@@ -44,3 +44,12 @@ Required by the course. One entry per work session: done, remaining, bottlenecks
 - Demo: none; review only
 - Remaining: build account runs the schema test (condition 2), then builds `agents/`; Andrew asks course staff whether a typed-action loop counts as tool use
 - Bottlenecks: course staff answer on tool use
+## 2026-10-09 (build account, session 4)
+- Done: typed-action orchestrator, built on branch `wip/orchestrator` before the review below arrived; proposal `docs/proposals/2026-10-09_structured-action-agents.md`
+- Done: `agents/launcher.py` (clean environment from a fixed list, pinned Claude Code 2.1.293, strict model check, prompt on stdin, no tools), `agents/actions.py` (draft fault, remedy and info lists; flat strict JSON schema; validation), `agents/orchestrator.py` (step loop, trace JSONL, step limit, stop after two failed calls), `agents/prompts/diagnostician.md`. Commit 50c310a
+- Done: `python -m pytest -q tests`: 7 passed in 0.10 s (scripted launcher, no LLM)
+- Done: `scripts/check_cli.py` replaces `check_api.py`: Claude Code 2.1.293, login claude.ai (enterprise), model claude-opus-5-5, 2 turns, 1.6 s, OK. `anthropic` and `.env.example` removed; README setup uses `claude auth login`. Commit 5747825
+- Done: `python scripts/demo_diagnostician.py` on a made-up task: request_info(displacement_vs_patch_radius), apply_remedy(displacement_exceeds_patch, change_frame_stride, half), accept(0.85). 3 steps, 0 failed calls, 21 s, about 3.5k input and 0.5k output tokens per step. Trace in `results/2026-10-09_demo_diagnostician/`. Commit a1b09dc
+- Demo: `python scripts/demo_diagnostician.py` prints `outcome: accept {'confidence': ...}; steps 3` and writes the trace
+- Remaining: planning-account approval, then merge to main; fix the fault, remedy and info lists with a decisions entry; checker on synthetic rods; real executors for request_info and apply_remedy
+- Bottlenecks: approval of the typed-action proposal (planning account); MCP allowlist question with course staff (Andrew)
