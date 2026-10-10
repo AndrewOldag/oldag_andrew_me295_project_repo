@@ -3,8 +3,9 @@
 Course project for AM/ME/CE 295, Caltech, Fall 2026. Start with `CLAUDE.md` and `docs/context/project_summary.md`.
 
 ## How the agents run
-- Each agent step is one non-interactive Claude Code call (`claude -p`) that returns one typed action as JSON
-- The orchestrator (`agents/orchestrator.py`, plain Python) checks the action against fixed lists, runs it, and calls the agent again with the result. Agents run nothing themselves
+- The agents' tool interface is a set of typed actions (`agents/actions.py`). The diagnostician's tools: `request_info` (evidence from the checker and tracker), `apply_remedy` (re-run the measurement with a remedy from a fixed list), `accept` and `decline`
+- Each agent step is one non-interactive Claude Code call (`claude -p`) that returns one action as JSON under a fixed schema
+- The orchestrator (`agents/orchestrator.py`, plain Python) checks the action against the fixed lists, carries it out, and calls the agent again with the result, until the agent accepts, declines or reaches the step limit
 - The model ID and the Claude Code version are pinned in `config/models.yaml`. A call fails if any other model answers
 
 ## Setup
