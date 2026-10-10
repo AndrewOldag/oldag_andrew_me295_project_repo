@@ -219,6 +219,11 @@ def variant_tag(width_kappa_inv=None, rotation_deg=None):
     return tag
 
 
+def rod_id(case, fault=None, seed=0, moved=False, width_kappa_inv=None, rotation_deg=None):
+    return (f"{case}_{fault or 'clean'}{variant_tag(width_kappa_inv, rotation_deg)}_s{seed}"
+            + ("_moved" if moved else ""))
+
+
 def image_case(case, fault=None, seed=0, moved=False, width_kappa_inv=None, rotation_deg=None):
     """Spec and movie settings for one image-level rod.
 
@@ -248,8 +253,7 @@ def build(out_dir, case, fault=None, seed=0, moved=False, pixel_um=2.105, width_
           rotation_deg=None):
     """Render one rod into out_dir: <id>.imgdir, <id>_midline.npz, <id>_truth.npz. Returns the id."""
     spec, movie = image_case(case, fault, seed, moved, width_kappa_inv, rotation_deg)
-    rid = (f"{case}_{fault or 'clean'}{variant_tag(width_kappa_inv, rotation_deg)}_s{seed}"
-           + ("_moved" if moved else ""))
+    rid = rod_id(case, fault, seed, moved, width_kappa_inv, rotation_deg)
     r = render(spec, movie)
     out_dir = Path(out_dir)
     write_imgdir(out_dir / f"{rid}.imgdir", r["frames"], r["times"], r["stage_px"], pixel_um)

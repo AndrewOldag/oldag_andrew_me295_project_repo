@@ -7,6 +7,11 @@ the per-frame midline in the world frame and the settings used.
 
   python qb_track.py --imgdir X.imgdir --midline X_midline.npz --out X_track.npz
       [--stride 1] [--disk-radius R] [--spacing 15] [--couple]
+      [--register] [--midline-smooth light|strong]
+      [--band-mask mask_second_root|crop_to_main_root]
+
+The last three run before tracking (measure/preprocess.py); they carry out
+remedies the tracker has no setting for.
 
 The midline file holds `midline_image` (T, K, 2; row, col; tip first) for
 every frame of the movie, `seed` (frame-0 midline for the tracker) and
@@ -14,11 +19,16 @@ every frame of the movie, `seed` (frame-0 midline for the tracker) and
 """
 import argparse
 import json
+import sys
 import time
 from dataclasses import replace
 from pathlib import Path
 
 import numpy as np
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from measure import preprocess                                 # noqa: E402
+from measure.render import seed_midline                         # noqa: E402
 
 from root_kinematics.slidebook_io import load_root_recording
 from root_kinematics.stage_correction import cumulative_correction_px
@@ -38,6 +48,11 @@ def main():
     ap.add_argument("--threshold", type=float, default=10.0)
     ap.add_argument("--couple", action="store_true")
     ap.add_argument("--pixel-um", type=float, default=2.105)
+    ap.add_argument("--register", action="store_true")
+    ap.add_argument("--midline-smooth", choices=sorted(preprocess.MIDLINE_SMOOTH), default=None)
+    ap.add_argument("--band-mask", choices=["mask_second_root", "crop_to_main_root"], default=None)
+    ap.add_argument("--band-radius", type=float, default=45.0, help="px, for --band-mask and frame quality")
+    ap.add_argument("--track-length", type=float, default=400.0, help="px of midline handed to the tracker")
     a = ap.parse_args()
 
     imgdir = Path(a.imgdir)
@@ -46,9 +61,21 @@ def main():
     rec = replace(rec, images=np.asarray(rec.images)[keep], stage_xy_um=rec.stage_xy_um[keep],
                   elapsed_s=rec.elapsed_s[keep])
     m = np.load(a.midline)
-    seed = m["seed"].astype(float)
     mask = m["mask0"].astype(bool) if "mask0" in m.files else None
     mid_img = m["midline_image"][keep].astype(float)
+    corr0 = cumulative_correction_px(rec)
+    pre = {}
+    if a.midline_smooth:
+        mid_img = preprocess.smooth_midline(mid_img, a.midline_smooth)
+    if a.register:
+        frames, mid_img, _, pre["register"] = preprocess.register_frames(
+            np.asarray(rec.images), corr0, mid_img, a.track_length)
+        rec = replace(rec, images=frames)
+    if a.band_mask:
+        rec = replace(rec, images=preprocess.band_mask(np.asarray(rec.images), mid_img,
+                                                       a.band_radius, a.band_mask))
+    seed = seed_midline(mid_img[0], a.track_length)   # same as the saved seed when nothing changed it
+    quality = preprocess.frame_quality(np.asarray(rec.images), mid_img, a.band_radius)
 
     t0 = time.time()
     res = run_two_side(rec, seed, mask, spacing=a.spacing, half_fraction=a.half_fraction,
@@ -68,7 +95,9 @@ def main():
                 "spacing": a.spacing, "half_fraction": a.half_fraction,
                 "threshold": a.threshold, "couple": bool(a.couple), "stride": a.stride,
                 "track_centre": True, "used_mask": bool(res.split.used_mask),
-                "run_s": round(run_s, 1), "n_frames": int(len(keep))}
+                "run_s": round(run_s, 1), "n_frames": int(len(keep)),
+                "register": bool(a.register), "midline_smooth": a.midline_smooth,
+                "band_mask": a.band_mask, "preprocess": pre, "frame_quality": quality}
     meta = {"root_id": imgdir.stem, "pixel_um": a.pixel_um, "settings": settings}
     np.savez_compressed(
         a.out, meta=json.dumps(meta),
