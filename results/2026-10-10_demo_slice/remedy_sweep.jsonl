@@ -1,0 +1,13 @@
+{"fault": "displacement_exceeds_patch", "run": "st12", "checks": {"rigid_invariance": [47.98, false], "closure": [51.38, false], "plane_sections": [32.79, false]}, "regr_rms": 11.369, "flank_rms": 9.316}
+{"fault": "displacement_exceeds_patch", "run": "change_frame_stride/half -> st6", "checks": {"rigid_invariance": [51.08, false], "closure": [4.37, false], "plane_sections": [33.62, false]}, "regr_rms": 3.865, "flank_rms": 7.31}
+{"fault": "displacement_exceeds_patch", "run": "change_frame_stride/half -> st3", "checks": {"rigid_invariance": [17.22, false], "closure": [3.54, false], "plane_sections": [4.84, false]}, "regr_rms": 1.433, "flank_rms": 0.768}
+{"fault": "rigid_drift", "run": "st1", "checks": {"rigid_invariance": [0.49, true], "closure": [16.27, false], "plane_sections": [1.39, true]}, "regr_rms": 0.413, "flank_rms": 0.268}
+{"fault": "rigid_drift", "run": "register_frames/None -> st1_reg", "checks": {"rigid_invariance": [0.92, true], "closure": [1.26, false], "plane_sections": [2.91, true]}, "regr_rms": 0.505, "flank_rms": 0.61}
+{"fault": "midline_jitter", "run": "st1", "checks": {"rigid_invariance": [0.58, true], "closure": [2.24, false], "plane_sections": [35.34, false]}, "regr_rms": 0.797, "flank_rms": 0.757}
+{"fault": "midline_jitter", "run": "smooth_midline/light -> st1_mslight", "checks": {"rigid_invariance": [0.84, true], "closure": [2.02, false], "plane_sections": [21.95, false]}, "regr_rms": 0.561, "flank_rms": 0.417}
+{"fault": "midline_jitter", "run": "smooth_midline/strong -> st1_msstrong", "checks": {"rigid_invariance": [0.75, true], "closure": [2.98, false], "plane_sections": [8.79, false]}, "regr_rms": 0.679, "flank_rms": 0.37}
+{"fault": "low_texture", "run": "st1", "checks": {"rigid_invariance": [255.39, false], "closure": [5.51, false], "plane_sections": [157.29, false]}, "regr_rms": 16.137, "flank_rms": 53.553}
+{"fault": "low_texture", "run": "enlarge_patch/1.5x -> st1_r22", "checks": {"rigid_invariance": [88.59, false], "closure": [0.63, true], "plane_sections": [66.46, false]}, "regr_rms": 11.804, "flank_rms": 24.008}
+{"fault": "low_texture", "run": "enlarge_patch/2x -> st1_r30", "checks": {"rigid_invariance": [64.55, false], "closure": [2.66, false], "plane_sections": [56.81, false]}, "regr_rms": 8.058, "flank_rms": 22.849}
+{"fault": "width_change", "run": "st1", "checks": {"rigid_invariance": [1.06, true], "closure": [0.07, true], "plane_sections": [4.3, false]}, "regr_rms": 0.402, "flank_rms": 0.322}
+{"fault": "width_change", "remedy": "use_width_free_ratio", "result": {"rechecked": false, "error": "remedy not available: the tracker has no setting for it; it changes the reported quantity, not the measurement"}}
