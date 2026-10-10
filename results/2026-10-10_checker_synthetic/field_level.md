@@ -1,0 +1,20 @@
+| Case | Check | Value | Unit | Expected | Where (s, px) |
+| :-- | :-- | --: | :-- | :-- | --: |
+| rigid_translation | rigid_invariance | 0.0000 | %/h | pass | 435 |
+| rigid_translation | closure | 0.0000 | px/h | pass | 480 |
+| rigid_translation | plane_sections | 0.0000 | %/h | pass | 5 |
+| rigid_rotation | rigid_invariance | 0.0000 | %/h | pass | 435 |
+| rigid_rotation | closure | 0.0000 | px/h | pass | 480 |
+| rigid_rotation | plane_sections | 0.0000 | %/h | pass | 75 |
+| uniform_strain | rigid_invariance | 0.0000 | %/h | pass | 380 |
+| uniform_strain | closure | 0.0000 | px/h | pass | 560 |
+| uniform_strain | plane_sections | 0.0000 | %/h | pass | 510 |
+| growth_zone | rigid_invariance | 0.0000 | %/h | pass | 505 |
+| growth_zone | closure | 0.0000 | px/h | pass | 510 |
+| growth_zone | plane_sections | 0.0000 | %/h | pass | 195 |
+| bending | rigid_invariance | 0.0000 | %/h | pass | 330 |
+| bending | closure | 0.0000 | px/h | pass | 510 |
+| bending | plane_sections | 0.0016 | %/h | pass | 145 |
+| width_change | rigid_invariance | 0.0000 | %/h | pass | 505 |
+| width_change | closure | 0.0000 | px/h | pass | 510 |
+| width_change | plane_sections | 1.5010 | %/h | fail | 220 |
