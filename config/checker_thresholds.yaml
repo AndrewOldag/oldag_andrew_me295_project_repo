@@ -1,9 +1,11 @@
 # Checker thresholds. Approved by Andrew on 2026-10-10 (spec 2026-10-09, item 4):
 # rigid_invariance and closure as proposed; plane_sections raised from the
 # proposed 3.0 to 3.25. Any change needs his approval.
-# Basis: results/2026-10-10_checker_synthetic/ (20 clean image-level rods,
-# 4 cases x 5 seeds, each tracked twice for the invariance check).
+# Basis: results/2026-10-10_checker_synthetic/, clean image-level rods
+# growth_zone, bending and rigid_translation, 5 seeds each (15 rods), each
+# tracked twice for the invariance check. rigid_rotation is not a clean case:
+# closure is expected to fail on it (decisions, 2026-10-10).
 status: approved
-rigid_invariance: 2.0   # %/h. Clean max 1.08 (median 0.70). Faulted runs that should fail: low_texture >= 152, displacement_exceeds_patch >= 48
-closure: 1.0            # px/h. Clean max 0.19 with an anchored base (tip path 60 px/h). rigid_drift 16.3, displacement_exceeds_patch >= 19.8, low_texture >= 4.5, midline_jitter >= 2.2. Whole-rod rotation gives 5.6 by construction (basal tracked point moves)
-plane_sections: 3.25    # %/h. Clean max 2.36 (median 0.85). midline_jitter >= 25.9. width_change 1.93-2.33 is inside clean noise and passes
+rigid_invariance: 2.0   # %/h. Clean max 1.04 (median 0.65). Faulted runs that should fail: low_texture >= 152, displacement_exceeds_patch >= 48
+closure: 1.0            # px/h. Clean max 0.19 with an anchored base (tip path 60 px/h). rigid_drift 16.3, displacement_exceeds_patch >= 19.8, low_texture >= 4.5, midline_jitter >= 2.2. rigid_rotation at 0.1 deg/frame 5.6 (expected failure: basal tracked point moves)
+plane_sections: 3.25    # %/h. Clean max 2.36 (median 0.86). midline_jitter >= 25.9. width_change 1.93-2.33 is inside clean noise and passes
