@@ -117,6 +117,12 @@ class RemoteRunner:
                                f"{p.stderr.decode(errors='replace').strip().splitlines()[-1:]}")
         return p.stdout
 
+    def start_detached(self, cmd):
+        """Start a long job remotely and return at once (ssh -f; the job is detached with setsid)."""
+        subprocess.run(["ssh", "-o", "BatchMode=yes", "-f", self.host,
+                        f"setsid nohup sh -c {shlex.quote(cmd)} > /dev/null 2>&1 < /dev/null &"],
+                       check=True, capture_output=True)
+
     def sync_code(self):
         buf = io.BytesIO()
         with tarfile.open(fileobj=buf, mode="w") as tar:

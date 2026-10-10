@@ -5,7 +5,8 @@
   python scripts/synth/repair_sweep.py fetch                    # copy tracker outputs to staging/tracks
 
 Part A: clean growth_zone and bending, seeds 0-2, each remedy setting alone.
-Part B: fault sizes with the fitting remedy's states (one and two steps).
+Part B: fault sizes with the fitting remedy's states (one and two steps);
+width_change at its approved size, unremedied.
 Uses private/runner.yaml (measure.runner.RemoteRunner).
 """
 import argparse
@@ -66,6 +67,9 @@ def plan(part):
             for size in sizes:
                 for seed in SEEDS:
                     rods.append((Rod("growth_zone", fault, seed, size=size), b_states(fault, size)))
+        # width_change keeps its size; its remedy needs no tracker re-run (decisions, 2026-10-10)
+        for seed in SEEDS:
+            rods.append((Rod("growth_zone", "width_change", seed), [TrackSettings()]))
     return {"rods": [{"options": rod.options(), "runs": [{"tag": s.tag(), "args": s.args()} for s in states]}
                      for rod, states in rods]}
 
@@ -82,8 +86,8 @@ def main():
         n = sum(2 * len(x["runs"]) for x in p["rods"])
         r.sync_code()
         r._ssh(f"mkdir -p {q(r.work)} && cat > {q(r.work)}/plan.json", stdin=json.dumps(p).encode())
-        r._ssh(f"cd {q(r.work)} && setsid nohup {r.python} {q(r.code)}/scripts/synth/sweep.py "
-               f"--plan plan.json --work . --workers 4 > sweep.log 2>&1 < /dev/null &")
+        r.start_detached(f"cd {q(r.work)} && {r.python} {q(r.code)}/scripts/synth/sweep.py "
+                         f"--plan plan.json --work . --workers 4 > sweep.log 2>&1")
         print(f"started: {len(p['rods'])} rods, {n} tracker runs")
     elif a.cmd == "status":
         print(r._ssh(f"cd {q(r.work)} && wc -l < sweep.log && grep -c '\"ok\": false' sweep.log; "
