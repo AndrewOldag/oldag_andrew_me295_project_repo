@@ -1,11 +1,9 @@
 """Test whether `claude -p` can call a local MCP tool under the agent call shape.
 
-    python scripts/cli_probe/test_safe_mode_mcp.py [--variant A|B|both]
+    python scripts/cli_probe/test_safe_mode_mcp.py [--variant A|C|both]
 
 Variant A: --safe-mode with --mcp-config and --strict-mcp-config (approved shape).
 Variant C: shape A without --safe-mode (control for the MCP config).
-Variant B: no --safe-mode; a fresh CLAUDE_CONFIG_DIR holding only a copy of the
-login, and an empty working directory. For comparison only.
 
 Each run gets a random probe value. Pass: the probe server is connected, its
 tool is listed, the structured output equals the probe value, and modelUsage
@@ -55,15 +53,7 @@ def run(variant, model):
             "--no-session-persistence", "--max-turns", "6"]
     if variant == "A":
         args.insert(2, "--safe-mode")
-    elif variant == "C":
-        pass  # control: shape A without --safe-mode, to check the MCP config itself
-    else:
-        conf = work / "config"
-        conf.mkdir()
-        cred = Path(env["USERPROFILE"]) / ".claude" / ".credentials.json"
-        if cred.exists():
-            shutil.copy2(cred, conf / ".credentials.json")
-        env["CLAUDE_CONFIG_DIR"] = str(conf)
+    # variant C: shape A without --safe-mode, to check the MCP config itself
     rundir = work / "cwd"
     rundir.mkdir()
     exe = shutil.which("claude", path=env.get("PATH"))
@@ -79,7 +69,7 @@ def run(variant, model):
             init = ev
         if ev.get("type") == "result":
             result = ev
-    shutil.rmtree(work, ignore_errors=True)  # removes the copied login in variant B
+    shutil.rmtree(work, ignore_errors=True)
 
     servers = init.get("mcp_servers", [])
     tools = init.get("tools", [])
@@ -112,11 +102,11 @@ def run(variant, model):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--variant", choices=["A", "B", "C", "both"], default="both")
+    ap.add_argument("--variant", choices=["A", "C", "both"], default="both")
     a = ap.parse_args()
     model = yaml.safe_load((ROOT / "config" / "models.yaml").read_text())["model"]
     version = subprocess.run(["claude", "--version"], capture_output=True, text=True).stdout.strip()
-    runs = [run(v, model) for v in (["A", "B"] if a.variant == "both" else [a.variant])]
+    runs = [run(v, model) for v in (["A", "C"] if a.variant == "both" else [a.variant])]
     report = {"date": datetime.date.today().isoformat(), "claude_version": version, "model": model, "runs": runs}
     outdir = ROOT / "results" / f"{report['date']}_safe_mode_mcp"
     outdir.mkdir(parents=True, exist_ok=True)
