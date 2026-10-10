@@ -134,8 +134,13 @@ def plane_sections(rec, threshold=None):
                               f"predicted {pred[j] * PER_S_TO_PCT_PER_H:.2f} %/h")
 
 
-def run_checks(rec, rec_moved=None, thresholds=None):
-    """All three checks. thresholds: dict check -> value, or None for values only."""
+def run_checks(rec, rec_moved=None, thresholds=None, skip=()):
+    """All three checks. thresholds: dict check -> value, or None for values only.
+
+    skip: checks not applied (passed None, value still computed). The
+    plane-sections check is skipped when the width-free ratio is reported
+    (decisions, 2026-10-10).
+    """
     th = (thresholds or {})
     out = []
     if rec_moved is not None:
@@ -146,4 +151,8 @@ def run_checks(rec, rec_moved=None, thresholds=None):
                                detail="no rigidly moved run supplied"))
     out.append(closure(rec, th.get("closure")))
     out.append(plane_sections(rec, th.get("plane_sections")))
+    for r in out:
+        if r.check in skip:
+            r.passed = None
+            r.detail = "skipped: width-free ratio reported; " + r.detail
     return out

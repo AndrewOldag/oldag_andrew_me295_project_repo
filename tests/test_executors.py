@@ -29,7 +29,7 @@ def test_every_remedy_in_the_list_is_handled():
                 new, change = apply_remedy(s, remedy, setting, 15)
                 assert new != s and change
             except NotAvailable as e:
-                assert remedy in ("switch_midline_source", "use_width_free_ratio"), (remedy, e)
+                raise AssertionError((remedy, setting, e))
 
 
 def test_remedy_settings():
@@ -69,8 +69,22 @@ def test_apply_remedy_reruns_and_rechecks():
                         "setting": "double"}, {})
     assert r["rechecked"] and r["change"] == "frame stride 1 -> 2" and len(s.runs) == 2
     assert s.current.record.n_frames == 21
-    r = s.apply_remedy({"fault": "unknown", "remedy": "switch_midline_source", "setting": "ml"}, {})
-    assert not r["rechecked"] and "not available" in r["error"] and len(s.runs) == 2
+    s2 = Slice(FieldRunner(), Rod("growth_zone"))
+    r = s2.apply_remedy({"fault": "unknown", "remedy": "change_frame_stride", "setting": "half"}, {})
+    assert not r["rechecked"] and "not available" in r["error"] and len(s2.runs) == 1
+
+
+def test_width_free_ratio_skips_plane_sections():
+    s = Slice(FieldRunner(), Rod("width_change"))
+    r = s.apply_remedy({"fault": "width_change", "remedy": "use_width_free_ratio", "setting": None}, {})
+    assert r["rechecked"] and "plane_sections" in r["not_run"]
+    assert "plane_sections" not in r["failed_checks"]
+    out = s.request_info({"kind": "velocity_profile"}, {})
+    assert "width_free_ratio" in out and out["width_free_ratio"]
+
+
+def test_switch_midline_source_removed():
+    assert "switch_midline_source" not in REMEDIES
 
 
 def test_loop_with_real_executors(tmp_path):

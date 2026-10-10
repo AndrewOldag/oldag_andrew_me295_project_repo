@@ -31,7 +31,6 @@ FAULTS = [
 REMEDIES = {
     "register_frames": [None],
     "change_frame_stride": ["half", "double"],
-    "switch_midline_source": ["classical", "ml"],
     "smooth_midline": ["light", "strong"],
     "crop_or_mask": ["crop_to_main_root", "mask_second_root"],
     "enlarge_patch": ["1.5x", "2x"],
