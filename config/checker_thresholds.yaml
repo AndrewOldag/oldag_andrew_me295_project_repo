@@ -1,0 +1,7 @@
+# Checker thresholds. PROVISIONAL: not approved, not used to score anything.
+# Proposed values and their basis are added after the clean image-level rods
+# are tracked; Andrew approves them before use (spec 2026-10-09, item 4).
+status: provisional
+rigid_invariance: null   # %/h
+closure: null            # px/h
+plane_sections: null     # %/h
