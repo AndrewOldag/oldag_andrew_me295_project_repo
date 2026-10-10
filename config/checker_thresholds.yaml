@@ -1,7 +1,8 @@
-# Checker thresholds. PROVISIONAL: not approved, not used to score anything.
-# Proposed values and their basis are added after the clean image-level rods
-# are tracked; Andrew approves them before use (spec 2026-10-09, item 4).
-status: provisional
-rigid_invariance: null   # %/h
-closure: null            # px/h
-plane_sections: null     # %/h
+# Checker thresholds. PROPOSED, NOT APPROVED. Not used to score anything
+# until Andrew approves them (spec 2026-10-09, item 4).
+# Basis: results/2026-10-10_checker_synthetic/ (20 clean image-level rods,
+# 4 cases x 5 seeds, each tracked twice for the invariance check).
+status: proposed
+rigid_invariance: 2.0   # %/h. Clean max 1.08 (median 0.70). Faulted runs that should fail: low_texture >= 152, displacement_exceeds_patch >= 48
+closure: 1.0            # px/h. Clean max 0.19 with an anchored base (tip path 60 px/h). rigid_drift 16.3, displacement_exceeds_patch >= 19.8, low_texture >= 4.5, midline_jitter >= 2.2. Whole-rod rotation gives 5.6 by construction (basal tracked point moves)
+plane_sections: 3.0     # %/h. Clean max 2.36 (median 0.85). midline_jitter >= 25.9. width_change 1.93-2.33 is inside clean noise and passes
