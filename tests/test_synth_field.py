@@ -13,9 +13,9 @@ def records():
     return {name: make_record(spec) for name, spec in CASES.items()}
 
 
-def test_six_cases():
-    assert set(CASES) == {"rigid_translation", "rigid_rotation", "uniform_strain",
-                          "growth_zone", "bending", "width_change"}
+def test_cases():
+    assert set(CASES) == {"rigid_translation", "rigid_rotation", "rotation_basal_pivot",
+                          "uniform_strain", "growth_zone", "bending", "width_change"}
 
 
 @pytest.mark.parametrize("name", list(CASES))

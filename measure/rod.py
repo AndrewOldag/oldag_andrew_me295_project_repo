@@ -55,7 +55,8 @@ class RodSpec:
     dh: Callable = lambda t: 0.0 * t
     base_xy: tuple = (40.0, 128.0)           # anchored base, world (row, col)
     base_angle: float = np.pi                # tip->base tangent angle at the base; pi = root grows toward +row
-    rotation_rate: float = 0.0               # rigid rotation about the base, rad/s
+    rotation_rate: float = 0.0               # rigid rotation, rad/s, about the pivot
+    pivot_offset: float = 0.0                # pivot distance basal to the base along the base tangent, px; 0 = the base
     stage_velocity: Optional[tuple] = None   # logged stage velocity, px/s (world static)
     stage_follow_px: Optional[float] = 10.0  # stage step to follow the tip, px; None = fixed
     substeps: int = 20
@@ -104,8 +105,14 @@ def shape_from_curvature(s, kap, spec, t):
     phi = phi_base - _cumtrapz_from_base(kap, s)
     tr = np.cos(phi)
     tc = np.sin(phi)
-    row = spec.base_xy[0] - _cumtrapz_from_base(tr, s)
-    col = spec.base_xy[1] - _cumtrapz_from_base(tc, s)
+    base = np.asarray(spec.base_xy, float)
+    if spec.pivot_offset:
+        # Turning about a point basal to the base moves the base on a circle.
+        a0, a = spec.base_angle, phi_base
+        pivot = base + spec.pivot_offset * np.array([np.cos(a0), np.sin(a0)])
+        base = pivot - spec.pivot_offset * np.array([np.cos(a), np.sin(a)])
+    row = base[0] - _cumtrapz_from_base(tr, s)
+    col = base[1] - _cumtrapz_from_base(tc, s)
     return np.stack([row, col], axis=1)
 
 
@@ -185,8 +192,35 @@ def growth_zone():
     return richards_velocity(V_END, s_mid=150.0, width=35.0, shape=1.0)
 
 
+WIDTH_RATE = 0.40          # flank half-spacing growth, 1/h, in the width-change cases
+
+
+def width_change_spec(kappa_inv=800.0):
+    """Curved rod (constant curvature 1/kappa_inv px) whose flank spacing grows 40 %/h.
+
+    True plane-sections residual 2 kappa dh/dt: 1.5 %/h at 1/800, 3.0 at 1/400, 4.5 at 1/267.
+    """
+    v_gz, regr_gz = growth_zone()
+    h0, hdot = 15.0, 15.0 * WIDTH_RATE / 3600.0
+    k0 = 1.0 / kappa_inv
+    return RodSpec("width_change", v=v_gz, regr=regr_gz, kappa0=lambda X: k0 + 0 * np.asarray(X, float),
+                   h=lambda t: h0 + hdot * np.asarray(t, float), dh=lambda t: hdot + 0 * np.asarray(t, float),
+                   notes=f"constant curvature 1/{kappa_inv:g} px; flank spacing grows 40 %/h; constant-width assumption broken",
+                   expected={"rigid_invariance": True, "closure": True, "plane_sections": False})
+
+
+def rigid_rotation_spec(deg_per_frame=0.1, pivot_offset=0.0, name="rigid_rotation"):
+    """No growth; the whole rod turns at deg_per_frame (frames 90 s apart) about a pivot."""
+    return RodSpec(name, rotation_rate=np.deg2rad(deg_per_frame) / 90.0, stage_follow_px=None,
+                   pivot_offset=pivot_offset,
+                   notes=f"no growth; whole rod turns {deg_per_frame:g} deg/frame about a point "
+                         f"{pivot_offset:g} px basal to the last chain point",
+                   expected={"rigid_invariance": True, "closure": pivot_offset == 0.0,
+                             "plane_sections": True})
+
+
 def field_cases():
-    """The six field-level cases. `expected` gives the pass/fail of each check."""
+    """The field-level cases. `expected` gives the pass/fail of each check."""
     v_gz, regr_gz = growth_zone()
     zero = lambda s: 0.0 * np.asarray(s, float)
     all_pass = {"rigid_invariance": True, "closure": True, "plane_sections": True}
@@ -195,15 +229,13 @@ def field_cases():
     # difference at the peak is 30 c_peak = 1.8 %/h.
     c_peak = 6e-4 / 3600.0
     bump = lambda s: c_peak * np.exp(-0.5 * ((np.asarray(s, float) - 150.0) / 40.0) ** 2)
-    k0 = 1.0 / 800.0
-    h0, hdot = 15.0, 15.0 * 0.40 / 3600.0     # flank half-spacing grows 40 %/h
     return [
         RodSpec("rigid_translation", stage_velocity=(0.6 / 90.0, 0.3 / 90.0),
                 notes="no growth; stage moves 0.67 px/frame and is logged; world static",
                 expected=dict(all_pass)),
-        RodSpec("rigid_rotation", rotation_rate=np.deg2rad(0.1) / 90.0, stage_follow_px=None,
-                notes="no growth; whole rod turns 0.1 deg/frame about the anchored base",
-                expected=dict(all_pass)),
+        rigid_rotation_spec(0.1),
+        # The basal tracked tissue moves: closure flags it (decisions, 2026-10-10)
+        rigid_rotation_spec(0.1, pivot_offset=200.0, name="rotation_basal_pivot"),
         RodSpec("uniform_strain", v=lambda s: eps * np.asarray(s, float),
                 regr=lambda s: eps + zero(s),
                 notes="REGR 30 %/h along the whole chain", expected=dict(all_pass)),
@@ -213,8 +245,5 @@ def field_cases():
         RodSpec("bending", v=v_gz, regr=regr_gz, kappa_rate=bump,
                 notes="growth zone plus a curvature-rate bump at s = 150 px; constant width",
                 expected=dict(all_pass)),
-        RodSpec("width_change", v=v_gz, regr=regr_gz, kappa0=lambda X: k0 + 0 * np.asarray(X, float),
-                h=lambda t: h0 + hdot * np.asarray(t, float), dh=lambda t: hdot + 0 * np.asarray(t, float),
-                notes="constant curvature 1/800 px; flank spacing grows 40 %/h; constant-width assumption broken",
-                expected={"rigid_invariance": True, "closure": True, "plane_sections": False}),
+        width_change_spec(800.0),
     ]
