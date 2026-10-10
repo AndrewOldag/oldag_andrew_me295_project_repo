@@ -20,6 +20,8 @@ ap.add_argument("--work", required=True)
 ap.add_argument("--case", default="growth_zone")
 ap.add_argument("--fault", default=None)
 ap.add_argument("--seeds", type=int, nargs="+", default=[0])
+ap.add_argument("--width-kappa-inv", type=float, default=None)
+ap.add_argument("--rotation-deg", type=float, default=None)
 ap.add_argument("--moved-too", action="store_true", help="also the rigidly moved run for the invariance check")
 a = ap.parse_args()
 work = Path(a.work)
@@ -30,7 +32,9 @@ for seed in a.seeds:
         t0 = time.time()
         cmd = [sys.executable, str(HERE / "make_rod.py"), "--out", str(work / "rods"),
                "--case", a.case, "--seed", str(seed)] + (["--fault", a.fault] if a.fault else []) \
-              + (["--moved"] if moved else [])
+              + (["--moved"] if moved else []) \
+              + (["--width-kappa-inv", str(a.width_kappa_inv)] if a.width_kappa_inv else []) \
+              + (["--rotation-deg", str(a.rotation_deg)] if a.rotation_deg else [])
         info = json.loads(subprocess.run(cmd, check=True, capture_output=True, text=True).stdout.strip().splitlines()[-1])
         rid = info["id"]
         cmd = [sys.executable, str(HERE.parent / "remote" / "qb_track.py"),

@@ -16,7 +16,8 @@ import numpy as np
 from scipy.ndimage import gaussian_filter, map_coordinates
 from scipy.spatial import cKDTree
 
-from measure.rod import RodSpec, field_cases, make_record, simulate, normals, stage_track
+from measure.rod import (RodSpec, field_cases, make_record, simulate, normals, stage_track,
+                         width_change_spec, rigid_rotation_spec)
 
 DEV_FAULTS = ("rigid_drift", "displacement_exceeds_patch", "midline_jitter",
               "low_texture", "width_change")
@@ -199,15 +200,43 @@ def write_imgdir(path, frames, times_s, stage_px, pixel_um):
     (path / "ChannelRecord.yaml").write_text("mMoveFieldDownSign: 1\nmMoveFieldRightSign: 1\n")
 
 
-def image_case(case, fault=None, seed=0, moved=False):
+# Expected outcome of each check for clean image-level cases. rigid_rotation
+# turns about a point basal to the tracked length, so the basal tracked tissue
+# moves and closure fails (decisions, 2026-10-10).
+_PASS = {"rigid_invariance": True, "closure": True, "plane_sections": True}
+IMAGE_EXPECTED = {
+    "growth_zone": dict(_PASS), "bending": dict(_PASS), "rigid_translation": dict(_PASS),
+    "rigid_rotation": {"rigid_invariance": True, "closure": False, "plane_sections": True},
+}
+
+
+def variant_tag(width_kappa_inv=None, rotation_deg=None):
+    tag = ""
+    if width_kappa_inv is not None:
+        tag += f"_k{width_kappa_inv:g}"
+    if rotation_deg is not None:
+        tag += f"_r{rotation_deg:g}"
+    return tag
+
+
+def image_case(case, fault=None, seed=0, moved=False, width_kappa_inv=None, rotation_deg=None):
     """Spec and movie settings for one image-level rod.
 
     case: a field-level case name (growth_zone, bending, rigid_translation, ...).
     moved: add the rigid motion used by the rigid-invariance check.
+    width_kappa_inv: curvature 1/width_kappa_inv px for the width_change fault (default 800).
+    rotation_deg: rotation rate of the rigid_rotation case, deg/frame (default 0.1).
     """
     movie_kw, spec_override = fault_settings(fault)
     name = spec_override or case
-    spec = next(s for s in field_cases() if s.name == name)
+    if name == "width_change":
+        spec = width_change_spec(width_kappa_inv or 800.0)
+        if width_kappa_inv is not None and width_kappa_inv < 800.0:
+            movie_kw = dict(movie_kw, width=640)      # the more curved rod leaves a 320 px frame
+    elif name == "rigid_rotation" and rotation_deg is not None:
+        spec = rigid_rotation_spec(rotation_deg)
+    else:
+        spec = next(s for s in field_cases() if s.name == name)
     movie = Movie(seed=seed, **movie_kw)
     if moved:
         movie = replace(movie, rigid_rotation=movie.rigid_rotation + np.deg2rad(0.1) / 90.0,
@@ -215,10 +244,12 @@ def image_case(case, fault=None, seed=0, moved=False):
     return spec, movie
 
 
-def build(out_dir, case, fault=None, seed=0, moved=False, pixel_um=2.105):
+def build(out_dir, case, fault=None, seed=0, moved=False, pixel_um=2.105, width_kappa_inv=None,
+          rotation_deg=None):
     """Render one rod into out_dir: <id>.imgdir, <id>_midline.npz, <id>_truth.npz. Returns the id."""
-    spec, movie = image_case(case, fault, seed, moved)
-    rid = f"{case}_{fault or 'clean'}_s{seed}" + ("_moved" if moved else "")
+    spec, movie = image_case(case, fault, seed, moved, width_kappa_inv, rotation_deg)
+    rid = (f"{case}_{fault or 'clean'}{variant_tag(width_kappa_inv, rotation_deg)}_s{seed}"
+           + ("_moved" if moved else ""))
     r = render(spec, movie)
     out_dir = Path(out_dir)
     write_imgdir(out_dir / f"{rid}.imgdir", r["frames"], r["times"], r["stage_px"], pixel_um)
@@ -227,5 +258,7 @@ def build(out_dir, case, fault=None, seed=0, moved=False, pixel_um=2.105):
                         mask0=r["mask0"])
     truth = make_record(replace(spec, n_frames=r["spec_frames"])).truth
     np.savez_compressed(out_dir / f"{rid}_truth.npz", stride=movie.stride,
-                        fault=str(fault), case=case, **truth)
+                        fault=str(fault), case=case, variant=variant_tag(width_kappa_inv, rotation_deg),
+                        frame_size=np.array([movie.height, movie.width]),
+                        track_length=movie.track_length, **truth)
     return rid
