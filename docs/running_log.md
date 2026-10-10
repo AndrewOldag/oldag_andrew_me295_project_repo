@@ -63,3 +63,10 @@ Required by the course. One entry per work session: done, remaining, bottlenecks
 - Demo: `python scripts/demo_diagnostician.py` prints the outcome and per-task call totals and writes the trace
 - Remaining: merged to main this session; fix the fault, remedy and info lists with a decisions entry; checker on synthetic rods; real executors for `request_info` and `apply_remedy`; call-budget estimate and approval step before any all-roots run (condition 4)
 - Bottlenecks: course staff answer on whether typed actions count as tool use (Andrew)
+
+## 2026-10-09 (planning account, session 3)
+- Done: reviewed build session 4 (12 commits). Seven conditions confirmed met; `python -m pytest -q tests` gives 16 passed on a second machine. Wrote the next spec, approved by Andrew: `docs/specs/2026-10-09_checker-and-synthetic-rods.md`
+- Demo: none; review and spec only
+- Remaining: build account works the spec in order (branch cleanup, measurement record, synthetic rods, checker, real executors, freeze). Planning account drafts the related-work note and the draft proposal for Lab report 1 (due 16 Oct)
+- Bottlenecks: course staff answer on whether typed actions count as tool use (Andrew)
+

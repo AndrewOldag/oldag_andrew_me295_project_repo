@@ -51,7 +51,7 @@ One slice that runs end to end with known truth: synthetic rod movie, tracker, c
 - Check: `python scripts/demo_slice.py` runs one image-level rod with one injected fault from start to finish. It prints the truth, the error before and after the remedy, and the outcome, and writes the trace to `results/`
 
 ### 6. Lists and freeze
-- Development faults: the five in item 3. Proposed held-out faults: `second_root`, `bad_stage_correction`, `fast_rotation`, plus one fault not on the list, chosen later by the planning account. Pending Andrew's approval
+- Development faults: the five in item 3. Held-out faults: `second_root`, `bad_stage_correction`, `fast_rotation`, plus one fault not on the list, chosen later by the planning account. Andrew approved this spec on 2026-10-09
 - The fault, remedy and info lists, the diagnostician prompt and the checker thresholds are frozen together under a git tag `freeze-v1`, with a decisions entry. Andrew approves the freeze
 - Held-out injectors are written only after the tag. Nothing frozen changes after a held-out result is seen
 - `step_limit` and `error` outcomes are scored as not reported, in their own category, not as `decline`
