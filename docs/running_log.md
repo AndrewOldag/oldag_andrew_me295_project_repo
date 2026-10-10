@@ -38,3 +38,9 @@ Required by the course. One entry per work session: done, remaining, bottlenecks
 - Remaining: decision on the agent tool interface (planning account and Andrew), then agent code
 - Done: Andrew chose agents that return typed actions, executed by the orchestrator, with no MCP. Proposal for the planning account: `docs/proposals/2026-10-09_structured-action-agents.md`. Andrew asks course staff whether a project MCP server can be allowed
 - Bottlenecks: local MCP tools are blocked by organization policy; needs either an administrator allowlist entry or a design without MCP
+
+## 2026-10-09 (planning account, session 2)
+- Done: reviewed the build account's six commits and the safe-mode MCP test. Approved the typed-action proposal with seven conditions, recorded in `docs/proposals/2026-10-09_structured-action-agents.md` and `docs/decisions.md`
+- Demo: none; review only
+- Remaining: build account runs the schema test (condition 2), then builds `agents/`; Andrew asks course staff whether a typed-action loop counts as tool use
+- Bottlenecks: course staff answer on tool use
