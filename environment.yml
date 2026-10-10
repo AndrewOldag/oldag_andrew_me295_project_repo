@@ -10,6 +10,7 @@ dependencies:
   - libblas=*=*openblas   # the MKL build crashed on matrix products on the Windows build machine (missing DLL entry point)
   - scipy
   - pyyaml
+  - matplotlib-base   # result plots
   - pytest
   - pip
   - pip:
