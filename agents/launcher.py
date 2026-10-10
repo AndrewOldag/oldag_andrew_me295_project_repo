@@ -47,6 +47,8 @@ def sha256(text):
 class CallResult:
     ok: bool
     error: str = ""
+    # failure cause: timeout, exit_code, max_turns, schema, result_error, model_check
+    cause: str = ""
     structured_output: dict = None
     models: list = field(default_factory=list)
     subtype: str = ""
@@ -110,7 +112,7 @@ class Launcher:
                 proc = subprocess.run([self.exe] + args, input=prompt, cwd=cwd, env=self.env, capture_output=True,
                                       text=True, encoding="utf-8", timeout=self.timeout_s)
             except subprocess.TimeoutExpired:
-                res.error = f"timeout after {self.timeout_s} s"
+                res.error, res.cause = f"timeout after {self.timeout_s} s", "timeout"
                 return res
         finally:
             shutil.rmtree(work, ignore_errors=True)
@@ -118,6 +120,7 @@ class Launcher:
             d = json.loads(proc.stdout)
         except json.JSONDecodeError:
             res.error = f"exit {proc.returncode}; no JSON result; stderr: {proc.stderr.strip()[-300:]}"
+            res.cause = "exit_code"
             return res
         usage = d.get("usage") or {}
         res.subtype = d.get("subtype", "")
@@ -130,10 +133,14 @@ class Launcher:
         res.structured_output = d.get("structured_output")
         if d.get("is_error") or res.subtype != "success":
             res.error = f"result {res.subtype}: {str(d.get('result', ''))[:300]}"
+            res.cause = {"error_max_turns": "max_turns",
+                         "error_max_structured_output_retries": "schema"}.get(res.subtype, "result_error")
+        elif proc.returncode != 0:
+            res.error, res.cause = f"exit {proc.returncode} with a success result", "exit_code"
         elif res.models != [model]:
-            res.error = f"model check failed: {res.models} (pinned {model})"
+            res.error, res.cause = f"model check failed: {res.models} (pinned {model})", "model_check"
         elif not isinstance(res.structured_output, dict):
-            res.error = "no structured output"
+            res.error, res.cause = "no structured output", "schema"
         else:
             res.ok = True
         return res

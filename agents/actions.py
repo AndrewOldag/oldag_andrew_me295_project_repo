@@ -1,11 +1,17 @@
 """Action sets for each agent: fixed lists, JSON schema, validation.
 
+The typed actions are the agents' tool interface: each agent step returns one
+action, and the orchestrator checks it and carries it out.
+
 The lists below are a DRAFT. They must be fixed, with a decisions entry,
 before any evaluation run; after that they do not change.
 
-The output schema is one flat object: `action`, `rationale`, and every
-argument any action can take. Arguments an action does not use are null.
-Validation checks that the chosen action has its own arguments set.
+Schema forms (see results/2026-10-09_action_schema/):
+- "optional": one flat object; `action` and `rationale` required, every
+  argument optional. Default, as the planning-account review asks
+- "nullable": one flat object; every field required, unused ones null
+- "union": one object type per action
+The orchestrator validates the chosen action's arguments in every form.
 """
 from dataclasses import dataclass, field
 
@@ -41,11 +47,14 @@ INFO_KINDS = [
     "frame_quality",
 ]
 
+FORMS = ("optional", "nullable", "union")
+
 
 @dataclass
 class Action:
     name: str
-    args: dict            # argument name -> JSON schema of its non-null value
+    args: dict = field(default_factory=dict)       # required: name -> JSON schema of the value
+    optional: dict = field(default_factory=dict)   # may be missing or null
     terminal: bool = False
     description: str = ""
 
@@ -63,29 +72,52 @@ class ActionSet:
         out = {}
         for a in self.actions:
             out.update(a.args)
+            out.update(a.optional)
         return out
 
-    def schema(self):
-        props = {
-            "action": {"type": "string", "enum": [a.name for a in self.actions]},
-            "rationale": {"type": "string"},
-        }
-        for name, s in self.all_args().items():
-            props[name] = {"anyOf": [s, {"type": "null"}]}
-        return {"type": "object", "properties": props, "required": list(props), "additionalProperties": False}
+    def schema(self, form="optional"):
+        base = {"action": {"type": "string", "enum": [a.name for a in self.actions]}, "rationale": {"type": "string"}}
+        if form == "optional":
+            props = dict(base, **self.all_args())
+            return {"type": "object", "properties": props, "required": ["action", "rationale"],
+                    "additionalProperties": False}
+        if form == "nullable":
+            props = dict(base, **{n: {"anyOf": [s, {"type": "null"}]} for n, s in self.all_args().items()})
+            return {"type": "object", "properties": props, "required": list(props), "additionalProperties": False}
+        if form == "union":
+            variants = []
+            for a in self.actions:
+                props = {"action": {"type": "string", "enum": [a.name]}, "rationale": {"type": "string"}}
+                props.update(a.args)
+                props.update({n: {"anyOf": [s, {"type": "null"}]} for n, s in a.optional.items()})
+                variants.append({"type": "object", "properties": props, "required": list(props),
+                                 "additionalProperties": False})
+            return {"anyOf": variants}
+        raise ValueError(f"unknown schema form {form!r}")
 
     def describe(self):
         """Plain-text list of actions for the prompt."""
         lines = []
         for a in self.actions:
-            args = ", ".join(a.args) or "no arguments"
+            args = ", ".join(list(a.args) + [f"{n} (optional)" for n in a.optional]) or "no arguments"
             lines.append(f"- {a.name} ({args}){' [ends the task]' if a.terminal else ''}: {a.description}")
-        enums = {n: s["enum"] for n, s in self.all_args().items() if "enum" in s}
-        for n, vals in enums.items():
-            lines.append(f"Allowed {n}: {', '.join(vals)}")
+        for n, s in self.all_args().items():
+            if "enum" in s:
+                lines.append(f"Allowed {n}: {', '.join(s['enum'])}")
         if self.notes:
             lines.append(self.notes)
         return "\n".join(lines)
+
+    @staticmethod
+    def _check(name, s, v):
+        if "enum" in s and v not in s["enum"]:
+            raise ValueError(f"{name}={v!r} not in the allowed list")
+        if s.get("type") == "number" and not isinstance(v, (int, float)):
+            raise ValueError(f"{name} must be a number")
+        if s.get("type") == "string" and not isinstance(v, str):
+            raise ValueError(f"{name} must be a string")
+        if ("minimum" in s and v < s["minimum"]) or ("maximum" in s and v > s["maximum"]):
+            raise ValueError(f"{name}={v} out of range")
 
     def validate(self, out):
         """Return (action_name, args) or raise ValueError with a reason."""
@@ -99,46 +131,35 @@ class ActionSet:
             v = out.get(name)
             if v is None:
                 raise ValueError(f"{act.name} needs {name}")
-            if "enum" in s and v not in s["enum"]:
-                raise ValueError(f"{name}={v!r} not in the allowed list")
-            if s.get("type") == "number" and not isinstance(v, (int, float)):
-                raise ValueError(f"{name} must be a number")
-            if "minimum" in s and v < s["minimum"] or "maximum" in s and v > s["maximum"]:
-                raise ValueError(f"{name}={v} out of range")
+            self._check(name, s, v)
+            args[name] = v
+        for name, s in act.optional.items():
+            v = out.get(name)
+            if v is not None:
+                self._check(name, s, v)
             args[name] = v
         if act.name == "apply_remedy":
             allowed = REMEDIES[args["remedy"]]
-            setting = out.get("setting")
-            if setting not in allowed:
-                raise ValueError(f"setting {setting!r} not allowed for {args['remedy']}; allowed: {allowed}")
-            args["setting"] = setting
+            if args["setting"] not in allowed:
+                raise ValueError(f"setting {args['setting']!r} not allowed for {args['remedy']}; allowed: {allowed}")
         return act.name, args
 
 
-_enum = lambda xs: {"type": "string", "enum": list(xs)}  # noqa: E731
+def _enum(xs):
+    return {"type": "string", "enum": list(xs)}
+
 
 DIAGNOSTICIAN = ActionSet("diagnostician", [
     Action("request_info", {"kind": _enum(INFO_KINDS)},
            description="get one more piece of evidence about this task"),
     Action("apply_remedy", {"fault": _enum(FAULTS), "remedy": _enum(REMEDIES)},
-           description="re-run the measurement with a remedy; also set `setting` to an allowed value or null"),
+           {"setting": _enum(sorted({s for v in REMEDIES.values() for s in v if s}))},
+           description="re-run the measurement with a remedy and setting from the fixed list"),
     Action("accept", {"confidence": {"type": "number", "minimum": 0, "maximum": 1}}, terminal=True,
            description="report the measurement"),
     Action("decline", {"fault": _enum(FAULTS), "reason": {"type": "string"}}, terminal=True,
            description="do not report the measurement"),
 ], notes="Allowed setting per remedy: " + "; ".join(
-    f"{r}: {', '.join(s or 'null' for s in v)}" for r, v in REMEDIES.items()))
-# `setting` is an argument of apply_remedy checked against REMEDIES, so it is
-# added to the schema separately.
-DIAGNOSTICIAN_SETTING = {"type": "string", "enum": sorted({s for v in REMEDIES.values() for s in v if s})}
-
-
-def diagnostician_schema():
-    s = DIAGNOSTICIAN.schema()
-    s["properties"]["setting"] = {"anyOf": [DIAGNOSTICIAN_SETTING, {"type": "null"}]}
-    s["required"].append("setting")
-    return s
-
+    f"{r}: {', '.join(s or 'none (leave setting out)' for s in v)}" for r, v in REMEDIES.items()))
 
 ACTION_SETS = {"diagnostician": DIAGNOSTICIAN}
-SCHEMAS = {"diagnostician": diagnostician_schema}

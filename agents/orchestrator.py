@@ -1,18 +1,20 @@
-"""Step loop: ask an agent for one action, check it, execute it, repeat.
+"""Step loop: ask an agent for one typed action, check it, carry it out, repeat.
 
-The orchestrator is plain code. It decides what each agent sees, runs every
-action itself, and writes one trace line per step. Agents run nothing.
+The typed actions are the agents' tool interface. The orchestrator is plain
+code: it decides what each agent sees, carries out every action itself, and
+writes one trace line per step plus one summary line per task.
 
 Stops when the agent returns a terminal action, at the step limit, or after
-two failed calls in a row. Failed calls (CLI error, model check, invalid
-action) count as steps.
+two failed steps in a row. A failed step is a failed call (timeout, non-zero
+exit, turn limit, schema error, model check) or an invalid action; each is
+logged with its cause and counts as a step.
 """
 import datetime
 import json
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field
 from pathlib import Path
 
-from .actions import ACTION_SETS, SCHEMAS
+from .actions import ACTION_SETS
 
 PROMPTS = Path(__file__).resolve().parent / "prompts"
 
@@ -24,7 +26,11 @@ class Outcome:
     status: str            # terminal action name, "step_limit" or "error"
     args: dict = field(default_factory=dict)
     steps: int = 0
-    failed_calls: int = 0
+    failed_steps: int = 0
+    calls: int = 0
+    input_tokens: int = 0
+    output_tokens: int = 0
+    call_ms: int = 0
 
 
 def build_prompt(action_set, task, history):
@@ -39,7 +45,7 @@ def build_prompt(action_set, task, history):
     ]
     for h in history:
         parts.append(json.dumps(h))
-    parts += ["", "Return the next action. Set every argument the action does not use to null."]
+    parts += ["", "Return the next action. Leave out arguments the action does not use."]
     return "\n".join(parts)
 
 
@@ -62,43 +68,53 @@ class Orchestrator:
         """
         cfg = self.launcher.cfg["agents"][agent]
         action_set = ACTION_SETS[agent]
-        schema = SCHEMAS[agent]()
+        schema = action_set.schema(cfg.get("schema_form", "optional"))
         system = (PROMPTS / f"{agent}.md").read_text(encoding="utf-8")
-        history, failed_in_row, failed = [], 0, 0
         terminal = {a.name for a in action_set.actions if a.terminal}
+        history, failed_in_row = [], 0
+        out = Outcome(task_id, agent, "step_limit")
+
+        def finish(status, args=None):
+            out.status, out.args = status, args or {}
+            self._trace({"agent": agent, "task_id": task_id, "status": "task_end", "outcome": asdict(out)})
+            return out
 
         for step in range(1, cfg["step_limit"] + 1):
+            out.steps = step
             prompt = build_prompt(action_set, task, history)
             call = self.launcher.call(prompt, system, schema, cfg["effort"], cfg["max_turns"])
+            out.calls += 1
+            out.input_tokens += call.input_tokens
+            out.output_tokens += call.output_tokens
+            out.call_ms += call.duration_ms
             rec = {"agent": agent, "task_id": task_id, "step": step, "call": call.record()}
             if not call.ok:
-                failed += 1
+                out.failed_steps += 1
                 failed_in_row += 1
-                rec["status"] = "call_failed"
+                rec.update(status="failed_step", cause=call.cause or "unknown", error=call.error)
                 self._trace(rec)
                 if failed_in_row >= 2:
-                    return Outcome(task_id, agent, "error", {"reason": call.error}, step, failed)
+                    return finish("error", {"cause": call.cause, "reason": call.error})
                 continue
-            out = call.structured_output
-            rec["output"] = out
+            output = call.structured_output
+            rec["output"] = output
             try:
-                name, args = action_set.validate(out)
+                name, args = action_set.validate(output)
             except ValueError as e:
-                failed += 1
+                out.failed_steps += 1
                 failed_in_row += 1
-                rec["status"] = "invalid_action"
-                rec["error"] = str(e)
+                rec.update(status="failed_step", cause="invalid_action", error=str(e))
                 self._trace(rec)
-                history.append({"step": step, "action": out.get("action"), "result": {"error": f"invalid action: {e}"}})
+                history.append({"step": step, "action": output.get("action"), "result": {"error": f"invalid action: {e}"}})
                 if failed_in_row >= 2:
-                    return Outcome(task_id, agent, "error", {"reason": str(e)}, step, failed)
+                    return finish("error", {"cause": "invalid_action", "reason": str(e)})
                 continue
             failed_in_row = 0
             rec["action"] = {"name": name, "args": args}
             if name in terminal:
                 rec["status"] = "terminal"
                 self._trace(rec)
-                return Outcome(task_id, agent, name, args, step, failed)
+                return finish(name, args)
             fn = executors.get(name)
             if fn is None:
                 result = {"error": f"{name} is not available for this task"}
@@ -107,11 +123,9 @@ class Orchestrator:
                     result = fn(args, task)
                 except Exception as e:  # executor failure is shown to the agent and logged
                     result = {"error": f"{type(e).__name__}: {e}"}
-            rec["status"] = "executed"
-            rec["result"] = result
+            rec.update(status="executed", result=result)
             self._trace(rec)
-            history.append({"step": step, "action": name, "args": args, "rationale": out.get("rationale", ""),
+            history.append({"step": step, "action": name, "args": args, "rationale": output.get("rationale", ""),
                             "result": result})
 
-        self._trace({"agent": agent, "task_id": task_id, "step": cfg["step_limit"], "status": "step_limit"})
-        return Outcome(task_id, agent, "step_limit", {}, cfg["step_limit"], failed)
+        return finish("step_limit")

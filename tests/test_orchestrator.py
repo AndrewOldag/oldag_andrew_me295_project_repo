@@ -3,18 +3,15 @@ import json
 
 import pytest
 
-from agents.actions import DIAGNOSTICIAN, diagnostician_schema
+from agents.actions import DIAGNOSTICIAN, FORMS
 from agents.launcher import CallResult
 from agents.orchestrator import Orchestrator
 
 CFG = {"model": "m", "agents": {"diagnostician": {"effort": "low", "max_turns": 3, "step_limit": 4}}}
-NULLS = {k: None for k in diagnostician_schema()["properties"]}
 
 
 def act(**kw):
-    out = dict(NULLS, rationale="r")
-    out.update(kw)
-    return out
+    return dict(rationale="r", **kw)
 
 
 class ScriptedLauncher:
@@ -30,7 +27,8 @@ class ScriptedLauncher:
         o = self.outputs.pop(0)
         if isinstance(o, CallResult):
             return o
-        return CallResult(ok=True, structured_output=o, models=["m"], subtype="success")
+        return CallResult(ok=True, structured_output=o, models=["m"], subtype="success",
+                          input_tokens=100, output_tokens=10, duration_ms=50)
 
 
 def run(tmp_path, outputs, executors=None):
@@ -45,8 +43,15 @@ def test_info_then_accept(tmp_path):
     ex = {"request_info": lambda a, t: {"kind": a["kind"], "value": 3.2}}
     out, trace, L = run(tmp_path, [act(action="request_info", kind="check_report"), act(action="accept", confidence=0.9)], ex)
     assert out.status == "accept" and out.args == {"confidence": 0.9} and out.steps == 2
-    assert [r["status"] for r in trace] == ["executed", "terminal"]
+    assert [r["status"] for r in trace] == ["executed", "terminal", "task_end"]
     assert '"value": 3.2' in L.prompts[1]          # result fed back to the agent
+
+
+def test_totals_per_task(tmp_path):
+    ex = {"request_info": lambda a, t: {}}
+    out, trace, _ = run(tmp_path, [act(action="request_info", kind="check_report"), act(action="accept", confidence=0.5)], ex)
+    assert (out.calls, out.input_tokens, out.output_tokens, out.call_ms) == (2, 200, 20, 100)
+    assert trace[-1]["outcome"]["calls"] == 2
 
 
 def test_remedy_setting_checked(tmp_path):
@@ -54,10 +59,17 @@ def test_remedy_setting_checked(tmp_path):
     good = act(action="apply_remedy", fault="displacement_exceeds_patch", remedy="change_frame_stride", setting="half")
     ex = {"apply_remedy": lambda a, t: {"checks_pass": True}}
     out, trace, L = run(tmp_path, [bad, good, act(action="accept", confidence=0.8)], ex)
-    assert [r["status"] for r in trace] == ["invalid_action", "executed", "terminal"]
-    assert "not allowed for change_frame_stride" in trace[0]["error"]
+    assert [r["status"] for r in trace] == ["failed_step", "executed", "terminal", "task_end"]
+    assert trace[0]["cause"] == "invalid_action" and "not allowed for change_frame_stride" in trace[0]["error"]
     assert "invalid action" in L.prompts[1]
-    assert out.status == "accept" and out.failed_calls == 1
+    assert out.status == "accept" and out.failed_steps == 1
+
+
+def test_remedy_without_setting():
+    name, args = DIAGNOSTICIAN.validate(act(action="apply_remedy", fault="rigid_drift", remedy="register_frames"))
+    assert args == {"fault": "rigid_drift", "remedy": "register_frames", "setting": None}
+    with pytest.raises(ValueError, match="not allowed for change_frame_stride"):
+        DIAGNOSTICIAN.validate(act(action="apply_remedy", fault="rigid_drift", remedy="change_frame_stride"))
 
 
 def test_missing_argument_and_unknown_action():
@@ -69,16 +81,18 @@ def test_missing_argument_and_unknown_action():
         DIAGNOSTICIAN.validate(act(action="accept", confidence=1.5))
 
 
-def test_two_failures_in_a_row_stop(tmp_path):
-    fail = CallResult(ok=False, error="model check failed: ['other'] (pinned m)")
+@pytest.mark.parametrize("cause", ["max_turns", "schema", "exit_code", "model_check", "timeout"])
+def test_failed_calls_logged_with_cause(tmp_path, cause):
+    fail = CallResult(ok=False, error="x", cause=cause, input_tokens=5)
     out, trace, _ = run(tmp_path, [fail, fail])
-    assert out.status == "error" and out.steps == 2 and "model check" in out.args["reason"]
+    assert out.status == "error" and out.args["cause"] == cause and out.failed_steps == 2
+    assert [r.get("cause") for r in trace[:2]] == [cause, cause]
 
 
 def test_step_limit(tmp_path):
     ex = {"request_info": lambda a, t: {"ok": 1}}
     out, trace, _ = run(tmp_path, [act(action="request_info", kind="frame_quality")] * 4, ex)
-    assert out.status == "step_limit" and trace[-1]["status"] == "step_limit"
+    assert out.status == "step_limit" and trace[-1]["outcome"]["status"] == "step_limit"
 
 
 def test_executor_error_reported_not_raised(tmp_path):
@@ -90,6 +104,10 @@ def test_executor_error_reported_not_raised(tmp_path):
     assert out.status == "decline"
 
 
-def test_schema_is_strict():
-    s = diagnostician_schema()
-    assert s["additionalProperties"] is False and set(s["required"]) == set(s["properties"])
+@pytest.mark.parametrize("form", FORMS)
+def test_schema_forms_are_closed(form):
+    s = DIAGNOSTICIAN.schema(form)
+    objs = s["anyOf"] if form == "union" else [s]
+    for o in objs:
+        assert o["additionalProperties"] is False
+        assert {"action", "rationale"} <= set(o["required"])
