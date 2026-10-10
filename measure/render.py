@@ -43,22 +43,46 @@ class Movie:
     seed: int = 0
 
 
-def fault_settings(fault):
-    """Movie and spec changes for one development fault."""
+def fault_settings(fault, size=None):
+    """Movie changes, spec override and tip-speed factor for one development fault.
+
+    size (string; None = the size used since 2026-10-10):
+    - rigid_drift: factor on the drift, 1 = 0.4, 0.2 px/frame and 0.02 deg/frame
+    - displacement_exceeds_patch: "FxK", tip speed F times 60 px/h and analysis
+      stride K, in a window of at most 41 rendered frames (1 h). Default: stride
+      12, 21 analysis frames (6 h), speed 1
+    - midline_jitter: sideways jitter std, px (default 3)
+    - low_texture: texture contrast (default 0.03), with blur 2 px and noise 40
+    """
     if fault is None:
-        return {}, None
+        return {}, None, 1.0
     if fault == "rigid_drift":
-        return {"rigid_velocity": (0.4 / 90.0, 0.2 / 90.0),
-                "rigid_rotation": np.deg2rad(0.02) / 90.0}, None
+        k = float(size) if size else 1.0
+        return {"rigid_velocity": (0.4 * k / 90.0, 0.2 * k / 90.0),
+                "rigid_rotation": np.deg2rad(0.02 * k) / 90.0}, None, 1.0
     if fault == "displacement_exceeds_patch":
-        return {"stride": 12, "analysis_frames": 21}, None
+        if not size:
+            return {"stride": 12, "analysis_frames": 21}, None, 1.0
+        f, k = size.split("x")
+        k = int(k)
+        return {"stride": k, "analysis_frames": 40 // k + 1}, None, float(f)
     if fault == "midline_jitter":
-        return {"midline_jitter": 3.0}, None
+        return {"midline_jitter": float(size) if size else 3.0}, None, 1.0
     if fault == "low_texture":
-        return {"contrast": 0.03, "blur": 2.0, "noise": 40.0}, None
+        return {"contrast": float(size) if size else 0.03, "blur": 2.0, "noise": 40.0}, None, 1.0
     if fault == "width_change":
-        return {}, "width_change"
+        return {}, "width_change", 1.0
     raise ValueError(f"unknown or held-out fault: {fault}")
+
+
+def faster(spec, factor):
+    """The same rod with every tissue velocity multiplied by factor."""
+    if factor == 1.0:
+        return spec
+    v, regr = spec.v, spec.regr
+    return replace(spec, v=lambda s: factor * np.asarray(v(s), float),
+                   regr=lambda s: factor * np.asarray(regr(s), float),
+                   notes=spec.notes + f"; velocities x{factor:g}")
 
 
 def _texture(spec, movie, rng):
@@ -219,20 +243,21 @@ def variant_tag(width_kappa_inv=None, rotation_deg=None):
     return tag
 
 
-def rod_id(case, fault=None, seed=0, moved=False, width_kappa_inv=None, rotation_deg=None):
-    return (f"{case}_{fault or 'clean'}{variant_tag(width_kappa_inv, rotation_deg)}_s{seed}"
-            + ("_moved" if moved else ""))
+def rod_id(case, fault=None, seed=0, moved=False, width_kappa_inv=None, rotation_deg=None, size=None):
+    return (f"{case}_{fault or 'clean'}{variant_tag(width_kappa_inv, rotation_deg)}"
+            + (f"_z{size}" if size else "") + f"_s{seed}" + ("_moved" if moved else ""))
 
 
-def image_case(case, fault=None, seed=0, moved=False, width_kappa_inv=None, rotation_deg=None):
+def image_case(case, fault=None, seed=0, moved=False, width_kappa_inv=None, rotation_deg=None, size=None):
     """Spec and movie settings for one image-level rod.
 
     case: a field-level case name (growth_zone, bending, rigid_translation, ...).
     moved: add the rigid motion used by the rigid-invariance check.
     width_kappa_inv: curvature 1/width_kappa_inv px for the width_change fault (default 400).
     rotation_deg: rotation rate of the rigid_rotation case, deg/frame (default 0.1).
+    size: fault size, see fault_settings.
     """
-    movie_kw, spec_override = fault_settings(fault)
+    movie_kw, spec_override, speed = fault_settings(fault, size)
     name = spec_override or case
     if name == "width_change":
         spec = width_change_spec(width_kappa_inv or 400.0)
@@ -242,6 +267,7 @@ def image_case(case, fault=None, seed=0, moved=False, width_kappa_inv=None, rota
         spec = rigid_rotation_spec(rotation_deg)
     else:
         spec = next(s for s in field_cases() if s.name == name)
+    spec = faster(spec, speed)
     movie = Movie(seed=seed, **movie_kw)
     if moved:
         movie = replace(movie, rigid_rotation=movie.rigid_rotation + np.deg2rad(0.1) / 90.0,
@@ -250,10 +276,10 @@ def image_case(case, fault=None, seed=0, moved=False, width_kappa_inv=None, rota
 
 
 def build(out_dir, case, fault=None, seed=0, moved=False, pixel_um=2.105, width_kappa_inv=None,
-          rotation_deg=None):
+          rotation_deg=None, size=None):
     """Render one rod into out_dir: <id>.imgdir, <id>_midline.npz, <id>_truth.npz. Returns the id."""
-    spec, movie = image_case(case, fault, seed, moved, width_kappa_inv, rotation_deg)
-    rid = rod_id(case, fault, seed, moved, width_kappa_inv, rotation_deg)
+    spec, movie = image_case(case, fault, seed, moved, width_kappa_inv, rotation_deg, size)
+    rid = rod_id(case, fault, seed, moved, width_kappa_inv, rotation_deg, size)
     r = render(spec, movie)
     out_dir = Path(out_dir)
     write_imgdir(out_dir / f"{rid}.imgdir", r["frames"], r["times"], r["stage_px"], pixel_um)
@@ -262,7 +288,7 @@ def build(out_dir, case, fault=None, seed=0, moved=False, pixel_um=2.105, width_
                         mask0=r["mask0"])
     truth = make_record(replace(spec, n_frames=r["spec_frames"])).truth
     np.savez_compressed(out_dir / f"{rid}_truth.npz", stride=movie.stride,
-                        fault=str(fault), case=case, variant=variant_tag(width_kappa_inv, rotation_deg),
+                        fault=str(fault), case=case, size=str(size), variant=variant_tag(width_kappa_inv, rotation_deg),
                         frame_size=np.array([movie.height, movie.width]),
                         track_length=movie.track_length, **truth)
     return rid
