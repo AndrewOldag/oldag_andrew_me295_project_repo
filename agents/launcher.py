@@ -5,7 +5,8 @@
 - The Claude Code version must equal the pinned version
 - The answer must come from the pinned model only (strict; Claude Code can
   fall back to another model on its own)
-- The prompt goes in on stdin; the system prompt from a file; no tools
+- The prompt goes in on stdin; the system prompt from a file. Built-in CLI
+  tools are off; the agent's tools are the typed actions in its output schema
 - Nothing from the environment and no credential is returned or logged
 """
 import hashlib
