@@ -39,7 +39,11 @@
   .imgs figure { margin:0; }
   .imgs img { width:100%; display:block; border-radius:4px; background:#000; cursor:zoom-in; }
   .imgs figcaption { font-size:11px; color:var(--muted); text-align:center; }
-  .gifwrap img { width:100%; border-radius:4px; cursor:zoom-in; }
+  .scrub img { width:100%; border-radius:4px; cursor:zoom-in; background:#000; display:block; }
+  .scrub .ctl { display:flex; gap:8px; align-items:center; margin-top:6px; }
+  .scrub input[type=range] { flex:1; }
+  .scrub .t { font:600 15px/1 ui-monospace, Consolas, monospace; min-width:70px; text-align:right; }
+  .scrub .ctl button { padding:4px 9px; }
   .title { display:flex; align-items:baseline; gap:10px; margin-bottom:6px; }
   .title b { font-size:16px; }
   .meta { font-size:12px; color:var(--muted); }
@@ -84,7 +88,7 @@
   <section class="notes">
     <h2>Before you start</h2>
     <ul>
-      <li>One card per root position (experiment and chamber code). Each card shows the stitched movie at the start, middle and end. <b>Play 24 h</b> shows one frame every 2 h.</li>
+      <li>One card per root position (experiment and chamber code). Each card shows the stitched movie at the start, middle and end. <b>Movie with time</b> opens a player with one frame every 15 min and the elapsed time on each frame; drag the slider to find when something happens, then press <b>Set start</b> or <b>Set end</b> to fill the usable window.</li>
       <li>For each root: check the condition, choose <b>Keep</b>, <b>Drop</b> or <b>Unsure</b>, and add a note if anything looks wrong (second root in frame, root leaves the field, out of focus, drift).</li>
       <li>Condition is pre-filled from the chamber code and is a guess. The <code>c</code>/<code>m</code> meaning in the 21 Jul folder and the <code>cc</code>/<code>mc</code>/<code>mm</code> meaning in the 27 Jul folder need your confirmation.</li>
       <li>Root counts per folder do not match the earlier inventory (see the table below). Please say which is right.</li>
@@ -94,7 +98,7 @@
     </ul>
   </section>
   <section class="summary"><h2>Counts</h2><div id="summary"></div></section>
-  <p class="help">Click a card to select it, then: <kbd>K</kbd> keep · <kbd>D</kbd> drop · <kbd>U</kbd> unsure · <kbd>P</kbd> play/stop · <kbd>J</kbd>/<kbd>&darr;</kbd> next · <kbd>&uarr;</kbd> previous. Click an image to enlarge.</p>
+  <p class="help">Click a card to select it, then: <kbd>K</kbd> keep · <kbd>D</kbd> drop · <kbd>U</kbd> unsure · <kbd>P</kbd> open/close movie · in the movie: <kbd>Space</kbd> play/pause, <kbd>&larr;</kbd>/<kbd>&rarr;</kbd> step 15 min, <kbd>[</kbd> set start, <kbd>]</kbd> set end · <kbd>J</kbd>/<kbd>&darr;</kbd> next · <kbd>&uarr;</kbd> previous. Click an image to enlarge.</p>
   <div id="cards"></div>
 </main>
 <div class="lightbox" id="lb"><img id="lbimg" alt=""><div id="lbcap"></div></div>
@@ -205,7 +209,16 @@ function card(r) {
       <div class="imgs">
         ${["start", "mid", "end"].map(s => `<figure><img loading="lazy" src="thumbs/${r.id}_${s}.png" alt="${r.id} ${s}" data-cap="${r.id} · ${s}"><figcaption>${s === "start" ? "0 h" : s === "mid" ? "~12 h" : "~24 h"}</figcaption></figure>`).join("")}
       </div>
-      <div class="gifwrap" hidden><img alt="${r.id} 24 h" data-cap="${r.id} · one frame per 2 h"></div>
+      <div class="scrub" hidden>
+        <img alt="${r.id}" data-cap="${r.id}">
+        <div class="ctl">
+          <button class="sp" title="Play or pause (space)">▶</button>
+          <input type="range" min="0" value="0" step="1">
+          <span class="t">0.00 h</span>
+          <button class="setfrom" title="Use this time as the start of the usable window">Set start</button>
+          <button class="setto" title="Use this time as the end of the usable window">Set end</button>
+        </div>
+      </div>
       <table class="meta">
         <tr><td>Start</td><td>${r.start_time}</td><td>Timepoints</td><td>${r.n_timepoints} over ${r.duration_h} h</td></tr>
         <tr><td>Step</td><td>${r.step_s} s (max ${r.max_step_s} s)</td><td>Image</td><td>${r.size_px} px</td></tr>
@@ -215,7 +228,7 @@ function card(r) {
       ${flag}
     </div>
     <div class="form">
-      <button class="play" style="width:100%">▶ Play 24 h</button>
+      <button class="play" style="width:100%">▶ Movie with time</button>
       <label>Keep this root?</label>
       <div class="seg">${["yes", "no", "unsure"].map(v => `<button data-v="${v}" class="${r.include === v ? "on" : ""}">${v === "yes" ? "Keep" : v === "no" ? "Drop" : "Unsure"}</button>`).join("")}</div>
       <label>Condition <span class="guess">(guess from code: ${r.condition_guess})</span></label>
@@ -247,11 +260,49 @@ function setInclude(cardEl, v) {
   cardEl.querySelectorAll(".seg button").forEach(b => b.classList.toggle("on", b.dataset.v === r.include));
   save();
 }
-function togglePlay(cardEl) {
-  const g = cardEl.querySelector(".gifwrap"), imgs = cardEl.querySelector(".imgs"), btn = cardEl.querySelector(".play");
-  const on = g.hidden;
-  if (on) g.querySelector("img").src = `thumbs/${cardEl.dataset.id}.gif`;
-  g.hidden = !on; imgs.hidden = on; btn.textContent = on ? "■ Stop" : "▶ Play 24 h";
+const scrubs = {};  // id -> {times, k, timer}
+function showFrame(cardEl, k) {
+  const s = scrubs[cardEl.dataset.id]; if (!s) return;
+  s.k = Math.max(0, Math.min(s.times.length - 1, k));
+  const img = cardEl.querySelector(".scrub img");
+  img.src = `scrub/${cardEl.dataset.id}/${String(s.k).padStart(3, "0")}.jpg`;
+  img.dataset.cap = `${cardEl.dataset.id} · ${s.times[s.k].toFixed(2)} h`;
+  cardEl.querySelector(".scrub input").value = s.k;
+  cardEl.querySelector(".scrub .t").textContent = s.times[s.k].toFixed(2) + " h";
+}
+function playPause(cardEl, force) {
+  const s = scrubs[cardEl.dataset.id]; if (!s) return;
+  const run = force ?? !s.timer;
+  clearInterval(s.timer); s.timer = null;
+  if (run) {
+    if (s.k >= s.times.length - 1) s.k = -1;
+    s.timer = setInterval(() => {
+      if (s.k >= s.times.length - 1) return playPause(cardEl, false);
+      showFrame(cardEl, s.k + 1);
+    }, 150);
+  }
+  cardEl.querySelector(".sp").textContent = s.timer ? "❚❚" : "▶";
+}
+async function togglePlay(cardEl) {
+  const sc = cardEl.querySelector(".scrub"), imgs = cardEl.querySelector(".imgs"), btn = cardEl.querySelector(".play");
+  const id = cardEl.dataset.id, open = sc.hidden;
+  if (open) {
+    if (!scrubs[id]) {
+      const meta = await (await fetch(`scrub/${id}.json`)).json();
+      scrubs[id] = { times: meta.times_h, k: 0, timer: null };
+      meta.times_h.forEach((_, k) => { new Image().src = `scrub/${id}/${String(k).padStart(3, "0")}.jpg`; });
+      cardEl.querySelector(".scrub input").max = meta.times_h.length - 1;
+    }
+    showFrame(cardEl, scrubs[id].k);
+  } else playPause(cardEl, false);
+  sc.hidden = !open; imgs.hidden = open; btn.textContent = open ? "■ Close movie" : "▶ Movie with time";
+}
+function setWindow(cardEl, which) {
+  const s = scrubs[cardEl.dataset.id], r = rowOf(cardEl); if (!s) return;
+  const v = (Math.round(s.times[s.k] * 4) / 4).toString();
+  if (which === "from") r.usable_from_h = v; else r.usable_to_h = v;
+  cardEl.querySelector("." + which).value = v;
+  save();
 }
 function focusCard(i) {
   const cs = [...document.querySelectorAll(".card")];
@@ -266,11 +317,18 @@ document.getElementById("cards").addEventListener("click", e => {
   focusCard([...document.querySelectorAll(".card")].indexOf(c));
   if (e.target.matches(".seg button")) setInclude(c, e.target.dataset.v);
   else if (e.target.matches(".play")) togglePlay(c);
+  else if (e.target.matches(".sp")) playPause(c);
+  else if (e.target.matches(".setfrom")) setWindow(c, "from");
+  else if (e.target.matches(".setto")) setWindow(c, "to");
   else if (e.target.tagName === "IMG") {
     document.getElementById("lbimg").src = e.target.src;
     document.getElementById("lbcap").textContent = e.target.dataset.cap;
     document.getElementById("lb").style.display = "flex";
   }
+});
+document.getElementById("cards").addEventListener("input", e => {
+  if (!e.target.matches(".scrub input[type=range]")) return;
+  const c = e.target.closest(".card"); playPause(c, false); showFrame(c, +e.target.value);
 });
 document.getElementById("cards").addEventListener("change", e => {
   const r = rowOf(e.target); if (!r) return;
@@ -299,6 +357,14 @@ document.addEventListener("keydown", e => {
   const map = { k: "yes", d: "no", u: "unsure" };
   if (map[e.key]) { setInclude(cs[focusIdx], map[e.key]); focusCard(focusIdx + 1); }
   if (e.key === "p") togglePlay(cs[focusIdx]);
+  const open = !cs[focusIdx].querySelector(".scrub").hidden;
+  if (open && (e.key === "ArrowRight" || e.key === "ArrowLeft")) {
+    e.preventDefault(); playPause(cs[focusIdx], false);
+    showFrame(cs[focusIdx], scrubs[cs[focusIdx].dataset.id].k + (e.key === "ArrowRight" ? 1 : -1));
+  }
+  if (open && e.key === " ") { e.preventDefault(); playPause(cs[focusIdx]); }
+  if (open && e.key === "[") setWindow(cs[focusIdx], "from");
+  if (open && e.key === "]") setWindow(cs[focusIdx], "to");
 });
 load();
 </script>
