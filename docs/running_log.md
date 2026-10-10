@@ -92,3 +92,15 @@ Required by the course. One entry per work session: done, remaining, bottlenecks
 - Demo: none; review and spec only
 - Remaining: build account works parts A and B of the new spec, then item 5 of the 2026-10-09 spec, with part C before item 6
 - Bottlenecks: course staff answer on tool use (Andrew)
+
+## 2026-10-10 (build account, session 5, continued)
+- Done: pulled planning session 4: thresholds approved (2.0 %/h, 1.0 px/h, 3.25 %/h), spec `docs/specs/2026-10-10_bent-rods-width-change-rotation.md`. Worked parts A and B
+- Done: code. `width_change_spec(kappa_inv)`, `rigid_rotation_spec(rate, pivot_offset)`, new field case `rotation_basal_pivot`, `IMAGE_EXPECTED` (rigid_rotation: closure fails), `--width-kappa-inv` and `--rotation-deg` options, test `tests/test_image_expected.py` with seed-0 fixtures. Commit 4188ad8. Threshold basis comment now 15 clean rods. Commit d1b6100
+- Done: 30 tracker runs on the lab server, 0 failed, 0 frozen points; render 21 s and track 7-8 s per width run. `results/2026-10-10_width_rotation/`. Commit bb5e1f7
+- Done: part A. plane_sections at curvature 1/400 (true 3.0 %/h): 4.30, 3.43, 3.55, 3 of 3 above 3.25. At 1/267 (true 4.5 %/h): 6.04, 4.98, 5.15, 3 of 3. Other checks pass. Four of six peaks at s = 40-75 px
+- Done: part B. Field level: rotation_basal_pivot closure 13.96 px/h (= rate x 200 px), others 0. Image level, closure at 0.1 / 0.03 / 0.01 deg/frame: 5.58 / 1.71 / 0.57 px/h median, predicted 5.58 / 1.68 / 0.56. Slowest rate flagged: 0.03 deg/frame. 0.01 deg/frame is not flagged
+- Done: `python -m pytest -q tests`: 49 passed, 1.8 s
+- Demo A: `python scripts/synth/eval_rods.py --tracks <tracks dir> --out results/2026-10-10_width_rotation` writes `per_seed.md` with the plane-sections value per seed and size
+- Demo B: the same command prints the closure-against-rate table (`rotation.md`); `python -m pytest -q tests/test_image_expected.py` checks rigid_rotation fails closure only at the approved thresholds
+- Remaining: Andrew picks the width_change size (1/400 clears 3.25 by 0.18 %/h at worst; 1/267 by 1.73); then item 5 of the 2026-10-09 spec; part C (bent rods) before item 6
+- Bottlenecks: width_change size choice (Andrew); course staff answer on tool use (Andrew)

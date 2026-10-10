@@ -19,8 +19,8 @@ Course project for AM/ME/CE 295, Caltech, Fall 2026. Start with `CLAUDE.md` and 
 - Record format: `docs/context/measurement_record.md`. Code: `measure/record.py`
 - Field-level rods (six cases, truth known): `measure/rod.py`. Checker: `checker/` (no LLM; definitions in `docs/decisions.md`). Both run in the agents env and are covered by `python -m pytest -q tests`
 - Image-level rods need the tracker (Quantum Borland v1, private) in its own env (`envs/qb.yml`), on the machine where tracking runs. With that env's Python, from a copy of `measure/` and `scripts/`:
-  - `python scripts/synth/run_batch.py --work DIR --case growth_zone --seeds 0 1 2 --moved-too [--fault low_texture]` renders each rod (`scripts/synth/make_rod.py`), tracks it (`scripts/remote/qb_track.py`) and writes `DIR/tracks/<id>.npz` with the truth beside it. About 13 s per rod
-- Back in the agents env: `python scripts/synth/eval_rods.py --tracks DIR/tracks --out results/<date>_<name>` writes the field-level table, the image-level check values and truth errors, and a profile plot
+  - `python scripts/synth/run_batch.py --work DIR --case growth_zone --seeds 0 1 2 --moved-too [--fault low_texture]` renders each rod (`scripts/synth/make_rod.py`; options `--width-kappa-inv K` for the width_change curvature and `--rotation-deg R` for the rigid_rotation rate), tracks it (`scripts/remote/qb_track.py`) and writes `DIR/tracks/<id>.npz` with the truth beside it. About 13 s per rod
+- Back in the agents env: `python scripts/synth/eval_rods.py --tracks DIR/tracks --out results/<date>_<name>` writes the field-level table, the image-level check values at the approved thresholds, per-seed values, truth errors, and a profile plot
 - Checker thresholds: `config/checker_thresholds.yaml`. Provisional until approved
 
 ## Tools
