@@ -51,7 +51,9 @@ def main():
     trace.unlink(missing_ok=True)
     orch = Orchestrator(Launcher(), trace)
     outcome = orch.run("diagnostician", "demo", TASK, {"request_info": request_info, "apply_remedy": apply_remedy})
-    print(f"outcome: {outcome.status} {outcome.args}; steps {outcome.steps}; failed calls {outcome.failed_calls}")
+    print(f"outcome: {outcome.status} {outcome.args}; steps {outcome.steps}; failed steps {outcome.failed_steps}")
+    print(f"calls {outcome.calls}; tokens in {outcome.input_tokens}, out {outcome.output_tokens}; "
+          f"call time {outcome.call_ms / 1000:.1f} s")
     print(f"trace: {trace.relative_to(ROOT)}")
 
 
