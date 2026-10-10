@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Root manifest review</title>
+<style>
+  :root { --bg:#f6f7f9; --card:#fff; --ink:#1d2330; --muted:#677084; --line:#e2e5eb; --accent:#2f6fed;
+          --ok:#1f8a4c; --no:#c4372c; --warn:#b26a00; --warnbg:#fff4e0; }
+  * { box-sizing:border-box; }
+  [hidden] { display:none !important; }
+  body { margin:0; font:14px/1.45 system-ui, "Segoe UI", sans-serif; background:var(--bg); color:var(--ink); }
+  header { position:sticky; top:0; z-index:5; background:#fff; border-bottom:1px solid var(--line); padding:10px 20px; }
+  .bar { display:flex; gap:14px; align-items:center; flex-wrap:wrap; }
+  h1 { font-size:17px; margin:0 12px 0 0; }
+  .progress { flex:0 0 220px; height:8px; background:var(--line); border-radius:4px; overflow:hidden; }
+  .progress > div { height:100%; background:var(--ok); width:0; transition:width .2s; }
+  select, input[type=text], input[type=search] { font:inherit; padding:5px 8px; border:1px solid var(--line); border-radius:6px; background:#fff; }
+  button { font:inherit; padding:5px 11px; border:1px solid var(--line); border-radius:6px; background:#fff; cursor:pointer; }
+  button:hover { border-color:var(--accent); }
+  .save { font-size:12px; color:var(--muted); }
+  main { max-width:1280px; margin:0 auto; padding:16px 20px 80px; }
+  .notes { background:#fff; border:1px solid var(--line); border-radius:10px; padding:12px 16px; margin-bottom:14px; }
+  .notes h2, .summary h2 { font-size:14px; margin:0 0 6px; }
+  .notes ul { margin:4px 0 0 18px; padding:0; }
+  .summary { background:#fff; border:1px solid var(--line); border-radius:10px; padding:12px 16px; margin-bottom:14px; overflow-x:auto; }
+  table { border-collapse:collapse; font-size:13px; }
+  th, td { padding:4px 10px; border-bottom:1px solid var(--line); text-align:right; }
+  th:first-child, td:first-child { text-align:left; }
+  .bad { color:var(--no); font-weight:600; }
+  .help { font-size:12px; color:var(--muted); margin:0 0 10px; }
+  kbd { background:#eef0f4; border:1px solid var(--line); border-radius:4px; padding:0 5px; font-size:11px; }
+  .card { display:grid; grid-template-columns: 1fr 330px; gap:16px; background:var(--card); border:1px solid var(--line);
+          border-left:5px solid var(--line); border-radius:10px; padding:12px 14px; margin-bottom:12px; }
+  .card.focus { outline:2px solid var(--accent); }
+  .card.yes { border-left-color:var(--ok); }
+  .card.no { border-left-color:var(--no); }
+  .card.unsure { border-left-color:var(--warn); }
+  .imgs { display:grid; grid-template-columns:repeat(3, 1fr); gap:6px; }
+  .imgs figure { margin:0; }
+  .imgs img { width:100%; display:block; border-radius:4px; background:#000; cursor:zoom-in; }
+  .imgs figcaption { font-size:11px; color:var(--muted); text-align:center; }
+  .gifwrap img { width:100%; border-radius:4px; cursor:zoom-in; }
+  .title { display:flex; align-items:baseline; gap:10px; margin-bottom:6px; }
+  .title b { font-size:16px; }
+  .meta { font-size:12px; color:var(--muted); }
+  .meta td { text-align:left; padding:1px 8px 1px 0; border:0; }
+  .flag { background:var(--warnbg); color:var(--warn); border-radius:6px; padding:4px 8px; font-size:12px; margin:6px 0; }
+  .form label { display:block; font-size:12px; color:var(--muted); margin-top:8px; }
+  .form select, .form input[type=text] { width:100%; }
+  .seg { display:flex; gap:6px; margin-top:3px; }
+  .seg button { flex:1; }
+  .seg input[type=number] { flex:1; min-width:0; font:inherit; padding:5px 8px; border:1px solid var(--line); border-radius:6px; }
+  .seg button.on[data-v=yes] { background:var(--ok); color:#fff; border-color:var(--ok); }
+  .seg button.on[data-v=no] { background:var(--no); color:#fff; border-color:var(--no); }
+  .seg button.on[data-v=unsure] { background:var(--warn); color:#fff; border-color:var(--warn); }
+  .guess { font-size:11px; color:var(--muted); }
+  .lightbox { position:fixed; inset:0; background:rgba(10,12,16,.88); display:none; align-items:center; justify-content:center; z-index:20; flex-direction:column; }
+  .lightbox img { max-width:96vw; max-height:86vh; }
+  .lightbox div { color:#ddd; margin-top:8px; }
+  .empty { text-align:center; color:var(--muted); padding:40px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <h1>Root manifest review</h1>
+    <div class="progress" title="Roots with a keep / drop / unsure answer"><div id="prog"></div></div>
+    <span id="progtext"></span>
+    <select id="fexp"><option value="">All experiments</option></select>
+    <select id="fstate">
+      <option value="">All roots</option>
+      <option value="todo">Not reviewed</option>
+      <option value="flagged">Flagged</option>
+      <option value="unsure">Marked unsure</option>
+      <option value="no">Marked drop</option>
+      <option value="window">Notes mention a time limit</option>
+    </select>
+    <input type="search" id="fsearch" placeholder="Search id or note">
+    <button id="dl" title="Also saved automatically">Download CSV</button>
+    <span class="save" id="savestate"></span>
+  </div>
+</header>
+<main>
+  <section class="notes">
+    <h2>Before you start</h2>
+    <ul>
+      <li>One card per root position (experiment and chamber code). Each card shows the stitched movie at the start, middle and end. <b>Play 24 h</b> shows one frame every 2 h.</li>
+      <li>For each root: check the condition, choose <b>Keep</b>, <b>Drop</b> or <b>Unsure</b>, and add a note if anything looks wrong (second root in frame, root leaves the field, out of focus, drift).</li>
+      <li>Condition is pre-filled from the chamber code and is a guess. The <code>c</code>/<code>m</code> meaning in the 21 Jul folder and the <code>cc</code>/<code>mc</code>/<code>mm</code> meaning in the 27 Jul folder need your confirmation.</li>
+      <li>Root counts per folder do not match the earlier inventory (see the table below). Please say which is right.</li>
+      <li>21 Jul: <code>test1.dir</code> holds no capture folders; only <code>test2.dir</code> (named <code>timebefore_30</code>) exists. 27 Jul: every root has one gap of about 40 min. This may be the transfer.</li>
+      <li><b>Usable window:</b> if only part of a movie can be tracked, enter the hours to keep (e.g. from 0 to 12). Leave blank to keep the whole movie. The filter <i>Notes mention a time limit</i> lists the roots whose notes suggest one.</li>
+      <li>Answers save automatically to <code>data/manifest/manifest_reviewed.csv</code>. You can close the page and come back.</li>
+    </ul>
+  </section>
+  <section class="summary"><h2>Counts</h2><div id="summary"></div></section>
+  <p class="help">Click a card to select it, then: <kbd>K</kbd> keep · <kbd>D</kbd> drop · <kbd>U</kbd> unsure · <kbd>P</kbd> play/stop · <kbd>J</kbd>/<kbd>&darr;</kbd> next · <kbd>&uarr;</kbd> previous. Click an image to enlarge.</p>
+  <div id="cards"></div>
+</main>
+<div class="lightbox" id="lb"><img id="lbimg" alt=""><div id="lbcap"></div></div>
+<script>
+const CONDITIONS = ["control", "mannitol", "control then control", "mannitol then control", "mannitol then mannitol", "other", "unsure"];
+const GUESS_MAP = {
+  "control": "control", "mannitol": "mannitol", "control?": "control",
+  "mannitol then recovery?": "mannitol then control", "control then control?": "control then control",
+  "mannitol then control (recovery)?": "mannitol then control", "mannitol then mannitol?": "mannitol then mannitol",
+};
+const INVENTORY = { "20260708": 10, "20260711": 28, "20260714": 24, "20260721": 28, "20260727": 28 };
+const EDIT = ["root_label", "condition", "include", "notes", "usable_from_h", "usable_to_h"];
+const TIME_NOTE = /(\d+ ?(h|hr|hrs|hour|hours)\b|\bend\b|out of frame|grows? out|grew out|hits the back)/i;
+let rows = [], fields = [], focusIdx = -1, saveTimer = null;
+
+function parseCSV(text) {
+  const out = []; let row = [], f = "", q = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (q) {
+      if (c === '"' && text[i + 1] === '"') { f += '"'; i++; }
+      else if (c === '"') q = false;
+      else f += c;
+    } else if (c === '"') q = true;
+    else if (c === ",") { row.push(f); f = ""; }
+    else if (c === "\n" || c === "\r") {
+      if (c === "\r" && text[i + 1] === "\n") i++;
+      row.push(f); f = ""; if (row.length > 1 || row[0] !== "") out.push(row); row = [];
+    } else f += c;
+  }
+  if (f !== "" || row.length) { row.push(f); out.push(row); }
+  const head = out.shift();
+  return { head, rows: out.map(r => Object.fromEntries(head.map((h, i) => [h, r[i] ?? ""]))) };
+}
+function toCSV() {
+  const esc = v => /[",\n\r]/.test(v) ? '"' + String(v).replace(/"/g, '""') + '"' : String(v);
+  return [fields.join(","), ...rows.map(r => fields.map(h => esc(r[h] ?? "")).join(","))].join("\n") + "\n";
+}
+
+async function load() {
+  const draft = parseCSV(await (await fetch("manifest_draft.csv")).text());
+  fields = draft.head; rows = draft.rows;
+  EDIT.forEach(k => { if (!fields.includes(k)) fields.push(k); });
+  let saved = null;
+  const res = await fetch("manifest_reviewed.csv");
+  if (res.ok) saved = parseCSV(await res.text()).rows;
+  else { try { saved = JSON.parse(localStorage.getItem("manifest_review") || "null"); } catch (e) {} }
+  const byId = Object.fromEntries((saved || []).map(r => [r.id, r]));
+  for (const r of rows) {
+    const s = byId[r.id];
+    if (s) EDIT.forEach(k => r[k] = s[k] ?? "");
+    if (!r.root_label) r.root_label = r.id;
+    if (!r.condition) r.condition = GUESS_MAP[r.condition_guess] || "unsure";
+  }
+  const exps = [...new Set(rows.map(r => r.experiment))].sort();
+  document.getElementById("fexp").innerHTML += exps.map(e => `<option>${e}</option>`).join("");
+  render();
+}
+
+function save() {
+  localStorage.setItem("manifest_review", JSON.stringify(rows.map(r => Object.fromEntries(["id", ...EDIT].map(k => [k, r[k]])))));
+  clearTimeout(saveTimer);
+  document.getElementById("savestate").textContent = "Saving…";
+  saveTimer = setTimeout(async () => {
+    try {
+      const res = await fetch("/save", { method: "POST", headers: { "Content-Type": "text/csv" }, body: toCSV() });
+      document.getElementById("savestate").textContent = res.ok ? "Saved " + new Date().toLocaleTimeString() : "Save failed: download the CSV";
+    } catch (e) { document.getElementById("savestate").textContent = "Server not reachable: download the CSV"; }
+  }, 400);
+  updateTop();
+}
+
+function visible() {
+  const fe = document.getElementById("fexp").value, fs = document.getElementById("fstate").value;
+  const q = document.getElementById("fsearch").value.trim().toLowerCase();
+  return rows.filter(r => (!fe || r.experiment === fe)
+    && (!fs || (fs === "todo" && !r.include) || (fs === "flagged" && r.flags) || (fs === r.include)
+        || (fs === "window" && r.include !== "no" && TIME_NOTE.test(r.notes)))
+    && (!q || (r.id + " " + r.notes + " " + r.capture_name).toLowerCase().includes(q)));
+}
+
+function updateTop() {
+  const done = rows.filter(r => r.include).length;
+  document.getElementById("prog").style.width = (100 * done / rows.length) + "%";
+  document.getElementById("progtext").textContent = `${done} of ${rows.length} reviewed`;
+  const exps = [...new Set(rows.map(r => r.experiment))].sort();
+  let h = "<table><tr><th>Experiment</th><th>Positions found</th><th>Inventory says</th><th>Keep</th><th>Drop</th><th>Unsure</th><th>To do</th><th>Keep by condition</th></tr>";
+  for (const e of exps) {
+    const rs = rows.filter(r => r.experiment === e), inv = INVENTORY[e.slice(0, 8)];
+    const n = v => rs.filter(r => r.include === v).length;
+    const byCond = {};
+    rs.filter(r => r.include === "yes").forEach(r => byCond[r.condition] = (byCond[r.condition] || 0) + 1);
+    h += `<tr><td>${e}</td><td>${rs.length}</td><td class="${inv !== rs.length ? "bad" : ""}">${inv ?? "?"}</td>`
+       + `<td>${n("yes")}</td><td>${n("no")}</td><td>${n("unsure")}</td><td>${n("")}</td>`
+       + `<td style="text-align:left">${Object.entries(byCond).map(([k, v]) => `${k}: ${v}`).join(", ") || "–"}</td></tr>`;
+  }
+  const keep = rows.filter(r => r.include === "yes").length;
+  h += `<tr><td><b>Total</b></td><td><b>${rows.length}</b></td><td><b>118</b></td><td><b>${keep}</b></td><td></td><td></td><td></td><td></td></tr></table>`;
+  document.getElementById("summary").innerHTML = h;
+}
+
+function card(r) {
+  const opts = CONDITIONS.map(c => `<option ${c === r.condition ? "selected" : ""}>${c}</option>`).join("");
+  const flag = r.flags ? `<div class="flag">⚑ ${r.flags}</div>` : "";
+  return `<article class="card ${r.include}" data-id="${r.id}">
+    <div>
+      <div class="title"><b>${r.id}</b><span class="meta">${r.experiment} · ${r.position} · ${r.capture_name}</span></div>
+      <div class="imgs">
+        ${["start", "mid", "end"].map(s => `<figure><img loading="lazy" src="thumbs/${r.id}_${s}.png" alt="${r.id} ${s}" data-cap="${r.id} · ${s}"><figcaption>${s === "start" ? "0 h" : s === "mid" ? "~12 h" : "~24 h"}</figcaption></figure>`).join("")}
+      </div>
+      <div class="gifwrap" hidden><img alt="${r.id} 24 h" data-cap="${r.id} · one frame per 2 h"></div>
+      <table class="meta">
+        <tr><td>Start</td><td>${r.start_time}</td><td>Timepoints</td><td>${r.n_timepoints} over ${r.duration_h} h</td></tr>
+        <tr><td>Step</td><td>${r.step_s} s (max ${r.max_step_s} s)</td><td>Image</td><td>${r.size_px} px</td></tr>
+        <tr><td>Montage</td><td colspan="3">${r.montage_imgdir || "<span class='bad'>none</span>"}</td></tr>
+        <tr><td>Raw</td><td colspan="3">${r.raw_imgdir || "none"}</td></tr>
+      </table>
+      ${flag}
+    </div>
+    <div class="form">
+      <button class="play" style="width:100%">▶ Play 24 h</button>
+      <label>Keep this root?</label>
+      <div class="seg">${["yes", "no", "unsure"].map(v => `<button data-v="${v}" class="${r.include === v ? "on" : ""}">${v === "yes" ? "Keep" : v === "no" ? "Drop" : "Unsure"}</button>`).join("")}</div>
+      <label>Condition <span class="guess">(guess from code: ${r.condition_guess})</span></label>
+      <select class="cond">${opts}</select>
+      <label>Root label</label>
+      <input type="text" class="label" value="${r.root_label.replace(/"/g, "&quot;")}">
+      <label>Notes</label>
+      <input type="text" class="note" value="${r.notes.replace(/"/g, "&quot;")}" placeholder="e.g. second root enters at ~10 h">
+      <label>Usable window (h) <span class="guess">blank = whole movie (0 to ${r.duration_h})</span></label>
+      <div class="seg">
+        <input type="number" class="from" min="0" max="${r.duration_h}" step="0.5" value="${r.usable_from_h || ""}" placeholder="from 0">
+        <input type="number" class="to" min="0" max="${r.duration_h}" step="0.5" value="${r.usable_to_h || ""}" placeholder="to ${r.duration_h}">
+      </div>
+    </div>
+  </article>`;
+}
+
+function render() {
+  const vs = visible();
+  document.getElementById("cards").innerHTML = vs.length ? vs.map(card).join("") : `<div class="empty">No roots match the filters.</div>`;
+  focusIdx = -1;
+  updateTop();
+}
+
+function rowOf(el) { const c = el.closest(".card"); return c && rows.find(r => r.id === c.dataset.id); }
+function setInclude(cardEl, v) {
+  const r = rowOf(cardEl); r.include = r.include === v ? "" : v;
+  cardEl.className = "card focus " + r.include;
+  cardEl.querySelectorAll(".seg button").forEach(b => b.classList.toggle("on", b.dataset.v === r.include));
+  save();
+}
+function togglePlay(cardEl) {
+  const g = cardEl.querySelector(".gifwrap"), imgs = cardEl.querySelector(".imgs"), btn = cardEl.querySelector(".play");
+  const on = g.hidden;
+  if (on) g.querySelector("img").src = `thumbs/${cardEl.dataset.id}.gif`;
+  g.hidden = !on; imgs.hidden = on; btn.textContent = on ? "■ Stop" : "▶ Play 24 h";
+}
+function focusCard(i) {
+  const cs = [...document.querySelectorAll(".card")];
+  if (!cs.length) return;
+  focusIdx = Math.max(0, Math.min(cs.length - 1, i));
+  cs.forEach((c, j) => c.classList.toggle("focus", j === focusIdx));
+  cs[focusIdx].scrollIntoView({ block: "nearest", behavior: "smooth" });
+}
+
+document.getElementById("cards").addEventListener("click", e => {
+  const c = e.target.closest(".card"); if (!c) return;
+  focusCard([...document.querySelectorAll(".card")].indexOf(c));
+  if (e.target.matches(".seg button")) setInclude(c, e.target.dataset.v);
+  else if (e.target.matches(".play")) togglePlay(c);
+  else if (e.target.tagName === "IMG") {
+    document.getElementById("lbimg").src = e.target.src;
+    document.getElementById("lbcap").textContent = e.target.dataset.cap;
+    document.getElementById("lb").style.display = "flex";
+  }
+});
+document.getElementById("cards").addEventListener("change", e => {
+  const r = rowOf(e.target); if (!r) return;
+  if (e.target.matches(".cond")) r.condition = e.target.value;
+  if (e.target.matches(".label")) r.root_label = e.target.value;
+  if (e.target.matches(".note")) r.notes = e.target.value;
+  if (e.target.matches(".from")) r.usable_from_h = e.target.value;
+  if (e.target.matches(".to")) r.usable_to_h = e.target.value;
+  save();
+});
+document.getElementById("lb").addEventListener("click", () => document.getElementById("lb").style.display = "none");
+["fexp", "fstate"].forEach(id => document.getElementById(id).addEventListener("change", render));
+document.getElementById("fsearch").addEventListener("input", render);
+document.getElementById("dl").addEventListener("click", () => {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([toCSV()], { type: "text/csv" }));
+  a.download = "manifest_reviewed.csv"; a.click();
+});
+document.addEventListener("keydown", e => {
+  if (e.target.matches("input, select, textarea")) return;
+  if (e.key === "Escape") { document.getElementById("lb").style.display = "none"; return; }
+  const cs = [...document.querySelectorAll(".card")];
+  if (e.key === "j" || e.key === "ArrowDown") { e.preventDefault(); focusCard(focusIdx + 1); return; }
+  if (e.key === "ArrowUp") { e.preventDefault(); focusCard(focusIdx - 1); return; }
+  if (focusIdx < 0 || !cs[focusIdx]) return;
+  const map = { k: "yes", d: "no", u: "unsure" };
+  if (map[e.key]) { setInclude(cs[focusIdx], map[e.key]); focusCard(focusIdx + 1); }
+  if (e.key === "p") togglePlay(cs[focusIdx]);
+});
+load();
+</script>
+</body>
+</html>
