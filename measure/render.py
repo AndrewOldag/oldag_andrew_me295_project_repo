@@ -224,14 +224,14 @@ def image_case(case, fault=None, seed=0, moved=False, width_kappa_inv=None, rota
 
     case: a field-level case name (growth_zone, bending, rigid_translation, ...).
     moved: add the rigid motion used by the rigid-invariance check.
-    width_kappa_inv: curvature 1/width_kappa_inv px for the width_change fault (default 800).
+    width_kappa_inv: curvature 1/width_kappa_inv px for the width_change fault (default 400).
     rotation_deg: rotation rate of the rigid_rotation case, deg/frame (default 0.1).
     """
     movie_kw, spec_override = fault_settings(fault)
     name = spec_override or case
     if name == "width_change":
-        spec = width_change_spec(width_kappa_inv or 800.0)
-        if width_kappa_inv is not None and width_kappa_inv < 800.0:
+        spec = width_change_spec(width_kappa_inv or 400.0)
+        if (width_kappa_inv or 400.0) < 800.0:
             movie_kw = dict(movie_kw, width=640)      # the more curved rod leaves a 320 px frame
     elif name == "rigid_rotation" and rotation_deg is not None:
         spec = rigid_rotation_spec(rotation_deg)

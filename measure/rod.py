@@ -195,7 +195,7 @@ def growth_zone():
 WIDTH_RATE = 0.40          # flank half-spacing growth, 1/h, in the width-change cases
 
 
-def width_change_spec(kappa_inv=800.0):
+def width_change_spec(kappa_inv=400.0):
     """Curved rod (constant curvature 1/kappa_inv px) whose flank spacing grows 40 %/h.
 
     True plane-sections residual 2 kappa dh/dt: 1.5 %/h at 1/800, 3.0 at 1/400, 4.5 at 1/267.
@@ -245,5 +245,5 @@ def field_cases():
         RodSpec("bending", v=v_gz, regr=regr_gz, kappa_rate=bump,
                 notes="growth zone plus a curvature-rate bump at s = 150 px; constant width",
                 expected=dict(all_pass)),
-        width_change_spec(800.0),
+        width_change_spec(400.0),          # size chosen by Andrew, 2026-10-10
     ]
