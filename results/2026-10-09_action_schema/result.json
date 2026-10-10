@@ -1,0 +1,297 @@
+{
+  "date": "2026-10-09",
+  "claude_version": "2.1.293",
+  "model": "claude-opus-5-5",
+  "effort": "high",
+  "summary": {
+    "optional": {
+      "calls": 4,
+      "valid": 4
+    },
+    "nullable": {
+      "calls": 4,
+      "valid": 4
+    },
+    "union": {
+      "calls": 4,
+      "valid": 0
+    }
+  },
+  "calls": [
+    {
+      "form": "optional",
+      "scenario": "fresh_task",
+      "rep": 0,
+      "expected": "request_info or apply_remedy",
+      "cli_ok": true,
+      "cause": "",
+      "valid": true,
+      "action": "request_info",
+      "error": "",
+      "output": {
+        "action": "request_info",
+        "kind": "displacement_vs_patch_radius",
+        "rationale": "The tracked tip displacement is only 0.62 of the stage-log displacement, which points to either displacements too big for the 20 px patch at stride 4 or a bad stage correction. Comparing per-frame displacement to the patch radius tells these two apart."
+      },
+      "num_turns": 2,
+      "duration_ms": 3665,
+      "input_tokens": 3120,
+      "output_tokens": 298,
+      "models": [
+        "claude-opus-5-5"
+      ]
+    },
+    {
+      "form": "optional",
+      "scenario": "evidence_in",
+      "rep": 0,
+      "expected": "apply_remedy",
+      "cli_ok": true,
+      "cause": "",
+      "valid": true,
+      "action": "apply_remedy",
+      "error": "",
+      "output": {
+        "action": "apply_remedy",
+        "fault": "displacement_exceeds_patch",
+        "remedy": "change_frame_stride",
+        "setting": "half",
+        "rationale": "Displacement per step (median 28 px, p95 34 px) is larger than the 20 px patch radius, so the tracker loses the tip and closure comes out at 0.62. Halving the frame stride from 4 to 2 should bring displacement down to about 14\u201317 px, inside the patch."
+      },
+      "num_turns": 2,
+      "duration_ms": 4736,
+      "input_tokens": 3204,
+      "output_tokens": 368,
+      "models": [
+        "claude-opus-5-5"
+      ]
+    },
+    {
+      "form": "optional",
+      "scenario": "remedy_passed",
+      "rep": 0,
+      "expected": "accept",
+      "cli_ok": true,
+      "cause": "",
+      "valid": true,
+      "action": "accept",
+      "error": "",
+      "output": {
+        "action": "accept",
+        "confidence": 0.85,
+        "rationale": "With a stride of 4, tip displacement per step (median 28 px, p95 34 px) was larger than the 20 px patch radius. Halving the stride roughly halves that to about 14\u201317 px, which fits inside the patch, and all checks now pass with closure 0.97."
+      },
+      "num_turns": 2,
+      "duration_ms": 3949,
+      "input_tokens": 3293,
+      "output_tokens": 296,
+      "models": [
+        "claude-opus-5-5"
+      ]
+    },
+    {
+      "form": "optional",
+      "scenario": "remedy_failed",
+      "rep": 0,
+      "expected": "decline",
+      "cli_ok": true,
+      "cause": "",
+      "valid": true,
+      "action": "decline",
+      "error": "",
+      "output": {
+        "action": "decline",
+        "fault": "low_texture",
+        "reason": "The root is out of focus with very low texture for the whole window. Enlarging the patch 2x made closure worse (0.62 to 0.55), and no other listed remedy can bring back image texture that isn't there.",
+        "rationale": "Frame quality shows poor focus and very low texture across the whole window, and the matching remedy (enlarge_patch 2x) failed, lowering closure from 0.62 to 0.55. No listed remedy can fix out-of-focus images, so the measurement can't be trusted."
+      },
+      "num_turns": 2,
+      "duration_ms": 3738,
+      "input_tokens": 3285,
+      "output_tokens": 325,
+      "models": [
+        "claude-opus-5-5"
+      ]
+    },
+    {
+      "form": "nullable",
+      "scenario": "fresh_task",
+      "rep": 0,
+      "expected": "request_info or apply_remedy",
+      "cli_ok": true,
+      "cause": "",
+      "valid": true,
+      "action": "request_info",
+      "error": "",
+      "output": {
+        "action": "request_info",
+        "rationale": "A closure ratio of 0.62 means tracking recovers too little tip displacement. With frame stride 4 and a 20 px patch, the per-step motion may be larger than the patch, so comparing displacement with patch radius is the most direct test before looking at the stage log.",
+        "kind": "displacement_vs_patch_radius",
+        "fault": null,
+        "remedy": null,
+        "setting": null,
+        "confidence": null,
+        "reason": null
+      },
+      "num_turns": 2,
+      "duration_ms": 4610,
+      "input_tokens": 3259,
+      "output_tokens": 424,
+      "models": [
+        "claude-opus-5-5"
+      ]
+    },
+    {
+      "form": "nullable",
+      "scenario": "evidence_in",
+      "rep": 0,
+      "expected": "apply_remedy",
+      "cli_ok": true,
+      "cause": "",
+      "valid": true,
+      "action": "apply_remedy",
+      "error": "",
+      "output": {
+        "action": "apply_remedy",
+        "rationale": "Per-step displacement (median 28 px, p95 34 px) exceeds the 20 px patch radius, which explains the low closure ratio of 0.62. Halving the frame stride from 4 to 2 should bring displacement to about 14\u201317 px, inside the patch.",
+        "fault": "displacement_exceeds_patch",
+        "remedy": "change_frame_stride",
+        "setting": "half",
+        "kind": null,
+        "confidence": null,
+        "reason": null
+      },
+      "num_turns": 3,
+      "duration_ms": 12677,
+      "input_tokens": 7403,
+      "output_tokens": 955,
+      "models": [
+        "claude-opus-5-5"
+      ]
+    },
+    {
+      "form": "nullable",
+      "scenario": "remedy_passed",
+      "rep": 0,
+      "expected": "accept",
+      "cli_ok": true,
+      "cause": "",
+      "valid": true,
+      "action": "accept",
+      "error": "",
+      "output": {
+        "action": "accept",
+        "rationale": "Median displacement of 28 px per step exceeded the 20 px patch radius. Halving the frame stride brings it to about 14 px, and the re-check passed every check with closure ratio 0.97, inside the 0.9\u20131.1 tolerance.",
+        "confidence": 0.88,
+        "kind": null,
+        "fault": null,
+        "remedy": null,
+        "setting": null,
+        "reason": null
+      },
+      "num_turns": 3,
+      "duration_ms": 9190,
+      "input_tokens": 7401,
+      "output_tokens": 724,
+      "models": [
+        "claude-opus-5-5"
+      ]
+    },
+    {
+      "form": "nullable",
+      "scenario": "remedy_failed",
+      "rep": 0,
+      "expected": "decline",
+      "cli_ok": true,
+      "cause": "",
+      "valid": true,
+      "action": "decline",
+      "error": "",
+      "output": {
+        "action": "decline",
+        "rationale": "Frame quality shows the root out of focus with very low texture for the whole window, and the only fitting remedy (enlarge_patch 2x) made closure worse (0.62 to 0.55). No other listed remedy can restore texture lost to blur.",
+        "kind": null,
+        "fault": "low_texture",
+        "remedy": null,
+        "setting": null,
+        "confidence": null,
+        "reason": "Root out of focus for the whole window gives too little texture to track; enlarging the patch failed (closure ratio 0.55, tolerance 0.9-1.1), and no listed remedy fixes blur."
+      },
+      "num_turns": 2,
+      "duration_ms": 6832,
+      "input_tokens": 3424,
+      "output_tokens": 714,
+      "models": [
+        "claude-opus-5-5"
+      ]
+    },
+    {
+      "form": "union",
+      "scenario": "fresh_task",
+      "rep": 0,
+      "expected": "request_info or apply_remedy",
+      "cli_ok": false,
+      "cause": "result_error",
+      "valid": false,
+      "action": null,
+      "error": "result success: API Error: 400 tools.1.custom.input_schema.type: Field required",
+      "output": null,
+      "num_turns": 1,
+      "duration_ms": 645,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "models": []
+    },
+    {
+      "form": "union",
+      "scenario": "evidence_in",
+      "rep": 0,
+      "expected": "apply_remedy",
+      "cli_ok": false,
+      "cause": "result_error",
+      "valid": false,
+      "action": null,
+      "error": "result success: API Error: 400 tools.1.custom.input_schema.type: Field required",
+      "output": null,
+      "num_turns": 1,
+      "duration_ms": 542,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "models": []
+    },
+    {
+      "form": "union",
+      "scenario": "remedy_passed",
+      "rep": 0,
+      "expected": "accept",
+      "cli_ok": false,
+      "cause": "result_error",
+      "valid": false,
+      "action": null,
+      "error": "result success: API Error: 400 tools.1.custom.input_schema.type: Field required",
+      "output": null,
+      "num_turns": 1,
+      "duration_ms": 532,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "models": []
+    },
+    {
+      "form": "union",
+      "scenario": "remedy_failed",
+      "rep": 0,
+      "expected": "decline",
+      "cli_ok": false,
+      "cause": "result_error",
+      "valid": false,
+      "action": null,
+      "error": "result success: API Error: 400 tools.1.custom.input_schema.type: Field required",
+      "output": null,
+      "num_turns": 1,
+      "duration_ms": 486,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "models": []
+    }
+  ]
+}
