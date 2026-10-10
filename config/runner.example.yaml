@@ -1,0 +1,6 @@
+# Template for private/runner.yaml, read by measure/runner.py (RemoteRunner).
+# Copy to private/runner.yaml and fill in. Keep the real file out of git.
+host: <ssh host alias of the machine that has the tracker>
+work_dir: <directory there for rendered rods and tracker outputs>
+code_dir: <directory there for a copy of measure/ and scripts/>
+python: <Python of the tracker environment there (envs/qb.yml)>

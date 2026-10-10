@@ -21,7 +21,12 @@ Course project for AM/ME/CE 295, Caltech, Fall 2026. Start with `CLAUDE.md` and 
 - Image-level rods need the tracker (Quantum Borland v1, private) in its own env (`envs/qb.yml`), on the machine where tracking runs. With that env's Python, from a copy of `measure/` and `scripts/`:
   - `python scripts/synth/run_batch.py --work DIR --case growth_zone --seeds 0 1 2 --moved-too [--fault low_texture]` renders each rod (`scripts/synth/make_rod.py`; options `--width-kappa-inv K` for the width_change curvature and `--rotation-deg R` for the rigid_rotation rate), tracks it (`scripts/remote/qb_track.py`) and writes `DIR/tracks/<id>.npz` with the truth beside it. About 13 s per rod
 - Back in the agents env: `python scripts/synth/eval_rods.py --tracks DIR/tracks --out results/<date>_<name>` writes the field-level table, the image-level check values at the approved thresholds, per-seed values, truth errors, and a profile plot
-- Checker thresholds: `config/checker_thresholds.yaml`. Provisional until approved
+- Checker thresholds: `config/checker_thresholds.yaml` (approved 2026-10-10)
+
+## Diagnostician on a synthetic rod (one slice)
+- `request_info` answers come from the measurement record and the check results (`measure/info.py`). `apply_remedy` changes the run settings (`measure/remedies.py`; table in `docs/decisions.md`), re-runs the measurement and re-checks it (`agents/executors.py`)
+- Runner (`measure/runner.py`), one interface with two forms: `FieldRunner` in process for field-level rods; `RemoteRunner` renders and tracks on the machine that has the tracker. For the remote form copy `config/runner.example.yaml` to `private/runner.yaml` and fill it in (ssh host alias, work and code directories there, tracker env Python)
+- `python scripts/demo_slice.py --fault displacement_exceeds_patch` renders one rod with that fault, tracks and checks it, runs the diagnostician, and prints the truth, the error before and after, and the outcome. Trace and summary in `results/<date>_demo_slice/`. `--no-agent` stops after the first check; `--runner field` runs a field-level rod in process
 
 ## Tools
 - Root manifest review app: `python scripts/manifest/review_server.py`, then open http://localhost:8295
