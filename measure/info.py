@@ -50,6 +50,18 @@ def velocity_profile(rec, checks=None, step_um=50.0):
             "tip_net_displacement_um_per_h": _r(np.linalg.norm(tip[-1] - tip[0]) * rec.pixel_um / dur_h, 1)}
 
 
+def width_free_ratio(rec, step_um=50.0):
+    """(plus - minus) / (plus + minus) of the window-mean flank strain rates, where the sum exceeds 5 %/h."""
+    f = rec.fields
+    s_um = f["s_grid"] * rec.pixel_um
+    p, m = _wmean(f["regr_plus"]), _wmean(f["regr_minus"])
+    total = (p + m) * PER_S_TO_PCT_PER_H
+    ratio = np.where(total > 5.0, (p - m) / (p + m), np.nan)
+    grid = np.arange(0.0, np.nanmax(s_um[np.isfinite(ratio)]) + 1e-9, step_um) if np.isfinite(ratio).any() else []
+    return {"width_free_ratio_s_um": [round(x) for x in grid],
+            "width_free_ratio": [_r(x, 3) for x in np.interp(grid, s_um, ratio)] if len(grid) else []}
+
+
 def displacement_vs_patch_radius(rec, checks=None):
     """Motion per analysed frame pair against the tracker's disk radius.
 

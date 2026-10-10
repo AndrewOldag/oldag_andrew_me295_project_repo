@@ -19,6 +19,7 @@ class TrackSettings:
     register: bool = False                 # preprocess.register_frames before tracking
     midline_smooth: Optional[str] = None   # preprocess.smooth_midline level
     band_mask: Optional[str] = None        # preprocess.band_mask mode
+    width_free: bool = False               # report centre strain rate and width-free ratio; skip plane sections
 
     def args(self):
         """Command-line arguments for scripts/remote/qb_track.py."""
@@ -34,6 +35,7 @@ class TrackSettings:
         return a
 
     def tag(self):
+        """Names the tracker run. width_free changes no tracker run and is not in it."""
         parts = [f"st{self.stride}"]
         if self.disk_radius is not None:
             parts.append(f"r{self.disk_radius}")
@@ -78,10 +80,9 @@ def apply_remedy(settings, remedy, setting, base_disk_radius):
         if s.band_mask == setting:
             raise NotAvailable(f"{setting} already applied")
         return replace(s, band_mask=setting), f"frames limited to the main root ({setting})"
-    if remedy == "switch_midline_source":
-        raise NotAvailable("synthetic rods have one midline source (the true midline); "
-                           "the ML and classical sources exist only for real movies")
     if remedy == "use_width_free_ratio":
-        raise NotAvailable("the tracker has no setting for it; it changes the reported quantity, "
-                           "not the measurement")
+        if s.width_free:
+            raise NotAvailable("the width-free ratio is already reported")
+        return (replace(s, width_free=True),
+                "report the centre strain rate and the width-free ratio; plane-sections check skipped")
     raise NotAvailable(f"unknown remedy {remedy!r}")

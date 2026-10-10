@@ -40,6 +40,7 @@ class Rod:
     seed: int = 0
     width_kappa_inv: Optional[float] = None
     rotation_deg: Optional[float] = None
+    size: Optional[str] = None
 
     def options(self):
         o = ["--case", self.case, "--seed", str(self.seed)]
@@ -49,6 +50,8 @@ class Rod:
             o += ["--width-kappa-inv", str(self.width_kappa_inv)]
         if self.rotation_deg:
             o += ["--rotation-deg", str(self.rotation_deg)]
+        if self.size:
+            o += ["--size", str(self.size)]
         return o
 
 
@@ -102,7 +105,8 @@ class RemoteRunner:
     def initial_settings(self, rod):
         """The rod's own analysis frame stride; tracker defaults otherwise."""
         from measure.render import image_case
-        _, movie = image_case(rod.case, rod.fault, rod.seed, False, rod.width_kappa_inv, rod.rotation_deg)
+        _, movie = image_case(rod.case, rod.fault, rod.seed, False, rod.width_kappa_inv, rod.rotation_deg,
+                              rod.size)
         return TrackSettings(stride=movie.stride)
 
     def _ssh(self, cmd, stdin=None):
@@ -142,6 +146,7 @@ class RemoteRunner:
         return local
 
     def track(self, rid, settings):
+        settings = replace(settings, width_free=False)      # not a tracker setting
         name = f"{rid}__{settings.tag()}.npz"
         local = self.cache / name
         if not local.exists():

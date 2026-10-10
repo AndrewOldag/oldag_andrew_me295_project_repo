@@ -29,7 +29,8 @@ class Slice:
 
     def _measure(self, settings, change):
         m = self.runner.measure(self.rod, settings)
-        checks = run_checks(m.record, m.moved, self.thresholds)
+        skip = ("plane_sections",) if settings.width_free else ()
+        checks = run_checks(m.record, m.moved, self.thresholds, skip)
         self.runs.append((settings, m, checks, change))
 
     @property
@@ -48,7 +49,10 @@ class Slice:
                              "pixel_um": self.current.record.pixel_um}}
 
     def request_info(self, args, task):
-        return info.request_info(args["kind"], self.current.record, self.checks)
+        out = info.request_info(args["kind"], self.current.record, self.checks)
+        if args["kind"] == "velocity_profile" and self.runs[-1][0].width_free:
+            out.update(info.width_free_ratio(self.current.record))
+        return out
 
     def apply_remedy(self, args, task):
         settings = self.runs[-1][0]
