@@ -19,9 +19,15 @@ Condition 1 of the CLI agent design: check that `claude -p --safe-mode` can call
 - Raw fields: `result_A.json`, `result_C.json`
 
 ## Cause
-- The account's organization-managed Claude Code settings allow only MCP servers on an administrator list. Servers not on the list are dropped before start, with no error in the init event
-- The local probe server is not on the list. This blocks local MCP tools for every flag set, not only `--safe-mode`
-- Variant B (no `--safe-mode`, separate config directory) was not run: the managed setting applies to the account, so it would be blocked the same way
+- `--safe-mode` turns off MCP servers by itself (Claude Code CLI reference). Variant A could not pass under any policy
+- Variant C is the run that tests the policy. It failed: the account's organization-managed Claude Code settings allow only MCP servers on an administrator list, and drop others with no error, including servers passed with `--mcp-config`
+- An allowlist entry would not rescue the MCP design: a stdio server is matched by its exact command and arguments, so an entry holds for one machine only, and `--safe-mode` would still have to be dropped
+
+## How the policy was confirmed
+- `claude mcp list` and `claude mcp get probe`, run with the agents' clean environment from a temporary folder whose project `.mcp.json` names the probe server:
+  - `mcp list` shows only the organization's managed connectors (8). The probe server is absent
+  - `mcp get probe` exits 1: `No MCP server named "probe"`
+- The account's managed settings contain `allowManagedMcpServersOnly: true`
 
 ## Status
-Stopped and reported, as condition 1 requires. The tool interface needs a decision before agent code is built.
+Stopped and reported, as condition 1 required. Replaced by typed actions executed by the orchestrator (`docs/decisions.md`, 2026-10-09). Variant B (no `--safe-mode`, separate config directory) was not run and has been removed from the script.
