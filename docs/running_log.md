@@ -85,3 +85,10 @@ Required by the course. One entry per work session: done, remaining, bottlenecks
 - Demo: `python scripts/synth/eval_rods.py --tracks <tracks dir> --out results/2026-10-10_checker_synthetic` prints the per-group check table; `python -m pytest -q tests` covers the field-level pass/fail table and the tracker fixture
 - Remaining: Andrew approves or changes the three thresholds; decide on width_change (not detected at the injected size: 1.93-2.33 %/h against clean up to 2.36 %/h); then item 5 (real executors, runner interface, remedy-to-tracker-parameter table, `scripts/demo_slice.py`), then item 6 (freeze)
 - Bottlenecks: threshold approval and the width_change decision (Andrew); course staff answer on tool use (Andrew)
+
+## 2026-10-10 (planning account, session 4)
+- Done: reviewed build session 5 (8 commits). Andrew approved the checker thresholds: rigid_invariance 2.0 %/h, closure 1.0 px/h, plane_sections 3.25 %/h (raised from the proposed 3.0). `config/checker_thresholds.yaml` marked approved, decisions logged
+- Done: wrote spec `docs/specs/2026-10-10_bent-rods-width-change-rotation.md` from Andrew's answers: larger width-change injection, whole-rod rotation flagged by closure, two strongly bent clean cases. Field-level trial of the two bent cases with the existing code: plane_sections at most 0.22 %/h, the other two 0.0000
+- Demo: none; review and spec only
+- Remaining: build account works parts A and B of the new spec, then item 5 of the 2026-10-09 spec, with part C before item 6
+- Bottlenecks: course staff answer on tool use (Andrew)
