@@ -1,0 +1,21 @@
+# Pinned model settings for the LLM agents.
+# Change only with a dated entry in docs/decisions.md.
+# The checker has no LLM and does not read this file.
+
+model: claude-opus-5-5   # pinned 2026-10-08. Exact ID, no alias
+
+# Server-side refusal fallback is off: a fallback would answer with a
+# different model and break the pinned-model provenance. Refusals are
+# logged and the task is marked unanswered.
+fallbacks: false
+
+agents:
+  dispatcher:
+    effort: medium
+    max_tokens: 16000
+  diagnostician:
+    effort: high
+    max_tokens: 16000
+  auditor:
+    effort: high
+    max_tokens: 32000

@@ -1,0 +1,21 @@
+# data and staging
+data/
+staging/
+*.npy
+*.tif
+*.tiff
+*.sldy
+*.imgdir/
+# papers
+*.pdf
+# private context: machines, access, other people's comments
+private/
+# secrets
+.env
+*.key
+id_*
+vm_key*
+# python
+__pycache__/
+*.pyc
+.venv/
