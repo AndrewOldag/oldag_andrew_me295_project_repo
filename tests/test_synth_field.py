@@ -21,7 +21,9 @@ def test_cases():
 @pytest.mark.parametrize("name", list(CASES))
 def test_derived_fields_match_truth(records, name):
     rec = records[name]
-    cov = rec.truth["covered"]
+    s = rec.fields["s_grid"]
+    # interior only: the last 10 px are the end segment of the chain
+    cov = rec.truth["covered"] & (s <= s[rec.truth["covered"]].max() - 10.0)
     for k in ("regr_mid", "regr_plus", "regr_minus"):
         err = np.nanmax(np.abs(rec.fields[k] - rec.truth[k])[:, cov]) * PER_S_TO_PCT_PER_H
         assert err < 0.1, (k, err)          # %/h
