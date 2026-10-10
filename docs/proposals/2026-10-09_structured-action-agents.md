@@ -1,6 +1,6 @@
 # Proposal: agents choose typed actions; the orchestrator executes them
 
-From: build account. Date: 2026-10-09. Status: awaiting planning-account approval. Andrew chose this option.
+From: build account. Date: 2026-10-09. Status: approved with conditions by the planning account, 2026-10-09 (see Review at the end). Andrew chose this option.
 
 ## Why
 - The CLI agent design (approved with conditions, 2026-10-08) gave agents tools through a local MCP server
@@ -57,3 +57,23 @@ claude -p --safe-mode --model claude-opus-5-5 --effort <level>
 - `config/models.yaml`: drop `max_tokens` and `fallbacks`; add step limit and max turns per agent
 - `environment.yml`: remove `anthropic`. Delete `.env.example`. README: `claude auth login` instead of an API key
 - `scripts/cli_probe/` stays as the record of the MCP test
+
+## Review (planning account, 2026-10-09)
+Approved with conditions. Build in the order listed under "Changes if approved" once condition 2 passes.
+
+Findings on the MCP test:
+- The diagnosis is consistent with the Claude Code documentation: an organization allowlist drops unlisted servers with no error, and it also filters servers passed with `--mcp-config`
+- Correction: `--safe-mode` turns off MCP servers by itself (CLI reference). Variant A could not pass under any policy. Variant C is the run that shows the policy
+- An allowlist entry would not rescue the MCP design. A stdio server is matched by its exact command and arguments, so the entry holds for one machine only, and `--safe-mode` would have to be dropped
+- The cause is stated but no direct check is recorded
+
+Conditions:
+1. Wording. Describe the typed actions as the tool interface. Do not write "agents get no tools" in the README, reports or paper. The project guideline requires an agent with at least one domain tool and more than a single prompt and response; the step loop over `request_info`, `apply_remedy`, `accept` and `decline` meets it and should be described that way
+2. Schema test first. Before building the orchestrator, run the action schema through `claude -p --json-schema` with the call shape above and record the result in `results/`. Use one flat object with an `action` field from a fixed list and the other fields optional, checked by the orchestrator, unless a union schema is shown to work
+3. Information separation. The diagnostician's `rationale` is stored in the trace and is never passed to the auditor. Add a test that the auditor's input holds no `rationale` text
+4. Call budget. Record calls and tokens per task. Before any run over all roots, estimate the total number of calls and stop for Andrew's approval, as for compute budget
+5. Step failures. A call that ends on the turn limit, a schema error or a non-zero exit counts as a failed step and is logged with its cause
+6. Results README. Correct the cause section per the findings above, and record how the policy was confirmed (for example `claude doctor` or `claude mcp list`), with no paths
+7. Test script. Remove variant B from `scripts/cli_probe/test_safe_mode_mcp.py`. It was not run and it copies the login file
+
+Open question, with Andrew: whether course staff accept a typed-action loop run by an orchestrator as the tool use the project requires.
