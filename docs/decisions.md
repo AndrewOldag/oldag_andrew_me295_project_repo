@@ -23,3 +23,20 @@ One entry per decision: date, decision, reason. Decisions made before this repos
 - 2026-10-10: Two strongly bent clean cases are added to the synthetic rods, `bend_continue` and `bend_reverse`. Reason: the existing `bending` case turns about 3 degrees and its flank difference is below the clean plane-sections value, so no case tests a visibly bent rod. `bend_reverse` starts with a bend in tissue that has left the growth zone, so the bend stays and the rod ends S-shaped. They are run before the freeze
 - All four: `docs/specs/2026-10-10_bent-rods-width-change-rotation.md`
 - 2026-10-10: `width_change` development fault uses curvature 1/400 px with flank spacing growing 40 %/h (true plane-sections residual 3.0 %/h), field and image level. Chosen by Andrew from `results/2026-10-10_width_rotation/`: measured 3.43-4.30 %/h, 3 of 3 above 3.25. Image-level movies 640 x 640 px. Runs named `width_change` before this date used 1/800
+- 2026-10-10: Remedy table (spec 2026-10-09, item 5; `measure/remedies.py`). A remedy is applied to the current run settings, the measurement is re-run (both the movie and its rigidly moved copy) and re-checked. Remedies stack
+
+  | Remedy | Setting | What it changes | Carried out by |
+  | :-- | :-- | :-- | :-- |
+  | change_frame_stride | half / double | analysis frame stride, halved or doubled (half is refused at stride 1) | tracker input (`qb_track.py --stride`) |
+  | enlarge_patch | 1.5x / 2x | tracker disk radius, 1.5 or 2 times the first run's radius (15 px -> 22 or 30 px) | tracker parameter `disk_radius` |
+  | register_frames | none | rigid (Euclidean) registration of frame t to frame t-1 on the basal band of the root (60-100 % of the tracked length, 20 px band; OpenCV ECC), after the logged stage shift; applied to frames and midline before tracking | preprocessing before the tracker (`measure/preprocess.py`); the tracker has no registration |
+  | smooth_midline | light / strong | Gaussian smoothing of the midline source along s (10 / 25 px) and over time (1 / 3 frames), before seeding and curvature | preprocessing of the midline source |
+  | crop_or_mask | mask_second_root / crop_to_main_root | pixels outside a 45 px band around the midline (or outside the band's bounding box) set to background | preprocessing of the frames |
+  | switch_midline_source | classical / ml | not available: synthetic rods have one midline source; the tracker repository has the ML midline only | none; returns "not available" |
+  | use_width_free_ratio | none | not available: changes the reported quantity, not the measurement; no tracker setting | none; returns "not available" |
+
+  - The spec says a remedy the tracker cannot carry out is removed from the list. Removing `switch_midline_source` and `use_width_free_ratio` is a list change and waits for Andrew; until then they return "not available" and are never imitated
+  - `register_frames` assumes the basal tissue is fixed in the world, as closure does. After it, closure is not independent evidence on synthetic rods, whose background has no texture
+  - Reason: remedies are re-runs with one changed setting, so the agent's choice is the only difference between runs
+- 2026-10-10: Runner interface (`measure/runner.py`): `measure(rod, settings)` returns the record, the rigidly moved record and the settings. Two forms: in process for field-level rods (only stride and midline smoothing act on a record); a remote job on the tracker machine for image-level rods. Host, paths and Python in `private/runner.yaml`; template `config/runner.example.yaml`. Reason: spec item 5; the agent code does not depend on where tracking runs
+- 2026-10-10: `request_info` kinds (`measure/info.py`) are computed from the current record and its check results only; the truth is never read. `frame_quality` comes from the frames on the tracker machine (texture contrast, focus, bright-object count on three frames). Reason: the same evidence must exist for real movies
