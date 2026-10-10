@@ -53,3 +53,13 @@ Required by the course. One entry per work session: done, remaining, bottlenecks
 - Demo: `python scripts/demo_diagnostician.py` prints `outcome: accept {'confidence': ...}; steps 3` and writes the trace
 - Remaining: planning-account approval, then merge to main; fix the fault, remedy and info lists with a decisions entry; checker on synthetic rods; real executors for request_info and apply_remedy
 - Bottlenecks: approval of the typed-action proposal (planning account); MCP allowlist question with course staff (Andrew)
+- Done: planning-account review of the typed-action proposal received (approved, seven conditions). Branch rebased onto it; all seven met:
+- Condition 2, schema test: `python scripts/cli_probe/test_action_schema.py`, 12 calls. `optional` 4 of 4 valid (2 turns, 3.7-4.7 s), `nullable` 4 of 4 (two calls needed 3 turns, up to 12.7 s), `union` 0 of 4 (API 400: top-level schema needs `type`). `optional` kept as default. `results/2026-10-09_action_schema/`. Commits 5639f1c, 867278b. Built after the orchestrator, not before; the review arrived after the first build
+- Condition 5: launcher records a failure cause (timeout, exit_code, max_turns, schema, result_error, model_check); orchestrator logs failed steps with cause, including invalid_action. Condition 4: per-task calls, tokens and call time in the outcome and a `task_end` trace line. Commit 5639f1c
+- Condition 3: `agents/views.py` builds the auditor's input without `rationale`, raw output or free-text arguments; `tests/test_views.py` checks it. Commit 60627bd
+- Condition 1: README and code describe the typed actions as the agents' tool interface. Commit 1e0e2ac
+- Condition 6: MCP results README corrected (`--safe-mode` disables MCP by itself; variant C shows the policy; an allowlist entry would be machine-specific) and policy confirmed with `claude mcp list` / `claude mcp get probe` (probe absent; `No MCP server named "probe"`) and the managed setting `allowManagedMcpServersOnly`. Commit 1f14abc. Condition 7: variant B removed from the MCP script. Commit 25b2d35
+- Done: `python -m pytest -q tests`: 16 passed in 0.16 s. `python scripts/check_cli.py`: OK, 1.5 s. `python scripts/demo_diagnostician.py`: accept (0.9), 3 steps, 0 failed, 3 calls, 10,081 input and 1,427 output tokens, 16.1 s. Commit df38612
+- Demo: `python scripts/demo_diagnostician.py` prints the outcome and per-task call totals and writes the trace
+- Remaining: merged to main this session; fix the fault, remedy and info lists with a decisions entry; checker on synthetic rods; real executors for `request_info` and `apply_remedy`; call-budget estimate and approval step before any all-roots run (condition 4)
+- Bottlenecks: course staff answer on whether typed actions count as tool use (Andrew)
