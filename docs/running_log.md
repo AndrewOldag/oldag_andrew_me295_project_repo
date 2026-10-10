@@ -70,3 +70,18 @@ Required by the course. One entry per work session: done, remaining, bottlenecks
 - Remaining: build account works the spec in order (branch cleanup, measurement record, synthetic rods, checker, real executors, freeze). Planning account drafts the related-work note and the draft proposal for Lab report 1 (due 16 Oct)
 - Bottlenecks: course staff answer on whether typed actions count as tool use (Andrew)
 
+
+## 2026-10-10 (build account, session 5)
+- Done: pulled spec `docs/specs/2026-10-09_checker-and-synthetic-rods.md`. Worked items 1-4; stopped at item 4 for threshold approval
+- Done: item 1. Remote `wip/orchestrator` was already gone; `git branch -r` lists `origin/main` only
+- Done: agents env switched to OpenBLAS; with MKL every numpy matrix product exited Python (0xc06d007f). Commit 576ebfb
+- Done: item 2. Measurement record `measure/record.py`, `docs/context/measurement_record.md`: three tracked chains, stage log, frame times, per-frame midline; strain rates from chain segment stretch, not the tracker's logistic fits. Commit 6547010. Tracker-output test with a fixture from a clean rod: `tests/test_record_tracker.py`. Commit 7e339e3
+- Done: item 3, field level. `measure/rod.py`: six cases. Derived strain rates within 0.08 %/h of the analytic truth; integrated strain rate equals tip-relative base velocity to 0.01 px/h. Commit 6547010
+- Done: item 3, image level. `measure/render.py`: textured rod movies in the tracker's input format, injectors for the five development faults only. `scripts/remote/qb_track.py`, `scripts/synth/run_batch.py`. Commit 4337285
+- Done: item 4. Check definitions and costs in `docs/decisions.md` (rigid invariance: one extra tracker run; closure and plane sections: none). Commit 6547010; checker `checker/` in f606fb1; coverage rule in e25bb03. Definitions were worked out alongside the code, then committed before it
+- Done: 70 tracker runs on the lab server, 0 failed, 6-7 s each; about 20 min wall time in total. Clean REGR error 0.40-0.44 %/h RMS, max 1.42 %/h, peak 43 %/h. Field level: 18 of 18 check outcomes as expected. `results/2026-10-10_checker_synthetic/`. Commit aebc749
+- Done: proposed thresholds in `config/checker_thresholds.yaml` (status: proposed): rigid_invariance 2.0 %/h, closure 1.0 px/h, plane_sections 3.0 %/h. Not used to score anything
+- Done: `python -m pytest -q tests`: 42 passed, 1.3 s
+- Demo: `python scripts/synth/eval_rods.py --tracks <tracks dir> --out results/2026-10-10_checker_synthetic` prints the per-group check table; `python -m pytest -q tests` covers the field-level pass/fail table and the tracker fixture
+- Remaining: Andrew approves or changes the three thresholds; decide on width_change (not detected at the injected size: 1.93-2.33 %/h against clean up to 2.36 %/h); then item 5 (real executors, runner interface, remedy-to-tracker-parameter table, `scripts/demo_slice.py`), then item 6 (freeze)
+- Bottlenecks: threshold approval and the width_change decision (Andrew); course staff answer on tool use (Andrew)
