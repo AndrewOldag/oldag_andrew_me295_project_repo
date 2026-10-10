@@ -5,9 +5,10 @@
 model: claude-opus-5-5          # pinned 2026-10-08. Exact ID, no alias
 claude_code_version: 2.1.293    # pinned 2026-10-09. The launcher refuses any other version
 
-# One agent step is one `claude -p` call that returns one action.
+# One agent step is one `claude -p` call that returns one typed action.
 # max_turns: CLI turns per call (the structured-output tool uses one).
 # step_limit: actions per task before the orchestrator stops it.
+# schema_form: optional (default), nullable or union; see agents/actions.py.
 agents:
   dispatcher:
     effort: medium
