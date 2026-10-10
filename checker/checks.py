@@ -2,7 +2,8 @@
 
 Each check is a plain function of measurement records and returns a
 CheckResult: pass or fail, the value, the threshold, and where it failed.
-Profiles are window means over frame pairs.
+Profiles are window means over frame pairs. A grid point enters a window
+mean only where at least MIN_COVERAGE of the frame pairs have a value.
 """
 from dataclasses import dataclass, asdict
 import warnings
@@ -14,6 +15,7 @@ import yaml
 
 from measure.record import PER_S_TO_PCT_PER_H
 
+MIN_COVERAGE = 0.5
 THRESHOLDS_FILE = Path(__file__).resolve().parents[1] / "config" / "checker_thresholds.yaml"
 
 
@@ -40,7 +42,9 @@ def load_thresholds(path=THRESHOLDS_FILE):
 def _window_mean(a):
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", RuntimeWarning)    # all-NaN columns
-        return np.nanmean(a, axis=0)
+        m = np.nanmean(a, axis=0)
+    m[np.mean(np.isfinite(a), axis=0) < MIN_COVERAGE] = np.nan
+    return m
 
 
 def _decide(value, threshold):
