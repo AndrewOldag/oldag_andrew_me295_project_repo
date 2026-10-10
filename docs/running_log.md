@@ -104,3 +104,14 @@ Required by the course. One entry per work session: done, remaining, bottlenecks
 - Demo B: the same command prints the closure-against-rate table (`rotation.md`); `python -m pytest -q tests/test_image_expected.py` checks rigid_rotation fails closure only at the approved thresholds
 - Remaining: Andrew picks the width_change size (1/400 clears 3.25 by 0.18 %/h at worst; 1/267 by 1.73); then item 5 of the 2026-10-09 spec; part C (bent rods) before item 6
 - Bottlenecks: width_change size choice (Andrew); course staff answer on tool use (Andrew)
+
+## 2026-10-10 (build account, session 6)
+- Done: width_change set to curvature 1/400 px (Andrew's choice). Commit f3afee9 went in with one failing test (end-of-chain point in the field truth comparison); fixed in cef215a
+- Done: item 5 of the 2026-10-09 spec, built. Preprocessing before tracking (`measure/preprocess.py`: frame registration, midline smoothing, band mask, frame quality). Commit c6abc76
+- Done: real executors `agents/executors.py`; remedy table `measure/remedies.py` and `docs/decisions.md`; info kinds `measure/info.py`; runner `measure/runner.py` (in process and remote job; config in `private/runner.yaml`, template `config/runner.example.yaml`). Commit c77ff40
+- Done: `python -m pytest -q tests`: 61 passed, 2.3 s
+- Done: remedy sweep, each development fault with its natural remedy, no agent, 22 tracker runs: no fault reaches three passes. displacement_exceeds_patch stride 12 -> 6 -> 3: REGR error 11.37 -> 3.87 -> 1.43 %/h; rigid_drift register_frames: closure 16.27 -> 1.26 px/h; midline_jitter smooth strong: plane_sections 35.3 -> 8.8 %/h; low_texture enlarge 2x: invariance 255 -> 65 %/h. `results/2026-10-10_demo_slice/`. Commit e62b17b
+- Done: `python scripts/demo_slice.py --fault displacement_exceeds_patch`: halved stride, then five info requests and register_frames; outcome step_limit at 8 steps, 0 failed steps, 35.9k input and 3.7k output tokens, 43.7 s call time. REGR error 11.37 -> 5.51 %/h RMS. Commit e62b17b
+- Demo: `python scripts/demo_slice.py --fault displacement_exceeds_patch` prints the truth, the checks and error before and after, and the outcome; writes `results/<date>_demo_slice/`
+- Remaining: Andrew decides on removing `switch_midline_source` and `use_width_free_ratio` (they return "not available"); Andrew and planning decide what to do about remedies that improve but never repair a dev fault (remedy settings, the 6 h window of the stride fault, step limit); part C (bent rods) before item 6; item 6 freeze
+- Bottlenecks: the two list decisions above (Andrew); course staff answer on tool use (Andrew)
