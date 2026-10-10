@@ -115,3 +115,11 @@ Required by the course. One entry per work session: done, remaining, bottlenecks
 - Demo: `python scripts/demo_slice.py --fault displacement_exceeds_patch` prints the truth, the checks and error before and after, and the outcome; writes `results/<date>_demo_slice/`
 - Remaining: Andrew decides on removing `switch_midline_source` and `use_width_free_ratio` (they return "not available"); Andrew and planning decide what to do about remedies that improve but never repair a dev fault (remedy settings, the 6 h window of the stride fault, step limit); part C (bent rods) before item 6; item 6 freeze
 - Bottlenecks: the two list decisions above (Andrew); course staff answer on tool use (Andrew)
+
+## 2026-10-10 (planning account, session 4, continued)
+- Done: reviewed build session 5 continued (4 commits) and session 6 (6 commits). Read the demo trace and the remedy sweep
+- Done: wrote spec `docs/specs/2026-10-10_repair-criteria.md`, approach agreed by Andrew: clean rods through each remedy, fault sizes a remedy can repair, correct outcome per rod, diagnostician may repeat a working remedy. Decisions logged
+- Demo: none; review and spec only
+- Remaining: build account works the new spec (A, B, C, then D after Andrew approves the sizes and the tolerance), then the bent rods, then item 6
+- Bottlenecks: `width_change` outcome and the two unavailable remedies (Andrew); fault sizes and tolerance once proposed (Andrew); course staff answer on tool use (Andrew)
+
