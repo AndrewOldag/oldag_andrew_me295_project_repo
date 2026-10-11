@@ -53,8 +53,9 @@ def fmt(vals):
 
 def sequence(fault, size, s):
     if fault == "displacement_exceeds_patch":
-        k0 = int(size.split("x")[1])
-        n = round(math.log2(k0 / s.stride)) if s.stride < k0 else 0
+        k, n = int(size.split("x")[1]), 0
+        while k > s.stride:                     # halving is integer: 6 -> 3 -> 1
+            k, n = max(1, k // 2), n + 1
         return ["change_frame_stride/half"] * n
     if s.register:
         return ["register_frames"]
