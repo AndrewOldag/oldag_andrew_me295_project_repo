@@ -19,12 +19,22 @@ every frame of the movie, `seed` (frame-0 midline for the tracker) and
 """
 import argparse
 import json
+import os
 import sys
 import time
 from dataclasses import replace
 from pathlib import Path
 
-import numpy as np
+for _v in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS", "NUMEXPR_NUM_THREADS"):
+    os.environ[_v] = "1"                       # one thread per run on the shared machine (decisions, 2026-10-11)
+
+import cv2                                      # noqa: E402
+import numpy as np                              # noqa: E402
+import torch                                    # noqa: E402
+
+cv2.setNumThreads(1)
+torch.set_num_threads(1)
+torch.set_num_interop_threads(1)
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from measure import preprocess                                 # noqa: E402
@@ -94,18 +104,21 @@ def main():
     settings = {"tracker": "quantum_borland_v1", "disk_radius": int(res.disk_radius),
                 "spacing": a.spacing, "half_fraction": a.half_fraction,
                 "threshold": a.threshold, "couple": bool(a.couple), "stride": a.stride,
+                "threads": {"torch": torch.get_num_threads(), "opencv": cv2.getNumThreads()},
                 "track_centre": True, "used_mask": bool(res.split.used_mask),
                 "run_s": round(run_s, 1), "n_frames": int(len(keep)),
                 "register": bool(a.register), "midline_smooth": a.midline_smooth,
                 "band_mask": a.band_mask, "preprocess": pre, "frame_quality": quality}
     meta = {"root_id": imgdir.stem, "pixel_um": a.pixel_um, "settings": settings}
+    tmp = Path(a.out).with_name(Path(a.out).stem + ".part.npz")    # a stopped run leaves no complete-looking file
     np.savez_compressed(
-        a.out, meta=json.dumps(meta),
+        tmp, meta=json.dumps(meta),
         centre_track=res.centre_track, left_track=res.left_track, right_track=res.right_track,
         centre_frozen=frozen["centre"], left_frozen=frozen["left"], right_frozen=frozen["right"],
         elapsed_s=rec.elapsed_s, stage_px=corr, midline_world=mid_img + corr[:, None, :],
         qb_l_domain=res.l_domain, qb_regr_left=res.regr_left, qb_regr_right=res.regr_right,
         qb_valid_max=res.valid_max)
+    os.replace(tmp, a.out)
     print(json.dumps({"out": a.out, "run_s": round(run_s, 1), "frames": int(len(keep)),
                       "points": int(res.centre_track.shape[0]), "disk_radius": int(res.disk_radius)}))
 

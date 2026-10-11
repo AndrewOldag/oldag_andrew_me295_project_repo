@@ -2,19 +2,18 @@
 
   python scripts/synth/repair_sweep.py start [--part A|B|all]   # write the plan, start it on the tracker machine
   python scripts/synth/repair_sweep.py status
+  python scripts/synth/repair_sweep.py stop
   python scripts/synth/repair_sweep.py fetch                    # copy tracker outputs to staging/tracks
 
 Part A: clean growth_zone and bending, seeds 0-2, each remedy setting alone.
 Part B: fault sizes with the fitting remedy's states (one and two steps);
 width_change at its approved size, unremedied.
-Uses private/runner.yaml (measure.runner.RemoteRunner).
+Uses private/runner.yaml (measure.runner.RemoteRunner). The limits for the
+shared machine are in scripts/synth/sweep.py.
 """
 import argparse
-import io
 import json
-import shlex
 import sys
-import tarfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -70,36 +69,35 @@ def plan(part):
         # width_change keeps its size; its remedy needs no tracker re-run (decisions, 2026-10-10)
         for seed in SEEDS:
             rods.append((Rod("growth_zone", "width_change", seed), [TrackSettings()]))
-    return {"rods": [{"options": rod.options(), "runs": [{"tag": s.tag(), "args": s.args()} for s in states]}
+    return {"rods": [{"id": rod.id(), "options": rod.options(), "runs": [{"tag": s.tag(), "args": s.args()} for s in states]}
                      for rod, states in rods]}
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", choices=["start", "status", "fetch"])
+    ap.add_argument("cmd", choices=["start", "status", "stop", "fetch"])
     ap.add_argument("--part", default="all", choices=["A", "B", "all"])
     a = ap.parse_args()
     r = RemoteRunner()
-    q = shlex.quote
+    name = f"repair_{a.part}"
     if a.cmd == "start":
         p = plan(a.part)
         n = sum(2 * len(x["runs"]) for x in p["rods"])
-        r.sync_code()
-        r._ssh(f"mkdir -p {q(r.work)} && cat > {q(r.work)}/plan.json", stdin=json.dumps(p).encode())
-        r.start_detached(f"cd {q(r.work)} && {r.python} {q(r.code)}/scripts/synth/sweep.py "
-                         f"--plan plan.json --work . --workers 4 > sweep.log 2>&1")
+        r.sweep_start(p, name)
         print(f"started: {len(p['rods'])} rods, {n} tracker runs")
     elif a.cmd == "status":
-        print(r._ssh(f"cd {q(r.work)} && wc -l < sweep.log && grep -c '\"ok\": false' sweep.log; "
-                     f"tail -n 1 sweep.log").decode())
+        st = r.sweep_status(name)
+        log = st.pop("log")
+        print(json.dumps(st))
+        print(f"runs logged {sum('tag' in x for x in log)}, failed {sum(x.get('ok') is False for x in log)}")
+        for x in log:
+            if "tag" not in x:
+                print(json.dumps(x))
+    elif a.cmd == "stop":
+        print(json.dumps(r.sweep_stop()))
     else:
-        data = r._ssh(f"cd {q(r.work)}/tracks && tar cf - *__*.npz")
-        with tarfile.open(fileobj=io.BytesIO(data)) as tar:
-            tar.extractall(r.cache, filter="data")
+        r.sweep_fetch()
         print(f"fetched to {r.cache.relative_to(ROOT)}: {len(list(r.cache.glob('*__*.npz')))} files")
-        for rid in {p.name.split("__")[0] for p in r.cache.glob("*__*.npz") if "_moved__" not in p.name}:
-            if not (r.cache / f"{rid}_truth.npz").exists():
-                r.truth(rid)
 
 
 if __name__ == "__main__":

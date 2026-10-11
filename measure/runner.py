@@ -42,6 +42,10 @@ class Rod:
     rotation_deg: Optional[float] = None
     size: Optional[str] = None
 
+    def id(self, moved=False):
+        from measure.render import rod_id
+        return rod_id(self.case, self.fault, self.seed, moved, self.width_kappa_inv, self.rotation_deg, self.size)
+
     def options(self):
         o = ["--case", self.case, "--seed", str(self.seed)]
         if self.fault:
@@ -135,6 +139,66 @@ class RemoteRunner:
     def _py(self, script, args):
         return " ".join([self.python, shlex.quote(f"{self.code}/{script}")] + [shlex.quote(a) for a in args])
 
+    def _low(self, cmd):
+        """Lowest CPU and I/O priority on the shared machine (decisions, 2026-10-11)."""
+        return f"nice -n 19 $(command -v ionice >/dev/null && echo ionice -c 3) {cmd}"
+
+    def _load_ok(self):
+        """A single job starts only if the 1 min load is at most half the cores."""
+        n, l1 = self._ssh("nproc; cut -d' ' -f1 /proc/loadavg").decode().split()
+        if float(l1) > 0.5 * int(n):
+            raise RuntimeError(f"load {l1} is above half of {n} cores; not starting a job on the shared machine")
+
+    # ---- sweeps (scripts/synth/sweep.py holds the limits for the shared machine)
+
+    @property
+    def size_root(self):
+        """The space the 10 GB limit applies to: the directory holding the work and code directories."""
+        import posixpath
+        return posixpath.commonpath([self.work, self.code])
+
+    def sweep_start(self, plan, name, tracks="tracks", max_hours=2.0):
+        """Write the plan and start sweep.py detached at lowest priority. Refuses while a sweep runs."""
+        self.sync_code()
+        st = self.sweep_status()
+        if st.get("running"):
+            raise RuntimeError(f"a sweep is running ({st.get('plan')}); not starting another")
+        q = shlex.quote
+        self._ssh(f"mkdir -p {q(self.work)} && cat > {q(self.work)}/plan_{name}.json", stdin=json.dumps(plan).encode())
+        self.start_detached(f"cd {q(self.work)} && " + self._low(
+            self._py("scripts/synth/sweep.py", ["run", "--plan", f"plan_{name}.json", "--work", ".",
+                                                "--tracks", tracks, "--rods", "rods", "--size-root", self.size_root,
+                                                "--max-hours", str(max_hours)]))
+            + f" > sweep_{name}.log 2>&1")
+
+    def sweep_status(self, name=None):
+        out = json.loads(self._ssh(self._py("scripts/synth/sweep.py", ["status", "--work", self.work]))
+                         .decode().strip().splitlines()[-1])
+        if name:
+            q = shlex.quote
+            log = self._ssh(f"cd {q(self.work)} && cat sweep_{name}.log 2>/dev/null || true").decode()
+            out["log"] = [json.loads(x) for x in log.splitlines() if x.startswith("{")]
+        return out
+
+    def sweep_stop(self):
+        return json.loads(self._ssh(self._py("scripts/synth/sweep.py", ["stop", "--work", self.work]))
+                          .decode().strip().splitlines()[-1])
+
+    def sweep_fetch(self, tracks="tracks", cache=None):
+        """Copy finished tracker outputs (not partial ones) and the truth of each rod to a local folder."""
+        cache = Path(cache or self.cache)
+        cache.mkdir(parents=True, exist_ok=True)
+        q = shlex.quote
+        data = self._ssh(f"cd {q(self.work)}/{q(tracks)} && ls | grep -E '__.+[.]npz$' | grep -v '[.]part[.]npz$' "
+                         f"| tar cf - -T -")
+        with tarfile.open(fileobj=io.BytesIO(data)) as tar:
+            tar.extractall(cache, filter="data")
+        for rid in {f.name.split("__")[0] for f in cache.glob("*__*.npz") if "_moved__" not in f.name}:
+            local = cache / f"{rid}_truth.npz"
+            if not local.exists():
+                self._fetch(f"{self.work}/rods/{rid}_truth.npz", local)
+        return cache
+
     def render(self, rod, moved=False):
         """Render the rod on the tracker machine unless it exists. Returns the rod id."""
         args = ["--out", f"{self.work}/rods"] + rod.options() + (["--moved"] if moved else [])
@@ -143,7 +207,9 @@ class RemoteRunner:
         rid = json.loads(self._ssh(cmd).decode().strip().splitlines()[-1])["id"]
         exists = self._ssh(f"test -d {shlex.quote(self.work)}/rods/{rid}.imgdir && echo yes || echo no")
         if exists.decode().strip() != "yes":
-            out = json.loads(self._ssh(self._py("scripts/synth/make_rod.py", args)).decode().strip().splitlines()[-1])
+            self._load_ok()
+            out = json.loads(self._ssh(self._low(self._py("scripts/synth/make_rod.py", args)))
+                             .decode().strip().splitlines()[-1])
             self.log.append({"render": out})
         return rid
 
@@ -159,7 +225,9 @@ class RemoteRunner:
             args = ["--imgdir", f"{self.work}/rods/{rid}.imgdir",
                     "--midline", f"{self.work}/rods/{rid}_midline.npz",
                     "--out", f"{self.work}/tracks/{name}"] + settings.args()
-            out = json.loads(self._ssh(self._py("scripts/remote/qb_track.py", args)).decode().strip().splitlines()[-1])
+            self._load_ok()
+            out = json.loads(self._ssh(self._low(self._py("scripts/remote/qb_track.py", args)))
+                             .decode().strip().splitlines()[-1])
             out["out"] = Path(out.get("out", name)).name        # no remote paths in logs
             self.log.append({"track": out})
             self._fetch(f"{self.work}/tracks/{name}", local)
