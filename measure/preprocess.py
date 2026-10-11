@@ -97,19 +97,37 @@ def register_frames(frames, stage_px, midline, track_length, basal_from=0.6, ban
     return out_f, out_m, C, report
 
 
+def _smooth_linear_ends(a, sigma, axis):
+    """Gaussian smoothing with the ends padded by linear extrapolation (odd reflection about the end
+    value), so a quantity that changes linearly along the axis comes out unchanged. Padding with the
+    end value (mode 'nearest') pulled a steadily moving tip path short (decisions, 2026-10-11)."""
+    pad = int(np.ceil(4.0 * sigma))
+    if pad == 0:
+        return a
+    widths = [(0, 0)] * a.ndim
+    widths[axis] = (pad, pad)
+    padded = np.pad(a, widths, mode="reflect", reflect_type="odd")
+    sm = gaussian_filter1d(padded, sigma, axis=axis, mode="nearest", truncate=4.0)
+    return np.take(sm, np.arange(pad, pad + a.shape[axis]), axis=axis)
+
+
 def smooth_midline(midline, level):
-    """Gaussian smoothing along s (resampled per frame) and over time, for 'light' or 'strong'."""
+    """Gaussian smoothing along s (resampled per frame) and over time, for 'light' or 'strong'.
+
+    Both ends are padded by linear extrapolation, so a straight midline that
+    moves at constant velocity comes out unchanged.
+    """
     sig_s, sig_t = MIDLINE_SMOOTH[level]
     out = midline.copy()
     for t in range(len(out)):
         line = out[t]
         ok = np.isfinite(line[:, 0])
         step = np.median(np.linalg.norm(np.diff(line[ok], axis=0), axis=1))
-        sm = gaussian_filter1d(line[ok], sig_s / step, axis=0, mode="nearest")
+        sm = _smooth_linear_ends(line[ok], sig_s / step, axis=0)
         sm[0] = line[ok][0]                       # keep the tip
         out[t, ok] = sm
     if sig_t > 0:
-        out = gaussian_filter1d(out, sig_t, axis=0, mode="nearest")
+        out = _smooth_linear_ends(out, sig_t, axis=0)
     return out
 
 
