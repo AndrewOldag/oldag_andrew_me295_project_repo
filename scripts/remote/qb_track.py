@@ -82,7 +82,7 @@ def main():
     corr0 = cumulative_correction_px(rec)
     pre = {}
     if a.midline_smooth:
-        mid_img = preprocess.smooth_midline(mid_img, a.midline_smooth)
+        mid_img = preprocess.smooth_midline(mid_img, a.midline_smooth, corr0)   # time smoothing in the world frame
     if a.register:
         if a.register_from_px is None:
             ap.error("--register needs --register-from-px")

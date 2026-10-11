@@ -92,7 +92,7 @@ def state_label(tag):
     if "_reg2p" in tag:
         return "register_frames"
     if "_ms" in tag:
-        return "smooth_midline " + tag.split("_ms")[1].split("_")[0].rstrip("23")
+        return "smooth_midline " + tag.split("_ms")[1].split("_")[0].rstrip("234")
     if "_r22" in tag or "_r30" in tag:
         return "enlarge_patch " + ("1.5x" if "_r22" in tag else "2x")
     if tag.endswith("_mask") or tag.endswith("_crop"):
@@ -352,17 +352,18 @@ B = CACHE / "tracks_b"
 U = CACHE / "tracks_uncoupled"
 
 
-def b_smooth_table():
-    """11b item 1: clean rods and midline_jitter with the fitted-line padding; unremedied runs from item 4."""
-    clean = clean_rows(U, lambda t: t == "st1") + clean_rows(B, lambda t: "_ms" in t and t.endswith("3"))
+def b_smooth_table(d=None, ver="3", what="the fitted-line time padding"):
+    """Clean rods and midline_jitter after smoothing (11b item 1, 11c item 1); unremedied runs from item 4."""
+    B_ = d or B
+    clean = clean_rows(U, lambda t: t == "st1") + clean_rows(B_, lambda t: "_ms" in t and t.endswith(ver))
     fails = [f"{r['id']} {r['state']}" for r in clean if not r["all_pass"]]
     import fix_sweep as fs
     groups = [("midline_jitter", z, [fs.Rod("growth_zone", "midline_jitter", s, size=z).id() for s in fs.SEEDS])
               for z in fs.U_SIZES["midline_jitter"]]
     ids = [i for _, _, ii in groups for i in ii]
-    rows = fault_rows(U, ids, lambda t: t == "st1") + fault_rows(B, ids, lambda t: t.endswith("3"))
+    rows = fault_rows(U, ids, lambda t: t == "st1") + fault_rows(B_, ids, lambda t: t.endswith(ver))
     summary, per, labels = fault_tables(rows, groups)
-    return ("Smoothing with the fitted-line time padding (tags `mslight3`, `msstrong3`). Unremedied runs: item 4 of the "
+    return (f"Smoothing with {what} (tags `mslight{ver}`, `msstrong{ver}`). Unremedied runs: item 4 of the "
             "2026-10-11 spec (same code). " + THRESHOLD_NOTE + "\n\n## Clean rods\n\n" + clean_table(clean)
             + "\nClean runs failing an approved threshold: " + (", ".join(fails) if fails else "none")
             + "\n\n## midline_jitter\n\n" + summary + "\n\n" + labels + "\n\nPer run:\n\n" + per + "\n")
@@ -448,7 +449,11 @@ def b_weight_table():
             + "\n".join(loss_lines) + "\n")
 
 
-TABLES = {"b_weight": ("b4_coupling_weight.md", b_weight_table),
+def c_smooth_table():
+    return b_smooth_table(CACHE / "tracks_c", "4", "world-coordinate time smoothing and the fitted-line padding")
+
+
+TABLES = {"c_smooth": ("c1_smoothing.md", c_smooth_table), "b_weight": ("b4_coupling_weight.md", b_weight_table),
           "b_smooth": ("b1_smoothing.md", b_smooth_table), "band": ("item3_band.md", band_table), "u_clean": ("item4_clean.md", u_clean_table),
           "bent": ("item7_bent.md", bent_table),
           "c_basis": ("item6_clean_basis.md", c_basis_table),
