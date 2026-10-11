@@ -31,10 +31,12 @@ A growing plant root is a slender rod whose material generates its own strain: t
 - Nothing unpublished from other lab work appears in this repo or in anything submitted for the course. If unsure whether something is published, ask Andrew
 - Raw data is not in this repo. Never copy a whole experiment folder to the build machine. Stage one root at a time and delete staged images after use
 - Tracking runs on the lab compute server by default. The computing cluster is used only after Andrew approves a cost estimate
+- The lab compute server is shared. Every job there: at most 4 single-thread workers, lowest priority, load checked before and between runs, one sweep at a time. Limits in `docs/decisions.md`, 2026-10-11
 - The checker contains no LLM calls
 - Remedies come from a fixed list set in advance. No free parameter tuning on data that may go into paper figures
 - Pin the model ID in config. Never commit API keys, tokens or SSH keys
 - The course paper makes claims about agent behaviour only. Tracker comparisons and biology results belong to other lab work and are out of scope
+- Coupled and uncoupled results on synthetic rods may be committed (Andrew, 2026-10-11). They are data, not a claim
 - Kinematics only. Do not claim stress, stiffness or a constitutive law
 - Write in a plain, flat, declarative style. Short bullets. No flourish
 - Follow the logging and pushing routine below in every session
