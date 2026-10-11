@@ -123,3 +123,15 @@ Required by the course. One entry per work session: done, remaining, bottlenecks
 - Remaining: build account works the new spec (A, B, C, then D after Andrew approves the sizes and the tolerance), then the bent rods, then item 6
 - Bottlenecks: `width_change` outcome and the two unavailable remedies (Andrew); fault sizes and tolerance once proposed (Andrew); course staff answer on tool use (Andrew)
 
+
+## 2026-10-10 (build account, session 7)
+- Done: Andrew's decisions applied: `switch_midline_source` removed; `use_width_free_ratio` reports centre strain rate and width-free ratio and skips plane sections. Commit 9dddf46
+- Done: fault size options and a no-agent sweep runner. Commit 52e8064. Outcome categories, labels and diagnosis scoring in `measure/score.py`, one test per table row. Commit 9e6494b. Evaluation script. Commit a1a7f2c
+- Done: repair-criteria sweep, parts A-C: 354 tracker runs, 0 failed, 52 min. `results/2026-10-10_repair_criteria/`. Commit 51de646
+- Done: part A stop condition met: clean rods fail approved thresholds after register_frames (closure 1.05-1.22 px/h, 0 of 6), smooth_midline strong (closure about 3.0, 0 of 6), smooth_midline light (3 of 6 pass) and stride 2 (one of 6 runs fails rigid invariance at 23.2 %/h)
+- Done: part B: sizes meeting the criteria: displacement_exceeds_patch 2x6 (tip speed x2, stride 6; two halvings, 3 of 3) and width_change (use_width_free_ratio, 3 of 3). No size works for rigid_drift, midline_jitter or low_texture
+- Done: part C: proposed tolerance REGR RMS <= 1.0 %/h, flank-difference RMS <= 0.5 %/h. Labels written for the sizes tried
+- Done: `python -m pytest -q tests`: 75 passed. An evaluation bug (stride halving counted 3 steps for 6 -> 3 -> 1) was found and fixed before the tables were committed
+- Demo A, B, C: `python scripts/synth/eval_repair.py --out results/2026-10-10_repair_criteria` prints the three tables from the fetched sweep
+- Remaining: Andrew decides on the part A failures (remedies that make clean rods fail: register_frames, smooth_midline); approves sizes and tolerance; then part D
+- Bottlenecks: the decisions above (Andrew); course staff answer on tool use (Andrew)
