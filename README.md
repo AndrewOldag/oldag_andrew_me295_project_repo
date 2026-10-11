@@ -28,7 +28,8 @@ Course project for AM/ME/CE 295, Caltech, Fall 2026. Start with `CLAUDE.md` and 
 - From the agents env, with `private/runner.yaml` filled in: `python scripts/synth/fix_sweep.py start --part check`, then `status --part check`, `stop`, `fetch --part check`. `status` prints the preflight line (cores, load, memory, disk, work space, own processes) and the end line (load before and after, peak workers, wall time)
 - On the tracker machine directly: `python scripts/synth/sweep.py run --plan P --work DIR`, `sweep.py status --work DIR`, `sweep.py stop --work DIR`
 - Spec 2026-10-11 sweeps: `python scripts/synth/fix_sweep.py start --part P` (parts listed in the script; `--dry-run` prints the run count), `fetch --part P` copies outputs to `staging/tracks_2026-10-11/`, then `python scripts/synth/eval_fix.py --out results/2026-10-11_remedy_fixes` writes the tables
-- Coupled tracking: `TrackSettings(couple=True)` or `RemoteRunner(couple=True)`; a run setting, not a remedy. Scoring tolerance: `config/scoring_tolerance.yaml` (scoring only)
+- The system runs uncoupled (Andrew, 2026-10-11): `couple` is a recorded run setting, false everywhere. The coupled tables are data in `results/2026-10-11_remedy_fixes/item6_clean_basis.md` and `results/2026-10-11b_padding_tolerance_coupling/b4_coupling_weight.md`. Scoring tolerance: `config/scoring_tolerance.yaml` (scoring only)
+- Diagnostician on one rod: `python scripts/demo_slice.py --fault rigid_drift --size 0.5 --out results/<dir>`; `--replay` re-applies the remedies of an existing trace without calling the agent
 
 ## Diagnostician on a synthetic rod (one slice)
 - `request_info` answers come from the measurement record and the check results (`measure/info.py`). `apply_remedy` changes the run settings (`measure/remedies.py`; table in `docs/decisions.md`), re-runs the measurement and re-checks it (`agents/executors.py`)

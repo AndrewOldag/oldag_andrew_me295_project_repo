@@ -31,7 +31,7 @@ FAULTS = [
 REMEDIES = {
     "register_frames": [None],
     "change_frame_stride": ["half", "double"],
-    "smooth_midline": ["light", "strong"],
+    "smooth_midline": ["light"],               # strong withdrawn 2026-10-11 (spec 11c item 1 rule)
     "crop_or_mask": ["crop_to_main_root", "mask_second_root"],
     "enlarge_patch": ["1.5x", "2x"],
     "use_width_free_ratio": [None],

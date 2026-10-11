@@ -453,7 +453,56 @@ def c_smooth_table():
     return b_smooth_table(CACHE / "tracks_c", "4", "world-coordinate time smoothing and the fitted-line padding")
 
 
-TABLES = {"c_smooth": ("c1_smoothing.md", c_smooth_table), "b_weight": ("b4_coupling_weight.md", b_weight_table),
+def tolerance_basis():
+    """11b item 2: the basis rule of 2026-10-10 with the bent rods in the clean set. Returns (rows, keep, result)."""
+    import math
+    from measure.score import truth_summary
+    C = CACHE / "tracks_c"
+    old = {"st1", "st1_r22", "st1_r30", "st1_mask", "st1_crop"}
+    rows = (clean_rows(OLD, lambda t: t in old)
+            + clean_rows(U, lambda t: "_reg2p" in t)
+            + clean_rows(C, lambda t: t != "st1")
+            + clean_rows(CACHE / "tracks_bent", lambda t: t == "st1"))
+    rows = [r for r in rows if r["case"] in ("growth_zone", "bending", "bend_continue", "bend_reverse")]
+    for r in rows:
+        r["regr_frac"] = r["regr_rms_pct_per_h"] / truth_summary(r["truth"], 2.105)["peak_regr_pct_per_h"]
+    by = {}
+    for r in rows:
+        by.setdefault(r["state"], []).append(r)
+    keep = sorted(st for st, rs in by.items() if all(r["all_pass"] for r in rs) and len(rs) == 12)
+    kept = [r for r in rows if r["state"] in keep]
+    mx = max(r["flank_difference_rms_pct_per_h"] for r in kept)
+    worst = max(kept, key=lambda r: r["flank_difference_rms_pct_per_h"])
+    tol = math.floor(mx / 0.25 + 1) * 0.25
+    cmax = max(kept, key=lambda r: r["regr_frac"])
+    return rows, by, keep, {"max_flank": mx, "worst": worst, "flank_tol": tol, "max_centre_frac": cmax["regr_frac"],
+                            "worst_centre": cmax}
+
+
+def c_tolerance_table():
+    rows, by, keep, res = tolerance_basis()
+    lines = clean_table(rows)
+    n = ["| Setting | Runs | All pass | Largest flank err (%/h) | Largest centre err / true peak |", "| :-- | --: | :-- | --: | --: |"]
+    for st in STATE_ORDER:
+        rs = by.get(st)
+        if rs:
+            n.append(f"| {st} | {len(rs)} | {sum(r['all_pass'] for r in rs)} of {len(rs)} | "
+                     f"{max(r['flank_difference_rms_pct_per_h'] for r in rs):.2f} | {100 * max(r['regr_frac'] for r in rs):.2f} % |")
+    fails = [f"{r['id']} {r['state']}: " + ", ".join(f"{c} {r[c]:.2f}" for c in CHECKS if r[f"{c}_pass"] is False)
+             for r in rows if not r["all_pass"]]
+    return ("Clean set: growth_zone, bending, bend_continue, bend_reverse, seeds 0-2 (12 rods). Runs: unremedied, enlarge_patch and "
+            "crop_or_mask of growth_zone and bending from 2026-10-10 (same code); register_frames from 2026-10-11 item 4; smoothing "
+            "(world coordinates) and every bent-rod remedy from this spec.\n\n" + "\n".join(n)
+            + f"\n\nSettings that keep every clean run passing: {', '.join(keep)}.\n\n"
+            f"Largest clean flank-difference RMS error under them: {res['max_flank']:.3f} %/h ({res['worst']['id']}, {res['worst']['state']}). "
+            f"Rounded up to the next 0.25 %/h: {res['flank_tol']:.2f} %/h.\n\n"
+            f"Largest clean centre REGR RMS error as a fraction of the true peak: {100 * res['max_centre_frac']:.2f} % "
+            f"({res['worst_centre']['id']}, {res['worst_centre']['state']}); approved limit 2.5 %.\n\n"
+            "Clean runs failing an approved threshold: " + ("; ".join(fails) if fails else "none") + "\n\n" + lines)
+
+
+TABLES = {"c_tolerance": ("c2_flank_tolerance.md", c_tolerance_table),
+          "c_smooth": ("c1_smoothing.md", c_smooth_table), "b_weight": ("b4_coupling_weight.md", b_weight_table),
           "b_smooth": ("b1_smoothing.md", b_smooth_table), "band": ("item3_band.md", band_table), "u_clean": ("item4_clean.md", u_clean_table),
           "bent": ("item7_bent.md", bent_table),
           "c_basis": ("item6_clean_basis.md", c_basis_table),
