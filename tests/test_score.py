@@ -70,3 +70,17 @@ def test_tolerance_just_inside_and_outside(fault, size, peak):
     assert measurement_good({"regr_rms_pct_per_h": limit - 0.01, "flank_difference_rms_pct_per_h": flank - 0.01}, tol)
     assert not measurement_good({"regr_rms_pct_per_h": limit + 0.01, "flank_difference_rms_pct_per_h": 0.1}, tol)
     assert not measurement_good({"regr_rms_pct_per_h": 0.1, "flank_difference_rms_pct_per_h": flank + 0.01}, tol)
+
+
+def test_truth_error_with_nothing_covered():
+    import numpy as np
+    from measure.score import measurement_good, truth_error
+    from tests.test_executors import FIXTURES
+    from measure.record import from_tracker_npz
+    rec = from_tracker_npz(FIXTURES / "growth_zone_clean_s0.npz")
+    rec.fields["regr_mid"][:] = np.nan
+    rec.fields["regr_plus"][:] = np.nan
+    truth = dict(np.load(FIXTURES / "growth_zone_clean_s0_truth.npz"))
+    e = truth_error(rec, truth)
+    assert e["regr_covered_um"] == 0 and np.isnan(e["regr_rms_pct_per_h"])
+    assert not measurement_good(e, {"regr_rms_pct_per_h": 1.0, "flank_difference_rms_pct_per_h": 1.0})

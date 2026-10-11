@@ -57,7 +57,7 @@ def band_start(rod):
     """Registration band start from the rod's unremedied record (preprocess.registration_band_start)."""
     from measure.preprocess import registration_band_start
     from measure.record import from_tracker_npz
-    for cache in (CACHE / "tracks_check", ROOT / "staging" / "tracks"):
+    for cache in (CACHE / "tracks_check", ROOT / "staging" / "tracks", CACHE / "tracks_bent"):
         f = cache / f"{rod.id()}__st{RemoteRunner.initial_stride(rod)}.npz"
         if f.exists():
             return registration_band_start(from_tracker_npz(f))
@@ -194,6 +194,14 @@ def part_bent_u():
     return [entry(r, [TrackSettings()]) for r in BENT]
 
 
+def part_c_bent():
+    """11b item 2: bent clean rods through the remedy settings of the flank-tolerance basis (no remedy is in tracks_bent)."""
+    return [entry(r, [TrackSettings(disk_radius=round(1.5 * BASE_RADIUS)), TrackSettings(disk_radius=2 * BASE_RADIUS),
+                      TrackSettings(band_mask="mask_second_root"), TrackSettings(band_mask="crop_to_main_root"),
+                      register_state(r), TrackSettings(midline_smooth="light"), TrackSettings(midline_smooth="strong")])
+            for r in BENT]
+
+
 # ---- spec 2026-10-11b (padding, flank tolerance, coupling weight); outputs in tracks_b
 
 def part_b_smooth():
@@ -223,7 +231,8 @@ def part_b_weight():
 PARTS = {"check": (part_check, "tracks_check"), "band": (part_band, "tracks_band"),
          "b_weight": (part_b_weight, "tracks_b_weight"),
          "b_smooth": (part_b_smooth, "tracks_b"),
-         "c_smooth": (part_b_smooth, "tracks_c"),       # 11c item 1: same rods, world-coordinate smoothing (tag ms*4)
+         "c_smooth": (part_b_smooth, "tracks_c"),
+         "c_bent": (lambda: part_c_bent(), "tracks_c"),   # 11b item 2 via 11c: bent rods through the remedies       # 11c item 1: same rods, world-coordinate smoothing (tag ms*4)
          "bent_u": (part_bent_u, "tracks_bent"),
          "c_time": (part_c_time, "tracks_coupled"), "c_basis": (part_c_basis, "tracks_coupled"),
          "c_remedies": (part_c_remedies, "tracks_coupled"), "c_faults": (part_c_faults, "tracks_coupled"),

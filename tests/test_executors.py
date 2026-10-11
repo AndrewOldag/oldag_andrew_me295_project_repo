@@ -126,7 +126,9 @@ def test_no_progress_rule():
     assert no_progress(before, [c("closure", False, 3.5), c("plane_sections", True, 0.5)])        # lowered 12 %
     assert not no_progress(before, [c("closure", False, 3.0), c("plane_sections", True, 0.5)])    # lowered 25 %
     assert not no_progress(before, [c("closure", True, 0.5), c("plane_sections", True, 0.5)])     # now passes
-    assert not no_progress(before, [c("closure", None, float("nan")), c("plane_sections", True, 0.5)])  # not run
+    skipped = c("closure", None, float("nan")); skipped.detail = "skipped: width-free ratio reported; "
+    assert not no_progress(before, [skipped, c("plane_sections", True, 0.5)])                     # skipped on purpose
+    assert no_progress(before, [c("closure", None, float("nan")), c("plane_sections", True, 0.5)])  # no longer computable
     assert not no_progress([c("closure", True, 0.1)], [c("closure", True, 0.9)])                 # nothing failed
 
 

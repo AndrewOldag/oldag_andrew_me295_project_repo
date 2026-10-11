@@ -191,3 +191,18 @@ Required by the course. One entry per work session: done, remaining, bottlenecks
 - Remaining: build account works 11c in order (world-coordinate smoothing, items 2 and 3 of 11b, uncoupled note in the README, freeze list). About 160 tracker runs, at most 5 diagnostician runs. Planning account drafts the related-work note and the draft proposal for Lab report 1 (due 16 Oct)
 - Bottlenecks: sizes for `midline_jitter` and a repairable `low_texture` if proposed (Andrew); the freeze (Andrew); course staff answer on tool use (Andrew)
 
+
+## 2026-10-11 (build account, session 10)
+- Done: spec `2026-10-11c_world-coordinate-smoothing-uncoupled.md`: item 1 done; item 2 run with the flank tolerance stopped (1.00 %/h, not 0.75); 5 diagnostician runs made; items 3 and 4 done. 11c and 11b not done: the flank tolerance and three questions wait for Andrew
+- Done: item 1, `smooth_midline` time smoothing in world coordinates, tag `ms*4`. 72 runs: clean 12 of 12 pass light and strong; midline_jitter 0.5 px met the criteria on 3 of 3 (2 by strong). Commit 8891942
+- Done: item 2 (11b item 2), bent rods through 7 remedy settings, 84 runs: strong fails plane_sections on 6 of 6 bent clean rods (3.43-4.69 %/h), so `strong` withdrawn by the 11c rule; midline_jitter then not repairable at 3 px. Basis rule gives flank tolerance 1.00 %/h (0.797 max, enlarge_patch 2x): stop. Largest centre error 2.45 % of peak
+- Done: 11b item 3 plus the midline_jitter run: 5 diagnostician runs, seed 0. 1 correct outcome (low_texture decline), 2 unnecessary declines (width_change, rigid_drift), 2 step limits (displacement_exceeds_patch 2x6, midline_jitter). 0 of 5 faults named correctly. 37 steps, 159k / 18k tokens, 207 s call time
+- Done: fixes found by those runs: `demo_slice.py` relative `--out` crash (summaries rebuilt by the new `--replay`, no agent call repeated); `truth_error` with no coverage; roll back counted an uncomputable check as resolved
+- Done: item 3 README line (uncoupled); item 4 `docs/proposals/2026-10-11_freeze-v1.md`
+- Done: `python -m pytest -q tests`: 102 passed. 156 sweep runs, 0 failed, 6.8 min wall; load at most 6.32 on 32 cores; work space 5.62 -> 5.67 GB
+- Demo 1: `python -m pytest -q tests/test_preprocess.py`; `python scripts/synth/eval_fix.py --out results/2026-10-11c_world_smoothing_freeze --parts c_smooth`
+- Demo 2: `python scripts/synth/eval_fix.py --out results/2026-10-11c_world_smoothing_freeze --parts c_tolerance` prints the basis rule per setting and the result 1.00 %/h
+- Demo 3: `python scripts/demo_slice.py --fault rigid_drift --size 0.5 --out results/2026-10-11c_world_smoothing_freeze/diagnostician --replay` re-applies the recorded remedies and prints the outcome without an agent call
+- Demo 4: `docs/proposals/2026-10-11_freeze-v1.md`
+- Remaining: Andrew's answers (flank tolerance; confirm `strong` withdrawn; re-run of the low_texture diagnostician run); then labels under the tolerance, the low_texture size question, and the freeze
+- Bottlenecks: flank tolerance, `strong`, the extra diagnostician run, freeze approval (Andrew); course staff answer on tool use (Andrew)

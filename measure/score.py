@@ -28,6 +28,10 @@ def truth_error(rec, truth):
             warnings.simplefilter("ignore", RuntimeWarning)
             t = np.interp(s, truth["s_grid"], np.nanmean(tru, axis=0), right=np.nan)
         e = (_wmean(meas) - t) * PER_S_TO_PCT_PER_H
+        if not np.any(np.isfinite(e)):                 # nothing measured in enough frames: no error, not good
+            out.update({f"{name}_rms_pct_per_h": float("nan"), f"{name}_max_pct_per_h": float("nan"),
+                        f"{name}_covered_um": 0})
+            continue
         out[f"{name}_rms_pct_per_h"] = round(float(np.sqrt(np.nanmean(e ** 2))), 3)
         out[f"{name}_max_pct_per_h"] = round(float(np.nanmax(np.abs(e))), 3)
         out[f"{name}_covered_um"] = round(float(np.nanmax(s[np.isfinite(e)]) * rec.pixel_um))

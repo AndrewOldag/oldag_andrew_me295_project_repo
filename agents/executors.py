@@ -29,14 +29,15 @@ def _before_after(before, after):
 
 def no_progress(before, after):
     """True if the measurement before had a failing check and the remedy made none of them pass (or no
-    longer apply, as plane sections under the width-free ratio) and lowered none by at least a quarter."""
+    longer apply, as plane sections under the width-free ratio) and lowered none by at least a quarter.
+    A check that can no longer be computed (no coverage) is not resolved."""
     failing = [c for c in before if c.passed is False]
     if not failing:
         return False
     a = {c.check: c for c in after}
     for c in failing:
         n = a[c.check]
-        if n.passed is not False:
+        if n.passed is True or (n.passed is None and n.detail.startswith("skipped")):
             return False
         if math.isfinite(n.value) and math.isfinite(c.value) and n.value <= ROLL_BACK_FRACTION * c.value:
             return False
