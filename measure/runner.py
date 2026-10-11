@@ -106,12 +106,16 @@ class RemoteRunner:
         self.cache.mkdir(parents=True, exist_ok=True)
         self.log = []
 
-    def initial_settings(self, rod):
-        """The rod's own analysis frame stride; tracker defaults otherwise."""
+    @staticmethod
+    def initial_stride(rod):
         from measure.render import image_case
         _, movie = image_case(rod.case, rod.fault, rod.seed, False, rod.width_kappa_inv, rod.rotation_deg,
                               rod.size)
-        return TrackSettings(stride=movie.stride)
+        return movie.stride
+
+    def initial_settings(self, rod):
+        """The rod's own analysis frame stride; tracker defaults otherwise."""
+        return TrackSettings(stride=self.initial_stride(rod))
 
     def _ssh(self, cmd, stdin=None):
         p = subprocess.run(["ssh", "-o", "BatchMode=yes", self.host, cmd], input=stdin,

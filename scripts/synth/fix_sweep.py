@@ -7,6 +7,9 @@
 
 Parts:
 - check: 8 clean runs under the limits for the shared machine (item 1)
+- band: registration band at 0.6, 0.8, 0.9 of the tracked length on one clean rod (item 3)
+- band2: band from the measured profile, two band ends, clean and rigid_drift rods (item 3)
+- band3: band from the measured profile to the midline end, inside the frames (item 3)
 Each part writes its tracker outputs to its own directory on the tracker
 machine, so a run made with older code is never reused by name. The limits
 for the shared machine are in scripts/synth/sweep.py.
@@ -22,6 +25,7 @@ from measure.remedies import TrackSettings  # noqa: E402
 from measure.runner import RemoteRunner, Rod  # noqa: E402
 
 CACHE = ROOT / "staging" / "tracks_2026-10-11"
+SEEDS = (0, 1, 2)
 
 
 def entry(rod, runs):
@@ -38,7 +42,49 @@ def part_check():
     return [entry(r, [TrackSettings()]) for r in rods]
 
 
-PARTS = {"check": (part_check, "tracks_check")}
+def part_band():
+    """Item 3: one clean rod, registration band starting at 0.6, 0.8 and 0.9 of the tracked length (400 px)."""
+    runs = [(f"st1_regb{int(100 * f)}", ["--stride", "1", "--register", "--register-from-px", str(400 * f)])
+            for f in (0.6, 0.8, 0.9)]
+    return [entry(Rod("growth_zone", None, 0), runs)]
+
+
+def band_start(rod):
+    """Registration band start from the rod's unremedied record (preprocess.registration_band_start)."""
+    from measure.preprocess import registration_band_start
+    from measure.record import from_tracker_npz
+    for cache in (CACHE / "tracks_check", ROOT / "staging" / "tracks"):
+        f = cache / f"{rod.id()}__st{RemoteRunner.initial_stride(rod)}.npz"
+        if f.exists():
+            return registration_band_start(from_tracker_npz(f))
+    raise FileNotFoundError(f"no unremedied record for {rod.id()}; run and fetch it first")
+
+
+def part_band2():
+    """Item 3: band from the measured profile, ending at the tracked length or at the end of the midline."""
+    rods = [Rod(c, None, s) for c in ("growth_zone", "bending") for s in SEEDS] +            [Rod("growth_zone", "rigid_drift", s, size="1") for s in SEEDS]
+    out = []
+    for rod in rods:
+        s0 = band_start(rod)
+        out.append(entry(rod, [(f"st1_regp{s0:.0f}_400", ["--stride", "1", "--register", "--register-from-px", str(s0)]),
+                               (f"st1_regp{s0:.0f}_end", ["--stride", "1", "--register", "--register-from-px", str(s0),
+                                                           "--register-to-px", "10000"])]))
+    return out
+
+
+def part_band3():
+    """Item 3: band from the measured profile to the end of the midline, kept 25 px inside the frames."""
+    rods = [Rod(c, None, s) for c in ("growth_zone", "bending") for s in SEEDS] +            [Rod("growth_zone", "rigid_drift", s, size="1") for s in SEEDS]
+    out = []
+    for rod in rods:
+        s0 = band_start(rod)
+        out.append(entry(rod, [(f"st1_regp{s0:.0f}_in", ["--stride", "1", "--register", "--register-from-px", str(s0),
+                                                         "--register-to-px", "10000"])]))
+    return out
+
+
+PARTS = {"check": (part_check, "tracks_check"), "band": (part_band, "tracks_band"),
+         "band2": (part_band2, "tracks_band"), "band3": (part_band3, "tracks_band")}
 
 
 def main():
