@@ -145,3 +145,22 @@ Required by the course. One entry per work session: done, remaining, bottlenecks
 - Remaining: build account works the new spec in order (compute limits, the two fixes, uncoupled re-run, tolerance, coupled mode, bent rods, part D code). About 610 tracker runs. Planning account drafts the related-work note and the draft proposal for Lab report 1 (due 16 Oct)
 - Bottlenecks: sizes for `rigid_drift`, `midline_jitter` and a repairable `low_texture` once proposed (Andrew); tracking mode for the real movies (Andrew); course staff answer on tool use (Andrew)
 
+
+## 2026-10-11 (build account, session 8)
+- Done: spec `2026-10-11_remedy-fixes-coupled-mode-shared-compute.md`, items 1-5, 7 (uncoupled) and 8 (code). Item 6 stopped at the clean basis (coupled growing rods fail closure). Spec not done
+- Done: item 1, shared-machine limits in `scripts/synth/sweep.py` and `measure/runner.py`. Check: 8 clean runs, 0 failed, 8.7-10.5 s each, CPU share 0.83-0.92 of a core, 504-507 MB, load 1.92 / 3.07 / 3.07 before / during / after. One-thread output equal to earlier runs to 1e-13 px. Commit b04ca85
+- Done: item 2, `smooth_midline` padded by linear extrapolation (odd reflection). Translating midline unchanged to < 0.01 px (was 3.7 / 9.8 px). Commit 6064dd0
+- Done: item 3, registration cause confirmed: closure 1.16 / 0.21 / 0.08 px/h at band 0.6 / 0.8 / 0.9. New band: record's REGR under 5 % of peak to the midline end, 25 px inside the frames. 6 of 6 clean pass (closure 0.09-0.16), 3 of 3 rigid_drift size 1 pass. Commit 346388c
+- Done: item 4, uncoupled re-run, 216 runs. Clean: 24 of 24 pass after the fixed remedies. rigid_drift meets the criteria at all four sizes; midline_jitter and low_texture 0.2 / 0.25 at none. Proposed (not adopted): rigid_drift 0.5. Commits 9f73915, eebc229
+- Done: item 5, tolerance in `config/scoring_tolerance.yaml`; part C labels unchanged. Commit 9f73915
+- Done: item 6, `couple` run setting (tag `_cpl`). Coupled 9.4-9.6 s against 9.3 s per run, same memory. Clean basis coupled: 10 of 10 growing rods fail closure (1.46-1.99 px/h), REGR error 4.4-5.3 %/h; rigid_translation 5 of 5 pass. Tracker's own coupled peak 31.9 %/h against truth 43.4. Stopped. Commit eebc229
+- Done: item 7, `bend_continue` and `bend_reverse` added; uncoupled 6 of 6 pass all checks. Commit eebc229
+- Done: item 8, prompt rules, before-and-after check values, roll back. Commit 9d27233
+- Done: `python -m pytest -q tests`: 97 passed. 356 tracker runs this session, 12 failed (report-line bug, fixed and re-run), 19 min wall in total; work space 4.46 -> 5.5 GB
+- Demo 1: `python scripts/synth/fix_sweep.py start --part check`, then `status --part check` prints the preflight line, 8 runs and the end line (load, peak workers, wall time)
+- Demo 2: `python -m pytest -q tests/test_preprocess.py` checks the translating midline is unchanged after both smoothing levels
+- Demo 3, 4, 6, 7: `python scripts/synth/eval_fix.py --out results/2026-10-11_remedy_fixes` writes the item 3, 4, 6 and 7 tables from the fetched sweeps
+- Demo 5: `python -m pytest -q tests/test_score.py` checks the tolerance just inside and outside for a clean and a 2x6 rod
+- Demo 8: `python -m pytest -q tests/test_executors.py -k "roll_back or no_progress"`
+- Remaining: Andrew's two answers (below); then the coupled sweeps (about 420 runs) and coupled bent rods, if continued; Andrew approves sizes; then the diagnostician runs (part D)
+- Bottlenecks: whether to change the smoothing end padding, which leaves midline_jitter not repairable (Andrew); whether to continue coupled runs (Andrew); sizes for rigid_drift, midline_jitter, low_texture (Andrew); course staff answer on tool use (Andrew)
