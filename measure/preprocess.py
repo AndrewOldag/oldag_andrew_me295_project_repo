@@ -166,12 +166,15 @@ def _smooth_fitted_ends(a, sigma):
     return sm[pad:pad + T].reshape(a.shape)
 
 
-def smooth_midline(midline, level):
+def smooth_midline(midline, level, stage_px=None):
     """Gaussian smoothing along s (resampled per frame) and over time, for 'light' or 'strong'.
 
     Along s the ends are padded by odd reflection; over time by a line fitted
-    to the end frames. A straight midline that moves at constant velocity
-    comes out unchanged.
+    to the end frames. The time smoothing is done in world coordinates: with
+    stage_px (T, 2) given, the midline is in image coordinates, the stage log
+    is added before and subtracted after (decisions, 2026-10-11c). Smoothing
+    in image coordinates moved the tip across stage steps. A straight midline
+    that moves at constant velocity in the world comes out unchanged.
     """
     sig_s, sig_t = MIDLINE_SMOOTH[level]
     out = midline.copy()
@@ -183,7 +186,8 @@ def smooth_midline(midline, level):
         sm[0] = line[ok][0]                       # keep the tip
         out[t, ok] = sm
     if sig_t > 0:
-        out = _smooth_fitted_ends(out, sig_t)
+        shift = 0.0 if stage_px is None else np.asarray(stage_px, float)[:, None, :]
+        out = _smooth_fitted_ends(out + shift, sig_t) - shift
     return out
 
 

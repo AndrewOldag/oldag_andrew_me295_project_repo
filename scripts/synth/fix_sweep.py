@@ -223,6 +223,7 @@ def part_b_weight():
 PARTS = {"check": (part_check, "tracks_check"), "band": (part_band, "tracks_band"),
          "b_weight": (part_b_weight, "tracks_b_weight"),
          "b_smooth": (part_b_smooth, "tracks_b"),
+         "c_smooth": (part_b_smooth, "tracks_c"),       # 11c item 1: same rods, world-coordinate smoothing (tag ms*4)
          "bent_u": (part_bent_u, "tracks_bent"),
          "c_time": (part_c_time, "tracks_coupled"), "c_basis": (part_c_basis, "tracks_coupled"),
          "c_remedies": (part_c_remedies, "tracks_coupled"), "c_faults": (part_c_faults, "tracks_coupled"),

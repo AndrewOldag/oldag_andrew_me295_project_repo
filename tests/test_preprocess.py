@@ -88,3 +88,17 @@ def test_end_frame_jitter_lowered(level, most):
     assert np.allclose(r[:, 1], r[:, 0])                            # odd reflection kept the end frames
     ratio = np.sqrt(np.mean(r[:, 2] ** 2) / np.mean(r[:, 1] ** 2))  # measured: 0.969 light, 0.731 strong
     assert ratio < most
+
+
+@pytest.mark.parametrize("level", ["light", "strong"])
+def test_world_steady_midline_with_stage_steps_unchanged(level):
+    """Steady motion in the world while the stage steps every 7 frames (a sawtooth in the image)."""
+    world = translating(T=41, v=(1.5, 0.0))
+    stage = np.zeros((41, 2))
+    for t in range(1, 41):
+        stage[t] = stage[t - 1]
+        if t % 7 == 6:
+            stage[t, 0] = round(1.5 * t, 1)              # follow the tip in steps
+    img = world - stage[:, None, :]
+    out = smooth_midline(img, level, stage)
+    assert np.max(np.abs(out - img)) < 0.01
