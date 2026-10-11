@@ -135,3 +135,13 @@ Required by the course. One entry per work session: done, remaining, bottlenecks
 - Demo A, B, C: `python scripts/synth/eval_repair.py --out results/2026-10-10_repair_criteria` prints the three tables from the fetched sweep
 - Remaining: Andrew decides on the part A failures (remedies that make clean rods fail: register_frames, smooth_midline); approves sizes and tolerance; then part D
 - Bottlenecks: the decisions above (Andrew); course staff answer on tool use (Andrew)
+
+## 2026-10-11 (planning account, session 5)
+- Done: reviewed build session 7 (5 commits) and the repair-criteria sweep. Andrew's decisions logged: fix `register_frames` and `smooth_midline`; tolerance approved (centre 2.5 % of true peak REGR, flank difference 0.5 %/h); sizes approved for `displacement_exceeds_patch` (2x6) and `width_change` (1/400); coupled mode added as a run setting, both modes run; limits for the shared tracker machine
+- Done: wrote spec `docs/specs/2026-10-11_remedy-fixes-coupled-mode-shared-compute.md`. Two rule lines added to `CLAUDE.md`
+- Done: calculated, not run: the registration band (240-400 px from the tip) still holds growing tissue, band mean 0.97 px/h, against 1.1 px/h added to closure. Item 3 of the spec confirms it first
+- Done: searched the tracked files for machine names, outside paths and people's names. None found
+- Demo: none; review and spec only
+- Remaining: build account works the new spec in order (compute limits, the two fixes, uncoupled re-run, tolerance, coupled mode, bent rods, part D code). About 610 tracker runs. Planning account drafts the related-work note and the draft proposal for Lab report 1 (due 16 Oct)
+- Bottlenecks: sizes for `rigid_drift`, `midline_jitter` and a repairable `low_texture` once proposed (Andrew); tracking mode for the real movies (Andrew); course staff answer on tool use (Andrew)
+
