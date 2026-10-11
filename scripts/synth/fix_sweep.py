@@ -202,7 +202,26 @@ def part_b_smooth():
     return [entry(r, [TrackSettings(midline_smooth="light"), TrackSettings(midline_smooth="strong")]) for r in rods]
 
 
+WEIGHTS = (0.0, 0.01, 0.03, 0.1, 0.3, 1.0)        # x the tracker defaults, lambda = mu = 2.0
+W_RODS = [Rod(c, None, s) for c in ("growth_zone", "bending", "rigid_translation", "bend_continue", "bend_reverse")
+          for s in SEEDS] + [Rod("growth_zone", "displacement_exceeds_patch", s, size="2x1") for s in SEEDS]
+
+
+def weight_tag(w):
+    return f"st1_cplw{w:g}"
+
+
+def part_b_weight():
+    """11b item 4: coupling weight. lambda and mu scaled together; uncoupled run beside. Growth_zone at twice
+    the tip speed is the displacement_exceeds_patch rod at size 2x1 (speed x2, stride 1, no fault left)."""
+    runs = [("st1", ["--stride", "1"])] + [
+        (weight_tag(w), ["--stride", "1", "--couple", "--couple-lambda", str(2.0 * w), "--couple-mu", str(2.0 * w)])
+        for w in WEIGHTS]
+    return [entry(r, runs) for r in W_RODS]
+
+
 PARTS = {"check": (part_check, "tracks_check"), "band": (part_band, "tracks_band"),
+         "b_weight": (part_b_weight, "tracks_b_weight"),
          "b_smooth": (part_b_smooth, "tracks_b"),
          "bent_u": (part_bent_u, "tracks_bent"),
          "c_time": (part_c_time, "tracks_coupled"), "c_basis": (part_c_basis, "tracks_coupled"),

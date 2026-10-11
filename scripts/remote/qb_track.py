@@ -57,6 +57,8 @@ def main():
     ap.add_argument("--half-fraction", type=float, default=0.5)
     ap.add_argument("--threshold", type=float, default=10.0)
     ap.add_argument("--couple", action="store_true")
+    ap.add_argument("--couple-lambda", type=float, default=2.0, help="inextensibility weight (tracker default 2.0)")
+    ap.add_argument("--couple-mu", type=float, default=2.0, help="smoothness weight (tracker default 2.0)")
     ap.add_argument("--pixel-um", type=float, default=2.105)
     ap.add_argument("--register", action="store_true")
     ap.add_argument("--register-from-px", type=float, default=None,
@@ -97,6 +99,7 @@ def main():
     t0 = time.time()
     res = run_two_side(rec, seed, mask, spacing=a.spacing, half_fraction=a.half_fraction,
                        disk_radius=a.disk_radius, track_centre=True, couple=a.couple,
+                       couple_lambda=a.couple_lambda, couple_mu=a.couple_mu,
                        threshold=a.threshold)
     run_s = time.time() - t0
 
@@ -111,6 +114,7 @@ def main():
     settings = {"tracker": "quantum_borland_v1", "disk_radius": int(res.disk_radius),
                 "spacing": a.spacing, "half_fraction": a.half_fraction,
                 "threshold": a.threshold, "couple": bool(a.couple), "stride": a.stride,
+                "couple_lambda": a.couple_lambda, "couple_mu": a.couple_mu,
                 "threads": {"torch": torch.get_num_threads(), "opencv": cv2.getNumThreads()},
                 "track_centre": True, "used_mask": bool(res.split.used_mask),
                 "run_s": round(run_s, 1), "n_frames": int(len(keep)),

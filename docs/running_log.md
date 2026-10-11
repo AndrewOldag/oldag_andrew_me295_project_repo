@@ -173,3 +173,13 @@ Required by the course. One entry per work session: done, remaining, bottlenecks
 - Remaining: build account works the new spec in order (padding, flank tolerance, four diagnostician runs, coupling weight). About 370 tracker runs. Item 6 of the earlier spec is closed by this one. Planning account drafts the related-work note and the draft proposal for Lab report 1 (due 16 Oct)
 - Bottlenecks: sizes for `midline_jitter` and a repairable `low_texture` once proposed (Andrew); tracking mode for the real movies (Andrew); course staff answer on tool use (Andrew)
 
+
+## 2026-10-11 (build account, session 9)
+- Done: spec `2026-10-11b_padding-flank-tolerance-coupling-weight.md`, item 1 run and stopped; item 4 done; items 2 and 3 not started. Spec not done. Spec `2026-10-11_remedy-fixes-coupled-mode-shared-compute.md` is closed by 11b (item 6 replaced by 11b item 4)
+- Done: item 1, `smooth_midline` time padding by a line fitted to 3 (light) or 7 (strong) end frames, tag `ms*3`. End-frame jitter 0.97 / 0.73 of the odd-reflection value. 72 runs: clean light 6 of 6 pass, clean strong 0 of 6 (closure 1.55-1.60 px/h): stop. Cause: smoothing in image coordinates across 10.5 px stage steps; in world coordinates the net tip error is 0.00 px/h. midline_jitter: no size meets the criteria. Commit 4db4b0c
+- Done: item 4, coupling weight (`couple_lambda`, `couple_mu`, defaults 2.0) x 0, 0.01, 0.03, 0.1, 0.3, 1 on 6 rod groups, 252 runs. x0 equals uncoupled. Peak growth_zone 42.4 (uncoupled) -> 30.7 %/h (x1), truth 43.4. All growing rods pass the thresholds up to x0.03. Peak loss larger at twice the tip speed at every weight
+- Done: `python -m pytest -q tests`: 99 passed. 324 tracker runs, 0 failed, 11.5 min wall; load at most 6.22 on 32 cores; work space 5.42 -> 5.62 GB
+- Demo 1: `python -m pytest -q tests/test_preprocess.py` (translating midline unchanged; end-frame jitter ratio); `python scripts/synth/eval_fix.py --out results/2026-10-11b_padding_tolerance_coupling --parts b_smooth` prints the clean and midline_jitter tables
+- Demo 4: `python scripts/synth/eval_fix.py --out results/2026-10-11b_padding_tolerance_coupling --parts b_weight` prints the weight table, the passing range and the peak loss at 1x and 2x speed
+- Remaining: Andrew's answer on smoothing in world coordinates; then item 1 re-run, item 2 (flank tolerance, about 84 runs), item 3 (4 diagnostician runs)
+- Bottlenecks: smoothing in world coordinates (Andrew); midline_jitter and repairable low_texture sizes (Andrew); tracking mode for the real movies (Andrew); course staff answer on tool use (Andrew)
