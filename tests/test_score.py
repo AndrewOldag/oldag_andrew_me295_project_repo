@@ -47,3 +47,26 @@ def test_label_rod():
 
 def test_diagnosis():
     assert diagnosis_correct("rigid_drift", "rigid_drift") and not diagnosis_correct("low_texture", "rigid_drift")
+
+
+# ---- approved tolerance (spec 2026-10-11, item 5)
+
+def _truth(fault=None, size=None):
+    from measure.render import image_case
+    from measure.rod import make_record
+    spec, _ = image_case("growth_zone", fault, 0, size=size)
+    return make_record(spec).truth
+
+
+@pytest.mark.parametrize("fault,size,peak", [(None, None, 43.4), ("displacement_exceeds_patch", "2x6", 86.9)])
+def test_tolerance_just_inside_and_outside(fault, size, peak):
+    from measure.score import load_tolerance, rod_tolerance
+    cfg = load_tolerance()
+    assert cfg["status"] == "approved" and cfg["regr_rms_fraction_of_true_peak"] == 0.025
+    tol = rod_tolerance(_truth(fault, size), 2.105, cfg)
+    assert tol["peak_regr_pct_per_h"] == peak
+    limit = 0.025 * peak                                   # 1.085 and 2.1725 %/h
+    flank = cfg["flank_difference_rms_pct_per_h"]
+    assert measurement_good({"regr_rms_pct_per_h": limit - 0.01, "flank_difference_rms_pct_per_h": flank - 0.01}, tol)
+    assert not measurement_good({"regr_rms_pct_per_h": limit + 0.01, "flank_difference_rms_pct_per_h": 0.1}, tol)
+    assert not measurement_good({"regr_rms_pct_per_h": 0.1, "flank_difference_rms_pct_per_h": flank + 0.01}, tol)

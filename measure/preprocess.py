@@ -119,7 +119,7 @@ def register_frames(frames, stage_px, midline, s_from, s_to, band_px=20.0, edge_
         out_m[t] = (pts @ Ainv.T)[:, :2]
     angles = [float(np.degrees(np.arctan2(c[1, 0], c[0, 0]))) for c in C]
     shifts = [float(np.hypot(*(c[:2, 2]))) for c in C]
-    report = {"ecc_min": float(np.nanmin(ecc)) if ecc else None, "band_px": [round(s_from), round(s_to)],
+    report = {"ecc_min": float(np.nanmin(ecc)) if ecc else None, "band_px": [round(s_from), round(s_to) if np.isfinite(s_to) else "end"],
               "final_rotation_deg": round(angles[-1], 3), "final_shift_px": round(shifts[-1], 2)}
     return out_f, out_m, C, report
 
