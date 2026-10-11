@@ -23,6 +23,11 @@ Course project for AM/ME/CE 295, Caltech, Fall 2026. Start with `CLAUDE.md` and 
 - Back in the agents env: `python scripts/synth/eval_rods.py --tracks DIR/tracks --out results/<date>_<name>` writes the field-level table, the image-level check values at the approved thresholds, per-seed values, truth errors, and a profile plot
 - Checker thresholds: `config/checker_thresholds.yaml` (approved 2026-10-10)
 
+## Sweeps on the shared tracker machine
+- The tracker machine is shared. `scripts/synth/sweep.py` enforces the limits (`docs/decisions.md`, 2026-10-11): load check before start (1 min load at most half the cores; three 15 min retries) and before each run (pause above three quarters), at most 4 workers and one eighth of the cores, one thread per worker, `nice 19` and idle I/O, one sweep at a time (lock file), 2 h projected wall time and 10 GB of work space. Single runs through `RemoteRunner` are also load-checked and run at lowest priority
+- From the agents env, with `private/runner.yaml` filled in: `python scripts/synth/fix_sweep.py start --part check`, then `status --part check`, `stop`, `fetch --part check`. `status` prints the preflight line (cores, load, memory, disk, work space, own processes) and the end line (load before and after, peak workers, wall time)
+- On the tracker machine directly: `python scripts/synth/sweep.py run --plan P --work DIR`, `sweep.py status --work DIR`, `sweep.py stop --work DIR`
+
 ## Diagnostician on a synthetic rod (one slice)
 - `request_info` answers come from the measurement record and the check results (`measure/info.py`). `apply_remedy` changes the run settings (`measure/remedies.py`; table in `docs/decisions.md`), re-runs the measurement and re-checks it (`agents/executors.py`)
 - Runner (`measure/runner.py`), one interface with two forms: `FieldRunner` in process for field-level rods; `RemoteRunner` renders and tracks on the machine that has the tracker. For the remote form copy `config/runner.example.yaml` to `private/runner.yaml` and fill it in (ssh host alias, work and code directories there, tracker env Python)
