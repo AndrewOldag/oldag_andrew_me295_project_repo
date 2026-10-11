@@ -10,6 +10,8 @@ Parts:
 - band: registration band at 0.6, 0.8, 0.9 of the tracked length on one clean rod (item 3)
 - band2: band from the measured profile, two band ends, clean and rigid_drift rods (item 3)
 - band3: band from the measured profile to the midline end, inside the frames (item 3)
+- u_clean: clean rods through the fixed remedies, uncoupled (item 4)
+- u_faults: rigid_drift, midline_jitter and low_texture sizes with the fixed remedies, uncoupled (item 4)
 Each part writes its tracker outputs to its own directory on the tracker
 machine, so a run made with older code is never reused by name. The limits
 for the shared machine are in scripts/synth/sweep.py.
@@ -17,6 +19,7 @@ for the shared machine are in scripts/synth/sweep.py.
 import argparse
 import json
 import sys
+from dataclasses import replace
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -26,6 +29,7 @@ from measure.runner import RemoteRunner, Rod  # noqa: E402
 
 CACHE = ROOT / "staging" / "tracks_2026-10-11"
 SEEDS = (0, 1, 2)
+BASE_RADIUS = 15
 
 
 def entry(rod, runs):
@@ -83,7 +87,46 @@ def part_band3():
     return out
 
 
+def register_state(rod, base=None):
+    """register_frames as apply_remedy carries it out: band start from the rod's unremedied record."""
+    base = base or TrackSettings(stride=RemoteRunner.initial_stride(rod))
+    return replace(base, register=True, register_from_px=int(round(band_start(rod))))
+
+
+CLEAN = [Rod(c, None, s) for c in ("growth_zone", "bending") for s in SEEDS]
+U_SIZES = {"rigid_drift": ["0.25", "0.5", "0.75", "1"], "midline_jitter": ["0.5", "1", "2", "3"],
+           "low_texture": ["0.2", "0.25"]}
+
+
+def fault_states(rod):
+    """The fixed remedy's states for a fault rod, unremedied first."""
+    base = TrackSettings(stride=RemoteRunner.initial_stride(rod))
+    if rod.fault == "rigid_drift":
+        return [base, register_state(rod, base)]
+    if rod.fault == "midline_jitter":
+        return [base, replace(base, midline_smooth="light"), replace(base, midline_smooth="strong")]
+    if rod.fault == "low_texture":
+        return [base, replace(base, disk_radius=round(1.5 * BASE_RADIUS)), replace(base, disk_radius=2 * BASE_RADIUS)]
+    raise ValueError(rod.fault)
+
+
+def part_u_clean():
+    """Item 4: clean rods, unremedied and through register_frames, smooth_midline light and strong."""
+    return [entry(r, [TrackSettings(), register_state(r), TrackSettings(midline_smooth="light"),
+                      TrackSettings(midline_smooth="strong")]) for r in CLEAN]
+
+
+def part_u_faults():
+    """Item 4: rigid_drift and midline_jitter at four sizes, low_texture at 0.2 and 0.25, with the fixed remedies."""
+    return [entry(r, fault_states(r)) for r in fault_rods()]
+
+
+def fault_rods():
+    return [Rod("growth_zone", f, s, size=z) for f, sizes in U_SIZES.items() for z in sizes for s in SEEDS]
+
+
 PARTS = {"check": (part_check, "tracks_check"), "band": (part_band, "tracks_band"),
+         "u_clean": (part_u_clean, "tracks_uncoupled"), "u_faults": (part_u_faults, "tracks_uncoupled"),
          "band2": (part_band2, "tracks_band"), "band3": (part_band3, "tracks_band")}
 
 

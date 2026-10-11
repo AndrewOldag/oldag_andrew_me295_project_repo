@@ -1,7 +1,9 @@
 """Error of a measurement against the truth of a synthetic rod. Used for scoring, never shown to agents."""
 import warnings
+from pathlib import Path
 
 import numpy as np
+import yaml
 
 from measure.record import PER_S_TO_PCT_PER_H
 
@@ -33,6 +35,12 @@ def truth_error(rec, truth):
 
 
 def truth_summary(truth, pixel_um):
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", RuntimeWarning)
+        return _truth_summary(truth, pixel_um)
+
+
+def _truth_summary(truth, pixel_um):
     regr = np.nanmean(truth["regr_mid"], axis=0) * PER_S_TO_PCT_PER_H
     diff = np.nanmean(truth["regr_plus"] - truth["regr_minus"], axis=0) * PER_S_TO_PCT_PER_H
     return {"peak_regr_pct_per_h": round(float(np.nanmax(regr)), 1),
@@ -43,6 +51,25 @@ def truth_summary(truth, pixel_um):
 # ---------------------------------------------------------------- outcomes (spec 2026-10-10, repair criteria)
 
 OUTCOME_CATEGORIES = ("good_report", "false_accept", "correct_decline", "unnecessary_decline", "not_reported")
+
+
+TOLERANCE_FILE = Path(__file__).resolve().parents[1] / "config" / "scoring_tolerance.yaml"
+
+
+def load_tolerance(path=TOLERANCE_FILE):
+    """The approved scoring tolerance (config/scoring_tolerance.yaml). Scoring only; never shown to an agent."""
+    cfg = yaml.safe_load(Path(path).read_text())
+    if cfg.get("status") != "approved":
+        raise ValueError(f"scoring tolerance in {Path(path).name} is not approved")
+    return cfg
+
+
+def rod_tolerance(truth, pixel_um, cfg=None):
+    """Tolerance for one rod: centre limit = fraction x the rod's true peak REGR (truth_summary)."""
+    cfg = cfg or load_tolerance()
+    peak = truth_summary(truth, pixel_um)["peak_regr_pct_per_h"]
+    return {"regr_rms_pct_per_h": cfg["regr_rms_fraction_of_true_peak"] * peak,
+            "flank_difference_rms_pct_per_h": cfg["flank_difference_rms_pct_per_h"], "peak_regr_pct_per_h": peak}
 
 
 def measurement_good(error, tolerance, width_free=False):
