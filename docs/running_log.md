@@ -183,3 +183,11 @@ Required by the course. One entry per work session: done, remaining, bottlenecks
 - Demo 4: `python scripts/synth/eval_fix.py --out results/2026-10-11b_padding_tolerance_coupling --parts b_weight` prints the weight table, the passing range and the peak loss at 1x and 2x speed
 - Remaining: Andrew's answer on smoothing in world coordinates; then item 1 re-run, item 2 (flank tolerance, about 84 runs), item 3 (4 diagnostician runs)
 - Bottlenecks: smoothing in world coordinates (Andrew); midline_jitter and repairable low_texture sizes (Andrew); tracking mode for the real movies (Andrew); course staff answer on tool use (Andrew)
+
+## 2026-10-11 (planning account, session 7)
+- Done: reviewed build session 9 (2 commits), `b1_smoothing.md` and `b4_coupling_weight.md`. Andrew's answers logged: smooth in world coordinates, final change to that remedy; system uncoupled, no further coupled runs
+- Done: wrote spec `docs/specs/2026-10-11c_world-coordinate-smoothing-uncoupled.md`. It also asks for a freeze list for approval
+- Demo: none; review and spec only
+- Remaining: build account works 11c in order (world-coordinate smoothing, items 2 and 3 of 11b, uncoupled note in the README, freeze list). About 160 tracker runs, at most 5 diagnostician runs. Planning account drafts the related-work note and the draft proposal for Lab report 1 (due 16 Oct)
+- Bottlenecks: sizes for `midline_jitter` and a repairable `low_texture` if proposed (Andrew); the freeze (Andrew); course staff answer on tool use (Andrew)
+
