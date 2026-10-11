@@ -92,19 +92,25 @@ def state_label(tag):
     if "_reg2p" in tag:
         return "register_frames"
     if "_ms" in tag:
-        return "smooth_midline " + tag.split("_ms")[1].rstrip("2").split("_")[0]
+        return "smooth_midline " + tag.split("_ms")[1].split("_")[0].rstrip("23")
     if "_r22" in tag or "_r30" in tag:
         return "enlarge_patch " + ("1.5x" if "_r22" in tag else "2x")
+    if tag.endswith("_mask") or tag.endswith("_crop"):
+        return "crop_or_mask " + ("mask_second_root" if tag.endswith("_mask") else "crop_to_main_root")
+    if tag.startswith("st2"):
+        return "change_frame_stride double"
     return "none"
 
 
-def clean_rows(tracks_dir):
-    """Every clean rod and setting run in a tracks directory: evaluated rows."""
+def clean_rows(tracks_dir, keep=lambda tag: True):
+    """Every clean rod and setting run in a tracks directory (tags passing `keep`): evaluated rows."""
     rows = []
     for f in sorted(tracks_dir.glob("*_clean_s*__*.npz")):
-        if "_moved__" in f.name:
+        if "_moved__" in f.name or ".part." in f.name:
             continue
         rid, tag = f.name[:-4].split("__")
+        if not keep(tag):
+            continue
         r = evaluate(rid, tag, [tracks_dir])
         if r:
             r["case"], r["seed"], r["state"] = rid.split("_clean_")[0], int(rid[-1]), state_label(tag)
@@ -113,13 +119,14 @@ def clean_rows(tracks_dir):
 
 
 STATE_ORDER = ["none", "register_frames", "smooth_midline light", "smooth_midline strong",
-               "enlarge_patch 1.5x", "enlarge_patch 2x"]
+               "enlarge_patch 1.5x", "enlarge_patch 2x", "crop_or_mask mask_second_root",
+               "crop_or_mask crop_to_main_root", "change_frame_stride double"]
 
 
 def clean_table(rows, mode=""):
     lines = ["| Case | Remedy | n | rigid_invariance (%/h) | closure (px/h) | plane_sections (%/h) | REGR err (%/h) | Flank err (%/h) | All pass | Run time (s) |",
              "| :-- | :-- | --: | --: | --: | --: | --: | --: | :-- | --: |"]
-    for case in ("growth_zone", "bending"):
+    for case in ("growth_zone", "bending", "bend_continue", "bend_reverse"):
         for st in STATE_ORDER:
             rs = [r for r in rows if r["case"] == case and r["state"] == st]
             if not rs:
@@ -200,14 +207,16 @@ def steps(tag):
     return 0 if state_label(tag) == "none" else 1
 
 
-def fault_rows(tracks_dir, fault_ids):
-    """Evaluated rows for fault rods, with the rod's approved tolerance and 'good'."""
+def fault_rows(tracks_dir, fault_ids, keep=lambda tag: True, cfg=None):
+    """Evaluated rows for fault rods, with the rod's tolerance (approved unless cfg is given) and 'good'."""
     from measure.score import load_tolerance, measurement_good, rod_tolerance
-    cfg = load_tolerance()
+    cfg = cfg or load_tolerance()
     rows = []
     for rid in fault_ids:
         for f in sorted(tracks_dir.glob(f"{rid}__*.npz")):
             tag = f.name[:-4].split("__")[1]
+            if ".part" in tag or not keep(tag):
+                continue
             r = evaluate(rid, tag, [tracks_dir])
             if r is None:
                 continue
@@ -337,7 +346,29 @@ def bent_table():
             "(coupled clean rods fail closure, item 6). " + THRESHOLD_NOTE + "\n\n" + "\n".join(lines) + "\n")
 
 
-TABLES = {"band": ("item3_band.md", band_table), "u_clean": ("item4_clean.md", u_clean_table),
+# ---- spec 2026-10-11b
+
+B = CACHE / "tracks_b"
+U = CACHE / "tracks_uncoupled"
+
+
+def b_smooth_table():
+    """11b item 1: clean rods and midline_jitter with the fitted-line padding; unremedied runs from item 4."""
+    clean = clean_rows(U, lambda t: t == "st1") + clean_rows(B, lambda t: "_ms" in t and t.endswith("3"))
+    fails = [f"{r['id']} {r['state']}" for r in clean if not r["all_pass"]]
+    import fix_sweep as fs
+    groups = [("midline_jitter", z, [fs.Rod("growth_zone", "midline_jitter", s, size=z).id() for s in fs.SEEDS])
+              for z in fs.U_SIZES["midline_jitter"]]
+    ids = [i for _, _, ii in groups for i in ii]
+    rows = fault_rows(U, ids, lambda t: t == "st1") + fault_rows(B, ids, lambda t: t.endswith("3"))
+    summary, per, labels = fault_tables(rows, groups)
+    return ("Smoothing with the fitted-line time padding (tags `mslight3`, `msstrong3`). Unremedied runs: item 4 of the "
+            "2026-10-11 spec (same code). " + THRESHOLD_NOTE + "\n\n## Clean rods\n\n" + clean_table(clean)
+            + "\nClean runs failing an approved threshold: " + (", ".join(fails) if fails else "none")
+            + "\n\n## midline_jitter\n\n" + summary + "\n\n" + labels + "\n\nPer run:\n\n" + per + "\n")
+
+
+TABLES = {"b_smooth": ("b1_smoothing.md", b_smooth_table), "band": ("item3_band.md", band_table), "u_clean": ("item4_clean.md", u_clean_table),
           "bent": ("item7_bent.md", bent_table),
           "c_basis": ("item6_clean_basis.md", c_basis_table),
           "labels": ("item5_labels.md", labels_table), "u_faults": ("item4_faults.md", u_faults_table)}

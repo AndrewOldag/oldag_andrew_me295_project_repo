@@ -138,11 +138,40 @@ def _smooth_linear_ends(a, sigma, axis):
     return np.take(sm, np.arange(pad, pad + a.shape[axis]), axis=axis)
 
 
+def fit_frames(sigma):
+    """Frames in each end's line fit for the time padding: 2 ceil(sigma) + 1 (3 light, 7 strong)."""
+    return 2 * int(np.ceil(sigma)) + 1
+
+
+def _smooth_fitted_ends(a, sigma):
+    """Gaussian smoothing over time (axis 0) with each end padded by a least-squares straight line
+    fitted to the first or last fit_frames(sigma) frames. A midline moving at constant velocity comes
+    out unchanged, and the first and last frames are smoothed like the others: odd reflection kept
+    them as they were, jitter included, and closure depends only on those two (decisions, 2026-10-11)."""
+    pad = int(np.ceil(4.0 * sigma))
+    T = a.shape[0]
+    if pad == 0 or T < 2:
+        return a
+    n = min(fit_frames(sigma), T)
+    flat = a.reshape(T, -1)
+    t = np.arange(T, dtype=float)
+
+    def line(idx, at):
+        b, c = np.polyfit(t[idx], flat[idx], 1)          # slope, intercept per column
+        return at[:, None] * b[None, :] + c[None, :]
+    head = line(np.arange(n), np.arange(-pad, 0, dtype=float))
+    tail = line(np.arange(T - n, T), np.arange(T, T + pad, dtype=float))
+    padded = np.concatenate([head, flat, tail], axis=0)
+    sm = gaussian_filter1d(padded, sigma, axis=0, mode="nearest", truncate=4.0)
+    return sm[pad:pad + T].reshape(a.shape)
+
+
 def smooth_midline(midline, level):
     """Gaussian smoothing along s (resampled per frame) and over time, for 'light' or 'strong'.
 
-    Both ends are padded by linear extrapolation, so a straight midline that
-    moves at constant velocity comes out unchanged.
+    Along s the ends are padded by odd reflection; over time by a line fitted
+    to the end frames. A straight midline that moves at constant velocity
+    comes out unchanged.
     """
     sig_s, sig_t = MIDLINE_SMOOTH[level]
     out = midline.copy()
@@ -154,7 +183,7 @@ def smooth_midline(midline, level):
         sm[0] = line[ok][0]                       # keep the tip
         out[t, ok] = sm
     if sig_t > 0:
-        out = _smooth_linear_ends(out, sig_t, axis=0)
+        out = _smooth_fitted_ends(out, sig_t)
     return out
 
 
