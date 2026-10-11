@@ -368,7 +368,88 @@ def b_smooth_table():
             + "\n\n## midline_jitter\n\n" + summary + "\n\n" + labels + "\n\nPer run:\n\n" + per + "\n")
 
 
-TABLES = {"b_smooth": ("b1_smoothing.md", b_smooth_table), "band": ("item3_band.md", band_table), "u_clean": ("item4_clean.md", u_clean_table),
+def profile_numbers(rid, tag, dirs):
+    """Peak REGR (record and tracker's own output), peak position, zone length above half the peak,
+    integrated strain rate and tip speed (px/h), apparent strain rate RMS (%/h)."""
+    from measure.record import PER_S_TO_PCT_PER_H as K
+    from measure.score import _wmean
+    f = find(f"{rid}__{tag}.npz", dirs)
+    rec = from_tracker_npz(f)
+    s = rec.fields["s_grid"]
+    m = _wmean(rec.fields["regr_mid"]) * K
+    j = int(np.nanargmax(m))
+    above = s[np.isfinite(m) & (m >= 0.5 * m[j])]
+    with np.load(f) as z:
+        own = 0.5 * (z["qb_regr_left"] + z["qb_regr_right"]) * K
+    ok = np.isfinite(m)
+    integ = float(np.trapezoid(m[ok], s[ok])) / 100.0                       # (%/h) px -> px/h
+    tip = rec.midline[:, 0] + 0.0
+    tw = tip                                                                 # midline is in the world frame
+    speed = float(np.linalg.norm(tw[-1] - tw[0]) / ((rec.frame_times_s[-1] - rec.frame_times_s[0]) / 3600))
+    return {"peak": float(m[j]), "peak_own": float(np.nanmax(own)), "peak_at": float(s[j]),
+            "zone_len": float(above.max() - above.min()) if len(above) else np.nan,
+            "integ": integ, "tip_speed": speed, "apparent": float(np.sqrt(np.nanmean(m ** 2)))}
+
+
+def b_weight_table():
+    """11b item 4: coupling weight, lambda and mu scaled together, against the uncoupled run."""
+    import fix_sweep as fs
+    from measure.score import load_tolerance, measurement_good, rod_tolerance, truth_summary
+    cfg = load_tolerance()
+    d = [CACHE / "tracks_b_weight"]
+    groups = {"growth_zone": "growth_zone_clean", "bending": "bending_clean", "rigid_translation": "rigid_translation_clean",
+              "bend_continue": "bend_continue_clean", "bend_reverse": "bend_reverse_clean",
+              "growth_zone x2 speed": "growth_zone_displacement_exceeds_patch_z2x1"}
+    modes = [("uncoupled", "st1")] + [(f"coupled x{w:g}", fs.weight_tag(w)) for w in fs.WEIGHTS]
+    lines = ["| Rods | Mode | Peak REGR record / tracker / truth (%/h) | Peak at s (px) | Zone above half peak (px) | REGR err (%/h) | Flank err (%/h) | rigid_invariance | closure | plane_sections | Runs failing | Within tolerance | Integrated REGR / tip speed (px/h) |",
+             "| :-- | :-- | :-- | --: | --: | --: | --: | --: | --: | --: | --: | --: | :-- |"]
+    ok_all = {m: True for m, _ in modes}
+    loss = {}
+    for label, prefix in groups.items():
+        ids = [f"{prefix}_s{s}" for s in fs.SEEDS]
+        for mode, tag in modes:
+            rs, ps = [], []
+            for rid in ids:
+                r = evaluate(rid, tag, d)
+                if r is None:
+                    continue
+                ts = truth_summary(r["truth"], 2.105)
+                r["good"] = measurement_good(r, rod_tolerance(r["truth"], 2.105, cfg))
+                r["truth_peak"] = ts["peak_regr_pct_per_h"]
+                rs.append(r)
+                ps.append(profile_numbers(rid, tag, d))
+            if not rs:
+                continue
+            growing = label != "rigid_translation"
+            if growing and not all(r["all_pass"] and r["good"] for r in rs):
+                ok_all[mode] = False
+            pk = np.median([p["peak"] for p in ps])
+            tpk = rs[0]["truth_peak"]
+            if label in ("growth_zone", "growth_zone x2 speed"):
+                loss.setdefault(mode, {})[label] = 1 - pk / tpk
+            peak_cell = (f"{pk:.1f} / {np.median([p['peak_own'] for p in ps]):.1f} / {tpk:.1f}" if growing
+                         else f"apparent RMS {np.median([p['apparent'] for p in ps]):.2f}")
+            lines.append(f"| {label} | {mode} | {peak_cell} | {np.median([p['peak_at'] for p in ps]):.0f} | "
+                         f"{np.median([p['zone_len'] for p in ps]):.0f} | {fmt([r['regr_rms_pct_per_h'] for r in rs])} | "
+                         f"{fmt([r['flank_difference_rms_pct_per_h'] for r in rs])} | "
+                         + " | ".join(fmt([r[c] for r in rs]) for c in CHECKS)
+                         + f" | {sum(not r['all_pass'] for r in rs)} of {len(rs)} | {sum(r['good'] for r in rs)} of {len(rs)} | "
+                         f"{np.median([p['integ'] for p in ps]):.1f} / {np.median([p['tip_speed'] for p in ps]):.1f} |")
+    passing = [m for m, _ in modes if ok_all[m] and m != "uncoupled"]
+    loss_lines = [f"- {m}: {100 * v.get('growth_zone', np.nan):.1f} % at 1x, {100 * v.get('growth_zone x2 speed', np.nan):.1f} % at 2x"
+                  for m, v in loss.items()]
+    return ("Coupling weights lambda (inextensibility) and mu (smoothness), tracker defaults 2.0 each, scaled together. "
+            "x0 is coupled with both set to 0. 3 seeds per group, each tracked twice. Cells: median, or median [min, max]. "
+            + THRESHOLD_NOTE + " Within tolerance: approved tolerance (centre 2.5 % of the true peak, flank 0.5 %/h).\n\n"
+            + "\n".join(lines)
+            + "\n\nCoupled weights at which every growing clean rod passes the approved thresholds and is within tolerance: "
+            + (", ".join(passing) if passing else "none") + f" (uncoupled: {'yes' if ok_all['uncoupled'] else 'no'}).\n\n"
+            + "Loss at the peak (1 - record peak / true peak), growth_zone at once and twice the tip speed:\n\n"
+            + "\n".join(loss_lines) + "\n")
+
+
+TABLES = {"b_weight": ("b4_coupling_weight.md", b_weight_table),
+          "b_smooth": ("b1_smoothing.md", b_smooth_table), "band": ("item3_band.md", band_table), "u_clean": ("item4_clean.md", u_clean_table),
           "bent": ("item7_bent.md", bent_table),
           "c_basis": ("item6_clean_basis.md", c_basis_table),
           "labels": ("item5_labels.md", labels_table), "u_faults": ("item4_faults.md", u_faults_table)}
