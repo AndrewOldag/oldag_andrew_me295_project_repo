@@ -194,7 +194,16 @@ def part_bent_u():
     return [entry(r, [TrackSettings()]) for r in BENT]
 
 
+# ---- spec 2026-10-11b (padding, flank tolerance, coupling weight); outputs in tracks_b
+
+def part_b_smooth():
+    """11b item 1: fitted-line padding. Clean rods and midline_jitter sizes, light and strong."""
+    rods = CLEAN + [Rod("growth_zone", "midline_jitter", s, size=z) for z in U_SIZES["midline_jitter"] for s in SEEDS]
+    return [entry(r, [TrackSettings(midline_smooth="light"), TrackSettings(midline_smooth="strong")]) for r in rods]
+
+
 PARTS = {"check": (part_check, "tracks_check"), "band": (part_band, "tracks_band"),
+         "b_smooth": (part_b_smooth, "tracks_b"),
          "bent_u": (part_bent_u, "tracks_bent"),
          "c_time": (part_c_time, "tracks_coupled"), "c_basis": (part_c_basis, "tracks_coupled"),
          "c_remedies": (part_c_remedies, "tracks_coupled"), "c_faults": (part_c_faults, "tracks_coupled"),

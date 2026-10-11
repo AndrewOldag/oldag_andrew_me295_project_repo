@@ -55,3 +55,36 @@ def test_band_kept_inside_both_frames():
     m = _inside((100, 80), np.array([10.0, 0.0]), 25)
     rows = np.flatnonzero(m.any(axis=1))
     assert rows.min() == 35 and rows.max() == 84    # image rows 25..74, moved by the stage
+
+
+def _space_only(midline, level):
+    """smooth_midline along s only (the time sigma set to 0)."""
+    from unittest import mock
+    from measure import preprocess
+    sig_s, _ = preprocess.MIDLINE_SMOOTH[level]
+    with mock.patch.dict(preprocess.MIDLINE_SMOOTH, {level: (sig_s, 0.0)}):
+        return preprocess.smooth_midline(midline, level)
+
+
+def end_frame_jitter(level, seed=0, std=1.0):
+    """RMS sideways error in the first and last frame of a jittered translating midline: raw, after the
+    old odd-reflection padding over time, after the fitted-line padding (smooth_midline)."""
+    from measure.preprocess import MIDLINE_SMOOTH, _smooth_linear_ends
+    rng = np.random.default_rng(seed)
+    m = translating(T=41)
+    noisy = m.copy()
+    noisy[..., 1] += rng.normal(0, std, len(m))[:, None]           # independent sideways shift, every frame
+    sig_s, sig_t = MIDLINE_SMOOTH[level]
+    old = _smooth_linear_ends(_space_only(noisy, level), sig_t, axis=0)
+    new = smooth_midline(noisy, level)
+    ends = [0, -1]
+    rms = lambda x: float(np.sqrt(np.mean((x[ends, 1:-20, 1] - m[ends, 1:-20, 1]) ** 2)))   # sideways, away from the base end
+    return rms(noisy), rms(old), rms(new)
+
+
+@pytest.mark.parametrize("level,most", [("light", 0.99), ("strong", 0.75)])
+def test_end_frame_jitter_lowered(level, most):
+    r = np.array([end_frame_jitter(level, seed=k) for k in range(50)])
+    assert np.allclose(r[:, 1], r[:, 0])                            # odd reflection kept the end frames
+    ratio = np.sqrt(np.mean(r[:, 2] ** 2) / np.mean(r[:, 1] ** 2))  # measured: 0.969 light, 0.731 strong
+    assert ratio < most

@@ -49,7 +49,7 @@ class TrackSettings:
         if self.register:                                  # reg: the retired 0.6-1.0 band (2026-10-10 runs)
             parts.append("reg" if self.register_from_px is None else f"reg2p{self.register_from_px}")
         if self.midline_smooth:
-            parts.append(f"ms{self.midline_smooth}2")     # 2: linear-end smoothing (2026-10-11); no reuse of older runs
+            parts.append(f"ms{self.midline_smooth}3")     # 3: fitted-line time padding (2026-10-11b); no reuse of older runs
         if self.band_mask:
             parts.append({"mask_second_root": "mask", "crop_to_main_root": "crop"}[self.band_mask])
         if self.couple:
