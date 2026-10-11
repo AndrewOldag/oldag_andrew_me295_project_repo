@@ -42,7 +42,7 @@ class TrackSettings:
         if self.register:
             parts.append("reg")
         if self.midline_smooth:
-            parts.append(f"ms{self.midline_smooth}")
+            parts.append(f"ms{self.midline_smooth}2")     # 2: linear-end smoothing (2026-10-11); no reuse of older runs
         if self.band_mask:
             parts.append({"mask_second_root": "mask", "crop_to_main_root": "crop"}[self.band_mask])
         return "_".join(parts)
