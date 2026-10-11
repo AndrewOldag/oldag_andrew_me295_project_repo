@@ -164,3 +164,12 @@ Required by the course. One entry per work session: done, remaining, bottlenecks
 - Demo 8: `python -m pytest -q tests/test_executors.py -k "roll_back or no_progress"`
 - Remaining: Andrew's two answers (below); then the coupled sweeps (about 420 runs) and coupled bent rods, if continued; Andrew approves sizes; then the diagnostician runs (part D)
 - Bottlenecks: whether to change the smoothing end padding, which leaves midline_jitter not repairable (Andrew); whether to continue coupled runs (Andrew); sizes for rigid_drift, midline_jitter, low_texture (Andrew); course staff answer on tool use (Andrew)
+
+## 2026-10-11 (planning account, session 6)
+- Done: reviewed build session 8 (7 commits) and `results/2026-10-11_remedy_fixes/`. Andrew's answers logged: `rigid_drift` 0.5 approved; smoothing padding changed to a fitted line; no further coupled sweeps at the default setting, a coupling-weight sweep on clean rods instead; flank tolerance from the same basis rule with the bent rods included
+- Done: wrote spec `docs/specs/2026-10-11b_padding-flank-tolerance-coupling-weight.md`
+- Done: reading of the coupled clean basis: peak 31.9 against 43.4 %/h but closure short by only 1.5-2.0 px/h of 60, so the profile is spread along the root and the integrated growth is nearly kept
+- Demo: none; review and spec only
+- Remaining: build account works the new spec in order (padding, flank tolerance, four diagnostician runs, coupling weight). About 370 tracker runs. Item 6 of the earlier spec is closed by this one. Planning account drafts the related-work note and the draft proposal for Lab report 1 (due 16 Oct)
+- Bottlenecks: sizes for `midline_jitter` and a repairable `low_texture` once proposed (Andrew); tracking mode for the real movies (Andrew); course staff answer on tool use (Andrew)
+
