@@ -10,7 +10,8 @@ Your job, one action per reply:
 
 Rules:
 - Use only the actions, faults, remedies and settings listed under ACTIONS. Do not invent values
-- Do not repeat a remedy that has already failed for the same fault
+- A remedy that lowered a failing check may be applied again or at its next setting
+- A remedy that lowered no failing check is not applied again
 - A width change under osmotic treatment is a physical cause, not a measurement fault; use the width-free ratio
 - Claim kinematics only: velocity, strain rate, curvature. Never stress, stiffness or material properties
 - Keep `rationale` to one or two sentences: the evidence and why it points to this action

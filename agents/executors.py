@@ -4,11 +4,43 @@ A Slice holds one rod, one runner and the current measurement. request_info
 answers from the current record and its check results (measure/info.py).
 apply_remedy changes the settings (measure/remedies.py), re-runs the
 measurement through the runner and re-checks it; the re-run becomes the
-current measurement. The agent never sees the rod's name, fault or truth.
+current measurement. The result shows each check's value before and after.
+Roll back (spec 2026-10-10, repair criteria, part D): if a remedy makes no
+failing check pass and lowers no failing check by at least a quarter, the
+settings and measurement from before it are restored and the result says so.
+The step still counts. The agent never sees the rod's name, fault or truth.
 """
+import math
+
 from checker import run_checks, load_thresholds
 from measure import info
 from measure.remedies import NotAvailable, apply_remedy
+
+
+ROLL_BACK_FRACTION = 0.75      # a failing check must fall to at most 3/4 of its value to count as lowered
+
+
+def _before_after(before, after):
+    b = {c.check: c for c in before}
+    return {c.check: {"before": None if b[c.check].passed is None else round(b[c.check].value, 3),
+                      "after": None if c.passed is None else round(c.value, 3),
+                      "threshold": c.threshold, "unit": c.unit} for c in after}
+
+
+def no_progress(before, after):
+    """True if the measurement before had a failing check and the remedy made none of them pass (or no
+    longer apply, as plane sections under the width-free ratio) and lowered none by at least a quarter."""
+    failing = [c for c in before if c.passed is False]
+    if not failing:
+        return False
+    a = {c.check: c for c in after}
+    for c in failing:
+        n = a[c.check]
+        if n.passed is not False:
+            return False
+        if math.isfinite(n.value) and math.isfinite(c.value) and n.value <= ROLL_BACK_FRACTION * c.value:
+            return False
+    return True
 
 
 def _summary(checks):
@@ -55,14 +87,22 @@ class Slice:
         return out
 
     def apply_remedy(self, args, task):
-        settings = self.runs[-1][0]
+        settings, before_m, before, _ = self.runs[-1]
         try:
             new, change = apply_remedy(settings, args["remedy"], args.get("setting"), self.base_disk_radius,
                                        self.current.record)
         except NotAvailable as e:
             return {"rechecked": False, "error": f"remedy not available: {e}"}
         self._measure(new, change)
-        return {"rechecked": True, "change": change, **_summary(self.checks)}
+        after = self.checks
+        out = {"rechecked": True, "change": change, **_summary(after),
+               "check_values": _before_after(before, after)}
+        if no_progress(before, after):
+            self.runs.append((settings, before_m, before, f"rolled back: {change}"))
+            out.update({k: v for k, v in _summary(before).items() if k != "check_values"}, rolled_back=True,
+                       note="the remedy made no failing check pass and lowered none by a quarter; "
+                            "the settings and measurement from before it are restored. The step counts")
+        return out
 
     def executors(self):
         return {"request_info": self.request_info, "apply_remedy": self.apply_remedy}

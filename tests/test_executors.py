@@ -114,3 +114,34 @@ def test_couple_is_a_run_setting_not_a_remedy():
     for remedy, settings in REMEDIES.items():          # every remedy keeps the mode
         for setting in settings:
             assert apply_remedy(replace(s, stride=4), remedy, setting, 15, rec)[0].couple
+
+
+# ---- part D of spec 2026-10-10 (repair criteria): before-and-after values and roll back
+
+def test_no_progress_rule():
+    from checker.checks import CheckResult
+    from agents.executors import no_progress
+    c = lambda name, passed, value: CheckResult(name, passed, value, 1.0, "u")
+    before = [c("closure", False, 4.0), c("plane_sections", True, 0.5)]
+    assert no_progress(before, [c("closure", False, 3.5), c("plane_sections", True, 0.5)])        # lowered 12 %
+    assert not no_progress(before, [c("closure", False, 3.0), c("plane_sections", True, 0.5)])    # lowered 25 %
+    assert not no_progress(before, [c("closure", True, 0.5), c("plane_sections", True, 0.5)])     # now passes
+    assert not no_progress(before, [c("closure", None, float("nan")), c("plane_sections", True, 0.5)])  # not run
+    assert not no_progress([c("closure", True, 0.1)], [c("closure", True, 0.9)])                 # nothing failed
+
+
+def test_roll_back_restores_settings_and_counts_the_step():
+    s = Slice(FieldRunner(), Rod("rotation_basal_pivot"))             # closure fails at field level
+    assert "closure" in s.task()["failed_checks"]
+    r = s.apply_remedy({"fault": "rigid_drift", "remedy": "change_frame_stride", "setting": "double"}, {})
+    assert r["rechecked"] and r["rolled_back"] and "closure" in r["failed_checks"]
+    v = r["check_values"]["closure"]
+    assert v["before"] is not None and v["after"] is not None and v["after"] > 0.75 * v["before"]
+    assert s.runs[-1][0].stride == 1 and len(s.runs) == 3          # restored; the attempt is kept in the runs
+    assert s.current.record.n_frames == s.runs[0][1].record.n_frames
+
+
+def test_width_free_ratio_is_not_rolled_back():
+    s = Slice(FieldRunner(), Rod("width_change"))
+    r = s.apply_remedy({"fault": "width_change", "remedy": "use_width_free_ratio", "setting": None}, {})
+    assert not r.get("rolled_back") and r["check_values"]["plane_sections"]["after"] is None
