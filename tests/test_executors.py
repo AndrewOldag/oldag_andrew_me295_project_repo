@@ -23,10 +23,11 @@ def sl():
 
 def test_every_remedy_in_the_list_is_handled():
     s = TrackSettings(stride=4)
+    rec = from_tracker_npz(FIXTURES / "growth_zone_clean_s0.npz")
     for remedy, settings in REMEDIES.items():
         for setting in settings:
             try:
-                new, change = apply_remedy(s, remedy, setting, 15)
+                new, change = apply_remedy(s, remedy, setting, 15, rec)
                 assert new != s and change
             except NotAvailable as e:
                 raise AssertionError((remedy, setting, e))
@@ -38,7 +39,12 @@ def test_remedy_settings():
     assert apply_remedy(s, "enlarge_patch", "2x", 15)[0].disk_radius == 30
     with pytest.raises(NotAvailable):
         apply_remedy(TrackSettings(), "change_frame_stride", "half", 15)
-    assert "--register" in apply_remedy(s, "register_frames", None, 15)[0].args()
+    rec = from_tracker_npz(FIXTURES / "growth_zone_clean_s0.npz")
+    new = apply_remedy(s, "register_frames", None, 15, rec)[0]
+    assert new.args()[-3:] == ["--register", "--register-from-px", str(new.register_from_px)]
+    assert 250 <= new.register_from_px <= 350          # growth zone of the clean rod ends near 300 px
+    with pytest.raises(NotAvailable):
+        apply_remedy(s, "register_frames", None, 15)    # no record, no band
 
 
 def test_task_hides_the_rod(sl):

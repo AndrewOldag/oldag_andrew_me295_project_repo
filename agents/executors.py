@@ -57,7 +57,8 @@ class Slice:
     def apply_remedy(self, args, task):
         settings = self.runs[-1][0]
         try:
-            new, change = apply_remedy(settings, args["remedy"], args.get("setting"), self.base_disk_radius)
+            new, change = apply_remedy(settings, args["remedy"], args.get("setting"), self.base_disk_radius,
+                                       self.current.record)
         except NotAvailable as e:
             return {"rechecked": False, "error": f"remedy not available: {e}"}
         self._measure(new, change)

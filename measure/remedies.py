@@ -17,6 +17,7 @@ class TrackSettings:
     stride: int = 1                        # analysis frame stride (qb_track --stride)
     disk_radius: Optional[int] = None      # tracker disk radius, px; None = the tracker's split default
     register: bool = False                 # preprocess.register_frames before tracking
+    register_from_px: Optional[int] = None # registration band start, px from the tip, from the record's profile
     midline_smooth: Optional[str] = None   # preprocess.smooth_midline level
     band_mask: Optional[str] = None        # preprocess.band_mask mode
     width_free: bool = False               # report centre strain rate and width-free ratio; skip plane sections
@@ -27,7 +28,9 @@ class TrackSettings:
         if self.disk_radius is not None:
             a += ["--disk-radius", str(self.disk_radius)]
         if self.register:
-            a += ["--register"]
+            if self.register_from_px is None:
+                raise ValueError("register needs register_from_px (the 0.6-1.0 band of 2026-10-10 is retired)")
+            a += ["--register", "--register-from-px", str(self.register_from_px)]
         if self.midline_smooth:
             a += ["--midline-smooth", self.midline_smooth]
         if self.band_mask:
@@ -39,8 +42,8 @@ class TrackSettings:
         parts = [f"st{self.stride}"]
         if self.disk_radius is not None:
             parts.append(f"r{self.disk_radius}")
-        if self.register:
-            parts.append("reg")
+        if self.register:                                  # reg: the retired 0.6-1.0 band (2026-10-10 runs)
+            parts.append("reg" if self.register_from_px is None else f"reg2p{self.register_from_px}")
         if self.midline_smooth:
             parts.append(f"ms{self.midline_smooth}2")     # 2: linear-end smoothing (2026-10-11); no reuse of older runs
         if self.band_mask:
@@ -51,8 +54,10 @@ class TrackSettings:
         return asdict(self)
 
 
-def apply_remedy(settings, remedy, setting, base_disk_radius):
-    """New settings for a remedy, and a one-line description of the change."""
+def apply_remedy(settings, remedy, setting, base_disk_radius, record=None):
+    """New settings for a remedy, and a one-line description of the change.
+
+    record: the current measurement; register_frames reads the band start from its strain-rate profile."""
     s = settings
     if remedy == "change_frame_stride":
         if setting == "half":
@@ -71,7 +76,12 @@ def apply_remedy(settings, remedy, setting, base_disk_radius):
     if remedy == "register_frames":
         if s.register:
             raise NotAvailable("frames are already registered")
-        return replace(s, register=True), "frames registered on the basal tissue before tracking"
+        from measure.preprocess import registration_band_start
+        start = registration_band_start(record) if record is not None else None
+        if start is None:
+            raise NotAvailable("no strain-rate profile to find the non-growing tissue in")
+        return (replace(s, register=True, register_from_px=int(round(start))),
+                f"frames registered on the non-growing tissue (from {start:.0f} px from the tip) before tracking")
     if remedy == "smooth_midline":
         if s.midline_smooth == setting:
             raise NotAvailable(f"midline already smoothed ({setting})")

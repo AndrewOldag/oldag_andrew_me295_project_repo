@@ -59,6 +59,10 @@ def main():
     ap.add_argument("--couple", action="store_true")
     ap.add_argument("--pixel-um", type=float, default=2.105)
     ap.add_argument("--register", action="store_true")
+    ap.add_argument("--register-from-px", type=float, default=None,
+                    help="registration band start, px from the tip (preprocess.registration_band_start)")
+    ap.add_argument("--register-to-px", type=float, default=None,
+                    help="registration band end, px from the tip (default: the basal end of the midline)")
     ap.add_argument("--midline-smooth", choices=sorted(preprocess.MIDLINE_SMOOTH), default=None)
     ap.add_argument("--band-mask", choices=["mask_second_root", "crop_to_main_root"], default=None)
     ap.add_argument("--band-radius", type=float, default=45.0, help="px, for --band-mask and frame quality")
@@ -78,8 +82,11 @@ def main():
     if a.midline_smooth:
         mid_img = preprocess.smooth_midline(mid_img, a.midline_smooth)
     if a.register:
+        if a.register_from_px is None:
+            ap.error("--register needs --register-from-px")
         frames, mid_img, _, pre["register"] = preprocess.register_frames(
-            np.asarray(rec.images), corr0, mid_img, a.track_length)
+            np.asarray(rec.images), corr0, mid_img, a.register_from_px,
+            np.inf if a.register_to_px is None else a.register_to_px)
         rec = replace(rec, images=frames)
     if a.band_mask:
         rec = replace(rec, images=preprocess.band_mask(np.asarray(rec.images), mid_img,

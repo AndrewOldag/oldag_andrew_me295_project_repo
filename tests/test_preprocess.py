@@ -39,3 +39,19 @@ def test_jitter_is_reduced():
     noisy = m + rng.normal(0, 1.0, m.shape)
     for level in ("light", "strong"):
         assert np.sqrt(np.mean((smooth_midline(noisy, level) - m)[:, 1:] ** 2)) < 0.5
+
+
+def test_band_start_from_the_measured_profile():
+    from pathlib import Path
+    from measure.preprocess import registration_band_start
+    from measure.record import from_tracker_npz
+    rec = from_tracker_npz(Path(__file__).resolve().parent / "fixtures" / "growth_zone_clean_s0.npz")
+    s0 = registration_band_start(rec)
+    assert 250 <= s0 <= 350                      # the clean rod's growth zone ends near 300 px
+
+
+def test_band_kept_inside_both_frames():
+    from measure.preprocess import _inside
+    m = _inside((100, 80), np.array([10.0, 0.0]), 25)
+    rows = np.flatnonzero(m.any(axis=1))
+    assert rows.min() == 35 and rows.max() == 84    # image rows 25..74, moved by the stage

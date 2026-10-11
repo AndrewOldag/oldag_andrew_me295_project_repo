@@ -5,9 +5,10 @@ All run on the tracker machine inside scripts/remote/qb_track.py. Frames are
 world = image + stage_px.
 
 - register_frames: remove rigid motion that the stage log does not hold, by
-  registering the basal part of the root frame to frame (OpenCV ECC,
-  Euclidean). Assumes the basal tissue is fixed in the world, the same
-  assumption as the closure check
+  registering a band of non-growing basal tissue frame to frame (OpenCV ECC,
+  Euclidean). Assumes that tissue is fixed in the world, the same assumption
+  as the closure check. registration_band_start finds where the band can
+  start from the measured strain-rate profile of the current record
 - smooth_midline: Gaussian smoothing of the midline source along s and over time
 - band_mask: keep only a band around the midline source (mask_second_root), or
   that band's bounding box (crop_to_main_root)
@@ -51,12 +52,37 @@ def _shift(t):
     return M
 
 
-def register_frames(frames, stage_px, midline, track_length, basal_from=0.6, band_px=20.0):
+def registration_band_start(rec, fraction=0.05, min_cov=0.5):
+    """Arc length (px from the tip) beyond which the window-mean centre strain rate of a record stays
+    under `fraction` of its peak. Read from the measurement, never from the truth. None if the
+    profile has no finite peak."""
+    import warnings
+    f = rec.fields
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", RuntimeWarning)
+        m = np.nanmean(f["regr_mid"], axis=0)
+    m[np.mean(np.isfinite(f["regr_mid"]), axis=0) < min_cov] = np.nan
+    if not np.any(np.isfinite(m)) or np.nanmax(m) <= 0:
+        return None
+    above = np.flatnonzero(m >= fraction * np.nanmax(m))
+    s = f["s_grid"]
+    return float(s[min(above[-1] + 1, len(s) - 1)])
+
+
+def _inside(shape, stage, margin):
+    """World-frame pixels whose image position (world - stage) lies at least `margin` px inside the frame."""
+    r = np.arange(shape[0])[:, None] - stage[0]
+    c = np.arange(shape[1])[None, :] - stage[1]
+    return (r >= margin) & (r < shape[0] - margin) & (c >= margin) & (c < shape[1] - margin)
+
+
+def register_frames(frames, stage_px, midline, s_from, s_to, band_px=20.0, edge_px=25.0):
     """Remove unlogged rigid motion. Returns (frames, midline, per-frame 3x3 maps, report).
 
     World-aligned frames g_t(x) = f_t(x - stage_t) are registered pairwise on
-    the basal band (arc length basal_from x track_length .. track_length of
-    the previous frame's midline): g_t(E_t x) = g_{t-1}(x). With
+    the basal band (arc length s_from .. s_to px from the tip along the
+    previous frame's midline, within band_px of it), keeping only pixels at
+    least edge_px inside both frames: g_t(E_t x) = g_{t-1}(x). With
     C_t = E_t ... E_1, the corrected frame is f'_t(u) = f_t(C_t(u + s_t) - s_t).
     """
     import cv2
@@ -72,8 +98,9 @@ def register_frames(frames, stage_px, midline, track_length, basal_from=0.6, ban
     for t in range(1, T):
         line_w = midline[t - 1] + stage_px[t - 1]
         s = _arclength(line_w)
-        part = line_w[(s >= basal_from * track_length) & (s <= track_length)]
-        mask = _band(f[t].shape, part, band_px).astype(np.uint8)
+        part = line_w[(s >= s_from) & (s <= s_to)]
+        mask = _band(f[t].shape, part, band_px) & _inside(f[t].shape, stage_px[t - 1], edge_px)             & _inside(f[t].shape, stage_px[t], edge_px)
+        mask = mask.astype(np.uint8)
         W = np.eye(2, 3, dtype=np.float32)
         try:
             cc, W = cv2.findTransformECC(world[t - 1], world[t], W, cv2.MOTION_EUCLIDEAN, crit, mask, 5)
@@ -92,7 +119,7 @@ def register_frames(frames, stage_px, midline, track_length, basal_from=0.6, ban
         out_m[t] = (pts @ Ainv.T)[:, :2]
     angles = [float(np.degrees(np.arctan2(c[1, 0], c[0, 0]))) for c in C]
     shifts = [float(np.hypot(*(c[:2, 2]))) for c in C]
-    report = {"ecc_min": float(np.nanmin(ecc)) if ecc else None,
+    report = {"ecc_min": float(np.nanmin(ecc)) if ecc else None, "band_px": [round(s_from), round(s_to)],
               "final_rotation_deg": round(angles[-1], 3), "final_shift_px": round(shifts[-1], 2)}
     return out_f, out_m, C, report
 
