@@ -15,7 +15,8 @@ def records():
 
 def test_cases():
     assert set(CASES) == {"rigid_translation", "rigid_rotation", "rotation_basal_pivot",
-                          "uniform_strain", "growth_zone", "bending", "width_change"}
+                          "uniform_strain", "growth_zone", "bending", "width_change",
+                          "bend_continue", "bend_reverse"}
 
 
 @pytest.mark.parametrize("name", list(CASES))

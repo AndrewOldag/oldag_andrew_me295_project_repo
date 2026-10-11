@@ -21,6 +21,8 @@ class TrackSettings:
     midline_smooth: Optional[str] = None   # preprocess.smooth_midline level
     band_mask: Optional[str] = None        # preprocess.band_mask mode
     width_free: bool = False               # report centre strain rate and width-free ratio; skip plane sections
+    couple: bool = False                   # coupled two-side tracking (qb_track --couple). A run setting, not a
+                                           # remedy: no remedy changes it and no agent list holds it (2026-10-11)
 
     def args(self):
         """Command-line arguments for scripts/remote/qb_track.py."""
@@ -35,6 +37,8 @@ class TrackSettings:
             a += ["--midline-smooth", self.midline_smooth]
         if self.band_mask:
             a += ["--band-mask", self.band_mask]
+        if self.couple:
+            a += ["--couple"]
         return a
 
     def tag(self):
@@ -48,6 +52,8 @@ class TrackSettings:
             parts.append(f"ms{self.midline_smooth}2")     # 2: linear-end smoothing (2026-10-11); no reuse of older runs
         if self.band_mask:
             parts.append({"mask_second_root": "mask", "crop_to_main_root": "crop"}[self.band_mask])
+        if self.couple:
+            parts.append("cpl")                            # coupled and uncoupled outputs never share a name
         return "_".join(parts)
 
     def to_dict(self):

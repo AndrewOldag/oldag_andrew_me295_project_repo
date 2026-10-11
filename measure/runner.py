@@ -98,7 +98,9 @@ class FieldRunner:
 class RemoteRunner:
     form = "remote_job"
 
-    def __init__(self, config=RUNNER_CONFIG, cache=None):
+    def __init__(self, config=RUNNER_CONFIG, cache=None, couple=False):
+        """couple: tracking mode for every run of this runner (a run setting, not a remedy)."""
+        self.couple = couple
         cfg = yaml.safe_load(Path(config).read_text())
         self.host, self.work, self.code, self.python = (cfg["host"], cfg["work_dir"],
                                                         cfg["code_dir"], cfg["python"])
@@ -115,7 +117,7 @@ class RemoteRunner:
 
     def initial_settings(self, rod):
         """The rod's own analysis frame stride; tracker defaults otherwise."""
-        return TrackSettings(stride=self.initial_stride(rod))
+        return TrackSettings(stride=self.initial_stride(rod), couple=self.couple)
 
     def _ssh(self, cmd, stdin=None):
         p = subprocess.run(["ssh", "-o", "BatchMode=yes", self.host, cmd], input=stdin,

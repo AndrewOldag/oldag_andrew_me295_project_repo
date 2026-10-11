@@ -125,7 +125,80 @@ def fault_rods():
     return [Rod("growth_zone", f, s, size=z) for f, sizes in U_SIZES.items() for z in sizes for s in SEEDS]
 
 
+def coupled(states):
+    return [replace(s, couple=True) for s in states]
+
+
+def part_c_time():
+    """Item 6: one clean rod, uncoupled and coupled, for run time and peak memory."""
+    return [entry(Rod("growth_zone", None, 0), [TrackSettings(), TrackSettings(couple=True)])]
+
+
+BASIS = [Rod(c, None, s) for c in ("growth_zone", "bending", "rigid_translation") for s in range(5)]
+
+
+def part_c_basis():
+    """Item 6: the 15 clean rods behind the approved thresholds, both modes."""
+    return [entry(r, [TrackSettings(), TrackSettings(couple=True)]) for r in BASIS]
+
+
+def a_states(rod):
+    """Part A of 2026-10-10 with the fixed remedies: every remedy setting alone on a clean rod."""
+    return [TrackSettings(), TrackSettings(stride=2), TrackSettings(disk_radius=round(1.5 * BASE_RADIUS)),
+            TrackSettings(disk_radius=2 * BASE_RADIUS), register_state(rod), TrackSettings(midline_smooth="light"),
+            TrackSettings(midline_smooth="strong"), TrackSettings(band_mask="mask_second_root"),
+            TrackSettings(band_mask="crop_to_main_root")]
+
+
+def part_c_remedies():
+    """Item 6: part A with the fixed remedies, coupled."""
+    return [entry(r, coupled(a_states(r))) for r in CLEAN]
+
+
+C_SIZES = {"rigid_drift": ["0.25", "0.5", "0.75", "1"], "displacement_exceeds_patch": ["2x6", "3x4", "4x3"],
+           "midline_jitter": ["0.5", "1", "2", "3"], "low_texture": ["0.06", "0.1", "0.15", "0.03", "0.2", "0.25"]}
+
+
+def c_fault_rods():
+    rods = [Rod("growth_zone", f, s, size=z) for f, sizes in C_SIZES.items() for z in sizes for s in SEEDS]
+    return rods + [Rod("growth_zone", "width_change", s) for s in SEEDS]
+
+
+def c_fault_states(rod):
+    if rod.fault == "displacement_exceeds_patch":
+        k = int(rod.size.split("x")[1])
+        return [TrackSettings(stride=x) for x in sorted({k, max(1, k // 2), max(1, k // 4)}, reverse=True)]
+    if rod.fault == "width_change":
+        return [TrackSettings()]                 # use_width_free_ratio needs no tracker re-run
+    return fault_states(rod)
+
+
+def part_c_faults():
+    """Item 6: the part B sizes and the low_texture sizes of item 4, with the fitting remedy, coupled."""
+    return [entry(r, coupled(c_fault_states(r))) for r in c_fault_rods()]
+
+
+ROTATION = [Rod("rigid_rotation", None, s, rotation_deg=d) for d in (0.1, 0.03, 0.01) for s in SEEDS]
+
+
+def part_c_rotation():
+    """Item 6: rigid_rotation at 0.1, 0.03 and 0.01 deg/frame, both modes."""
+    return [entry(r, [TrackSettings(), TrackSettings(couple=True)]) for r in ROTATION]
+
+
+BENT = [Rod(c, None, s) for c in ("bend_continue", "bend_reverse") for s in SEEDS]
+
+
+def part_bent_u():
+    """Item 7: bent rods, uncoupled. The coupled runs wait for Andrew (coupled clean rods fail closure)."""
+    return [entry(r, [TrackSettings()]) for r in BENT]
+
+
 PARTS = {"check": (part_check, "tracks_check"), "band": (part_band, "tracks_band"),
+         "bent_u": (part_bent_u, "tracks_bent"),
+         "c_time": (part_c_time, "tracks_coupled"), "c_basis": (part_c_basis, "tracks_coupled"),
+         "c_remedies": (part_c_remedies, "tracks_coupled"), "c_faults": (part_c_faults, "tracks_coupled"),
+         "c_rotation": (part_c_rotation, "tracks_coupled"),
          "u_clean": (part_u_clean, "tracks_uncoupled"), "u_faults": (part_u_faults, "tracks_uncoupled"),
          "band2": (part_band2, "tracks_band"), "band3": (part_band3, "tracks_band")}
 

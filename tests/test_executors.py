@@ -1,5 +1,6 @@
 """Real executors with the in-process runner on field-level rods. No LLM, no tracker."""
 import json
+from dataclasses import replace
 from pathlib import Path
 
 import pytest
@@ -102,3 +103,14 @@ def test_loop_with_real_executors(tmp_path):
     assert out.status == "accept" and out.steps == 3
     assert "peak_strain_rate_pct_per_h" in L.prompts[1]
     assert '"rechecked": true' in L.prompts[2]
+
+
+def test_couple_is_a_run_setting_not_a_remedy():
+    s = TrackSettings(couple=True)
+    assert s.args()[-1] == "--couple" and s.tag().endswith("_cpl")
+    assert TrackSettings().tag() != s.tag()
+    assert "couple" not in REMEDIES and all("couple" not in str(v) for v in REMEDIES.values())
+    rec = from_tracker_npz(FIXTURES / "growth_zone_clean_s0.npz")
+    for remedy, settings in REMEDIES.items():          # every remedy keeps the mode
+        for setting in settings:
+            assert apply_remedy(replace(s, stride=4), remedy, setting, 15, rec)[0].couple

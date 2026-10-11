@@ -267,6 +267,12 @@ def image_case(case, fault=None, seed=0, moved=False, width_kappa_inv=None, rota
         spec = rigid_rotation_spec(rotation_deg)
     else:
         spec = next(s for s in field_cases() if s.name == name)
+    if name in ("bend_continue", "bend_reverse"):
+        # Bent rods leave a 320 px frame: 640 px wide, base at column 400. Rod columns 215-400
+        # (continue) and 249-400 (reverse) over the hour. The tracked length stays 400 px: material
+        # within 400 px of the tip at frame 0 holds the whole old bend of bend_reverse (X 300 +- 3 sigma)
+        movie_kw = dict(movie_kw, width=640)
+        spec = replace(spec, base_xy=(spec.base_xy[0], 400.0))
     spec = faster(spec, speed)
     movie = Movie(seed=seed, **movie_kw)
     if moved:

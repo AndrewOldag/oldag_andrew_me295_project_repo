@@ -219,6 +219,37 @@ def rigid_rotation_spec(deg_per_frame=0.1, pivot_offset=0.0, name="rigid_rotatio
                              "plane_sections": True})
 
 
+def _gauss(x, centre, sigma):
+    return np.exp(-0.5 * ((np.asarray(x, float) - centre) / sigma) ** 2)
+
+
+def _turning(deg, sigma):
+    """Peak of a Gaussian curvature profile whose integral is `deg` degrees."""
+    return np.deg2rad(deg) / (sigma * np.sqrt(2.0 * np.pi))
+
+
+def bent_specs():
+    """Strongly bent clean rods (spec 2026-10-10, bent rods, part C). Both start bent; curvature is
+    carried by the material, so a bend that has left the growth zone stays. Growth zone, constant width."""
+    v_gz, regr_gz = growth_zone()
+    all_pass = {"rigid_invariance": True, "closure": True, "plane_sections": True}
+    k1, c1 = _turning(30.0, 40.0), _turning(30.0, 40.0) / 3600.0
+    k2, c2 = _turning(30.0, 30.0), _turning(45.0, 40.0) / 3600.0
+    return [
+        RodSpec("bend_continue", v=v_gz, regr=regr_gz, kappa0=lambda X: k1 * _gauss(X, 150.0, 40.0),
+                kappa_rate=lambda s: c1 * _gauss(s, 150.0, 40.0),
+                notes="starts bent 30 deg (Gaussian in X at 150 px, sigma 40) and keeps bending the same way "
+                      "at 30 deg/h (Gaussian in s at 150 px, sigma 40); flank difference at the peak 15.7 %/h",
+                expected=dict(all_pass)),
+        RodSpec("bend_reverse", v=v_gz, regr=regr_gz, kappa0=lambda X: k2 * _gauss(X, 300.0, 30.0),
+                kappa_rate=lambda s: -c2 * _gauss(s, 150.0, 40.0),
+                notes="starts bent 30 deg basal to the growth zone (Gaussian in X at 300 px, sigma 30), then "
+                      "bends the other way at 45 deg/h (Gaussian in s at 150 px, sigma 40); ends S-shaped; "
+                      "flank difference at the peak 23.5 %/h",
+                expected=dict(all_pass)),
+    ]
+
+
 def field_cases():
     """The field-level cases. `expected` gives the pass/fail of each check."""
     v_gz, regr_gz = growth_zone()
@@ -246,4 +277,5 @@ def field_cases():
                 notes="growth zone plus a curvature-rate bump at s = 150 px; constant width",
                 expected=dict(all_pass)),
         width_change_spec(400.0),          # size chosen by Andrew, 2026-10-10
+        *bent_specs(),
     ]
