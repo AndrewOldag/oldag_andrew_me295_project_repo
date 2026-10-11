@@ -195,8 +195,152 @@ def labels_table():
             f"Labels that change: {', '.join(changed) if changed else 'none'}.\n\n" + "\n".join(lines) + "\n")
 
 
+def steps(tag):
+    """Remedy steps from the unremedied state: one per fixed remedy here (stride halvings count each)."""
+    return 0 if state_label(tag) == "none" else 1
+
+
+def fault_rows(tracks_dir, fault_ids):
+    """Evaluated rows for fault rods, with the rod's approved tolerance and 'good'."""
+    from measure.score import load_tolerance, measurement_good, rod_tolerance
+    cfg = load_tolerance()
+    rows = []
+    for rid in fault_ids:
+        for f in sorted(tracks_dir.glob(f"{rid}__*.npz")):
+            tag = f.name[:-4].split("__")[1]
+            r = evaluate(rid, tag, [tracks_dir])
+            if r is None:
+                continue
+            tol = rod_tolerance(r["truth"], 2.105, cfg)
+            r.update(state=state_label(tag), steps=steps(tag), good=measurement_good(r, tol),
+                     limit=tol["regr_rms_pct_per_h"])
+            rows.append(r)
+    return rows
+
+
+def fault_tables(rows, groups):
+    """Part-B form: summary per fault and size, then every run. groups: [(fault, size, [rod ids])]."""
+    from measure.score import label_rod
+    summary = ["| Fault | Size | Unremedied: seeds failing a check | Remedied (1 step): seeds with three passes | Remedied: three passes and good | Meets criteria |",
+               "| :-- | :-- | :-- | :-- | :-- | :-- |"]
+    per = ["| Rod | Remedy | rigid_invariance | closure | plane_sections | REGR err (limit) | Flank err | All pass | Good |",
+           "| :-- | :-- | --: | --: | --: | --: | --: | :-- | :-- |"]
+    labels = ["| Rod | Label | Repairing remedy |", "| :-- | :-- | :-- |"]
+    for fault, size, rids in groups:
+        fail0 = passed = good_pass = done = 0
+        for rid in rids:
+            rs = sorted([r for r in rows if r["id"] == rid], key=lambda r: STATE_ORDER.index(r["state"]))
+            if not rs or rs[0]["steps"] != 0:
+                continue
+            done += 1
+            fail0 += not rs[0]["all_pass"]
+            rem = [r for r in rs if r["steps"] >= 1]
+            passed += any(r["all_pass"] for r in rem)
+            good_pass += any(r["all_pass"] and r["good"] for r in rem)
+            for r in rs:
+                per.append(f"| {rid} | {r['state']} | " + " | ".join(cell(r, c) for c in CHECKS)
+                           + f" | {r['regr_rms_pct_per_h']:.2f} ({r['limit']:.2f}) | {r['flank_difference_rms_pct_per_h']:.2f} | "
+                           f"{'yes' if r['all_pass'] else 'no'} | {'yes' if r['good'] else 'no'} |")
+            lab, seq = label_rod([{"sequence": [] if r["steps"] == 0 else [r["state"]], "checks_pass": r["all_pass"],
+                                   "good": r["good"]} for r in rs])
+            labels.append(f"| {rid} | {lab} | {' + '.join(seq) if seq else ('none needed' if lab == 'repairable' else '-')} |")
+        if done:
+            meets = fail0 == done and good_pass >= 2
+            summary.append(f"| {fault} | {size} | {fail0} of {done} | {passed} of {done} | {good_pass} of {done} | "
+                           f"{'yes' if meets else 'no'} |")
+    return "\n".join(summary), "\n".join(per), "\n".join(labels)
+
+
+def u_fault_groups():
+    import fix_sweep as fs
+    return [(f, z, [fs.Rod("growth_zone", f, s, size=z).id() for s in fs.SEEDS])
+            for f, sizes in fs.U_SIZES.items() for z in sizes]
+
+
+def u_faults_table():
+    groups = u_fault_groups()
+    rows = fault_rows(CACHE / "tracks_uncoupled", [rid for _, _, ids in groups for rid in ids])
+    summary, per, labels = fault_tables(rows, groups)
+    return ("Criteria (spec 2026-10-10): the unremedied rod fails a check on every seed, and the fitting remedy "
+            "gives three passes and a good measurement on at least 2 of 3 seeds. Good: approved tolerance "
+            "(REGR limit in brackets, 2.5 % of the true peak; flank 0.5 %/h). " + THRESHOLD_NOTE + "\n\n"
+            + summary + "\n\nLabels (from these states only):\n\n" + labels
+            + "\n\nPer run (F = fails the approved threshold):\n\n" + per + "\n")
+
+
+def side_by_side(groups, dirs_u, dirs_c, width_free=False):
+    """groups: [(label, remedy, [(rid, uncoupled tag)])]. Both modes per group: checks, errors, fails, run time."""
+    lines = ["| Rods | Remedy | Mode | n | rigid_invariance (%/h) | closure (px/h) | plane_sections (%/h) | REGR err (%/h) | Flank err (%/h) | Runs failing a check | Run time (s) |",
+             "| :-- | :-- | :-- | --: | --: | --: | --: | --: | --: | --: | --: |"]
+    allrows = {"uncoupled": [], "coupled": []}
+    for label, remedy, items in groups:
+        for mode, dirs, suffix in (("uncoupled", dirs_u, ""), ("coupled", dirs_c, "_cpl")):
+            rs = [r for r in (evaluate(rid, tag + suffix, dirs, width_free) for rid, tag in items) if r]
+            allrows[mode] += rs
+            if not rs:
+                continue
+            lines.append(f"| {label} | {remedy} | {mode} | {len(rs)} | " + " | ".join(fmt([r[c] for r in rs]) for c in CHECKS)
+                         + f" | {fmt([r['regr_rms_pct_per_h'] for r in rs])} | {fmt([r['flank_difference_rms_pct_per_h'] for r in rs])}"
+                         + f" | {sum(not r['all_pass'] for r in rs)} | {fmt([r['run_s'] for r in rs])} |")
+    return "\n".join(lines), allrows
+
+
+def c_basis_table():
+    import fix_sweep as fs
+    groups = [(f"{c} s0-4", "none", [(r.id(), "st1") for r in fs.BASIS if r.case == c])
+              for c in ("growth_zone", "bending", "rigid_translation")]
+    d = [CACHE / "tracks_coupled"]
+    table, rows = side_by_side(groups, d, d)
+    per = ["| Rod | Mode | " + " | ".join(CHECKS) + " | All pass |", "| :-- | :-- | --: | --: | --: | :-- |"]
+    for r in sorted(rows["uncoupled"] + rows["coupled"], key=lambda r: (r["id"], r["tag"])):
+        per.append(f"| {r['id']} | {'coupled' if r['tag'].endswith('_cpl') else 'uncoupled'} | "
+                   + " | ".join(cell(r, c) for c in CHECKS) + f" | {'yes' if r['all_pass'] else 'no'} |")
+    fails = [r["id"] for r in rows["coupled"] if not r["all_pass"]]
+    return (table + "\n\nCells: median [min, max]. " + THRESHOLD_NOTE + "\n\nClean coupled rods failing an approved threshold: "
+            + (", ".join(fails) if fails else "none") + f" ({len(rows['coupled']) - len(fails)} of {len(rows['coupled'])} pass).\n\n"
+            + "\n".join(per) + "\n")
+
+
+def flank_errors(rid, tag, dirs):
+    """RMS error (%/h) of the window-mean plus and minus flank strain rates against the truth."""
+    from measure.record import PER_S_TO_PCT_PER_H
+    from measure.score import _wmean
+    rec = from_tracker_npz(find(f"{rid}__{tag}.npz", dirs))
+    with np.load(find(f"{rid}_truth.npz", dirs)) as z:
+        truth = {k: z[k] for k in z.files}
+    s = rec.fields["s_grid"]
+    out = {}
+    for k in ("regr_plus", "regr_minus"):
+        t = np.interp(s, truth["s_grid"], np.nanmean(truth[k], axis=0), right=np.nan)
+        e = (_wmean(rec.fields[k]) - t) * PER_S_TO_PCT_PER_H
+        out[k] = float(np.sqrt(np.nanmean(e ** 2)))
+    return out
+
+
+def bent_table():
+    import fix_sweep as fs
+    d = [CACHE / "tracks_bent"]
+    lines = ["| Rod | Mode | rigid_invariance (%/h) | closure (px/h) | plane_sections (%/h) | Peak at s (px) | REGR err (%/h) | Plus flank err (%/h) | Minus flank err (%/h) | Flank diff err (%/h) | All pass |",
+             "| :-- | :-- | --: | --: | --: | --: | --: | --: | --: | --: | :-- |"]
+    for rod in fs.BENT:
+        for mode, tag in (("uncoupled", "st1"), ("coupled", "st1_cpl")):
+            r = evaluate(rod.id(), tag, d)
+            if r is None:
+                continue
+            fe = flank_errors(rod.id(), tag, d)
+            rec = from_tracker_npz(find(f"{rod.id()}__{tag}.npz", d))
+            ps = [c for c in run_checks(rec, None, TH) if c.check == "plane_sections"][0]
+            lines.append(f"| {rod.id()} | {mode} | " + " | ".join(cell(r, c) for c in CHECKS)
+                         + f" | {ps.where_s_px:.0f} | {r['regr_rms_pct_per_h']:.2f} | {fe['regr_plus']:.2f} | {fe['regr_minus']:.2f} | "
+                         f"{r['flank_difference_rms_pct_per_h']:.2f} | {'yes' if r['all_pass'] else 'no'} |")
+    return ("Frame 640 x 640 px, base at column 400, tracked length 400 px. Coupled runs not made: they wait for Andrew "
+            "(coupled clean rods fail closure, item 6). " + THRESHOLD_NOTE + "\n\n" + "\n".join(lines) + "\n")
+
+
 TABLES = {"band": ("item3_band.md", band_table), "u_clean": ("item4_clean.md", u_clean_table),
-          "labels": ("item5_labels.md", labels_table)}
+          "bent": ("item7_bent.md", bent_table),
+          "c_basis": ("item6_clean_basis.md", c_basis_table),
+          "labels": ("item5_labels.md", labels_table), "u_faults": ("item4_faults.md", u_faults_table)}
 
 
 def main():
