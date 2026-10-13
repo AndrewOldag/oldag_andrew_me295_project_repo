@@ -1,0 +1,9 @@
+# Reference for frame_quality (measure/info.py), P5 of docs/proposals/2026-10-12_diagnostician-misses.md.
+# Approved by Andrew on 2026-10-12 (spec docs/specs/2026-10-12_freeze-decisions-diagnostician-fixes.md).
+# Synthetic rods only. The reference for real movies is open.
+# Values: median and lowest over the 15 clean basis rods of the checker thresholds (growth_zone, bending,
+# rigid_translation, seeds 0-4, uncoupled, unremedied), 3 frames each (0, 20, 40): 45 values.
+# Source: staging/tracks_2026-10-11/tracks_coupled/<rod>__st1.npz, settings.frame_quality.
+basis: 15 clean synthetic rods, 3 frames each
+texture_contrast: {median: 0.193, lowest: 0.155}
+focus: {median: 0.090, lowest: 0.073}

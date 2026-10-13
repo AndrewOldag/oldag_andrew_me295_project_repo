@@ -1,0 +1,164 @@
+{
+ "rod": {
+  "case": "growth_zone",
+  "fault": "midline_jitter",
+  "size": "3",
+  "seed": 0
+ },
+ "runner": "remote_job",
+ "truth": {
+  "peak_regr_pct_per_h": 43.4,
+  "peak_at_um": 316,
+  "largest_flank_difference_pct_per_h": 0.0
+ },
+ "error_before": {
+  "regr_rms_pct_per_h": 0.797,
+  "regr_max_pct_per_h": 1.869,
+  "regr_covered_um": 884,
+  "flank_difference_rms_pct_per_h": 0.757,
+  "flank_difference_max_pct_per_h": 2.427,
+  "flank_difference_covered_um": 884
+ },
+ "initial_checks": [
+  {
+   "check": "rigid_invariance",
+   "passed": true,
+   "value": 0.5751432243319214,
+   "threshold": 2.0,
+   "unit": "%/h",
+   "where_s_px": 325.0,
+   "where_frame_pair": null,
+   "detail": "largest change in regr_plus"
+  },
+  {
+   "check": "closure",
+   "passed": false,
+   "value": 2.2383819205187327,
+   "threshold": 1.0,
+   "unit": "px/h",
+   "where_s_px": 428.5215035050436,
+   "where_frame_pair": 22,
+   "detail": "tip path 450.6 px/h; base at s = 429 px; largest single-pair residual at pair 22"
+  },
+  {
+   "check": "plane_sections",
+   "passed": false,
+   "value": 35.34318999334634,
+   "threshold": 3.25,
+   "unit": "%/h",
+   "where_s_px": 30.0,
+   "where_frame_pair": null,
+   "detail": "flank difference -0.98 %/h, predicted -36.32 %/h"
+  }
+ ],
+ "outcome": {
+  "task_id": "rod-1",
+  "agent": "diagnostician",
+  "status": "decline",
+  "args": {
+   "fault": "midline_jitter",
+   "reason": "Light midline smoothing, the only setting for the midline-jitter remedy, lowered plane sections (35.34 to 26.10 %/h) but it still fails, and closure got worse (2.24 to 3.54 px/h). The remedy cannot be applied again, frame registration did not help, and no other fault has its own evidence. The curvature-rate and strain-rate measurement cannot be trusted."
+  },
+  "steps": 7,
+  "failed_steps": 0,
+  "calls": 7,
+  "input_tokens": 32071,
+  "output_tokens": 3485,
+  "call_ms": 38331
+ },
+ "error_after": {
+  "regr_rms_pct_per_h": 0.54,
+  "regr_max_pct_per_h": 1.467,
+  "regr_covered_um": 884,
+  "flank_difference_rms_pct_per_h": 0.531,
+  "flank_difference_max_pct_per_h": 1.375,
+  "flank_difference_covered_um": 884
+ },
+ "remedies": [
+  "frames registered on the non-growing tissue (from 305 px from the tip) before tracking",
+  "rolled back: frames registered on the non-growing tissue (from 305 px from the tip) before tracking",
+  "midline source smoothed (light)"
+ ],
+ "roll_backs": 1,
+ "final_settings": {
+  "stride": 1,
+  "disk_radius": null,
+  "register": false,
+  "register_from_px": null,
+  "midline_smooth": "light",
+  "band_mask": null,
+  "width_free": false,
+  "couple": false
+ },
+ "final_checks": [
+  {
+   "check": "rigid_invariance",
+   "passed": true,
+   "value": 0.5121757621001367,
+   "threshold": 2.0,
+   "unit": "%/h",
+   "where_s_px": 205.0,
+   "where_frame_pair": null,
+   "detail": "largest change in regr_mid"
+  },
+  {
+   "check": "closure",
+   "passed": false,
+   "value": 3.537851234878903,
+   "threshold": 1.0,
+   "unit": "px/h",
+   "where_s_px": 429.23164907047664,
+   "where_frame_pair": 0,
+   "detail": "tip path 152.5 px/h; base at s = 429 px; largest single-pair residual at pair 0"
+  },
+  {
+   "check": "plane_sections",
+   "passed": false,
+   "value": 26.096084223475113,
+   "threshold": 3.25,
+   "unit": "%/h",
+   "where_s_px": 30.0,
+   "where_frame_pair": null,
+   "detail": "flank difference -0.59 %/h, predicted -26.69 %/h"
+  }
+ ],
+ "reported": false,
+ "runner_log": [
+  {
+   "track": {
+    "out": "growth_zone_midline_jitter_z3_s0__st1_reg2p305.npz",
+    "run_s": 5.3,
+    "frames": 41,
+    "points": 27,
+    "disk_radius": 15
+   }
+  },
+  {
+   "track": {
+    "out": "growth_zone_midline_jitter_z3_s0_moved__st1_reg2p305.npz",
+    "run_s": 5.3,
+    "frames": 41,
+    "points": 27,
+    "disk_radius": 15
+   }
+  },
+  {
+   "track": {
+    "out": "growth_zone_midline_jitter_z3_s0__st1_mslight4.npz",
+    "run_s": 5.3,
+    "frames": 41,
+    "points": 27,
+    "disk_radius": 15
+   }
+  },
+  {
+   "track": {
+    "out": "growth_zone_midline_jitter_z3_s0_moved__st1_mslight4.npz",
+    "run_s": 5.3,
+    "frames": 41,
+    "points": 27,
+    "disk_radius": 15
+   }
+  }
+ ]
+}

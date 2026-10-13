@@ -12,6 +12,9 @@ class NotAvailable(Exception):
     pass
 
 
+SMOOTH_SETTINGS = ("light",)   # strong withdrawn 2026-10-11; preprocess.MIDLINE_SMOOTH keeps its sigmas for old runs
+
+
 @dataclass(frozen=True)
 class TrackSettings:
     stride: int = 1                        # analysis frame stride (qb_track --stride)
@@ -89,6 +92,8 @@ def apply_remedy(settings, remedy, setting, base_disk_radius, record=None):
         return (replace(s, register=True, register_from_px=int(round(start))),
                 f"frames registered on the non-growing tissue (from {start:.0f} px from the tip) before tracking")
     if remedy == "smooth_midline":
+        if setting not in SMOOTH_SETTINGS:
+            raise NotAvailable(f"unknown setting {setting!r} for smooth_midline")
         if s.midline_smooth == setting:
             raise NotAvailable(f"midline already smoothed ({setting})")
         return replace(s, midline_smooth=setting), f"midline source smoothed ({setting})"

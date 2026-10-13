@@ -12,6 +12,7 @@ The step still counts. The agent never sees the rod's name, fault or truth.
 """
 import math
 
+from agents.actions import REMEDIES
 from checker import run_checks, load_thresholds
 from measure import info
 from measure.remedies import NotAvailable, apply_remedy
@@ -103,7 +104,20 @@ class Slice:
             out.update({k: v for k, v in _summary(before).items() if k != "check_values"}, rolled_back=True,
                        note="the remedy made no failing check pass and lowered none by a quarter; "
                             "the settings and measurement from before it are restored. The step counts")
+        if not self.settings_left(args["remedy"]):
+            out["settings_left"] = f"no further setting: {args['remedy']} cannot be applied again or at another setting"
         return out
+
+    def settings_left(self, remedy):
+        """Settings of `remedy` (REMEDIES) that can still be applied to the current settings (P3, 2026-10-12)."""
+        left = []
+        for s in REMEDIES[remedy]:
+            try:
+                apply_remedy(self.runs[-1][0], remedy, s, self.base_disk_radius, self.current.record)
+                left.append(s)
+            except NotAvailable:
+                pass
+        return left
 
     def executors(self):
         return {"request_info": self.request_info, "apply_remedy": self.apply_remedy}

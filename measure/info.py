@@ -4,10 +4,14 @@ One function per info kind in agents/actions.py INFO_KINDS. Each returns a
 small JSON-serializable dict. The truth of a synthetic rod is never read here.
 """
 import warnings
+from pathlib import Path
 
 import numpy as np
+import yaml
 
 from measure.record import PER_S_TO_PCT_PER_H
+
+FRAME_QUALITY_REFERENCE = Path(__file__).resolve().parents[1] / "config" / "frame_quality_reference.yaml"
 
 
 def _wmean(a):
@@ -39,6 +43,7 @@ def velocity_profile(rec, checks=None, step_um=50.0):
     grid = np.arange(0.0, np.nanmax(s_um[np.isfinite(regr)]) + 1e-9, step_um)
     tip = rec.midline[:, 0]
     dur_h = (rec.frame_times_s[-1] - rec.frame_times_s[0]) / 3600.0
+    spacing_rate = flank_spacing_rate(rec)
     return {"s_um": [round(x) for x in grid],
             "velocity_um_per_h": [_r(x, 1) for x in np.interp(grid, s_um, v)],
             "strain_rate_pct_per_h": [_r(x, 1) for x in np.interp(grid, s_um, regr)],
@@ -47,7 +52,24 @@ def velocity_profile(rec, checks=None, step_um=50.0):
             "negative_strain_rate_min_pct_per_h": _r(np.nanmin(regr), 1),
             "basal_velocity_um_per_h": _r(v[np.isfinite(v)][-1], 1),
             "tip_path_um_per_h": _r(np.linalg.norm(np.diff(tip, axis=0), axis=1).sum() * rec.pixel_um / dur_h, 1),
-            "tip_net_displacement_um_per_h": _r(np.linalg.norm(tip[-1] - tip[0]) * rec.pixel_um / dur_h, 1)}
+            "tip_net_displacement_um_per_h": _r(np.linalg.norm(tip[-1] - tip[0]) * rec.pixel_um / dur_h, 1),
+            "flank_spacing_rate_pct_per_h": [_r(x, 1) for x in np.interp(grid, s_um, spacing_rate)],
+            "flank_spacing_rate_max_abs_pct_per_h": (_r(np.nanmax(np.abs(spacing_rate)), 1)
+                                                     if np.isfinite(spacing_rate).any() else None)}
+
+
+def flank_spacing_rate(rec):
+    """Window mean of d ln(flank spacing)/dt on the record's s grid, %/h (P4, 2026-10-12).
+    A width change shows here; a constant-width root gives about zero."""
+    sp = np.asarray(rec.fields["spacing"], dtype=float)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", RuntimeWarning)
+        ln = np.log(np.where(sp > 0, sp, np.nan))
+    dt = np.diff(rec.frame_times_s)
+    dt = dt[:len(sp)]                                          # one row of fields per frame pair
+    t_mid = np.cumsum(dt) - dt / 2.0
+    rate = np.diff(ln, axis=0) / np.diff(t_mid)[:, None]       # 1/s
+    return _wmean(rate) * PER_S_TO_PCT_PER_H
 
 
 def width_free_ratio(rec, step_um=50.0):
@@ -129,6 +151,11 @@ def stage_log_summary(rec, checks=None):
         r = np.linalg.norm(np.diff(rec.midline[:, 0], axis=0) - np.diff(rel, axis=0), axis=1)
         out["closure_residual_px_at_moves"] = _r(np.mean(r[moves])) if moves.any() else None
         out["closure_residual_px_elsewhere"] = _r(np.mean(r[~moves])) if (~moves).any() else None
+        # net residual per hour summed over each set of pairs, as the closure check sums it (P1, 2026-10-12)
+        rv = np.diff(rec.midline[:, 0], axis=0) - np.diff(rel, axis=0)
+        dur_h = (rec.frame_times_s[-1] - rec.frame_times_s[0]) / 3600.0
+        out["closure_residual_px_per_h_at_moves"] = _r(np.linalg.norm(rv[moves].sum(axis=0)) / dur_h)
+        out["closure_residual_px_per_h_elsewhere"] = _r(np.linalg.norm(rv[~moves].sum(axis=0)) / dur_h)
         v = np.nanmean(rec.fields["v_mid"], axis=1) * 3600.0
         out["velocity_jump_at_moves_px_per_h"] = (_r(np.nanmean(np.abs(v[moves] - np.nanmedian(v))))
                                                   if moves.any() else None)
@@ -139,8 +166,10 @@ def frame_quality(rec, checks=None):
     q = rec.settings.get("frame_quality")
     if not q:
         return {"error": "no frame-quality measures for this record (no images)"}
+    ref = yaml.safe_load(FRAME_QUALITY_REFERENCE.read_text())
     return {"frames": q, "note": "texture_contrast: high-pass std / mean inside the root band; "
-                                 "focus: mean gradient / mean; bright_objects_over_500px: count"}
+                                 "focus: mean gradient / mean; bright_objects_over_500px: count",
+            "reference": {"basis": ref["basis"], **{k: ref[k] for k in ("texture_contrast", "focus")}}}
 
 
 INFO = {"check_report": check_report, "velocity_profile": velocity_profile,

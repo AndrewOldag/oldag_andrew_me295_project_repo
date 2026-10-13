@@ -94,6 +94,18 @@ def test_switch_midline_source_removed():
     assert "switch_midline_source" not in REMEDIES
 
 
+def test_smooth_midline_strong_rejected():
+    """strong withdrawn 2026-10-11: not offered, rejected by the action check and by the remedy itself."""
+    from agents.actions import DIAGNOSTICIAN
+    assert REMEDIES["smooth_midline"] == ["light"]
+    assert "strong" not in DIAGNOSTICIAN.describe()
+    with pytest.raises(ValueError, match="'strong' not in the allowed list"):
+        DIAGNOSTICIAN.validate(act(action="apply_remedy", fault="midline_jitter", remedy="smooth_midline",
+                                   setting="strong"))
+    with pytest.raises(NotAvailable, match="unknown setting 'strong'"):
+        apply_remedy(TrackSettings(), "smooth_midline", "strong", 15)
+
+
 def test_loop_with_real_executors(tmp_path):
     s = Slice(FieldRunner(), Rod("growth_zone"))
     L = ScriptedLauncher([act(action="request_info", kind="velocity_profile"),
