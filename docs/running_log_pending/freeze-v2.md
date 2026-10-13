@@ -1,4 +1,14 @@
 ## 2026-10-12 (build account, freeze-v2 session)
-- Not done: spec `docs/specs/2026-10-12_freeze-decisions-diagnostician-fixes.md` not found. Searched: this branch, origin/main and all other branches (after `git fetch`), and the working trees of the main checkout and the other worktrees. No file with that name exists. No code changed
-- Remaining: planning account writes the spec to `docs/specs/` and pushes it to main; then rebase wip/freeze-v2 on main and work it in order
-- Bottlenecks: missing spec (planning account / Andrew)
+- Start: spec `docs/specs/2026-10-12_freeze-decisions-diagnostician-fixes.md` was not in Git (683a6d1 logged the miss). Andrew pasted the text; saved and committed alone as given (769d97f). Spec worked in order, items 1-6; done. No stop condition hit
+- Done, item 1 (9ef68f1): 9 decision lines in `docs/decisions.md`; `config/scoring_tolerance.yaml` flank difference 1.00 %/h. `strong` already absent from `REMEDIES` and `describe()`; `measure/remedies.py` accepted any `smooth_midline` setting and now rejects all but `light`; test `test_smooth_midline_strong_rejected`
+- Done, item 1: seeds 0-2 labels recomputed from existing runs under 0.5 and 1.00 %/h (`scripts/synth/eval_freeze.py --parts relabel`): 15 rods, 36 runs, 0 tracker runs; no label changes (`results/2026-10-12_freeze_v2/item1_labels.md`)
+- Done, item 2 (f4f9a74): `config/scoring_seeds.yaml`: development [0], scoring [1, 2, 3, 4, 5]
+- Done, item 3 (2a5baa5): seeds 3-5 labelled tracker only, `scripts/synth/freeze_sweep.py` parts seeds35 and seeds35_reg. 66 tracker runs (spec estimate 105-150; `strong` not run, width_change needs one run), 0 failed, 316 s sweep wall time, peak 4 workers, load 1 min max 5.44 on 32 cores, work space 6.7 -> 7.28 GB. No seed 3-5 label differs from seeds 0-2 (`item3_seeds35.md`)
+- Done, item 4 (5b896cb): P1-P5 as written. Prompt lines; `stage_log_summary` closure residual per hour at moves and elsewhere; `velocity_profile` flank spacing rate and its largest absolute value; `frame_quality` reference (`config/frame_quality_reference.yaml`: contrast median 0.193, lowest 0.155; focus 0.090, 0.073; 45 frames of the 15 clean basis rods); `settings_left` "no further setting" note in remedy results. `tests/test_info_p1_p5.py`, 5 tests; 4 seed-0 tracker outputs added as fixtures
+- Done, item 5 (a3a0dbf): `docs/proposals/2026-10-12_freeze-v2.md`. Open: real-movie `frame_quality` reference only
+- Done, item 6 (da93690): development check, seed 0, 5 diagnostician runs (not a score): 5 of 5 correct outcomes, 5 of 5 terminal faults correct (build session 10: 1 of 5, 0 of 5). 28 steps, 124k input and 13k output tokens, 148 s call time, Claude Code 2.1.293. Table in `results/2026-10-12_freeze_v2/README.md`
+- Done: `python -m pytest -q tests`: 137 passed
+- Setup, not tracked: the worktree reaches `staging/tracks`, `staging/tracks_2026-10-11` and `private/` through directory links to the main checkout. New seed 3-5 outputs are in this worktree's `staging/tracks_2026-10-12/`
+- Demo: `python scripts/synth/eval_freeze.py --out results/2026-10-12_freeze_v2 --parts relabel seeds35` prints both label tables and "Labels that change: none"
+- Remaining: Andrew approves freeze v2 from `docs/proposals/2026-10-12_freeze-v2.md`; merge wip/freeze-v2; then the scored runs on seeds 1-5 (25 runs), as a new spec
+- Bottlenecks: freeze approval and the real-movie `frame_quality` reference (Andrew)
