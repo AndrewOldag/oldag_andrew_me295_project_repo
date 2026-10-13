@@ -1,0 +1,129 @@
+{
+ "freeze_tag": "freeze-v2",
+ "commit": "c9d5a0c",
+ "method": "remedy_tree",
+ "rod": {
+  "case": "growth_zone",
+  "fault": "partial_occlusion",
+  "size": "20",
+  "seed": 2
+ },
+ "runner": "remote_job",
+ "truth": {
+  "peak_regr_pct_per_h": 43.4,
+  "peak_at_um": 316,
+  "largest_flank_difference_pct_per_h": 0.0
+ },
+ "error_before": {
+  "regr_rms_pct_per_h": 32.824,
+  "regr_max_pct_per_h": 109.263,
+  "regr_covered_um": 884,
+  "flank_difference_rms_pct_per_h": 1.754,
+  "flank_difference_max_pct_per_h": 5.714,
+  "flank_difference_covered_um": 884
+ },
+ "initial_checks": [
+  {
+   "check": "rigid_invariance",
+   "passed": false,
+   "value": 99.175788942589,
+   "threshold": 2.0,
+   "unit": "%/h",
+   "where_s_px": 240.0,
+   "where_frame_pair": null,
+   "detail": "largest change in regr_mid"
+  },
+  {
+   "check": "closure",
+   "passed": true,
+   "value": 0.08512252464907594,
+   "threshold": 1.0,
+   "unit": "px/h",
+   "where_s_px": 453.42196588573705,
+   "where_frame_pair": 19,
+   "detail": "tip path 60.0 px/h; base at s = 453 px; largest single-pair residual at pair 19"
+  },
+  {
+   "check": "plane_sections",
+   "passed": false,
+   "value": 5.713904004143651,
+   "threshold": 3.25,
+   "unit": "%/h",
+   "where_s_px": 180.0,
+   "where_frame_pair": null,
+   "detail": "flank difference 5.71 %/h, predicted -0.00 %/h"
+  }
+ ],
+ "outcome": {
+  "task_id": "rod-1",
+  "agent": "remedy_tree",
+  "status": "accept",
+  "args": {
+   "confidence": null
+  },
+  "steps": 4,
+  "failed_steps": 0,
+  "calls": 0,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "call_ms": 0
+ },
+ "error_after": {
+  "regr_rms_pct_per_h": 15.823,
+  "regr_max_pct_per_h": 77.393,
+  "regr_covered_um": 884,
+  "flank_difference_rms_pct_per_h": 3.173,
+  "flank_difference_max_pct_per_h": 13.734,
+  "flank_difference_covered_um": 884
+ },
+ "remedies": [
+  "tracker disk radius 15 -> 22 px",
+  "midline source smoothed (light)",
+  "rolled back: midline source smoothed (light)",
+  "report the centre strain rate and the width-free ratio; plane-sections check skipped"
+ ],
+ "roll_backs": 1,
+ "final_settings": {
+  "stride": 1,
+  "disk_radius": 22,
+  "register": false,
+  "register_from_px": null,
+  "midline_smooth": null,
+  "band_mask": null,
+  "width_free": true,
+  "couple": false
+ },
+ "final_checks": [
+  {
+   "check": "rigid_invariance",
+   "passed": true,
+   "value": 1.3011078707035921,
+   "threshold": 2.0,
+   "unit": "%/h",
+   "where_s_px": 195.0,
+   "where_frame_pair": null,
+   "detail": "largest change in regr_mid"
+  },
+  {
+   "check": "closure",
+   "passed": true,
+   "value": 0.09481153050844529,
+   "threshold": 1.0,
+   "unit": "px/h",
+   "where_s_px": 430.0730083075275,
+   "where_frame_pair": 19,
+   "detail": "tip path 60.0 px/h; base at s = 430 px; largest single-pair residual at pair 19"
+  },
+  {
+   "check": "plane_sections",
+   "passed": null,
+   "value": 13.733667663050786,
+   "threshold": 3.25,
+   "unit": "%/h",
+   "where_s_px": 195.0,
+   "where_frame_pair": null,
+   "detail": "skipped: width-free ratio reported; flank difference 13.73 %/h, predicted 0.00 %/h"
+  }
+ ],
+ "reported": true
+}
