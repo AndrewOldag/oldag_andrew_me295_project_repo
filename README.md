@@ -47,6 +47,10 @@ Course project for AM/ME/CE 295, Caltech, Fall 2026. Start with `CLAUDE.md` and 
 - Development faults at their frozen sizes, seeds 0-2, in rounds: `python scripts/synth/baselines.py next` starts the tracker runs still needed as one sweep (refuses while another sweep holds the lock, and past 200 runs), `status`, `fetch` (to `staging/tracks_baselines/`); repeat until `next` needs nothing. Then `python scripts/synth/baselines.py write --out results/<dir>` writes a trace and a summary per task
 - Scoring: `python scripts/synth/eval_baselines.py --runs results/<dir> [--agent-runs DIR] --out results/<dir>` writes `table.md` and `scores.json` (`measure/score.py`, freeze labels)
 
+## Scored runs (four methods)
+- `python scripts/synth/scored_v1.py next --set dev|heldout` starts the tracker runs the script and remedy tree still need as one sweep; `status`, `fetch`; repeat until `next` needs nothing. Then `rules --set S`, `agents --set S --method diagnostician|single_agent` (needs a clean tracked tree; each run records the freeze tag and commit; runs with a summary are skipped), and `eval`, which writes `results/2026-10-12b_scored_v1/table_dev.md`, `table_heldout.md` and `scores.json`
+- Held-out labels: `python scripts/synth/heldout_labels.py start`, `status`, `fetch`, `eval --out results/2026-10-12b_heldout_labels`
+
 ## Tools
 - Root manifest review app: `python scripts/manifest/review_server.py`, then open http://localhost:8295
 
