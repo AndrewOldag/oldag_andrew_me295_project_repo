@@ -254,3 +254,26 @@ Required by the course. One entry per work session: done, remaining, bottlenecks
 - Demo: open `docs/reports/2026-10-16_lab-report-1.md`; [ANDREW] marks show what Andrew must write or decide
 - Remaining: Andrew reads and digests 2-3 agent-systems papers, writes part 1; fills the [ANDREW] marks (README check date, research question, intended users, root count 118 vs 123/102, demo choice, next-steps order); confirms pre-push hook install
 - Bottlenecks: agent-systems reading (Andrew)
+
+## 2026-10-12 (planning account, freeze decisions spec)
+- Done: wrote spec `docs/specs/2026-10-12_freeze-decisions-diagnostician-fixes.md` from Andrew's decisions on the open items of freeze v1, the session 10 questions and P1-P5. Committed on wip/freeze-v2 (769d97f)
+- Decisions in it: flank tolerance 1.00 %/h; `strong` withdrawn; midline_jitter 3 px and low_texture 0.03 are declines; P1-P5 approved; scoring seeds 1-5, seed 0 development only; freeze approved from v2, not v1
+- Demo: none; spec only
+- Remaining: build account works the spec in order (done on wip/freeze-v2, entry below)
+- Bottlenecks: `frame_quality` reference for real movies (Andrew)
+
+## 2026-10-12 (build account, freeze-v2 session)
+- Start: spec `docs/specs/2026-10-12_freeze-decisions-diagnostician-fixes.md` was not in Git (683a6d1 logged the miss). Andrew pasted the text; saved and committed alone as given (769d97f). Spec worked in order, items 1-6; done. No stop condition hit
+- Done, item 1 (9ef68f1): 9 decision lines in `docs/decisions.md`; `config/scoring_tolerance.yaml` flank difference 1.00 %/h. `strong` already absent from `REMEDIES` and `describe()`; `measure/remedies.py` accepted any `smooth_midline` setting and now rejects all but `light`; test `test_smooth_midline_strong_rejected`
+- Done, item 1: seeds 0-2 labels recomputed from existing runs under 0.5 and 1.00 %/h (`scripts/synth/eval_freeze.py --parts relabel`): 15 rods, 36 runs, 0 tracker runs; no label changes (`results/2026-10-12_freeze_v2/item1_labels.md`)
+- Done, item 2 (f4f9a74): `config/scoring_seeds.yaml`: development [0], scoring [1, 2, 3, 4, 5]
+- Done, item 3 (2a5baa5): seeds 3-5 labelled tracker only, `scripts/synth/freeze_sweep.py` parts seeds35 and seeds35_reg. 66 tracker runs (spec estimate 105-150; `strong` not run, width_change needs one run), 0 failed, 316 s sweep wall time, peak 4 workers, load 1 min max 5.44 on 32 cores, work space 6.7 -> 7.28 GB. No seed 3-5 label differs from seeds 0-2 (`item3_seeds35.md`)
+- Done, item 4 (5b896cb): P1-P5 as written. Prompt lines; `stage_log_summary` closure residual per hour at moves and elsewhere; `velocity_profile` flank spacing rate and its largest absolute value; `frame_quality` reference (`config/frame_quality_reference.yaml`: contrast median 0.193, lowest 0.155; focus 0.090, 0.073; 45 frames of the 15 clean basis rods); `settings_left` "no further setting" note in remedy results. `tests/test_info_p1_p5.py`, 5 tests; 4 seed-0 tracker outputs added as fixtures
+- Done, item 5 (a3a0dbf): `docs/proposals/2026-10-12_freeze-v2.md`. Open: real-movie `frame_quality` reference only
+- Done, item 6 (da93690): development check, seed 0, 5 diagnostician runs (not a score): 5 of 5 correct outcomes, 5 of 5 terminal faults correct (build session 10: 1 of 5, 0 of 5). 28 steps, 124k input and 13k output tokens, 148 s call time, Claude Code 2.1.293. Table in `results/2026-10-12_freeze_v2/README.md`
+- Done: `python -m pytest -q tests`: 137 passed
+- Setup, not tracked: the worktree reaches `staging/tracks`, `staging/tracks_2026-10-11` and `private/` through directory links to the main checkout. New seed 3-5 outputs are in this worktree's `staging/tracks_2026-10-12/`
+- Demo: `python scripts/synth/eval_freeze.py --out results/2026-10-12_freeze_v2 --parts relabel seeds35` prints both label tables and "Labels that change: none"
+- Done: freeze v2 approved by Andrew, 2026-10-12. Recorded in the proposal header and `docs/decisions.md`. Not tagged
+- Remaining: merge wip/freeze-v2; then the scored runs on seeds 1-5 (25 runs), as a new spec
+- Bottlenecks: the real-movie `frame_quality` reference (Andrew)

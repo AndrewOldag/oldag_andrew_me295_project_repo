@@ -1,0 +1,6 @@
+# Seeds of the five development faults (docs/proposals/2026-10-12_freeze-v2.md, section 1).
+# Decided by Andrew on 2026-10-12 (spec docs/specs/2026-10-12_freeze-decisions-diagnostician-fixes.md).
+# Seed 0: development only. Prompt changes P1-P5 were written from seed 0 traces; a seed 0 run is a check, not a score.
+# Seeds 1-5: scoring. Seeds 3-5 are labelled by tracker-only runs before any prompt change.
+development_seeds: [0]
+scoring_seeds: [1, 2, 3, 4, 5]
