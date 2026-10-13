@@ -9,6 +9,11 @@ Two forms:
   output. Host, paths and Python come from private/runner.yaml (git-ignored;
   template config/runner.example.yaml)
 
+Code goes to one directory per branch on the tracker machine:
+<code_dir>/<branch, "/" replaced by "_">, so sessions on different branches
+cannot overwrite each other's code. The sweep lock stays in the shared work
+directory, one per machine (decisions, 2026-10-12).
+
 Both return a Measurement: the record, the rigidly moved record for the
 invariance check, and the settings used.
 """
@@ -95,15 +100,34 @@ class FieldRunner:
         return Measurement(rec, rigid_moved(rec, *MOVED), settings, truth, notes)
 
 
+def current_branch(root=ROOT):
+    """The checked-out branch of this checkout. Refuses a detached HEAD (no branch to name the code directory)."""
+    b = subprocess.run(["git", "rev-parse", "--abbrev-ref", "HEAD"], cwd=root, capture_output=True,
+                       text=True, check=True).stdout.strip()
+    if not b or b == "HEAD":
+        raise RuntimeError("detached HEAD: check out a branch before syncing code to the tracker machine")
+    return b
+
+
+def branch_code_dir(base, branch):
+    """<base>/<branch with "/" replaced by "_">. One code directory per branch."""
+    name = branch.replace("/", "_")
+    if name in ("", ".", "..") or "\\" in name:
+        raise ValueError(f"branch name {branch!r} cannot name a code directory")
+    return f"{base.rstrip('/')}/{name}"
+
+
 class RemoteRunner:
     form = "remote_job"
 
-    def __init__(self, config=RUNNER_CONFIG, cache=None, couple=False):
-        """couple: tracking mode for every run of this runner (a run setting, not a remedy)."""
+    def __init__(self, config=RUNNER_CONFIG, cache=None, couple=False, branch=None):
+        """couple: tracking mode for every run of this runner (a run setting, not a remedy).
+        branch: names the code directory; default the checked-out branch."""
         self.couple = couple
         cfg = yaml.safe_load(Path(config).read_text())
-        self.host, self.work, self.code, self.python = (cfg["host"], cfg["work_dir"],
-                                                        cfg["code_dir"], cfg["python"])
+        self.host, self.work, self.code_base, self.python = (cfg["host"], cfg["work_dir"],
+                                                             cfg["code_dir"], cfg["python"])
+        self.code = branch_code_dir(self.code_base, branch or current_branch())
         self.cache = Path(cache or ROOT / "staging" / "tracks")
         self.cache.mkdir(parents=True, exist_ok=True)
         self.log = []
@@ -161,7 +185,7 @@ class RemoteRunner:
     def size_root(self):
         """The space the 10 GB limit applies to: the directory holding the work and code directories."""
         import posixpath
-        return posixpath.commonpath([self.work, self.code])
+        return posixpath.commonpath([self.work, self.code_base])
 
     def sweep_start(self, plan, name, tracks="tracks", max_hours=2.0):
         """Write the plan and start sweep.py detached at lowest priority. Refuses while a sweep runs."""
