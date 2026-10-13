@@ -1,0 +1,122 @@
+{
+ "rod": {
+  "case": "growth_zone",
+  "fault": "low_texture",
+  "size": null,
+  "seed": 2
+ },
+ "runner": "remote_job",
+ "baseline": "script",
+ "truth": {
+  "peak_regr_pct_per_h": 43.4,
+  "peak_at_um": 316,
+  "largest_flank_difference_pct_per_h": 0.0
+ },
+ "error_before": {
+  "regr_rms_pct_per_h": 22.448,
+  "regr_max_pct_per_h": 112.874,
+  "regr_covered_um": 895,
+  "flank_difference_rms_pct_per_h": 39.01,
+  "flank_difference_max_pct_per_h": 130.264,
+  "flank_difference_covered_um": 895
+ },
+ "initial_checks": [
+  {
+   "check": "rigid_invariance",
+   "passed": false,
+   "value": 151.84557382204855,
+   "threshold": 2.0,
+   "unit": "%/h",
+   "where_s_px": 420.0,
+   "where_frame_pair": null,
+   "detail": "largest change in regr_minus"
+  },
+  {
+   "check": "closure",
+   "passed": false,
+   "value": 4.502635402788962,
+   "threshold": 1.0,
+   "unit": "px/h",
+   "where_s_px": 435.0192485238991,
+   "where_frame_pair": 14,
+   "detail": "tip path 60.0 px/h; base at s = 435 px; largest single-pair residual at pair 14"
+  },
+  {
+   "check": "plane_sections",
+   "passed": false,
+   "value": 130.26376191201277,
+   "threshold": 3.25,
+   "unit": "%/h",
+   "where_s_px": 360.0,
+   "where_frame_pair": null,
+   "detail": "flank difference 130.26 %/h, predicted 0.00 %/h"
+  }
+ ],
+ "outcome": {
+  "task_id": "rod-1",
+  "agent": "script",
+  "status": "accept",
+  "args": {
+   "confidence": null
+  },
+  "steps": 1,
+  "failed_steps": 0,
+  "calls": 0,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "call_ms": 0
+ },
+ "error_after": {
+  "regr_rms_pct_per_h": 22.448,
+  "regr_max_pct_per_h": 112.874,
+  "regr_covered_um": 895,
+  "flank_difference_rms_pct_per_h": 39.01,
+  "flank_difference_max_pct_per_h": 130.264,
+  "flank_difference_covered_um": 895
+ },
+ "remedies": [],
+ "roll_backs": 0,
+ "final_settings": {
+  "stride": 1,
+  "disk_radius": null,
+  "register": false,
+  "register_from_px": null,
+  "midline_smooth": null,
+  "band_mask": null,
+  "width_free": false,
+  "couple": false
+ },
+ "final_checks": [
+  {
+   "check": "rigid_invariance",
+   "passed": false,
+   "value": 151.84557382204855,
+   "threshold": 2.0,
+   "unit": "%/h",
+   "where_s_px": 420.0,
+   "where_frame_pair": null,
+   "detail": "largest change in regr_minus"
+  },
+  {
+   "check": "closure",
+   "passed": false,
+   "value": 4.502635402788962,
+   "threshold": 1.0,
+   "unit": "px/h",
+   "where_s_px": 435.0192485238991,
+   "where_frame_pair": 14,
+   "detail": "tip path 60.0 px/h; base at s = 435 px; largest single-pair residual at pair 14"
+  },
+  {
+   "check": "plane_sections",
+   "passed": false,
+   "value": 130.26376191201277,
+   "threshold": 3.25,
+   "unit": "%/h",
+   "where_s_px": 360.0,
+   "where_frame_pair": null,
+   "detail": "flank difference 130.26 %/h, predicted 0.00 %/h"
+  }
+ ],
+ "reported": true
+}
