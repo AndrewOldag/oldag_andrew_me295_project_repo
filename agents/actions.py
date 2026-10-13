@@ -161,4 +161,5 @@ DIAGNOSTICIAN = ActionSet("diagnostician", [
 ], notes="Allowed setting per remedy: " + "; ".join(
     f"{r}: {', '.join(s or 'none (leave setting out)' for s in v)}" for r, v in REMEDIES.items()))
 
-ACTION_SETS = {"diagnostician": DIAGNOSTICIAN}
+ACTION_SETS = {"diagnostician": DIAGNOSTICIAN,
+               "single_agent": DIAGNOSTICIAN}   # single-agent baseline: the same actions and lists (2026-10-12)
