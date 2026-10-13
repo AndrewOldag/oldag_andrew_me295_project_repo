@@ -10,5 +10,6 @@
 - Done: `python -m pytest -q tests`: 137 passed
 - Setup, not tracked: the worktree reaches `staging/tracks`, `staging/tracks_2026-10-11` and `private/` through directory links to the main checkout. New seed 3-5 outputs are in this worktree's `staging/tracks_2026-10-12/`
 - Demo: `python scripts/synth/eval_freeze.py --out results/2026-10-12_freeze_v2 --parts relabel seeds35` prints both label tables and "Labels that change: none"
-- Remaining: Andrew approves freeze v2 from `docs/proposals/2026-10-12_freeze-v2.md`; merge wip/freeze-v2; then the scored runs on seeds 1-5 (25 runs), as a new spec
-- Bottlenecks: freeze approval and the real-movie `frame_quality` reference (Andrew)
+- Done: freeze v2 approved by Andrew, 2026-10-12. Recorded in the proposal header and `docs/decisions.md`. Not tagged
+- Remaining: merge wip/freeze-v2; then the scored runs on seeds 1-5 (25 runs), as a new spec
+- Bottlenecks: the real-movie `frame_quality` reference (Andrew)
