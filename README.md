@@ -37,6 +37,11 @@ Course project for AM/ME/CE 295, Caltech, Fall 2026. Start with `CLAUDE.md` and 
 - Runner (`measure/runner.py`), one interface with two forms: `FieldRunner` in process for field-level rods; `RemoteRunner` renders and tracks on the machine that has the tracker. For the remote form copy `config/runner.example.yaml` to `private/runner.yaml` and fill it in (ssh host alias, work and code directories there, tracker env Python)
 - `python scripts/demo_slice.py --fault displacement_exceeds_patch` renders one rod with that fault, tracks and checks it, runs the diagnostician, and prints the truth, the error before and after, and the outcome. Trace and summary in `results/<date>_demo_slice/`. `--no-agent` stops after the first check; `--runner field` runs a field-level rod in process
 
+## Non-LLM baselines (no agent call)
+- Fixed-parameter script and rule-based remedy tree: `agents/baselines.py`. The tree is fixed in `docs/proposals/2026-10-12_remedy-tree.md`. Both use the diagnostician's `Slice` (same remedies, re-runs and roll back) and write the orchestrator's outcome record
+- Development faults at their frozen sizes, seeds 0-2, in rounds: `python scripts/synth/baselines.py next` starts the tracker runs still needed as one sweep (refuses while another sweep holds the lock, and past 200 runs), `status`, `fetch` (to `staging/tracks_baselines/`); repeat until `next` needs nothing. Then `python scripts/synth/baselines.py write --out results/<dir>` writes a trace and a summary per task
+- Scoring: `python scripts/synth/eval_baselines.py --runs results/<dir> [--agent-runs DIR] --out results/<dir>` writes `table.md` and `scores.json` (`measure/score.py`, freeze labels)
+
 ## Tools
 - Root manifest review app: `python scripts/manifest/review_server.py`, then open http://localhost:8295
 
