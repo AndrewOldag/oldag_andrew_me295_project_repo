@@ -1,11 +1,13 @@
 # Scoring tolerance for synthetic rods. Used for scoring only (measure/score.py); never shown to an agent.
 # Approved by Andrew on 2026-10-11 (spec docs/specs/2026-10-11_remedy-fixes-coupled-mode-shared-compute.md, item 5;
-# docs/decisions.md, 2026-10-11). Any change needs his approval.
+# docs/decisions.md, 2026-10-11). Flank-difference value 1.00 approved by Andrew on 2026-10-12 (spec
+# docs/specs/2026-10-12_freeze-decisions-diagnostician-fixes.md). Any change needs his approval.
 # Basis: the proposed absolute 1.0 %/h (results/2026-10-10_repair_criteria/part_c.md; largest clean error 0.77 %/h)
 # left the repaired displacement_exceeds_patch 2x6 rods, which grow twice as fast, at 0.95-0.99 %/h. A fraction
 # of the rod's true peak REGR (from measure.score.truth_summary) gives 1.085 %/h on the standard rods
 # (peak 43.4 %/h) and 2.17 %/h on the 2x6 rods (peak 86.9 %/h).
 status: approved
-approved: 2026-10-11
+approved: 2026-10-12
 regr_rms_fraction_of_true_peak: 0.025     # centre REGR RMS error at most 2.5 % of the rod's true peak REGR
-flank_difference_rms_pct_per_h: 0.5       # flank-difference RMS error, %/h
+flank_difference_rms_pct_per_h: 1.0       # flank-difference RMS error, %/h. Basis rule of 2026-10-10 with the bent rods:
+                                          # largest clean 0.797 (bend_reverse s0, enlarge_patch 2x), rounded up (was 0.5)
