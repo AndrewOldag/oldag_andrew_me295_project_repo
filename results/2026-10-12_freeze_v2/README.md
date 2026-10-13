@@ -24,3 +24,10 @@ Spec: `docs/specs/2026-10-12_freeze-decisions-diagnostician-fixes.md`. Approved 
 | seeds35_reg | 6 | 0 | 27 | 2.61 / 2.93 / 2.70 | 4 | - |
 
 - Work space 6.7 -> 7.28 GB. Sweep wall time so far in this spec: 316 s
+
+## 4. P1-P5 applied (commit 5b896cb)
+- Prompt lines as written in the proposal; info fields in `stage_log_summary`, `velocity_profile`, `frame_quality`; `settings_left` note in the remedy result
+- Tests: `tests/test_info_p1_p5.py`, 5 tests (one per new field on a clean rod and its fault; note after `smooth_midline light`; each prompt line). Fixtures: seed 0 tracker outputs of rigid_drift 0.5, width_change, low_texture 0.03, and clean growth_zone s1 (basis run, has frame quality). Full suite: 137 passed
+
+## 5. Freeze v2
+- `docs/proposals/2026-10-12_freeze-v2.md`. Open: the real-movie `frame_quality` reference only
