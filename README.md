@@ -14,6 +14,7 @@ Course project for AM/ME/CE 295, Caltech, Fall 2026. Start with `CLAUDE.md` and 
 3. Install Claude Code at the version pinned in `config/models.yaml` and sign in with your own Claude seat: `claude auth login`. No API key is used
 4. Check agent calls: `python scripts/check_cli.py`. It prints the Claude Code version, login type, the model that answered, and `OK`
 5. Run the offline tests: `python -m pytest -q tests`
+6. Before the first push, with the agents env active: `sh scripts/hooks/install.sh` installs the pre-push check (`scripts/hooks/pre_push_check.py`; needs `private/blocklist.txt` in the main repo folder)
 
 ## Measurement record, synthetic rods and checker
 - Record format: `docs/context/measurement_record.md`. Code: `measure/record.py`
