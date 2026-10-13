@@ -218,3 +218,15 @@ Required by the course. One entry per work session: done, remaining, bottlenecks
 - Demo: `python scripts/hooks/pre_push_check.py --commits main` prints the one hit and "64 commits scanned, 1 hits"
 - Remaining: merge wip/gatekeeper to main; run `sh scripts/hooks/install.sh` in the main repo folder with the agents env active
 - Bottlenecks: none; merge and hook install wait for Andrew
+
+## 2026-10-12 (build account, diag-review session)
+- Done: read the 5 diagnostician traces of build session 10 (all seed 0) against `agents/prompts/diagnostician.md`, `agents/actions.py`, `measure/info.py`, `checker/checks.py`, `agents/executors.py`. No code changed. 0 diagnostician calls; no `--replay` run (traces were enough)
+- Done: `docs/proposals/2026-10-12_diagnostician-misses.md`. Per run: true fault, info asked, answers, fault named, first divergence
+- Result: terminal fault correct 0 of 5; correct outcome 1 of 5 (low_texture decline); true fault named in a remedy 2 of 5 (displacement_exceeds_patch step 2, midline_jitter steps 3 and 8)
+- Result: causes: a (missing measurement) 2: width_change (no width in any info kind; the "osmotic treatment" rule cannot fire, the task has no treatment field), low_texture (frame_quality has no reference). b (prompt led away) 3: rigid_drift, displacement_exceeds_patch, midline_jitter. c (step limit) 0: the two step-limit runs needed 4-5 and 3-4 steps. d 0; one flag on the midline_jitter label under a 1.00 %/h flank tolerance
+- Result: one belief drives 3 misses: the agent reads "rigid-body invariance" as a drift test. The check adds a known rigid motion; unlogged drift passes it and fails closure
+- Proposals P1-P5 (prompt wording for b, one info field each for a). All change a proposed freeze item: listed as needs Andrew before the freeze. Scoring seeds proposed: seed 0 development only; seeds 1-2 held out (10 runs, labels exist)
+- Done: `python -m pytest -q tests`: 131 passed
+- Demo: `docs/proposals/2026-10-12_diagnostician-misses.md`, summary table at the top
+- Remaining: Andrew's answers on P1-P5 and the seeds; then apply the approved changes before the freeze; score on seeds 1-2
+- Bottlenecks: P1-P5 approval, held-out seeds, frame_quality reference for real movies (Andrew)
