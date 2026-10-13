@@ -1,0 +1,14 @@
+## 2026-10-12 (build account, baselines session)
+- Done: remedy tree written and committed before any run: `docs/proposals/2026-10-12_remedy-tree.md`, commit ea95149. Uses only freeze-list remedies, pass or fail of the approved checks, the 3/4 roll-back rule and step limit 8. No new remedy or threshold needed
+- Done: `agents/baselines.py`: fixed-parameter script (base run, checks recorded not acted on, accept) and remedy tree. Both act on the diagnostician's `Slice` and return its `Outcome`; trace lines in the orchestrator format. `tests/test_baselines.py`: 7 tests. Commit 720f7da
+- Done: `scripts/synth/baselines.py` runs both in rounds from a local cache; each round's missing tracker runs go out as one sweep (`sweep.py` lock and limits; refuses while another sweep runs, and past 200 runs). `scripts/synth/eval_baselines.py` scores summaries with `measure/score.py` unchanged against the freeze labels. README section and two decisions entries. Commits 720f7da, 8dcba30
+- Done: 5 rounds, 108 tracker runs, 0 failed, 472 s sweep wall time; load at most 5.03 on 32 cores; work space 5.67 -> 5.83 GB. No round found the lock held
+- Done: results in `results/2026-10-12_baselines/` (commit 9a2cc03). Correct outcomes: script 6 of 15, remedy tree 15 of 15, diagnostician 1 of 5 (seed 0 runs of 2026-10-11, rescored with the same code; categories unchanged)
+- Done: script: 3 false_accept displacement_exceeds_patch, 3 false_accept low_texture, 2 false_accept and 1 good_report midline_jitter, 3 good_report each for width_change and rigid_drift (accepts with checks failing; the base measurement is within tolerance)
+- Done: tree: 57 steps, 42 remedies applied, 20 roll backs, at most 5 steps, no step limit. Its fault naming (15 of 15) follows from its lists, not from diagnosis
+- Found: `diagnosis_correct` on the last `apply_remedy` gives the diagnostician 1 of 5 (midline_jitter, step-limit run); the 2026-10-11 log says 0 of 5
+- Found: the midline_jitter script result depends on the open flank tolerance: at 0.5 %/h 2 false accepts, at 1.00 all 3 good_report
+- Note: the freeze is still a proposal; the table is scored against it as written. `python -m pytest -q tests`: 138 passed
+- Demo: `python scripts/synth/eval_baselines.py --runs results/2026-10-12_baselines/runs --agent-runs results/2026-10-11c_world_smoothing_freeze/diagnostician --out results/2026-10-12_baselines` prints the fault x method table and totals (needs `staging/tracks_baselines/` for the truth)
+- Remaining: merge wip/baselines; re-score after the freeze is approved (flank tolerance); single-agent baseline after the freeze; diagnostician seeds 1-2 for a like-for-like comparison
+- Bottlenecks: freeze approval and flank tolerance (Andrew). Shared remote code directory: every sweep start syncs this checkout's `measure/` and `scripts/` there, so parallel sessions with different code can overwrite each other's code mid-sweep (Andrew, to decide)
