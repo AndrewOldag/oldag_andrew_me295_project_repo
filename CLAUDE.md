@@ -49,6 +49,7 @@ Lab reports are due every two weeks and are written from this repo. Keep it curr
 - Commit after each piece of work that runs or passes its test. One change per commit. The message says what changed in one line
 - Push after every commit. Participation is graded from commit activity on GitHub, so unpushed work does not count
 - Unfinished work that breaks the README run steps goes on a branch named `wip/<name>`, pushed the same way
+- Parallel sessions write their log entry to docs/running_log_pending/<name>.md on their branch; the coordinator moves it into docs/running_log.md at merge.
 - Before each commit read `git diff --cached` and check it against the first three rules above
 - End of session: log entry written, nothing uncommitted, nothing unpushed. `git status` is clean and `git log origin/main..main` is empty
 
