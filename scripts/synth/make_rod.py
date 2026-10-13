@@ -4,7 +4,7 @@
 
 Writes DIR/<id>.imgdir (tracker input), DIR/<id>_midline.npz (midline source,
 tracker seed, frame-0 mask) and DIR/<id>_truth.npz, and prints <id> and the
-analysis stride.
+analysis stride. Held-out faults are rendered by measure/render_heldout.py.
 """
 import argparse
 import json
@@ -13,12 +13,14 @@ import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
-from measure.render import DEV_FAULTS, build, image_case, rod_id  # noqa: E402
+from measure import render, render_heldout  # noqa: E402
+from measure.render import DEV_FAULTS, rod_id  # noqa: E402
+from measure.render_heldout import HELDOUT_FAULTS  # noqa: E402
 
 ap = argparse.ArgumentParser()
 ap.add_argument("--out", required=True)
 ap.add_argument("--case", default="growth_zone")
-ap.add_argument("--fault", choices=DEV_FAULTS, default=None)
+ap.add_argument("--fault", choices=DEV_FAULTS + HELDOUT_FAULTS, default=None)
 ap.add_argument("--seed", type=int, default=0)
 ap.add_argument("--moved", action="store_true", help="add the rigid motion of the invariance check")
 ap.add_argument("--width-kappa-inv", type=float, default=None, help="width_change curvature 1/K px (default 400)")
@@ -26,6 +28,8 @@ ap.add_argument("--rotation-deg", type=float, default=None, help="rigid_rotation
 ap.add_argument("--size", default=None, help="fault size, see measure.render.fault_settings")
 ap.add_argument("--dry-run", action="store_true", help="print the id and stride only")
 a = ap.parse_args()
+build, image_case = ((render_heldout.build, render_heldout.image_case) if a.fault in HELDOUT_FAULTS
+                     else (render.build, render.image_case))
 t0 = time.time()
 if a.dry_run:
     _, movie = image_case(a.case, a.fault, a.seed, a.moved, a.width_kappa_inv, a.rotation_deg, a.size)
