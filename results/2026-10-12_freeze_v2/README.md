@@ -31,3 +31,21 @@ Spec: `docs/specs/2026-10-12_freeze-decisions-diagnostician-fixes.md`. Approved 
 
 ## 5. Freeze v2
 - `docs/proposals/2026-10-12_freeze-v2.md`. Open: the real-movie `frame_quality` reference only
+
+## 6. Development check, seed 0 (not a score)
+- After the freeze v2 commit (a3a0dbf): one diagnostician run per development fault, seed 0, new prompt and info fields. 5 runs. Seed 0 is the development seed P1-P5 were written from; these runs are not scored and nothing was changed from them
+- Command per run: `python scripts/demo_slice.py --fault <fault> [--size <size>] --seed 0 --out results/2026-10-12_freeze_v2/devcheck`. Trace and summary per run in `devcheck/`
+- Tracker runs as single jobs through `RemoteRunner` (load-checked, lowest priority; cached runs reused)
+
+| Fault | Size | Label | Outcome | Category | Named fault | Correct | Steps | First step naming the true fault | Remedies | Roll backs | Tokens in / out | Call time (s) | Claude Code |
+| :-- | :-- | :-- | :-- | :-- | :-- | :-- | --: | :-- | :-- | --: | :-- | --: | :-- |
+| displacement_exceeds_patch | 2x6 | repairable | accept | good_report | displacement_exceeds_patch | yes | 7 | 2 (apply_remedy change_frame_stride) | frame stride 6 -> 3; frame stride 3 -> 1 | 0 | 31478 / 3592 | 41.6 | 2.1.293 |
+| width_change | 1/400 | repairable | accept | good_report | width_change | yes | 6 | 5 (apply_remedy use_width_free_ratio) | report the centre strain rate and the width-free ratio; plane-sections check skipped | 0 | 27350 / 2380 | 27.6 | 2.1.293 |
+| rigid_drift | 0.5 | repairable | accept | good_report | rigid_drift | yes | 5 | 4 (apply_remedy register_frames) | frames registered on the non-growing tissue (from 305 px from the tip) before tracking | 0 | 21852 / 2109 | 25.6 | 2.1.293 |
+| low_texture | 0.03 | not repairable | decline | correct_decline | low_texture | yes | 3 | 3 (decline) | none | 0 | 11427 / 1195 | 14.9 | 2.1.293 |
+| midline_jitter | 3 | not repairable | decline | correct_decline | midline_jitter | yes | 7 | 6 (apply_remedy smooth_midline) | frames registered on the non-growing tissue (from 305 px from the tip) before tracking; rolled back: frames registered on the non-growing tissue (from 305 px from the tip) before tracking; midline source smoothed (light) | 1 | 32071 / 3485 | 38.3 | 2.1.293 |
+
+- Development check: 5 of 5 correct outcomes; terminal fault correct 5 of 5. Build session 10 (old prompt): 1 of 5 and 0 of 5. Totals: 28 steps, 124k input and 13k output tokens, 148 s call time
+- Good: within the approved tolerance (centre 2.5 % of the true peak, flank 1.00 %/h). After the remedies: 2x6 REGR error 34.67 -> 0.95 %/h (limit 2.17), three passes; width_change 0.40 %/h, plane sections skipped; rigid_drift 0.42 %/h, three passes
+- First step naming the true fault (session 10 in brackets): 2x6 step 2 (2); width_change step 5 (never); rigid_drift step 4 (never); low_texture step 3, the decline (never); midline_jitter step 6 (3)
+- midline_jitter: `register_frames` (named rigid_drift) at step 2 was rolled back; `smooth_midline light` at step 6; decline at step 7: "the remedy cannot be applied again"
