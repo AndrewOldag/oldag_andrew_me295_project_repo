@@ -101,7 +101,7 @@ def main():
         lines.append(f"| {fault} | {size} | {label} | {correct} | " + " | ".join(cells) + " |")
     lines += ["", "## Totals",
               "| Method | Tasks | Correct | good_report | false_accept | correct_decline | unnecessary_decline | "
-              "not_reported | Fault named correctly | Steps | Tracker re-runs (remedies) | Roll backs |",
+              "not_reported | Fault named correctly | Steps | Remedies applied | Roll backs |",
               "| :-- | --: | --: | --: | --: | --: | --: | --: | --: | --: | --: | --: |"]
     for m in methods:
         rs = [r for r in rows if r["method"] == m]
