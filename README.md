@@ -51,6 +51,10 @@ Course project for AM/ME/CE 295, Caltech, Fall 2026. Start with `CLAUDE.md` and 
 - `python scripts/synth/scored_v1.py next --set dev|heldout` starts the tracker runs the script and remedy tree still need as one sweep; `status`, `fetch`; repeat until `next` needs nothing. Then `rules --set S`, `agents --set S --method diagnostician|single_agent` (needs a clean tracked tree; each run records the freeze tag and commit; runs with a summary are skipped), and `eval`, which writes `results/2026-10-12b_scored_v1/table_dev.md`, `table_heldout.md` and `scores.json`
 - Held-out labels: `python scripts/synth/heldout_labels.py start`, `status`, `fetch`, `eval --out results/2026-10-12b_heldout_labels`
 
+## Auditor v1 (scored runs v1, no tracker runs)
+- Reads the cached final records of `results/2026-10-12b_scored_v1/` from `staging/` (the scored runs' caches). Definition: `docs/proposals/2026-10-13_auditor-v1.md`
+- `python scripts/synth/auditor_v1.py views` writes the 8 batch views; `rule` runs the rule auditor; `llm --set dev|heldout [--method M] [--repeat K]` runs the LLM auditor (needs a clean tracked tree); `eval` writes `results/2026-10-13_auditor_v1/scores.md`. Test: `tests/test_auditor.py`
+
 ## Tools
 - Root manifest review app: `python scripts/manifest/review_server.py`, then open http://localhost:8295
 
