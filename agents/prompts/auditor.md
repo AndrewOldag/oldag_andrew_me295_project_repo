@@ -9,6 +9,7 @@ What each run record holds:
   - Closure: the tip motion from the midline and stage log matches the tip motion from the tracked kinematics
   - Plane sections: the flank difference matches flank spacing times the curvature rate, for constant width. It is not run when the width-free ratio is reported
 - `remedies_kept`, `roll_backs`, `steps`, `final_settings`: how the final measurement was made
+  - Rates are computed from the frame times, in %/h. A frame-stride change sets which frames are paired, not the time base, so it does not rescale the strain rate
 - `summaries` of the final measurement, window means: centre strain-rate (REGR) peak and its distance from the tip, growth-zone length (REGR above 10 % of its peak), largest flank difference and its position, largest width-free ratio when that ratio is reported
 - In the batch table, each summary comes with its robust z in the batch: (value - batch median) / (1.4826 MAD). A large |z| marks a measurement unlike the others. When the batch MAD is very small, a large |z| can be a small difference; look at the difference itself, against the value
 

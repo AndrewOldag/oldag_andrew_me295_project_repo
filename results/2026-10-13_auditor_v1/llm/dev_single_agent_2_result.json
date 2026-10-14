@@ -1,0 +1,51 @@
+{
+ "set": "dev",
+ "method": "single_agent",
+ "n": 2,
+ "commit": "b1055da",
+ "claude_code": "2.1.293",
+ "model": "claude-opus-5-5",
+ "wall_s": 63.1,
+ "outcome": {
+  "task_id": "batch-1",
+  "agent": "auditor",
+  "status": "report",
+  "args": {
+   "text": "Batch: 25 runs. 6 accepted (r05, r13, r16, r17, r19, r24), 6 declined (r04, r09, r10, r11, r15, r22), 13 not reported.\nFlagged: none.\nCleared: all 6 accepted runs.\n- All 6 pass rigid-body invariance (0.44\u20130.82 %/h, threshold 2.0) and closure (0.06\u20130.45 px/h, threshold 1.0).\n- Their centre REGR peaks are 41.97\u201342.51 %/h, all at 316 \u00b5m from the tip, with growth zones of 526\u2013547 \u00b5m. Every summary has |z| \u2264 1.4.\n- All 6 report the width-free ratio. In r05, r13, r16, r19 and r24, plane sections is just above its threshold (3.43\u20133.86 vs 3.25 %/h), but this check is not run under the width-free ratio. These five kept only the width-free remedy. Their largest flank difference is about \u22123.5 %/h and their largest width-free ratio about \u22120.45, both within the batch spread.\n- r17 also kept frame registration on the non-growing tissue. Registration plus the width-free ratio made its checks pass, which is the normal path.\nSince no run was flagged, there is no common pattern among flagged runs. Batch context: the declined runs and most not-reported runs failed rigid invariance and closure by wide margins. Their strain-rate profiles differ from the batch: REGR peak 51\u2013173 %/h, peak position 116\u2013842 \u00b5m and growth zone 11\u2013400 \u00b5m."
+  },
+  "steps": 4,
+  "failed_steps": 0,
+  "calls": 4,
+  "input_tokens": 57102,
+  "output_tokens": 5625,
+  "call_ms": 58310
+ },
+ "decisions": {
+  "r05": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r13": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r16": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r17": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r19": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r24": {
+   "decision": "clear",
+   "order": 1
+  }
+ },
+ "undecided": [],
+ "report": "Batch: 25 runs. 6 accepted (r05, r13, r16, r17, r19, r24), 6 declined (r04, r09, r10, r11, r15, r22), 13 not reported.\nFlagged: none.\nCleared: all 6 accepted runs.\n- All 6 pass rigid-body invariance (0.44\u20130.82 %/h, threshold 2.0) and closure (0.06\u20130.45 px/h, threshold 1.0).\n- Their centre REGR peaks are 41.97\u201342.51 %/h, all at 316 \u00b5m from the tip, with growth zones of 526\u2013547 \u00b5m. Every summary has |z| \u2264 1.4.\n- All 6 report the width-free ratio. In r05, r13, r16, r19 and r24, plane sections is just above its threshold (3.43\u20133.86 vs 3.25 %/h), but this check is not run under the width-free ratio. These five kept only the width-free remedy. Their largest flank difference is about \u22123.5 %/h and their largest width-free ratio about \u22120.45, both within the batch spread.\n- r17 also kept frame registration on the non-growing tissue. Registration plus the width-free ratio made its checks pass, which is the normal path.\nSince no run was flagged, there is no common pattern among flagged runs. Batch context: the declined runs and most not-reported runs failed rigid invariance and closure by wide margins. Their strain-rate profiles differ from the batch: REGR peak 51\u2013173 %/h, peak position 116\u2013842 \u00b5m and growth zone 11\u2013400 \u00b5m."
+}

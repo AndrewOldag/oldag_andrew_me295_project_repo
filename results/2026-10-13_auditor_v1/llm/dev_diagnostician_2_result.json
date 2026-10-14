@@ -1,0 +1,117 @@
+{
+ "set": "dev",
+ "method": "diagnostician",
+ "n": 2,
+ "commit": "b1055da",
+ "claude_code": "2.1.293",
+ "model": "claude-opus-5-5",
+ "wall_s": 77.8,
+ "outcome": {
+  "task_id": "batch-1",
+  "agent": "auditor",
+  "status": "report",
+  "args": {
+   "text": "Batch: 25 runs. 15 accepted, 9 declined and 1 not reported (r23).\nFlagged, 5 runs (remedy_pattern): r02, r05, r11, r12 and r25. All five passed every final check. Each one kept the same two frame-stride changes (6\u21923, then 3\u21921). Each one's centre strain-rate (REGR) peak is 83.9\u201384.3 %/h, about twice the batch median of 42.44 %/h. Their peak position (316 \u00b5m), growth-zone length (537\u2013547 \u00b5m) and flank difference match the batch.\nWhat the flagged runs share: five roots with the same remedy all came out at double the strain rate with the batch's profile shape. That points to a time-scale error from the stride change (the frame interval probably wasn't rescaled), not to faster roots. Check the frame interval used after the stride change before reporting these runs.\nCleared, 10 runs: r07, r08, r13, r14, r15, r17, r18, r19, r21 and r22. All passed rigid-body invariance and closure, and their REGR peak, peak position, growth-zone length and flank difference match the batch. Plane sections passed where it was run. It wasn't run for the five width-free-ratio runs, as expected. The large z-scores on r17 and r18's width-free ratio come from a very small batch MAD (0.005): the values differ from the median by only about 0.025."
+  },
+  "steps": 8,
+  "failed_steps": 0,
+  "calls": 8,
+  "input_tokens": 124760,
+  "output_tokens": 5686,
+  "call_ms": 64993
+ },
+ "decisions": {
+  "r02": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "remedy_pattern",
+   "evidence": [
+    "remedies_kept",
+    "final_settings",
+    "centre_peak_regr_pct_per_h"
+   ]
+  },
+  "r05": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "remedy_pattern",
+   "evidence": [
+    "remedies_kept",
+    "final_settings",
+    "centre_peak_regr_pct_per_h"
+   ]
+  },
+  "r11": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "remedy_pattern",
+   "evidence": [
+    "remedies_kept",
+    "final_settings",
+    "centre_peak_regr_pct_per_h"
+   ]
+  },
+  "r12": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "remedy_pattern",
+   "evidence": [
+    "remedies_kept",
+    "final_settings",
+    "centre_peak_regr_pct_per_h"
+   ]
+  },
+  "r25": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "remedy_pattern",
+   "evidence": [
+    "remedies_kept",
+    "final_settings",
+    "centre_peak_regr_pct_per_h"
+   ]
+  },
+  "r07": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r08": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r13": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r14": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r15": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r17": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r18": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r19": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r21": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r22": {
+   "decision": "clear",
+   "order": 2
+  }
+ },
+ "undecided": [],
+ "report": "Batch: 25 runs. 15 accepted, 9 declined and 1 not reported (r23).\nFlagged, 5 runs (remedy_pattern): r02, r05, r11, r12 and r25. All five passed every final check. Each one kept the same two frame-stride changes (6\u21923, then 3\u21921). Each one's centre strain-rate (REGR) peak is 83.9\u201384.3 %/h, about twice the batch median of 42.44 %/h. Their peak position (316 \u00b5m), growth-zone length (537\u2013547 \u00b5m) and flank difference match the batch.\nWhat the flagged runs share: five roots with the same remedy all came out at double the strain rate with the batch's profile shape. That points to a time-scale error from the stride change (the frame interval probably wasn't rescaled), not to faster roots. Check the frame interval used after the stride change before reporting these runs.\nCleared, 10 runs: r07, r08, r13, r14, r15, r17, r18, r19, r21 and r22. All passed rigid-body invariance and closure, and their REGR peak, peak position, growth-zone length and flank difference match the batch. Plane sections passed where it was run. It wasn't run for the five width-free-ratio runs, as expected. The large z-scores on r17 and r18's width-free ratio come from a very small batch MAD (0.005): the values differ from the median by only about 0.025."
+}
