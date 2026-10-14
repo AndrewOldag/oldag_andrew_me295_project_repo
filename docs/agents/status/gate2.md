@@ -1,11 +1,12 @@
 # gate2
-Updated: 2026-10-14 01:40 (local)
+Updated: 2026-10-14 04:05 (local)
 Lane: research
 Branch: status/gate2
 Last inbox item done: 5
 State: working
-Now: item 3, synthetic validation v2 running on the VM: 2 phantoms x 2 trackers, about 80 windows each; about 7 h
+Now: item 3, synthetic validation v2 running on the VM: growth phantom 10 of about 80 windows per tracker, bend phantom not started; about 11 h left (VM was suspended about 3 h)
 Done since last update:
+- Inbox checked: no new items after 5
 - Validation v1 stopped after 13 windows per tracker: a pipeline defect found (curvature from tracked nodes near the tip). Fixed; dated entry in the plan file; v1 kept, not used
 - Full-run code checked on the tracker machine: smoke run, 1 worker, 2 windows, completed; no lock taken, lock checked first
 - Full-run scope set to the gate windows (stimulated: 1.5-3 h; controls: non-overlapping windows, interval 1 after the fix and interval 2). Every-frame windows for all 7 roots estimated over 48 h
