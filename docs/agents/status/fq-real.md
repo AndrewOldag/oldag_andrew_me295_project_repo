@@ -3,8 +3,8 @@ Updated: 2026-10-13 (local)
 Lane: course
 Branch: wip/fq-real
 Last inbox item done: 4
-State: waiting on Andrew
-Now: B4 stopped: separation check failed
+State: working
+Now: inbox item 5: provisional real reference in config, info.py, tests
 Done since last update:
 - Labels read (Andrew, in chat): 24 clean, 5 unsure, 1 not_clean. fq34 left out on Andrew's instruction
 - Reference candidate from 24 clean windows (72 frames): texture_contrast median 0.0648, lowest 0.0439; focus median 0.0286, lowest 0.0213
