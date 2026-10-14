@@ -30,6 +30,7 @@ A growing plant root is a slender rod whose material generates its own strain: t
 - Private context (machines, access, data layout, other people's comments) lives in `private/`, which is git-ignored. Read it. Never copy from it into a tracked file
 - Nothing unpublished from other lab work appears in this repo or in anything submitted for the course. If unsure whether something is published, ask Andrew
 - Raw data is not in this repo. Never copy a whole experiment folder to the build machine. Stage one root at a time and delete staged images after use
+- Real movies: only roots with `include` yes in `manifest/root_manifest.csv`, and only time inside `usable_from_h` to `usable_to_h`. Nothing outside these windows is used for labeling, training, thresholds, tests or results (Andrew, 2026-10-13)
 - Tracking runs on the lab compute server by default. The computing cluster is used only after Andrew approves a cost estimate
 - No Claude session deletes, moves or renames any file or folder on the lab server, by any means. Andrew deletes there himself, at the end of the project. Only exception: the lock files `scripts/synth/sweep.py` creates and removes for its own sweep. If a step needs a server delete, stop and tell Andrew (Andrew, 2026-10-13)
 - The lab compute server is shared. Every job there: at most 4 single-thread workers, lowest priority, load checked before and between runs, one sweep at a time. Limits in `docs/decisions.md`, 2026-10-11
