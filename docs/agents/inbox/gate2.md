@@ -23,3 +23,4 @@
    - Sweep lock left in place at exit: accepted
    - Plan section 6 comparisons: skip. Record in the plan as not run, by decision
    - Vault: write the notes to the gate2 folder on the VM; Andrew copies them
+7. Andrew, 2026-10-14: drop contact checked by eye on the crops; no contact in any frame. No exclusion. Record it in the plan as a dated note. Validation keeps running on the VM; do not move or restart it
