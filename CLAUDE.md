@@ -42,6 +42,10 @@ A growing plant root is a slender rod whose material generates its own strain: t
 - Write in a plain, flat, declarative style. Short bullets. No flourish
 - Follow the logging and pushing routine below in every session
 
+## Agents
+- Every session has a name. Its instructions are in `docs/agents/inbox/<name>.md` on `main`; it reports in `docs/agents/status/<name>.md`. Protocol in `docs/agents/README.md`
+- When Andrew says `check github`, follow that protocol
+
 ## Logging and pushing
 Lab reports are due every two weeks and are written from this repo. Keep it current so that a report is a copy of the log.
 
