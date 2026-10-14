@@ -1,0 +1,77 @@
+{
+ "set": "heldout",
+ "method": "remedy_tree",
+ "n": 2,
+ "commit": "23d93ef",
+ "claude_code": "2.1.293",
+ "model": "claude-opus-5-5",
+ "wall_s": 56.4,
+ "outcome": {
+  "task_id": "batch-1",
+  "agent": "auditor",
+  "status": "report",
+  "args": {
+   "text": "Batch: 15 runs. 9 accepted (r02, r03, r06, r08, r10, r11, r12, r13, r14) and 6 declined (r01, r04, r05, r07, r09, r15).\nFlagged (2):\n- r10, reason width_free_ratio_used. Its largest width-free ratio is -1.142, against a batch median of -0.351 (z -8.75). Rigid invariance only just passes (1.934 against 2.0), and that was after the tracker disk radius went from 15 to 30 px and after 2 roll-backs.\n- r14, reason summary_outlier. Its strain-rate profile has a different shape from the other roots. The growth zone is 295 \u00b5m against 526 \u00b5m (z -14.16). The peak is at 358 \u00b5m (z 2.83). The REGR peak is 67.66 %/h (z 26.49). Its width-free ratio is +0.619, the opposite sign from every other root (z 10.73).\nCleared (7): r02, r03, r06, r08, r11, r12, r13. All checks that were run passed. Peak position, growth-zone length and flank difference are close to the batch. r03's higher REGR peak (48.86 %/h) comes with a normal profile shape, so it is read as a faster root.\nWhat the flagged runs share: both were reported with the width-free ratio, and in both that ratio is far from the batch. Both also kept 2 remedies after roll-backs and have a high centre REGR peak."
+  },
+  "steps": 5,
+  "failed_steps": 0,
+  "calls": 5,
+  "input_tokens": 53154,
+  "output_tokens": 4522,
+  "call_ms": 50222
+ },
+ "decisions": {
+  "r10": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "width_free_ratio_used",
+   "evidence": [
+    "width_free_ratio_max",
+    "rigid_invariance",
+    "final_settings",
+    "roll_backs"
+   ]
+  },
+  "r14": {
+   "decision": "flag",
+   "order": 2,
+   "reason": "summary_outlier",
+   "evidence": [
+    "growth_zone_length_um",
+    "centre_peak_at_um",
+    "centre_peak_regr_pct_per_h",
+    "width_free_ratio_max"
+   ]
+  },
+  "r02": {
+   "decision": "clear",
+   "order": 3
+  },
+  "r03": {
+   "decision": "clear",
+   "order": 3
+  },
+  "r06": {
+   "decision": "clear",
+   "order": 3
+  },
+  "r08": {
+   "decision": "clear",
+   "order": 3
+  },
+  "r11": {
+   "decision": "clear",
+   "order": 3
+  },
+  "r12": {
+   "decision": "clear",
+   "order": 3
+  },
+  "r13": {
+   "decision": "clear",
+   "order": 3
+  }
+ },
+ "undecided": [],
+ "report": "Batch: 15 runs. 9 accepted (r02, r03, r06, r08, r10, r11, r12, r13, r14) and 6 declined (r01, r04, r05, r07, r09, r15).\nFlagged (2):\n- r10, reason width_free_ratio_used. Its largest width-free ratio is -1.142, against a batch median of -0.351 (z -8.75). Rigid invariance only just passes (1.934 against 2.0), and that was after the tracker disk radius went from 15 to 30 px and after 2 roll-backs.\n- r14, reason summary_outlier. Its strain-rate profile has a different shape from the other roots. The growth zone is 295 \u00b5m against 526 \u00b5m (z -14.16). The peak is at 358 \u00b5m (z 2.83). The REGR peak is 67.66 %/h (z 26.49). Its width-free ratio is +0.619, the opposite sign from every other root (z 10.73).\nCleared (7): r02, r03, r06, r08, r11, r12, r13. All checks that were run passed. Peak position, growth-zone length and flank difference are close to the batch. r03's higher REGR peak (48.86 %/h) comes with a normal profile shape, so it is read as a faster root.\nWhat the flagged runs share: both were reported with the width-free ratio, and in both that ratio is far from the batch. Both also kept 2 remedies after roll-backs and have a high centre REGR peak."
+}

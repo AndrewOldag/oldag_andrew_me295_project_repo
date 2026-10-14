@@ -1,0 +1,61 @@
+{
+ "set": "heldout",
+ "method": "diagnostician",
+ "n": 1,
+ "commit": "23d93ef",
+ "claude_code": "2.1.293",
+ "model": "claude-opus-5-5",
+ "wall_s": 91.6,
+ "outcome": {
+  "task_id": "batch-1",
+  "agent": "auditor",
+  "status": "report",
+  "args": {
+   "text": "Batch: 15 runs, 5 accepted (r02, r06, r07, r10, r11), 10 declined.\nFlagged (remedy_pattern): r06 and r07. Both passed all three checks and their summaries are close to the batch. However, both kept frame registration on tissue labelled \"non-growing\", starting 310 px (r06) and 315 px (r07) from the tip. Their REGR peak is at 316 \u00b5m and their growth zone is about 537\u2013547 \u00b5m long, so the registration region seems to lie inside the growing zone. That would bias the velocity and strain-rate field and make the rigid-invariance pass weak evidence (r07: 1.873 against a 2.0 threshold). This rests on an assumed scale of about 1 \u00b5m per px; the records give no pixel scale, so confirming the scale should settle the flag.\nCleared: r02, r10, r11. Rigid invariance and closure pass, all summaries are close to the batch (|z| \u2264 0.75), there are no roll-backs, and the only kept remedy is the width-free ratio. Their skipped plane-sections values (9.0\u201311.3 %/h) are what a width change produces, and that is why the width-free ratio was used.\nWhat the flagged runs share: registration on a reference region that appears to overlap the growth zone, not a failed check or an outlier summary."
+  },
+  "steps": 10,
+  "failed_steps": 0,
+  "calls": 10,
+  "input_tokens": 119061,
+  "output_tokens": 6714,
+  "call_ms": 77801
+ },
+ "decisions": {
+  "r02": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r06": {
+   "decision": "flag",
+   "order": 2,
+   "reason": "remedy_pattern",
+   "evidence": [
+    "remedies_kept",
+    "final_settings",
+    "centre_peak_at_um",
+    "growth_zone_length_um"
+   ]
+  },
+  "r07": {
+   "decision": "flag",
+   "order": 2,
+   "reason": "remedy_pattern",
+   "evidence": [
+    "remedies_kept",
+    "final_settings",
+    "centre_peak_at_um",
+    "growth_zone_length_um"
+   ]
+  },
+  "r10": {
+   "decision": "clear",
+   "order": 3
+  },
+  "r11": {
+   "decision": "clear",
+   "order": 4
+  }
+ },
+ "undecided": [],
+ "report": "Batch: 15 runs, 5 accepted (r02, r06, r07, r10, r11), 10 declined.\nFlagged (remedy_pattern): r06 and r07. Both passed all three checks and their summaries are close to the batch. However, both kept frame registration on tissue labelled \"non-growing\", starting 310 px (r06) and 315 px (r07) from the tip. Their REGR peak is at 316 \u00b5m and their growth zone is about 537\u2013547 \u00b5m long, so the registration region seems to lie inside the growing zone. That would bias the velocity and strain-rate field and make the rigid-invariance pass weak evidence (r07: 1.873 against a 2.0 threshold). This rests on an assumed scale of about 1 \u00b5m per px; the records give no pixel scale, so confirming the scale should settle the flag.\nCleared: r02, r10, r11. Rigid invariance and closure pass, all summaries are close to the batch (|z| \u2264 0.75), there are no roll-backs, and the only kept remedy is the width-free ratio. Their skipped plane-sections values (9.0\u201311.3 %/h) are what a width change produces, and that is why the width-free ratio was used.\nWhat the flagged runs share: registration on a reference region that appears to overlap the growth zone, not a failed check or an outlier summary."
+}
