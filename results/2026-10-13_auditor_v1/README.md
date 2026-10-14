@@ -12,7 +12,7 @@ Spec `docs/specs/2026-10-13_auditor-v1-real-frame-quality-labels.md`, Task A. De
 
 ## Runs
 - 8 batches: 4 methods x (dev 25 runs, held-out 15 runs)
-- Rule auditor: flags an accepted run on a failed final check or |robust z| > 3 (cutoff provisional)
+- Rule auditor: flags an accepted run on a failed final check or |robust z| > 3 (cutoff fixed, Andrew, 2026-10-14)
 - LLM auditor: `claude-opus-5-5`, Claude Code 2.1.293, effort high, step limit 20 per batch
 - Dev: 3 prompt rounds x 4 batches = 12 calls (of 40). Prompt changes per round in the proposal
 - Held-out: prompt of aa8483a (system prompt sha256 prefix `2541926380a9e924` in all 74 held-out calls), 4 batches x 3 = 12 calls. 24 auditor calls in all (limit 52). One call = one auditor run on one batch
