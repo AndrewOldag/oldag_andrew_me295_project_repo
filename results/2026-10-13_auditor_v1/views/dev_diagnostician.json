@@ -1,0 +1,2755 @@
+{
+ "batch": "dev_diagnostician",
+ "table": {
+  "columns": {
+   "checks": "check: [value, threshold, passed]; passed null = not run",
+   "summaries": "summary: [value, robust z in this batch]"
+  },
+  "batch_median_mad": {
+   "centre_peak_regr_pct_per_h": {
+    "median": 42.44,
+    "mad": 0.27
+   },
+   "centre_peak_at_um": {
+    "median": 316.0,
+    "mad": 0.0
+   },
+   "growth_zone_length_um": {
+    "median": 537.0,
+    "mad": 10.0
+   },
+   "flank_difference_max_pct_per_h": {
+    "median": -0.7,
+    "mad": 1.86
+   },
+   "flank_difference_at_um": {
+    "median": 189.0,
+    "mad": 137.0
+   },
+   "width_free_ratio_max": {
+    "median": -0.445,
+    "mad": 0.005
+   }
+  },
+  "runs": [
+   {
+    "run_id": "r01",
+    "status": "decline",
+    "checks": {
+     "rigid_invariance": [
+      107.127,
+      2.0,
+      false
+     ],
+     "closure": [
+      3.685,
+      1.0,
+      false
+     ],
+     "plane_sections": [
+      133.816,
+      3.25,
+      false
+     ]
+    },
+    "steps": 3,
+    "remedies_kept": 0,
+    "roll_backs": 0,
+    "width_free": false,
+    "summaries": {
+     "centre_peak_regr_pct_per_h": [
+      51.12,
+      21.68
+     ],
+     "centre_peak_at_um": [
+      284.0,
+      -0.75
+     ],
+     "growth_zone_length_um": [
+      358.0,
+      -12.07
+     ],
+     "flank_difference_max_pct_per_h": [
+      -133.82,
+      -48.27
+     ],
+     "flank_difference_at_um": [
+      874.0,
+      3.37
+     ],
+     "width_free_ratio_max": [
+      null,
+      null
+     ]
+    }
+   },
+   {
+    "run_id": "r02",
+    "status": "accept",
+    "checks": {
+     "rigid_invariance": [
+      0.589,
+      2.0,
+      true
+     ],
+     "closure": [
+      0.109,
+      1.0,
+      true
+     ],
+     "plane_sections": [
+      0.51,
+      3.25,
+      true
+     ]
+    },
+    "steps": 6,
+    "remedies_kept": 2,
+    "roll_backs": 0,
+    "width_free": false,
+    "summaries": {
+     "centre_peak_regr_pct_per_h": [
+      83.88,
+      103.52
+     ],
+     "centre_peak_at_um": [
+      316.0,
+      0.0
+     ],
+     "growth_zone_length_um": [
+      537.0,
+      0.0
+     ],
+     "flank_difference_max_pct_per_h": [
+      0.51,
+      0.44
+     ],
+     "flank_difference_at_um": [
+      589.0,
+      1.97
+     ],
+     "width_free_ratio_max": [
+      null,
+      null
+     ]
+    }
+   },
+   {
+    "run_id": "r03",
+    "status": "decline",
+    "checks": {
+     "rigid_invariance": [
+      0.583,
+      2.0,
+      true
+     ],
+     "closure": [
+      4.173,
+      1.0,
+      false
+     ],
+     "plane_sections": [
+      20.938,
+      3.25,
+      false
+     ]
+    },
+    "steps": 7,
+    "remedies_kept": 1,
+    "roll_backs": 0,
+    "width_free": false,
+    "summaries": {
+     "centre_peak_regr_pct_per_h": [
+      42.41,
+      -0.07
+     ],
+     "centre_peak_at_um": [
+      316.0,
+      0.0
+     ],
+     "growth_zone_length_um": [
+      526.0,
+      -0.74
+     ],
+     "flank_difference_max_pct_per_h": [
+      -1.41,
+      -0.26
+     ],
+     "flank_difference_at_um": [
+      410.0,
+      1.09
+     ],
+     "width_free_ratio_max": [
+      null,
+      null
+     ]
+    }
+   },
+   {
+    "run_id": "r04",
+    "status": "decline",
+    "checks": {
+     "rigid_invariance": [
+      76.694,
+      2.0,
+      false
+     ],
+     "closure": [
+      1.391,
+      1.0,
+      false
+     ],
+     "plane_sections": [
+      69.876,
+      3.25,
+      false
+     ]
+    },
+    "steps": 3,
+    "remedies_kept": 0,
+    "roll_backs": 0,
+    "width_free": false,
+    "summaries": {
+     "centre_peak_regr_pct_per_h": [
+      62.68,
+      50.56
+     ],
+     "centre_peak_at_um": [
+      379.0,
+      1.47
+     ],
+     "growth_zone_length_um": [
+      211.0,
+      -21.99
+     ],
+     "flank_difference_max_pct_per_h": [
+      -69.88,
+      -25.09
+     ],
+     "flank_difference_at_um": [
+      853.0,
+      3.27
+     ],
+     "width_free_ratio_max": [
+      null,
+      null
+     ]
+    }
+   },
+   {
+    "run_id": "r05",
+    "status": "accept",
+    "checks": {
+     "rigid_invariance": [
+      0.773,
+      2.0,
+      true
+     ],
+     "closure": [
+      0.047,
+      1.0,
+      true
+     ],
+     "plane_sections": [
+      0.573,
+      3.25,
+      true
+     ]
+    },
+    "steps": 6,
+    "remedies_kept": 2,
+    "roll_backs": 0,
+    "width_free": false,
+    "summaries": {
+     "centre_peak_regr_pct_per_h": [
+      84.2,
+      104.32
+     ],
+     "centre_peak_at_um": [
+      316.0,
+      0.0
+     ],
+     "growth_zone_length_um": [
+      537.0,
+      0.0
+     ],
+     "flank_difference_max_pct_per_h": [
+      -0.57,
+      0.05
+     ],
+     "flank_difference_at_um": [
+      926.0,
+      3.63
+     ],
+     "width_free_ratio_max": [
+      null,
+      null
+     ]
+    }
+   },
+   {
+    "run_id": "r06",
+    "status": "decline",
+    "checks": {
+     "rigid_invariance": [
+      139.884,
+      2.0,
+      false
+     ],
+     "closure": [
+      6.861,
+      1.0,
+      false
+     ],
+     "plane_sections": [
+      86.56,
+      3.25,
+      false
+     ]
+    },
+    "steps": 3,
+    "remedies_kept": 0,
+    "roll_backs": 0,
+    "width_free": false,
+    "summaries": {
+     "centre_peak_regr_pct_per_h": [
+      71.42,
+      72.4
+     ],
+     "centre_peak_at_um": [
+      842.0,
+      12.31
+     ],
+     "growth_zone_length_um": [
+      11.0,
+      -35.48
+     ],
+     "flank_difference_max_pct_per_h": [
+      86.56,
+      31.64
+     ],
+     "flank_difference_at_um": [
+      189.0,
+      0.0
+     ],
+     "width_free_ratio_max": [
+      null,
+      null
+     ]
+    }
+   },
+   {
+    "run_id": "r07",
+    "status": "accept",
+    "checks": {
+     "rigid_invariance": [
+      0.863,
+      2.0,
+      true
+     ],
+     "closure": [
+      0.318,
+      1.0,
+      true
+     ],
+     "plane_sections": [
+      0.658,
+      3.25,
+      true
+     ]
+    },
+    "steps": 3,
+    "remedies_kept": 1,
+    "roll_backs": 0,
+    "width_free": false,
+    "summaries": {
+     "centre_peak_regr_pct_per_h": [
+      42.44,
+      0.0
+     ],
+     "centre_peak_at_um": [
+      316.0,
+      0.0
+     ],
+     "growth_zone_length_um": [
+      547.0,
+      0.67
+     ],
+     "flank_difference_max_pct_per_h": [
+      0.75,
+      0.53
+     ],
+     "flank_difference_at_um": [
+      21.0,
+      -0.83
+     ],
+     "width_free_ratio_max": [
+      null,
+      null
+     ]
+    }
+   },
+   {
+    "run_id": "r08",
+    "status": "accept",
+    "checks": {
+     "rigid_invariance": [
+      0.612,
+      2.0,
+      true
+     ],
+     "closure": [
+      0.063,
+      1.0,
+      true
+     ],
+     "plane_sections": [
+      3.835,
+      3.25,
+      null
+     ]
+    },
+    "steps": 5,
+    "remedies_kept": 1,
+    "roll_backs": 0,
+    "width_free": true,
+    "summaries": {
+     "centre_peak_regr_pct_per_h": [
+      42.3,
+      -0.35
+     ],
+     "centre_peak_at_um": [
+      316.0,
+      0.0
+     ],
+     "growth_zone_length_um": [
+      537.0,
+      0.0
+     ],
+     "flank_difference_max_pct_per_h": [
+      -3.84,
+      -1.14
+     ],
+     "flank_difference_at_um": [
+      53.0,
+      -0.67
+     ],
+     "width_free_ratio_max": [
+      -0.44,
+      0.67
+     ]
+    }
+   },
+   {
+    "run_id": "r09",
+    "status": "decline",
+    "checks": {
+     "rigid_invariance": [
+      0.807,
+      2.0,
+      true
+     ],
+     "closure": [
+      3.79,
+      1.0,
+      false
+     ],
+     "plane_sections": [
+      36.164,
+      3.25,
+      false
+     ]
+    },
+    "steps": 6,
+    "remedies_kept": 0,
+    "roll_backs": 1,
+    "width_free": false,
+    "summaries": {
+     "centre_peak_regr_pct_per_h": [
+      42.04,
+      -1.0
+     ],
+     "centre_peak_at_um": [
+      326.0,
+      0.23
+     ],
+     "growth_zone_length_um": [
+      537.0,
+      0.0
+     ],
+     "flank_difference_max_pct_per_h": [
+      -1.72,
+      -0.37
+     ],
+     "flank_difference_at_um": [
+      21.0,
+      -0.83
+     ],
+     "width_free_ratio_max": [
+      null,
+      null
+     ]
+    }
+   },
+   {
+    "run_id": "r10",
+    "status": "decline",
+    "checks": {
+     "rigid_invariance": [
+      0.865,
+      2.0,
+      true
+     ],
+     "closure": [
+      2.679,
+      1.0,
+      false
+     ],
+     "plane_sections": [
+      37.176,
+      3.25,
+      false
+     ]
+    },
+    "steps": 7,
+    "remedies_kept": 1,
+    "roll_backs": 1,
+    "width_free": false,
+    "summaries": {
+     "centre_peak_regr_pct_per_h": [
+      42.39,
+      -0.12
+     ],
+     "centre_peak_at_um": [
+      316.0,
+      0.0
+     ],
+     "growth_zone_length_um": [
+      526.0,
+      -0.74
+     ],
+     "flank_difference_max_pct_per_h": [
+      1.23,
+      0.7
+     ],
+     "flank_difference_at_um": [
+      147.0,
+      -0.21
+     ],
+     "width_free_ratio_max": [
+      null,
+      null
+     ]
+    }
+   },
+   {
+    "run_id": "r11",
+    "status": "accept",
+    "checks": {
+     "rigid_invariance": [
+      0.664,
+      2.0,
+      true
+     ],
+     "closure": [
+      0.181,
+      1.0,
+      true
+     ],
+     "plane_sections": [
+      0.621,
+      3.25,
+      true
+     ]
+    },
+    "steps": 6,
+    "remedies_kept": 2,
+    "roll_backs": 0,
+    "width_free": false,
+    "summaries": {
+     "centre_peak_regr_pct_per_h": [
+      84.25,
+      104.45
+     ],
+     "centre_peak_at_um": [
+      316.0,
+      0.0
+     ],
+     "growth_zone_length_um": [
+      537.0,
+      0.0
+     ],
+     "flank_difference_max_pct_per_h": [
+      -0.62,
+      0.03
+     ],
+     "flank_difference_at_um": [
+      831.0,
+      3.16
+     ],
+     "width_free_ratio_max": [
+      null,
+      null
+     ]
+    }
+   },
+   {
+    "run_id": "r12",
+    "status": "accept",
+    "checks": {
+     "rigid_invariance": [
+      0.531,
+      2.0,
+      true
+     ],
+     "closure": [
+      0.111,
+      1.0,
+      true
+     ],
+     "plane_sections": [
+      0.535,
+      3.25,
+      true
+     ]
+    },
+    "steps": 6,
+    "remedies_kept": 2,
+    "roll_backs": 0,
+    "width_free": false,
+    "summaries": {
+     "centre_peak_regr_pct_per_h": [
+      84.29,
+      104.55
+     ],
+     "centre_peak_at_um": [
+      316.0,
+      0.0
+     ],
+     "growth_zone_length_um": [
+      537.0,
+      0.0
+     ],
+     "flank_difference_max_pct_per_h": [
+      0.53,
+      0.45
+     ],
+     "flank_difference_at_um": [
+      189.0,
+      0.0
+     ],
+     "width_free_ratio_max": [
+      null,
+      null
+     ]
+    }
+   },
+   {
+    "run_id": "r13",
+    "status": "accept",
+    "checks": {
+     "rigid_invariance": [
+      1.049,
+      2.0,
+      true
+     ],
+     "closure": [
+      0.5,
+      1.0,
+      true
+     ],
+     "plane_sections": [
+      0.942,
+      3.25,
+      true
+     ]
+    },
+    "steps": 4,
+    "remedies_kept": 1,
+    "roll_backs": 0,
+    "width_free": false,
+    "summaries": {
+     "centre_peak_regr_pct_per_h": [
+      42.34,
+      -0.25
+     ],
+     "centre_peak_at_um": [
+      316.0,
+      0.0
+     ],
+     "growth_zone_length_um": [
+      537.0,
+      0.0
+     ],
+     "flank_difference_max_pct_per_h": [
+      -0.94,
+      -0.09
+     ],
+     "flank_difference_at_um": [
+      53.0,
+      -0.67
+     ],
+     "width_free_ratio_max": [
+      null,
+      null
+     ]
+    }
+   },
+   {
+    "run_id": "r14",
+    "status": "accept",
+    "checks": {
+     "rigid_invariance": [
+      0.442,
+      2.0,
+      true
+     ],
+     "closure": [
+      0.097,
+      1.0,
+      true
+     ],
+     "plane_sections": [
+      3.426,
+      3.25,
+      null
+     ]
+    },
+    "steps": 6,
+    "remedies_kept": 1,
+    "roll_backs": 0,
+    "width_free": true,
+    "summaries": {
+     "centre_peak_regr_pct_per_h": [
+      42.24,
+      -0.5
+     ],
+     "centre_peak_at_um": [
+      316.0,
+      0.0
+     ],
+     "growth_zone_length_um": [
+      537.0,
+      0.0
+     ],
+     "flank_difference_max_pct_per_h": [
+      -3.43,
+      -0.99
+     ],
+     "flank_difference_at_um": [
+      84.0,
+      -0.52
+     ],
+     "width_free_ratio_max": [
+      -0.449,
+      -0.54
+     ]
+    }
+   },
+   {
+    "run_id": "r15",
+    "status": "accept",
+    "checks": {
+     "rigid_invariance": [
+      0.728,
+      2.0,
+      true
+     ],
+     "closure": [
+      0.629,
+      1.0,
+      true
+     ],
+     "plane_sections": [
+      1.341,
+      3.25,
+      true
+     ]
+    },
+    "steps": 3,
+    "remedies_kept": 1,
+    "roll_backs": 0,
+    "width_free": false,
+    "summaries": {
+     "centre_peak_regr_pct_per_h": [
+      42.21,
+      -0.57
+     ],
+     "centre_peak_at_um": [
+      316.0,
+      0.0
+     ],
+     "growth_zone_length_um": [
+      547.0,
+      0.67
+     ],
+     "flank_difference_max_pct_per_h": [
+      1.34,
+      0.74
+     ],
+     "flank_difference_at_um": [
+      53.0,
+      -0.67
+     ],
+     "width_free_ratio_max": [
+      null,
+      null
+     ]
+    }
+   },
+   {
+    "run_id": "r16",
+    "status": "decline",
+    "checks": {
+     "rigid_invariance": [
+      151.846,
+      2.0,
+      false
+     ],
+     "closure": [
+      4.503,
+      1.0,
+      false
+     ],
+     "plane_sections": [
+      130.264,
+      3.25,
+      false
+     ]
+    },
+    "steps": 3,
+    "remedies_kept": 0,
+    "roll_backs": 0,
+    "width_free": false,
+    "summaries": {
+     "centre_peak_regr_pct_per_h": [
+      56.78,
+      35.82
+     ],
+     "centre_peak_at_um": [
+      116.0,
+      -4.68
+     ],
+     "growth_zone_length_um": [
+      358.0,
+      -12.07
+     ],
+     "flank_difference_max_pct_per_h": [
+      130.26,
+      47.49
+     ],
+     "flank_difference_at_um": [
+      758.0,
+      2.8
+     ],
+     "width_free_ratio_max": [
+      null,
+      null
+     ]
+    }
+   },
+   {
+    "run_id": "r17",
+    "status": "accept",
+    "checks": {
+     "rigid_invariance": [
+      0.757,
+      2.0,
+      true
+     ],
+     "closure": [
+      0.079,
+      1.0,
+      true
+     ],
+     "plane_sections": [
+      3.55,
+      3.25,
+      null
+     ]
+    },
+    "steps": 5,
+    "remedies_kept": 1,
+    "roll_backs": 0,
+    "width_free": true,
+    "summaries": {
+     "centre_peak_regr_pct_per_h": [
+      42.17,
+      -0.67
+     ],
+     "centre_peak_at_um": [
+      316.0,
+      0.0
+     ],
+     "growth_zone_length_um": [
+      526.0,
+      -0.74
+     ],
+     "flank_difference_max_pct_per_h": [
+      -3.55,
+      -1.03
+     ],
+     "flank_difference_at_um": [
+      326.0,
+      0.67
+     ],
+     "width_free_ratio_max": [
+      -0.472,
+      -3.64
+     ]
+    }
+   },
+   {
+    "run_id": "r18",
+    "status": "accept",
+    "checks": {
+     "rigid_invariance": [
+      0.522,
+      2.0,
+      true
+     ],
+     "closure": [
+      0.231,
+      1.0,
+      true
+     ],
+     "plane_sections": [
+      3.471,
+      3.25,
+      null
+     ]
+    },
+    "steps": 6,
+    "remedies_kept": 1,
+    "roll_backs": 0,
+    "width_free": true,
+    "summaries": {
+     "centre_peak_regr_pct_per_h": [
+      42.51,
+      0.17
+     ],
+     "centre_peak_at_um": [
+      316.0,
+      0.0
+     ],
+     "growth_zone_length_um": [
+      537.0,
+      0.0
+     ],
+     "flank_difference_max_pct_per_h": [
+      -3.47,
+      -1.0
+     ],
+     "flank_difference_at_um": [
+      295.0,
+      0.52
+     ],
+     "width_free_ratio_max": [
+      -0.421,
+      3.24
+     ]
+    }
+   },
+   {
+    "run_id": "r19",
+    "status": "accept",
+    "checks": {
+     "rigid_invariance": [
+      0.821,
+      2.0,
+      true
+     ],
+     "closure": [
+      0.451,
+      1.0,
+      true
+     ],
+     "plane_sections": [
+      0.571,
+      3.25,
+      true
+     ]
+    },
+    "steps": 5,
+    "remedies_kept": 1,
+    "roll_backs": 0,
+    "width_free": false,
+    "summaries": {
+     "centre_peak_regr_pct_per_h": [
+      41.97,
+      -1.17
+     ],
+     "centre_peak_at_um": [
+      316.0,
+      0.0
+     ],
+     "growth_zone_length_um": [
+      547.0,
+      0.67
+     ],
+     "flank_difference_max_pct_per_h": [
+      0.57,
+      0.46
+     ],
+     "flank_difference_at_um": [
+      295.0,
+      0.52
+     ],
+     "width_free_ratio_max": [
+      null,
+      null
+     ]
+    }
+   },
+   {
+    "run_id": "r20",
+    "status": "decline",
+    "checks": {
+     "rigid_invariance": [
+      0.885,
+      2.0,
+      true
+     ],
+     "closure": [
+      2.772,
+      1.0,
+      false
+     ],
+     "plane_sections": [
+      14.751,
+      3.25,
+      false
+     ]
+    },
+    "steps": 7,
+    "remedies_kept": 1,
+    "roll_backs": 0,
+    "width_free": false,
+    "summaries": {
+     "centre_peak_regr_pct_per_h": [
+      42.21,
+      -0.57
+     ],
+     "centre_peak_at_um": [
+      316.0,
+      0.0
+     ],
+     "growth_zone_length_um": [
+      526.0,
+      -0.74
+     ],
+     "flank_difference_max_pct_per_h": [
+      1.16,
+      0.67
+     ],
+     "flank_difference_at_um": [
+      189.0,
+      0.0
+     ],
+     "width_free_ratio_max": [
+      null,
+      null
+     ]
+    }
+   },
+   {
+    "run_id": "r21",
+    "status": "accept",
+    "checks": {
+     "rigid_invariance": [
+      0.619,
+      2.0,
+      true
+     ],
+     "closure": [
+      0.075,
+      1.0,
+      true
+     ],
+     "plane_sections": [
+      3.862,
+      3.25,
+      null
+     ]
+    },
+    "steps": 6,
+    "remedies_kept": 1,
+    "roll_backs": 0,
+    "width_free": true,
+    "summaries": {
+     "centre_peak_regr_pct_per_h": [
+      42.4,
+      -0.1
+     ],
+     "centre_peak_at_um": [
+      316.0,
+      0.0
+     ],
+     "growth_zone_length_um": [
+      547.0,
+      0.67
+     ],
+     "flank_difference_max_pct_per_h": [
+      -3.86,
+      -1.15
+     ],
+     "flank_difference_at_um": [
+      53.0,
+      -0.67
+     ],
+     "width_free_ratio_max": [
+      -0.445,
+      0.0
+     ]
+    }
+   },
+   {
+    "run_id": "r22",
+    "status": "accept",
+    "checks": {
+     "rigid_invariance": [
+      1.003,
+      2.0,
+      true
+     ],
+     "closure": [
+      0.422,
+      1.0,
+      true
+     ],
+     "plane_sections": [
+      0.74,
+      3.25,
+      true
+     ]
+    },
+    "steps": 3,
+    "remedies_kept": 1,
+    "roll_backs": 0,
+    "width_free": false,
+    "summaries": {
+     "centre_peak_regr_pct_per_h": [
+      42.61,
+      0.42
+     ],
+     "centre_peak_at_um": [
+      316.0,
+      0.0
+     ],
+     "growth_zone_length_um": [
+      537.0,
+      0.0
+     ],
+     "flank_difference_max_pct_per_h": [
+      0.94,
+      0.59
+     ],
+     "flank_difference_at_um": [
+      21.0,
+      -0.83
+     ],
+     "width_free_ratio_max": [
+      null,
+      null
+     ]
+    }
+   },
+   {
+    "run_id": "r23",
+    "status": "not_reported",
+    "checks": {
+     "rigid_invariance": [
+      0.671,
+      2.0,
+      true
+     ],
+     "closure": [
+      2.697,
+      1.0,
+      false
+     ],
+     "plane_sections": [
+      41.464,
+      3.25,
+      false
+     ]
+    },
+    "steps": 8,
+    "remedies_kept": 0,
+    "roll_backs": 2,
+    "width_free": false,
+    "summaries": {
+     "centre_peak_regr_pct_per_h": [
+      42.26,
+      -0.45
+     ],
+     "centre_peak_at_um": [
+      316.0,
+      0.0
+     ],
+     "growth_zone_length_um": [
+      547.0,
+      0.67
+     ],
+     "flank_difference_max_pct_per_h": [
+      -0.7,
+      0.0
+     ],
+     "flank_difference_at_um": [
+      410.0,
+      1.09
+     ],
+     "width_free_ratio_max": [
+      null,
+      null
+     ]
+    }
+   },
+   {
+    "run_id": "r24",
+    "status": "decline",
+    "checks": {
+     "rigid_invariance": [
+      191.332,
+      2.0,
+      false
+     ],
+     "closure": [
+      4.921,
+      1.0,
+      false
+     ],
+     "plane_sections": [
+      121.066,
+      3.25,
+      false
+     ]
+    },
+    "steps": 3,
+    "remedies_kept": 0,
+    "roll_backs": 0,
+    "width_free": false,
+    "summaries": {
+     "centre_peak_regr_pct_per_h": [
+      67.0,
+      61.35
+     ],
+     "centre_peak_at_um": [
+      337.0,
+      0.49
+     ],
+     "growth_zone_length_um": [
+      179.0,
+      -24.15
+     ],
+     "flank_difference_max_pct_per_h": [
+      -121.07,
+      -43.65
+     ],
+     "flank_difference_at_um": [
+      589.0,
+      1.97
+     ],
+     "width_free_ratio_max": [
+      null,
+      null
+     ]
+    }
+   },
+   {
+    "run_id": "r25",
+    "status": "accept",
+    "checks": {
+     "rigid_invariance": [
+      0.84,
+      2.0,
+      true
+     ],
+     "closure": [
+      0.105,
+      1.0,
+      true
+     ],
+     "plane_sections": [
+      0.924,
+      3.25,
+      true
+     ]
+    },
+    "steps": 8,
+    "remedies_kept": 2,
+    "roll_backs": 0,
+    "width_free": false,
+    "summaries": {
+     "centre_peak_regr_pct_per_h": [
+      83.92,
+      103.62
+     ],
+     "centre_peak_at_um": [
+      316.0,
+      0.0
+     ],
+     "growth_zone_length_um": [
+      547.0,
+      0.67
+     ],
+     "flank_difference_max_pct_per_h": [
+      -0.92,
+      -0.08
+     ],
+     "flank_difference_at_um": [
+      168.0,
+      -0.1
+     ],
+     "width_free_ratio_max": [
+      null,
+      null
+     ]
+    }
+   }
+  ]
+ },
+ "runs": [
+  {
+   "run_id": "r01",
+   "status": "decline",
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "value": 107.127,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "passed": false
+    },
+    {
+     "check": "closure",
+     "value": 3.685,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "passed": false
+    },
+    {
+     "check": "plane_sections",
+     "value": 133.816,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "passed": false
+    }
+   ],
+   "remedies_kept": [],
+   "roll_backs": 0,
+   "steps": 3,
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false
+   },
+   "summaries": {
+    "centre_peak_regr_pct_per_h": 51.12,
+    "centre_peak_at_um": 284.0,
+    "growth_zone_length_um": 358.0,
+    "flank_difference_max_pct_per_h": -133.82,
+    "flank_difference_at_um": 874.0,
+    "width_free_ratio_max": null,
+    "width_free_ratio_at_um": null
+   },
+   "z": {
+    "centre_peak_regr_pct_per_h": 21.68,
+    "centre_peak_at_um": -0.75,
+    "growth_zone_length_um": -12.07,
+    "flank_difference_max_pct_per_h": -48.27,
+    "flank_difference_at_um": 3.37,
+    "width_free_ratio_max": null
+   }
+  },
+  {
+   "run_id": "r02",
+   "status": "accept",
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "value": 0.589,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "passed": true
+    },
+    {
+     "check": "closure",
+     "value": 0.109,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "passed": true
+    },
+    {
+     "check": "plane_sections",
+     "value": 0.51,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "passed": true
+    }
+   ],
+   "remedies_kept": [
+    "frame stride 6 -> 3",
+    "frame stride 3 -> 1"
+   ],
+   "roll_backs": 0,
+   "steps": 6,
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false
+   },
+   "summaries": {
+    "centre_peak_regr_pct_per_h": 83.88,
+    "centre_peak_at_um": 316.0,
+    "growth_zone_length_um": 537.0,
+    "flank_difference_max_pct_per_h": 0.51,
+    "flank_difference_at_um": 589.0,
+    "width_free_ratio_max": null,
+    "width_free_ratio_at_um": null
+   },
+   "z": {
+    "centre_peak_regr_pct_per_h": 103.52,
+    "centre_peak_at_um": 0.0,
+    "growth_zone_length_um": 0.0,
+    "flank_difference_max_pct_per_h": 0.44,
+    "flank_difference_at_um": 1.97,
+    "width_free_ratio_max": null
+   }
+  },
+  {
+   "run_id": "r03",
+   "status": "decline",
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "value": 0.583,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "passed": true
+    },
+    {
+     "check": "closure",
+     "value": 4.173,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "passed": false
+    },
+    {
+     "check": "plane_sections",
+     "value": 20.938,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "passed": false
+    }
+   ],
+   "remedies_kept": [
+    "midline source smoothed (light)"
+   ],
+   "roll_backs": 0,
+   "steps": 7,
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": "light",
+    "band_mask": null,
+    "width_free": false
+   },
+   "summaries": {
+    "centre_peak_regr_pct_per_h": 42.41,
+    "centre_peak_at_um": 316.0,
+    "growth_zone_length_um": 526.0,
+    "flank_difference_max_pct_per_h": -1.41,
+    "flank_difference_at_um": 410.0,
+    "width_free_ratio_max": null,
+    "width_free_ratio_at_um": null
+   },
+   "z": {
+    "centre_peak_regr_pct_per_h": -0.07,
+    "centre_peak_at_um": 0.0,
+    "growth_zone_length_um": -0.74,
+    "flank_difference_max_pct_per_h": -0.26,
+    "flank_difference_at_um": 1.09,
+    "width_free_ratio_max": null
+   }
+  },
+  {
+   "run_id": "r04",
+   "status": "decline",
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "value": 76.694,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "passed": false
+    },
+    {
+     "check": "closure",
+     "value": 1.391,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "passed": false
+    },
+    {
+     "check": "plane_sections",
+     "value": 69.876,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "passed": false
+    }
+   ],
+   "remedies_kept": [],
+   "roll_backs": 0,
+   "steps": 3,
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false
+   },
+   "summaries": {
+    "centre_peak_regr_pct_per_h": 62.68,
+    "centre_peak_at_um": 379.0,
+    "growth_zone_length_um": 211.0,
+    "flank_difference_max_pct_per_h": -69.88,
+    "flank_difference_at_um": 853.0,
+    "width_free_ratio_max": null,
+    "width_free_ratio_at_um": null
+   },
+   "z": {
+    "centre_peak_regr_pct_per_h": 50.56,
+    "centre_peak_at_um": 1.47,
+    "growth_zone_length_um": -21.99,
+    "flank_difference_max_pct_per_h": -25.09,
+    "flank_difference_at_um": 3.27,
+    "width_free_ratio_max": null
+   }
+  },
+  {
+   "run_id": "r05",
+   "status": "accept",
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "value": 0.773,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "passed": true
+    },
+    {
+     "check": "closure",
+     "value": 0.047,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "passed": true
+    },
+    {
+     "check": "plane_sections",
+     "value": 0.573,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "passed": true
+    }
+   ],
+   "remedies_kept": [
+    "frame stride 6 -> 3",
+    "frame stride 3 -> 1"
+   ],
+   "roll_backs": 0,
+   "steps": 6,
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false
+   },
+   "summaries": {
+    "centre_peak_regr_pct_per_h": 84.2,
+    "centre_peak_at_um": 316.0,
+    "growth_zone_length_um": 537.0,
+    "flank_difference_max_pct_per_h": -0.57,
+    "flank_difference_at_um": 926.0,
+    "width_free_ratio_max": null,
+    "width_free_ratio_at_um": null
+   },
+   "z": {
+    "centre_peak_regr_pct_per_h": 104.32,
+    "centre_peak_at_um": 0.0,
+    "growth_zone_length_um": 0.0,
+    "flank_difference_max_pct_per_h": 0.05,
+    "flank_difference_at_um": 3.63,
+    "width_free_ratio_max": null
+   }
+  },
+  {
+   "run_id": "r06",
+   "status": "decline",
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "value": 139.884,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "passed": false
+    },
+    {
+     "check": "closure",
+     "value": 6.861,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "passed": false
+    },
+    {
+     "check": "plane_sections",
+     "value": 86.56,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "passed": false
+    }
+   ],
+   "remedies_kept": [],
+   "roll_backs": 0,
+   "steps": 3,
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false
+   },
+   "summaries": {
+    "centre_peak_regr_pct_per_h": 71.42,
+    "centre_peak_at_um": 842.0,
+    "growth_zone_length_um": 11.0,
+    "flank_difference_max_pct_per_h": 86.56,
+    "flank_difference_at_um": 189.0,
+    "width_free_ratio_max": null,
+    "width_free_ratio_at_um": null
+   },
+   "z": {
+    "centre_peak_regr_pct_per_h": 72.4,
+    "centre_peak_at_um": 12.31,
+    "growth_zone_length_um": -35.48,
+    "flank_difference_max_pct_per_h": 31.64,
+    "flank_difference_at_um": 0.0,
+    "width_free_ratio_max": null
+   }
+  },
+  {
+   "run_id": "r07",
+   "status": "accept",
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "value": 0.863,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "passed": true
+    },
+    {
+     "check": "closure",
+     "value": 0.318,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "passed": true
+    },
+    {
+     "check": "plane_sections",
+     "value": 0.658,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "passed": true
+    }
+   ],
+   "remedies_kept": [
+    "frames registered on the non-growing tissue (from 305 px from the tip) before tracking"
+   ],
+   "roll_backs": 0,
+   "steps": 3,
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": true,
+    "register_from_px": 305,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false
+   },
+   "summaries": {
+    "centre_peak_regr_pct_per_h": 42.44,
+    "centre_peak_at_um": 316.0,
+    "growth_zone_length_um": 547.0,
+    "flank_difference_max_pct_per_h": 0.75,
+    "flank_difference_at_um": 21.0,
+    "width_free_ratio_max": null,
+    "width_free_ratio_at_um": null
+   },
+   "z": {
+    "centre_peak_regr_pct_per_h": 0.0,
+    "centre_peak_at_um": 0.0,
+    "growth_zone_length_um": 0.67,
+    "flank_difference_max_pct_per_h": 0.53,
+    "flank_difference_at_um": -0.83,
+    "width_free_ratio_max": null
+   }
+  },
+  {
+   "run_id": "r08",
+   "status": "accept",
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "value": 0.612,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "passed": true
+    },
+    {
+     "check": "closure",
+     "value": 0.063,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "passed": true
+    },
+    {
+     "check": "plane_sections",
+     "value": 3.835,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "passed": null
+    }
+   ],
+   "remedies_kept": [
+    "report the centre strain rate and the width-free ratio; plane-sections check skipped"
+   ],
+   "roll_backs": 0,
+   "steps": 5,
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": true
+   },
+   "summaries": {
+    "centre_peak_regr_pct_per_h": 42.3,
+    "centre_peak_at_um": 316.0,
+    "growth_zone_length_um": 537.0,
+    "flank_difference_max_pct_per_h": -3.84,
+    "flank_difference_at_um": 53.0,
+    "width_free_ratio_max": -0.44,
+    "width_free_ratio_at_um": 600
+   },
+   "z": {
+    "centre_peak_regr_pct_per_h": -0.35,
+    "centre_peak_at_um": 0.0,
+    "growth_zone_length_um": 0.0,
+    "flank_difference_max_pct_per_h": -1.14,
+    "flank_difference_at_um": -0.67,
+    "width_free_ratio_max": 0.67
+   }
+  },
+  {
+   "run_id": "r09",
+   "status": "decline",
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "value": 0.807,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "passed": true
+    },
+    {
+     "check": "closure",
+     "value": 3.79,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "passed": false
+    },
+    {
+     "check": "plane_sections",
+     "value": 36.164,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "passed": false
+    }
+   ],
+   "remedies_kept": [],
+   "roll_backs": 1,
+   "steps": 6,
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false
+   },
+   "summaries": {
+    "centre_peak_regr_pct_per_h": 42.04,
+    "centre_peak_at_um": 326.0,
+    "growth_zone_length_um": 537.0,
+    "flank_difference_max_pct_per_h": -1.72,
+    "flank_difference_at_um": 21.0,
+    "width_free_ratio_max": null,
+    "width_free_ratio_at_um": null
+   },
+   "z": {
+    "centre_peak_regr_pct_per_h": -1.0,
+    "centre_peak_at_um": 0.23,
+    "growth_zone_length_um": 0.0,
+    "flank_difference_max_pct_per_h": -0.37,
+    "flank_difference_at_um": -0.83,
+    "width_free_ratio_max": null
+   }
+  },
+  {
+   "run_id": "r10",
+   "status": "decline",
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "value": 0.865,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "passed": true
+    },
+    {
+     "check": "closure",
+     "value": 2.679,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "passed": false
+    },
+    {
+     "check": "plane_sections",
+     "value": 37.176,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "passed": false
+    }
+   ],
+   "remedies_kept": [
+    "midline source smoothed (light)"
+   ],
+   "roll_backs": 1,
+   "steps": 7,
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": "light",
+    "band_mask": null,
+    "width_free": false
+   },
+   "summaries": {
+    "centre_peak_regr_pct_per_h": 42.39,
+    "centre_peak_at_um": 316.0,
+    "growth_zone_length_um": 526.0,
+    "flank_difference_max_pct_per_h": 1.23,
+    "flank_difference_at_um": 147.0,
+    "width_free_ratio_max": null,
+    "width_free_ratio_at_um": null
+   },
+   "z": {
+    "centre_peak_regr_pct_per_h": -0.12,
+    "centre_peak_at_um": 0.0,
+    "growth_zone_length_um": -0.74,
+    "flank_difference_max_pct_per_h": 0.7,
+    "flank_difference_at_um": -0.21,
+    "width_free_ratio_max": null
+   }
+  },
+  {
+   "run_id": "r11",
+   "status": "accept",
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "value": 0.664,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "passed": true
+    },
+    {
+     "check": "closure",
+     "value": 0.181,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "passed": true
+    },
+    {
+     "check": "plane_sections",
+     "value": 0.621,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "passed": true
+    }
+   ],
+   "remedies_kept": [
+    "frame stride 6 -> 3",
+    "frame stride 3 -> 1"
+   ],
+   "roll_backs": 0,
+   "steps": 6,
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false
+   },
+   "summaries": {
+    "centre_peak_regr_pct_per_h": 84.25,
+    "centre_peak_at_um": 316.0,
+    "growth_zone_length_um": 537.0,
+    "flank_difference_max_pct_per_h": -0.62,
+    "flank_difference_at_um": 831.0,
+    "width_free_ratio_max": null,
+    "width_free_ratio_at_um": null
+   },
+   "z": {
+    "centre_peak_regr_pct_per_h": 104.45,
+    "centre_peak_at_um": 0.0,
+    "growth_zone_length_um": 0.0,
+    "flank_difference_max_pct_per_h": 0.03,
+    "flank_difference_at_um": 3.16,
+    "width_free_ratio_max": null
+   }
+  },
+  {
+   "run_id": "r12",
+   "status": "accept",
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "value": 0.531,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "passed": true
+    },
+    {
+     "check": "closure",
+     "value": 0.111,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "passed": true
+    },
+    {
+     "check": "plane_sections",
+     "value": 0.535,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "passed": true
+    }
+   ],
+   "remedies_kept": [
+    "frame stride 6 -> 3",
+    "frame stride 3 -> 1"
+   ],
+   "roll_backs": 0,
+   "steps": 6,
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false
+   },
+   "summaries": {
+    "centre_peak_regr_pct_per_h": 84.29,
+    "centre_peak_at_um": 316.0,
+    "growth_zone_length_um": 537.0,
+    "flank_difference_max_pct_per_h": 0.53,
+    "flank_difference_at_um": 189.0,
+    "width_free_ratio_max": null,
+    "width_free_ratio_at_um": null
+   },
+   "z": {
+    "centre_peak_regr_pct_per_h": 104.55,
+    "centre_peak_at_um": 0.0,
+    "growth_zone_length_um": 0.0,
+    "flank_difference_max_pct_per_h": 0.45,
+    "flank_difference_at_um": 0.0,
+    "width_free_ratio_max": null
+   }
+  },
+  {
+   "run_id": "r13",
+   "status": "accept",
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "value": 1.049,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "passed": true
+    },
+    {
+     "check": "closure",
+     "value": 0.5,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "passed": true
+    },
+    {
+     "check": "plane_sections",
+     "value": 0.942,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "passed": true
+    }
+   ],
+   "remedies_kept": [
+    "frames registered on the non-growing tissue (from 305 px from the tip) before tracking"
+   ],
+   "roll_backs": 0,
+   "steps": 4,
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": true,
+    "register_from_px": 305,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false
+   },
+   "summaries": {
+    "centre_peak_regr_pct_per_h": 42.34,
+    "centre_peak_at_um": 316.0,
+    "growth_zone_length_um": 537.0,
+    "flank_difference_max_pct_per_h": -0.94,
+    "flank_difference_at_um": 53.0,
+    "width_free_ratio_max": null,
+    "width_free_ratio_at_um": null
+   },
+   "z": {
+    "centre_peak_regr_pct_per_h": -0.25,
+    "centre_peak_at_um": 0.0,
+    "growth_zone_length_um": 0.0,
+    "flank_difference_max_pct_per_h": -0.09,
+    "flank_difference_at_um": -0.67,
+    "width_free_ratio_max": null
+   }
+  },
+  {
+   "run_id": "r14",
+   "status": "accept",
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "value": 0.442,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "passed": true
+    },
+    {
+     "check": "closure",
+     "value": 0.097,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "passed": true
+    },
+    {
+     "check": "plane_sections",
+     "value": 3.426,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "passed": null
+    }
+   ],
+   "remedies_kept": [
+    "report the centre strain rate and the width-free ratio; plane-sections check skipped"
+   ],
+   "roll_backs": 0,
+   "steps": 6,
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": true
+   },
+   "summaries": {
+    "centre_peak_regr_pct_per_h": 42.24,
+    "centre_peak_at_um": 316.0,
+    "growth_zone_length_um": 537.0,
+    "flank_difference_max_pct_per_h": -3.43,
+    "flank_difference_at_um": 84.0,
+    "width_free_ratio_max": -0.449,
+    "width_free_ratio_at_um": 600
+   },
+   "z": {
+    "centre_peak_regr_pct_per_h": -0.5,
+    "centre_peak_at_um": 0.0,
+    "growth_zone_length_um": 0.0,
+    "flank_difference_max_pct_per_h": -0.99,
+    "flank_difference_at_um": -0.52,
+    "width_free_ratio_max": -0.54
+   }
+  },
+  {
+   "run_id": "r15",
+   "status": "accept",
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "value": 0.728,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "passed": true
+    },
+    {
+     "check": "closure",
+     "value": 0.629,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "passed": true
+    },
+    {
+     "check": "plane_sections",
+     "value": 1.341,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "passed": true
+    }
+   ],
+   "remedies_kept": [
+    "frames registered on the non-growing tissue (from 305 px from the tip) before tracking"
+   ],
+   "roll_backs": 0,
+   "steps": 3,
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": true,
+    "register_from_px": 305,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false
+   },
+   "summaries": {
+    "centre_peak_regr_pct_per_h": 42.21,
+    "centre_peak_at_um": 316.0,
+    "growth_zone_length_um": 547.0,
+    "flank_difference_max_pct_per_h": 1.34,
+    "flank_difference_at_um": 53.0,
+    "width_free_ratio_max": null,
+    "width_free_ratio_at_um": null
+   },
+   "z": {
+    "centre_peak_regr_pct_per_h": -0.57,
+    "centre_peak_at_um": 0.0,
+    "growth_zone_length_um": 0.67,
+    "flank_difference_max_pct_per_h": 0.74,
+    "flank_difference_at_um": -0.67,
+    "width_free_ratio_max": null
+   }
+  },
+  {
+   "run_id": "r16",
+   "status": "decline",
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "value": 151.846,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "passed": false
+    },
+    {
+     "check": "closure",
+     "value": 4.503,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "passed": false
+    },
+    {
+     "check": "plane_sections",
+     "value": 130.264,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "passed": false
+    }
+   ],
+   "remedies_kept": [],
+   "roll_backs": 0,
+   "steps": 3,
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false
+   },
+   "summaries": {
+    "centre_peak_regr_pct_per_h": 56.78,
+    "centre_peak_at_um": 116.0,
+    "growth_zone_length_um": 358.0,
+    "flank_difference_max_pct_per_h": 130.26,
+    "flank_difference_at_um": 758.0,
+    "width_free_ratio_max": null,
+    "width_free_ratio_at_um": null
+   },
+   "z": {
+    "centre_peak_regr_pct_per_h": 35.82,
+    "centre_peak_at_um": -4.68,
+    "growth_zone_length_um": -12.07,
+    "flank_difference_max_pct_per_h": 47.49,
+    "flank_difference_at_um": 2.8,
+    "width_free_ratio_max": null
+   }
+  },
+  {
+   "run_id": "r17",
+   "status": "accept",
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "value": 0.757,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "passed": true
+    },
+    {
+     "check": "closure",
+     "value": 0.079,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "passed": true
+    },
+    {
+     "check": "plane_sections",
+     "value": 3.55,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "passed": null
+    }
+   ],
+   "remedies_kept": [
+    "report the centre strain rate and the width-free ratio; plane-sections check skipped"
+   ],
+   "roll_backs": 0,
+   "steps": 5,
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": true
+   },
+   "summaries": {
+    "centre_peak_regr_pct_per_h": 42.17,
+    "centre_peak_at_um": 316.0,
+    "growth_zone_length_um": 526.0,
+    "flank_difference_max_pct_per_h": -3.55,
+    "flank_difference_at_um": 326.0,
+    "width_free_ratio_max": -0.472,
+    "width_free_ratio_at_um": 600
+   },
+   "z": {
+    "centre_peak_regr_pct_per_h": -0.67,
+    "centre_peak_at_um": 0.0,
+    "growth_zone_length_um": -0.74,
+    "flank_difference_max_pct_per_h": -1.03,
+    "flank_difference_at_um": 0.67,
+    "width_free_ratio_max": -3.64
+   }
+  },
+  {
+   "run_id": "r18",
+   "status": "accept",
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "value": 0.522,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "passed": true
+    },
+    {
+     "check": "closure",
+     "value": 0.231,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "passed": true
+    },
+    {
+     "check": "plane_sections",
+     "value": 3.471,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "passed": null
+    }
+   ],
+   "remedies_kept": [
+    "report the centre strain rate and the width-free ratio; plane-sections check skipped"
+   ],
+   "roll_backs": 0,
+   "steps": 6,
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": true
+   },
+   "summaries": {
+    "centre_peak_regr_pct_per_h": 42.51,
+    "centre_peak_at_um": 316.0,
+    "growth_zone_length_um": 537.0,
+    "flank_difference_max_pct_per_h": -3.47,
+    "flank_difference_at_um": 295.0,
+    "width_free_ratio_max": -0.421,
+    "width_free_ratio_at_um": 600
+   },
+   "z": {
+    "centre_peak_regr_pct_per_h": 0.17,
+    "centre_peak_at_um": 0.0,
+    "growth_zone_length_um": 0.0,
+    "flank_difference_max_pct_per_h": -1.0,
+    "flank_difference_at_um": 0.52,
+    "width_free_ratio_max": 3.24
+   }
+  },
+  {
+   "run_id": "r19",
+   "status": "accept",
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "value": 0.821,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "passed": true
+    },
+    {
+     "check": "closure",
+     "value": 0.451,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "passed": true
+    },
+    {
+     "check": "plane_sections",
+     "value": 0.571,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "passed": true
+    }
+   ],
+   "remedies_kept": [
+    "frames registered on the non-growing tissue (from 305 px from the tip) before tracking"
+   ],
+   "roll_backs": 0,
+   "steps": 5,
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": true,
+    "register_from_px": 305,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false
+   },
+   "summaries": {
+    "centre_peak_regr_pct_per_h": 41.97,
+    "centre_peak_at_um": 316.0,
+    "growth_zone_length_um": 547.0,
+    "flank_difference_max_pct_per_h": 0.57,
+    "flank_difference_at_um": 295.0,
+    "width_free_ratio_max": null,
+    "width_free_ratio_at_um": null
+   },
+   "z": {
+    "centre_peak_regr_pct_per_h": -1.17,
+    "centre_peak_at_um": 0.0,
+    "growth_zone_length_um": 0.67,
+    "flank_difference_max_pct_per_h": 0.46,
+    "flank_difference_at_um": 0.52,
+    "width_free_ratio_max": null
+   }
+  },
+  {
+   "run_id": "r20",
+   "status": "decline",
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "value": 0.885,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "passed": true
+    },
+    {
+     "check": "closure",
+     "value": 2.772,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "passed": false
+    },
+    {
+     "check": "plane_sections",
+     "value": 14.751,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "passed": false
+    }
+   ],
+   "remedies_kept": [
+    "midline source smoothed (light)"
+   ],
+   "roll_backs": 0,
+   "steps": 7,
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": "light",
+    "band_mask": null,
+    "width_free": false
+   },
+   "summaries": {
+    "centre_peak_regr_pct_per_h": 42.21,
+    "centre_peak_at_um": 316.0,
+    "growth_zone_length_um": 526.0,
+    "flank_difference_max_pct_per_h": 1.16,
+    "flank_difference_at_um": 189.0,
+    "width_free_ratio_max": null,
+    "width_free_ratio_at_um": null
+   },
+   "z": {
+    "centre_peak_regr_pct_per_h": -0.57,
+    "centre_peak_at_um": 0.0,
+    "growth_zone_length_um": -0.74,
+    "flank_difference_max_pct_per_h": 0.67,
+    "flank_difference_at_um": 0.0,
+    "width_free_ratio_max": null
+   }
+  },
+  {
+   "run_id": "r21",
+   "status": "accept",
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "value": 0.619,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "passed": true
+    },
+    {
+     "check": "closure",
+     "value": 0.075,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "passed": true
+    },
+    {
+     "check": "plane_sections",
+     "value": 3.862,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "passed": null
+    }
+   ],
+   "remedies_kept": [
+    "report the centre strain rate and the width-free ratio; plane-sections check skipped"
+   ],
+   "roll_backs": 0,
+   "steps": 6,
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": true
+   },
+   "summaries": {
+    "centre_peak_regr_pct_per_h": 42.4,
+    "centre_peak_at_um": 316.0,
+    "growth_zone_length_um": 547.0,
+    "flank_difference_max_pct_per_h": -3.86,
+    "flank_difference_at_um": 53.0,
+    "width_free_ratio_max": -0.445,
+    "width_free_ratio_at_um": 600
+   },
+   "z": {
+    "centre_peak_regr_pct_per_h": -0.1,
+    "centre_peak_at_um": 0.0,
+    "growth_zone_length_um": 0.67,
+    "flank_difference_max_pct_per_h": -1.15,
+    "flank_difference_at_um": -0.67,
+    "width_free_ratio_max": 0.0
+   }
+  },
+  {
+   "run_id": "r22",
+   "status": "accept",
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "value": 1.003,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "passed": true
+    },
+    {
+     "check": "closure",
+     "value": 0.422,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "passed": true
+    },
+    {
+     "check": "plane_sections",
+     "value": 0.74,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "passed": true
+    }
+   ],
+   "remedies_kept": [
+    "frames registered on the non-growing tissue (from 305 px from the tip) before tracking"
+   ],
+   "roll_backs": 0,
+   "steps": 3,
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": true,
+    "register_from_px": 305,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false
+   },
+   "summaries": {
+    "centre_peak_regr_pct_per_h": 42.61,
+    "centre_peak_at_um": 316.0,
+    "growth_zone_length_um": 537.0,
+    "flank_difference_max_pct_per_h": 0.94,
+    "flank_difference_at_um": 21.0,
+    "width_free_ratio_max": null,
+    "width_free_ratio_at_um": null
+   },
+   "z": {
+    "centre_peak_regr_pct_per_h": 0.42,
+    "centre_peak_at_um": 0.0,
+    "growth_zone_length_um": 0.0,
+    "flank_difference_max_pct_per_h": 0.59,
+    "flank_difference_at_um": -0.83,
+    "width_free_ratio_max": null
+   }
+  },
+  {
+   "run_id": "r23",
+   "status": "not_reported",
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "value": 0.671,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "passed": true
+    },
+    {
+     "check": "closure",
+     "value": 2.697,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "passed": false
+    },
+    {
+     "check": "plane_sections",
+     "value": 41.464,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "passed": false
+    }
+   ],
+   "remedies_kept": [],
+   "roll_backs": 2,
+   "steps": 8,
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false
+   },
+   "summaries": {
+    "centre_peak_regr_pct_per_h": 42.26,
+    "centre_peak_at_um": 316.0,
+    "growth_zone_length_um": 547.0,
+    "flank_difference_max_pct_per_h": -0.7,
+    "flank_difference_at_um": 410.0,
+    "width_free_ratio_max": null,
+    "width_free_ratio_at_um": null
+   },
+   "z": {
+    "centre_peak_regr_pct_per_h": -0.45,
+    "centre_peak_at_um": 0.0,
+    "growth_zone_length_um": 0.67,
+    "flank_difference_max_pct_per_h": 0.0,
+    "flank_difference_at_um": 1.09,
+    "width_free_ratio_max": null
+   }
+  },
+  {
+   "run_id": "r24",
+   "status": "decline",
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "value": 191.332,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "passed": false
+    },
+    {
+     "check": "closure",
+     "value": 4.921,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "passed": false
+    },
+    {
+     "check": "plane_sections",
+     "value": 121.066,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "passed": false
+    }
+   ],
+   "remedies_kept": [],
+   "roll_backs": 0,
+   "steps": 3,
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false
+   },
+   "summaries": {
+    "centre_peak_regr_pct_per_h": 67.0,
+    "centre_peak_at_um": 337.0,
+    "growth_zone_length_um": 179.0,
+    "flank_difference_max_pct_per_h": -121.07,
+    "flank_difference_at_um": 589.0,
+    "width_free_ratio_max": null,
+    "width_free_ratio_at_um": null
+   },
+   "z": {
+    "centre_peak_regr_pct_per_h": 61.35,
+    "centre_peak_at_um": 0.49,
+    "growth_zone_length_um": -24.15,
+    "flank_difference_max_pct_per_h": -43.65,
+    "flank_difference_at_um": 1.97,
+    "width_free_ratio_max": null
+   }
+  },
+  {
+   "run_id": "r25",
+   "status": "accept",
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "value": 0.84,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "passed": true
+    },
+    {
+     "check": "closure",
+     "value": 0.105,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "passed": true
+    },
+    {
+     "check": "plane_sections",
+     "value": 0.924,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "passed": true
+    }
+   ],
+   "remedies_kept": [
+    "frame stride 6 -> 3",
+    "frame stride 3 -> 1"
+   ],
+   "roll_backs": 0,
+   "steps": 8,
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false
+   },
+   "summaries": {
+    "centre_peak_regr_pct_per_h": 83.92,
+    "centre_peak_at_um": 316.0,
+    "growth_zone_length_um": 547.0,
+    "flank_difference_max_pct_per_h": -0.92,
+    "flank_difference_at_um": 168.0,
+    "width_free_ratio_max": null,
+    "width_free_ratio_at_um": null
+   },
+   "z": {
+    "centre_peak_regr_pct_per_h": 103.62,
+    "centre_peak_at_um": 0.0,
+    "growth_zone_length_um": 0.67,
+    "flank_difference_max_pct_per_h": -0.08,
+    "flank_difference_at_um": -0.1,
+    "width_free_ratio_max": null
+   }
+  }
+ ]
+}
