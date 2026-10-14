@@ -68,6 +68,8 @@ def main():
     ap.add_argument("--midline-smooth", choices=sorted(preprocess.MIDLINE_SMOOTH), default=None)
     ap.add_argument("--band-mask", choices=["mask_second_root", "crop_to_main_root"], default=None)
     ap.add_argument("--band-radius", type=float, default=45.0, help="px, for --band-mask and frame quality")
+    ap.add_argument("--movie", choices=["synthetic", "real"], default="synthetic",
+                    help="selects the frame_quality reference in measure/info.py")
     ap.add_argument("--track-length", type=float, default=400.0, help="px of midline handed to the tracker")
     a = ap.parse_args()
 
@@ -119,7 +121,7 @@ def main():
                 "track_centre": True, "used_mask": bool(res.split.used_mask),
                 "run_s": round(run_s, 1), "n_frames": int(len(keep)),
                 "register": bool(a.register), "midline_smooth": a.midline_smooth,
-                "band_mask": a.band_mask, "preprocess": pre, "frame_quality": quality}
+                "band_mask": a.band_mask, "movie": a.movie, "preprocess": pre, "frame_quality": quality}
     meta = {"root_id": imgdir.stem, "pixel_um": a.pixel_um, "settings": settings}
     tmp = Path(a.out).with_name(Path(a.out).stem + ".part.npz")    # a stopped run leaves no complete-looking file
     np.savez_compressed(

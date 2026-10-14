@@ -166,10 +166,16 @@ def frame_quality(rec, checks=None):
     q = rec.settings.get("frame_quality")
     if not q:
         return {"error": "no frame-quality measures for this record (no images)"}
-    ref = yaml.safe_load(FRAME_QUALITY_REFERENCE.read_text())
+    ref = frame_quality_reference(rec)
     return {"frames": q, "note": "texture_contrast: high-pass std / mean inside the root band; "
                                  "focus: mean gradient / mean; bright_objects_over_500px: count",
             "reference": {"basis": ref["basis"], **{k: ref[k] for k in ("texture_contrast", "focus")}}}
+
+
+def frame_quality_reference(rec):
+    """The `real` reference for records from real movies (settings movie: real), else the synthetic one."""
+    ref = yaml.safe_load(FRAME_QUALITY_REFERENCE.read_text())
+    return ref["real"] if rec.settings.get("movie") == "real" else ref
 
 
 INFO = {"check_report": check_report, "velocity_profile": velocity_profile,

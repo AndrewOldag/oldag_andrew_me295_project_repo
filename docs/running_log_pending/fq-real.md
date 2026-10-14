@@ -33,3 +33,11 @@
 - Demo: none new; labels in staging/fq_real_labeling/labels.csv (VM)
 - Remaining: Andrew decides how to proceed (see status)
 - Bottlenecks: decision on the failed separation check (Andrew)
+
+## 2026-10-13 (build account, session fq-real, B4 done, inbox item 5)
+- Done: real frame_quality reference written, provisional (planning option a): `real:` section in config/frame_quality_reference.yaml, 24 clean windows, 72 frames: texture_contrast median 0.0648, lowest 0.0439; focus median 0.0286, lowest 0.0213. Limits in config and docs/decisions.md: marks low texture and blur, not uneven lighting or debris; one not_clean window cannot test separation
+- Done: measure/info.py frame_quality_reference(rec): real reference when settings movie is real, synthetic otherwise; qb_track.py --movie (default synthetic) writes the setting. Synthetic output unchanged
+- Done: tests/test_frame_quality_reference.py (3 tests: synthetic unchanged, real for movie real, real section provisional). Full suite 172 passed, 0 skipped, 87 s
+- Demo: `python -m pytest -q tests/test_frame_quality_reference.py` prints 3 passed
+- Remaining: coordinator merges wip/fq-real; staged frames in staging/fq_real_labeling/ stay on the VM until Andrew says to delete them; recompute the real reference with the real-tracking midline source when it exists
+- Bottlenecks: none
