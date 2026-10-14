@@ -1,16 +1,17 @@
 # fq-real
-Updated: 2026-10-13 22:40 (local)
+Updated: 2026-10-13 23:20 (local)
 Lane: course
 Branch: wip/fq-real
-Last inbox item done: 1
-State: working
-Now: inbox items 2-4: replace windows outside usable windows, provisional band, drop synthetic-lowest stop
+Last inbox item done: 4
+State: waiting on Andrew
+Now: labeling set rebuilt to the usable-window rule; B4 starts when an inbox item says the labels are done
 Done since last update:
-- B1: 30 windows (20 clean candidates, 10 likely poor), ids fq01-fq30 shuffled, list in private/
-- B2: 90 frames copied read-only from the lab server; view/, labels.csv, HOW_TO_LABEL.txt written; 530 MB
-- B3: frame_quality for all 90 frames, in private/, hidden from the labeling set
-- Log entry in docs/running_log_pending/fq-real.md
+- Item 2: 7 windows broke the rule, all on include (not yes); none outside usable hours. Replaced: fq03, fq10, fq19, fq25, fq27 (include unsure), fq23, fq28 (include no). New: fq31-fq37, likely-poor windows from include-yes roots inside usable hours
+- Item 2: column 3, bottom row of the overlay grid was fq28 (include no, dark region of the plate). Replaced
+- Item 2: replaced windows removed from the VM labeling folder and labels.csv; no labels had been written
+- Fix: labels.csv had only 4 rows since the first build; now 30 rows
+- Item 3: segmentation band kept; border fix removed off-root patches in 4 windows; all 30 overlays checked by eye. Real reference will be marked provisional in config at B4
+- Item 4: B4 stop rule "clean below synthetic lowest" dropped; clean vs not_clean separation check kept
 Needs Andrew:
-- Label 30 windows: folder staging/fq_real_labeling/ in the main repo folder; look at view/<id>.png, write clean, not_clean or unsure in labels.csv (instructions in HOW_TO_LABEL.txt)
-- Band for real frames: no real-movie midline source exists yet, so values use a band from a simple dark-root segmentation. Accept it for the real reference, or wait for the midline source that real tracking will use (the reference should use the same band)
-- All 90 real frames are below the synthetic lowest on both measures. B4 says stop if any clean window falls below the synthetic lowest, so B4 will stop as written. Decide: drop that check for the real reference (real and synthetic references are separate), or keep it and stop
+- Label 30 windows: staging/fq_real_labeling/ in the main repo folder; view/<id>.png, write clean, not_clean or unsure in labels.csv (HOW_TO_LABEL.txt)
+- Band leaves the root in fq34: it runs past the tip and widens in a dark patch. Keep fq34 in the reference with this band, or leave it out

@@ -11,3 +11,16 @@
 - Demo: open staging/fq_real_labeling/view/fq01.png; labels go in staging/fq_real_labeling/labels.csv
 - Remaining: Andrew labels the 30 windows; then B4 (reference, separation, real: section in config/frame_quality_reference.yaml, measure/info.py picks real or synthetic reference, tests)
 - Bottlenecks: labels (Andrew); midline source for the real band and the B4 synthetic-lowest stop rule (Andrew, see status)
+
+## 2026-10-13 (build account, session fq-real, inbox items 2-4)
+- Done: checked all 30 windows against the usable-window rule (CLAUDE.md, 2026-10-13). 7 broke it, all with include not yes (unsure or no); none were outside usable hours
+- Replaced fq03, fq10, fq19, fq23, fq25, fq27, fq28 with fq31-fq37: likely-poor windows from include-yes roots inside usable hours, picked from manifest notes (weird lighting, second root entering, chamber edge in the image). 21 frames pulled read-only as before; frame step 96-111 s, no acquisition gap
+- Replaced windows removed from staging/fq_real_labeling/ on the VM (frames/, view/) and from labels.csv. No labels had been written
+- Fixed: labels.csv had held only fq01-fq04 since the first build (written while the pull was still running, then not rewritten). Now 30 rows, labels empty
+- Set now: 30 windows, 90 frames, 530 MB. Experiments 0708/0711/0714/0721/0727: 4/4/5/8/9. 20 clean candidates, 10 likely poor. The likely-poor windows now come mostly from 0721 and 0727, where the include-yes roots with image-problem notes are
+- Band: the dark border of some frames joined edge blobs to the root mask (band off the root in 4 windows). A 5 px border is now cleared before the largest component is taken. Values recomputed for all 90 frames; all 30 overlays checked by eye
+- Band after the fix: on the root in 29 windows; in 1 window it runs past the tip and widens in a dark patch. In 2 windows the basal root under a bubble is not covered (band stays on the root)
+- Planning decisions taken in: segmentation band used now, real reference marked provisional in config at B4; B4 stop rule "clean window below the synthetic lowest" dropped, clean vs not_clean separation check kept
+- Demo: open staging/fq_real_labeling/view/fq31.png; labels go in staging/fq_real_labeling/labels.csv (30 rows)
+- Remaining: Andrew labels the 30 windows; then B4
+- Bottlenecks: labels (Andrew)
