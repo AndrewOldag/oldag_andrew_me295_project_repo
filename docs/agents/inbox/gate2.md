@@ -16,3 +16,10 @@
    - Where to run: validation on the VM. Install `scikit-image` and `tifffile` into the tracker env first; if the install fails, run validation on the server instead. Full run on the server as in item 4. Server work: read raw data, write only to a new gate2 work folder, nice 19 / ionice idle, shared limits, course sweep lock respected
    - Pushes from `~/coord-gate2` to `status/gate2` are allowed
    - The zero-growth phantom and delta-REGR choices: not received by the planning account. Put them under Needs Andrew in your status, one line each, and continue with your proposed choices in the meantime
+6. Answers (Andrew, 2026-10-14):
+   - Zero-growth phantom: rebuild it with the same construction on a frame from this dataset, and say so in the validation note and the report
+   - Delta-REGR: score against the true value at the tracked flank lines. Add a dated clarification to the plan file
+   - Drop contact: Andrew checks by eye. Write tip crops of the last 20 frames of interval 3 of stimulated_1, plus 3 evenly spaced earlier frames, as PNGs to `~/gate2/review/drop_contact/` on the VM, with the drop rim visible. Not in this repo. Status: the folder and the frame count under Needs Andrew. Do not exclude anything unless a later item says so; the pilot may proceed
+   - Sweep lock left in place at exit: accepted
+   - Plan section 6 comparisons: skip. Record in the plan as not run, by decision
+   - Vault: write the notes to the gate2 folder on the VM; Andrew copies them
