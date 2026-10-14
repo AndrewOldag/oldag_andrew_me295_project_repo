@@ -24,3 +24,12 @@
 - Demo: open staging/fq_real_labeling/view/fq31.png; labels go in staging/fq_real_labeling/labels.csv (30 rows)
 - Remaining: Andrew labels the 30 windows; then B4
 - Bottlenecks: labels (Andrew)
+
+## 2026-10-13 (build account, session fq-real, B4 stopped)
+- Done: Andrew labelled the 30 windows: 24 clean, 5 unsure, 1 not_clean. fq34 left out on Andrew's instruction (band runs past the tip); it is labelled unsure, so it was out anyway
+- Real reference candidate, 24 clean windows, 72 frames, provisional band: texture_contrast median 0.0648, lowest 0.0439; focus median 0.0286, lowest 0.0213
+- Separation check failed: the one not_clean window (fq12, bad lighting and debris) is above the clean lowest on both measures in all 3 frames (texture_contrast 0.070-0.073, focus 0.029-0.031), and above the clean median
+- Stopped per spec B4. config/frame_quality_reference.yaml and measure/info.py not changed
+- Demo: none new; labels in staging/fq_real_labeling/labels.csv (VM)
+- Remaining: Andrew decides how to proceed (see status)
+- Bottlenecks: decision on the failed separation check (Andrew)
