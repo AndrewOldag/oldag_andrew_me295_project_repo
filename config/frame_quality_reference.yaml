@@ -1,9 +1,23 @@
 # Reference for frame_quality (measure/info.py), P5 of docs/proposals/2026-10-12_diagnostician-misses.md.
 # Approved by Andrew on 2026-10-12 (spec docs/specs/2026-10-12_freeze-decisions-diagnostician-fixes.md).
-# Synthetic rods only. The reference for real movies is open.
+# Top-level keys: synthetic rods. Real movies: the `real:` section below.
 # Values: median and lowest over the 15 clean basis rods of the checker thresholds (growth_zone, bending,
 # rigid_translation, seeds 0-4, uncoupled, unremedied), 3 frames each (0, 20, 40): 45 values.
 # Source: staging/tracks_2026-10-11/tracks_coupled/<rod>__st1.npz, settings.frame_quality.
 basis: 15 clean synthetic rods, 3 frames each
 texture_contrast: {median: 0.193, lowest: 0.155}
 focus: {median: 0.090, lowest: 0.073}
+
+# Real movies (spec 2026-10-13 Task B4; inbox fq-real item 5, planning decision 2026-10-13, option a). PROVISIONAL.
+# Values: median and lowest over the frames of the real 1 h windows Andrew labelled clean by eye: 24 windows,
+# 3 frames each (start, middle, end of the hour): 72 values. Windows inside usable windows of include-yes roots only.
+# Band: 45 px around a medial ridge of a dark-root segmentation, not the midline source of real tracking.
+# Recompute with that midline source once it exists.
+# Limits: marks low texture and blur. Does not mark uneven lighting or debris: the one window labelled
+# not_clean (lighting, debris) is above the clean median on both measures. One not_clean window cannot test separation.
+# Used by measure/info.py for records whose settings have movie: real.
+real:
+  basis: "PROVISIONAL: 24 real 1 h windows labelled clean, 3 frames each; marks low texture and blur, not uneven lighting or debris"
+  provisional: true
+  texture_contrast: {median: 0.0648, lowest: 0.0439}
+  focus: {median: 0.0286, lowest: 0.0213}
