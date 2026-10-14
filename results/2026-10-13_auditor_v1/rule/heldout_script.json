@@ -1,0 +1,126 @@
+{
+ "z_cutoff": 3.0,
+ "decisions": {
+  "r01": {
+   "decision": "flag",
+   "reasons": [
+    "check_failed:rigid_invariance",
+    "check_failed:plane_sections",
+    "summary_outlier:centre_peak_regr_pct_per_h",
+    "summary_outlier:growth_zone_length_um"
+   ]
+  },
+  "r02": {
+   "decision": "flag",
+   "reasons": [
+    "check_failed:rigid_invariance",
+    "check_failed:closure",
+    "check_failed:plane_sections"
+   ]
+  },
+  "r03": {
+   "decision": "flag",
+   "reasons": [
+    "check_failed:plane_sections"
+   ]
+  },
+  "r04": {
+   "decision": "flag",
+   "reasons": [
+    "check_failed:plane_sections"
+   ]
+  },
+  "r05": {
+   "decision": "flag",
+   "reasons": [
+    "check_failed:rigid_invariance",
+    "check_failed:plane_sections",
+    "summary_outlier:centre_peak_regr_pct_per_h",
+    "summary_outlier:centre_peak_at_um",
+    "summary_outlier:growth_zone_length_um"
+   ]
+  },
+  "r06": {
+   "decision": "flag",
+   "reasons": [
+    "check_failed:rigid_invariance",
+    "check_failed:closure",
+    "check_failed:plane_sections",
+    "summary_outlier:centre_peak_regr_pct_per_h",
+    "summary_outlier:flank_difference_max_pct_per_h"
+   ]
+  },
+  "r07": {
+   "decision": "flag",
+   "reasons": [
+    "check_failed:closure"
+   ]
+  },
+  "r08": {
+   "decision": "flag",
+   "reasons": [
+    "check_failed:closure"
+   ]
+  },
+  "r09": {
+   "decision": "flag",
+   "reasons": [
+    "check_failed:closure"
+   ]
+  },
+  "r10": {
+   "decision": "flag",
+   "reasons": [
+    "check_failed:rigid_invariance",
+    "check_failed:closure",
+    "check_failed:plane_sections",
+    "summary_outlier:centre_peak_regr_pct_per_h",
+    "summary_outlier:flank_difference_max_pct_per_h"
+   ]
+  },
+  "r11": {
+   "decision": "flag",
+   "reasons": [
+    "check_failed:rigid_invariance",
+    "check_failed:plane_sections",
+    "summary_outlier:centre_peak_regr_pct_per_h",
+    "summary_outlier:growth_zone_length_um"
+   ]
+  },
+  "r12": {
+   "decision": "flag",
+   "reasons": [
+    "check_failed:rigid_invariance",
+    "check_failed:closure",
+    "check_failed:plane_sections",
+    "summary_outlier:centre_peak_regr_pct_per_h",
+    "summary_outlier:centre_peak_at_um",
+    "summary_outlier:growth_zone_length_um"
+   ]
+  },
+  "r13": {
+   "decision": "flag",
+   "reasons": [
+    "check_failed:rigid_invariance",
+    "check_failed:closure",
+    "check_failed:plane_sections",
+    "summary_outlier:flank_difference_max_pct_per_h"
+   ]
+  },
+  "r14": {
+   "decision": "flag",
+   "reasons": [
+    "check_failed:plane_sections"
+   ]
+  },
+  "r15": {
+   "decision": "flag",
+   "reasons": [
+    "check_failed:rigid_invariance",
+    "check_failed:closure",
+    "check_failed:plane_sections",
+    "summary_outlier:flank_difference_max_pct_per_h"
+   ]
+  }
+ }
+}

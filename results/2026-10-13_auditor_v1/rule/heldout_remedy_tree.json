@@ -1,0 +1,50 @@
+{
+ "z_cutoff": 3.0,
+ "decisions": {
+  "r02": {
+   "decision": "clear",
+   "reasons": []
+  },
+  "r03": {
+   "decision": "flag",
+   "reasons": [
+    "summary_outlier:centre_peak_regr_pct_per_h"
+   ]
+  },
+  "r06": {
+   "decision": "clear",
+   "reasons": []
+  },
+  "r08": {
+   "decision": "clear",
+   "reasons": []
+  },
+  "r10": {
+   "decision": "flag",
+   "reasons": [
+    "summary_outlier:centre_peak_regr_pct_per_h",
+    "summary_outlier:width_free_ratio_max"
+   ]
+  },
+  "r11": {
+   "decision": "clear",
+   "reasons": []
+  },
+  "r12": {
+   "decision": "clear",
+   "reasons": []
+  },
+  "r13": {
+   "decision": "clear",
+   "reasons": []
+  },
+  "r14": {
+   "decision": "flag",
+   "reasons": [
+    "summary_outlier:centre_peak_regr_pct_per_h",
+    "summary_outlier:growth_zone_length_um",
+    "summary_outlier:width_free_ratio_max"
+   ]
+  }
+ }
+}
