@@ -31,6 +31,7 @@ A growing plant root is a slender rod whose material generates its own strain: t
 - Nothing unpublished from other lab work appears in this repo or in anything submitted for the course. If unsure whether something is published, ask Andrew
 - Raw data is not in this repo. Never copy a whole experiment folder to the build machine. Stage one root at a time and delete staged images after use
 - Tracking runs on the lab compute server by default. The computing cluster is used only after Andrew approves a cost estimate
+- No Claude session deletes, moves or renames any file or folder on the lab server, by any means. Andrew deletes there himself, at the end of the project. Only exception: the lock files `scripts/synth/sweep.py` creates and removes for its own sweep. If a step needs a server delete, stop and tell Andrew (Andrew, 2026-10-13)
 - The lab compute server is shared. Every job there: at most 4 single-thread workers, lowest priority, load checked before and between runs, one sweep at a time. Limits in `docs/decisions.md`, 2026-10-11
 - The checker contains no LLM calls
 - Remedies come from a fixed list set in advance. No free parameter tuning on data that may go into paper figures
@@ -84,7 +85,7 @@ Lab reports go in `docs/reports/`, one file per report, started from `docs/repor
 - Lab report 2: Fri 30 Oct (1-page proposal; commitment point)
 - Lab report 3: Fri 13 Nov (smallest slice running end to end)
 - Lab report 4: Mon 23 Nov (integrated run; failure modes)
-- Presentation: Wed 2 Dec. Final report and repository: Wed 9 Dec (syllabus also says 4 Dec; confirm)
+- Presentation: Wed 2 Dec. Final report and repository: Wed 9 Dec (syllabus deliverables table)
 
 ## Context files
 - `docs/context/project_summary.md`: design, evaluation, limits, open items
