@@ -1,0 +1,162 @@
+{
+ "set": "heldout",
+ "method": "script",
+ "n": 3,
+ "commit": "23d93ef",
+ "claude_code": "2.1.293",
+ "model": "claude-opus-5-5",
+ "wall_s": 39.3,
+ "outcome": {
+  "task_id": "batch-1",
+  "agent": "auditor",
+  "status": "report",
+  "args": {
+   "text": "Batch: 15 runs, 15 accepted, 15 flagged, 0 cleared.\n- Flagged, check_failed_but_accepted, all three checks failed (r02, r06, r10, r12, r13, r15): rigid invariance 40\u2013125 (threshold 2), closure 1.4\u201329.6 (threshold 1), plane sections 32\u2013173 (threshold 3.25). r12 also has an off-batch profile: peak at 53 \u00b5m and growth zone of 105 \u00b5m. r13 and r15 have large flank differences (-173 and -92 %/h).\n- Flagged, check_failed_but_accepted, rigid invariance and plane sections failed (r01, r05, r11): the tracker test failed. These runs also have off-batch profiles: REGR peaks of 74\u2013122 %/h against a batch median of 42.5, and growth zones of 263\u2013410 \u00b5m against a median of 526.\n- Flagged, check_failed_but_accepted, plane sections failed (r03, r04, r14): 9.0\u201311.3 against 3.25, with the width-free ratio not used. Strain-rate summaries match the batch.\n- Flagged, check_failed_but_accepted, closure failed (r07, r08, r09): 2.92\u20132.93 against 1.0. Strain-rate summaries match the batch.\nWhat the flagged runs have in common: every run was accepted after at least one failed final check. No run kept a remedy, rolled back, used the width-free ratio or took more than one step. This points to a fault in the acceptance step for the whole batch, not in single roots. The acceptance logic should be reviewed and the batch re-run before any velocity, strain-rate or curvature result is reported."
+  },
+  "steps": 5,
+  "failed_steps": 0,
+  "calls": 5,
+  "input_tokens": 51349,
+  "output_tokens": 2790,
+  "call_ms": 32689
+ },
+ "decisions": {
+  "r02": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "rigid_invariance",
+    "closure",
+    "plane_sections"
+   ]
+  },
+  "r06": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "rigid_invariance",
+    "closure",
+    "plane_sections"
+   ]
+  },
+  "r10": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "rigid_invariance",
+    "closure",
+    "plane_sections"
+   ]
+  },
+  "r12": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "rigid_invariance",
+    "closure",
+    "plane_sections"
+   ]
+  },
+  "r13": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "rigid_invariance",
+    "closure",
+    "plane_sections"
+   ]
+  },
+  "r15": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "rigid_invariance",
+    "closure",
+    "plane_sections"
+   ]
+  },
+  "r01": {
+   "decision": "flag",
+   "order": 2,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "rigid_invariance",
+    "plane_sections"
+   ]
+  },
+  "r05": {
+   "decision": "flag",
+   "order": 2,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "rigid_invariance",
+    "plane_sections"
+   ]
+  },
+  "r11": {
+   "decision": "flag",
+   "order": 2,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "rigid_invariance",
+    "plane_sections"
+   ]
+  },
+  "r03": {
+   "decision": "flag",
+   "order": 3,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "plane_sections"
+   ]
+  },
+  "r04": {
+   "decision": "flag",
+   "order": 3,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "plane_sections"
+   ]
+  },
+  "r14": {
+   "decision": "flag",
+   "order": 3,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "plane_sections"
+   ]
+  },
+  "r07": {
+   "decision": "flag",
+   "order": 4,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "closure"
+   ]
+  },
+  "r08": {
+   "decision": "flag",
+   "order": 4,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "closure"
+   ]
+  },
+  "r09": {
+   "decision": "flag",
+   "order": 4,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "closure"
+   ]
+  }
+ },
+ "undecided": [],
+ "report": "Batch: 15 runs, 15 accepted, 15 flagged, 0 cleared.\n- Flagged, check_failed_but_accepted, all three checks failed (r02, r06, r10, r12, r13, r15): rigid invariance 40\u2013125 (threshold 2), closure 1.4\u201329.6 (threshold 1), plane sections 32\u2013173 (threshold 3.25). r12 also has an off-batch profile: peak at 53 \u00b5m and growth zone of 105 \u00b5m. r13 and r15 have large flank differences (-173 and -92 %/h).\n- Flagged, check_failed_but_accepted, rigid invariance and plane sections failed (r01, r05, r11): the tracker test failed. These runs also have off-batch profiles: REGR peaks of 74\u2013122 %/h against a batch median of 42.5, and growth zones of 263\u2013410 \u00b5m against a median of 526.\n- Flagged, check_failed_but_accepted, plane sections failed (r03, r04, r14): 9.0\u201311.3 against 3.25, with the width-free ratio not used. Strain-rate summaries match the batch.\n- Flagged, check_failed_but_accepted, closure failed (r07, r08, r09): 2.92\u20132.93 against 1.0. Strain-rate summaries match the batch.\nWhat the flagged runs have in common: every run was accepted after at least one failed final check. No run kept a remedy, rolled back, used the width-free ratio or took more than one step. This points to a fault in the acceptance step for the whole batch, not in single roots. The acceptance logic should be reviewed and the batch re-run before any velocity, strain-rate or curvature result is reported."
+}

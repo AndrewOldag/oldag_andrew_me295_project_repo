@@ -25,4 +25,4 @@ agents:
   auditor:
     effort: high
     max_turns: 3
-    step_limit: 30
+    step_limit: 20                # spec 2026-10-13, auditor v1: per batch

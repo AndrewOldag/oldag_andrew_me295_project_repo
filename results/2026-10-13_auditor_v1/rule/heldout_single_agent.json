@@ -1,0 +1,33 @@
+{
+ "z_cutoff": 3.0,
+ "decisions": {
+  "r02": {
+   "decision": "clear",
+   "reasons": []
+  },
+  "r04": {
+   "decision": "clear",
+   "reasons": []
+  },
+  "r06": {
+   "decision": "flag",
+   "reasons": [
+    "check_failed:closure"
+   ]
+  },
+  "r07": {
+   "decision": "flag",
+   "reasons": [
+    "check_failed:closure"
+   ]
+  },
+  "r10": {
+   "decision": "clear",
+   "reasons": []
+  },
+  "r12": {
+   "decision": "clear",
+   "reasons": []
+  }
+ }
+}

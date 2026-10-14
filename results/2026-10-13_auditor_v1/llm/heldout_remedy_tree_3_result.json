@@ -1,0 +1,77 @@
+{
+ "set": "heldout",
+ "method": "remedy_tree",
+ "n": 3,
+ "commit": "23d93ef",
+ "claude_code": "2.1.293",
+ "model": "claude-opus-5-5",
+ "wall_s": 43.8,
+ "outcome": {
+  "task_id": "batch-1",
+  "agent": "auditor",
+  "status": "report",
+  "args": {
+   "text": "Batch: 15 runs. 9 accepted, 6 declined (r01, r04, r05, r07, r09, r15).\nFlagged (2):\n- r10, width_free_ratio_used: its largest width-free ratio is -1.142, against a batch median of -0.351 (about 3x). It took 5 steps and 2 roll-backs. The tracker disk was doubled from 15 to 30 px. Rigid invariance was 1.934, just under the 2.0 threshold.\n- r14, summary_outlier: the strain-rate profile has a different shape. The growth zone is 295 \u00b5m against a median of 526 \u00b5m. The REGR peak sits at 358 \u00b5m against 316 \u00b5m, and its value is 67.66 %/h against 42.52 %/h. The width-free ratio is +0.619, the opposite sign to the batch median of -0.351.\nCleared (7): r02, r03, r06, r08, r11, r12, r13. All checks that were run passed, and the peak position, growth-zone length, flank difference and width-free ratio are close to the batch. r03's higher REGR peak (48.86 %/h) has a profile of the usual shape, so it is a faster root. r06, r08 and r11 use the width-free ratio and nothing else puts them in doubt.\nCommon to the flagged runs: both are reported with the width-free ratio, and that ratio is far from the batch. Both kept 2 remedies and needed more steps with roll-backs than the cleared runs."
+  },
+  "steps": 5,
+  "failed_steps": 0,
+  "calls": 5,
+  "input_tokens": 53131,
+  "output_tokens": 3583,
+  "call_ms": 37639
+ },
+ "decisions": {
+  "r10": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "width_free_ratio_used",
+   "evidence": [
+    "width_free_ratio_max",
+    "rigid_invariance",
+    "roll_backs",
+    "remedies_kept"
+   ]
+  },
+  "r14": {
+   "decision": "flag",
+   "order": 2,
+   "reason": "summary_outlier",
+   "evidence": [
+    "growth_zone_length_um",
+    "centre_peak_at_um",
+    "centre_peak_regr_pct_per_h",
+    "width_free_ratio_max"
+   ]
+  },
+  "r02": {
+   "decision": "clear",
+   "order": 3
+  },
+  "r03": {
+   "decision": "clear",
+   "order": 3
+  },
+  "r06": {
+   "decision": "clear",
+   "order": 3
+  },
+  "r08": {
+   "decision": "clear",
+   "order": 3
+  },
+  "r11": {
+   "decision": "clear",
+   "order": 3
+  },
+  "r12": {
+   "decision": "clear",
+   "order": 3
+  },
+  "r13": {
+   "decision": "clear",
+   "order": 3
+  }
+ },
+ "undecided": [],
+ "report": "Batch: 15 runs. 9 accepted, 6 declined (r01, r04, r05, r07, r09, r15).\nFlagged (2):\n- r10, width_free_ratio_used: its largest width-free ratio is -1.142, against a batch median of -0.351 (about 3x). It took 5 steps and 2 roll-backs. The tracker disk was doubled from 15 to 30 px. Rigid invariance was 1.934, just under the 2.0 threshold.\n- r14, summary_outlier: the strain-rate profile has a different shape. The growth zone is 295 \u00b5m against a median of 526 \u00b5m. The REGR peak sits at 358 \u00b5m against 316 \u00b5m, and its value is 67.66 %/h against 42.52 %/h. The width-free ratio is +0.619, the opposite sign to the batch median of -0.351.\nCleared (7): r02, r03, r06, r08, r11, r12, r13. All checks that were run passed, and the peak position, growth-zone length, flank difference and width-free ratio are close to the batch. r03's higher REGR peak (48.86 %/h) has a profile of the usual shape, so it is a faster root. r06, r08 and r11 use the width-free ratio and nothing else puts them in doubt.\nCommon to the flagged runs: both are reported with the width-free ratio, and that ratio is far from the batch. Both kept 2 remedies and needed more steps with roll-backs than the cleared runs."
+}

@@ -1,0 +1,73 @@
+{
+ "z_cutoff": 3.0,
+ "decisions": {
+  "r01": {
+   "decision": "clear",
+   "reasons": []
+  },
+  "r02": {
+   "decision": "flag",
+   "reasons": [
+    "summary_outlier:centre_peak_regr_pct_per_h"
+   ]
+  },
+  "r04": {
+   "decision": "flag",
+   "reasons": [
+    "summary_outlier:centre_peak_regr_pct_per_h"
+   ]
+  },
+  "r09": {
+   "decision": "clear",
+   "reasons": []
+  },
+  "r10": {
+   "decision": "flag",
+   "reasons": [
+    "summary_outlier:centre_peak_regr_pct_per_h"
+   ]
+  },
+  "r11": {
+   "decision": "flag",
+   "reasons": [
+    "summary_outlier:width_free_ratio_max"
+   ]
+  },
+  "r12": {
+   "decision": "clear",
+   "reasons": []
+  },
+  "r14": {
+   "decision": "flag",
+   "reasons": [
+    "summary_outlier:width_free_ratio_max"
+   ]
+  },
+  "r15": {
+   "decision": "clear",
+   "reasons": []
+  },
+  "r16": {
+   "decision": "clear",
+   "reasons": []
+  },
+  "r18": {
+   "decision": "clear",
+   "reasons": []
+  },
+  "r20": {
+   "decision": "flag",
+   "reasons": [
+    "summary_outlier:centre_peak_regr_pct_per_h"
+   ]
+  },
+  "r23": {
+   "decision": "clear",
+   "reasons": []
+  },
+  "r25": {
+   "decision": "clear",
+   "reasons": []
+  }
+ }
+}

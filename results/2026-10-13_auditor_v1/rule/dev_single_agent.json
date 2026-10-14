@@ -1,0 +1,29 @@
+{
+ "z_cutoff": 3.0,
+ "decisions": {
+  "r05": {
+   "decision": "clear",
+   "reasons": []
+  },
+  "r13": {
+   "decision": "clear",
+   "reasons": []
+  },
+  "r16": {
+   "decision": "clear",
+   "reasons": []
+  },
+  "r17": {
+   "decision": "clear",
+   "reasons": []
+  },
+  "r19": {
+   "decision": "clear",
+   "reasons": []
+  },
+  "r24": {
+   "decision": "clear",
+   "reasons": []
+  }
+ }
+}
