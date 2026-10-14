@@ -12,3 +12,7 @@
    - Pilot first: stimulated_1 alone. From it, estimate output size and wall time for all 7 roots. Over 50 GB of output or over 48 h of wall time: stop, Needs Andrew. Otherwise run the other 6 roots one at a time
    - Frame flags and event handling as the plan says
    - Report: a note "Gate 2 Results - <date>.md" in the vault folder next to the validation note, per root and pooled, in the plan's format. Status here: roots done, counts, pass or fail only. No result values in this repo
+5. Answers (planning, 2026-10-14):
+   - Where to run: validation on the VM. Install `scikit-image` and `tifffile` into the tracker env first; if the install fails, run validation on the server instead. Full run on the server as in item 4. Server work: read raw data, write only to a new gate2 work folder, nice 19 / ionice idle, shared limits, course sweep lock respected
+   - Pushes from `~/coord-gate2` to `status/gate2` are allowed
+   - The zero-growth phantom and delta-REGR choices: not received by the planning account. Put them under Needs Andrew in your status, one line each, and continue with your proposed choices in the meantime
