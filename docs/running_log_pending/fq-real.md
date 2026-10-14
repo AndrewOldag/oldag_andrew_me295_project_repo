@@ -1,0 +1,13 @@
+## 2026-10-13 (build account, session fq-real)
+- Done: Task B1-B3 of spec 2026-10-13 (real-movie frame-quality labeling set), branch wip/fq-real
+- B1: 30 windows of 1 h, ids fq01-fq30 in shuffled order: 20 control roots with include yes inside usable hours, 10 likely poor (notes on lighting, focus, dark region, banding, artifacts). Experiments 0708/0711/0714/0721/0727: 6/5/8/7/4 windows. Start hours 1.7-21.7 h. List in the git-ignored private folder
+- B1 deviation: 0727 has 2 control roots with include yes and no image-problem note, so it gives 2 clean-candidate windows; 0714 and 0721 give 5 each instead of 4
+- B2: 90 frames (start, middle, end of each hour) from the montage image folders, read-only on the lab server: sftp at nice 19, ionice idle, 40 Mbit/s cap, load checked before each window (1 min load 0.3-0.7 of 32 cores), no other transfer running. Nothing written, moved or deleted on the server
+- B2: frame step inside the windows 90-114 s; no window crosses an acquisition gap
+- B2: set in staging/fq_real_labeling/ (git-ignored): frames/ (90 .npy, 12-bit, 1200 x 2280 px), view/ (30 PNG, 3 frames stacked, 12-bit range mapped to 8-bit, no auto-levels, downscaled 3x), labels.csv (30 rows, label empty), HOW_TO_LABEL.txt. 530 MB on disk (cap 5 GB)
+- B3: frame_quality (texture_contrast, focus) for all 90 frames with measure.preprocess.frame_quality, band radius 45 px as in qb_track.py. Values in the private folder, not in view/ or labels.csv
+- B3: no midline source exists yet for real movies, so the band follows a medial ridge of a dark-root segmentation (Gaussian 4 px, below 0.85 x smoothed background, largest component). Overlays checked by eye: the band covers the root in all 30 windows; 2-3 windows pick up small dark blobs at the image edge
+- B3: all 90 real frames are below the synthetic lowest on both measures (synthetic lowest 0.155 and 0.073). Under B4 as written, any window Andrew labels clean will hit the stop condition "clean window below the synthetic lowest"
+- Demo: open staging/fq_real_labeling/view/fq01.png; labels go in staging/fq_real_labeling/labels.csv
+- Remaining: Andrew labels the 30 windows; then B4 (reference, separation, real: section in config/frame_quality_reference.yaml, measure/info.py picks real or synthetic reference, tests)
+- Bottlenecks: labels (Andrew); midline source for the real band and the B4 synthetic-lowest stop rule (Andrew, see status)
