@@ -9,9 +9,8 @@
 Each candidate size on growth_zone, seeds 0-2, unremedied, uncoupled, each
 rod tracked as is and rigidly moved. The sweep runs under the limits for the
 shared machine in scripts/synth/sweep.py and takes the same sweep lock as
-every other sweep. The code goes to its own directory on the tracker
-machine (<code_dir>_heldout), so a code copy by another session cannot
-change it while the sweep runs.
+every other sweep. The code goes to the branch's own directory on the
+tracker machine (measure/runner.py), as for every other sweep.
 
 private/runner.yaml is read from this checkout, or else from the main
 checkout (beside the git common directory) when run from a worktree.
@@ -57,9 +56,7 @@ def config():
 
 
 def runner():
-    r = RemoteRunner(config(), cache=CACHE)
-    r.code = r.code.rstrip("/") + "_heldout"
-    return r
+    return RemoteRunner(config(), cache=CACHE)
 
 
 def evaluate_all(out):

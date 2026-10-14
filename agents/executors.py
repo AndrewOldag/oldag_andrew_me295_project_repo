@@ -121,3 +121,34 @@ class Slice:
 
     def executors(self):
         return {"request_info": self.request_info, "apply_remedy": self.apply_remedy}
+
+
+class BlindSlice(Slice):
+    """Single-agent baseline (docs/proposals/2026-10-12_single-agent-baseline.md): the same rod, runner and
+    remedies, with no checker output in anything the agent sees. The checker still runs on every measurement,
+    for the record and for scoring. `check_report` answers not available; no roll back (it is decided by
+    the check values)."""
+
+    def task(self):
+        s = self.current.record.settings
+        return {"task": f"{self.label}, one window of {self.current.record.n_frames} frames",
+                "tracking": {"frame_stride": s.get("stride"), "disk_radius_px": s.get("disk_radius"),
+                             "pixel_um": self.current.record.pixel_um}}
+
+    def request_info(self, args, task):
+        if args["kind"] == "check_report":
+            return {"error": "check_report is not available for this task"}
+        return super().request_info(args, task)
+
+    def apply_remedy(self, args, task):
+        settings = self.runs[-1][0]
+        try:
+            new, change = apply_remedy(settings, args["remedy"], args.get("setting"), self.base_disk_radius,
+                                       self.current.record)
+        except NotAvailable as e:
+            return {"rerun": False, "error": f"remedy not available: {e}"}
+        self._measure(new, change)
+        out = {"rerun": True, "change": change}
+        if not self.settings_left(args["remedy"]):
+            out["settings_left"] = f"no further setting: {args['remedy']} cannot be applied again or at another setting"
+        return out

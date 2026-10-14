@@ -26,6 +26,7 @@ Course project for AM/ME/CE 295, Caltech, Fall 2026. Start with `CLAUDE.md` and 
 
 ## Sweeps on the shared tracker machine
 - The tracker machine is shared. `scripts/synth/sweep.py` enforces the limits (`docs/decisions.md`, 2026-10-11): load check before start (1 min load at most half the cores; three 15 min retries) and before each run (pause above three quarters), at most 4 workers and one eighth of the cores, one thread per worker, `nice 19` and idle I/O, one sweep at a time (lock file), 2 h projected wall time and 10 GB of work space. Single runs through `RemoteRunner` are also load-checked and run at lowest priority
+- Code goes to one directory per branch on the tracker machine: `<code_dir>/<branch with / replaced by _>` (`code_dir` from `private/runner.yaml`). Run from a checked-out branch; a detached HEAD is refused. The sweep lock and work directory stay shared, one sweep per machine
 - From the agents env, with `private/runner.yaml` filled in: `python scripts/synth/fix_sweep.py start --part check`, then `status --part check`, `stop`, `fetch --part check`. `status` prints the preflight line (cores, load, memory, disk, work space, own processes) and the end line (load before and after, peak workers, wall time)
 - On the tracker machine directly: `python scripts/synth/sweep.py run --plan P --work DIR`, `sweep.py status --work DIR`, `sweep.py stop --work DIR`
 - Spec 2026-10-11 sweeps: `python scripts/synth/fix_sweep.py start --part P` (parts listed in the script; `--dry-run` prints the run count), `fetch --part P` copies outputs to `staging/tracks_2026-10-11/`, then `python scripts/synth/eval_fix.py --out results/2026-10-11_remedy_fixes` writes the tables
@@ -38,10 +39,17 @@ Course project for AM/ME/CE 295, Caltech, Fall 2026. Start with `CLAUDE.md` and 
 - Runner (`measure/runner.py`), one interface with two forms: `FieldRunner` in process for field-level rods; `RemoteRunner` renders and tracks on the machine that has the tracker. For the remote form copy `config/runner.example.yaml` to `private/runner.yaml` and fill it in (ssh host alias, work and code directories there, tracker env Python)
 - `python scripts/demo_slice.py --fault displacement_exceeds_patch` renders one rod with that fault, tracks and checks it, runs the diagnostician, and prints the truth, the error before and after, and the outcome. Trace and summary in `results/<date>_demo_slice/`. `--no-agent` stops after the first check; `--runner field` runs a field-level rod in process
 
+## Single-agent baseline
+- Same model, prompt (one sentence changed), actions, lists and step limit as the diagnostician, with no checker output in anything it sees: no check fields in the task, `check_report` answers not available, remedy results show the change only, no roll back. `agents/executors.py` (`BlindSlice`), `agents/prompts/single_agent.md`, `single_agent` in `config/models.yaml`. Definition: `docs/proposals/2026-10-12_single-agent-baseline.md`. Test: `tests/test_single_agent.py`
+
 ## Non-LLM baselines (no agent call)
 - Fixed-parameter script and rule-based remedy tree: `agents/baselines.py`. The tree is fixed in `docs/proposals/2026-10-12_remedy-tree.md`. Both use the diagnostician's `Slice` (same remedies, re-runs and roll back) and write the orchestrator's outcome record
 - Development faults at their frozen sizes, seeds 0-2, in rounds: `python scripts/synth/baselines.py next` starts the tracker runs still needed as one sweep (refuses while another sweep holds the lock, and past 200 runs), `status`, `fetch` (to `staging/tracks_baselines/`); repeat until `next` needs nothing. Then `python scripts/synth/baselines.py write --out results/<dir>` writes a trace and a summary per task
 - Scoring: `python scripts/synth/eval_baselines.py --runs results/<dir> [--agent-runs DIR] --out results/<dir>` writes `table.md` and `scores.json` (`measure/score.py`, freeze labels)
+
+## Scored runs (four methods)
+- `python scripts/synth/scored_v1.py next --set dev|heldout` starts the tracker runs the script and remedy tree still need as one sweep; `status`, `fetch`; repeat until `next` needs nothing. Then `rules --set S`, `agents --set S --method diagnostician|single_agent` (needs a clean tracked tree; each run records the freeze tag and commit; runs with a summary are skipped), and `eval`, which writes `results/2026-10-12b_scored_v1/table_dev.md`, `table_heldout.md` and `scores.json`
+- Held-out labels: `python scripts/synth/heldout_labels.py start`, `status`, `fetch`, `eval --out results/2026-10-12b_heldout_labels`
 
 ## Tools
 - Root manifest review app: `python scripts/manifest/review_server.py`, then open http://localhost:8295

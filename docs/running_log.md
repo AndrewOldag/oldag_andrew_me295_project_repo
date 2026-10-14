@@ -288,3 +288,27 @@ Required by the course. One entry per work session: done, remaining, bottlenecks
 - Demo: `python scripts/synth/heldout_sweep.py eval --out results/2026-10-12_heldout_faults` (after `fetch`) prints the per-fault table of seeds failing the checker
 - Remaining: Andrew approves sizes, names and outcomes; then the remedy label sweep (about 90 runs, no agent); then merge at the freeze
 - Bottlenecks: size, name and outcome approval (Andrew); branch not merged until the freeze (Andrew)
+
+## 2026-10-12 (build account, scored-v1 session)
+- Start: spec `docs/specs/2026-10-12b_heldout-labels-single-agent-scored-runs.md` pasted by Andrew; saved and committed alone (8d2cda7). Branch wip/scored-v1 from main 5b64897. Items 1-7 done in order
+- Done, item 1 (625b461): code syncs to `<code_dir>/<branch with / replaced by _>` (`measure/runner.py`, `branch_code_dir`; detached HEAD refused). Held-out sweep's `_heldout` suffix removed. Work directory, sweep lock and 10 GB limit unchanged. `tests/test_runner_code_dir.py`, 6 tests
+- Coordinator: merge item 1 (625b461) to main early, so later branches pick it up
+- For Andrew: old code copies left in place on the tracker machine, not deleted: the shared copy at `code_dir` itself and `<code_dir>_heldout` (`code_dir` in `private/runner.yaml`)
+- Done, item 2: tag `freeze-v2` on main 5b64897, pushed
+- Done, item 3 (1e5e2c2): `scripts/synth/heldout_labels.py`. 84 tracker runs, 0 failed, 212 s sweep wall, 4 workers, load at most 5.71 on 32 cores. Labels: second_root, fast_rotation, flank_swap, partial_occlusion not repairable 3 of 3; bad_stage_correction repairable (register_frames) 3 of 3. `results/2026-10-12b_heldout_labels/`
+- Found: fast_rotation label differs from the proposal (accept after register_frames): register_frames leaves all checks failing; correct outcome decline. Label wins; size unchanged
+- Found: `use_width_free_ratio` (not a fitting state) on second_root passes the other two checks with a good centre on 3 of 3. Label kept from fitting states, as for the development labels. For Andrew
+- Item 4: stopped and asked (the `check_report` info kind, remedy results and the prompt carry checker output). Andrew chose: check_report listed, answered not available; remedy results give the change only; no roll back; one prompt sentence replaced; no check value in any message, with a test
+- Done, item 4: definition `docs/proposals/2026-10-12_single-agent-baseline.md` (51f1598, before any run). `BlindSlice` in `agents/executors.py`, `agents/prompts/single_agent.md`, `single_agent` entry in `config/models.yaml` equal to the diagnostician's (4192747). `tests/test_single_agent.py`, 5 tests; the leak test also flags the diagnostician's view when pointed at it
+- Done, items 5-6 (c9d5a0c harness, f2b727e results): `scripts/synth/scored_v1.py`. 160 runs: 4 methods x (25 dev + 15 held-out). 80 agent runs, 0 harness errors, 0 orchestrator errors. All runs record freeze-v2 and commit c9d5a0c; Claude Code 2.1.293
+- Done: tracker runs for the scored runs: 96 in 9 sweep rounds (0 failed, 445 s wall, load at most 4.73), 22 as single jobs from agent runs. Spec total 202 tracker runs, 657 s sweep wall time
+- Result, dev seeds 1-5, correct of 25: script 10, remedy tree 24, diagnostician 24, single agent 11. False accepts: script 10, others 0. Not reported (step limit): diagnostician 1, single agent 13
+- Result, held-out seeds 0-2, correct of 15: script 3, remedy tree 9, diagnostician 11, single agent 7. False accepts: script 12, tree 3 (partial_occlusion), agents 0. Terminal fault correct: tree 1, diagnostician 3, single agent 1
+- Result: second_root: tree, diagnostician and single agent applied the width-free ratio, named width_change and accepted a good centre on 3 of 3 each; counted neither correct nor false accept under the label
+- Result, both sets, per run mean: diagnostician 5.2 steps, 23.0k tokens in, 2.7k out, 31.6 s call time; single agent 6.8 steps, 28.4k, 3.3k, 38.8 s. Totals 0.92M and 1.14M tokens in
+- Done, item 7 (30b78e1): `results/2026-10-12b_scored_v1/README.md`, `table_dev.md`, `table_heldout.md`, `scores.json`. Lab report 1 root-count mark replaced as the spec gives it
+- Done: `python -m pytest -q tests`: 169 passed
+- Setup, not tracked: worktree links to `private/` and the staging caches of the main checkout and the baselines, freeze-v2 and held-out worktrees
+- Demo: `python scripts/synth/scored_v1.py eval` prints both method x fault tables and totals (needs the staging caches for the truth)
+- Remaining: merge item 1 early, then the branch; Andrew decides whether the width-free ratio is a label state for second_root (changes 9 runs from uncounted to correct); auditor next
+- Bottlenecks: second_root label question (Andrew); real-movie `frame_quality` reference (Andrew)
