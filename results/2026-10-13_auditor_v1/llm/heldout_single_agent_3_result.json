@@ -1,0 +1,59 @@
+{
+ "set": "heldout",
+ "method": "single_agent",
+ "n": 3,
+ "commit": "23d93ef",
+ "claude_code": "2.1.293",
+ "model": "claude-opus-5-5",
+ "wall_s": 59.7,
+ "outcome": {
+  "task_id": "batch-1",
+  "agent": "auditor",
+  "status": "report",
+  "args": {
+   "text": "Batch: 15 runs, 6 accepted (r02, r04, r06, r07, r10, r12). 9 were declined or not reported.\nFlagged (2): r06 and r07, reason check_failed_but_accepted. Closure failed on both: 2.928 and 2.915 px/h against a 1.0 threshold.\nCleared (4): r02, r04, r10, r12. Rigid-body invariance and closure pass, and plane sections was not run because they report the width-free ratio. Every summary is within |z| < 1.5: REGR peak 42.0\u201342.5 %/h at 316 \u00b5m, growth zone 526\u2013537 \u00b5m.\nWhat the flagged runs share: each kept one remedy (the width-free ratio) over 6 steps. Their summaries look like the rest of the batch. Only the closure check shows the problem: the tip motion from the midline and stage log does not match the tip motion from the tracked velocity field. Their strain-rate and curvature-rate profiles may look normal, but the velocity field behind them is not consistent."
+  },
+  "steps": 5,
+  "failed_steps": 0,
+  "calls": 5,
+  "input_tokens": 52911,
+  "output_tokens": 4535,
+  "call_ms": 52323
+ },
+ "decisions": {
+  "r06": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "closure"
+   ]
+  },
+  "r07": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "closure"
+   ]
+  },
+  "r02": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r04": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r10": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r12": {
+   "decision": "clear",
+   "order": 2
+  }
+ },
+ "undecided": [],
+ "report": "Batch: 15 runs, 6 accepted (r02, r04, r06, r07, r10, r12). 9 were declined or not reported.\nFlagged (2): r06 and r07, reason check_failed_but_accepted. Closure failed on both: 2.928 and 2.915 px/h against a 1.0 threshold.\nCleared (4): r02, r04, r10, r12. Rigid-body invariance and closure pass, and plane sections was not run because they report the width-free ratio. Every summary is within |z| < 1.5: REGR peak 42.0\u201342.5 %/h at 316 \u00b5m, growth zone 526\u2013537 \u00b5m.\nWhat the flagged runs share: each kept one remedy (the width-free ratio) over 6 steps. Their summaries look like the rest of the batch. Only the closure check shows the problem: the tip motion from the midline and stage log does not match the tip motion from the tracked velocity field. Their strain-rate and curvature-rate profiles may look normal, but the velocity field behind them is not consistent."
+}

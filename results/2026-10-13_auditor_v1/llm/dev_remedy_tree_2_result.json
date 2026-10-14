@@ -1,0 +1,83 @@
+{
+ "set": "dev",
+ "method": "remedy_tree",
+ "n": 2,
+ "commit": "b1055da",
+ "claude_code": "2.1.293",
+ "model": "claude-opus-5-5",
+ "wall_s": 56.2,
+ "outcome": {
+  "task_id": "batch-1",
+  "agent": "auditor",
+  "status": "report",
+  "args": {
+   "text": "The batch has 25 runs: 14 accepted, 11 declined (r03, r05, r06, r07, r08, r13, r17, r19, r21, r22, r24) and none not reported.\nFlagged: none.\nCleared: all 14 accepted runs (r01, r02, r04, r09, r10, r11, r12, r14, r15, r16, r18, r20, r23, r25).\n- Every check that was run passed on every accepted run. All of them have a centre strain-rate (REGR) peak at 316 \u00b5m from the tip and a growth zone 526\u2013547 \u00b5m long, the same as the rest of the batch.\n- r02, r04, r10 and r20 have REGR peaks near 84 %/h, about twice the batch median of 42.44 %/h. Their profile shape is the same as the batch, and r10 uses the same settings (stride 1, no registration) as r11, which has a typical peak. I read these as faster-growing roots, not a fault.\n- r09, r11, r14, r15 and r25 report the width-free ratio. The plane-sections check was not run on them; its value would be just above threshold, as expected when root width changes. The large ratio z-scores on r11 and r14 come from differences of only about 0.03 against a batch MAD of 0.005.\nNo runs were flagged, so the flagged runs have nothing in common to report. The declined runs show two patterns. In r05, r07, r13, r17 and r22 the rigid-body invariance check failed, with a short growth zone (221\u2013347 \u00b5m) and large flank differences in the velocity field. In r03, r06, r08, r19, r21 and r24 the closure check failed."
+  },
+  "steps": 5,
+  "failed_steps": 0,
+  "calls": 5,
+  "input_tokens": 73322,
+  "output_tokens": 4264,
+  "call_ms": 48550
+ },
+ "decisions": {
+  "r01": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r02": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r04": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r09": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r10": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r11": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r12": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r14": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r15": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r16": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r18": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r20": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r23": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r25": {
+   "decision": "clear",
+   "order": 1
+  }
+ },
+ "undecided": [],
+ "report": "The batch has 25 runs: 14 accepted, 11 declined (r03, r05, r06, r07, r08, r13, r17, r19, r21, r22, r24) and none not reported.\nFlagged: none.\nCleared: all 14 accepted runs (r01, r02, r04, r09, r10, r11, r12, r14, r15, r16, r18, r20, r23, r25).\n- Every check that was run passed on every accepted run. All of them have a centre strain-rate (REGR) peak at 316 \u00b5m from the tip and a growth zone 526\u2013547 \u00b5m long, the same as the rest of the batch.\n- r02, r04, r10 and r20 have REGR peaks near 84 %/h, about twice the batch median of 42.44 %/h. Their profile shape is the same as the batch, and r10 uses the same settings (stride 1, no registration) as r11, which has a typical peak. I read these as faster-growing roots, not a fault.\n- r09, r11, r14, r15 and r25 report the width-free ratio. The plane-sections check was not run on them; its value would be just above threshold, as expected when root width changes. The large ratio z-scores on r11 and r14 come from differences of only about 0.03 against a batch MAD of 0.005.\nNo runs were flagged, so the flagged runs have nothing in common to report. The declined runs show two patterns. In r05, r07, r13, r17 and r22 the rigid-body invariance check failed, with a short growth zone (221\u2013347 \u00b5m) and large flank differences in the velocity field. In r03, r06, r08, r19, r21 and r24 the closure check failed."
+}

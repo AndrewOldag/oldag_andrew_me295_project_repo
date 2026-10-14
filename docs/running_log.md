@@ -312,3 +312,20 @@ Required by the course. One entry per work session: done, remaining, bottlenecks
 - Demo: `python scripts/synth/scored_v1.py eval` prints both method x fault tables and totals (needs the staging caches for the truth)
 - Remaining: merge item 1 early, then the branch; Andrew decides whether the width-free ratio is a label state for second_root (changes 9 runs from uncounted to correct); auditor next
 - Bottlenecks: second_root label question (Andrew); real-movie `frame_quality` reference (Andrew)
+
+## 2026-10-13 (build account, auditor-v1 session)
+- Start: inbox item 1, Task A of spec `docs/specs/2026-10-13_auditor-v1-real-frame-quality-labels.md`. Branch wip/auditor-v1 from main bc8d9ed
+- Setup, not tracked: worktree `staging/` links (junctions) to the scored runs' caches in the main checkout and the freeze-v2, baselines, held-out and scored-v1 worktrees; read only
+- Done (99d70bd): definition `docs/proposals/2026-10-13_auditor-v1.md`, committed before any auditor run. `audit/view.py` (view from an allow-list, field summaries, robust z), `audit/rule.py`, `audit/llm.py` (actions through the unchanged orchestrator), `agents/prompts/auditor.md`, `scripts/synth/auditor_v1.py`; auditor step limit 20 in `config/models.yaml`; `tests/test_auditor.py`, 18 tests including the sentinel leak test
+- Done: all 160 final records found in the cache; 0 tracker runs
+- Done (d15db20): 8 batch views and rule auditor. Rule flags false accepts dev 10 / 10, held-out 15 / 15; good reports flagged dev tree 6 / 14, diagnostician 7 / 15, held-out 5 / 11
+- Done: LLM auditor dev, 3 prompt rounds x 4 batches, 12 calls (b1055da, aa8483a, 23d93ef). Good reports flagged, tree 4 -> 0 -> 0 / 14, diagnostician 7 -> 5 -> 0 / 15, single agent 5 -> 0 -> 5 / 6; script 10 / 10 false accepts and 15 / 15 good reports flagged every round
+- Done (46a9d6f): held-out, prompt aa8483a, 4 batches x 3, 12 calls, no change between runs (one system prompt hash over 74 calls). False accepts flagged 14 / 15 in each run (rule 15 / 15); good reports flagged 7, 5, 5 / 11 (rule 5 / 11); alt_repair 0 / 9 (rule 0 / 9)
+- Result: LLM miss on held-out: remedy tree partial_occlusion s1 (checks pass, normal shape, REGR peak z 6.7), cleared 3 of 3 under the round 2 prompt rule that a peak unlike the batch with a normal shape is a faster root
+- Result: 24 LLM auditor runs, all ended with report, 0 undecided, 0 errors; mean 80.2k tokens in and 48.6 s call time per dev run, 68.2k and 45.0 s per held-out run
+- Found: dev round 1 runs record commit 8a01264, a status commit made while they ran; code and prompt as 99d70bd
+- Found: pre-push hook reads a dotted module import in `audit/view.py` as a host name; import changed to `from measure import info`
+- Done: `python -m pytest -q tests`: 187 passed
+- Demo: `python scripts/synth/auditor_v1.py eval` prints both auditors' scores per batch and per run and writes `results/2026-10-13_auditor_v1/scores.md`
+- Remaining: Andrew: z cutoff 3, MAD-0 fallback, statistics over all runs, run id lists in flag and clear; then merge. Next: flank-spacing rate in the view; control vs stressed on real movies
+- Bottlenecks: merge needs the scored-v1 worktree's caches kept (coordinator, Andrew); provisional choices (Andrew)
