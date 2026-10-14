@@ -1,10 +1,10 @@
 # fq-real
-Updated: 2026-10-13 22:10 (local)
+Updated: 2026-10-13 22:40 (local)
 Lane: course
 Branch: wip/fq-real
 Last inbox item done: 1
-State: waiting on Andrew
-Now: labeling set ready; B4 starts when an inbox item says the labels are done
+State: working
+Now: inbox items 2-4: replace windows outside usable windows, provisional band, drop synthetic-lowest stop
 Done since last update:
 - B1: 30 windows (20 clean candidates, 10 likely poor), ids fq01-fq30 shuffled, list in private/
 - B2: 90 frames copied read-only from the lab server; view/, labels.csv, HOW_TO_LABEL.txt written; 530 MB
