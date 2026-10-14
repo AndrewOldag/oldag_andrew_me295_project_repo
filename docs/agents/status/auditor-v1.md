@@ -1,15 +1,13 @@
 # auditor-v1
-Updated: 2026-10-13 23:55 (local)
+Updated: 2026-10-14 (local)
 Lane: course
-Branch: wip/auditor-v1
-Last inbox item done: 1
+Branch: wip/auditor-v1b
+Last inbox item done: 3
 State: ready to merge
-Now: item 1 done; Task A complete, tests pass (187)
+Now: items 2-3 done; wip/auditor-v1b ready to merge (one commit, no runs)
 Done since last update:
-- Dev prompt rounds 1-3, 12 calls (b1055da, aa8483a, 23d93ef); held-out prompt fixed at aa8483a, recorded in the proposal
-- Held-out: 12 runs (46a9d6f). False accepts flagged LLM 14 / 15 each run, rule 15 / 15; good reports flagged LLM 7, 5, 5 / 11, rule 5 / 11; alt_repair 0 / 9 both
-- `results/2026-10-13_auditor_v1/README.md`, `scores.md`; log in `docs/running_log_pending/auditor-v1.md`
-- 24 of 52 auditor calls used; 0 tracker runs
+- Item 1: merged by the coordinator (f53a07f)
+- Item 2: cache location written to `private/`, not tracked; records read in place, read only, no copy
+- Item 3 (adbeb5f): proposal says z cutoff 3 and MAD-0 fallback are fixed (Andrew, 2026-10-14); same wording in the `audit/rule.py` docstring and the results README. No code behaviour change, no runs. `tests/test_auditor.py` 18 passed
 Needs Andrew:
-- z cutoff 3 (provisional); MAD-0 fallback; batch statistics over all runs; `flag`/`clear` take run id lists. In the proposal
-- Cached final records read in place from the scored-v1 worktree staging. Keep that worktree; the views are committed, so only rebuilding them needs it
+- none

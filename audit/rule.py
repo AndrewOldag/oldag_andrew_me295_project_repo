@@ -2,7 +2,7 @@
 
 Flags an accepted run if any final check failed, or if any field summary has |robust z| > Z_CUTOFF in its
 batch. Every other accepted run is cleared. Declined and not-reported runs are not audited.
-Rule: docs/proposals/2026-10-13_auditor-v1.md. Z_CUTOFF is provisional.
+Rule: docs/proposals/2026-10-13_auditor-v1.md. Z_CUTOFF fixed (Andrew, 2026-10-14).
 """
 Z_CUTOFF = 3.0
 
