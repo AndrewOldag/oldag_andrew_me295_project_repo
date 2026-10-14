@@ -1,0 +1,99 @@
+{
+ "set": "dev",
+ "method": "remedy_tree",
+ "n": 1,
+ "commit": "8a01264",
+ "claude_code": "2.1.293",
+ "model": "claude-opus-5-5",
+ "wall_s": 53.5,
+ "outcome": {
+  "task_id": "batch-1",
+  "agent": "auditor",
+  "status": "report",
+  "args": {
+   "text": "Batch: 25 runs. 14 accepted, 11 declined, none not_reported.\nFlagged (4): r02, r04, r10, r20, reason summary_outlier. Their centre REGR peak is about 84 %/h. The batch median is 42.44 %/h, so these sit at robust z of about +104.\nCleared (10): r01, r09, r11, r12, r14, r15, r16, r18, r23, r25. Every check that was run passed, and the REGR peak, peak position and growth-zone length are all within |z| < 1.3 of the batch.\nWhat the flagged runs share: the REGR peak is about twice the batch value, while the peak position (316 \u00b5m) and growth-zone length (526\u2013537 \u00b5m) match the other roots. Each kept 2\u20133 remedies over 4 steps. All three checks passed, so the checks did not catch the problem. Declined run r08 shows the same doubled peak. A uniform factor of two suggests a time-scale or frame-interval error, but I have not confirmed this from final_settings.\nNote on the cleared width-free runs (r09, r11, r14, r15, r25): plane sections was not run. Its values (3.43\u20133.86 %/h) were above the 3.25 threshold. The width-free ratios all fall between \u22120.421 and \u22120.472."
+  },
+  "steps": 4,
+  "failed_steps": 0,
+  "calls": 4,
+  "input_tokens": 55097,
+  "output_tokens": 3907,
+  "call_ms": 43952
+ },
+ "decisions": {
+  "r02": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "summary_outlier",
+   "evidence": [
+    "centre_peak_regr_pct_per_h"
+   ]
+  },
+  "r04": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "summary_outlier",
+   "evidence": [
+    "centre_peak_regr_pct_per_h"
+   ]
+  },
+  "r10": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "summary_outlier",
+   "evidence": [
+    "centre_peak_regr_pct_per_h"
+   ]
+  },
+  "r20": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "summary_outlier",
+   "evidence": [
+    "centre_peak_regr_pct_per_h"
+   ]
+  },
+  "r01": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r09": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r11": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r12": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r14": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r15": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r16": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r18": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r23": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r25": {
+   "decision": "clear",
+   "order": 2
+  }
+ },
+ "undecided": [],
+ "report": "Batch: 25 runs. 14 accepted, 11 declined, none not_reported.\nFlagged (4): r02, r04, r10, r20, reason summary_outlier. Their centre REGR peak is about 84 %/h. The batch median is 42.44 %/h, so these sit at robust z of about +104.\nCleared (10): r01, r09, r11, r12, r14, r15, r16, r18, r23, r25. Every check that was run passed, and the REGR peak, peak position and growth-zone length are all within |z| < 1.3 of the batch.\nWhat the flagged runs share: the REGR peak is about twice the batch value, while the peak position (316 \u00b5m) and growth-zone length (526\u2013537 \u00b5m) match the other roots. Each kept 2\u20133 remedies over 4 steps. All three checks passed, so the checks did not catch the problem. Declined run r08 shows the same doubled peak. A uniform factor of two suggests a time-scale or frame-interval error, but I have not confirmed this from final_settings.\nNote on the cleared width-free runs (r09, r11, r14, r15, r25): plane sections was not run. Its values (3.43\u20133.86 %/h) were above the 3.25 threshold. The width-free ratios all fall between \u22120.421 and \u22120.472."
+}

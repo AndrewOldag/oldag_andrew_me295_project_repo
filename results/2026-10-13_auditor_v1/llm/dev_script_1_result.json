@@ -1,0 +1,282 @@
+{
+ "set": "dev",
+ "method": "script",
+ "n": 1,
+ "commit": "8a01264",
+ "claude_code": "2.1.293",
+ "model": "claude-opus-5-5",
+ "wall_s": 45.9,
+ "outcome": {
+  "task_id": "batch-1",
+  "agent": "auditor",
+  "status": "report",
+  "args": {
+   "text": "Batch: 25 runs, all 25 accepted. Flagged: 25, all for check_failed_but_accepted. Cleared: 0.\n- r02, r03, r05, r08, r16, r18, r20, r21, r22, r24: all three checks failed. Rigid-body invariance was 76.7 to 408 against a threshold of 2.0, so the tracker is faulty. The summaries are also far from the batch: REGR peak |z| 17 to 240, growth-zone length |z| 10 to 32, flank difference |z| 19 to 116.\n- r01, r06, r13, r14, r19: closure failed (2.7 to 6.8 against 1.0) and plane sections failed (25.9 to 52.6 against 3.25). Summaries are near the batch median.\n- r04, r07, r11, r15, r17: closure failed (8.0 to 8.2 against 1.0). The other two checks passed.\n- r09, r10, r12, r23, r25: plane sections failed narrowly (3.43 to 3.86 against 3.25). The other two checks passed.\nCommon pattern: every run took one step, kept no remedies and had no roll backs. Each was accepted with at least one failed final check, and no run passed all three. Acceptance appears not to take the check results into account; the acceptance logic should be reviewed before this batch's velocity, strain-rate or curvature fields are reported."
+  },
+  "steps": 5,
+  "failed_steps": 0,
+  "calls": 5,
+  "input_tokens": 69479,
+  "output_tokens": 2793,
+  "call_ms": 33045
+ },
+ "decisions": {
+  "r02": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "rigid_invariance",
+    "closure",
+    "plane_sections",
+    "centre_peak_regr_pct_per_h",
+    "growth_zone_length_um",
+    "flank_difference_max_pct_per_h"
+   ]
+  },
+  "r03": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "rigid_invariance",
+    "closure",
+    "plane_sections",
+    "centre_peak_regr_pct_per_h",
+    "growth_zone_length_um",
+    "flank_difference_max_pct_per_h"
+   ]
+  },
+  "r05": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "rigid_invariance",
+    "closure",
+    "plane_sections",
+    "centre_peak_regr_pct_per_h",
+    "growth_zone_length_um",
+    "flank_difference_max_pct_per_h"
+   ]
+  },
+  "r08": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "rigid_invariance",
+    "closure",
+    "plane_sections",
+    "centre_peak_regr_pct_per_h",
+    "growth_zone_length_um",
+    "flank_difference_max_pct_per_h"
+   ]
+  },
+  "r16": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "rigid_invariance",
+    "closure",
+    "plane_sections",
+    "centre_peak_regr_pct_per_h",
+    "growth_zone_length_um",
+    "flank_difference_max_pct_per_h"
+   ]
+  },
+  "r18": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "rigid_invariance",
+    "closure",
+    "plane_sections",
+    "centre_peak_regr_pct_per_h",
+    "growth_zone_length_um",
+    "flank_difference_max_pct_per_h"
+   ]
+  },
+  "r20": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "rigid_invariance",
+    "closure",
+    "plane_sections",
+    "centre_peak_regr_pct_per_h",
+    "growth_zone_length_um",
+    "flank_difference_max_pct_per_h"
+   ]
+  },
+  "r21": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "rigid_invariance",
+    "closure",
+    "plane_sections",
+    "centre_peak_regr_pct_per_h",
+    "growth_zone_length_um",
+    "flank_difference_max_pct_per_h"
+   ]
+  },
+  "r22": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "rigid_invariance",
+    "closure",
+    "plane_sections",
+    "centre_peak_regr_pct_per_h",
+    "growth_zone_length_um",
+    "flank_difference_max_pct_per_h"
+   ]
+  },
+  "r24": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "rigid_invariance",
+    "closure",
+    "plane_sections",
+    "centre_peak_regr_pct_per_h",
+    "growth_zone_length_um",
+    "flank_difference_max_pct_per_h"
+   ]
+  },
+  "r01": {
+   "decision": "flag",
+   "order": 2,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "closure",
+    "plane_sections"
+   ]
+  },
+  "r06": {
+   "decision": "flag",
+   "order": 2,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "closure",
+    "plane_sections"
+   ]
+  },
+  "r13": {
+   "decision": "flag",
+   "order": 2,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "closure",
+    "plane_sections"
+   ]
+  },
+  "r14": {
+   "decision": "flag",
+   "order": 2,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "closure",
+    "plane_sections"
+   ]
+  },
+  "r19": {
+   "decision": "flag",
+   "order": 2,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "closure",
+    "plane_sections"
+   ]
+  },
+  "r04": {
+   "decision": "flag",
+   "order": 3,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "closure"
+   ]
+  },
+  "r07": {
+   "decision": "flag",
+   "order": 3,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "closure"
+   ]
+  },
+  "r11": {
+   "decision": "flag",
+   "order": 3,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "closure"
+   ]
+  },
+  "r15": {
+   "decision": "flag",
+   "order": 3,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "closure"
+   ]
+  },
+  "r17": {
+   "decision": "flag",
+   "order": 3,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "closure"
+   ]
+  },
+  "r09": {
+   "decision": "flag",
+   "order": 4,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "plane_sections"
+   ]
+  },
+  "r10": {
+   "decision": "flag",
+   "order": 4,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "plane_sections"
+   ]
+  },
+  "r12": {
+   "decision": "flag",
+   "order": 4,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "plane_sections"
+   ]
+  },
+  "r23": {
+   "decision": "flag",
+   "order": 4,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "plane_sections"
+   ]
+  },
+  "r25": {
+   "decision": "flag",
+   "order": 4,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "plane_sections"
+   ]
+  }
+ },
+ "undecided": [],
+ "report": "Batch: 25 runs, all 25 accepted. Flagged: 25, all for check_failed_but_accepted. Cleared: 0.\n- r02, r03, r05, r08, r16, r18, r20, r21, r22, r24: all three checks failed. Rigid-body invariance was 76.7 to 408 against a threshold of 2.0, so the tracker is faulty. The summaries are also far from the batch: REGR peak |z| 17 to 240, growth-zone length |z| 10 to 32, flank difference |z| 19 to 116.\n- r01, r06, r13, r14, r19: closure failed (2.7 to 6.8 against 1.0) and plane sections failed (25.9 to 52.6 against 3.25). Summaries are near the batch median.\n- r04, r07, r11, r15, r17: closure failed (8.0 to 8.2 against 1.0). The other two checks passed.\n- r09, r10, r12, r23, r25: plane sections failed narrowly (3.43 to 3.86 against 3.25). The other two checks passed.\nCommon pattern: every run took one step, kept no remedies and had no roll backs. Each was accepted with at least one failed final check, and no run passed all three. Acceptance appears not to take the check results into account; the acceptance logic should be reviewed before this batch's velocity, strain-rate or curvature fields are reported."
+}
