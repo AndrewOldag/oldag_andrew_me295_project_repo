@@ -18,6 +18,10 @@ agents:
     effort: high
     max_turns: 3
     step_limit: 8
+  single_agent:                 # baseline: the diagnostician's settings, no checker output (2026-10-12)
+    effort: high
+    max_turns: 3
+    step_limit: 8
   auditor:
     effort: high
     max_turns: 3

@@ -1,0 +1,133 @@
+{
+ "freeze_tag": "freeze-v2",
+ "commit": "c9d5a0c",
+ "method": "remedy_tree",
+ "rod": {
+  "case": "growth_zone",
+  "fault": "midline_jitter",
+  "size": null,
+  "seed": 2
+ },
+ "runner": "remote_job",
+ "truth": {
+  "peak_regr_pct_per_h": 43.4,
+  "peak_at_um": 316,
+  "largest_flank_difference_pct_per_h": 0.0
+ },
+ "error_before": {
+  "regr_rms_pct_per_h": 0.422,
+  "regr_max_pct_per_h": 1.363,
+  "regr_covered_um": 884,
+  "flank_difference_rms_pct_per_h": 0.501,
+  "flank_difference_max_pct_per_h": 1.65,
+  "flank_difference_covered_um": 884
+ },
+ "initial_checks": [
+  {
+   "check": "rigid_invariance",
+   "passed": true,
+   "value": 0.6672214792206481,
+   "threshold": 2.0,
+   "unit": "%/h",
+   "where_s_px": 415.0,
+   "where_frame_pair": null,
+   "detail": "largest change in regr_mid"
+  },
+  {
+   "check": "closure",
+   "passed": false,
+   "value": 6.8298868929063055,
+   "threshold": 1.0,
+   "unit": "px/h",
+   "where_s_px": 428.8025633628052,
+   "where_frame_pair": 37,
+   "detail": "tip path 520.8 px/h; base at s = 429 px; largest single-pair residual at pair 37"
+  },
+  {
+   "check": "plane_sections",
+   "passed": false,
+   "value": 26.360667215299014,
+   "threshold": 3.25,
+   "unit": "%/h",
+   "where_s_px": 245.0,
+   "where_frame_pair": null,
+   "detail": "flank difference -1.03 %/h, predicted 25.33 %/h"
+  }
+ ],
+ "outcome": {
+  "task_id": "rod-1",
+  "agent": "remedy_tree",
+  "status": "decline",
+  "args": {
+   "fault": "midline_jitter",
+   "reason": "rule 3: no remedy left for closure"
+  },
+  "steps": 5,
+  "failed_steps": 0,
+  "calls": 0,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "call_ms": 0
+ },
+ "error_after": {
+  "regr_rms_pct_per_h": 0.419,
+  "regr_max_pct_per_h": 1.297,
+  "regr_covered_um": 884,
+  "flank_difference_rms_pct_per_h": 0.382,
+  "flank_difference_max_pct_per_h": 1.162,
+  "flank_difference_covered_um": 884
+ },
+ "remedies": [
+  "frames registered on the non-growing tissue (from 310 px from the tip) before tracking",
+  "rolled back: frames registered on the non-growing tissue (from 310 px from the tip) before tracking",
+  "tracker disk radius 15 -> 22 px",
+  "rolled back: tracker disk radius 15 -> 22 px",
+  "tracker disk radius 15 -> 30 px",
+  "rolled back: tracker disk radius 15 -> 30 px",
+  "midline source smoothed (light)"
+ ],
+ "roll_backs": 3,
+ "final_settings": {
+  "stride": 1,
+  "disk_radius": null,
+  "register": false,
+  "register_from_px": null,
+  "midline_smooth": "light",
+  "band_mask": null,
+  "width_free": false,
+  "couple": false
+ },
+ "final_checks": [
+  {
+   "check": "rigid_invariance",
+   "passed": true,
+   "value": 0.8851474239268278,
+   "threshold": 2.0,
+   "unit": "%/h",
+   "where_s_px": 405.0,
+   "where_frame_pair": null,
+   "detail": "largest change in regr_plus"
+  },
+  {
+   "check": "closure",
+   "passed": false,
+   "value": 2.7715904353185574,
+   "threshold": 1.0,
+   "unit": "px/h",
+   "where_s_px": 428.4001647345776,
+   "where_frame_pair": 4,
+   "detail": "tip path 157.1 px/h; base at s = 428 px; largest single-pair residual at pair 4"
+  },
+  {
+   "check": "plane_sections",
+   "passed": false,
+   "value": 14.751226540693223,
+   "threshold": 3.25,
+   "unit": "%/h",
+   "where_s_px": 380.0,
+   "where_frame_pair": null,
+   "detail": "flank difference -0.25 %/h, predicted -15.00 %/h"
+  }
+ ],
+ "reported": false
+}

@@ -1,0 +1,131 @@
+{
+ "freeze_tag": "freeze-v2",
+ "commit": "c9d5a0c",
+ "method": "single_agent",
+ "rod": {
+  "case": "growth_zone",
+  "fault": "displacement_exceeds_patch",
+  "size": "2x6",
+  "seed": 3
+ },
+ "runner": "remote_job",
+ "truth": {
+  "peak_regr_pct_per_h": 86.9,
+  "peak_at_um": 316,
+  "largest_flank_difference_pct_per_h": 0.0
+ },
+ "error_before": {
+  "regr_rms_pct_per_h": 34.602,
+  "regr_max_pct_per_h": 94.835,
+  "regr_covered_um": 884,
+  "flank_difference_rms_pct_per_h": 56.789,
+  "flank_difference_max_pct_per_h": 193.742,
+  "flank_difference_covered_um": 884
+ },
+ "initial_checks": [
+  {
+   "check": "rigid_invariance",
+   "passed": false,
+   "value": 275.46850195272435,
+   "threshold": 2.0,
+   "unit": "%/h",
+   "where_s_px": 55.0,
+   "where_frame_pair": null,
+   "detail": "largest change in regr_plus"
+  },
+  {
+   "check": "closure",
+   "passed": false,
+   "value": 95.36720513737495,
+   "threshold": 1.0,
+   "unit": "px/h",
+   "where_s_px": 429.0757810685896,
+   "where_frame_pair": 1,
+   "detail": "tip path 120.0 px/h; base at s = 429 px; largest single-pair residual at pair 1"
+  },
+  {
+   "check": "plane_sections",
+   "passed": false,
+   "value": 193.74190245883347,
+   "threshold": 3.25,
+   "unit": "%/h",
+   "where_s_px": 20.0,
+   "where_frame_pair": null,
+   "detail": "flank difference -193.74 %/h, predicted 0.00 %/h"
+  }
+ ],
+ "outcome": {
+  "task_id": "rod-1",
+  "agent": "single_agent",
+  "status": "decline",
+  "args": {
+   "fault": "low_texture",
+   "reason": "Texture contrast and focus are at or below the lowest clean reference and fall across the window. The midline is stable (tip second difference 0, ~1 px frame-to-frame), yet velocity and strain rate near the tip stay jagged and negative after the stride fix. That points to weak texture. No listed remedy addresses low texture."
+  },
+  "steps": 8,
+  "failed_steps": 0,
+  "calls": 8,
+  "input_tokens": 33593,
+  "output_tokens": 4412,
+  "call_ms": 50667
+ },
+ "error_after": {
+  "regr_rms_pct_per_h": 31.354,
+  "regr_max_pct_per_h": 156.876,
+  "regr_covered_um": 905,
+  "flank_difference_rms_pct_per_h": 57.639,
+  "flank_difference_max_pct_per_h": 197.67,
+  "flank_difference_covered_um": 905
+ },
+ "remedies": [
+  "frame stride 6 -> 3"
+ ],
+ "roll_backs": 0,
+ "final_settings": {
+  "stride": 3,
+  "disk_radius": null,
+  "register": false,
+  "register_from_px": null,
+  "midline_smooth": null,
+  "band_mask": null,
+  "width_free": false,
+  "couple": false
+ },
+ "final_checks": [
+  {
+   "check": "rigid_invariance",
+   "passed": false,
+   "value": 155.4887931441447,
+   "threshold": 2.0,
+   "unit": "%/h",
+   "where_s_px": 10.0,
+   "where_frame_pair": null,
+   "detail": "largest change in regr_minus"
+  },
+  {
+   "check": "closure",
+   "passed": false,
+   "value": 81.57038479201744,
+   "threshold": 1.0,
+   "unit": "px/h",
+   "where_s_px": 442.25578455972146,
+   "where_frame_pair": 3,
+   "detail": "tip path 120.0 px/h; base at s = 442 px; largest single-pair residual at pair 3"
+  },
+  {
+   "check": "plane_sections",
+   "passed": false,
+   "value": 197.66984161725676,
+   "threshold": 3.25,
+   "unit": "%/h",
+   "where_s_px": 95.0,
+   "where_frame_pair": null,
+   "detail": "flank difference 197.67 %/h, predicted -0.00 %/h"
+  }
+ ],
+ "reported": false,
+ "claude_code": "2.1.293",
+ "wall_s": 62.4,
+ "tracker_runs_new": 0,
+ "runner_log": []
+}
