@@ -373,3 +373,17 @@ Required by the course. One entry per work session: done, remaining, bottlenecks
 - Demo: `python -m pytest -q tests/test_frame_quality_reference.py` prints 3 passed
 - Remaining: coordinator merges wip/fq-real; staged frames in staging/fq_real_labeling/ stay on the VM until Andrew says to delete them; recompute the real reference with the real-tracking midline source when it exists
 - Bottlenecks: none
+
+## 2026-10-16 (build account, session vm-backup)
+- Done: VM backup before the 15:00 wipe, per the planning spec of 2026-10-16. Destination: lab server, backup folder (see private/)
+- Stopped check: no sweep running; slice sweep.lock from 2026-10-14 is stale (its process is gone), left in place. 5 Claude Code processes, 0 python processes on the VM; none killed
+- Course repo: all 10 worktrees clean, nothing to commit; every branch already on origin; tag freeze-v2 already on origin. Pre-push hook blocked nothing
+- Heads: main 8759d4f, heldout/faults fe7dda1, wip/auditor-v1 cb7f65f, wip/auditor-v1b 1c55763, wip/baselines ffaacf5, wip/diag-review 55edff8, wip/fq-real 149ff37, wip/freeze-v2 5593c65, wip/gatekeeper 52600c0, wip/lab-report-1 d911c6a, wip/scored-v1 5562438; tag freeze-v2 6a68610
+- Course lane: me295-all.bundle (3.1 MB, all refs), planning-clone bundle (0.2 MB, main 52c1f80), me295-nongit.tar.gz (1.14 GB: private/, data/, staging/ incl. tracks .npz/.npy 917 MB, worktree staging/, one ignored results file, .claude settings/skills/projects, env exports, pip freeze, Python versions, ssh config)
+- Research lane: tracker repo bundle (124 MB; 1 local commit not pushed, no GitLab remote, kept in bundle per Andrew) and working-files tarball (219 MB). Contents listed in RESTORE.md in the backup folder, not here
+- Left out: *.tif, *.tiff, *.sldy (raw frames, re-pulled later against checksums); SSH and API keys; Claude caches and telemetry. Not present on the VM: ~/litreview, crontab, docs/running_log_pending/
+- Verified on the server: sha256sum -c 5 of 5 OK; each bundle cloned and fsck clean, branch hashes match. Clones left in the backup folder's _verify/ for Andrew to delete (CLAUDE.md: no server deletes)
+- Deviation: the VM has no rsync. Files were piped over ssh to a nice/ionice receiver. The 1.14 GB tarball ran at 74 MB/s for 15 s, above the 50 MB/s limit; other files under 54 MB/s. Server 1-min load 2.2 of 32 before the copy
+- Demo: on the server, `sha256sum -c SHA256SUMS` in course/ and research/ prints OK for each file
+- Remaining: after rebuild, follow RESTORE.md; push the tracker commit to GitLab; Andrew deletes _verify/
+- Bottlenecks: none
