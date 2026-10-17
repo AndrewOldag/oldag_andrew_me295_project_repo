@@ -55,6 +55,11 @@ Course project for AM/ME/CE 295, Caltech, Fall 2026. Start with `CLAUDE.md` and 
 - Reads the cached final records of `results/2026-10-12b_scored_v1/` from `staging/` (the scored runs' caches). Definition: `docs/proposals/2026-10-13_auditor-v1.md`
 - `python scripts/synth/auditor_v1.py views` writes the 8 batch views; `rule` runs the rule auditor; `llm --set dev|heldout [--method M] [--repeat K]` runs the LLM auditor (needs a clean tracked tree); `eval` writes `results/2026-10-13_auditor_v1/scores.md`. Test: `tests/test_auditor.py`
 
+## Task board
+- One file per task in `tasks/` (format in `tasks/README.md`). Research-lane tasks use the same format in a folder outside every git repo
+- Optional: copy `config/board.example.conf` to `private/board.conf` and set the research folder and the page path
+- `python scripts/board.py` prints one table of all tasks; a `working` task with `last_update` older than 30 min shows as stale. `--html` also writes the local page (never inside a git repo). Test: `tests/test_board.py`
+
 ## Tools
 - Root manifest review app: `python scripts/manifest/review_server.py`, then open http://localhost:8295
 
