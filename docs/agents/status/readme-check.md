@@ -1,13 +1,13 @@
 # readme-check
-Updated: 2026-10-17 15:17 (local)
+Updated: 2026-10-17 15:22 (local)
 Lane: course
 Branch: wip/readme-check
 Last inbox item done: 0
-State: waiting on Andrew
-Now: stopped by Andrew during step 2; to be restarted from the beginning
+State: working
+Now: item 1 restarted by a new session; steps 1-6 run, README text fixes next
 Done since last update:
-- df checked; fresh clone made at efd8b22; Step 1 conda 26.7.2, Python 3.14.7
-- Step 2 env create stopped part way; fresh clone and partial env removed (6 locked DLLs left in the env folder)
-- README gap seen: conda not on PATH in plain PowerShell; step 2 needs `conda init powershell` or Miniforge Prompt
+- Fresh clone at efd8b22; leftover partial env removed; steps 1-6 run
+- Step 4 FAIL: Claude Code 2.1.302 installed, config pins 2.1.293 (auto-update); no agent call made
+- Step 5: 198 passed, 5 skipped, 0 failed, 75 s
 Needs Andrew:
-- restart item 1 when ready
+- Claude Code version: reinstall 2.1.293 (`claude install 2.1.293`) or re-pin to 2.1.302 with a decision entry. Agent calls fail until one is done
