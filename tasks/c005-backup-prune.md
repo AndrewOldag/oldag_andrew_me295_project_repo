@@ -1,15 +1,15 @@
 ---
 id: c005
-title: Decide whether the nightly backup may delete copies older than 7 nights on the lab server
+title: Decide whether the backup may delete old copies on the lab server
 lane: course
 owner: Andrew
-state: needs-input
+state: done
 branch: none
 created: 2026-10-16 18:05
-last_update: 2026-10-16 18:05
-blocker: spec 2026-10-16 item 3 asks for it; CLAUDE.md forbids server deletes by a Claude-written script
-done_marker: PRUNE set in private/backup.conf and CLAUDE.md updated, or the rule left as is in docs/decisions.md
+last_update: 2026-10-16 18:15
+blocker: none
+done_marker: docs/decisions.md 2026-10-16 "never deletes anything on the lab server"
 ---
 
-- Built in `scripts/ops/backup_vm.sh`, off (`PRUNE=no`). It only touches dated folders that carry `.made-by-backup_vm`
-- Nothing is due before 2026-10-24 (7 nightly copies from 2026-10-17)
+- Decided (Andrew, 2026-10-16): never. Pruning code removed from `scripts/ops/backup_vm.sh`; `tests/test_ops.py` fails if a server command in it deletes, moves or renames
+- Also decided: no scheduled backup; `backup_vm.sh` is run by hand only

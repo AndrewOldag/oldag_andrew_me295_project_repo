@@ -1,4 +1,4 @@
-"""Tests for scripts/ops: heartbeat gap rule, backup prune selection and refusals."""
+"""Tests for scripts/ops: heartbeat gap rule, backup refusals and no server delete."""
 
 import shutil
 import subprocess
@@ -40,14 +40,15 @@ def test_heartbeat_lines_and_first_gap(tmp_path):
     assert "(30 min)" in first                # first gap kept, not replaced
 
 
-def test_select_prune_keeps_newest_and_dated_only():
-    names = ["2026-10-17", "2026-10-18", "2026-10-19", "2026-10-20", "2026-10-21",
-             "2026-10-22", "2026-10-23", "2026-10-24", "2026-10-25", "2026-10-16_test", "notes"]
-    r = sh(OPS / "backup_vm.sh", "select-prune", "7", inp="\n".join(names) + "\n")
-    assert r.returncode == 0, r.stderr
-    assert r.stdout.split() == ["2026-10-17", "2026-10-18"]
-    r = sh(OPS / "backup_vm.sh", "select-prune", "7", inp="2026-10-17\n2026-10-18\n")
-    assert r.stdout.split() == []
+def test_backup_never_deletes_on_server():
+    """No command sent to the lab server deletes, moves or renames (CLAUDE.md)."""
+    text = (OPS / "backup_vm.sh").read_text(encoding="utf-8")
+    remote_lines = [ln for ln in text.splitlines()
+                    if "remote " in ln and not ln.lstrip().startswith(("#", "remote ()"))]
+    assert remote_lines
+    for ln in remote_lines:
+        for word in ("rm ", "rmdir", "unlink", "mv ", "rsync", "find "):
+            assert word not in ln, ln.strip()
 
 
 def test_backup_refuses_without_conf(tmp_path):
