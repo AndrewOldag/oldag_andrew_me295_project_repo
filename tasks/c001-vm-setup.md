@@ -3,10 +3,10 @@ id: c001
 title: New VM setup, items 1-3 (restore check, task board, interruption safety)
 lane: course
 owner: vm-setup
-state: review
+state: done
 branch: wip/vm-setup
 created: 2026-10-16 17:45
-last_update: 2026-10-16 18:15
+last_update: 2026-10-16 18:24
 blocker: none
 done_marker: running log entry "session vm-setup" with items 1-3 done
 ---
