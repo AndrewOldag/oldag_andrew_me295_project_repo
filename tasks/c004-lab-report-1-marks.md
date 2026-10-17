@@ -1,12 +1,12 @@
 ---
 id: c004
-title: Fill the [ANDREW] marks in the Lab report 1 draft
+title: Fill the [ANDREW] marks in the Lab report 1 draft (due Sun 18 Oct)
 lane: course
 owner: Andrew
 state: needs-input
 branch: none
 created: 2026-10-16 17:45
-last_update: 2026-10-16 17:45
+last_update: 2026-10-16 18:25
 blocker: text and decisions from Andrew
 done_marker: no [ANDREW] mark left in docs/reports/2026-10-16_lab-report-1.md
 ---
