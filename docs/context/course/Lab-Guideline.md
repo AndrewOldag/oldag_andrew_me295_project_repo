@@ -19,6 +19,8 @@ The 4 weekly lab hours are for building your own final research project — not 
 
 ## **Lab Report 1 — Weeks 1–2 (due Fri, Oct 16\)**
 
+Due date confirmed by Andrew, 2026-10-16: Sun Oct 18, 11:59 pm.
+
 **Goal:** Lay the foundation for your project before it's formally proposed. At this point you don't have a locked-in topic or team yet, so the goal isn't a working demo — it's making sure you understand the problem space you're heading into and that your tooling is ready to build in. Read enough of the relevant literature to know what's already been tried and where a gap might be. Get your repository, environment, and API access working now so early setup issues don't cost you time later. Treat this report as evidence that you've started, not that you've built something yet.  
 **Potential Deliverables:**
 

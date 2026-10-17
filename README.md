@@ -55,6 +55,16 @@ Course project for AM/ME/CE 295, Caltech, Fall 2026. Start with `CLAUDE.md` and 
 - Reads the cached final records of `results/2026-10-12b_scored_v1/` from `staging/` (the scored runs' caches). Definition: `docs/proposals/2026-10-13_auditor-v1.md`
 - `python scripts/synth/auditor_v1.py views` writes the 8 batch views; `rule` runs the rule auditor; `llm --set dev|heldout [--method M] [--repeat K]` runs the LLM auditor (needs a clean tracked tree); `eval` writes `results/2026-10-13_auditor_v1/scores.md`. Test: `tests/test_auditor.py`
 
+## Task board
+- One file per task in `tasks/` (format in `tasks/README.md`). Research-lane tasks use the same format in a folder outside every git repo
+- Optional: copy `config/board.example.conf` to `private/board.conf` and set the research folder and the page path
+- `python scripts/board.py` prints one table of all tasks; a `working` task with `last_update` older than 30 min shows as stale. `--html` also writes the local page (never inside a git repo). Test: `tests/test_board.py`
+
+## VM heartbeat and backup by hand (Windows VM)
+- Copy `config/backup.example.conf` to `private/backup.conf` and fill it in (server alias and backup folder, sources, scheduler paths)
+- `powershell -File scripts/ops/install_schedule.ps1` copies `heartbeat.sh` and `hidden.vbs` to `OPS_DIR` and registers the scheduled task `me295-heartbeat`, every 5 min: it appends date and uptime to the health log; a gap over 10 min adds a `GAP` line, the first gap also writes `FIRST_GAP` beside the log. `-S4U` (elevated shell) runs it when nobody is logged on; `-Remove` unregisters it
+- There is no scheduled backup. `bash scripts/ops/backup_vm.sh --conf private/backup.conf [--tag T] run` makes one backup by hand: bundles, tarballs, `SHA256SUMS`, `RESTORE.md` in a dated folder on the server, checked there with `sha256sum -c`. It never overwrites a folder and never deletes anything on the server. Test: `tests/test_ops.py`
+
 ## Tools
 - Root manifest review app: `python scripts/manifest/review_server.py`, then open http://localhost:8295
 
