@@ -6,14 +6,13 @@ owner: Andrew
 state: needs-input
 branch: none
 created: 2026-10-16 17:45
-last_update: 2026-10-16 18:25
+last_update: 2026-10-17 16:00
 blocker: text and decisions from Andrew
 done_marker: no [ANDREW] mark left in docs/reports/2026-10-16_lab-report-1.md
 ---
 
-From spec 2026-10-12b item 7 and the lab-report-1 session. The root-count mark is filled. 9 marks left:
+From spec 2026-10-12b item 7 and the lab-report-1 session. The root-count and README checked-on marks are filled. 8 marks left:
 
-- README checked-on date: c006 (readme-check session) fills it
 - pre-push hook install: installed and its tests pass (29 passed, 2026-10-16 restore check)
 - demo choice
 - next-steps order and cuts
