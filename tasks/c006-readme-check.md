@@ -3,10 +3,10 @@ id: c006
 title: Check README setup steps 1-6 from a fresh clone (Lab report 1 "README checked on")
 lane: course
 owner: readme-check
-state: review
+state: done
 branch: wip/readme-check
 created: 2026-10-16 18:40
-last_update: 2026-10-17 15:35
+last_update: 2026-10-17 16:00
 blocker: none
 done_marker: running log entry "session readme-check" with steps 1-6 results and test count
 ---
