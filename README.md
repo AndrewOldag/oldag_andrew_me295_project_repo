@@ -9,12 +9,14 @@ Course project for AM/ME/CE 295, Caltech, Fall 2026. Start with `CLAUDE.md` and 
 - The model ID and the Claude Code version are pinned in `config/models.yaml`. A call fails if any other model answers
 
 ## Setup
-1. Install Miniforge (conda-forge). On Windows, create the target folder first, then run the installer
+1. Install Miniforge (conda-forge). On Windows, create the target folder first, then run the installer. On Windows, `conda` is not on the PATH of a plain PowerShell: use the Miniforge Prompt, or run `conda init powershell` once and open a new shell
 2. Create the environment: `conda env create -f environment.yml`, then `conda activate me295`
 3. Install Claude Code at the version pinned in `config/models.yaml` and sign in with your own Claude seat: `claude auth login`. No API key is used
-4. Check agent calls: `python scripts/check_cli.py`. It prints the Claude Code version, login type, the model that answered, and `OK`
-5. Run the offline tests: `python -m pytest -q tests`
-6. Before the first push, with the agents env active: `sh scripts/hooks/install.sh` installs the pre-push check (`scripts/hooks/pre_push_check.py`; needs `private/blocklist.txt` in the main repo folder)
+   - Check with `claude --version`. If it differs (Claude Code updates itself), install the pinned version: `claude install <version>`. To stop updates, set `DISABLE_AUTOUPDATER=1` in the `env` block of the Claude Code user settings
+4. Check agent calls: `python scripts/check_cli.py`. It prints the Claude Code version, login type, the model that answered, and `OK`. On a version mismatch it prints `FAIL: Claude Code <found> found; config pins <pinned>` and makes no agent call
+5. Run the offline tests: `python -m pytest -q tests`. The tests in `tests/test_ops.py` need `bash` on the PATH and are skipped without it
+6. Before the first push, with the agents env active: `sh scripts/hooks/install.sh` installs the pre-push check (`scripts/hooks/pre_push_check.py`). On Windows, run it from Git Bash; `sh` is not on the PowerShell PATH
+   - The check needs `private/blocklist.txt` in the main repo folder: one regular expression per line, `#` for comments. `private/` is git-ignored. Without the file, every push is blocked
 
 ## Measurement record, synthetic rods and checker
 - Record format: `docs/context/measurement_record.md`. Code: `measure/record.py`
