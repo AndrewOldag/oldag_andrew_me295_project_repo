@@ -1,0 +1,15 @@
+## 2026-10-17 (build account, session readme-check)
+- Done: README setup steps 1-6 checked from a fresh clone of origin/main at efd8b22, no `private/`, new env `me295-readme` (inbox readme-check item 1, task c006)
+- First attempt (2026-10-16) stopped by Andrew during step 2; restarted from the beginning; leftover partial env removed first
+- df: 64 GB free of 100 GB before the env; env about 0.6 GB
+- Step 1: Miniforge present, conda 26.7.2, base Python 3.14.7. Not reinstalled. README gap: `conda` not on the PATH of a plain PowerShell
+- Step 2: `conda env create -f environment.yml -n me295-readme`: exit 0, 42 s. No solver warning. One conda-pypi notice after pip, harmless
+- Step 3: installed Claude Code 2.1.302; `config/models.yaml` pins 2.1.293. Mismatch: the CLI updated itself. Not reinstalled
+- Step 4: `python scripts/check_cli.py`: FAIL, "Claude Code 2.1.302 found; config pins 2.1.293", 0.2 s. No agent call made
+- Step 5: `python -m pytest -q tests`: 198 passed, 5 skipped, 0 failed, 75 s. Skips: 5 in `tests/test_ops.py`, bash not on the PowerShell PATH. 1 RuntimeWarning (mean of empty slice) in `tests/test_record_tracker.py`
+- Step 6: `sh` not on the PowerShell PATH; run with Git's `sh`. `install.sh`: "pre-push hook written", exit 0. Without `private/blocklist.txt`, `pre_push_check.py` exits 1 with "blocklist not found; push blocked". Every push is blocked; fails closed. No push from the clone
+- README text fixed (251383d): conda on Windows, check and install the pinned Claude Code version, bash skips, Git Bash for step 6, blocklist format and effect. No code changes
+- Fresh clone and `me295-readme` env removed; `me295` and `qb` untouched
+- Demo: `python scripts/check_cli.py` prints the version FAIL line until the Claude Code version matches the pin
+- Remaining: Andrew sets the Claude Code version (reinstall 2.1.293 or re-pin); then re-run step 4 once; merge wip/readme-check; "README checked on 2026-10-17" in Lab report 1, with step 4 noted
+- Bottlenecks: step 4 blocked on Andrew (Claude Code version)
