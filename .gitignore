@@ -19,3 +19,5 @@ vm_key*
 __pycache__/
 *.pyc
 .venv/
+# Claude Code Agent View worktrees
+.claude/worktrees/

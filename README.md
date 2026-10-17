@@ -60,6 +60,11 @@ Course project for AM/ME/CE 295, Caltech, Fall 2026. Start with `CLAUDE.md` and 
 - Optional: copy `config/board.example.conf` to `private/board.conf` and set the research folder and the page path
 - `python scripts/board.py` prints one table of all tasks; a `working` task with `last_update` older than 30 min shows as stale. `--html` also writes the local page (never inside a git repo). Test: `tests/test_board.py`
 
+## VM heartbeat and nightly backup (Windows VM)
+- Copy `config/backup.example.conf` to `private/backup.conf` and fill it in (server alias and backup folder, sources, scheduler paths)
+- `powershell -File scripts/ops/install_schedule.ps1` copies `scripts/ops/` to `OPS_DIR` and registers two scheduled tasks: `me295-heartbeat` every 5 min (`heartbeat.sh` appends date and uptime to the health log; a gap over 10 min adds a `GAP` line, the first gap also writes `FIRST_GAP` beside the log) and `me295-backup` daily at 02:10. `-S4U` (elevated shell) runs them when nobody is logged on; `-Remove` unregisters both
+- `bash scripts/ops/backup_vm.sh --conf private/backup.conf [--tag T] run` makes one backup by hand: bundles, tarballs, `SHA256SUMS`, `RESTORE.md` in a dated folder on the server, checked there with `sha256sum -c`. It never overwrites a folder; old dated copies are listed, and deleted only with `PRUNE=yes`. Test: `tests/test_ops.py`
+
 ## Tools
 - Root manifest review app: `python scripts/manifest/review_server.py`, then open http://localhost:8295
 
