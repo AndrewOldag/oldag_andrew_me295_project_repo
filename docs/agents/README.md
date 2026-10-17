@@ -49,5 +49,6 @@ Needs Andrew:
 | data-steward | research | status/data-steward | 7 | unknown |
 | gate2 | research | status/gate2 | 8 | unknown |
 | litreview | research | status/litreview | 9 | unknown |
+| readme-check | course | wip/readme-check | inbox readme-check | to start (2026-10-16) |
 
 Finished sessions can be closed. A new task gets a new name and a new inbox.
