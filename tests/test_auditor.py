@@ -212,5 +212,5 @@ def test_auditor_config_and_prompt():
     from agents.orchestrator import PROMPTS
     cfg = load_config()
     assert cfg["agents"]["auditor"]["step_limit"] == 20
-    assert cfg["model"] == "claude-opus-5-5" and str(cfg["claude_code_version"]) == "2.1.293"
+    assert cfg["model"] == "claude-opus-5-5" and str(cfg["claude_code_version"]) == "2.1.302"
     assert (PROMPTS / "auditor.md").exists()
