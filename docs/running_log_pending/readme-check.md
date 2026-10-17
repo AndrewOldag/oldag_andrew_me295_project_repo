@@ -10,6 +10,9 @@
 - Step 6: `sh` not on the PowerShell PATH; run with Git's `sh`. `install.sh`: "pre-push hook written", exit 0. Without `private/blocklist.txt`, `pre_push_check.py` exits 1 with "blocklist not found; push blocked". Every push is blocked; fails closed. No push from the clone
 - README text fixed (251383d): conda on Windows, check and install the pinned Claude Code version, bash skips, Git Bash for step 6, blocklist format and effect. No code changes
 - Fresh clone and `me295-readme` env removed; `me295` and `qb` untouched
-- Demo: `python scripts/check_cli.py` prints the version FAIL line until the Claude Code version matches the pin
-- Remaining: Andrew sets the Claude Code version (reinstall 2.1.293 or re-pin); then re-run step 4 once; merge wip/readme-check; "README checked on 2026-10-17" in Lab report 1, with step 4 noted
-- Bottlenecks: step 4 blocked on Andrew (Claude Code version)
+- Re-pin (Andrew, 2026-10-17): Claude Code 2.1.293 -> 2.1.302 in `config/models.yaml`, pin check in `tests/test_auditor.py`, decision entry. Needed for the agent control feature (Agent View, `claude agents`) that runs the parallel build sessions; it requires the newer release. Earlier results stay recorded at 2.1.293
+- Step 4 after re-pin (`me295` env, worktree): OK, Claude Code 2.1.302, login claude.ai (enterprise), model claude-opus-5-5, 2 turns, 5.0 s. One agent call
+- Step 5 after re-pin: 198 passed, 5 skipped, 0 failed, 70 s
+- Demo: `python scripts/check_cli.py` prints the version, login, model and `OK`
+- Remaining: merge wip/readme-check; "README checked on 2026-10-17" in Lab report 1, noting the re-pin
+- Bottlenecks: none
