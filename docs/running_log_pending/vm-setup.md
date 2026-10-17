@@ -1,0 +1,15 @@
+## 2026-10-16 (build account, session vm-setup)
+- Done: spec saved as `docs/specs/2026-10-16_vm-setup.md` (08d7302); locations outside the repo named by role, key in `private/paths.md`
+- Done, item 1 restore check: all 11 branches and tag freeze-v2 match the 2026-10-16 backup log; main 41f75b3 is 8759d4f plus two log commits. Backup archives: sha256sum -c 5 of 5 OK on the VM copy; SHA256SUMS identical to the server copy
+- Done, item 1: restored files checked per file against the backup tarballs: private/ 21 of 21, gate2 review folder 43 of 43, gate2 24 of 24, gate2_work 503 of 503 match. Extra files only raw .tiff frames (left out of the backup by design) and .git/__pycache__
+- Item 1, missing: the lit-review folder. It was not on the VM before the wipe either (backup log). Old sibling worktrees still registered (9); not changed
+- Done, item 1: pre-push hook installed; `pytest tests/test_pre_push_check.py` 29 passed
+- Done, item 2 task board (00da4f4): `tasks/` with format in `tasks/README.md`; `scripts/board.py` (table; `--html` page outside every git repo; stale after 30 min in working; rejects a research lane in `tasks/`); `tests/test_board.py` 8 passed. Locations in `private/board.conf`
+- Done, item 2: open items of the 2026-10-12 specs as c002 (real frame_quality reference, blocked), c003 (old server code copies, Andrew, end of project), c004 (Lab report 1 marks, 9 left); this session c001. Research folder holds 2 tasks (outside the repo)
+- Done, item 3: resume rules and Agent View worktree rule in CLAUDE.md; `.claude/worktrees/` in `.gitignore`
+- Done, item 3: `scripts/ops/heartbeat.sh`, `backup_vm.sh`, `hidden.vbs`, `install_schedule.ps1`; `config/backup.example.conf`; `tests/test_ops.py` 5 passed. Windows scheduled tasks, not cron (no cron on the VM)
+- Done, item 3: scheduled tasks installed: me295-heartbeat every 5 min (first line 18:00:24, boot 15:40:31, task result 0), me295-backup daily 02:10. Logon type interactive: tasks run only while Andrew is logged on (S4U needs an elevated shell)
+- Done, item 3: backup tested by hand as `2026-10-16_test`: build 7 min, course 1.1 GB, research 328 MB, sent in 53 s (about 28 MB/s, cap 40), sha256sum -c on the server 5 of 5 OK (script and by hand), local stage removed
+- Demo: `python scripts/board.py` prints 6 rows (4 course, 2 research)
+- Remaining: Andrew decides on backup pruning (built, off); Andrew may re-run `install_schedule.ps1 -S4U` elevated; first nightly backup 2026-10-17 02:10; report the first heartbeat gap; then items 4-9 (new spec session)
+- Bottlenecks: prune permission (Andrew); IT timeout policy (Andrew)

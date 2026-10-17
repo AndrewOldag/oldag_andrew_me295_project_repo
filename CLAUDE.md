@@ -46,6 +46,18 @@ A growing plant root is a slender rod whose material generates its own strain: t
 ## Agents
 - Every session has a name. Its instructions are in `docs/agents/inbox/<name>.md` on `main`; it reports in `docs/agents/status/<name>.md`. Protocol in `docs/agents/README.md`
 - When Andrew says `check github`, follow that protocol
+- Live sessions run in Claude Code Agent View (`claude agents`). Worktrees live under `.claude/worktrees/` (git-ignored); branch names stay `wip/<name>`, `heldout/<name>`
+- The task board (`tasks/`, format in `tasks/README.md`) is the source of truth for who is doing what. Each session updates only its own task file, on its own branch: at start, at each commit, at stop. `python scripts/board.py` prints the board
+
+## Resume after interruption
+The VM may stop or time out at any time. Every task must resume from disk.
+- State lives on disk and in git, not in a session
+- Commit and push after every unit of work
+- Every task writes a done marker; a restarted task skips finished parts
+- Sweeps write each run to the cache as it finishes; a restarted sweep skips cached runs
+- On start, a session reads its task file first
+- On restart, the coordinator sets working tasks with no live session to interrupted and re-dispatches them
+- Do not try to prevent the timeout: no fake activity, no keep-alive
 
 ## Logging and pushing
 Lab reports are due every two weeks and are written from this repo. Keep it current so that a report is a copy of the log.
