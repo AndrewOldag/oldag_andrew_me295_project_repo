@@ -3,7 +3,7 @@
 # The checker has no LLM and does not read this file.
 
 model: claude-opus-5-5          # pinned 2026-10-08. Exact ID, no alias
-claude_code_version: 2.1.293    # pinned 2026-10-09. The launcher refuses any other version
+claude_code_version: 2.1.302    # pinned 2026-10-17 (was 2.1.293). The launcher refuses any other version
 
 # One agent step is one `claude -p` call that returns one typed action.
 # max_turns: CLI turns per call (the structured-output tool uses one).
