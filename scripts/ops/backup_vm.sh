@@ -1,24 +1,21 @@
 #!/bin/bash
-# Nightly VM backup to the lab server. Same layout as the 2026-10-16 backup:
+# VM backup to the lab server, run by hand (no schedule). Same layout as the 2026-10-16 backup:
 #   <REMOTE_ROOT>/<name>/course/   me295-all.bundle, me295-planning-clone.bundle,
 #                                  me295-nongit.tar.gz, SHA256SUMS
 #   <REMOTE_ROOT>/<name>/research/ qb-all.bundle, research-nongit.tar.gz, SHA256SUMS
-#   <REMOTE_ROOT>/<name>/RESTORE.md, .made-by-backup_vm
+#   <REMOTE_ROOT>/<name>/RESTORE.md
 # <name> is today's date (YYYY-MM-DD), or YYYY-MM-DD_<tag> with --tag.
 #
 # Usage: backup_vm.sh --conf FILE [--tag TAG] [--log FILE] run
-#        backup_vm.sh select-prune KEEP   (names on stdin; prints the ones to delete)
 #
 # All hosts and paths come from the conf file (private/backup.conf; template
 # config/backup.example.conf). Nothing is overwritten: an existing <name> on
-# the server stops the run. Left out: *.tif, *.tiff, *.sldy, keys, .git of
-# working trees, Claude caches. Sends at most RATE_MB MB/s to a nice 19,
-# idle-I/O receiver after a load check. Prune: keeps the newest KEEP dated
-# copies that carry .made-by-backup_vm; deletes older ones only if PRUNE=yes,
-# otherwise lists them.
+# the server stops the run. Nothing on the server is ever deleted; old copies
+# stay until Andrew removes them. Left out: *.tif, *.tiff, *.sldy, keys, .git
+# of working trees, Claude caches. Sends at most RATE_MB MB/s to a nice 19,
+# idle-I/O receiver after a load check.
 set -euo pipefail
 export PATH=/usr/bin:$PATH
-MARKER=.made-by-backup_vm
 EXCLUDES=(--exclude='*.tif' --exclude='*.tiff' --exclude='*.sldy' --exclude='id_rsa*'
           --exclude='id_ed25519*' --exclude='id_ecdsa*' --exclude='*.key' --exclude='vm_key*'
           --exclude='.env' --exclude='__pycache__')
@@ -26,12 +23,6 @@ EXCLUDES=(--exclude='*.tif' --exclude='*.tiff' --exclude='*.sldy' --exclude='id_
 log () { echo "$(date '+%F %T') backup: $*"; }
 trap 'log "FAILED at line $LINENO"' ERR
 die () { log "FAILED: $*"; exit 1; }
-
-select_prune () {  # stdin: folder names that carry the marker; $1: keep
-    grep -E '^[0-9]{4}-[0-9]{2}-[0-9]{2}$' | sort -r | tail -n +$(( $1 + 1 )) | sort || true
-}
-
-if [ "${1:-}" = select-prune ]; then select_prune "${2:?keep}"; exit 0; fi
 
 conf="" tag=""
 while [ $# -gt 0 ]; do
@@ -49,7 +40,7 @@ done
 for v in HOST REMOTE_ROOT COURSE_REPO PLANNING_CLONE RESEARCH_REPO RESEARCH_ITEMS HOME_CLAUDE STAGE; do
     [ -n "${!v:-}" ] || die "$v not set in conf"
 done
-RATE_MB=${RATE_MB:-40} KEEP=${KEEP:-7} PRUNE=${PRUNE:-no} MIN_FREE_GB=${MIN_FREE_GB:-10}
+RATE_MB=${RATE_MB:-40} MIN_FREE_GB=${MIN_FREE_GB:-10}
 CONDA=${CONDA:-} ENVS=${ENVS:-}
 u () { cygpath -u "$1" 2>/dev/null || echo "$1"; }
 COURSE_REPO=$(u "$COURSE_REPO") PLANNING_CLONE=$(u "$PLANNING_CLONE")
@@ -189,18 +180,7 @@ log "sent in $(( $(date +%s) - t_start )) s"
 # ---- verify on the server
 remote "cd && cd '$REMOTE_ROOT/$name' && (cd course && nice -n 19 sha256sum -c --quiet SHA256SUMS) && (cd research && nice -n 19 sha256sum -c --quiet SHA256SUMS)" \
     || die "server SHA256SUMS check failed; local stage kept at $name"
-remote "cd && date '+%F %T' > '$REMOTE_ROOT/$name/$MARKER'"
 log "verified on server: SHA256SUMS OK in course/ and research/"
 rm -rf -- "${out:?}"
 log "local stage removed"
-
-# ---- prune (dated copies made by this script only)
-old=$(remote "cd && cd '$REMOTE_ROOT' && for d in ????-??-??; do [ -f \"\$d/$MARKER\" ] && echo \"\$d\"; done; true" | select_prune "$KEEP")
-for d in $old; do
-    if [ "$PRUNE" = yes ]; then
-        remote "cd && cd '$REMOTE_ROOT' && [ -f '$d/$MARKER' ] && rm -rf -- './$d'" && log "pruned $d"
-    else
-        log "would prune $d (PRUNE is not yes)"
-    fi
-done
-log "done $name"
+log "done $name; server backup root holds $(remote "cd && du -sh '$REMOTE_ROOT' | cut -f1")"
