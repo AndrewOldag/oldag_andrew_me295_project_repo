@@ -98,7 +98,7 @@ Lab reports go in `docs/reports/`, one file per report, started from `docs/repor
 - Agents environment: `environment.yml`. Model settings: `config/models.yaml`
 
 ## Dates
-- Lab report 1: Fri 16 Oct (related-work note, repo and environment, running log, draft proposal)
+- Lab report 1: Sun 18 Oct, 11:59 pm (Andrew checked; syllabus and lab guideline say Fri 16 Oct) (related-work note, repo and environment, running log, draft proposal)
 - Lab report 2: Fri 30 Oct (1-page proposal; commitment point)
 - Lab report 3: Fri 13 Nov (smallest slice running end to end)
 - Lab report 4: Mon 23 Nov (integrated run; failure modes)
