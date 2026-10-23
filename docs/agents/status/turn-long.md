@@ -1,13 +1,14 @@
 # turn-long
-Updated: 2026-10-23 14:30 (local)
+Updated: 2026-10-23 15:05 (local)
 Lane: research
 Branch: status/turn-long
-Last inbox item done: 4
+Last inbox item done: 5
 State: working
-Now: research spec step 1 regression queued on the lab server, waiting for another job of this account to end
+Now: research spec step 2, seeds rerun with one root's span cut; queued behind another job of this account
 Done since last update:
-- Item 1: status clone and branch status/turn-long from main (cc5d35a); pre-push hook installed
-- Item 2: spec read; step 0 done (task file, work dir, code export); step 1 code committed in the tracker repo (2 commits)
-- Items 3, 4: standing; one server job at a time (a run started in error while another job was live was stopped after 15 s)
+- Item 5 (2-job limit): noted. Own wait checks stay stricter (start only when no other job of this account runs); a change to the 2-job count was denied by the permission check
+- Step 1 regression: PASS (positions 0.0 px; 25 seed and 54 track keys equal), 120 s
+- Step 2: frame cache 7 roots (259 s); RS30, RS60, FULL seeds; numeric checks pass on every window; eye check 6 of 7 roots pass the whole span, 1 root cut to 3.5 h (debris at the tip)
+- Usable over >= 3.5 h: 5 of 5 stimulated roots (spec needs 4)
 Needs Andrew:
 - none
