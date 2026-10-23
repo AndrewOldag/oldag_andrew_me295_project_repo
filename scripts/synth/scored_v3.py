@@ -163,14 +163,27 @@ def band_start(rod):
     return int(round(registration_band_start(from_tracker_npz(out_file(rod, st)))))
 
 
+def base_radius(rod):
+    """The tracker's own disk radius on the unremedied run (14 px on the v3 rods, 15 on v2), as the executors
+    use it for enlarge_patch (measure/remedies.py). None until that run is cached."""
+    st = initial(rod)
+    if not cached(rod, st):
+        return None
+    return int(from_tracker_npz(out_file(rod, st)).settings.get("disk_radius") or BASE_RADIUS)
+
+
+def enlarged(rod, base, factor):
+    r = base_radius(rod)
+    return None if r is None else replace(base, disk_radius=int(round(r * factor)))
+
+
 def label_states(rod):
     """[(remedy sequence, TrackSettings)]: unremedied first, then the fitting remedy's states (v2 rules: freeze
-    v2 dev seeds 3-5 and the held-out label sweep). None in place of a state that needs the unremedied run."""
+    v2 dev seeds 3-5 and the held-out label sweep). None in place of a state that needs the unremedied run
+    (registration band start, base disk radius)."""
     base = initial(rod)
-    r15, r2 = round(1.5 * BASE_RADIUS), 2 * BASE_RADIUS
     f = rod.fault
     out = [([], base)]
-    reg = None
     if f in ("rigid_drift", "fast_rotation", "bad_stage_correction", "stage_log_missing"):
         b = band_start(rod)
         reg = None if b is None else replace(base, register=True, register_from_px=b)
@@ -181,18 +194,16 @@ def label_states(rod):
     elif f == "width_change":
         out.append((["use_width_free_ratio"], replace(base, width_free=True)))
     elif f == "low_texture":
-        out += [(["enlarge_patch/1.5x"], replace(base, disk_radius=r15)),
-                (["enlarge_patch/2x"], replace(base, disk_radius=r2))]
+        out += [(["enlarge_patch/1.5x"], enlarged(rod, base, 1.5)), (["enlarge_patch/2x"], enlarged(rod, base, 2))]
     elif f == "midline_jitter":
         out.append((["smooth_midline/light"], replace(base, midline_smooth="light")))
     elif f == "second_root":
         out += [([f"crop_or_mask/{m}"], replace(base, band_mask=m)) for m in ("crop_to_main_root", "mask_second_root")]
     elif f in ("flank_swap", "partial_occlusion"):
-        d = "change_frame_stride/double"
-        out += [(["enlarge_patch/1.5x"], replace(base, disk_radius=r15)),
-                (["enlarge_patch/2x"], replace(base, disk_radius=r2)), ([d], replace(base, stride=2)),
-                ([d, "enlarge_patch/1.5x"], replace(base, stride=2, disk_radius=r15)),
-                ([d, "enlarge_patch/2x"], replace(base, stride=2, disk_radius=r2))]
+        d, s2 = "change_frame_stride/double", replace(base, stride=2)
+        out += [(["enlarge_patch/1.5x"], enlarged(rod, base, 1.5)), (["enlarge_patch/2x"], enlarged(rod, base, 2)),
+                ([d], s2), ([d, "enlarge_patch/1.5x"], enlarged(rod, s2, 1.5)),
+                ([d, "enlarge_patch/2x"], enlarged(rod, s2, 2))]
     return out
 
 
@@ -201,11 +212,14 @@ def label_states(rod):
 def need_basis():
     need = []
     for rod in basis_rods():
-        sts = [TrackSettings()]
-        if rod.case.startswith("v3_bend"):
-            sts.append(TrackSettings(disk_radius=2 * BASE_RADIUS))      # flank tolerance basis, as v2
-        need += [(rod, st) for st in sts if not cached(rod, st)]
+        need += [(rod, st) for st in basis_states(rod) if st is not None and not cached(rod, st)]
     return need
+
+
+def basis_states(rod):
+    """Unremedied; bent rods also enlarge_patch 2x (flank tolerance basis, as v2), once the unremedied run gives
+    the base radius."""
+    return [TrackSettings()] + ([enlarged(rod, TrackSettings(), 2)] if rod.case.startswith("v3_bend") else [])
 
 
 def sizing_rows():
@@ -320,9 +334,8 @@ def basis_report():
          "| :-- | :-- | --: | --: | --: | --: | --: | :-- |"]
     rows, missing = [], 0
     for rod in basis_rods():
-        sts = [TrackSettings()] + ([TrackSettings(disk_radius=2 * BASE_RADIUS)] if rod.case.startswith("v3_bend") else [])
-        for st in sts:
-            e = evaluate(rod, st)
+        for st in basis_states(rod):
+            e = evaluate(rod, st) if st is not None else None
             if e is None:
                 missing += 1
                 continue
