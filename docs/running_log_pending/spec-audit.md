@@ -1,0 +1,14 @@
+## 2026-10-23 (build account, session spec-audit)
+- Done: spec `docs/specs/2026-10-23_spec-audit.md`, course half; branch `wip/spec-audit`; task c008
+- Done: literature network location missing from the private paths file at start (stop item, reported in status 6915060); then added by spec-audit-r, which had copied the network to the VM; not copied again
+- Done: six reviewer agent files `.claude/agents/audit-*.md`, one commit each (c7d3df3, f2f7d46, ab85c0b, fa7f248, 8a391f8, 52f32a7); `.claude/` is in the local git exclude, files added with `git add -f`
+- Done: reviewers run as six parallel subagents, each writing one file in `docs/reviews/2026-10-23_spec-audit/`. Run times 7-20 min
+- Results: specs 21 findings (1fa8f12), rules 11 (0176ce3), numbers 13 (c123706), kinematics 6 (c0e5136), bending-and-tracking 9 (5bcb744), evaluation 11 (f847be5)
+- Results: 71 findings: 0 would change a reported number, 17 would change a design choice, 54 record only; 12 touch a frozen item. One STOP item (rules-1, the known 2026-10-12 hook hit in 304a3cb)
+- Done: `SUMMARY.md` (2eb1215): findings ranked, spec item states (121 rows: 78 met, 7 partial, 6 not met, 11 not shown, 7 changed by decision), papers for Andrew to check
+- Pre-push hook blocked one push: a literal account-at-domain placeholder in `specs.md`; reworded and amended before the push
+- Tests re-run by the specs reviewer: 174 of 203, 173 passed, 1 failed (`tests/test_board.py::test_research_rows_never_in_tracked_files`, specs-3)
+- No code, config, threshold, prompt or result changed. No server jobs, no tracker runs, no pipeline agent calls, no PDF opened
+- Demo: `cat docs/reviews/2026-10-23_spec-audit/SUMMARY.md` prints the counts table, ranked findings and the paper list
+- Remaining: spec-audit-check writes `CHECK.md`; Andrew marks findings; merge `wip/spec-audit`
+- Bottlenecks: findings marks (Andrew); rules-4 and specs-20 on `origin/status/gate2` (Andrew)
