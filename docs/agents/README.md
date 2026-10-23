@@ -49,6 +49,11 @@ Needs Andrew:
 | data-steward | research | status/data-steward | 7 | unknown |
 | gate2 | research | status/gate2 | 8 | unknown |
 | litreview | research | status/litreview | 9 | unknown |
-| readme-check | course | wip/readme-check | inbox readme-check | to start (2026-10-16) |
+| readme-check | course | wip/readme-check | inbox readme-check | done (2026-10-17) |
+| spec-audit | course | wip/spec-audit | spec 2026-10-23_spec-audit | to start (2026-10-23) |
+| spec-audit-check | course | wip/spec-audit-check | spec 2026-10-23_spec-audit | after spec-audit |
+| lab-report-2 | course | wip/lab-report-2 | spec 2026-10-23_next-steps | to start (2026-10-23) |
+| dispatcher | course | wip/dispatcher | spec 2026-10-23_next-steps | to start (2026-10-23) |
+| spec-audit-r | research | status/spec-audit-r | research spec, tracker repo | to start (2026-10-23) |
 
 Finished sessions can be closed. A new task gets a new name and a new inbox.
