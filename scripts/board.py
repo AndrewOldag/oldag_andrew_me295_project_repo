@@ -26,7 +26,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 FIELDS = ["id", "title", "lane", "owner", "state", "branch", "created",
           "last_update", "blocker", "done_marker"]
-STATES = ["queued", "working", "needs-input", "review", "done", "blocked", "interrupted"]
+STATES = ["queued", "working", "needs-input", "review", "done", "blocked", "interrupted",
+          "waiting on Andrew"]
+WAITING_PREFIX = "waiting on "  # also "waiting on <agent>"
 COLUMNS = ["id", "lane", "owner", "state", "branch", "last_update", "blocker"]
 STALE_AFTER = timedelta(minutes=30)
 
@@ -55,7 +57,8 @@ def parse_task(path):
     missing = [f for f in FIELDS if f not in task]
     if missing:
         raise BoardError(f"{Path(path).name}: missing {', '.join(missing)}")
-    if task["state"] not in STATES:
+    if task["state"] not in STATES and not (
+            task["state"].startswith(WAITING_PREFIX) and task["state"] != WAITING_PREFIX):
         raise BoardError(f"{Path(path).name}: unknown state {task['state']!r}")
     task["file"] = Path(path).name
     return task

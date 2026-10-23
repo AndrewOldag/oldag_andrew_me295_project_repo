@@ -14,7 +14,7 @@ id: c001
 title: one line
 lane: course
 owner: <session name> | Andrew
-state: queued | working | needs-input | review | done | blocked | interrupted
+state: queued | working | needs-input | review | done | blocked | interrupted | waiting on Andrew | waiting on <agent>
 branch: wip/<name> | main | none
 created: YYYY-MM-DD HH:MM
 last_update: YYYY-MM-DD HH:MM
