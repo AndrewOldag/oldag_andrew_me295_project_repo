@@ -17,3 +17,11 @@
    - Item 6 then runs with that runner copy. Do not change the shared runner install
    - Montage folders only. Raw two-tile folders are not supported
    - In this repo: record only the outcome (pass or fail, checker values before and after on t3, tracker branch hash) in `results/2026-10-23_tracker_timing/README.md` and the log. No paths, host names or tracker code
+8. Andrew, 2026-10-23 13:20:
+   - Cluster: the planning account submitted the two item 6 jobs from the private runner copy: CPU 5350184 (8 cpus, 2 h limit) and P100 5350185 (4 cpus, 1 h limit). Ledger `cluster_spend.csv` in the cluster work folder: worst-case total today $0.59. Do not resubmit. When they finish: `run_summary.csv`, previews, `stage_source` in `run_metadata.json`, `sacct` actual elapsed and cost into the ledger, then the item 6 timing and estimate update
+   - Closure: extend the tracked length past the growth zone before any checker change. Track to about 1.5-2 mm from the tip (about 700-950 px at 2.105 um/px) where the frame allows, on the lab server, t2 and t3; recheck closure. Checker and freeze unchanged
+   - Plane sections: no threshold change. Rerun the check with the midline from the cluster runner's nets (the cluster run output) in place of the provisional segmentation midline; report the values. If still about 100x the threshold, find the cause (flank placement, width, scale) and report; do not fix the checker
+   - `0727_cc7`: set `usable_to_h` in `manifest/root_manifest.csv` to the end of its stage-tracking coverage. Rule in `docs/decisions.md`: a montage root is usable only where its stage-tracking table covers the frames
+   - Dispatcher proposal approved (2 h windows and last-window rule, round limit 200, 2 retries per task). Start B5 (dispatcher code with a fake queue) now; the real slice after closure and plane sections are understood
+   - Tracker: merge `stage-auxdata` into `gate2-windowed-coupling` (`--no-ff`), run the tracker tests, push. Do not merge to master
+   - Build work runs to Wed 28 Oct. Keep the log, decisions and results README current at each commit
