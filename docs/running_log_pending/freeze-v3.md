@@ -5,6 +5,12 @@
 - Proposal: v3 rods at 2.105 um/px, tip 96 px/h (2.4 px/frame, from the timing run on `wip/dispatcher`), growth zone s_mid 200 px, width 45 (peak REGR 54.0 %/h at 421 um, zone 543 um; computed from `measure.rod.richards_velocity`), tracked length 500 px, stage follows the tip every frame; bent rods 16, 20, 24 and 30 deg/h
 - Proposal: kinematics-1, width-free ratio corrected for curvature (exact on field-level rods); not dropped. Claude Code 2.1.302 recorded in v3. New held-out injector `stage_log_missing`
 - Proposal: about 490 tracker runs (over the 300 limit; asks a cap of 600), 288 LLM runs. No run made
-- Demo: `cat docs/proposals/2026-10-23_freeze-v3.md`
-- Remaining: Andrew approves or changes the proposal (5 open items); then implement, clean basis check, held-out sizing, labels, tag `freeze-v3`, rerun all methods, results README
-- Bottlenecks: proposal approval (Andrew); tracker-run cap above 300 (Andrew)
+- Approved by Andrew 13:41 with a fixed non-growing rod added (set of 51: accept_clean 18, accept_repaired 15, decline 18), cap 600 tracker runs; recorded in `docs/decisions.md` (d9d5318)
+- Done (1a16f11): v3 cases in `measure/rod.py`, v3 frames in `measure/render.py`, `stage_log_missing` and v3 zone in `measure/render_heldout.py`, corrected `width_free_ratio` (field-level error under 1e-3 on 11 rods; v2 width_change max 0.435 -> 0.000), no-growth limit 0.5 %/h, `measure/metrics.py`; `tests/test_freeze_v3.py`
+- Done (7eb7cc3): no rename or overwrite on the lab server (spec audit rules-2): `qb_track.py` writes once and marks `.ok`, `make_rod.py` refuses an existing rod, `sweep.py` counts only `.ok` outputs and leaves partial files, code folder per commit from `git archive`, plan and log names per start; per-rod track length
+- Done (47a3c47, ece537c, 9eb747d): `scripts/synth/scored_v3.py`; v3 seeds in `config/scoring_seeds.yaml`; README steps. Suite 242 passed, 5 skipped
+- Run: one smoke rod as single jobs, 44 s, checks pass, centre error 0.35 against 1.35 %/h
+- Run (433fdcf): clean basis, 30 rods x seeds 10-14, 100 tracker runs in 2 sweeps, 0 failed, 405 s and 149 s wall, load at most 6.13 on 32 cores, work space 7.57 -> 9.47 GB. Largest clean values rigid_invariance 1.42, closure 0.36, plane_sections 2.97 %/h; flank error 0.575 %/h. Thresholds and tolerance stay. `results/2026-10-23_freeze_v3/basis.md`
+- Demo: `python scripts/synth/scored_v3.py basis` prints the basis summary from the cache
+- Remaining: held-out sizing (36 runs), labels (about 228), tag `freeze-v3`, rule methods, LLM methods x 3 repeats (306 runs), `eval`, results README
+- Bottlenecks: lab-server work space 9.47 of 10 GB; about 3.5 GB more needed; sessions may not delete (Andrew)
