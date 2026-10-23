@@ -57,6 +57,12 @@ Course project for AM/ME/CE 295, Caltech, Fall 2026. Start with `CLAUDE.md` and 
 - Reads the cached final records of `results/2026-10-12b_scored_v1/` from `staging/` (the scored runs' caches). Definition: `docs/proposals/2026-10-13_auditor-v1.md`
 - `python scripts/synth/auditor_v1.py views` writes the 8 batch views; `rule` runs the rule auditor; `llm --set dev|heldout [--method M] [--repeat K]` runs the LLM auditor (needs a clean tracked tree); `eval` writes `results/2026-10-13_auditor_v1/scores.md`. Test: `tests/test_auditor.py`
 
+## Dispatcher (fake queue, no real jobs)
+- Proposal `docs/proposals/2026-10-23_dispatcher.md` (approved 2026-10-23); settings `config/dispatcher.yaml`; code `agents/dispatcher.py`, prompt `agents/prompts/dispatcher.md`
+- `python scripts/demo_dispatcher.py` runs the script baseline over every include-yes root on the fake queue (2 h windows, 4 lab-server workers, 20 injected crashes retried once) and prints the summary: windows by state, core-hours, retries, peak workers, wall hours. No LLM call
+- The engine, not the agent, enforces the limits: include-yes rows and usable windows only; lab-server worker limit and load rule; cluster submits only inside an approved budget in `config/compute_budget.yaml` (absent = 0). Test: `tests/test_dispatcher.py`
+- Real-movie tracking of one window: `scripts/remote/qb_track.py --from-h H0 --to-h H1 --movie real` with a midline from `scripts/remote/real_midline.py` (provisional); timing driver `scripts/remote/time_window.sh`. Results `results/2026-10-23_tracker_timing/`
+
 ## Task board
 - One file per task in `tasks/` (format in `tasks/README.md`). Research-lane tasks use the same format in a folder outside every git repo
 - Optional: copy `config/board.example.conf` to `private/board.conf` and set the research folder and the page path
