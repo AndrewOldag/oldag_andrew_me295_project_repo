@@ -6,7 +6,7 @@ owner: dispatcher
 state: working
 branch: wip/dispatcher
 created: 2026-10-23 00:30
-last_update: 2026-10-23 00:40
+last_update: 2026-10-23 01:05
 blocker: none
 done_marker: proposal + results/2026-10-23_tracker_timing/; after approval, slice runs from README
 ---
@@ -14,7 +14,7 @@ done_marker: proposal + results/2026-10-23_tracker_timing/; after approval, slic
 Spec: `docs/specs/2026-10-23_next-steps-lr2-dispatcher.md`.
 
 ## Parts
-- [ ] B1 proposal (stop for Andrew)
+- [x] B1 proposal written (docs/proposals/2026-10-23_dispatcher.md); waiting for Andrew
 - [ ] B2 tracker timing, one root, lab server
 - [ ] B3 cost estimate
 - [ ] B4 dispatcher and real slice (after approval)
