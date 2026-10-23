@@ -23,5 +23,7 @@ Cluster runner (midline nets + QC + kinematics), one 2 h window per job:
 | Job | Elapsed min | $ per 2 h window | $ per 24 h root (12 windows) | $ include-yes windows | $ 118 roots x 24 h |
 | :-- | --: | --: | --: | --: | --: |
 | gpu (P100 + 4 cpus) | 11.2 | 0.032 | 0.38 | 38 | 45 |
+| cpu (8 cpus) | 120.3 | 0.193 | 2.31 | 235 | 273 |
 
 - Units: cpus + 10 per P100 or V100, per hour, at the rate above. No moved copy
+- cpu: timed out at the 2 h limit in the midline stage (85 s per frame on 8 cpus); its row is a lower bound

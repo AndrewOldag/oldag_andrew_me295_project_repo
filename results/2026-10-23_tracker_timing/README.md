@@ -92,8 +92,9 @@ Spec `docs/specs/2026-10-23_next-steps-lr2-dispatcher.md`, items B2 and B4 (clus
 | Job | Hardware | Queue wait | Elapsed | Midline s | QC s | Kinematics s | Peak memory (batch step) | Output | Cost |
 | :-- | :-- | --: | --: | --: | --: | --: | --: | --: | --: |
 | GPU | P100 + 4 cpus | 7 min 54 s | 11 min 15 s | 580 | 3 | 66 | 1.37 GB | 12 MB | $0.032 |
-| CPU | 8 cpus | 0 min 37 s | running at 31 min, still in the midline stage | | | | | | |
+| CPU | 8 cpus | 0 min 37 s | 2 h 0 min 20 s, TIMEOUT | 6805 | 3 | not finished | 4.76 GB | 1.3 MB | $0.193 |
 - GPU run status ok; 80 of 80 frames with a midline; `stage_source` aux_stage_tracking, 80 steps, 341.1 um travel (matches the lab-server validation)
 - Previews fail: the ML and stabilized midlines end about 280 px short of the root tip, inside the meristem, on frames 0 and 79. Tip confidence median 0.18, maximum 0.25 (runner warning: weak on every frame). Runner kinematics (peak REGR 40 %/h at 42 um from the tip) are not valid. Stopped for Andrew; net settings not changed
 - Per 2 h window on the P100: $0.032, of which the midline nets are 87 % of the time. 24 h root (12 windows): about $0.38. 1189 include-yes windows: about $38. 118 roots x 24 h: about $45. The lab server is free; its timing (about 1.04 core-s per frame with the provisional midline) stays the basis of the main estimate
-- Spent today, all jobs: $0.23 (earlier runner test) + $0.03 (GPU) + CPU still running (worst case $0.19); worst-case total $0.59, under the $5 cap
+- Spent today, all jobs, actual: $0.226 (earlier runner test) + $0.193 (CPU) + $0.032 (GPU) = $0.45, under the $5 cap
+- On CPU the runner's midline nets take 85 s per frame on 8 cpus (GPU: 7.3 s per frame)
