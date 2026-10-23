@@ -1,10 +1,10 @@
 # freeze-v3
-Updated: 2026-10-23 14:25 (local)
+Updated: 2026-10-23 14:55 (local)
 Lane: course
 Branch: wip/freeze-v3
-Last inbox item done: 2
-State: waiting on Andrew
-Now: item 4: clean basis done; held-out sizing, labels and method runs wait on work space (below)
+Last inbox item done: 5
+State: working
+Now: item 5 read (work space freed); held-out sizing sweep
 Done since last update:
 - Item 4: approval recorded (d9d5318)
 - v3 rods, `stage_log_missing`, curvature-corrected width-free ratio (field-level error under 1e-3; v2 width_change 0.435 -> 0.000), no-growth tolerance 0.5 %/h, `measure/metrics.py` (1a16f11)

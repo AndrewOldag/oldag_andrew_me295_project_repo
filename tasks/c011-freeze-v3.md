@@ -3,11 +3,11 @@ id: c011
 title: Freeze v3 from the spec audit; rerun all methods
 lane: course
 owner: freeze-v3
-state: waiting on Andrew
+state: working
 branch: wip/freeze-v3
 created: 2026-10-23 13:25
-last_update: 2026-10-23 14:25
-blocker: lab-server work space at 9.47 of 10 GB (Andrew)
+last_update: 2026-10-23 14:55
+blocker: none
 done_marker: tag freeze-v3 and results/2026-10-2x_freeze_v3/README.md
 ---
 
