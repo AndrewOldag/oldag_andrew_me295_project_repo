@@ -1,21 +1,17 @@
 # dispatcher
-Updated: 2026-10-23 01:40 (local)
+Updated: 2026-10-23 02:20 (local)
 Lane: course
 Branch: wip/dispatcher
 Last inbox item done: 2
 State: waiting on Andrew
-Now: B1, B2, B4 done; item 5 (cluster trials) stopped at the first data copy; B5 waits for approval
+Now: item 6 held before submit: stage correction must go into the tracker repo and the cluster runner first (Andrew, 2026-10-23)
 Done since last update:
-- Item 2, B1: proposal `docs/proposals/2026-10-23_dispatcher.md` (23443d2)
-- Item 2, B2: real-window timing on the lab server, 3 runs, `results/2026-10-23_tracker_timing/` (9bfb316 and this commit)
-- Item 2, B4: cost estimate `results/2026-10-23_tracker_timing/estimate.md`; all sets fit on the lab server; cluster cost under $8 in every case
-- Item 4: cluster rules read; rate $0.012 used in the estimate
-- Item 5: private cluster file copied and read; connection check OK; one work folder found and made; no job submitted; $0.00 spent. Stopped: the data copy to the cluster was refused by this session's permission check
-- Tests: 202 passed, 1 failed (test_board, research task r004 state 'waiting on Andrew' outside the repo; not this session's file)
+- Item 6: cluster data copy of 0708_m12 checked (1931 files, sizes identical to the lab-server copy)
+- Item 6: CPU and P100 configs and the ledger check written (outside the repo); spent today $0.23, nothing submitted by this session
+- Item 6: the runner reads no stage-tracking table; probe with cumulative stage-tracking moves on t3: closure 76.5 -> 5.5 px/h (sign +); plane_sections unchanged, 254 -> 256 %/h. `results/2026-10-23_tracker_timing/README.md`
+- Decision recorded (`docs/decisions.md`): correction goes into the tracker repo loader, then the runner; no dispatching before
 Needs Andrew:
+- Stage correction in the tracker repo loader and the cluster runner install (you or the research lane). Rule: positions = stage-position table + cumulative per-frame moves from the stage-tracking table, sign +. Then say `check github`; the two cluster jobs (CPU 8 cpus 2 h, P100 4 cpus 1 h; worst case $0.19 and $0.17) go next
 - Approve or change the dispatcher proposal (window 2 h and last-window rule, round limit 200, 2 retries per task)
-- Timing root fails the checker in a way not in the fault list: stage-tracking moves are in the movie's auxiliary data table, not in the stage-position table the tracker reads; stage correction is zero on these montage movies. Which source to use, and in which code (course wrapper or tracker)
-- No midline source for real movies on the lab server; the timing used a provisional segmentation midline. Use the cluster runner's midline nets, or another source?
-- Cluster trials: the data copy (one root's movie folder, lab server to the cluster work folder) needs a permission rule for this session, or Andrew runs the copy. Also: trial plan says raw imgdir; recovery roots have only a montage folder, and raw folders alternate two tiles. Proposed: montage folder for all three
-- Lab-server probe scripts and 2 preview images left in the timing work folder there (no deletes by sessions)
-- test_board fails on research task r004 state 'waiting on Andrew' (research lane)
+- After the fix: closure still 5.5 px/h (threshold 1.0) and plane_sections 256 %/h (threshold 3.25) on t3. Likely the provisional midline and the flank term; not checked
+- Lab-server probe scripts, preview images and probe outputs left in the timing work folder there (no deletes by sessions)

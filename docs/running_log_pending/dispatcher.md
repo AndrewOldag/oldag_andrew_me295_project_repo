@@ -9,3 +9,13 @@
 - Demo: `python results/2026-10-23_tracker_timing/estimate.py` prints the cost table
 - Remaining: Andrew approves or changes the proposal; stage-correction source for real movies; cluster copy permission; then B5 (dispatcher, real slice)
 - Bottlenecks: proposal approval, stage-tracking table, cluster copy permission (Andrew)
+
+## 2026-10-23 (build account, session dispatcher, inbox item 6)
+- Done: cluster copy of 0708_m12 checked against the lab-server copy: 1931 files, same names and sizes, 5,599,241,881 bytes
+- Done: two runner configs (CPU, P100) and a ledger check script written, both outside the repo. Spent today $0.23 (earlier runner test). P100 nodes free at check time
+- Found: the cluster runner, like the lab tracker, reads no stage-tracking table; montage movies get zero stage correction
+- Done: probe on the lab server, t3 re-tracked with cumulative stage-tracking moves: closure 76.5 -> 5.5 px/h (sign +), 158.6 px/h (sign -); plane_sections 254 -> 256 %/h, unchanged. `results/2026-10-23_tracker_timing/README.md`
+- Decision (Andrew): stage correction goes into the tracker repo loader, then the runner install; no dispatching before that. Cluster jobs not submitted
+- Demo: `python results/2026-10-23_tracker_timing/estimate.py` prints the cost table
+- Remaining: stage correction in the tracker repo and runner (Andrew or research lane); then the two cluster jobs; closure residual 5.5 px/h and plane_sections on real movies; proposal approval
+- Bottlenecks: tracker-repo stage correction (Andrew); proposal approval (Andrew)
