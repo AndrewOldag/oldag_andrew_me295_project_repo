@@ -2,12 +2,13 @@
 Updated: 2026-10-23 (local)
 Lane: research
 Branch: status/spec-audit-r
-Last inbox item done: 1
-State: waiting on Andrew
-Now: item 2 stopped at a SPEC stop condition (evidence of a server delete). Reviewer plan still running, read-only
+Last inbox item done: 5
+State: working
+Now: item 2. Fresh-session check (CHECK.md) running; vault note next
 Done since last update:
-- Reviewers done: 4 of 5 (gate2-threshold 9 findings, kinematics 9, tracking 9, rules 15)
-- Severity so far: would change a reported number 3; would change a design choice 6; record only 33
-- Frozen parameter check: pass
+- Item 5: audit resumed after Andrew's answer on the 2026-10-17 delete
+- Reviewers done: 5 of 5. Findings 58: would change a reported number 6; would change a design choice 8; record only 44
+- SUMMARY.md written in the work folder copy
+- One audit-process finding: a read-only git command by a reviewer refreshed a git index on the server outside the work folder. Andrew: record and continue. Rule added: no git commands on the server
 Needs Andrew:
-- Rules reviewer found one delete command run on the lab server, in a VM shell history dated 2026-10-17 (backup folder, outside the data area). Confirm whether you ran it, and whether the audit continues
+- none now
