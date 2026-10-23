@@ -1,5 +1,5 @@
 # coordinator
-Updated: 2026-10-23 14:01 (local)
+Updated: 2026-10-23 21:31 (local)
 Lane: course
 Branch: main
 Last inbox item done: 10
@@ -10,6 +10,7 @@ Done since last update:
 - Item 9: board allows `waiting on Andrew` and `waiting on <agent>` (`scripts/board.py`, `tasks/README.md`), 8223616; full suite 203 passed
 - Item 1: merged wip/spec-audit (2c0eb60) and then wip/spec-audit-check (f7ec454), `--no-ff`; pending log entries moved into `docs/running_log.md`; suite 203 passed on each merge
 - Item 8: pinged dispatcher 01:22 (inbox changed in 588f052). Coordinator inbox also changed (own). Message tool available: SendMessage + ListAgents
+- 14:20-21:30: no check ran (gap of about 7 h); no inbox change since 7939e21
 - 14:01: pinged dispatcher (inbox item 9, 7939e21). turn-long inbox new; session not live, not pinged
 - 13:50: freeze-v3 inbox item 4 (4d9d4b6) already being worked by freeze-v3; not pinged. spec-audit-r done
 - Item 10: decisions entries (build to 28 Oct, 102 include-yes roots, design-choice findings into freeze v3) and `Build stops: Wed 28 Oct` in CLAUDE.md; suite 203 passed
@@ -21,13 +22,14 @@ Done since last update:
 Branches (last commit, state):
 - wip/spec-audit: 2026-10-23 01:04, ready to merge, merged 2c0eb60
 - wip/spec-audit-check: 2026-10-23 01:14, ready to merge, merged f7ec454
-- wip/freeze-v3: 2026-10-23 13:57, working
+- wip/freeze-v3: 2026-10-23 14:21, waiting on Andrew (lab server work space)
 - wip/dispatcher: 2026-10-23 13:53, waiting on Andrew
 - wip/lab-report-2: 2026-10-23 13:29, working
 - status/spec-audit-r: 2026-10-23 13:42, done (research lane, not merged)
 - status/gate2: 2026-10-16 12:27, waiting on Andrew (research lane, not merged)
 - wip/readme-check, wip/vm-setup, wip/auditor-v1b, wip/fq-real, wip/auditor-v1, wip/scored-v1, wip/freeze-v2, heldout/faults, wip/baselines, wip/diag-review, wip/lab-report-1, wip/gatekeeper: merged
 Needs Andrew:
+- freeze-v3: work space 9.47 of 10 GB; raise the sweep limit to 16 GB, or delete the old v2 rendered rods yourself (freeze-v3 status)
 - Old lab-report-2 session (started 00:37) stopped 13:45 on Andrew's go-ahead; the 13:27 one remains
 - Dispatcher: cluster submit refused by its permission check; tracker branch stage-auxdata not merged; checker still fails after the stage fix (dispatcher status)
 - Local branch worktree-coordinator-c007 (b563b33, not pushed) duplicates 2170ca5; keep or drop
