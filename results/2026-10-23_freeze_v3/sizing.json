@@ -1,0 +1,10 @@
+{
+ "sizes": {
+  "bad_stage_correction": "3",
+  "stage_log_missing": "1",
+  "second_root": "30",
+  "fast_rotation": "2",
+  "flank_swap": "0.5",
+  "partial_occlusion": "20"
+ }
+}
