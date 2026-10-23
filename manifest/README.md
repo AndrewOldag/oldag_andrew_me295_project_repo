@@ -14,6 +14,7 @@
 | `condition` | Confirmed by Andrew. Drought folders: `control`, `mannitol`. Recovery: `control`, `mannitol then control`, `control then control`, `mannitol then mannitol` |
 | `include` | `yes`, `no` or `unsure` |
 | `usable_from_h`, `usable_to_h` | Part of the movie to track, in hours from the first frame |
+| | A montage root is usable only where its stage-tracking table covers the frames (2026-10-23). `0727_cc7`: table ends at frame 154, 4.06 h; `usable_to_h` 9.5 -> 4.05 |
 | `notes` | Andrew's review notes |
 | `flags` | Automatic checks from the scan (missing montage, gaps, odd names) |
 | `montage_imgdir` | Stitched 2400x1200 movie, relative to the experiment folder |
