@@ -3,10 +3,10 @@ id: c011
 title: Freeze v3 from the spec audit; rerun all methods
 lane: course
 owner: freeze-v3
-state: queued
+state: working
 branch: wip/freeze-v3
 created: 2026-10-23 13:25
-last_update: 2026-10-23 13:25
+last_update: 2026-10-23 13:29
 blocker: none
 done_marker: tag freeze-v3 and results/2026-10-2x_freeze_v3/README.md
 ---
