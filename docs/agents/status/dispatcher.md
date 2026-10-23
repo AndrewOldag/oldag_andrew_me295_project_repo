@@ -1,17 +1,21 @@
 # dispatcher
-Updated: 2026-10-23 02:20 (local)
+Updated: 2026-10-23 13:10 (local)
 Lane: course
 Branch: wip/dispatcher
 Last inbox item done: 2
 State: waiting on Andrew
-Now: item 6 held before submit: stage correction must go into the tracker repo and the cluster runner first (Andrew, 2026-10-23)
+Now: item 7 done except the cluster run; item 6 cluster jobs blocked (job script refused by this session's permission check)
 Done since last update:
-- Item 6: cluster data copy of 0708_m12 checked (1931 files, sizes identical to the lab-server copy)
-- Item 6: CPU and P100 configs and the ledger check written (outside the repo); spent today $0.23, nothing submitted by this session
-- Item 6: the runner reads no stage-tracking table; probe with cumulative stage-tracking moves on t3: closure 76.5 -> 5.5 px/h (sign +); plane_sections unchanged, 254 -> 256 %/h. `results/2026-10-23_tracker_timing/README.md`
-- Decision recorded (`docs/decisions.md`): correction goes into the tracker repo loader, then the runner; no dispatching before
+- Item 7: tracker repo branch `stage-auxdata` 888f972, pushed, not merged; tracker tests 46 passed, 9 skipped
+- Item 7: validation on 0708_m12: background drift t3 84.6 -> 2.6, t2 80.1 -> 1.1 px/h (pass, limit 5); rule: sign +, step i = move after frame i; full note in the lab-server work folder (VALIDATION.md)
+- Item 7: course checker after the fix: closure t3 76.5 -> 5.53, t2 68.2 -> 11.2 px/h (still fail, threshold 1.0); plane_sections 257, 366 %/h (unchanged, fail)
+- Item 7: scan of 122 montage folders: 121 OK; 0727_cc7 mismatch (155 steps, 857 frames); Andrew: continue, flag it
+- Item 7: private runner copy on the cluster with 888f972; root listing OK; loader confirmed on 0708_m12
+- Item 6: configs (CPU, P100) and ledger check ready; nothing submitted; spent today $0.23; no compute node used
 Needs Andrew:
-- Stage correction in the tracker repo loader and the cluster runner install (you or the research lane). Rule: positions = stage-position table + cumulative per-frame moves from the stage-tracking table, sign +. Then say `check github`; the two cluster jobs (CPU 8 cpus 2 h, P100 4 cpus 1 h; worst case $0.19 and $0.17) go next
-- Approve or change the dispatcher proposal (window 2 h and last-window rule, round limit 200, 2 retries per task)
-- After the fix: closure still 5.5 px/h (threshold 1.0) and plane_sections 256 %/h (threshold 3.25) on t3. Likely the provisional midline and the flank term; not checked
-- Lab-server probe scripts, preview images and probe outputs left in the timing work folder there (no deletes by sessions)
+- Cluster: writing the job script (`qb-submit` without `--submit`) was refused by this session's permission check. Add a permission rule, or write and submit the two jobs yourself (configs in the trials configs folder; worst case $0.19 CPU, $0.17 P100)
+- 0727_cc7: stage-tracking log covers about 4 h of 9.5 usable h. Shorten its usable window, exclude it, or another rule
+- Closure after the fix: residual = motion of the most basal tracked point; 400 px tracked length ends inside the growth zone. Longer track length or a different base rule? (checker and freeze unchanged until you decide)
+- plane_sections 257-366 %/h on real windows, not from stage correction; cause not checked
+- Dispatcher proposal approval (window 2 h, round limit 200, 2 retries)
+- Merge of tracker branch `stage-auxdata` (yours)

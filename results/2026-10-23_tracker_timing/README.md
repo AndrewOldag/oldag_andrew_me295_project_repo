@@ -57,3 +57,18 @@ Spec `docs/specs/2026-10-23_next-steps-lr2-dispatcher.md`, items B2 and B4 (clus
 - With + sign the base is nearly still in the world frame and the tip advances about 96 px/h. Sign + is the correction
 - Closure still above its threshold (provisional segmentation midline likely; not checked). plane_sections does not change with stage correction: predicted term -248 %/h from flank spacing x curvature rate; cause not checked
 - Decision (Andrew, 2026-10-23): the correction goes into the tracker repo's loader, then the cluster runner install is updated. No cluster job is submitted until then. Nothing submitted; spent today $0.23 (the earlier runner test only)
+
+## Stage correction in the tracker repo (inbox item 7, 2026-10-23)
+- Tracker repo branch `stage-auxdata`, commit 888f972 (pushed, not merged). Tracker tests 46 passed, 9 skipped (9 new)
+- Rule kept: stage positions = stage-position table + summed stage-tracking steps, sign +, step i = the move after frame i
+- Background debris drift (world frame), no correction -> kept rule: t3 84.6 -> 2.6 px/h, t2 80.1 -> 1.1 px/h (spec limit 5 px/h): pass. Wrong sign: 159-167 px/h
+- Course checker on the re-tracked windows (checker unchanged):
+
+| Window | closure px/h (threshold 1.0) before -> after | plane_sections %/h (threshold 3.25) before -> after |
+| :-- | :-- | :-- |
+| t3 (4-6 h) | 76.5 -> 5.53 (fail) | 254 -> 257 (fail) |
+| t2 (2-4 h) | 68.2 -> 11.20 (fail) | 358 -> 366 (fail) |
+
+- Closure residual matches the remaining motion of the most basal tracked point (6.5 and 12.3 px/h): the 400 px tracked length ends inside the growth zone. plane_sections unchanged by the correction; cause not checked
+- Scan of all 122 montage folders: 121 have a step count equal to the frame count. `0727_cc7` (include yes, usable 0-9.5 h): 155 steps for 857 frames; the loader raises on it. Flagged for Andrew (continue, Andrew, 2026-10-23)
+- Private runner copy on the cluster with this branch: built; root listing works; loader confirmed on 0708_m12. The cluster jobs were not submitted: writing the job script was refused by this session's permission check. Not retried. Spent today $0.23 (earlier runner test only); no compute node used by this session
