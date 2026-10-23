@@ -1,23 +1,18 @@
 # lab-report-2
-Updated: 2026-10-23 00:43 (local)
+Updated: 2026-10-23 13:30 (local)
 Lane: course
 Branch: wip/lab-report-2
-Last inbox item done: 2
-State: waiting on spec-audit
-Now: items 1-2 done (spec A1-A4); A5 waits for the audit SUMMARY.md and Andrew's marks; item 3 (ready by Wed 28 Oct) open
+Last inbox item done: 4
+State: working
+Now: draft has item 4 changes; finish from the log Thu 29 Oct (item 3; build stops Wed 28 Oct)
 Done since last update:
-- Draft `docs/reports/2026-10-30_lab-report-2.md` (277d9de): proposal, changes since Lab report 1, risks with actions, plan to 9 Dec, related-work note, repo and log section, progress, demo
-- All commit hashes in the draft checked against git; numbers from the scored-v1 and auditor-v1 READMEs and the log
-- Tests at 2170ca5: 202 passed, 1 failed, 89 s. Failure: test_board.py::test_research_rows_never_in_tracked_files; a research-lane task file outside the repo has state 'waiting on Andrew', not in the board's state list. Not changed by this session
-- Log entry in docs/running_log_pending/lab-report-2.md
+- Item 4: lit-reviewer agents replaced by the spec audit; 102 roots; accepted audit findings in changes and risks as freeze v3 (planned); v3 held-out seeds; Lab report 5 removed; Wed 28 Oct in the plan (see commit for this status)
+- Spec A5: done through item 4 (accepted design-choice findings added)
 Needs Andrew:
-- [ANDREW] line 17: literature-reviewer agents: keep in the plan or replace with the spec audit
-- [ANDREW] line 61: held-out sample: add seeds under a new freeze version, or keep 15 per method
-- [ANDREW] line 74: Lab report 5 date (not in Lab-Guideline.md)
-- [ANDREW] line 82: related-work additions from the audit (spec A5, after marks)
-- [ANDREW] line 100: recount commits on 30 Oct
-- [ANDREW] line 102: log entries for spec audit, dispatcher and this report merged before submission
-- [ANDREW] line 113: rerun tests after the board fix; replace the count
-- [ANDREW] line 114: add the slice demo command if it runs by 30 Oct
-- Proposal section is about 75 lines; trim to one printed page if needed
-- Board test failure above: fix the research task state or the board's state list (coordinator or research lane)
+- [ANDREW] line 96: related-work papers from the audit, if any; otherwise the note stays as in Lab report 1
+- [ANDREW] line 114: recount commits on 30 Oct
+- [ANDREW] line 116: log entries for spec audit, dispatcher and this report merged before submission
+- [ANDREW] line 127: rerun tests (board fix merged in 8223616); replace the count
+- [ANDREW] line 128: add the slice demo command if it runs by 30 Oct
+- Proposal section now longer than one printed page; trim if needed
+- Two live sessions are named lab-report-2 (one started 12h ago, one today); close one
