@@ -11,3 +11,5 @@ approved: 2026-10-12
 regr_rms_fraction_of_true_peak: 0.025     # centre REGR RMS error at most 2.5 % of the rod's true peak REGR
 flank_difference_rms_pct_per_h: 1.0       # flank-difference RMS error, %/h. Basis rule of 2026-10-10 with the bent rods:
                                           # largest clean 0.797 (bend_reverse s0, enlarge_patch 2x), rounded up (was 0.5)
+regr_rms_no_growth_pct_per_h: 0.5        # centre REGR RMS error limit on a non-growing rod (true peak 0), %/h.
+                                          # Andrew, 2026-10-23, freeze v3 (docs/proposals/2026-10-23_freeze-v3.md)
