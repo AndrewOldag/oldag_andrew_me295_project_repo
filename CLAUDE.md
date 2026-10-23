@@ -33,7 +33,7 @@ A growing plant root is a slender rod whose material generates its own strain: t
 - Real movies: only roots with `include` yes in `manifest/root_manifest.csv`, and only time inside `usable_from_h` to `usable_to_h`. Nothing outside these windows is used for labeling, training, thresholds, tests or results (Andrew, 2026-10-13)
 - Tracking runs on the lab compute server by default. The computing cluster is used only after Andrew approves a cost estimate
 - No Claude session deletes, moves or renames any file or folder on the lab server, by any means. Andrew deletes there himself, at the end of the project. Only exception: the lock files `scripts/synth/sweep.py` creates and removes for its own sweep. If a step needs a server delete, stop and tell Andrew (Andrew, 2026-10-13)
-- The lab compute server is shared. Every job there: at most 4 single-thread workers, lowest priority, load checked before and between runs, one sweep at a time. Limits in `docs/decisions.md`, 2026-10-11
+- The lab compute server is shared. At most 2 jobs of this account at once (Andrew, 2026-10-23), each at most 4 single-thread workers (8 in total, one quarter of the cores), lowest priority, load checked before and between runs (start only if the 1-min load is below half the cores), at most one `sweep.py` sweep at a time. Limits in `docs/decisions.md`, 2026-10-11 and 2026-10-23
 - The checker contains no LLM calls
 - Remedies come from a fixed list set in advance. No free parameter tuning on data that may go into paper figures
 - Pin the model ID in config. Never commit API keys, tokens or SSH keys

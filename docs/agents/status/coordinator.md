@@ -1,15 +1,16 @@
 # coordinator
-Updated: 2026-10-23 14:49 (local)
+Updated: 2026-10-23 15:01 (local)
 Lane: course
 Branch: main
-Last inbox item done: 10
+Last inbox item done: 11
 State: working
 Now: relay loop every 10 min (item 8): merges per item 1, `check github` to live sessions whose inbox changed
-Last-seen main: ec6026b (inboxes as of ec6026b)
+Last-seen main: 4c2a813 (inboxes as of 4c2a813)
 Done since last update:
 - Item 9: board allows `waiting on Andrew` and `waiting on <agent>` (`scripts/board.py`, `tasks/README.md`), 8223616; full suite 203 passed
 - Item 1: merged wip/spec-audit (2c0eb60) and then wip/spec-audit-check (f7ec454), `--no-ff`; pending log entries moved into `docs/running_log.md`; suite 203 passed on each merge
 - Item 8: pinged dispatcher 01:22 (inbox changed in 588f052). Coordinator inbox also changed (own). Message tool available: SendMessage + ListAgents
+- 15:01: item 11 (standing lab-server job limit) noted; the coordinator runs no server jobs. Pinged dispatcher, freeze-v3, turn-long (inboxes changed in 4c2a813)
 - 14:49: pinged freeze-v3 (inbox item 5, ec6026b). Correction: the 21:31 status time was GMT; local was 14:31; no gap in checks
 - 14:01: pinged dispatcher (inbox item 9, 7939e21). turn-long inbox new; session not live, not pinged
 - 13:50: freeze-v3 inbox item 4 (4d9d4b6) already being worked by freeze-v3; not pinged. spec-audit-r done
@@ -22,7 +23,8 @@ Done since last update:
 Branches (last commit, state):
 - wip/spec-audit: 2026-10-23 01:04, ready to merge, merged 2c0eb60
 - wip/spec-audit-check: 2026-10-23 01:14, ready to merge, merged f7ec454
-- wip/freeze-v3: 2026-10-23 14:21, waiting on Andrew (lab server work space)
+- wip/freeze-v3: 2026-10-23 14:53, working
+- status/turn-long: 2026-10-23 14:49, working (research lane, not merged)
 - wip/dispatcher: 2026-10-23 13:53, waiting on Andrew
 - wip/lab-report-2: 2026-10-23 13:29, working
 - status/spec-audit-r: 2026-10-23 13:42, done (research lane, not merged)

@@ -41,6 +41,8 @@ ROOT = Path(__file__).resolve().parents[1]
 RUNNER_CONFIG = ROOT / "private" / "runner.yaml"
 MOVED = (np.deg2rad(0.1) / 90.0, (0.5 / 90.0, 0.3 / 90.0))   # rotation rad/s, translation px/s
 SYNCED = ("measure", "scripts/synth", "scripts/remote")      # code copied to the tracker machine
+MAX_JOBS = 2                 # jobs of this account at once on the lab server (CLAUDE.md, Andrew 2026-10-23)
+JOB_PATTERN = "sweep|qb_track|make_rod|g2_run|st_run|curv.py|run_default"   # docs/decisions.md, 2026-10-23
 
 
 @dataclass(frozen=True)
@@ -196,11 +198,27 @@ class RemoteRunner:
         """Lowest CPU and I/O priority on the shared machine (decisions, 2026-10-11)."""
         return f"nice -n 19 $(command -v ionice >/dev/null && echo ionice -c 3) {cmd}"
 
-    def _load_ok(self):
-        """A single job starts only if the 1 min load is at most half the cores."""
-        n, l1 = self._ssh("nproc; cut -d' ' -f1 /proc/loadavg").decode().split()
-        if float(l1) > 0.5 * int(n):
-            raise RuntimeError(f"load {l1} is above half of {n} cores; not starting a job on the shared machine")
+    def account_jobs(self):
+        """Jobs of this account on the tracker machine: distinct process groups of its processes matching
+        JOB_PATTERN (a sweep, its workers and their tracker runs share one group)."""
+        cmd = (f"ps -u \"$(id -u)\" -o pgid=,args= | awk '$2 !~ /^(awk|ps|grep|sh|bash)$/' "
+               f"| grep -E {shlex.quote(JOB_PATTERN)} | grep -v -E 'sweep[.]py (status|stop)' "
+               f"| awk '{{print $1}}' | sort -u | wc -l")
+        return int(self._ssh(cmd).decode().split()[-1])
+
+    def _load_ok(self, wait_s=1800, poll_s=60):
+        """A job starts only if the 1 min load is below half the cores and fewer than MAX_JOBS jobs of this
+        account run (CLAUDE.md, Andrew 2026-10-23). Waits up to wait_s, then refuses."""
+        t0 = time.time()
+        while True:
+            n, l1 = self._ssh("nproc; cut -d' ' -f1 /proc/loadavg").decode().split()
+            jobs = self.account_jobs()
+            if float(l1) < 0.5 * int(n) and jobs < MAX_JOBS:
+                return
+            if time.time() - t0 > wait_s:
+                raise RuntimeError(f"load {l1} on {n} cores, {jobs} jobs of this account; not starting a job "
+                                   "on the shared machine")
+            time.sleep(poll_s)
 
     # ---- sweeps (scripts/synth/sweep.py holds the limits for the shared machine)
 
@@ -216,6 +234,9 @@ class RemoteRunner:
         st = self.sweep_status()
         if st.get("running"):
             raise RuntimeError(f"a sweep is running ({st.get('plan')}); not starting another")
+        jobs = self.account_jobs()
+        if jobs >= MAX_JOBS:
+            raise RuntimeError(f"{jobs} jobs of this account run on the tracker machine; at most {MAX_JOBS}")
         q = shlex.quote
         # New plan and log names per start, written with noclobber: nothing on the lab server is overwritten
         stamp = time.strftime("%Y%m%d-%H%M%S")

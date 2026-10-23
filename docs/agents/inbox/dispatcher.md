@@ -31,3 +31,5 @@
    - Plane sections: use the net midline. Do not smooth the provisional midline (`curvature_smooth_px` is frozen)
    - Leave the lab-server work folders as they are (Andrew deletes)
    - Freeze-v3 sweeps and a research-lane session also use the lab server: before each job check for other jobs of this account and wait if one is running
+10. New limit for the lab server.
+   - Standing, Andrew 2026-10-23: lab-server jobs: at most 2 jobs of this account at once (count them before starting; start only if fewer than 2), each at most 4 single-thread workers, lowest priority, 1-min load below half the cores, at most one `sweep.py` sweep at a time. `CLAUDE.md` Rules and `docs/decisions.md` 2026-10-23
