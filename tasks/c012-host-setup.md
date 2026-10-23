@@ -3,10 +3,10 @@ id: c012
 title: Second compute host (workstation) and host field on the task board
 lane: course
 owner: host-setup
-state: queued
+state: working
 branch: wip/host-setup
 created: 2026-10-23 15:05
-last_update: 2026-10-23 15:05
+last_update: 2026-10-23 15:07
 blocker: none
 done_marker: test job recorded in status; host field in tasks/README.md and board.py
 ---
