@@ -315,7 +315,7 @@ def build(out_dir, case, fault=None, seed=0, moved=False, pixel_um=2.105, width_
     write_imgdir(out_dir / f"{rid}.imgdir", r["frames"], r["times"], r["stage_px"], pixel_um)
     np.savez_compressed(out_dir / f"{rid}_midline.npz", midline_image=r["midline_image"],
                         seed=seed_midline(r["midline_image"][0], movie.track_length),
-                        mask0=r["mask0"])
+                        mask0=r["mask0"], track_length=movie.track_length)
     truth = make_record(replace(spec, n_frames=r["spec_frames"])).truth
     np.savez_compressed(out_dir / f"{rid}_truth.npz", stride=movie.stride,
                         fault=str(fault), case=case, size=str(size), variant=variant_tag(width_kappa_inv, rotation_deg),
