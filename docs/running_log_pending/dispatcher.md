@@ -28,3 +28,14 @@
 - Failed: cluster job script not written; permission check refused it. No job submitted; no compute node used
 - Remaining: permission or Andrew to write and submit the 2 cluster jobs; 0727_cc7 decision; proposal approval
 - Bottlenecks: cluster submit permission (Andrew); 0727_cc7 (Andrew)
+
+## 2026-10-23 (build account, session dispatcher, inbox item 8)
+- Done (696784d): `0727_cc7` usable_to_h 9.5 -> 4.05 (stage-tracking table ends at frame 154, 4.059 h); rule in decisions and manifest README
+- Done: closure vs tracked length, lab server, t2 and t3 at 700 and 950 px: t3 0.65 (pass at 700) and 4.71; t2 7.22 and 5.08 px/h. Not monotonic; checker unchanged
+- Done: plane_sections 440-558 %/h; cause: curvature noise of the provisional pixel-skeleton midline (0.04-0.09 /px per frame at smoothing 0)
+- Done: cluster GPU job 5350185 (P100): ok, 80 frames, 11 min 15 s, $0.032, stage_source aux_stage_tracking. Previews fail: midline ends about 280 px short of the tip. Stopped for Andrew. CPU job 5350184 still running at 31 min
+- Done (697321b, c42dfca, and the next commit): B5 part 1: `agents/dispatcher.py` (engine, typed actions, fake queue, script baseline), `agents/prompts/dispatcher.md`, `config/dispatcher.yaml`, `scripts/demo_dispatcher.py`; `tests/test_dispatcher.py` 19 passed; full suite 222 passed, 0 failed, 64 s
+- Done: tracker `stage-auxdata` merged into `gate2-windowed-coupling` with --no-ff, 52e9bd1, pushed; tracker tests 46 passed, 9 skipped
+- Demo: `python scripts/demo_dispatcher.py` prints 1189 windows collected, 51.1 core-hours, 20 retries, 20 succeeded, peak 4 workers, 15.5 h fake wall time
+- Remaining: CPU job result and ledger; net midline at SlideBook scale (Andrew); closure residual cause; plane sections with a smooth midline; B5 part 2 (real slice)
+- Bottlenecks: runner net scale on SlideBook frames (Andrew); closure and plane sections not understood yet

@@ -1,21 +1,20 @@
 # dispatcher
-Updated: 2026-10-23 13:10 (local)
+Updated: 2026-10-23 14:10 (local)
 Lane: course
 Branch: wip/dispatcher
-Last inbox item done: 2
+Last inbox item done: 8
 State: waiting on Andrew
-Now: item 7 done except the cluster run; item 6 cluster jobs blocked (job script refused by this session's permission check)
+Now: item 8 done except the CPU cluster job (running) and the plane-sections rerun on the net midline (net previews fail)
 Done since last update:
-- Item 7: tracker repo branch `stage-auxdata` 888f972, pushed, not merged; tracker tests 46 passed, 9 skipped
-- Item 7: validation on 0708_m12: background drift t3 84.6 -> 2.6, t2 80.1 -> 1.1 px/h (pass, limit 5); rule: sign +, step i = move after frame i; full note in the lab-server work folder (VALIDATION.md)
-- Item 7: course checker after the fix: closure t3 76.5 -> 5.53, t2 68.2 -> 11.2 px/h (still fail, threshold 1.0); plane_sections 257, 366 %/h (unchanged, fail)
-- Item 7: scan of 122 montage folders: 121 OK; 0727_cc7 mismatch (155 steps, 857 frames); Andrew: continue, flag it
-- Item 7: private runner copy on the cluster with 888f972; root listing OK; loader confirmed on 0708_m12
-- Item 6: configs (CPU, P100) and ledger check ready; nothing submitted; spent today $0.23; no compute node used
+- Item 8, cluster: GPU job 5350185 ok, 80 frames, 11 min 15 s, $0.032, stage_source aux_stage_tracking; ledger actual written. Previews fail: midline ends about 280 px short of the tip (tip confidence 0.18). CPU job 5350184 running, in the midline stage at 31 min
+- Item 8, closure vs tracked length: t3 0.65 (700 px, pass), 4.71 (950); t2 7.22 (700), 5.08 (950) px/h. Not monotonic. Checker unchanged
+- Item 8, plane sections: 440-558 %/h; cause: curvature noise of the provisional pixel-skeleton midline (0.04-0.09 /px frame to frame at smoothing 0)
+- Item 8, 0727_cc7: usable_to_h 9.5 -> 4.05; rule in decisions (696784d)
+- Item 8, B5 part 1: dispatcher engine, typed actions, fake queue, script baseline, prompt, config, demo; 19 tests; full suite 222 passed (697321b, c42dfca, and later commits)
+- Item 8, tracker: stage-auxdata merged into gate2-windowed-coupling --no-ff, 52e9bd1, pushed; tests 46 passed, 9 skipped
+- Item 8: estimate.md updated with the cluster GPU numbers ($0.032 per window, about $38 for all include-yes windows)
 Needs Andrew:
-- Cluster: writing the job script (`qb-submit` without `--submit`) was refused by this session's permission check. Add a permission rule, or write and submit the two jobs yourself (configs in the trials configs folder; worst case $0.19 CPU, $0.17 P100)
-- 0727_cc7: stage-tracking log covers about 4 h of 9.5 usable h. Shorten its usable window, exclude it, or another rule
-- Closure after the fix: residual = motion of the most basal tracked point; 400 px tracked length ends inside the growth zone. Longer track length or a different base rule? (checker and freeze unchanged until you decide)
-- plane_sections 257-366 %/h on real windows, not from stage correction; cause not checked
-- Dispatcher proposal approval (window 2 h, round limit 200, 2 retries)
-- Merge of tracker branch `stage-auxdata` (yours)
+- Cluster runner midline on SlideBook frames: it stops about 280 px short of the tip (scale factor 2.506, tip confidence 0.18-0.25). Which net scale or setting to try? Not changed by this session
+- Closure: residual not explained by tracked length alone (pass at 700 px on t3 only). Next step: run closure with a smooth midline source, or look at the frame pair with the largest residual (pair 7 in t3, 16 in t2)?
+- Plane sections need a smooth midline: the net midline (once its scale works) or a smoothed provisional midline? `curvature_smooth_px` is a frozen setting
+- Lab-server work folders hold probe scripts, preview images and tracker outputs (no deletes by sessions)
