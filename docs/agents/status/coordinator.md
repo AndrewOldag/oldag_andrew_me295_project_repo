@@ -26,7 +26,7 @@ Branches (last commit, state):
 - status/gate2: 2026-10-16 12:27, waiting on Andrew (research lane, not merged)
 - wip/readme-check, wip/vm-setup, wip/auditor-v1b, wip/fq-real, wip/auditor-v1, wip/scored-v1, wip/freeze-v2, heldout/faults, wip/baselines, wip/diag-review, wip/lab-report-1, wip/gatekeeper: merged
 Needs Andrew:
-- Two live lab-report-2 sessions (one started 12 h ago, one 3 min ago); close the old one
+- Old lab-report-2 session (started 00:37) stopped 13:45 on Andrew's go-ahead; the 13:27 one remains
 - Dispatcher: cluster submit refused by its permission check; tracker branch stage-auxdata not merged; checker still fails after the stage fix (dispatcher status)
 - Local branch worktree-coordinator-c007 (b563b33, not pushed) duplicates 2170ca5; keep or drop
 - Task c008 still `review` on the board (owner spec-audit); findings need Andrew's accept/reject marks (spec-audit status)
