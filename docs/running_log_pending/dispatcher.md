@@ -39,3 +39,11 @@
 - Demo: `python scripts/demo_dispatcher.py` prints 1189 windows collected, 51.1 core-hours, 20 retries, 20 succeeded, peak 4 workers, 15.5 h fake wall time
 - Remaining: CPU job result and ledger; net midline at SlideBook scale (Andrew); closure residual cause; plane sections with a smooth midline; B5 part 2 (real slice)
 - Bottlenecks: runner net scale on SlideBook frames (Andrew); closure and plane sections not understood yet
+
+## 2026-10-23 (build account, session dispatcher, inbox items 9-10)
+- Done: cluster CPU job 5350184: TIMEOUT at 2 h 0 min 20 s; midline stage 6805 s (85 s per frame on 8 cpus); $0.193. Ledger actuals written; spent today $0.45 actual
+- Done: net-scale sweep, lab server CPU, 5 frames, factors 1.0, 1.5, 2.0, 2.506: midline end to tip median 617, 543, 282, 299 px; tip net within 19-30 px at all factors. No factor reaches the tip; cause seen in the preview: tip zone clipped black by the contrast stretch. No GPU rerun. Stopped for Andrew
+- Done: closure worst pairs (t3 pair 7, t2 pair 16): whole-pixel jumps of the provisional midline tip (0-6 px per pair) against a smooth tracked tip (about 2 px per pair); not stage, not tracking
+- Item 10 noted: at most 2 lab-server jobs of this account; this session's job scripts start only when no other job of this account runs
+- Remaining: Andrew: contrast setting for the net midline, or another midline source; then GPU rerun, closure and plane sections with the net midline; B5 part 2
+- Bottlenecks: net midline does not reach the tip (Andrew)

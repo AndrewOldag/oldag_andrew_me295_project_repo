@@ -98,3 +98,24 @@ Spec `docs/specs/2026-10-23_next-steps-lr2-dispatcher.md`, items B2 and B4 (clus
 - Per 2 h window on the P100: $0.032, of which the midline nets are 87 % of the time. 24 h root (12 windows): about $0.38. 1189 include-yes windows: about $38. 118 roots x 24 h: about $45. The lab server is free; its timing (about 1.04 core-s per frame with the provisional midline) stays the basis of the main estimate
 - Spent today, all jobs, actual: $0.226 (earlier runner test) + $0.193 (CPU) + $0.032 (GPU) = $0.45, under the $5 cap
 - On CPU the runner's midline nets take 85 s per frame on 8 cpus (GPU: 7.3 s per frame)
+
+## Inbox item 9 (2026-10-23)
+
+### Net-scale sweep (lab server, CPU, one job, 5 frames of the t3 window)
+- Same steps as the runner's midline stage (contrast stretch 1-99.5 %, resize, cascade nets in tile mode, valley map to polyline). True tip: tip of the segmentation midline of the same frame (it reaches the tip in the previews)
+
+| Resize factor (`net_um_per_px`) | Midline end to true tip, median px (range) | Tip net to true tip, median px | Tip confidence, median | CPU s per frame |
+| :-- | :-- | --: | --: | --: |
+| 1.0 (2.105) | 617 (575-659) | 24 | 0.23 | 83 |
+| 1.5 (1.403) | 543 (393-1044) | 26 | 0.38 | 170 |
+| 2.0 (1.053) | 282 (240-387) | 27 | 0.21 | 207 |
+| 2.506 (0.840, current) | 299 (261-329) | 28 (one frame 534) | 0.16 | 323 |
+
+- No factor brings the midline to the tip. The tip net finds the tip within 19-30 px at every factor
+- Preview (factor 2.0, frame 160): after the 1-99.5 % contrast stretch (the darkest 1 % of a frame, about 29k px, is close to the size of the tip zone) the last 250-300 px of the root (meristem and cap, dense and dark) are clipped to uniform black; the midline ends where the black begins. Likely cause: contrast stretch on these frames, not scale. Not tested; contrast settings not changed
+- No factor recorded in decisions; no GPU rerun (item rule: pick the factor where the midline reaches the tip). Stopped for Andrew
+
+### Closure: the largest-residual frame pairs (700 px track)
+- t3 pair 7, t2 pair 16. The tracked tip point moves smoothly, 1.8-2.3 px per pair. The provisional midline tip moves in whole-pixel jumps: t3 pairs 6-9: 0, 6, 0, 5 px; t2 pairs 13-17: 5, -2, 2, 6, 0 px in col. Stage steps are a steady 2 px per pair and do not line up with the jumps
+- The residual at these pairs is pixel jitter of the segmentation tip, not stage or tracking. In t3 the jumps cancel over the window (sum -1.2 px; closure 0.65 px/h). In t2 they leave a net 14 px (7 px/h): the segmentation tip runs ahead of the tracked tip over 2 h
+- Closure therefore depends on the midline source. Recheck with the net midline waits on its tip reach
