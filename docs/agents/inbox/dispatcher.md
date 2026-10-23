@@ -12,3 +12,8 @@
    - Two jobs, per the private cluster file: CPU (`expansion`, 8 cpus, 32G, 2 h limit) and GPU (P100 or V100, whichever has free nodes; 4 cpus, 32G, 1 h limit). Spent so far today: one earlier runner test, 32 cpus x 35 min, about $0.23. Ledger check before each submit; total under $5
    - When each job ends: `run_summary.csv`, then `previews/` (midline follows the root to the tip). Bad previews: stop and ask. Record queue wait, elapsed, peak memory (`sacct`), frames, output size, actual cost
    - Then: update `estimate.md` with the cluster numbers (per 2 h window, per 24 h root, 118 roots; CPU and GPU), and say whether the runner's output can feed the checker (field names, units, arc length from tip), without changing the checker
+7. Andrew, 2026-10-23 12:40. Do this before item 6. Stage correction on these movies is zero because the tracker reads only the stage-position table; the tip-following moves are in the auxiliary stage-tracking table. Fix it in the tracker repository, not in this repo
+   - Spec: tracker repository, branch `stage-auxdata`, file `offshoot/stage_auxdata/SPEC.md`. Clone that branch outside every other repo and follow it: reader, validation on `0708_m12` (t2, t3), tests, push the branch (no merge), then the private runner copy in the cluster work folder
+   - Item 6 then runs with that runner copy. Do not change the shared runner install
+   - Montage folders only. Raw two-tile folders are not supported
+   - In this repo: record only the outcome (pass or fail, checker values before and after on t3, tracker branch hash) in `results/2026-10-23_tracker_timing/README.md` and the log. No paths, host names or tracker code
