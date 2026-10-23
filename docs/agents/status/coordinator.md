@@ -1,16 +1,17 @@
 # coordinator
-Updated: 2026-10-23 11:10 (local)
+Updated: 2026-10-23 12:41 (local)
 Lane: course
 Branch: main
 Last inbox item done: 9
 State: working
 Now: relay loop every 10 min (item 8): merges per item 1, `check github` to live sessions whose inbox changed
-Last-seen main: f57aa53 (inboxes as of 588f052)
+Last-seen main: 43576b6 (inboxes as of 43576b6)
 Done since last update:
 - Item 9: board allows `waiting on Andrew` and `waiting on <agent>` (`scripts/board.py`, `tasks/README.md`), 8223616; full suite 203 passed
 - Item 1: merged wip/spec-audit (2c0eb60) and then wip/spec-audit-check (f7ec454), `--no-ff`; pending log entries moved into `docs/running_log.md`; suite 203 passed on each merge
 - Item 8: pinged dispatcher 01:22 (inbox changed in 588f052). Coordinator inbox also changed (own). Message tool available: SendMessage + ListAgents
-- Checks every 10 min, 01:35-11:10: no inbox change, nothing ready to merge, no pings
+- Item 8: pinged dispatcher 12:41 (inbox item 7, 43576b6)
+- Checks every 10 min, 01:35-12:30: no inbox change, nothing ready to merge, no pings
 - dispatcher replied 11:00: item 6 held before submit (stage correction goes into the tracker first); no cluster job submitted
 - Item 2: pre-push hook installed (ran on each push, 0 hits)
 Branches (last commit, state):
