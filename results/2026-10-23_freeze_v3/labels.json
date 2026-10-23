@@ -1,0 +1,444 @@
+{
+ "labels": {
+  "v3_growth_zone_clean_s20": {
+   "class": "accept_clean",
+   "expected": "accept_clean",
+   "sequence": null,
+   "kind": "v3_growth_zone",
+   "seed": 20,
+   "size": null
+  },
+  "v3_growth_zone_clean_s21": {
+   "class": "accept_clean",
+   "expected": "accept_clean",
+   "sequence": null,
+   "kind": "v3_growth_zone",
+   "seed": 21,
+   "size": null
+  },
+  "v3_growth_zone_clean_s22": {
+   "class": "accept_clean",
+   "expected": "accept_clean",
+   "sequence": null,
+   "kind": "v3_growth_zone",
+   "seed": 22,
+   "size": null
+  },
+  "v3_bend16_clean_s20": {
+   "class": "accept_clean",
+   "expected": "accept_clean",
+   "sequence": null,
+   "kind": "v3_bend16",
+   "seed": 20,
+   "size": null
+  },
+  "v3_bend16_clean_s21": {
+   "class": "accept_clean",
+   "expected": "accept_clean",
+   "sequence": null,
+   "kind": "v3_bend16",
+   "seed": 21,
+   "size": null
+  },
+  "v3_bend16_clean_s22": {
+   "class": "accept_clean",
+   "expected": "accept_clean",
+   "sequence": null,
+   "kind": "v3_bend16",
+   "seed": 22,
+   "size": null
+  },
+  "v3_bend20_clean_s20": {
+   "class": "accept_clean",
+   "expected": "accept_clean",
+   "sequence": null,
+   "kind": "v3_bend20",
+   "seed": 20,
+   "size": null
+  },
+  "v3_bend20_clean_s21": {
+   "class": "accept_clean",
+   "expected": "accept_clean",
+   "sequence": null,
+   "kind": "v3_bend20",
+   "seed": 21,
+   "size": null
+  },
+  "v3_bend20_clean_s22": {
+   "class": "accept_clean",
+   "expected": "accept_clean",
+   "sequence": null,
+   "kind": "v3_bend20",
+   "seed": 22,
+   "size": null
+  },
+  "v3_bend24_clean_s20": {
+   "class": "accept_clean",
+   "expected": "accept_clean",
+   "sequence": null,
+   "kind": "v3_bend24",
+   "seed": 20,
+   "size": null
+  },
+  "v3_bend24_clean_s21": {
+   "class": "accept_clean",
+   "expected": "accept_clean",
+   "sequence": null,
+   "kind": "v3_bend24",
+   "seed": 21,
+   "size": null
+  },
+  "v3_bend24_clean_s22": {
+   "class": "accept_clean",
+   "expected": "accept_clean",
+   "sequence": null,
+   "kind": "v3_bend24",
+   "seed": 22,
+   "size": null
+  },
+  "v3_bend30_clean_s20": {
+   "class": "clean_fails",
+   "expected": "accept_clean",
+   "sequence": null,
+   "kind": "v3_bend30",
+   "seed": 20,
+   "size": null
+  },
+  "v3_bend30_clean_s21": {
+   "class": "accept_clean",
+   "expected": "accept_clean",
+   "sequence": null,
+   "kind": "v3_bend30",
+   "seed": 21,
+   "size": null
+  },
+  "v3_bend30_clean_s22": {
+   "class": "accept_clean",
+   "expected": "accept_clean",
+   "sequence": null,
+   "kind": "v3_bend30",
+   "seed": 22,
+   "size": null
+  },
+  "v3_still_clean_s20": {
+   "class": "accept_clean",
+   "expected": "accept_clean",
+   "sequence": null,
+   "kind": "v3_still",
+   "seed": 20,
+   "size": null
+  },
+  "v3_still_clean_s21": {
+   "class": "accept_clean",
+   "expected": "accept_clean",
+   "sequence": null,
+   "kind": "v3_still",
+   "seed": 21,
+   "size": null
+  },
+  "v3_still_clean_s22": {
+   "class": "accept_clean",
+   "expected": "accept_clean",
+   "sequence": null,
+   "kind": "v3_still",
+   "seed": 22,
+   "size": null
+  },
+  "v3_growth_zone_rigid_drift_z0.5_s20": {
+   "class": "accept_repaired",
+   "expected": "accept_repaired",
+   "sequence": [
+    "register_frames"
+   ],
+   "kind": "rigid_drift",
+   "seed": 20,
+   "size": "0.5"
+  },
+  "v3_growth_zone_rigid_drift_z0.5_s21": {
+   "class": "accept_repaired",
+   "expected": "accept_repaired",
+   "sequence": [
+    "register_frames"
+   ],
+   "kind": "rigid_drift",
+   "seed": 21,
+   "size": "0.5"
+  },
+  "v3_growth_zone_rigid_drift_z0.5_s22": {
+   "class": "accept_repaired",
+   "expected": "accept_repaired",
+   "sequence": [
+    "register_frames"
+   ],
+   "kind": "rigid_drift",
+   "seed": 22,
+   "size": "0.5"
+  },
+  "v3_growth_zone_displacement_exceeds_patch_z2x6_s20": {
+   "class": "decline",
+   "expected": "accept_repaired",
+   "sequence": null,
+   "kind": "displacement_exceeds_patch",
+   "seed": 20,
+   "size": "2x6"
+  },
+  "v3_growth_zone_displacement_exceeds_patch_z2x6_s21": {
+   "class": "decline",
+   "expected": "accept_repaired",
+   "sequence": null,
+   "kind": "displacement_exceeds_patch",
+   "seed": 21,
+   "size": "2x6"
+  },
+  "v3_growth_zone_displacement_exceeds_patch_z2x6_s22": {
+   "class": "decline",
+   "expected": "accept_repaired",
+   "sequence": null,
+   "kind": "displacement_exceeds_patch",
+   "seed": 22,
+   "size": "2x6"
+  },
+  "v3_growth_zone_width_change_s20": {
+   "class": "accept_repaired",
+   "expected": "accept_repaired",
+   "sequence": [
+    "use_width_free_ratio"
+   ],
+   "kind": "width_change",
+   "seed": 20,
+   "size": null
+  },
+  "v3_growth_zone_width_change_s21": {
+   "class": "accept_repaired",
+   "expected": "accept_repaired",
+   "sequence": [
+    "use_width_free_ratio"
+   ],
+   "kind": "width_change",
+   "seed": 21,
+   "size": null
+  },
+  "v3_growth_zone_width_change_s22": {
+   "class": "accept_repaired",
+   "expected": "accept_repaired",
+   "sequence": [
+    "use_width_free_ratio"
+   ],
+   "kind": "width_change",
+   "seed": 22,
+   "size": null
+  },
+  "v3_growth_zone_low_texture_z0.03_s20": {
+   "class": "decline",
+   "expected": "decline",
+   "sequence": null,
+   "kind": "low_texture",
+   "seed": 20,
+   "size": "0.03"
+  },
+  "v3_growth_zone_low_texture_z0.03_s21": {
+   "class": "decline",
+   "expected": "decline",
+   "sequence": null,
+   "kind": "low_texture",
+   "seed": 21,
+   "size": "0.03"
+  },
+  "v3_growth_zone_low_texture_z0.03_s22": {
+   "class": "decline",
+   "expected": "decline",
+   "sequence": null,
+   "kind": "low_texture",
+   "seed": 22,
+   "size": "0.03"
+  },
+  "v3_growth_zone_midline_jitter_z3_s20": {
+   "class": "decline",
+   "expected": "decline",
+   "sequence": null,
+   "kind": "midline_jitter",
+   "seed": 20,
+   "size": "3"
+  },
+  "v3_growth_zone_midline_jitter_z3_s21": {
+   "class": "decline",
+   "expected": "decline",
+   "sequence": null,
+   "kind": "midline_jitter",
+   "seed": 21,
+   "size": "3"
+  },
+  "v3_growth_zone_midline_jitter_z3_s22": {
+   "class": "decline",
+   "expected": "decline",
+   "sequence": null,
+   "kind": "midline_jitter",
+   "seed": 22,
+   "size": "3"
+  },
+  "v3_growth_zone_bad_stage_correction_z3_s20": {
+   "class": "accept_repaired",
+   "expected": "accept_repaired",
+   "sequence": [
+    "register_frames"
+   ],
+   "kind": "bad_stage_correction",
+   "seed": 20,
+   "size": "3"
+  },
+  "v3_growth_zone_bad_stage_correction_z3_s21": {
+   "class": "accept_repaired",
+   "expected": "accept_repaired",
+   "sequence": [
+    "register_frames"
+   ],
+   "kind": "bad_stage_correction",
+   "seed": 21,
+   "size": "3"
+  },
+  "v3_growth_zone_bad_stage_correction_z3_s22": {
+   "class": "accept_repaired",
+   "expected": "accept_repaired",
+   "sequence": [
+    "register_frames"
+   ],
+   "kind": "bad_stage_correction",
+   "seed": 22,
+   "size": "3"
+  },
+  "v3_growth_zone_stage_log_missing_z1_s20": {
+   "class": "accept_repaired",
+   "expected": "accept_repaired",
+   "sequence": [
+    "register_frames"
+   ],
+   "kind": "stage_log_missing",
+   "seed": 20,
+   "size": "1"
+  },
+  "v3_growth_zone_stage_log_missing_z1_s21": {
+   "class": "accept_repaired",
+   "expected": "accept_repaired",
+   "sequence": [
+    "register_frames"
+   ],
+   "kind": "stage_log_missing",
+   "seed": 21,
+   "size": "1"
+  },
+  "v3_growth_zone_stage_log_missing_z1_s22": {
+   "class": "accept_repaired",
+   "expected": "accept_repaired",
+   "sequence": [
+    "register_frames"
+   ],
+   "kind": "stage_log_missing",
+   "seed": 22,
+   "size": "1"
+  },
+  "v3_growth_zone_second_root_z30_s20": {
+   "class": "decline",
+   "expected": "decline",
+   "sequence": null,
+   "kind": "second_root",
+   "seed": 20,
+   "size": "30"
+  },
+  "v3_growth_zone_second_root_z30_s21": {
+   "class": "decline",
+   "expected": "decline",
+   "sequence": null,
+   "kind": "second_root",
+   "seed": 21,
+   "size": "30"
+  },
+  "v3_growth_zone_second_root_z30_s22": {
+   "class": "decline",
+   "expected": "decline",
+   "sequence": null,
+   "kind": "second_root",
+   "seed": 22,
+   "size": "30"
+  },
+  "v3_growth_zone_fast_rotation_z2_s20": {
+   "class": "decline",
+   "expected": "decline",
+   "sequence": null,
+   "kind": "fast_rotation",
+   "seed": 20,
+   "size": "2"
+  },
+  "v3_growth_zone_fast_rotation_z2_s21": {
+   "class": "decline",
+   "expected": "decline",
+   "sequence": null,
+   "kind": "fast_rotation",
+   "seed": 21,
+   "size": "2"
+  },
+  "v3_growth_zone_fast_rotation_z2_s22": {
+   "class": "decline",
+   "expected": "decline",
+   "sequence": null,
+   "kind": "fast_rotation",
+   "seed": 22,
+   "size": "2"
+  },
+  "v3_growth_zone_flank_swap_z0.5_s20": {
+   "class": "decline",
+   "expected": "decline",
+   "sequence": null,
+   "kind": "flank_swap",
+   "seed": 20,
+   "size": "0.5"
+  },
+  "v3_growth_zone_flank_swap_z0.5_s21": {
+   "class": "decline",
+   "expected": "decline",
+   "sequence": null,
+   "kind": "flank_swap",
+   "seed": 21,
+   "size": "0.5"
+  },
+  "v3_growth_zone_flank_swap_z0.5_s22": {
+   "class": "decline",
+   "expected": "decline",
+   "sequence": null,
+   "kind": "flank_swap",
+   "seed": 22,
+   "size": "0.5"
+  },
+  "v3_growth_zone_partial_occlusion_z20_s20": {
+   "class": "decline",
+   "expected": "decline",
+   "sequence": null,
+   "kind": "partial_occlusion",
+   "seed": 20,
+   "size": "20"
+  },
+  "v3_growth_zone_partial_occlusion_z20_s21": {
+   "class": "decline",
+   "expected": "decline",
+   "sequence": null,
+   "kind": "partial_occlusion",
+   "seed": 21,
+   "size": "20"
+  },
+  "v3_growth_zone_partial_occlusion_z20_s22": {
+   "class": "decline",
+   "expected": "decline",
+   "sequence": null,
+   "kind": "partial_occlusion",
+   "seed": 22,
+   "size": "20"
+  }
+ },
+ "counts": {
+  "accept_clean": 17,
+  "accept_repaired": 12,
+  "decline": 21,
+  "clean_fails": 1
+ },
+ "complete": true,
+ "stop": true
+}
