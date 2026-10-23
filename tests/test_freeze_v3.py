@@ -155,6 +155,24 @@ def test_v3_heldout_uses_v3_zone():
     assert H.zone(next(s for s in field_cases() if s.name == "growth_zone"))[0] == 150.0
 
 
+# ---------------------------------------------------------------- driver (offline)
+
+def test_scored_set_and_plans_offline():
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts" / "synth"))
+    import scored_v3 as S
+    rods = S.scored_rods()
+    assert len(rods) == 51 and len({r.id() for r in rods}) == 51
+    exp = [S.EXPECTED[S.kind(r)] for r in rods]
+    assert (exp.count("accept_clean"), exp.count("accept_repaired"), exp.count("decline")) == (18, 15, 18)
+    assert {r.seed for r in rods} == {20, 21, 22} and {r.seed for r in S.basis_rods()} == {10, 11, 12, 13, 14}
+    assert all(r.case.startswith("v3_") for r in rods + S.basis_rods())
+    dpx = next(r for r in rods if r.fault == "displacement_exceeds_patch")
+    assert S.initial(dpx).stride == 6
+    assert [s for s, _ in S.label_states(dpx)] == [[], ["change_frame_stride/half"], ["change_frame_stride/half"] * 2]
+
+
 # ---------------------------------------------------------------- metrics
 
 def _run(rod, cls, status, good=True, repeat=0, kept=0):
