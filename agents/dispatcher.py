@@ -213,6 +213,16 @@ class Engine:
                 self.cluster_spent_h += used - t.core_h      # estimate at submit -> measured at the end
         self._start_lab()
 
+    def advance(self, minutes, step=1.0):
+        """Let time pass. The worker pool runs between rounds: queued lab jobs start as soon as
+        a slot frees and the load allows, not only when the agent next looks."""
+        left = float(minutes)
+        while left > 1e-9:
+            dt = min(step, left)
+            self.queue.advance(dt)
+            self.refresh()
+            left -= dt
+
     def _start_lab(self):
         ls = self.cfg["lab_server"]
         load1, cores = self.queue.load()
@@ -408,8 +418,8 @@ def run_agent_batch(engine, launcher, trace_path, round_limit=None):
             status = "waiting_for_approval"; break
         if errors_in_row >= 2:
             status = "error"; break
-        engine.queue.advance(out.args.get("minutes", min(cfg["wait_minutes"])) if out.status == "wait"
-                             else min(cfg["wait_minutes"]))
+        engine.advance(out.args.get("minutes", min(cfg["wait_minutes"])) if out.status == "wait"
+                       else min(cfg["wait_minutes"]))
     engine.refresh()
     return {"status": status, "rounds": rounds, **engine.summary()}
 
@@ -433,6 +443,6 @@ def run_script_batch(engine, backend="lab_server", poll_minutes=30, round_limit=
                 engine.retry({"root_ids": [t.root_id]})
         if not engine.live() and not any(t.state in ("pending", "done", "failed") for t in engine.tasks.values()):
             status = "finish"; break
-        engine.queue.advance(poll_minutes)
+        engine.advance(poll_minutes)
     engine.refresh()
     return {"status": status, "rounds": rounds, "first_submit": r, **engine.summary()}
