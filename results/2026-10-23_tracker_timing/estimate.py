@@ -55,3 +55,17 @@ print(f"- Include-yes roots {len(inc)}, usable hours {hours_inc:,.1f}, frames {f
 print(f"- Peak memory per job {peak_gb:.1f} GB; output per window {out_mb:.2f} MB; "
       f"output for (b) at 1 setting x 2 {out_mb * windows_inc * MOVED / 1e3:.1f} GB")
 print(f"- Cluster rate ${RATE} per core-hour")
+
+runs_c = t.get("cluster_runs", [])
+if runs_c:
+    print()
+    print("Cluster runner (midline nets + QC + kinematics), one 2 h window per job:")
+    print()
+    print("| Job | Elapsed min | $ per 2 h window | $ per 24 h root (12 windows) | $ include-yes windows | $ 118 roots x 24 h |")
+    print("| :-- | --: | --: | --: | --: | --: |")
+    for c in runs_c:
+        usd = c["units_per_h"] * c["elapsed_s"] / 3600 * RATE
+        print(f"| {c['job']} ({c['hardware']}) | {c['elapsed_s'] / 60:.1f} | {usd:.3f} | {12 * usd:.2f} | "
+              f"{windows_inc * usd:,.0f} | {118 * 12 * usd:,.0f} |")
+    print()
+    print("- Units: cpus + 10 per P100 or V100, per hour, at the rate above. No moved copy")

@@ -72,3 +72,28 @@ Spec `docs/specs/2026-10-23_next-steps-lr2-dispatcher.md`, items B2 and B4 (clus
 - Closure residual matches the remaining motion of the most basal tracked point (6.5 and 12.3 px/h): the 400 px tracked length ends inside the growth zone. plane_sections unchanged by the correction; cause not checked
 - Scan of all 122 montage folders: 121 have a step count equal to the frame count. `0727_cc7` (include yes, usable 0-9.5 h): 155 steps for 857 frames; the loader raises on it. Flagged for Andrew (continue, Andrew, 2026-10-23)
 - Private runner copy on the cluster with this branch: built; root listing works; loader confirmed on 0708_m12. The cluster jobs were not submitted: writing the job script was refused by this session's permission check. Not retried. Spent today $0.23 (earlier runner test only); no compute node used by this session
+
+## Inbox item 8 (2026-10-23 afternoon)
+
+### Closure against tracked length (lab server, stage-corrected loader, provisional midline)
+| Window | 400 px | 700 px | 950 px |
+| :-- | --: | --: | --: |
+| t3 (4-6 h) | 5.53 | 0.65 (pass) | 4.71 |
+| t2 (2-4 h) | 11.20 | 7.22 | 5.08 |
+- Threshold 1.0 px/h. Not monotonic in length: tracked length alone does not explain the residual. Largest single-pair residual at the same frame pair in every run of a window (pair 7 in t3, pair 16 in t2). Checker and freeze unchanged
+- Tracked chain (950 px) grows from about 939 to 1127 px over 2 h
+
+### Plane sections
+- 700 px, t3: 558 %/h; 950 px: 465 (t3), 440 (t2) %/h; threshold 3.25. Flank difference stays within +-7 %/h; the predicted term (flank spacing x curvature rate) carries the value
+- Cause found: curvature noise of the provisional midline. At `curvature_smooth_px` 0 (frozen setting), the frame-to-frame change in curvature is 0.04-0.09 /px against a mean curvature near 1e-4 /px; at 29 px flank spacing this gives the -565 %/h predicted term at s = 575 px. The provisional midline is a pixel skeleton, resampled
+- Rerun with the cluster runner's net midline: not done. Its previews fail (below)
+
+### Cluster run, 0708_m12, 4-6 h, private runner copy (stage-auxdata 888f972)
+| Job | Hardware | Queue wait | Elapsed | Midline s | QC s | Kinematics s | Peak memory (batch step) | Output | Cost |
+| :-- | :-- | --: | --: | --: | --: | --: | --: | --: | --: |
+| GPU | P100 + 4 cpus | 7 min 54 s | 11 min 15 s | 580 | 3 | 66 | 1.37 GB | 12 MB | $0.032 |
+| CPU | 8 cpus | 0 min 37 s | running at 31 min, still in the midline stage | | | | | | |
+- GPU run status ok; 80 of 80 frames with a midline; `stage_source` aux_stage_tracking, 80 steps, 341.1 um travel (matches the lab-server validation)
+- Previews fail: the ML and stabilized midlines end about 280 px short of the root tip, inside the meristem, on frames 0 and 79. Tip confidence median 0.18, maximum 0.25 (runner warning: weak on every frame). Runner kinematics (peak REGR 40 %/h at 42 um from the tip) are not valid. Stopped for Andrew; net settings not changed
+- Per 2 h window on the P100: $0.032, of which the midline nets are 87 % of the time. 24 h root (12 windows): about $0.38. 1189 include-yes windows: about $38. 118 roots x 24 h: about $45. The lab server is free; its timing (about 1.04 core-s per frame with the provisional midline) stays the basis of the main estimate
+- Spent today, all jobs: $0.23 (earlier runner test) + $0.03 (GPU) + CPU still running (worst case $0.19); worst-case total $0.59, under the $5 cap
