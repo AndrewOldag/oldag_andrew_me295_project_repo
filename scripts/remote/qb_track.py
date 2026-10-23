@@ -46,6 +46,12 @@ from root_kinematics.tracking import edge_frozen_mask
 from two_side_tracking.pipeline import run_two_side
 
 
+def mark_done(path):
+    """Create <path>.ok, once (O_EXCL). Its presence marks <path> complete."""
+    fd = os.open(f"{path}.ok", os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+    os.close(fd)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--imgdir", required=True)
@@ -70,8 +76,12 @@ def main():
     ap.add_argument("--band-radius", type=float, default=45.0, help="px, for --band-mask and frame quality")
     ap.add_argument("--movie", choices=["synthetic", "real"], default="synthetic",
                     help="selects the frame_quality reference in measure/info.py")
-    ap.add_argument("--track-length", type=float, default=400.0, help="px of midline handed to the tracker")
+    ap.add_argument("--track-length", type=float, default=None,
+                    help="px of midline handed to the tracker (default: the rod's own, from the midline file; "
+                         "400 for files without it)")
     a = ap.parse_args()
+    if Path(a.out).exists():
+        sys.exit(f"output exists, not overwritten: {Path(a.out).name}")
 
     imgdir = Path(a.imgdir)
     rec = load_root_recording(imgdir, pixel_size_um=a.pixel_um, lazy=False)
@@ -81,6 +91,8 @@ def main():
     m = np.load(a.midline)
     mask = m["mask0"].astype(bool) if "mask0" in m.files else None
     mid_img = m["midline_image"][keep].astype(float)
+    if a.track_length is None:
+        a.track_length = float(m["track_length"]) if "track_length" in m.files else 400.0
     corr0 = cumulative_correction_px(rec)
     pre = {}
     if a.midline_smooth:
@@ -121,17 +133,19 @@ def main():
                 "track_centre": True, "used_mask": bool(res.split.used_mask),
                 "run_s": round(run_s, 1), "n_frames": int(len(keep)),
                 "register": bool(a.register), "midline_smooth": a.midline_smooth,
-                "band_mask": a.band_mask, "movie": a.movie, "preprocess": pre, "frame_quality": quality}
+                "band_mask": a.band_mask, "movie": a.movie, "track_length": a.track_length, "preprocess": pre, "frame_quality": quality}
     meta = {"root_id": imgdir.stem, "pixel_um": a.pixel_um, "settings": settings}
-    tmp = Path(a.out).with_name(Path(a.out).stem + ".part.npz")    # a stopped run leaves no complete-looking file
-    np.savez_compressed(
-        tmp, meta=json.dumps(meta),
+    # Write once, never rename or overwrite (no move or rename on the lab server, CLAUDE.md; spec audit rules-2).
+    # The output is complete only when <out>.ok exists; a stopped run leaves the .npz without it
+    with open(a.out, "xb") as fh:
+        np.savez_compressed(
+            fh, meta=json.dumps(meta),
         centre_track=res.centre_track, left_track=res.left_track, right_track=res.right_track,
         centre_frozen=frozen["centre"], left_frozen=frozen["left"], right_frozen=frozen["right"],
         elapsed_s=rec.elapsed_s, stage_px=corr, midline_world=mid_img + corr[:, None, :],
         qb_l_domain=res.l_domain, qb_regr_left=res.regr_left, qb_regr_right=res.regr_right,
-        qb_valid_max=res.valid_max)
-    os.replace(tmp, a.out)
+            qb_valid_max=res.valid_max)
+    mark_done(a.out)
     print(json.dumps({"out": a.out, "run_s": round(run_s, 1), "frames": int(len(keep)),
                       "points": int(res.centre_track.shape[0]), "disk_radius": int(res.disk_radius)}))
 

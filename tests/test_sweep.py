@@ -28,3 +28,31 @@ def test_tasks_carry_moved_ids(tmp_path):
     t = sweep.tasks_of(plan, tmp_path, tmp_path)
     assert [x["rid"] for x in t] == ["growth_zone_clean_s0"] * 2 + ["growth_zone_clean_s0_moved"] * 2
     assert t[2]["options"][-1] == "--moved"
+
+
+def _task(tmp_path):
+    (tmp_path / "rods").mkdir(exist_ok=True)
+    (tmp_path / "tracks").mkdir(exist_ok=True)
+    return {"rid": "r_s0", "options": [], "tag": "st1", "args": [], "rods": str(tmp_path / "rods"),
+            "tracks": str(tmp_path / "tracks")}
+
+
+def test_output_done_only_with_marker(tmp_path):
+    t = _task(tmp_path)
+    out = tmp_path / "tracks" / "r_s0__st1.npz"
+    out.write_bytes(b"partial")
+    rec = sweep.run_one(t)                       # a stopped run's file: left in place, reported, not re-run
+    assert rec["ok"] is False and rec["partial"] and out.read_bytes() == b"partial"
+    (tmp_path / "tracks" / "r_s0__st1.npz.ok").write_bytes(b"")
+    assert sweep.run_one(t) == {"id": "r_s0", "tag": "st1", "cached": True}
+
+
+def test_rod_done(tmp_path):
+    rods = tmp_path / "rods"
+    rods.mkdir()
+    (rods / "a.imgdir").mkdir()
+    assert not sweep.rod_done(rods, "a")
+    (rods / "a.ok").write_bytes(b"")
+    assert sweep.rod_done(rods, "a")
+    (rods / "b_truth.npz").write_bytes(b"")      # rendered before the marker existed
+    assert sweep.rod_done(rods, "b")
