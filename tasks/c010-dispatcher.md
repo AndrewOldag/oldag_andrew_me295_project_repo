@@ -6,8 +6,8 @@ owner: dispatcher
 state: needs-input
 branch: wip/dispatcher
 created: 2026-10-23 00:30
-last_update: 2026-10-23 14:10
-blocker: runner net midline short of tip; closure and plane sections not understood (Andrew)
+last_update: 2026-10-23 15:30
+blocker: net midline does not reach the tip (Andrew)
 done_marker: proposal + results/2026-10-23_tracker_timing/; after approval, slice runs from README
 ---
 
