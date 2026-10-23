@@ -426,3 +426,29 @@ Required by the course. One entry per work session: done, remaining, bottlenecks
 - Demo: `python scripts/check_cli.py` prints the version, login, model and `OK`
 - Remaining: merge wip/readme-check; "README checked on 2026-10-17" in Lab report 1, noting the re-pin
 - Bottlenecks: none
+
+## 2026-10-23 (build account, session spec-audit)
+- Done: spec `docs/specs/2026-10-23_spec-audit.md`, course half; branch `wip/spec-audit`; task c008
+- Done: literature network location missing from the private paths file at start (stop item, reported in status 6915060); then added by spec-audit-r, which had copied the network to the VM; not copied again
+- Done: six reviewer agent files `.claude/agents/audit-*.md`, one commit each (c7d3df3, f2f7d46, ab85c0b, fa7f248, 8a391f8, 52f32a7); `.claude/` is in the local git exclude, files added with `git add -f`
+- Done: reviewers run as six parallel subagents, each writing one file in `docs/reviews/2026-10-23_spec-audit/`. Run times 7-20 min
+- Results: specs 21 findings (1fa8f12), rules 11 (0176ce3), numbers 13 (c123706), kinematics 6 (c0e5136), bending-and-tracking 9 (5bcb744), evaluation 11 (f847be5)
+- Results: 71 findings: 0 would change a reported number, 17 would change a design choice, 54 record only; 12 touch a frozen item. One STOP item (rules-1, the known 2026-10-12 hook hit in 304a3cb)
+- Done: `SUMMARY.md` (2eb1215): findings ranked, spec item states (121 rows: 78 met, 7 partial, 6 not met, 11 not shown, 7 changed by decision), papers for Andrew to check
+- Pre-push hook blocked one push: a literal account-at-domain placeholder in `specs.md`; reworded and amended before the push
+- Tests re-run by the specs reviewer: 174 of 203, 173 passed, 1 failed (`tests/test_board.py::test_research_rows_never_in_tracked_files`, specs-3)
+- No code, config, threshold, prompt or result changed. No server jobs, no tracker runs, no pipeline agent calls, no PDF opened
+- Demo: `cat docs/reviews/2026-10-23_spec-audit/SUMMARY.md` prints the counts table, ranked findings and the paper list
+- Remaining: spec-audit-check writes `CHECK.md`; Andrew marks findings; merge `wip/spec-audit`
+- Bottlenecks: findings marks (Andrew); rules-4 and specs-20 on `origin/status/gate2` (Andrew)
+
+## 2026-10-23 (build account, session spec-audit-check)
+- Done: "spec-audit-check" section of `docs/specs/2026-10-23_spec-audit.md`; branch `wip/spec-audit-check` from `wip/spec-audit` (6b33b84); task c008, CHECK.md part
+- Done: fresh check; read the reviewer files, SUMMARY.md and the cited sources only; no reviewer agent file, trace or transcript read
+- Results: 17 of 17 design-choice findings confirmed; 10 of 10 record-only findings (seed 0) confirmed; 10 of 10 literature citations (seed 0) confirmed against the digests; 0 not reproduced; 0 wrong location
+- Results: line offsets inside confirmed findings: rules-3 `PATH_RE` at `:52` (cited `:49`); rules-7 `:373` (cited `:374`); rules-10 one time in UTC
+- Recomputed: width-free ratio on `width_change` -0.435 to -0.035 (1/400 px); growth-zone geometry at 2.105 and 0.84 um/px; all-decline replay 22 of 40 (held-out 12 of 15); pre-push scan `origin/main` 175 commits, 1 known hit
+- No code, config, threshold, prompt or result changed. No server access, no tracker runs, no agent calls, no PDF opened. Reviewer files not edited
+- Demo: `cat docs/reviews/2026-10-23_spec-audit/CHECK.md` prints the counts per reviewer and one row per checked item
+- Remaining: Andrew marks findings in the reviewer files; coordinator merges `wip/spec-audit` and `wip/spec-audit-check`
+- Bottlenecks: finding marks (Andrew)

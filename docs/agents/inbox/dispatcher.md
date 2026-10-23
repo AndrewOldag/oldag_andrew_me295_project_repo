@@ -1,5 +1,27 @@
 # Inbox: dispatcher
 
 1. Read `CLAUDE.md`, `docs/agents/README.md` and `docs/specs/2026-10-23_next-steps-lr2-dispatcher.md` section B. Branch `wip/dispatcher`. Task file `tasks/c010-dispatcher.md`. First status, push
-2. Do B1 (proposal) and stop for Andrew on it. In parallel do B2 (tracker timing on the lab server, shared-machine limits, one sweep at a time) and B3 (cost estimate). Submit nothing to the cluster
-3. B4 only after Andrew approves the proposal and a budget in this inbox
+2. Do B1 (proposal) and stop for Andrew on it. In parallel do B2 (tracker timing on the lab server, shared-machine limits, one sweep at a time) and B4 (cost estimate, using the B3 cluster rules). Submit nothing to the cluster
+3. B5 only after Andrew approves the proposal and a budget in this inbox
+4. Andrew, 2026-10-23: cluster rules in spec B3. P100 or V100 only, picked by availability. Initial trials budget $5 total (CPU and GPU), hard cap, worst case per job from the time limit
+5. Andrew, 2026-10-23: initial cluster trials approved under the $5 cap (spec B3). Copy the private cluster file (spec B3) to `private/cluster.md`, read it, then run its trial plan: pull 3 roots one at a time, time them on CPU and P100/V100, record cost per job. Write only in the one cluster folder it names. Connection down or any stop condition in that file: Needs Andrew, stop the cluster part, continue B1 and B2
+6. Andrew, 2026-10-23 01:10. Focus: one root through the cluster runner, to get timing and cost. B5 and the other proposal decisions wait
+   - Data: the planning account copied root `0708_m12`, montage `.imgdir` only, into the cluster work folder, `data/0708_m12/` (1931 files, count checked). Check file count and size against the lab-server copy; do not copy anything else. Montage folders only from now on (no raw tile folders)
+   - Stage correction and midline: use the lab runner install named in the private cluster file (read its README first). Point `input.path` at the montage `.imgdir`; the runner reads the stage motion from it and runs the midline nets. Do not write new stage-correction or midline code in this repo
+   - Config in the work folder `configs/`: `imaging.um_per_px: 2.105`, `input.frames` for 4-6 h of movie time (same window as t3), `kinematics.couple: false`, `window_min: 20`, `output.dir` in the work folder `runs/`. `qb-run CONFIG --list-roots` first
+   - Two jobs, per the private cluster file: CPU (`expansion`, 8 cpus, 32G, 2 h limit) and GPU (P100 or V100, whichever has free nodes; 4 cpus, 32G, 1 h limit). Spent so far today: one earlier runner test, 32 cpus x 35 min, about $0.23. Ledger check before each submit; total under $5
+   - When each job ends: `run_summary.csv`, then `previews/` (midline follows the root to the tip). Bad previews: stop and ask. Record queue wait, elapsed, peak memory (`sacct`), frames, output size, actual cost
+   - Then: update `estimate.md` with the cluster numbers (per 2 h window, per 24 h root, 118 roots; CPU and GPU), and say whether the runner's output can feed the checker (field names, units, arc length from tip), without changing the checker
+7. Andrew, 2026-10-23 12:40. Do this before item 6. Stage correction on these movies is zero because the tracker reads only the stage-position table; the tip-following moves are in the auxiliary stage-tracking table. Fix it in the tracker repository, not in this repo
+   - Spec: tracker repository, branch `stage-auxdata`, file `offshoot/stage_auxdata/SPEC.md`. Clone that branch outside every other repo and follow it: reader, validation on `0708_m12` (t2, t3), tests, push the branch (no merge), then the private runner copy in the cluster work folder
+   - Item 6 then runs with that runner copy. Do not change the shared runner install
+   - Montage folders only. Raw two-tile folders are not supported
+   - In this repo: record only the outcome (pass or fail, checker values before and after on t3, tracker branch hash) in `results/2026-10-23_tracker_timing/README.md` and the log. No paths, host names or tracker code
+8. Andrew, 2026-10-23 13:20:
+   - Cluster: the planning account submitted the two item 6 jobs from the private runner copy: CPU 5350184 (8 cpus, 2 h limit) and P100 5350185 (4 cpus, 1 h limit). Ledger `cluster_spend.csv` in the cluster work folder: worst-case total today $0.59. Do not resubmit. When they finish: `run_summary.csv`, previews, `stage_source` in `run_metadata.json`, `sacct` actual elapsed and cost into the ledger, then the item 6 timing and estimate update
+   - Closure: extend the tracked length past the growth zone before any checker change. Track to about 1.5-2 mm from the tip (about 700-950 px at 2.105 um/px) where the frame allows, on the lab server, t2 and t3; recheck closure. Checker and freeze unchanged
+   - Plane sections: no threshold change. Rerun the check with the midline from the cluster runner's nets (the cluster run output) in place of the provisional segmentation midline; report the values. If still about 100x the threshold, find the cause (flank placement, width, scale) and report; do not fix the checker
+   - `0727_cc7`: set `usable_to_h` in `manifest/root_manifest.csv` to the end of its stage-tracking coverage. Rule in `docs/decisions.md`: a montage root is usable only where its stage-tracking table covers the frames
+   - Dispatcher proposal approved (2 h windows and last-window rule, round limit 200, 2 retries per task). Start B5 (dispatcher code with a fake queue) now; the real slice after closure and plane sections are understood
+   - Tracker: merge `stage-auxdata` into `gate2-windowed-coupling` (`--no-ff`), run the tracker tests, push. Do not merge to master
+   - Build work runs to Wed 28 Oct. Keep the log, decisions and results README current at each commit
