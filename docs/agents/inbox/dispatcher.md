@@ -25,3 +25,9 @@
    - Dispatcher proposal approved (2 h windows and last-window rule, round limit 200, 2 retries per task). Start B5 (dispatcher code with a fake queue) now; the real slice after closure and plane sections are understood
    - Tracker: merge `stage-auxdata` into `gate2-windowed-coupling` (`--no-ff`), run the tracker tests, push. Do not merge to master
    - Build work runs to Wed 28 Oct. Keep the log, decisions and results README current at each commit
+9. Andrew, 2026-10-23 14:00:
+   - Net scale: small sweep on the lab server, CPU, shared-machine limits, 5 frames of `0708_m12` from the t3 window. Resize factors 1.0 (no resize), 1.5, 2.0, 2.506 (current), set through `midline.net_um_per_px` in your private runner copy's config (or the tracker's batch midline script with the same factor). Per factor: tip confidence, midline end distance from the true tip (px, from the frame), preview image. Pick the factor where the midline reaches the tip with the highest tip confidence; record it in decisions. Then one GPU cluster rerun of the t3 window with it (ledger check as before)
+   - Closure: look at the largest-residual frame pairs first (t3 pair 7, t2 pair 16): what moves, where, and why. Then recheck closure with the net midline once the scale works. Checker unchanged
+   - Plane sections: use the net midline. Do not smooth the provisional midline (`curvature_smooth_px` is frozen)
+   - Leave the lab-server work folders as they are (Andrew deletes)
+   - Freeze-v3 sweeps and a research-lane session also use the lab server: before each job check for other jobs of this account and wait if one is running
