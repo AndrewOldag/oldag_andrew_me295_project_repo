@@ -19,3 +19,12 @@
 - Demo: `python results/2026-10-23_tracker_timing/estimate.py` prints the cost table
 - Remaining: stage correction in the tracker repo and runner (Andrew or research lane); then the two cluster jobs; closure residual 5.5 px/h and plane_sections on real movies; proposal approval
 - Bottlenecks: tracker-repo stage correction (Andrew); proposal approval (Andrew)
+
+## 2026-10-23 (build account, session dispatcher, inbox item 7)
+- Done: tracker repo branch `stage-auxdata` 888f972: stage-tracking table reader, summed positions for constant stage tables, `stage_source`, raw two-tile folders raise; tracker tests 46 passed, 9 skipped
+- Done: validation on 0708_m12 t2, t3 (lab server): background drift 80-85 -> 1-3 px/h with sign +, step after frame; pass. Course checker closure t3 76.5 -> 5.53, t2 68.2 -> 11.2 px/h (fail; tracked length inside growth zone); plane_sections unchanged
+- Done: scan of 122 montage folders: 121 counts match; 0727_cc7 155 steps for 857 frames, flagged
+- Done: private runner copy on the cluster with 888f972; root listing works
+- Failed: cluster job script not written; permission check refused it. No job submitted; no compute node used
+- Remaining: permission or Andrew to write and submit the 2 cluster jobs; 0727_cc7 decision; proposal approval
+- Bottlenecks: cluster submit permission (Andrew); 0727_cc7 (Andrew)
