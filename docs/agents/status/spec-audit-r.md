@@ -3,10 +3,11 @@ Updated: 2026-10-23 (local)
 Lane: research
 Branch: status/spec-audit-r
 Last inbox item done: 1
-State: working
-Now: item 2. Five reviewers running (plan, rules, kinematics, gate2-threshold, tracking)
+State: waiting on Andrew
+Now: item 2 stopped at a SPEC stop condition (evidence of a server delete). Reviewer plan still running, read-only
 Done since last update:
-- Literature network copied to the VM (1,693 digests); location recorded in the private paths file
-- Frozen structure-tensor parameter file: same hash in both runs (pass)
+- Reviewers done: 4 of 5 (gate2-threshold 9 findings, kinematics 9, tracking 9, rules 15)
+- Severity so far: would change a reported number 3; would change a design choice 6; record only 33
+- Frozen parameter check: pass
 Needs Andrew:
-- none
+- Rules reviewer found one delete command run on the lab server, in a VM shell history dated 2026-10-17 (backup folder, outside the data area). Confirm whether you ran it, and whether the audit continues
