@@ -7,19 +7,20 @@ Spec `docs/specs/2026-10-23_next-steps-lr2-dispatcher.md`, items B2 and B4 (clus
 - Uncoupled, `qb_track.py` defaults, `--movie real`, new `--from-h 2 --to-h 4` (reads only the window frames)
 - Midline: `scripts/remote/real_midline.py`, provisional (dark-root segmentation, skeleton, longest path). No midline source exists yet for real movies
 - Under the shared-machine limits: one single-thread job, `nice -n 19`, `ionice -c 3`, start only with 1 min load at most half the cores, no other tracker job of this account. Driver `scripts/remote/time_window.sh`
-- Two runs. t1: midline oriented base first (tip rule fixed after); timing sample only. t2: tip first
+- Three runs. t1: 2-4 h, midline oriented base first (tip rule fixed after); timing sample only. t2: 2-4 h, tip first. t3: 4-6 h, tip first (the cluster trial window, for comparison)
 
 | Run | Midline CPU s | Midline peak MB | Tracker wall s | Tracker loop s | Tracker peak GB | Output MB (track + midline) | Load 1 min before / after |
 | :-- | --: | --: | --: | --: | --: | --: | --: |
 | t1 | 30.8 | 246 | 29.0 | 11.6 | 3.95 | 0.51 + 0.41 | 0.62 / 1.45 |
 | t2 | 33.2 | 249 | 49.7 | 13.1 | 3.95 | 0.52 + 0.40 | 0.74 / 1.14 |
+| t3 | 32.1 | 246 | 25.7 | 12.6 | 3.95 | 0.52 + 0.40 | 0.51 / 1.08 |
 
-- Tracker wall time is mostly frame loading (system time 13-32 s); the tracking loop itself is 12-13 s for 80 frames x 27 points
+- Tracker wall time is mostly frame loading (system time 9-32 s); the tracking loop itself is 12-13 s for 80 frames x 27 points
 - Numbers in `timing.json`
 
-## Checker on t2 (uncoupled, no rigidly moved run)
-- closure: failed, 68.2 px/h (threshold 1.0). plane_sections: failed, 358 %/h (threshold 3.25). rigid_invariance: not run
-- Cause found: the stage follows the tip during these movies. The montage folder's stage-position table is constant over the movie; the per-frame stage-tracking moves are in the folder's auxiliary data table (XYZ stage tracking, one triplet per frame, -2.105 um in x per frame in this window). The tracker's stage correction reads only the position table, so the correction is zero. Seen in the data: the tip stays near the same image column for 2 h while the mature tissue and background debris move away from it, about 67 px/h at 300-400 px from the tip
+## Checker on t2 and t3 (uncoupled, no rigidly moved run)
+- t2: closure failed, 68.2 px/h (threshold 1.0); plane_sections failed, 358 %/h (threshold 3.25). t3: closure failed, 76.5 px/h; plane_sections failed, 254 %/h. rigid_invariance: not run
+- Cause found: the stage follows the tip during these movies. The montage folder's stage-position table is constant over the movie; the per-frame stage-tracking moves are in the folder's auxiliary data table (XYZ stage tracking, one triplet per frame; the first entries are -2.105 um in x per frame). The tracker's stage correction reads only the position table, so the correction is zero. Seen in the data: the tip stays near the same image column for 2 h while the mature tissue and background debris move away from it, about 67 px/h at 300-400 px from the tip
 - Not one of the injected faults. Closest: `bad_stage_correction`, `rigid_drift`. Stopped here for Andrew (spec, "stop and ask")
 
 ## Cost estimate (B4)
@@ -35,3 +36,8 @@ Spec `docs/specs/2026-10-23_next-steps-lr2-dispatcher.md`, items B2 and B4 (clus
 - Every set fits on the lab server: worst case (118 roots x 24 h, 10 settings) 652 core-hours, about 163 h at 4 workers. All include-yes roots once at 3 settings: 153 core-hours, about 38 h
 - The cluster cost is small in every case (under $8). The cluster is not needed on cost or wall time for (a); for (b) it would shorten wall time only
 - Not included: LLM agent calls, staging time, the stage-correction fix, a midline net in place of the provisional midline
+
+## Cluster trials (B3)
+- Connection to the cluster up; work folder made (empty folders for data, configs, runs, logs). No job submitted. Spend $0.00 by this session
+- Stopped at the first data copy (one root's movie folder from the lab server to the cluster work folder): the copy command was refused by the build session's permission check. Not retried, not worked around. Needs Andrew
+- No `cluster_spend.csv` entries yet

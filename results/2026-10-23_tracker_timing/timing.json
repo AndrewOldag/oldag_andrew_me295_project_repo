@@ -14,7 +14,12 @@
    "frames": 80, "midline_cpu_s": 33.2, "midline_wall_s": 33.4, "midline_peak_rss_kb": 249428,
    "track_run_s": 13.1, "track_wall_s": 49.7, "track_cpu_s": 49.4, "track_peak_rss_kb": 3953752,
    "track_out_bytes": 523233, "midline_out_bytes": 404509, "points": 27, "disk_radius": 15,
-   "load1_before": 0.74, "load1_after": 1.14}
+   "load1_before": 0.74, "load1_after": 1.14},
+  {"tag": "t3", "note": "window 4-6 h (cluster trial window, for the comparison in the private trial plan); same checker failure",
+   "frames": 80, "midline_cpu_s": 32.1, "midline_wall_s": 33.7, "midline_peak_rss_kb": 246332,
+   "track_run_s": 12.6, "track_wall_s": 25.7, "track_cpu_s": 25.5, "track_peak_rss_kb": 3953000,
+   "track_out_bytes": 521773, "midline_out_bytes": 398352, "points": 27, "disk_radius": 15,
+   "load1_before": 0.51, "load1_after": 1.08}
  ],
  "cores": 32
 }
