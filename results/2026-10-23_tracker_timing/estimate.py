@@ -69,3 +69,4 @@ if runs_c:
               f"{windows_inc * usd:,.0f} | {118 * 12 * usd:,.0f} |")
     print()
     print("- Units: cpus + 10 per P100 or V100, per hour, at the rate above. No moved copy")
+    print("- cpu: timed out at the 2 h limit in the midline stage (85 s per frame on 8 cpus); its row is a lower bound")

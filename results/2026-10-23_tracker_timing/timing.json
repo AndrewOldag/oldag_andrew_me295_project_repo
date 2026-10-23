@@ -79,6 +79,21 @@
    "output_mb": 12,
    "usd": 0.032,
    "note": "runner previews fail (midline ends short of the tip); timing only"
+  },
+  {
+   "job": "cpu",
+   "hardware": "8 cpus",
+   "units_per_h": 8,
+   "frames": 80,
+   "elapsed_s": 7220,
+   "queue_wait_s": 37,
+   "midline_s": 6805.4,
+   "qc_s": 3.0,
+   "kinematics_s": null,
+   "peak_rss_kb_batch_step": 4760932,
+   "usd": 0.193,
+   "state": "TIMEOUT at the 2 h limit; kinematics not finished",
+   "note": "elapsed is a lower bound: the job did not finish"
   }
  ]
 }
