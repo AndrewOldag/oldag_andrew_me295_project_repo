@@ -1,5 +1,5 @@
 # coordinator
-Updated: 2026-10-23 15:11 (local)
+Updated: 2026-10-23 15:21 (local)
 Lane: course
 Branch: main
 Last inbox item done: 11 (item 12 waiting on host-setup)
@@ -24,8 +24,8 @@ Done since last update:
 Branches (last commit, state):
 - wip/spec-audit: 2026-10-23 01:04, ready to merge, merged 2c0eb60
 - wip/spec-audit-check: 2026-10-23 01:14, ready to merge, merged f7ec454
-- wip/host-setup: 2026-10-23 15:05, working
-- wip/freeze-v3: 2026-10-23 15:03, working
+- wip/host-setup: 2026-10-23 15:19, working (item 1)
+- wip/freeze-v3: 2026-10-23 15:12, waiting on Andrew (stop rule: clean scored rod fails closure)
 - status/turn-long: 2026-10-23 15:04, working (research lane, not merged)
 - wip/dispatcher: 2026-10-23 13:53, waiting on Andrew
 - wip/lab-report-2: 2026-10-23 13:29, working
@@ -33,6 +33,7 @@ Branches (last commit, state):
 - status/gate2: 2026-10-16 12:27, waiting on Andrew (research lane, not merged)
 - wip/readme-check, wip/vm-setup, wip/auditor-v1b, wip/fq-real, wip/auditor-v1, wip/scored-v1, wip/freeze-v2, heldout/faults, wip/baselines, wip/diag-review, wip/lab-report-1, wip/gatekeeper: merged
 Needs Andrew:
+- freeze-v3 STOP: clean rod v3_bend30_clean_s20 fails closure (4.51 vs 1.0 px/h); keep as accept_clean, label as fault, or drop (freeze-v3 status)
 - lab-report-2 and spec-audit-r sessions no longer live; wip/lab-report-2 status still says working (13:29)
 - Old lab-report-2 session (started 00:37) stopped 13:45 on Andrew's go-ahead; the 13:27 one remains
 - Dispatcher: cluster submit refused by its permission check; tracker branch stage-auxdata not merged; checker still fails after the stage fix (dispatcher status)
