@@ -4,3 +4,9 @@
 - Demo: open `docs/reports/2026-10-30_lab-report-2.md`; 8 `[ANDREW]` marks, listed in docs/agents/status/lab-report-2.md
 - Remaining: A5 after the spec-audit SUMMARY.md is marked by Andrew; Andrew resolves marks; ready by Wed 28 Oct
 - Bottlenecks: spec audit (A5); Andrew (marks)
+
+## 2026-10-23 (build account, session lab-report-2, inbox item 4)
+- Done: inbox item 4 in `docs/reports/2026-10-30_lab-report-2.md`: literature-reviewer agents replaced by the spec audit; root count 102 include-yes; accepted audit findings (evaluation-1, -2, -3, -9; bending-and-tracking-1, -3; kinematics-1; specs-1) added to changes and risks as freeze v3, planned; held-out seeds under v3; Lab report 5 removed, all-roots run moved to the final report; Wed 28 Oct build stop in the plan
+- Demo: open `docs/reports/2026-10-30_lab-report-2.md`; 5 `[ANDREW]` marks left, listed in docs/agents/status/lab-report-2.md
+- Remaining: freeze v3 results and slice demo from the log; recount commits and rerun tests; finish draft Thu 29 Oct
+- Bottlenecks: freeze-v3 session (results); Andrew (remaining marks)
