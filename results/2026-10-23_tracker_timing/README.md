@@ -41,3 +41,19 @@ Spec `docs/specs/2026-10-23_next-steps-lr2-dispatcher.md`, items B2 and B4 (clus
 - Connection to the cluster up; work folder made (empty folders for data, configs, runs, logs). No job submitted. Spend $0.00 by this session
 - Stopped at the first data copy (one root's movie folder from the lab server to the cluster work folder): the copy command was refused by the build session's permission check. Not retried, not worked around. Needs Andrew
 - No `cluster_spend.csv` entries yet
+
+## Stage correction probe (inbox item 6, 2026-10-23)
+- Cluster data copy for 0708_m12 (by the planning account) checked: 1931 files, names and sizes identical to the lab-server copy, 5,599,241,881 bytes
+- The cluster runner reads stage motion from the same stage-position table as the lab tracker; neither reads the stage-tracking table. Both would run these montage movies with zero stage correction
+- Stage-tracking table of 0708_m12: 961 rows (x, y, z), per-frame moves in whole pixels (0 to -8.42 um in x, 0 or -2.105 um in y). Sum over 4-6 h: -345 um in x (-164 px); basal tracked points move -149 px in the image over the same window
+- Probe (lab server, outside the repo): t3 re-tracked with stage positions = table value + cumulative moves
+
+| Run | Stage moves | closure px/h (threshold 1.0) | plane_sections %/h (threshold 3.25) | Tip, net px | Most basal point, net px |
+| :-- | :-- | --: | --: | --: | --: |
+| t3 | none | 76.5 | 254 | 7 | -149 |
+| t3ap | + cumulative | 5.5 | 256 | 193 | 9 |
+| t3am | - cumulative | 158.6 | 251 | -131 | -315 |
+
+- With + sign the base is nearly still in the world frame and the tip advances about 96 px/h. Sign + is the correction
+- Closure still above its threshold (provisional segmentation midline likely; not checked). plane_sections does not change with stage correction: predicted term -248 %/h from flank spacing x curvature rate; cause not checked
+- Decision (Andrew, 2026-10-23): the correction goes into the tracker repo's loader, then the cluster runner install is updated. No cluster job is submitted until then. Nothing submitted; spent today $0.23 (the earlier runner test only)
