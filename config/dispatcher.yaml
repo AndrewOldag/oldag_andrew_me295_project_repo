@@ -1,0 +1,20 @@
+# Dispatcher settings (docs/proposals/2026-10-23_dispatcher.md, approved by Andrew 2026-10-23).
+# Fixed: no agent can change them. Change only with a dated entry in docs/decisions.md.
+window_h: 2.0                  # root-by-window task length, from usable_from_h
+last_window_min_h: 1.0         # a last partial window is kept if at least this long
+round_limit: 200               # dispatcher rounds per batch
+retries_per_task: 2            # resubmits of a failed job (crash, timeout, preemption)
+wait_minutes: [15, 30, 60]
+
+lab_server:                    # shared-machine limits (decisions, 2026-10-11), enforced by the engine
+  max_workers: 4               # and never more than one eighth of the cores
+  start_load_fraction: 0.5     # start a sweep only if the 1 min load <= this x cores
+  pause_load_fraction: 0.75    # above this x cores, start no new job until under start_load_fraction
+  sweep_hours: 2.0
+
+timing:                        # results/2026-10-23_tracker_timing/ (slower of 3 runs)
+  core_s_per_frame: 1.04       # midline + tracker
+  moved_copy: 2                # each window tracked again on a rigidly moved copy
+  cluster_usd_per_core_h: 0.012
+
+budget_file: config/compute_budget.yaml   # written only after Andrew approves a cluster budget; absent = 0
