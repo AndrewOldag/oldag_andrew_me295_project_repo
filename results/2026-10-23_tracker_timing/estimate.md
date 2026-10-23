@@ -13,7 +13,7 @@
 | (b') 118 roots x 24 h once | mid (3) | 196 | 49 | $2.35 |
 | (b') 118 roots x 24 h once | high (10) | 652 | 163 | $7.83 |
 
-- Core-seconds per frame (midline + tracker, slower of 2 runs): 1.04
+- Core-seconds per frame (midline + tracker, slower of 3 runs): 1.04
 - Include-yes roots 102, usable hours 2,373.6, frames 88,585, 2 h windows 1,223
 - Peak memory per job 4.0 GB; output per window 0.93 MB; output for (b) at 1 setting x 2 2.3 GB
 - Cluster rate $0.012 per core-hour

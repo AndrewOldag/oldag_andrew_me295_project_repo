@@ -1,0 +1,11 @@
+## 2026-10-23 (build account, session dispatcher)
+- Done, B1 (23443d2): `docs/proposals/2026-10-23_dispatcher.md`. Typed actions split_root, estimate_cost, request_approval, submit, wait, collect, retry, finish; orchestrator enforces budget and shared-machine limits; fixed-script baseline; fake-queue tests. No dispatcher code until Andrew approves
+- Done, B2 (9bfb316): one real window timed on the lab server, root 0708_m12 (drought, mannitol), 80 frames per 2 h window, uncoupled, one single-thread job at lowest priority. Midline 31-33 CPU s, 0.25 GB; tracker 26-50 s wall (tracking loop 12-13 s), 3.95 GB peak; output 0.92 MB per window. Load (1 min) at most 1.45 of 32 cores
+- New: `qb_track.py --from-h --to-h` (window only); `scripts/remote/real_midline.py` (provisional midline); `scripts/remote/time_window.sh` (load check, nice, ionice, `/usr/bin/time -v`)
+- Checker on the timing root failed, t2 (2-4 h) and t3 (4-6 h): closure 68.2 and 76.5 px/h (threshold 1.0), plane_sections 358 and 254 %/h (threshold 3.25). Cause: stage-tracking moves are in the movie's auxiliary data table, not in the stage-position table the tracker reads, so stage correction is zero. Not in the fault list. Stopped for Andrew
+- Done, B4: `results/2026-10-23_tracker_timing/` (README, timing.json, estimate.py, estimate.md). 1.04 core-s per frame. All 102 include-yes roots once at 3 settings per window: 153 core-hours, about 38 h at 4 lab-server workers, $1.84 on the cluster. Worst case 118 roots x 24 h x 10 settings: 652 core-hours, $7.83
+- B3 cluster trials: connection up, work folder made, no job submitted, $0.00 spent. The first data copy to the cluster was refused by the session permission check; not retried
+- Tests: 202 passed, 1 failed (`tests/test_board.py::test_research_rows_never_in_tracked_files`: a research task file outside the repo has state 'waiting on Andrew', not in the board's state list; not this session's file), 130 s
+- Demo: `python results/2026-10-23_tracker_timing/estimate.py` prints the cost table
+- Remaining: Andrew approves or changes the proposal; stage-correction source for real movies; cluster copy permission; then B5 (dispatcher, real slice)
+- Bottlenecks: proposal approval, stage-tracking table, cluster copy permission (Andrew)
