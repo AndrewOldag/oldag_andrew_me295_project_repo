@@ -11,3 +11,4 @@
    - Open 5: `stage_log_missing` approved as a held-out fault
    - Stop rules in the proposal stand (clean basis failing a threshold; more than half the labelled set in decline)
    - Record this approval in `docs/decisions.md` and in the proposal header
+5. Andrew, 2026-10-23 14:50: work space freed. The planning account (one-time approval by Andrew) deleted the 804 v2 rendered rods in the shared rods folder (every entry without the `v3_` prefix), 4.9 GB. The 240 `v3_` entries and all track caches are untouched. List kept next to the rods folder as `deleted_v2_rods_20261023.txt`. Work space now about 4.8 GB of 10 GB. Sessions still may not delete on the lab server. Continue with held-out sizing, labels and the method runs. v2 results stay valid from their committed caches; if a v2 rod is ever needed again it is re-rendered from code and seed
