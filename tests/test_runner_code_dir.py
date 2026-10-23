@@ -11,8 +11,8 @@ from measure.runner import RemoteRunner, branch_code_dir
 from scripts.synth import sweep
 
 
-def make(tmp_path, branch, have=()):
-    """have: remote paths that exist (for `test -e` probes)."""
+def make(tmp_path, branch, have=(), jobs=0):
+    """have: remote paths that exist (for `test -e` probes). jobs: running jobs of the account."""
     cfg = tmp_path / "runner.yaml"
     cfg.write_text(yaml.safe_dump({"host": "h", "work_dir": "/base/work", "code_dir": "/base/code/",
                                    "python": "py"}))
@@ -24,6 +24,8 @@ def make(tmp_path, branch, have=()):
         r.calls.append((cmd, stdin))
         if cmd.startswith("test -e"):
             return b"yes\n" if any(h in cmd for h in have) else b"no\n"
+        if cmd.startswith("ps -u"):
+            return f"{jobs}\n".encode()
         return b'{"running": false}\n'
     r._ssh = ssh
     return r
@@ -96,6 +98,14 @@ def test_sweep_start_never_overwrites(tmp_path):
     start_cmd = r.calls[-1][0]
     assert "set -C" in plan_cmd and "set -C" in start_cmd and f"> {log}" in start_cmd
     assert log.startswith("sweep_x_") and log.endswith(".log")
+
+
+def test_at_most_two_jobs(tmp_path):
+    r = make(tmp_path, "wip/a", jobs=2)
+    r.start_detached = lambda cmd: r.calls.append((cmd, None))
+    with pytest.raises(RuntimeError, match="at most 2"):
+        r.sweep_start({"rods": []}, "x")
+    assert make(tmp_path, "wip/a", jobs=1).account_jobs() == 1
 
 
 def test_lock_is_one_per_machine(tmp_path):

@@ -2,7 +2,7 @@
 Updated: 2026-10-23 14:55 (local)
 Lane: course
 Branch: wip/freeze-v3
-Last inbox item done: 5
+Last inbox item done: 6
 State: working
 Now: item 5 read (work space freed); held-out sizing sweep
 Done since last update:
