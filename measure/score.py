@@ -72,7 +72,10 @@ def rod_tolerance(truth, pixel_um, cfg=None):
     """Tolerance for one rod: centre limit = fraction x the rod's true peak REGR (truth_summary)."""
     cfg = cfg or load_tolerance()
     peak = truth_summary(truth, pixel_um)["peak_regr_pct_per_h"]
-    return {"regr_rms_pct_per_h": cfg["regr_rms_fraction_of_true_peak"] * peak,
+    limit = cfg["regr_rms_fraction_of_true_peak"] * peak
+    if peak <= 0.0:                     # non-growing rod: absolute limit (freeze v3, Andrew, 2026-10-23)
+        limit = cfg["regr_rms_no_growth_pct_per_h"]
+    return {"regr_rms_pct_per_h": limit,
             "flank_difference_rms_pct_per_h": cfg["flank_difference_rms_pct_per_h"], "peak_regr_pct_per_h": peak}
 
 
