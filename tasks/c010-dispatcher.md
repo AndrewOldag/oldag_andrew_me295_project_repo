@@ -16,5 +16,5 @@ Spec: `docs/specs/2026-10-23_next-steps-lr2-dispatcher.md`.
 ## Parts
 - [ ] B1 proposal (stop for Andrew)
 - [ ] B2 tracker timing, one root, lab server
-- [ ] B3 cost estimate
-- [ ] B4 dispatcher and real slice (after approval)
+- [ ] B4 cost estimate (B3 rules: P100/V100, $5 cap)
+- [ ] B5 dispatcher and real slice (after approval)

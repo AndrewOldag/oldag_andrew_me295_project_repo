@@ -12,7 +12,7 @@ From: planning account. Date: 2026-10-23. Status: open. Lane: course.
 | Name | Lane | Branch | Task | Starts |
 | :-- | :-- | :-- | :-- | :-- |
 | lab-report-2 | course | wip/lab-report-2 | c009 | now |
-| dispatcher | course | wip/dispatcher | c010 | now (B1-B3); B4 after Andrew approves |
+| dispatcher | course | wip/dispatcher | c010 | now (B1-B4); B5 after Andrew approves |
 
 ## A. Lab report 2 (lab-report-2)
 1. Read `docs/context/course/Lab-Guideline.md` (Lab Report 2), `Project-Guideline.md` (proposal content, viability checks), `docs/reports/2026-10-16_lab-report-1.md`, `docs/context/project_summary.md`, `docs/decisions.md`, the log since 18 Oct
@@ -38,13 +38,19 @@ From: planning account. Date: 2026-10-23. Status: open. Lane: course.
    - Tests with a fake queue; no real jobs in tests
    - Commit the proposal and stop for Andrew's approval before writing dispatcher code
 2. Tracker timing, now, on the lab server under the shared-machine limits: one include-yes drought root, one 2 h window inside its usable hours, uncoupled, current settings. Record wall time, peak memory, output size, frames. Extrapolate to 24 h and to 118 roots. This is the input to the cost estimate. One sweep at a time; check for other `oldag` jobs first
-3. Cost estimate for the computing cluster from the timing: core-hours and cost for (a) the 12-16 root evaluation subset with repeats and (b) all roots once. `results/2026-10-23_tracker_timing/`. Do not submit anything to the cluster
-4. After Andrew approves the proposal and a budget: build the dispatcher, then the smallest real slice for Lab report 3: 2-3 include-yes roots (one control, one drought, one recovery), one window each, dispatcher -> tracker -> checker -> diagnostician -> auditor, end to end. Stage one root at a time on the VM; delete staged images after use
+3. Cluster rules (Andrew, 2026-10-23):
+   - Rate: lowest tier, $0.012 per compute unit (the lab is under the first tier this fiscal year). CPU core-hour = 1 unit ($0.012). P100 or V100 GPU-hour = 10 units ($0.12)
+   - GPUs: P100 or V100 only. Never L40S, H100 or H200. Before each job, check which of P100/V100 has free nodes (`sinfo`, `squeue`) and request that type; if neither is free, wait or run CPU-only. Request a GPU only if the timing shows the tracker uses it
+   - Budget for the initial trials (timing plus the first real slice): $5 total, CPU and GPU together. Hard cap
+   - Each job's worst-case cost = requested resources x `--time` limit x rate. Set `--time` so that the worst case of every job submitted plus all spent so far stays within $5. Running total in `results/2026-10-23_tracker_timing/cluster_spend.csv` (job, resources, time limit, worst case, actual from `sacct`)
+   - Each job still needs Andrew's direct approval before submission. The VM does not submit to the cluster itself; the job script and the cost line go to Andrew
+4. Cost estimate for the computing cluster from the timing: core-hours and cost for (a) the 12-16 root evaluation subset with repeats and (b) all roots once. `results/2026-10-23_tracker_timing/`. Do not submit anything to the cluster
+5. After Andrew approves the proposal and a budget: build the dispatcher, then the smallest real slice for Lab report 3: 2-3 include-yes roots (one control, one drought, one recovery), one window each, dispatcher -> tracker -> checker -> diagnostician -> auditor, end to end. Stage one root at a time on the VM; delete staged images after use
 
 ## Limits
 - Real movies: include yes and usable windows only
 - Lab server: shared-machine limits, no deletes, moves or renames
-- Cluster: nothing submitted without Andrew's approval of a cost estimate
+- Cluster: nothing submitted without Andrew's approval of a cost estimate. P100/V100 only. Initial trials capped at $5
 - Freeze v2 items unchanged. Changes go through Andrew and a new freeze version
 
 ## Stop and ask Andrew
