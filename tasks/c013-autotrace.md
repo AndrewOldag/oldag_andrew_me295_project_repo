@@ -3,7 +3,7 @@ id: c013
 title: Net-drafted midline traces for the tracing pack, previews and y/n review tool
 lane: course
 owner: autotrace
-state: ready to merge
+state: done
 branch: wip/autotrace
 host: workstation, lab server, cluster
 created: 2026-10-23 20:12
