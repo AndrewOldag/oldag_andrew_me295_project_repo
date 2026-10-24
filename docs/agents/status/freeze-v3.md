@@ -1,5 +1,5 @@
 # freeze-v3
-Updated: 2026-10-24 02:12 (local)
+Updated: 2026-10-24 02:35 (local)
 Lane: course
 Branch: wip/freeze-v3
 Last inbox item done: 10
@@ -10,6 +10,6 @@ Done since last update:
 - Method-phase tracker runs complete: 488 of 600 cached, 0 failed. Script and remedy tree: 102 runs; a second run from the cache identical on 102 of 102 (869f130)
 - LLM runs: 157 of 306 (diagnostician r0 51, r1 51; single agent r0 51, r1 4); 0 harness errors. Stopped once more on VM memory (second stop) (b3829b3)
 - `agents --max-runs N` for blocks (b3829b3)
-- Memory checks (free / total): 1.9 / 7.7 GB at 02:00; 2.0 / 7.7 at 02:12 (24 `claude` processes). Largest: 24 `claude` processes 4.63 GB, `svchost` 0.78, `MsMpEng` 0.31
+- Memory checks (free / total): 1.9 / 7.7 GB at 02:00; 2.0 / 7.7 at 02:12; 2.1 / 7.7 at 02:24 and 02:35 (24 `claude` processes each time). Largest: 24 `claude` processes 4.63 GB, `svchost` 0.78, `MsMpEng` 0.31
 Needs Andrew:
 - Free VM memory is 1.9 of 7.7 GB; 24 Claude processes hold 4.6 GB. The 4 GB rule may not be met while these sessions run. Closing idle sessions would free memory; until then each block waits 10 min and checks again
