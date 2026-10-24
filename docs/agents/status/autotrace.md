@@ -1,26 +1,25 @@
 # autotrace
-Updated: 2026-10-23 22:55 (local)
+Updated: 2026-10-24 01:40 (local)
 Lane: course
 Branch: wip/autotrace
 Last inbox item done: 11
-State: working
-Now: item 12, fine-tune net2_midline_ft2.pt from base net2 on 72 July + 109 pack traces (cluster GPU, under the $5 cap; $0.45 spent so far), then score 3 nets on the 28 held-out frames
+State: waiting on Andrew
+Now: item 12 blocked: the unchanged fine-tune recipe (batch 6 of 1080 px windows) does not fit a 16 GB P100, and the only V100s open to this account start in 10 days. Need a choice below. Held-out score for base and current nets done
 Done since last update:
 - Item 12: Andrew's files checked: 112 reviewed (72 y, 40 n), 109 traced + 3 skipped, 28 held-out traced; key sets match the pack
-- Item 12: training list 181 traces (72 July include-yes in-window + 109 pack), checked against the manifest and the held-out list (no held-out frame or root); 43 July traces refused (c1, c7, c3, c12). Keys in `train_keys.csv` with the run on the cluster; seed 20261023; recipe defaults unchanged, from base net2
-- Item 12: 181 frames (994 MB) copied to the cluster work folder; GPU job 5383578 (P100, 4 CPUs, 2 h limit) running. Ledger: spent 0.45 + worst case 0.34 = 0.79 of 5.00
-- Item 12: held-out scoring of base net2 and net2_midline_ft running on the workstation (tile, lo 0.1); ft2 follows when the job ends
-- Item 11 recorded: the next fine-tune starts from base net2 and trains only on include-yes, in-window traces (72 July + reviewed pack), never held-out frames; draft order stays base -> tip. For the coordinator: this decision belongs in docs/decisions.md (this task may not edit it)
-- Item 2, landmark rule: drafts end on the midline 35 px (74 um) behind the root apex. Measured on 9 July frames: median 35.3 px, range 23.4-63.5 px; 1 frame excluded (mask merged with a bubble). July traces run tip -> base; drafts run base -> tip as the inbox says
-- Item 3, drafts: 140 of 140 frames; net found no root on 0. Run time: net 2338 s (16.7 s/frame, CPU, nice 19, 10 threads), conversion 81 s, previews 36 s
-- Apex: net tip in 104 frames, root mask in 36; net tip vs mask apex median 5.0 px. Flags: 5 curled skeleton ends trimmed, 2 mask apex far ahead (#15 bubble at the tip, #135 crossing fibre); both show the flag in yellow on the preview
-- Items 4, 9: 28 held-out frames (16 roots) drafted with review_only; previews `HELDOUT_TRACE-BY-HAND_<n>_<key>.png`, 40 px red border, banner; skipped by the review tool and listed at its end; `HELD_OUT_TRACE_BY_HAND.csv` and `held_out_worklist.json` (28 frames)
-- Item 5: 140 previews (1200 px wide), `index.csv`; "||" in keys is "__" in file names
-- Item 6: `review_traces.py` (y/n/b/q, k of 112, review.csv after every key, resumable, `--backend MacOSX`), `apply_review.py` (traces_reviewed.json with non-held-out frames only, accepted drafts as traced, keeps hand traces on re-run, `--frames-root` for a local copy). `README.txt` in the folder gives the steps
-- Item 7: both tested headless on 3 frames + 1 held-out: all checks passed. MacOSX backend not testable here
-- Item 10: nothing large on the VM (previews viewed as small samples in the session temp folder only); workstation work folder 11 GB of 20, 35 GB free; no deletes anywhere
-- Results README `results/2026-10-23_autotrace/README.md`; log entry `docs/running_log_pending/autotrace.md`
+- Item 12: training list 181 traces (72 July include-yes in-window + 109 pack), checked against the manifest and the held-out list (no held-out frame or root); 43 July traces refused (c1, c7, c3, c12). Keys in `train_keys.csv` in the cluster work folder; seed 20261023; recipe defaults, from base net2. 181 frames (994 MB) on the cluster
+- Job 5383578 (P100 16 GB): CUDA out of memory at the first training step (15.2 GiB allocated, 0.4 GiB more needed). 2 min 41 s, $0.008. No weights written
+- Job 5383707 (V100): scheduler start estimate 2026-11-03; cancelled while pending, $0. The two other V100 partitions belong to other accounts
+- Cluster spend today: $0.457 of $5 (ledger updated)
+- Held-out score (28 frames, 16 roots; tile, lo 0.1; same conversion for every net):
+  - base net2: no root 1, off the root 24 of 28 (coverage 0)
+  - current net2_midline_ft: no root 0, off the root 0; distance median 2.9 px (6.1 um), p90 7.4 px (15.6 um); net end median 28 px past the hand end
+  - table and per experiment in `results/2026-10-23_autotrace/README.md`; ft2 row pending
+- Earlier: items 1-11 done (drafts, previews, review tools; see results README)
 Needs Andrew:
-- Review: copy `review/` next to your pack copy, then `python review_traces.py . --backend MacOSX` (112 frames), then `python apply_review.py . --frames-root <your frames folder>`
-- Hand-trace rejected frames (traces_reviewed.json) and the 28 held-out frames (held_out_worklist_local.json) with trace_midlines.py
-- Two-root frames (#48, #49 held out; #57): the draft follows one root; check it is the one you want
+- Fine-tune memory. Pick one (each P100 job worst case $0.34):
+  - A (recommended): gradient accumulation, batch 3 x 2 steps: same effective batch 6, epochs, lr and loss; batch norm sees 3 windows per step instead of 6
+  - B: mixed precision (fp16 autocast), batch 6: same batches; lower numeric precision
+  - C: batch 3, no accumulation: twice the optimizer steps per epoch
+  - D: wait for a V100 (estimated start 2026-11-03; 32 GB not confirmed)
+- Either choice changes only my private copy of the training script in the cluster work folder; the tracker repo and its nets stay unchanged
