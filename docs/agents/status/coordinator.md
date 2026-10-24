@@ -1,12 +1,14 @@
 # coordinator
-Updated: 2026-10-24 14:00 (local)
+Updated: 2026-10-24 14:15 (local)
 Lane: course
 Branch: main
 Last inbox item done: 20
 State: working
 Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8 (relay part), 10, 11, 16, 17 (item 20)
-Last-seen main: be99733 (inboxes as of feba21b; unchanged)
+Last-seen main: 64d03bc (dispatcher inbox changed in 64d03bc)
 Done since last update:
+- 2026-10-24 14:15 (tick): item 1: no branch ready to merge and unmerged (wip/dispatcher waiting on Andrew, 14:05; wip/lab-report-2 working; research status branches done)
+- 14:15: item 8: dispatcher inbox changed in 64d03bc (keep ft2, diagnose closure; replace 0711_c1 with a confidence check). Pinged dispatcher 14:15 (`check github`). Item 10: no status waits on an agent. Item 16: no status says `waiting on server job`. Item 21 still open
 - 2026-10-24 14:00 (tick): item 1: no branch ready to merge and unmerged (wip/dispatcher waiting on Andrew, 13:52; wip/lab-report-2 working; research status branches done)
 - 14:00: item 8: no inbox change since feba21b; no pings. Item 10: no status waits on an agent. Item 16: no status says `waiting on server job`. Item 2: hook installed. Item 21 still open (needs a live session)
 - 2026-10-24 13:30 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working, wip/lab-report-2 working, status/turn-long and status/spec-audit-r research lane)
@@ -66,11 +68,10 @@ Branches (last commit, state):
 - status/gate2: 2026-10-16 12:27, delete approved, Andrew runs it (research lane, not merged)
 - wip/readme-check, wip/vm-setup, wip/auditor-v1b, wip/fq-real, wip/auditor-v1, wip/scored-v1, wip/freeze-v2, heldout/faults, wip/baselines, wip/diag-review, wip/lab-report-1, wip/gatekeeper: merged
 Needs Andrew:
-- Dispatcher (status 14:05): keep ft2 for real movies despite the 0708_m12 closure regression (0.945 -> 4.52 px/h), or look into it first? Replace control root 0711_c1 (closure 64.2) or look into it?
 - Coordinator item 21 (tick cost cut: marker check in the script, smaller model, token log) needs a live session (e.g. coord-tick or a new one): a tick pass cannot test a full pass without starting a session
 - coord-tick (merged): install the scheduled task elevated: `scripts\ops\install_coordinator_tick.ps1`; confirm one scheduled S4U full pass in the tick log with exit 0
 - A live session named `coordinator` (started about 13:17, idle) is listed beside this tick pass; stop it once the tick is installed (coord-tick status)
-- Finished sessions still live and idle: freeze-v31 (merged), turn-long (done), coord-tick (merged); can be closed
+- Finished sessions still live and idle: freeze-v31 (merged), turn-long (done), coord-tick (merged), autotrace (merged); can be closed
 - `git push origin --delete status/gate2` (audit-marks item 2; refused for sessions)
 - freeze-v3: review `results/2026-10-23_freeze_v3/README.md` (all 12 accept_repaired rods measure well unremedied; second_root 0 correct for every method)
 - Workstation disk: host-setup work folder 9.9 of 20 GB after one root; sessions cannot delete there (host-setup status)
