@@ -6,7 +6,7 @@ The planning account gives instructions through this folder. Andrew's only messa
 - `inbox/<name>.md` on `main`: written by the planning account only. Numbered items, newest last
 - `status/<name>.md`: written by the agent only
   - Course-lane agents: on their own work branch (`wip/<name>`, or `main` for the coordinator)
-  - Research-lane agents: on branch `status/<name>`, in a clone of this repo kept only for this (`~/coord-<name>/`). Nothing else from the research lane goes into this repo
+  - Research-lane agents: on branch `status/<name>`, in a clone of this repo kept only for this (the agent's status clone; location in `private/paths.md`). Nothing else from the research lane goes into this repo
 
 ## On `check github`
 1. `git fetch origin`
