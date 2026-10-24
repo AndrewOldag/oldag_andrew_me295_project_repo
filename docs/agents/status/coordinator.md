@@ -1,15 +1,16 @@
 # coordinator
-Updated: 2026-10-23 18:47 (local)
+Updated: 2026-10-23 19:56 (local)
 Lane: course
 Branch: main
 Last inbox item done: 13
 State: working
 Now: relay loop every 10 min (item 8): merges per item 1, `check github` to live sessions whose inbox changed
-Last-seen main: 6d84335 (inboxes as of 6d84335)
+Last-seen main: 553f5f9 (inboxes as of 553f5f9)
 Done since last update:
 - Item 9: board allows `waiting on Andrew` and `waiting on <agent>` (`scripts/board.py`, `tasks/README.md`), 8223616; full suite 203 passed
 - Item 1: merged wip/spec-audit (2c0eb60) and then wip/spec-audit-check (f7ec454), `--no-ff`; pending log entries moved into `docs/running_log.md`; suite 203 passed on each merge
 - Item 8: pinged dispatcher 01:22 (inbox changed in 588f052). Coordinator inbox also changed (own). Message tool available: SendMessage + ListAgents
+- 19:56: pinged dispatcher (inbox changed in 553f5f9: net midline accepted, smoothing as a proposal, B5 part 2)
 - 18:47: item 1: merged wip/host-setup (b9a3a06, ready to merge 18:37, test passed); suite 205 passed; log entry moved. Items 12-13: host assignment appended to turn-long (8), dispatcher (15), freeze-v3 (9) inboxes (6d84335); pinged all three (dispatcher also for item 14, 54456a2)
 - 18:32: item 13 read (turn-long stays on the lab server; workstation: dispatcher sweeps and probes, freeze-v3 overflow after a cache-match test; disk 20 GB cap, 20 GB free floor). Pinged host-setup, turn-long, dispatcher (21fef9e, f86f3b8). freeze-v3 (items 7-8) not live
 - 18:21: workstation ssh approval (3e41548): pinged dispatcher and turn-long. host-setup (item 5) not live
@@ -29,9 +30,9 @@ Branches (last commit, state):
 - wip/spec-audit: 2026-10-23 01:04, ready to merge, merged 2c0eb60
 - wip/spec-audit-check: 2026-10-23 01:14, ready to merge, merged f7ec454
 - wip/host-setup: 2026-10-23 18:37, ready to merge, merged b9a3a06
-- wip/freeze-v3: 2026-10-23 15:12, waiting on Andrew (stop rule: clean scored rod fails closure)
-- status/turn-long: 2026-10-23 18:17, working (research lane, not merged)
-- wip/dispatcher: 2026-10-23 18:18, waiting on Andrew
+- wip/freeze-v3: 2026-10-23 18:42, working
+- status/turn-long: 2026-10-23 18:42, working (research lane, not merged)
+- wip/dispatcher: 2026-10-23 19:24, waiting on Andrew
 - wip/lab-report-2: 2026-10-23 13:29, working
 - status/spec-audit-r: 2026-10-23 13:42, done (research lane, not merged)
 - status/gate2: 2026-10-16 12:27, waiting on Andrew (research lane, not merged)
