@@ -485,7 +485,8 @@ def run_rules():
     print(f"rule-method runs written; second runs identical in this call: {same}")
 
 
-def run_agents(method, repeat):
+def run_agents(method, repeat, max_runs=None):
+    """max_runs: stop after this many new runs (blocks of at most 25, Andrew 2026-10-24, inbox item 11)."""
     from agents.launcher import Launcher
     from agents.orchestrator import Orchestrator
     if git("status", "--porcelain", "--untracked-files=no"):
@@ -494,13 +495,16 @@ def run_agents(method, repeat):
     out.mkdir(parents=True, exist_ok=True)
     launcher = Launcher()
     cls = {"diagnostician": Slice, "single_agent": BlindSlice}[method]
-    errors = []
+    errors, started = [], 0
     for rod in scored_rods():
         name = stem(method, rod, repeat)
         summ, trace = out / f"{name}_summary.json", out / f"{name}_trace.jsonl"
         if summ.exists():
             continue
-        if trace.exists():                              # a stopped run: kept, the repeat starts a new trace name
+        if max_runs is not None and started >= max_runs:
+            break
+        started += 1
+        if trace.exists():                            # a stopped run: kept, the repeat starts a new trace name
             trace = out / f"{name}_trace_{time.strftime('%H%M%S')}.jsonl"
         runner = V3Runner(remote=True)
         t0 = time.time()
@@ -673,6 +677,7 @@ def main():
     ap.add_argument("--phase", choices=["basis", "sizing", "labels", "methods"])
     ap.add_argument("--method", choices=LLM)
     ap.add_argument("--repeat", type=int, choices=REPEATS)
+    ap.add_argument("--max-runs", type=int, default=None, help="agents: at most this many new runs")
     ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args()
     OUT.mkdir(parents=True, exist_ok=True)
@@ -725,7 +730,7 @@ def main():
     elif a.cmd == "agents":
         if a.method is None or a.repeat is None:
             ap.error("--method and --repeat are required")
-        run_agents(a.method, a.repeat)
+        run_agents(a.method, a.repeat, a.max_runs)
     else:
         evaluate_all()
 
