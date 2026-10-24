@@ -1,15 +1,16 @@
 # coordinator
-Updated: 2026-10-24 04:22 (local)
+Updated: 2026-10-24 05:11 (local)
 Lane: course
 Branch: main
 Last inbox item done: 14
 State: working
 Now: relay loop every 10 min (item 8): merges per item 1, `check github` to live sessions whose inbox changed
-Last-seen main: 2ebd422 (inboxes as of 0b16387)
+Last-seen main: 8c5bcff (inboxes as of 8c5bcff)
 Done since last update:
 - Item 9: board allows `waiting on Andrew` and `waiting on <agent>` (`scripts/board.py`, `tasks/README.md`), 8223616; full suite 203 passed
 - Item 1: merged wip/spec-audit (2c0eb60) and then wip/spec-audit-check (f7ec454), `--no-ff`; pending log entries moved into `docs/running_log.md`; suite 203 passed on each merge
 - Item 8: pinged dispatcher 01:22 (inbox changed in 588f052). Coordinator inbox also changed (own). Message tool available: SendMessage + ListAgents
+- 2026-10-24 05:11: inboxes changed in 8c5bcff (ft2 adopted by planning; dispatcher restarts the 3-root slice with ft2, heavy steps off the VM). dispatcher and autotrace sessions not live; not pinged
 - 2026-10-24 04:22: item 1: merged wip/freeze-v3 (2ebd422; ready to merge 04:16): 852 files, 827 of them small JSON/JSONL results (4.6 MB, no images). Conflict in docs/decisions.md (re-pin entry on both sides, from item 14): kept both sides, one re-pin entry. Suite 250 passed; log entry moved. No session waits on freeze-v3
 - 2026-10-24 01:52: pinged dispatcher (restarted; inbox changed in 114b286, after its last check)
 - 2026-10-24 01:41: inboxes changed in f1aa878, 4285985, 6848a23: pinged freeze-v3, autotrace, turn-long. dispatcher session not live; not pinged
@@ -46,8 +47,7 @@ Branches (last commit, state):
 - wip/readme-check, wip/vm-setup, wip/auditor-v1b, wip/fq-real, wip/auditor-v1, wip/scored-v1, wip/freeze-v2, heldout/faults, wip/baselines, wip/diag-review, wip/lab-report-1, wip/gatekeeper: merged
 Needs Andrew:
 - freeze-v3: review `results/2026-10-23_freeze_v3/README.md` (all 12 accept_repaired rods measure well unremedied; second_root 0 correct for every method)
-- dispatcher: go-ahead to restart 0711_c1 (freeze-v3 LLM runs have ended, so VM memory should be freer)
-- autotrace: adopt net2_midline_ft2 (may be planning's call under the 2026-10-24 delegation)
+- Restart dispatcher and autotrace: new inbox items (8c5bcff) waiting; sessions not live
 - Workstation disk: host-setup work folder 9.9 of 20 GB after one root; sessions cannot delete there (host-setup status)
 - lab-report-2 and spec-audit-r sessions no longer live; wip/lab-report-2 status still says working (13:29)
 - Old lab-report-2 session (started 00:37) stopped 13:45 on Andrew's go-ahead; the 13:27 one remains
