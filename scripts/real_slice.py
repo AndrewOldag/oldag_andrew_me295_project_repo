@@ -1,6 +1,6 @@
 """The smallest real slice, end to end: dispatcher -> tracker -> checker -> diagnostician -> auditor.
 
-  python scripts/real_slice.py [--root 0708_m12 --from-h 4 --to-h 6] [--dispatcher agent|script] [--no-agent] [--out DIR]
+  python scripts/real_slice.py [--root 0708_m12 --from-h 4 --to-h 6] [--dispatcher agent|script] [--no-agent] [--audit-only] [--out DIR]
 
 One include-yes root, one window inside its usable hours. The dispatcher (LLM agent by default, or the
 script baseline) splits the window into a task and submits it; the job tracks the window on the compute
@@ -26,6 +26,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from agents import dispatcher as D  # noqa: E402
 from agents.executors import Slice  # noqa: E402
+from agents.actions import ACTION_SETS, ActionSet  # noqa: E402
 from agents.orchestrator import Orchestrator  # noqa: E402
 from audit.llm import AuditBatch  # noqa: E402
 from audit.view import batch_table, batch_view  # noqa: E402
@@ -92,6 +93,44 @@ class NotCalled(Accepted):
         self.status, self.args, self.note = "not_called", {}, "--no-agent: diagnostician not called"
 
 
+def run_auditor(summaries, records, launcher, out):
+    """The LLM auditor on the batch. With no accepted run there is nothing to flag or clear; the auditor still
+    reviews the batch and writes its report."""
+    views, stats, _ = batch_view(summaries, records, key="real_slice")
+    batch = AuditBatch({"batch": "real_slice", "table": batch_table(views, stats), "runs": views})
+    if not batch.accepted:
+        # flag and clear take accepted run ids only; with none, an empty id list is not a valid schema.
+        # The auditor keeps request_info and report (audit/llm.py unchanged).
+        keep = [x for x in batch.actions.actions if x.name in ("request_info", "report")]
+        batch.actions = ActionSet("auditor", keep, notes="No run in this batch was accepted: nothing to flag or "
+                                                         "clear. Review the batch and report.")
+        ACTION_SETS["auditor"] = batch.actions
+    (out / "auditor_trace.jsonl").unlink(missing_ok=True)
+    o = Orchestrator(launcher, out / "auditor_trace.jsonl").run("auditor", batch.label, batch.task(), batch.executors())
+    return {"status": o.status, "report": o.args.get("text"), "decisions": batch.decisions, "accepted": batch.accepted,
+            "runs": {v["run_id"]: v["status"] for v in views}, "steps": o.steps, "calls": o.calls,
+            "input_tokens": o.input_tokens, "output_tokens": o.output_tokens}
+
+
+def audit_only(out):
+    """Rebuild the batch from out/summary.json and the cached tracker outputs; run the auditor; update the summary."""
+    from measure.remedies import TrackSettings
+    from agents.launcher import Launcher
+    summ = json.loads((out / "summary.json").read_text())
+    runner, launcher = RealRunner(), Launcher()
+    summaries, records = [], []
+    for tid, s in summ["tasks"].items():
+        root, frm = tid.rsplit("__w", 1)
+        w = RealWindow(root, float(frm), float(summ["window_h"][1]))
+        records.append(runner.measure(w, TrackSettings(**s["final_settings"])).record)
+        summaries.append(s)
+    summ["auditor"] = run_auditor(summaries, records, launcher, out)
+    summ["auditor"]["mode"] = "--audit-only on the recorded batch"
+    (out / "summary.json").write_text(json.dumps(summ, indent=1, default=str))
+    a = summ["auditor"]
+    print(f"auditor: {a['status']}" + (f": {a.get('report')}" if a.get("report") else ""))
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--root", default="0708_m12")
@@ -100,8 +139,13 @@ def main():
     ap.add_argument("--dispatcher", choices=["agent", "script"], default="agent")
     ap.add_argument("--no-agent", action="store_true",
                     help="script dispatcher, tracker and checker only; no LLM call (diagnostician and auditor skipped)")
+    ap.add_argument("--audit-only", action="store_true",
+                    help="run only the auditor on the batch recorded in --out (cached tracker outputs; no re-run)")
     ap.add_argument("--out", default=None)
     a = ap.parse_args()
+    if a.audit_only:
+        out = Path(a.out).resolve() if a.out else ROOT / "results" / f"{datetime.date.today().isoformat()}_real_slice"
+        return audit_only(out)
     if a.no_agent:
         a.dispatcher = "script"
 
@@ -158,19 +202,7 @@ def main():
 
     audit = None
     if summaries:
-        views, stats, ids = batch_view(summaries, records, key="real_slice")
-        view = {"batch": "real_slice", "table": batch_table(views, stats), "runs": views}
-        batch = AuditBatch(view)
-        if a.no_agent:
-            audit = {"status": "not_called", "note": "--no-agent"}
-        elif batch.accepted:
-            o = Orchestrator(launcher, out / "auditor_trace.jsonl").run("auditor", batch.label, batch.task(),
-                                                                       batch.executors())
-            audit = {"status": o.status, "report": o.args.get("text"), "decisions": batch.decisions,
-                     "steps": o.steps, "calls": o.calls}
-        else:
-            audit = {"status": "not_called", "note": "no accepted run in the batch: nothing to flag or clear",
-                     "runs": {v["run_id"]: v["status"] for v in views}}
+        audit = {"status": "not_called", "note": "--no-agent"} if a.no_agent else             run_auditor(summaries, records, launcher, out)
         print(f"auditor: {audit['status']}" + (f": {audit.get('report')}" if audit.get("report") else ""))
 
     summary = {"root": a.root, "window_h": [a.from_h, a.to_h], "dispatcher_mode": a.dispatcher,
