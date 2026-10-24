@@ -56,3 +56,33 @@ def test_rod_done(tmp_path):
     assert sweep.rod_done(rods, "a")
     (rods / "b_truth.npz").write_bytes(b"")      # rendered before the marker existed
     assert sweep.rod_done(rods, "b")
+
+
+def test_lock_removes_only_its_own(tmp_path, monkeypatch):
+    monkeypatch.setattr(sweep.os, "getpgid", lambda _: 0, raising=False)
+    assert sweep.take_lock(tmp_path, "plan.json")
+    assert not sweep.take_lock(tmp_path, "plan.json")    # one sweep at a time
+    sweep.release_lock(tmp_path)
+    assert not sweep.lock_path(tmp_path).exists()
+
+
+def test_foreign_stale_lock_left_in_place(tmp_path, monkeypatch):
+    monkeypatch.setattr(sweep.os, "getpgid", lambda _: 0, raising=False)
+    foreign = '{"pid": 999999, "pgid": 999999, "plan": "other.json", "started": "2026-10-20 08:00:00"}'
+    sweep.lock_path(tmp_path).write_text(foreign)
+    assert not sweep.take_lock(tmp_path, "plan.json")    # stale or live: refused, not replaced
+    sweep.release_lock(tmp_path)
+    assert sweep.lock_path(tmp_path).read_text() == foreign
+    sweep.lock_path(tmp_path).write_text("not json")      # unreadable lock: also left alone
+    sweep.release_lock(tmp_path)
+    assert sweep.lock_path(tmp_path).read_text() == "not json"
+
+
+def test_same_pid_other_start_time_not_removed(tmp_path, monkeypatch):
+    monkeypatch.setattr(sweep.os, "getpgid", lambda _: 0, raising=False)
+    assert sweep.take_lock(tmp_path, "plan.json")
+    other = {**sweep._OWN_LOCK, "started": "2000-01-01 00:00:00"}
+    sweep.lock_path(tmp_path).write_text(sweep.json.dumps(other))
+    sweep.release_lock(tmp_path)
+    assert sweep.lock_path(tmp_path).exists()
+    sweep._OWN_LOCK.clear()
