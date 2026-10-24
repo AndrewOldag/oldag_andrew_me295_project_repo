@@ -1,5 +1,5 @@
 # autotrace
-Updated: 2026-10-23 21:05 (local)
+Updated: 2026-10-23 21:20 (local)
 Lane: course
 Branch: wip/autotrace
 Last inbox item done: 10
@@ -19,4 +19,5 @@ Needs Andrew:
 - Review: copy `review/` next to your pack copy, then `python review_traces.py . --backend MacOSX` (112 frames), then `python apply_review.py . --frames-root <your frames folder>`
 - Hand-trace rejected frames (traces_reviewed.json) and the 28 held-out frames (held_out_worklist_local.json) with trace_midlines.py
 - Two-root frames (#48, #49 held out; #57): the draft follows one root; check it is the one you want
+- Data-use rule: net2_midline_ft.pt was fine-tuned on 115 July traces, 43 of them from roots not include-yes (c1, c7 no; c3, c12 unsure), 4 of those after the usable window (c3 19.4, 21.7, 24.0 h; c12 24.0 h). It is the accepted real-movie midline source. Proposed: the planned fine-tune starts from base net2 and uses only include-yes, in-window traces (72 July + reviewed pack); results from the current net stay provisional until then. Decide
 - Say if drafts should run tip -> base like the July traces (order does not change the fine-tune)
