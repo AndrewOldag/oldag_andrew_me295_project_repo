@@ -16,7 +16,7 @@ Scoring seeds 20, 21, 22. Tracker only, no agent. Repair criteria (spec 2026-10-
 | v3_bend24_clean_s20 | accept_clean | accept_clean | - | yes, yes |
 | v3_bend24_clean_s21 | accept_clean | accept_clean | - | yes, yes |
 | v3_bend24_clean_s22 | accept_clean | accept_clean | - | yes, yes |
-| v3_bend30_clean_s20 | accept_clean | clean_fails | - | no, yes |
+| v3_bend30_clean_s20 | accept_clean | accept_clean | - | no, yes |
 | v3_bend30_clean_s21 | accept_clean | accept_clean | - | yes, yes |
 | v3_bend30_clean_s22 | accept_clean | accept_clean | - | yes, yes |
 | v3_still_clean_s20 | accept_clean | accept_clean | - | yes, yes |
@@ -57,10 +57,10 @@ Scoring seeds 20, 21, 22. Tracker only, no agent. Repair criteria (spec 2026-10-
 | v3_growth_zone_partial_occlusion_z20_s22 | decline | decline | - | no, no |
 
 - Rods labelled 51 of 51; states not yet run 0
-- Classes: {'accept_clean': 17, 'accept_repaired': 12, 'decline': 21, 'clean_fails': 1}
+- Classes: {'accept_clean': 18, 'accept_repaired': 12, 'decline': 21, 'clean_fails': 0}
 - All-decline would score 21 of 51
-- Label differs from the expected class: 4: v3_bend30_clean_s20, v3_growth_zone_displacement_exceeds_patch_z2x6_s20, v3_growth_zone_displacement_exceeds_patch_z2x6_s21, v3_growth_zone_displacement_exceeds_patch_z2x6_s22
-- Result: STOP for Andrew
+- Label differs from the expected class: 3: v3_growth_zone_displacement_exceeds_patch_z2x6_s20, v3_growth_zone_displacement_exceeds_patch_z2x6_s21, v3_growth_zone_displacement_exceeds_patch_z2x6_s22
+- Result: complete
 
 ## Per state
 
