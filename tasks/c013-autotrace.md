@@ -7,7 +7,7 @@ state: working
 branch: wip/autotrace
 host: workstation, lab server
 created: 2026-10-23 20:12
-last_update: 2026-10-23 20:35
+last_update: 2026-10-23 20:31
 blocker: none
 done_marker: review/review_traces.py and 140 previews in the tracing pack folder; status waiting on Andrew
 ---
