@@ -1,10 +1,10 @@
 # freeze-v3
-Updated: 2026-10-24 04:10 (local)
+Updated: 2026-10-24 04:25 (local)
 Lane: course
 Branch: wip/freeze-v3
 Last inbox item done: 12
 State: working
-Now: LLM runs in blocks of 9 (one at a time), floor 1.5 GB (items 11-12). 242 of 306 done. Last block: 13 runs, 0 harness errors, free 2.0 GB at start, CLI 2.1.310
+Now: LLM runs in blocks of 9 (one at a time), floor 1.5 GB (items 11-12). 255 of 306 done (diagnostician r2 complete). Last block: 13 runs, 0 harness errors, free 2.2 GB at start, CLI 2.1.310
 Done since last update:
 - Item 10: auto-update off (read); per-block CLI version check kept. CLI 2.1.310 on every block so far
 - Method-phase tracker runs complete: 488 of 600 cached, 0 failed. Script and remedy tree: 102 runs; a second run from the cache identical on 102 of 102 (869f130)
