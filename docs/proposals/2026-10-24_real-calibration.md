@@ -29,12 +29,12 @@ From: build account, real-calib session. Date: 2026-10-24. Spec 2026-10-24b, sec
 | 20260721_recovery_kinematics | 0721_c5 | 7-9, 15-17 |
 | 20260721_recovery_kinematics | 0721_c6 | 7-9, 15-17 |
 
-- Replacement order, used only as stated below: 0708_c6, 0708_c5; 0711_c4, 0711_c1; 0714_c13, 0714_c12, 0714_c11, 0714_c10; 0721_c3, 0721_c1 (eligible roots, from the end of the manifest order)
+- Replacement order, used only as stated below: 0714_c13, then 0711_c1 (the eligible roots not in the calibration set and not reserved for section C, picks or backups; amended 2026-10-24 before any compute, after the section C list was written)
 - Fixed non-growing roots: not used. They were imaged on another microscope and camera at about 0.84 um/px, not the SlideBook montage rig at 2.105 um/px
 
 ## Screen (before any check value)
 - The rule section C uses (dispatcher inbox item 29): a window is measured only if the ft2 net tip point lies within 15 px of the root-mask apex, median over 5 window frames (first, last and 3 evenly spaced between; `scripts/remote/tip_apex_probe.py`)
-- A window that fails the screen, or whose midline or tracker run fails, is listed with the reason and left out of the percentile. It is not replaced, unless fewer than 12 windows or fewer than 3 experiments remain. Then the next replacement root of the experiment with the fewest windows is added, both windows, until both minimums are met
+- A window that fails the screen, or whose midline or tracker run fails, is listed with the reason and left out of the percentile. It is not replaced, unless fewer than 12 windows or fewer than 3 experiments remain. Then the next replacement root is added, both windows, until both minimums are met
 
 ## Measurement (same as the real slice)
 - Midline: ft2 net (`net2_midline_ft2.pt`), tile mode, low 0.1 %, high 99.5 %, window frames only
