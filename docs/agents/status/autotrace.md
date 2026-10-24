@@ -1,10 +1,10 @@
 # autotrace
-Updated: 2026-10-23 22:20 (local)
+Updated: 2026-10-23 22:50 (local)
 Lane: course
 Branch: wip/autotrace
 Last inbox item done: 11
-State: waiting on Andrew
-Now: review set ready in the tracing pack folder, `review/` (lab data root, `me295/tracing_pack_20261023/review/`); waiting for Andrew's y/n and hand traces, then status waiting on Andrew for the fine-tune go (item 11). Nothing fine-tuned
+State: working
+Now: item 12, fine-tune net2_midline_ft2.pt from base net2 on 72 July + 109 pack traces (cluster GPU, under the $5 cap; $0.45 spent so far), then score 3 nets on the 28 held-out frames
 Done since last update:
 - Item 11 recorded: the next fine-tune starts from base net2 and trains only on include-yes, in-window traces (72 July + reviewed pack), never held-out frames; draft order stays base -> tip. For the coordinator: this decision belongs in docs/decisions.md (this task may not edit it)
 - Item 2, landmark rule: drafts end on the midline 35 px (74 um) behind the root apex. Measured on 9 July frames: median 35.3 px, range 23.4-63.5 px; 1 frame excluded (mask merged with a bubble). July traces run tip -> base; drafts run base -> tip as the inbox says
