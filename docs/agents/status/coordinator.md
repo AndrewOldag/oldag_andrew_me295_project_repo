@@ -1,12 +1,15 @@
 # coordinator
-Updated: 2026-10-24 13:24 (local)
+Updated: 2026-10-24 13:30 (local)
 Lane: course
 Branch: main
 Last inbox item done: 20
 State: working
 Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8 (relay part), 10, 11, 16, 17 (item 20)
-Last-seen main: 9aa97bf (inboxes as of 9aa97bf)
+Last-seen main: feba21b (inboxes as of feba21b)
 Done since last update:
+- 2026-10-24 13:30 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working, wip/lab-report-2 working, status/turn-long and status/spec-audit-r research lane)
+- 13:30: item 8: only the coordinator inbox changed since 9aa97bf (item 21, feba21b); no pings. Item 10: no status waits on an agent. Item 16: no status says `waiting on server job` (dispatcher now working, 13:30). Item 2: hook ran on push
+- 13:30: item 21 (tick cost cut) read, not done in this pass: it edits the script running this pass and needs a test full pass, i.e. starting a headless session, which a tick pass may not do. Under Needs Andrew
 - 2026-10-24 13:24 (tick): item 1 and 19(3): merged wip/coord-tick (9aa97bf; ready to merge 13:10). Conflicts: coordinator inbox (both sides added item 19: planning's kept as 19, coord-tick's renumbered 20); decisions (kept main's corrected v3.1 wording, added the tick entry). Suite 259 passed; log entry moved (item number noted). wip/audit-marks already merged (e3c0268)
 - 13:24: item 19(1): v3.1 wording on main seen (b16f82f). Item 19(2): `private/workstation.md` replaced with the refreshed copy (server file of 12:00 plus the host-setup survey section, as in the freeze-v31 worktree); old copy kept beside it with suffix .2026-10-23 (git-ignored)
 - 13:24: item 16: dispatcher `waiting on server job`: lab-server marker `ft2_chain.done` present (13:21), dispatcher last pushed 12:56; workstation `ws_ft2_chain.done`/`.failed` not present yet. Item 8: dispatcher inbox changed (item 27, b16f82f). Pinged dispatcher 13:24 (`check github`)
@@ -55,12 +58,13 @@ Branches (last commit, state):
 - wip/coord-tick: 2026-10-24 13:09, ready to merge, merged 9aa97bf
 - wip/freeze-v3: 2026-10-24 04:16, ready to merge, merged 2ebd422
 - status/turn-long: 2026-10-24 02:42, done (research lane, not merged)
-- wip/dispatcher: 2026-10-24 12:56, waiting on server job (lab-server marker now present; pinged)
+- wip/dispatcher: 2026-10-24 13:27, working (3-root agent run started 13:29)
 - wip/lab-report-2: 2026-10-23 13:29, working
 - status/spec-audit-r: 2026-10-23 13:42, done (research lane, not merged)
 - status/gate2: 2026-10-16 12:27, delete approved, Andrew runs it (research lane, not merged)
 - wip/readme-check, wip/vm-setup, wip/auditor-v1b, wip/fq-real, wip/auditor-v1, wip/scored-v1, wip/freeze-v2, heldout/faults, wip/baselines, wip/diag-review, wip/lab-report-1, wip/gatekeeper: merged
 Needs Andrew:
+- Coordinator item 21 (tick cost cut: marker check in the script, smaller model, token log) needs a live session (e.g. coord-tick or a new one): a tick pass cannot test a full pass without starting a session
 - coord-tick (merged): install the scheduled task elevated: `scripts\ops\install_coordinator_tick.ps1`; confirm one scheduled S4U full pass in the tick log with exit 0
 - A live session named `coordinator` (started about 13:17, idle) is listed beside this tick pass; stop it once the tick is installed (coord-tick status)
 - Finished sessions still live and idle: freeze-v31 (merged), turn-long (done), coord-tick (merged); can be closed
