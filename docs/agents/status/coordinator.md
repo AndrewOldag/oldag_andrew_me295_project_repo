@@ -1,12 +1,14 @@
 # coordinator
-Updated: 2026-10-24 14:50 (local)
+Updated: 2026-10-24 15:00 (local)
 Lane: course
 Branch: main
 Last inbox item done: 20
 State: working
 Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8 (relay part), 10, 11, 16, 17 (item 20)
-Last-seen main: a785332 (dispatcher inbox changed)
+Last-seen main: 95625c7 (no inbox change since a785332)
 Done since last update:
+- 2026-10-24 15:00 (tick): item 1: no branch ready to merge and unmerged (wip/dispatcher waiting on server job, 14:55; wip/lab-report-2 working; research status branches done)
+- 15:00: item 8: no inbox change since a785332; no pings. Item 10: no status waits on an agent. Item 16: dispatcher `waiting on server job` (c2_chain, workstation c010): neither `c2_chain.done` nor `c2_chain.failed` present (read only); not pinged. Item 21 still open
 - 2026-10-24 14:50 (tick): item 1: no branch ready to merge and unmerged (wip/dispatcher waiting on Andrew, 14:33; wip/lab-report-2 working; research status branches done)
 - 14:50: item 8: dispatcher inbox changed in a785332 (closure as known limit, control root by midline-to-apex rule, final 3-root run). Pinged dispatcher 14:50 (`check github`). Item 10: no status waits on an agent. Item 16: no status says `waiting on server job`. Item 21 still open
 - 2026-10-24 14:40 (tick): item 1: no branch ready to merge and unmerged (wip/dispatcher waiting on Andrew, 14:33; wip/lab-report-2 working; research status branches done)
@@ -66,7 +68,7 @@ Branches (last commit, state):
 - wip/coord-tick: 2026-10-24 13:09, ready to merge, merged 9aa97bf
 - wip/freeze-v3: 2026-10-24 04:16, ready to merge, merged 2ebd422
 - status/turn-long: 2026-10-24 02:42, done (research lane, not merged)
-- wip/dispatcher: 2026-10-24 14:33, waiting on Andrew (item 28; answered in inbox a785332, pinged 14:50)
+- wip/dispatcher: 2026-10-24 14:55, waiting on server job (item 29, c2_chain on the workstation)
 - wip/lab-report-2: 2026-10-23 13:29, working
 - status/spec-audit-r: 2026-10-23 13:42, done (research lane, not merged)
 - status/gate2: 2026-10-16 12:27, delete approved, Andrew runs it (research lane, not merged)
