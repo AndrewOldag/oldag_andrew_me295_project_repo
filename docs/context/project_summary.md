@@ -1,6 +1,6 @@
 # Project summary
 
-Final summary settled 7 Oct 2026. The text is in `CLAUDE.md`.
+Final summary settled 8 Oct 2026 (running log, 2026-10-08). The text is in `CLAUDE.md`.
 
 ## Design
 | Part | Type | Job |
@@ -20,7 +20,7 @@ Final summary settled 7 Oct 2026. The text is in `CLAUDE.md`.
 - Midline sideways jitter: switch or smooth the midline source
 - Second root in frame: crop or mask
 - Low texture or blur: enlarge patch, or decline
-- Rotation near 7 degrees per frame: decline
+- Fast rotation (synthetic `fast_rotation`, 2 degrees per frame, fails all three checks): decline
 - Bad stage correction: jump in the velocity field at a stage move
 - Width change (mannitol swelling) breaking the constant-width assumption: use the width-free ratio; this is a physical cause, not a measurement fault
 

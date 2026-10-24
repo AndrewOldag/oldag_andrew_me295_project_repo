@@ -58,7 +58,7 @@ Goal: a labeling set on the VM for Andrew, then the real reference once he has l
 
 ### B2. Pull frames (read-only on the server)
 - 3 frames per window (start, middle, end of the hour), from the image folder the tracker uses for real movies. 90 frames
-- Copy with `scp` or `sftp`, bandwidth capped, lowest priority, load checked before starting as for the data steward. One transfer from the server at a time: if the data steward's transfer is running, wait for it to finish
+- Copy with a bandwidth-capped transfer, lowest priority, load checked before starting as for the data steward. One transfer from the server at a time: if the data steward's transfer is running, wait for it to finish
 - Nothing written, moved or deleted on the server
 - Check `df` first; stop at 5 GB used by this task
 - Into the main repo folder, git-ignored: `staging/fq_real_labeling/`

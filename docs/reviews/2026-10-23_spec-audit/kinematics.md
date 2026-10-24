@@ -14,7 +14,7 @@ Reviewer 4 of `docs/specs/2026-10-23_spec-audit.md`. Read-only. Worked on `origi
 - Evidence: from `rod.py:10-13`, plus minus minus = -2 (h Dkappa/Dt + kappa dh/dt) / (1 - kappa^2 h^2). Dividing by the flank sum removes the factor 2h in front of Dkappa/Dt. It does not remove the kappa dh/dt term. Recomputed `measure.info.width_free_ratio` on the field-level `width_change` rod, which has zero curvature rate: the ratio is -0.035 to -0.435 at curvature 1/400 px and -0.017 to -0.214 at 1/800 px, over 12 grid points with flank sum > 5 %/h. Its magnitude is largest near the tip and the base, where the flank sum is small. On `growth_zone` (no width change) the ratio is 0.0. So the docs' statement that the ratio "has no width in it" holds for the factor 2h but not for a changing width. Scoring is not affected: `measure/score.py:79-84` skips the flank term when the ratio is reported
 - Severity: would change a design choice
 - Frozen item: yes (`use_width_free_ratio` remedy and the `width_change` label, freeze v2)
-- Andrew:
+- Andrew: accepted, handled (freeze v3)
 
 ### kinematics-2: DGCR, which needs the kappa·REGR term, is required by the docs and computed nowhere
 - Ours: `docs/context/research_background.md:11` ("Report it next to the flank difference"). No DGCR or angle-production rate exists in `measure/`, `checker/`, `audit/` or `agents/` (searched for `dgcr`, `turning`)
@@ -22,7 +22,7 @@ Reviewer 4 of `docs/specs/2026-10-23_spec-audit.md`. Read-only. Worked on `origi
 - Evidence: kappa·REGR belongs to the angle produced per length per time (DGCR), not to the material curvature rate. `research_background.md` gives no formula for DGCR. Units in the literature are deg/mm/h (`paper_digests.md:29`); the code has no deg/mm/h quantity
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, no action
 
 ### kinematics-3: the arc-length origin is called both "tip" and "quiescent centre"; the code uses the tracked centre point 0
 - Ours: `docs/context/research_background.md:6` ("from the tip (quiescent centre)"); `docs/context/measurement_record.md:35` (`v_mid` "from the tip"); `measure/record.py:138,154-156` (s and v measured from centre-chain index 0); `measure/render.py:201-205` (the seed starts at the frame-0 midline tip)
@@ -30,7 +30,7 @@ Reviewer 4 of `docs/specs/2026-10-23_spec-audit.md`. Read-only. Worked on `origi
 - Evidence: the cap apex and the QC are different origins, separated by the root-cap length. REGR values do not depend on the origin, because REGR is a derivative. Positions in um do depend on it. The code's origin is the tracked patch seeded at the frame-0 midline tip, not the per-frame midline tip. |centre[:,0] - midline[:,0]| on the tracker fixtures is at most 0.09 px on the clean fixtures (`growth_zone_clean_s0/s1`, `rigid_rotation_clean_s0`, `width_change_s0`, `rigid_drift`) and 4.72 px on `growth_zone_low_texture_z0.03_s0`. Not measured on real roots
 - Severity: record only (the course paper reports no positions; any comparison with literature positions needs the origin stated)
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, fixed (0469497)
 
 ### kinematics-4: the flank sign is fixed by image geometry, not by the per-root record the docs require
 - Ours: `docs/context/research_background.md:9` (upper or left flank "set from the per-root record, not from the image"); `measure/record.py:203-213` (`orient_flanks`: plus = +N side at frame 0); `docs/context/measurement_record.md:27`. `manifest/root_manifest.csv` has no flank or orientation column
@@ -38,7 +38,7 @@ Reviewer 4 of `docs/specs/2026-10-23_spec-audit.md`. Read-only. Worked on `origi
 - Evidence: +N = tip-to-base tangent turned +90 deg in (row, col), which is image left for a root growing toward +row. In a mirrored image kappa, plus and minus all change sign together, so the plane-sections check still passes. No check can tell which physical flank is plus. The sign agrees with the curvature sign inside the code (see section 4). Its mapping to the upper or lower flank is not implemented. No real-root flank difference has been reported
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, no action
 
 ### kinematics-5: the docs state the plane-sections relation without a sign and with "root width"; the checker uses minus the tracked flank spacing
 - Ours: `docs/context/research_background.md:14-15`; `checker/checks.py:116-134`; `docs/decisions.md:17`; `docs/context/measurement_record.md:28`
@@ -46,7 +46,7 @@ Reviewer 4 of `docs/specs/2026-10-23_spec-audit.md`. Read-only. Worked on `origi
 - Evidence: `research_background.md:14` reads "Flank difference = root width x material rate of change of curvature". The checker uses plus minus minus = -(spacing) x Dkappa/Dt, where spacing is the distance between the tracked plus and minus points (`record.py:142,161`). The relation holds for the lines whose strain rates are measured, so the tracked spacing is the consistent choice. It equals the root width only if the flank chains lie on the edges. The decisions entry and the record conventions give the sign; `research_background.md` does not. Which width enters the check is reviewed in full by `bending-and-tracking`
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, fixed (0469497)
 
 ### kinematics-6: "flank spacing grows 40 %/h" is linear growth, not a constant relative rate
 - Ours: `measure/rod.py:195-209`; `docs/decisions.md:25`
@@ -54,7 +54,7 @@ Reviewer 4 of `docs/specs/2026-10-23_spec-audit.md`. Read-only. Worked on `origi
 - Evidence: h(t) = 15 + 6 t px, with t in h. Over the 1 h window (40 pairs x 90 s) h goes from 15 to 21 px, so dh/dt / h falls from 40 to 28.6 %/h. The stated true residual 2 kappa dh/dt = 3.0 %/h at 1/400 px holds: dh/dt is constant, and the recomputed field-level plane-sections value is 3.01 %/h
 - Severity: record only
 - Frozen item: yes (the `width_change` fault size, freeze v2); the wording only, not the size
-- Andrew:
+- Andrew: accepted, no action
 
 ## 2. Definitions table
 

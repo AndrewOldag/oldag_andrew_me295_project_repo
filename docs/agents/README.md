@@ -6,7 +6,7 @@ The planning account gives instructions through this folder. Andrew's only messa
 - `inbox/<name>.md` on `main`: written by the planning account only. Numbered items, newest last
 - `status/<name>.md`: written by the agent only
   - Course-lane agents: on their own work branch (`wip/<name>`, or `main` for the coordinator)
-  - Research-lane agents: on branch `status/<name>`, in a clone of this repo kept only for this (`~/coord-<name>/`). Nothing else from the research lane goes into this repo
+  - Research-lane agents: on branch `status/<name>`, in a clone of this repo kept only for this (the agent's status clone; location in `private/paths.md`). Nothing else from the research lane goes into this repo
 
 ## On `check github`
 1. `git fetch origin`
@@ -44,8 +44,8 @@ Needs Andrew:
 | review | course | wip/review | 6 | never run; not needed after freeze v2 |
 | freeze-v2 | course | wip/freeze-v2 | spec 2026-10-12 | done, merged |
 | scored-v1 | course | wip/scored-v1 | spec 2026-10-12b | done, merged |
-| auditor-v1 | course | wip/auditor-v1 | spec 2026-10-13 Task A | to start |
-| fq-real | course | wip/fq-real | spec 2026-10-13 Task B | to start |
+| auditor-v1 | course | wip/auditor-v1 | spec 2026-10-13 Task A | done, merged (f52dbdd) |
+| fq-real | course | wip/fq-real | spec 2026-10-13 Task B | done, merged (742dc79) |
 | data-steward | research | status/data-steward | 7 | unknown |
 | gate2 | research | status/gate2 | 8 | unknown |
 | litreview | research | status/litreview | 9 | unknown |

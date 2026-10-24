@@ -10,7 +10,7 @@ Spec `docs/specs/2026-10-23_spec-audit.md`, Reviewers item 2. Rules: `CLAUDE.md`
 - Evidence: `python scripts/hooks/pre_push_check.py --commits <ref>` over 18 local branches and 18 `origin/` refs (36 refs). Each ref: 1 hit, the same commit and file line; 68-182 commits scanned per ref (`origin/main` 175). No other rule hit on any ref. The line was removed in 80e8a4b. The same hit was logged on 2026-10-12 and left as is by Andrew (`docs/running_log.md:215`). History not rewritten since
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, no action (Andrew's 2026-10-12 decision stands)
 
 ### rules-2: Code run on the lab server renames files there; only `sweep.py` lock files are excepted
 - Ours: `scripts/remote/qb_track.py:134` (`origin/main`) and `:154` (`origin/wip/dispatcher`): output written as `.part.npz`, then `os.replace` to the final name; `measure/runner.py:160-166` `sync_code`: `tar xf` into the code directory overwrites existing code files; `measure/runner.py:197`: plan file written with `cat >`
@@ -18,7 +18,7 @@ Spec `docs/specs/2026-10-23_spec-audit.md`, Reviewers item 2. Rules: `CLAUDE.md`
 - Evidence: rule dated 2026-10-13. Server tracker runs after that date: dispatcher timing runs t1 and t2 on 2026-10-23 (`origin/wip/dispatcher:results/2026-10-23_tracker_timing/README.md`), each through `qb_track.py`, so each ended in one rename. Rename design recorded in `docs/decisions.md:54` (2026-10-11, before the rule). The rule text does not except it. No log entry names it as a rename
 - Severity: would change a design choice
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, handled (freeze v3)
 
 ### rules-3: Paths outside the repo in tracked files, not caught by the hook
 - Ours: `docs/agents/README.md:9`; `docs/agents/inbox/data-steward.md:3`; `docs/agents/inbox/gate2.md:3`, `:17`, `:22`; `docs/agents/inbox/litreview.md:3`; `docs/agents/inbox/spec-audit-r.md:3`; `origin/status/gate2:docs/agents/status/gate2.md:16`
@@ -26,7 +26,7 @@ Spec `docs/specs/2026-10-23_spec-audit.md`, Reviewers item 2. Rules: `CLAUDE.md`
 - Evidence: `git grep -n -E "~/"` on `origin/main` and the unmerged branches: 8 lines with home-directory paths. `pre_push_check.py` `PATH_RE` (`scripts/hooks/pre_push_check.py:49`) matches three Unix mount and home prefixes and drive letters only; it does not match a tilde home path
 - Severity: would change a design choice
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, fixed (069d5e8; the `status/gate2` line goes with that branch)
 
 ### rules-4: Research-lane work (other lab work) described in tracked files on the public remote
 - Ours: `docs/agents/inbox/gate2.md` (26 lines: plan items, settings, roots, review steps); `origin/status/gate2:docs/agents/status/gate2.md` (16 lines: run counts and a pass/fail outcome of the research gate); `docs/agents/inbox/data-steward.md`, `litreview.md`, `spec-audit-r.md` (research-lane sessions)
@@ -34,7 +34,7 @@ Spec `docs/specs/2026-10-23_spec-audit.md`, Reviewers item 2. Rules: `CLAUDE.md`
 - Evidence: read the files. Whether the research-lane content is published is not stated in the repo. Needs Andrew to decide
 - Severity: would change a design choice
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, fixed (branch `status/gate2` removed from the remote, inbox audit-marks item 2)
 
 ### rules-5: Access methods and another person's statement named in tracked files
 - Ours: access methods: `docs/running_log.md:17`, `:337`, `:382`, `:383`, `:384`, `:386`, `:388`, `:402`; `docs/reports/2026-10-16_lab-report-1.md:59`, `:60`, `:61`; `docs/specs/2026-10-13_auditor-v1-real-frame-quality-labels.md:61`; `README.md:41`. Another person's statement: `docs/running_log.md:17`
@@ -42,7 +42,7 @@ Spec `docs/specs/2026-10-23_spec-audit.md`, Reviewers item 2. Rules: `CLAUDE.md`
 - Evidence: `git grep -n -oiE "ssh|sftp|scp|gitlab|enterprise seat|..."` on `origin/main`: protocol, transfer tool, remote host type and account type named in log and report lines. Generic uses in code (`measure/runner.py`, `scripts/ops/backup_vm.sh`, `config/*.example.*`) not listed. `docs/running_log.md:17` paraphrases an instruction from the course instructor
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, fixed (3378952)
 
 ### rules-6: Shared-machine transfer above the 50 MB/s cap on 2026-10-16
 - Ours: `docs/running_log.md:386`; `docs/reports/2026-10-16_lab-report-1.md:60`
@@ -50,7 +50,7 @@ Spec `docs/specs/2026-10-23_spec-audit.md`, Reviewers item 2. Rules: `CLAUDE.md`
 - Evidence: log: one 1.14 GB file at 74 MB/s for 15 s; other files "under 54 MB/s" (so some above 50). Logged as a deviation. Later backup capped at 40 MB/s; test run about 28 MB/s (`docs/running_log.md:400`)
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, no action
 
 ### rules-7: Agent single jobs on the lab server do not check the sweep lock
 - Ours: `measure/runner.py:176-180`, `:240`, `:258` (single jobs: load check, nice 19, ionice idle; no lock check); `scripts/synth/scored_v1.py` `agents` command (no `sweep_status` check; the `next` and `fetch` commands check at `:355`, `:374`)
@@ -58,7 +58,7 @@ Spec `docs/specs/2026-10-23_spec-audit.md`, Reviewers item 2. Rules: `CLAUDE.md`
 - Evidence: scored runs v1: 96 tracker runs in 9 sweep rounds at 4 workers, plus 22 single jobs from agent runs (`docs/running_log.md:304`). `staging/tracks_scored_v1/sweeps.jsonl` (32 lines) has no timestamps, so overlap of single jobs with a running sweep cannot be checked from disk. Agent traces start 2026-10-12T22:55:35
 - Severity: would change a design choice
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, handled (freeze v3)
 
 ### rules-8: Sweeps before the shared-machine limits ran without them
 - Ours: commit 52e8064 (2026-10-10, `scripts/synth/sweep.py`, `--workers 4`, no thread cap, nice or load gate); `docs/running_log.md:113`, `:130` (22 and 354 tracker runs, 2026-10-10)
@@ -66,7 +66,7 @@ Spec `docs/specs/2026-10-23_spec-audit.md`, Reviewers item 2. Rules: `CLAUDE.md`
 - Evidence: worker count 4 in 52e8064. Thread variables, nice, ionice and load gates added in b04ca85 (2026-10-11 11:21). The runs precede the rule
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, no action
 
 ### rules-9: Real-movie frames staged from 7 windows of roots not `include` yes; not labelled or used
 - Ours: `private/fq_real_candidates.csv` status "replaced", `private/fq_real_frames.json`; `docs/running_log.md:350`
@@ -74,7 +74,7 @@ Spec `docs/specs/2026-10-23_spec-audit.md`, Reviewers item 2. Rules: `CLAUDE.md`
 - Evidence: 37 candidate windows, 111 frames. 30 windows (90 frames) inside the usable window of an `include` yes root. 7 windows (21 frames) on roots with `include` unsure or no, staged by the first labeling set (e6c3b78), then replaced (18e45ce): 0714_m3 10.0-11.0 h; 0708_m5 21.0-22.0 h; 0714_c8 5.0-6.0 h; 0714_c3 15.0-16.0 h; 0711_m8 20.0-21.0 h; 0721_c12 17.0-18.0 h; 0708_c1 14.0-15.0 h. Their frames and views were removed from the VM staging; no label was written; `staging/fq_real_labeling/frames/` now holds only the 30 kept windows; none is in `private/fq_real_values.csv` or `labels.csv`
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, no action
 
 ### rules-10: Prompts and thresholds changed after the first held-out result, before freeze-v2 was tagged
 - Ours: commit order (`git log --all --date=iso`, Pacific time, 2026-10-12 unless noted):
@@ -92,7 +92,7 @@ Spec `docs/specs/2026-10-23_spec-audit.md`, Reviewers item 2. Rules: `CLAUDE.md`
 - Evidence: changes at 20:24-20:32 follow the checker-only held-out sizes and are inside freeze-v2. The single-agent prompt (4192747) is after the freeze-v2 tag and the held-out labels, before any scored run; no freeze version names it; its proposal (51f1598) says committed before any run. Auditor prompt rounds ran after the held-out scored records were committed (f2b727e); the proposal states development on the 4 dev batches only. Diagnostician prompt sha256 prefix 83ba54768d332ae4 at freeze-v2, c9d5a0c and `origin/main`, and in all 210 diagnostician steps of scored runs (dev and held-out). Single-agent prompt c8a9d43830928498 at 4192747 and `origin/main`, in all 272 steps. Auditor held-out prompt 2541926380a9e924 = aa8483a = `origin/main`, in all 12 held-out auditor traces. `git diff freeze-v2 origin/main` on `checker/`, `measure/remedies.py`, `config/checker_thresholds.yaml`, `agents/prompts/diagnostician.md`: no change. On `agents/actions.py`: 1 line (`ACTION_SETS["single_agent"]`). No change to prompts, thresholds or remedies after the first held-out agent result except the `real:` frame-quality section and the version re-pin
 - Severity: record only
 - Frozen item: yes (freeze-v2: diagnostician prompt, remedies, thresholds); no for the single-agent and auditor prompts
-- Andrew:
+- Andrew: accepted, no action
 
 ### rules-11: Staged real frames kept on the VM after use
 - Ours: `staging/fq_real_labeling/frames/` (90 frames, 30 windows) and `view/` (30 files) in the main checkout; `docs/running_log.md:374`
@@ -100,7 +100,7 @@ Spec `docs/specs/2026-10-23_spec-audit.md`, Reviewers item 2. Rules: `CLAUDE.md`
 - Evidence: frames listed on disk 2026-10-23. Log: kept until Andrew says to delete (fq-real inbox item 6)
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, no action
 
 ## Checked, no finding
 - Pre-push scan, other rules: `pre_push_check.py --commits <ref>` on 36 refs: 0 hits besides rules-1

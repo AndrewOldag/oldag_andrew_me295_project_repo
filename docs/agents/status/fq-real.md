@@ -3,8 +3,8 @@ Updated: 2026-10-14 (local)
 Lane: course
 Branch: wip/fq-real
 Last inbox item done: 6
-State: ready to merge
-Now: waiting for the coordinator to merge wip/fq-real; no further work until a new item
+State: done
+Now: done; wip/fq-real merged in 742dc79 (state set by audit-marks 2026-10-24, spec audit specs-11)
 Done since last update:
 - Item 6: 90 staged frames kept on the VM in staging/fq_real_labeling/ until the reference is recomputed with the real-tracking midline source. Nothing deleted
 - Item 5: `real:` section in config/frame_quality_reference.yaml, provisional, from 24 clean windows (72 frames); limits recorded in config and docs/decisions.md (c8eeedd)
