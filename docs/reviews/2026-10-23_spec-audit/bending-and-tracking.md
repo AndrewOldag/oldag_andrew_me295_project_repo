@@ -19,7 +19,7 @@ Depth labels in the network are `full_text`, `partial`, `abstract_only`, `metada
 - Evidence: at 0.84 um/px a reported zone of 0.25-0.8 mm is 300-950 px long, and the BeemsterBaskin1998 day-6 growth zone (1231 um) is 1465 px. The synthetic tracked length is 400 px. Closure assumes the most basal tracked point is not growing (`checker/checks.py:87-96`)
 - Severity: would change a design choice
 - Frozen item: yes (checker thresholds, approved 2026-10-10, basis: clean rods at 1.5 px/frame; synthetic rod geometry under freeze v2)
-- Andrew:
+- Andrew: accepted, handled (freeze v3)
 
 ### bending-and-tracking-2: The development `low_texture` fault has texture and focus values inside the range of real windows labelled clean
 - Ours: `measure/render.py:71-72` (`low_texture`: contrast 0.03, blur 2 px, noise 40); `config/frame_quality_reference.yaml:8-9` (clean synthetic: texture_contrast median 0.193, lowest 0.155; focus median 0.090, lowest 0.073); `config/frame_quality_reference.yaml:22-23` (real, provisional: texture_contrast median 0.0648, lowest 0.0439; focus median 0.0286, lowest 0.0213); `results/2026-10-12b_scored_v1/dev/diagnostician_low_texture_s1_trace.jsonl` (frame_quality result)
@@ -30,7 +30,7 @@ Depth labels in the network are `full_text`, `partial`, `abstract_only`, `metada
 - Evidence: the checker fails every `low_texture` rod (`config/checker_thresholds.yaml:9`, rigid_invariance >= 152 %/h). Its label is decline (`docs/decisions.md`, 2026-10-10 and 2026-10-11)
 - Severity: would change a design choice
 - Frozen item: yes (`low_texture` development size, approved 2026-10-11; frame_quality reference, approved 2026-10-12)
-- Andrew:
+- Andrew: accepted, handled (freeze v3)
 
 ### bending-and-tracking-3: The strongly bent clean rods bend 30 and 45 deg/h. Reported Arabidopsis gravitropic rates are 16-24 deg/h. The flank-difference tolerance takes its basis from the 45 deg/h rod
 - Ours: `measure/rod.py:236-237` (`bend_continue` 30 deg/h, `bend_reverse` 45 deg/h, both centred at s = 150 px, sigma 40 px); `measure/rod.py:261` (`bending` bump, 3.4 deg/h recomputed); `config/scoring_tolerance.yaml:12-13` (flank_difference_rms 1.0 %/h, basis "largest clean 0.797 (bend_reverse s0, enlarge_patch 2x)"); `docs/decisions.md` 2026-10-11 (flank-difference tolerance)
@@ -41,7 +41,7 @@ Depth labels in the network are `full_text`, `partial`, `abstract_only`, `metada
 - Evidence: a rod that bends faster than biology makes the checks harder, not easier. The tolerance basis is the case where this has an effect: the largest clean flank-difference error comes from the fastest-bending rod. Whether a 16-24 deg/h rod gives a smaller error was not run
 - Severity: would change a design choice
 - Frozen item: yes (scoring tolerance `flank_difference_rms_pct_per_h` 1.0, approved 2026-10-12)
-- Andrew:
+- Andrew: accepted, handled (freeze v3)
 
 ### bending-and-tracking-4: The plane-sections check uses the measured flank-track separation, which is half the rendered root diameter. The literature uses the full organ diameter. `research_background.md` says "root width"
 - Ours: `checker/checks.py:116-125` (`pred = -_window_mean(f["spacing"] * f["kappa_rate"])`); `measure/record.py:141,165,170` (`spacing` = mean Euclidean distance between paired plus and minus track points over the frame pair); `measure/rod.py:54` (h = 15 px), `measure/rod.py:179` (truth spacing 2h = 30 px); `measure/render.py:161` (rendered root radius R = 2h = 30 px); `docs/proposals/2026-10-12_heldout-faults.md:257` ("root radius 30 px, flank lines at +-15 px"); `docs/context/research_background.md:14` ("Flank difference = root width x material rate of change of curvature")
@@ -52,7 +52,7 @@ Depth labels in the network are `full_text`, `partial`, `abstract_only`, `metada
 - Evidence: the width-free ratio (plus - minus)/(plus + minus) at offset +-h is not the BastienEtAl2014 Delta at the surfaces. For a strain rate linear across the section it is h/R = 0.5 of it. `research_background.md:11` asks for DGCR (ChavarriaKrauser2006, abstract_only) to be reported next to the flank difference. Any comparison with a published Delta, Delta-tilde or DGCR needs the offset stated
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, no action
 
 ### bending-and-tracking-5: No injector changes brightness over time or puts different background behind the root
 - Ours: `measure/render.py:168` (`img = background + amplitude * inside * shade * (1 + contrast * tv)`; background, amplitude and contrast constant over frames and along the root); `measure/render_heldout.py:206` (same)
@@ -60,7 +60,7 @@ Depth labels in the network are `full_text`, `partial`, `abstract_only`, `metada
 - Evidence: the image-level injectors are `rigid_drift`, `displacement_exceeds_patch`, `midline_jitter`, `low_texture`, `width_change` (`measure/render.py:22-23`) and `second_root`, `fast_rotation`, `bad_stage_correction`, `flank_swap`, `partial_occlusion` (`measure/render_heldout.py:37`). None changes illumination between frames or varies the background along the root
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, no action
 
 ### bending-and-tracking-6: No injector models out-of-plane growth
 - Ours: `measure/rod.py:99-116` (planar rod); `measure/render.py:132-182`
@@ -68,7 +68,7 @@ Depth labels in the network are `full_text`, `partial`, `abstract_only`, `metada
 - Evidence: every rod lies in the image plane. If the root tilts out of the plane, the projected lengths shorten and an apparent strain rate appears. No injector or check targets this. Rigid invariance covers only in-plane rigid motion (`checker/checks.py:56-77`)
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, no action
 
 ### bending-and-tracking-7: Every synthetic rod has a growth field that is steady over the window. The elongation-zone position of real Arabidopsis roots moves within an hour
 - Ours: `measure/rod.py:50-51` (`v(s)`, `regr(s)` with no time argument); `measure/rod.py:166-169` (truth broadcast over frame pairs); `checker/checks.py:42-47` (window means)
@@ -76,7 +76,7 @@ Depth labels in the network are `full_text`, `partial`, `abstract_only`, `metada
 - Evidence: a 75 um span is 36 px at 2.105 um/px and 89 px at 0.84 um/px. The synthetic growth zone is 202 px long (20 % rule). The checks are linear in the fields and do not assume a steady state. Scoring compares against a time-constant truth, so no scored rod tests a moving zone
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, no action
 
 ### bending-and-tracking-8: The lower frame-rate bound and faults that begin mid-window are not injected
 - Ours: `measure/render.py:63-68` (`displacement_exceeds_patch`: stride raised only); `measure/render.py:71-72` (`low_texture` applies to every frame); `agents/actions.py:33` (`change_frame_stride`: half, double)
@@ -85,7 +85,7 @@ Depth labels in the network are `full_text`, `partial`, `abstract_only`, `metada
 - Evidence: blur from condensation builds up over time. `low_texture` blurs every frame from frame 0. The held-out faults `fast_rotation`, `bad_stage_correction`, `flank_swap` and `partial_occlusion` begin mid-window. No development fault does
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, no action
 
 ### bending-and-tracking-9: No rod has a width that varies along s
 - Ours: `measure/rod.py:54-55` (`h(t)`, no s argument); `measure/rod.py:198-209` (`width_change`: varies in time only)
@@ -93,7 +93,7 @@ Depth labels in the network are `full_text`, `partial`, `abstract_only`, `metada
 - Evidence: if the width varies along s, tissue moving basally through a taper changes width as it moves (Dh/Dt = v dh/ds). This adds 2 kappa Dh/Dt to the plane-sections residual in a curved region. This is the same term the `width_change` fault injects, but with no change in time at fixed s. No rod tests it
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, no action
 
 ## 2. Failure modes: literature against our injectors and checks
 

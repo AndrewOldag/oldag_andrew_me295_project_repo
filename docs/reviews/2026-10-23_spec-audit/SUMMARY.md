@@ -155,3 +155,6 @@ Other checks for Andrew, not papers:
 ## Next
 - spec-audit-check: verifies the 17 design-choice findings, 10 record-only findings (seed 0) and 10 literature citations; writes `CHECK.md`
 - Andrew: marks each finding accepted or rejected in the reviewer files. A finding that changes a frozen item needs a new freeze version
+
+## Marks
+- Marked by Andrew 2026-10-24 (written by the audit-marks session at his direction): all 71 findings accepted; 13 handled (freeze v3 / v3.1), 17 fixed, 2 known limit (report), 39 no action. Marks on each `- Andrew:` line in the reviewer files
