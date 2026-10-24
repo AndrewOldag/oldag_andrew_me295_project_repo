@@ -1,5 +1,7 @@
-"""Tests for scripts/ops: heartbeat gap rule, backup refusals and no server delete."""
+"""Tests for scripts/ops: heartbeat gap rule, backup refusals, no server delete, coordinator tick."""
 
+import json
+import os
 import shutil
 import subprocess
 from pathlib import Path
@@ -69,3 +71,84 @@ def test_ops_scripts_name_no_location():
         text = f.read_text(encoding="utf-8")
         for bad in ("caltech", "/mnt" + "/", "Users" + "/", "vm-backup" + "/", "D:" + "/", "/d" + "/"):
             assert bad not in text, f"{f.name}: {bad}"
+
+
+# Coordinator tick (scripts/ops/coordinator_tick.ps1): git and claude are stubs
+
+POWERSHELL = shutil.which("powershell") or shutil.which("pwsh")
+needs_ps = pytest.mark.skipif(POWERSHELL is None or os.name != "nt", reason="needs Windows PowerShell")
+
+GIT_STUB = r"""@echo off
+echo %* >> "%STUB_LOG%"
+echo %* | findstr /C:"ls-remote" >nul && (type "%STUB_REFS%" & exit /b 0)
+echo %* | findstr /C:"rev-parse" >nul && (echo 0123456789abcdef & exit /b 0)
+exit /b 0
+"""
+
+CLAUDE_STUB = r"""@echo off
+echo called >> "%STUB_CLAUDE%"
+echo {"result":"done\nPINGED: none; TO PING: none","usage":{"input_tokens":5,"output_tokens":7},"num_turns":2}
+"""
+
+REFS_A = "aaa1\trefs/heads/main\nbbb2\trefs/heads/wip/x\n"
+
+
+def tick(tmp_path, refs):
+    """One tick with stubbed git and claude. Returns (result, claude calls so far)."""
+    stubs = tmp_path / "stubs"
+    stubs.mkdir(exist_ok=True)
+    (stubs / "git.cmd").write_text(GIT_STUB)
+    (stubs / "claude.cmd").write_text(CLAUDE_STUB)
+    (tmp_path / "refs.txt").write_text(refs)
+    calls = tmp_path / "claude_calls.txt"
+    env = dict(os.environ, STUB_LOG=str(tmp_path / "git.log"), STUB_REFS=str(tmp_path / "refs.txt"),
+               STUB_CLAUDE=str(calls))
+    r = subprocess.run([POWERSHELL, "-NoProfile", "-ExecutionPolicy", "Bypass", "-File",
+                        str(OPS / "coordinator_tick.ps1"), "-Repo", str(tmp_path),
+                        "-Conf", str(tmp_path / "none.conf"), "-TickDir", str(tmp_path / "tick"),
+                        "-Git", str(stubs / "git.cmd"), "-Claude", str(stubs / "claude.cmd")],
+                       capture_output=True, text=True, env=env, timeout=120)
+    assert r.returncode == 0, r.stdout + r.stderr
+    return r, (len(calls.read_text().splitlines()) if calls.exists() else 0)
+
+
+def tick_log(tmp_path):
+    return (tmp_path / "tick" / "tick.log").read_text(encoding="utf-8-sig")
+
+
+@needs_ps
+def test_tick_skips_claude_when_refs_unchanged(tmp_path):
+    assert tick(tmp_path, REFS_A)[1] == 1                     # no state yet: full pass
+    assert tick(tmp_path, REFS_A)[1] == 1                     # same refs, < 60 min: skip
+    log = tick_log(tmp_path)
+    assert "skip: refs unchanged" in log
+    assert "exit: 0" in log and "commit: main=0123456789abcdef" in log
+    assert "tokens in=5 out=7" in log and "pings: PINGED: none; TO PING: none" in log
+    assert not (tmp_path / "tick" / "tick.lock").exists()
+
+
+@needs_ps
+def test_tick_hash_ignores_order_and_sees_changes(tmp_path):
+    tick(tmp_path, REFS_A)
+    reordered = "".join(reversed(REFS_A.splitlines(keepends=True)))
+    assert tick(tmp_path, reordered)[1] == 1                  # same refs, other order: skip
+    assert tick(tmp_path, REFS_A + "ccc3\trefs/heads/wip/y\n")[1] == 2   # new ref: full pass
+
+
+@needs_ps
+def test_tick_full_pass_after_an_hour_and_live_lock(tmp_path):
+    tick(tmp_path, REFS_A)
+    sf = tmp_path / "tick" / "state.json"
+    state = json.loads(sf.read_text(encoding="utf-8-sig"))
+    state["last_full"] -= 61 * 60
+    sf.write_text(json.dumps(state))
+    assert tick(tmp_path, REFS_A)[1] == 2                     # unchanged but 61 min old
+    # a lock held by a live process (this one): no pass, lock left alone
+    ticks = subprocess.run([POWERSHELL, "-NoProfile", "-Command",
+                            f"(Get-Process -Id {os.getpid()}).StartTime.Ticks"],
+                           capture_output=True, text=True).stdout.strip()
+    lock = tmp_path / "tick" / "tick.lock"
+    lock.write_text(f"{os.getpid()} {ticks}")
+    assert tick(tmp_path, REFS_A + "ddd4\trefs/heads/z\n")[1] == 2
+    assert "previous tick still running" in tick_log(tmp_path)
+    assert lock.exists()
