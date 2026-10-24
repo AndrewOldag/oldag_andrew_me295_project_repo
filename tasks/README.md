@@ -23,7 +23,7 @@ done_marker: file or check that shows the task is done
 host: VM | workstation | lab server | cluster | comma list (e.g. workstation, cluster)
 ---
 ```
-- `host` (spec 2026-10-23c): where the task runs; a task with parts on several hosts lists them. One host per part. Outputs and done markers live on the lab server in the task's own folder. Older files without it show `-`
+- `host` (spec 2026-10-23c): where the task runs; a task with parts on several hosts lists them. One host per part; a note in parentheses may follow a host, e.g. `VM (LLM runs)`. Outputs and done markers live on the lab server in the task's own folder. Older files without it show `-`
 - Times are VM local time
 - A task in state `working` with `last_update` older than 30 min is shown as stale
 - On restart, the coordinator sets `working` tasks with no live session to `interrupted` and re-dispatches them
