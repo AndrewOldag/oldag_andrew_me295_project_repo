@@ -3,7 +3,7 @@ id: c018
 title: Real-image noise floor and real-movie thresholds
 lane: course
 owner: real-calib
-state: queued
+state: working
 branch: wip/real-calib
 host: cluster, lab server (light)
 created: 2026-10-24 16:45
