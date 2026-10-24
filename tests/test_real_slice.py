@@ -135,3 +135,49 @@ def test_whole_pixel_moved_copy(tmp_path, monkeypatch):
     rm, mm = np.load(tmp_path / "ref.npz"), np.load(tmp_path / "mv.npz")
     assert np.allclose(rm["midline_image"][2, 0], [20.0, 44.0]) and np.allclose(mm["midline_image"][2, 0], [30.0, 50.0])
     assert rm["mask0"].shape == (50, 74)
+
+
+def test_parse_window():
+    assert RS.parse_window("0711_c1:4-6") == ("0711_c1", 4.0, 6.0)
+    assert RS.parse_window("0721_m10:4.5-6.5") == ("0721_m10", 4.5, 6.5)
+
+
+def test_midline_path_default_and_cached_run_needs_no_host(tmp_path, monkeypatch):
+    cfg = tmp_path / "r.yaml"
+    cfg.write_text("host: h\nwork_dir: /w\ncode_dir: /c\ntracker_code: /t\npython: /p\n"
+                   "windows:\n  r1__w4-6:\n    imgdir: /d.imgdir\n  r2__w4-6:\n    imgdir: /e.imgdir\n"
+                   "    midline: /m.npz\n")
+    r = RealRunner(cfg, cache=tmp_path / "cache")
+    w, st = RealWindow("r1", 4, 6), r.initial_settings(RealWindow("r1", 4, 6))
+    assert r.midline_path(w) == "/w/midline/r1__w4-6_netmid.npz"
+    assert r.midline_path(RealWindow("r2", 4, 6)) == "/m.npz"
+    assert r.cache_path(w, st, "ref").name == "r1__w4-6_wp_ref__st1__L400.npz"
+    calls = []
+    monkeypatch.setattr(r, "_ssh", lambda cmd, stdin=None: calls.append(cmd) or b"")
+    monkeypatch.setattr("measure.real_runner.from_tracker_npz", lambda path, root_id: (path.name, root_id))
+    for k in ("ref", "moved"):
+        r.cache_path(w, st, k).write_bytes(b"")
+    m = r.measure(w, st)
+    assert calls == [] and m.record == ("r1__w4-6_wp_ref__st1__L400.npz", "r1__w4-6")
+
+
+def test_job_count_pattern_does_not_match_its_own_command():
+    import re
+    from measure.real_runner import COUNT_PATTERN, JOB_PATTERN
+    rx = re.compile(COUNT_PATTERN)
+    assert rx.search("python scripts/remote/qb_track.py --imgdir x") and rx.search("python batch_midlines.py y")
+    assert rx.search("python sweep.py run --cache z")
+    assert not rx.search(f"bash -c ps -u 1 -o args= | grep -cE '{COUNT_PATTERN}'")
+    assert set(JOB_PATTERN.split("|")) == {p.replace("[", "").replace("]", "") for p in COUNT_PATTERN.split("|")}
+
+
+def test_condition_in_real_view_only():
+    from audit.view import batch_table, batch_view
+    sl = Slice(FakeRunner(), RealWindow("r1", 4, 6))
+    plain = RS.summarize(sl, RS.Accepted())
+    real = dict(plain, condition="control")
+    rec = sl.current.record
+    views, stats, _ = batch_view([plain, real], [rec, rec], key="k")
+    assert sorted("condition" in v for v in views) == [False, True]
+    rows = batch_table(views, stats)["runs"]
+    assert sorted(r.get("condition", "") for r in rows) == ["", "control"]

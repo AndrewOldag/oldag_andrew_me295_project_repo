@@ -2,7 +2,7 @@
 
 Per run, the record the auditor sees: status, final checks, remedies kept, roll backs, steps, final settings,
 and field summaries from the final measurement record. Built from an allow-list of summary keys; nothing else
-of the run summary is read. Withheld: fault, size, seed, label, truth, error_before, error_after, category,
+of the run summary is read; a real-movie run also shows its root's condition. Withheld: fault, size, seed, label, truth, error_before, error_after, category,
 correct, good, named fault, traces, the method and the run's file name. Runs get opaque ids.
 
 Batch statistics: per field summary, batch median, MAD and robust z per run, z = (x - median) / (1.4826 MAD).
@@ -109,7 +109,8 @@ def run_view(run_id, summary, record):
             "final_settings": {k: settings.get(k) for k in ("stride", "disk_radius", "register",
                                                             "register_from_px", "midline_smooth", "band_mask",
                                                             "width_free")},
-            "summaries": field_summaries(record, bool(settings.get("width_free")))}
+            "summaries": field_summaries(record, bool(settings.get("width_free"))),
+            **({"condition": summary["condition"]} if summary.get("condition") else {})}   # real movies only
 
 
 def robust_z(values):
@@ -163,7 +164,8 @@ def batch_table(views, stats):
             not_gating = c.get("gating") is False
             any_not_gating |= not_gating
             checks[c["check"]] = [c["value"], c["threshold"], "not gating" if not_gating else c["passed"]]
-        rows.append({"run_id": v["run_id"], "status": v["status"], "checks": checks,
+        rows.append({"run_id": v["run_id"], **({"condition": v["condition"]} if "condition" in v else {}),
+                     "status": v["status"], "checks": checks,
                      "steps": v["steps"], "remedies_kept": len(v["remedies_kept"]), "roll_backs": v["roll_backs"],
                      "width_free": v["final_settings"]["width_free"],
                      "summaries": {k: [v["summaries"][k], v["z"][k]] for k in SUMMARIES}})

@@ -6,11 +6,16 @@ window on the compute host with the window's midline file (net midline, decision
 remedy settings, then fetches the output. Outputs are cached locally by window and settings tag.
 
 Host, folders, Python, tracker code and the per-window movie and midline paths come from
-private/real_runner.yaml (git-ignored; template config/real_runner.example.yaml).
+private/real_runner.yaml (git-ignored; template config/real_runner.example.yaml). A window whose midline
+file is missing on the host gets its net midline built there first (`ensure_midline`, inbox item 21):
+segmentation midline (scripts/remote/real_midline.py, for the frame list and mask0), the tracker's
+`midline_ml/batch_midlines.py --mode tile` with the fine-tuned net2 at low 0.1 %, high 99.5 %
+(decisions 2026-10-23), then scripts/remote/net_to_midline.py.
 
 Limits on the host, checked before every tracker run: 1 min load at most half the cores; fewer than
 2 jobs of this account already running; at least `min_free_gb` free on the work disk (workstation rule,
-2026-10-23). Single-thread tracker, nice 19.
+2026-10-23). Single-thread tracker, nice 19. The net midline runs as one process with 3 compute threads
+and 1 prefetch thread (4 workers at most).
 
 Rigid invariance: the runner makes the copies on the host once (scripts/remote/real_moved.py) and tracks
 them with the same settings, as RemoteRunner does for synthetic rods. Default `moved_mode="whole_pixel"`
@@ -35,6 +40,11 @@ from measure.runner import Measurement
 ROOT = Path(__file__).resolve().parents[1]
 REAL_CONFIG = ROOT / "private" / "real_runner.yaml"
 JOB_PATTERN = "qb_track.py|batch_midlines.py|sweep.py run"
+# The same pattern with one letter in brackets, so that the shell running the count does not count itself
+COUNT_PATTERN = "[q]b_track.py|[b]atch_midlines.py|[s]weep.py run"
+MIDLINE_ARGS = ["--mode", "tile", "--midline-weights", "net2_midline_ft.pt", "--lo", "0.1", "--hi", "99.5",
+                "--workers", "1"]
+MIDLINE_THREADS = 3
 
 
 @dataclass(frozen=True)
@@ -59,7 +69,7 @@ class RealRunner:
         self.host, self.work, self.code, self.tracker, self.python = (
             cfg["host"], cfg["work_dir"], cfg["code_dir"], cfg["tracker_code"], cfg["python"])
         self.min_free_gb = float(cfg.get("min_free_gb", 21))
-        self.windows = cfg["windows"]                 # window id -> {imgdir, midline}
+        self.windows = cfg["windows"]                 # window id -> {imgdir, midline (optional)}
         self.track_length = float(track_length)
         self.with_moved = bool(moved)
         self.moved_mode = moved_mode            # whole_pixel (inbox item 19) or rotate (first 2026-10-24 run)
@@ -87,7 +97,7 @@ class RealRunner:
 
     def host_state(self):
         q = shlex.quote
-        out = self._ssh(f"nproc; cut -d' ' -f1 /proc/loadavg; pgrep -u $(id -u) -fc {q(JOB_PATTERN)} || true; "
+        out = self._ssh(f"nproc; cut -d' ' -f1 /proc/loadavg; ps -u $(id -u) -o args= | grep -cE {q(COUNT_PATTERN)}; "
                         f"df -BG --output=avail {q(self.work)} | tail -1").decode().split()
         return {"cores": int(out[0]), "load1": float(out[1]), "own_jobs": int(out[2]),
                 "free_gb": float(out[3].rstrip("G"))}
@@ -102,6 +112,41 @@ class RealRunner:
             raise HostBusy(f"{s['free_gb']} GB free, below {self.min_free_gb} GB")
         return s
 
+    def midline_path(self, window):
+        return self.windows[window.id()].get("midline") or f"{self.work}/midline/{window.id()}_netmid.npz"
+
+    def ensure_midline(self, window):
+        """Build the window's net midline on the host unless the file exists. Each step skips an output that
+        exists, so an interrupted build resumes."""
+        q = shlex.quote
+        out = self.midline_path(window)
+        if self._ssh(f"test -f {q(out)} && echo yes || echo no").decode().strip() == "yes":
+            return out
+        wid, img = window.id(), self.windows[window.id()]["imgdir"]
+        d = f"{self.work}/midline"
+        seg, bm = f"{d}/{wid}_seg.npz", f"{d}/{wid}_bm"
+        env = (f"OMP_NUM_THREADS={MIDLINE_THREADS} MKL_NUM_THREADS={MIDLINE_THREADS} OPENBLAS_NUM_THREADS=1 "
+               f"PYTHONPATH={q(self.tracker)}:{q(self.code)}")
+        before = self.check_host()
+        self._ssh(f"mkdir -p {q(d)} && cd {q(self.code)} && (test -f {q(seg)} || {env} nice -n 19 {q(self.python)} "
+                  f"scripts/remote/real_midline.py --imgdir {q(img)} --from-h {window.from_h:g} "
+                  f"--to-h {window.to_h:g} --out {q(seg)})")
+        prog = "import json,sys,numpy as np; f=np.load(sys.argv[1])['frames']; print(json.dumps([int(f[0]), int(f[-1])]))"
+        frames = json.loads(self._ssh(f"{q(self.python)} -c {q(prog)} {q(seg)}").decode().strip().splitlines()[-1])
+        self.check_host()
+        t = self._ssh(f"test -n \"$(ls {q(bm)}/*_htpmid.npz 2>/dev/null)\" || (date +%s; {env} nice -n 19 "
+                      f"{q(self.python)} {q(self.tracker)}/midline_ml/batch_midlines.py {q(img)} --out {q(bm)} "
+                      + " ".join(MIDLINE_ARGS) + f" --start {frames[0]} --end {frames[1] + 1} > {q(bm)}.log 2>&1;"
+                      " date +%s)").decode().split()
+        res = json.loads(self._ssh(f"cd {q(self.code)} && {env} nice -n 19 {q(self.python)} "
+                                   f"scripts/remote/net_to_midline.py {q(self.tracker)} {q(bm)}/*_htpmid.npz "
+                                   f"{q(seg)} {q(out)}").decode().strip().splitlines()[-1])
+        after = self.host_state()
+        self.log.append({"midline": wid, **res, "net_s": int(t[1]) - int(t[0]) if len(t) == 2 else None,
+                         "first_frame": frames[0], "last_frame": frames[1], "load1_before": before["load1"],
+                         "free_gb_before": before["free_gb"], "free_gb_after": after["free_gb"]})
+        return out
+
     def copy_paths(self, window, which):
         """which: 'moved' or 'ref'. Whole-pixel mode (inbox item 19): cropped reference and moved copies."""
         base = f"{self.work}/moved/{window.id()}"
@@ -111,7 +156,8 @@ class RealRunner:
 
     def ensure_moved(self, window):
         """Make the rigidly moved copy (and, whole-pixel mode, the cropped reference) on the host unless they exist."""
-        w, mv, ref = self.windows[window.id()], self.copy_paths(window, "moved"), self.copy_paths(window, "ref")
+        mv, ref = self.copy_paths(window, "moved"), self.copy_paths(window, "ref")
+        w = dict(self.windows[window.id()], midline=self.midline_path(window))
         q = shlex.quote
         need = [mv] if self.moved_mode == "rotate" else [mv, ref]
         test = " && ".join(f"test -d {q(p['imgdir'])} && test -f {q(p['midline'])}" for p in need)
@@ -131,13 +177,18 @@ class RealRunner:
                          "free_gb_after": after["free_gb"]})
         return mv
 
+    def cache_path(self, window, settings, which="window"):
+        settings = replace(settings, width_free=False)
+        tag = {"window": "", "moved": "_moved" if self.moved_mode == "rotate" else "_wp_moved", "ref": "_wp_ref"}[which]
+        return self.cache / f"{window.id()}{tag}__{settings.tag()}__L{self.track_length:g}.npz"
+
     def track(self, window, settings, which="window"):
         """which: 'window' (the movie as is), 'moved' or 'ref' (copies made by ensure_moved)."""
         settings = replace(settings, width_free=False)
-        w = self.windows[window.id()] if which == "window" else self.copy_paths(window, which)
-        tag = {"window": "", "moved": "_moved" if self.moved_mode == "rotate" else "_wp_moved", "ref": "_wp_ref"}[which]
-        name = f"{window.id()}{tag}__{settings.tag()}__L{self.track_length:g}.npz"
-        local = self.cache / name
+        w = (dict(self.windows[window.id()], midline=self.midline_path(window)) if which == "window"
+             else self.copy_paths(window, which))
+        local = self.cache_path(window, settings, which)
+        name = local.name
         if not local.exists():
             before = self.check_host()
             q = shlex.quote
@@ -159,10 +210,14 @@ class RealRunner:
     def measure(self, window, settings):
         """Whole-pixel mode: the record is the cropped reference copy and `moved` its shifted twin, so rigid
         invariance compares two copies cropped to the same area (inbox item 19)."""
+        main = "window" if self.moved_mode == "rotate" else "ref"
+        need = [main, "moved"] if self.with_moved else ["window"]
+        if not all(self.cache_path(window, settings, k).exists() for k in need):   # cached runs need no host step
+            self.ensure_midline(window)
+            if self.with_moved:
+                self.ensure_moved(window)
         if not self.with_moved:
             return Measurement(from_tracker_npz(self.track(window, settings), root_id=window.id()), None, settings, {})
-        self.ensure_moved(window)
-        main = "window" if self.moved_mode == "rotate" else "ref"
         rec = from_tracker_npz(self.track(window, settings, main), root_id=window.id())
         moved = from_tracker_npz(self.track(window, settings, "moved"), root_id=window.id() + "_moved")
         return Measurement(rec, moved, settings, {})
