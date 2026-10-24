@@ -66,9 +66,11 @@ def whole_pixel(src, m, win, tw, a):
     """Whole-pixel translation only (inbox item 19): shift d_i = round(v t_i) px, no rotation, no resampling.
     Both copies are cropped to the common area: rows from max d_row, cols from max d_col. Reference copy:
     the crop of each window frame; moved copy: the same box shifted back by d_i, so content moves by +d_i."""
-    d = np.rint(np.outer(tw, VELOCITY)).astype(int)                 # (T, 2) row, col; >= 0
+    d = np.rint(np.outer(tw, VELOCITY) * a.shift_scale).astype(int)  # (T, 2) row, col; >= 0
     D = d.max(axis=0)
     t0 = time.time()
+    if a.pad:
+        return whole_pixel_padded(src, m, win, d, a, t0)
     for name, shift in (("ref", np.zeros_like(d)), ("moved", d)):
         dst = Path(a.out_ref_imgdir if name == "ref" else a.out_imgdir)
         tmp = dst.with_name(dst.name + ".part")
@@ -94,6 +96,32 @@ def whole_pixel(src, m, win, tw, a):
                       "crop_px": D.tolist(), "run_s": round(time.time() - t0, 1)}))
 
 
+def whole_pixel_padded(src, m, win, d, a, t0):
+    """Control (inbox item 20): the same whole-pixel shift without cropping. Moved frame i = window frame i
+    shifted by d_i, uncovered pixels set to the frame median (background). Its reference is the window as is."""
+    dst = Path(a.out_imgdir)
+    tmp = dst.with_name(dst.name + ".part")
+    tmp.mkdir(parents=True, exist_ok=False)
+    names = {f"ImageData_Ch0_TP{int(f):07d}.npy": k for k, f in enumerate(win)}
+    for p in sorted(src.iterdir()):
+        if p.name in names:
+            k = names[p.name]
+            a3 = np.load(p)
+            dr, dc = d[k]
+            out = np.full_like(a3, np.median(a3[0]).astype(a3.dtype))
+            out[:, dr:, dc:] = a3[:, :a3.shape[1] - dr, :a3.shape[2] - dc]
+            np.save(tmp / p.name, out)
+        else:
+            os.symlink(p.resolve(), tmp / p.name)
+    out = {k: m[k] for k in m.files}
+    mid = m["midline_image"][:len(win)] + d[:, None, :]
+    out.update(midline_image=mid, seed=mid[0])
+    np.savez_compressed(a.out_midline, **out)
+    os.rename(tmp, dst)
+    print(json.dumps({"mode": "whole_pixel_padded", "frames": int(len(win)), "shift_px_end": d[-1].tolist(),
+                      "run_s": round(time.time() - t0, 1)}))
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--imgdir", required=True)
@@ -106,6 +134,9 @@ def main():
                     help="whole_pixel (item 19; needs --out-ref-*) or rotate (the synthetic rods' motion, bilinear)")
     ap.add_argument("--out-ref-imgdir", default=None, help="whole_pixel: cropped reference copy")
     ap.add_argument("--out-ref-midline", default=None)
+    ap.add_argument("--shift-scale", type=float, default=1.0, help="whole_pixel: 0 = zero-shift control (item 20)")
+    ap.add_argument("--pad", action="store_true",
+                    help="whole_pixel control (item 20): no crop; shifted frames padded with background")
     a = ap.parse_args()
     t0 = time.time()
     src, dst = Path(a.imgdir), Path(a.out_imgdir)
@@ -116,7 +147,7 @@ def main():
         raise SystemExit("midline file frames do not match the window")
     tw = t[win] - t[win[0]]
     if a.mode == "whole_pixel":
-        if not (a.out_ref_imgdir and a.out_ref_midline):
+        if not a.pad and not (a.out_ref_imgdir and a.out_ref_midline):
             ap.error("whole_pixel needs --out-ref-imgdir and --out-ref-midline")
         return whole_pixel(src, m, win, tw, a)
     about = np.asarray(m["midline_image"][0, 0], float)        # frame-0 tip, (row, col)

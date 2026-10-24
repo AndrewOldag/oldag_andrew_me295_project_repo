@@ -96,3 +96,11 @@
 - Demo: `python scripts/real_slice.py --no-agent` prints the check values
 - Remaining: Andrew's decision on rigid invariance for real windows
 - Bottlenecks: rigid invariance on real windows (Andrew)
+
+## 2026-10-24 (build account, session dispatcher, inbox item 20)
+- Done, step A: controls (zero shift 0.000 %/h; padded uncropped 7.286 %/h, equal to cropped); basal points 520-575 px from frame edges (margin 54 px), no frozen points, valid frame pairs equal in both copies. `scripts/rigid_cause_test.py`, `results/2026-10-24_rigid_cause_test/`
+- Done, step B (second branch): real-movie profile gates closure only; rigid invariance reported with full-range and profile-window values; decisions entry (planning account under delegation); `agents/executors.py`, tests updated; suite 242 passed, 1 skipped
+- Done: real slice with agents: closure 0.945 pass; rigid 7.29 (window 5.76) and plane sections 133.6 reported; diagnostician not called (no gating failure); auditor flagged the accepted run from the non-gating values. `results/2026-10-24_real_slice_closure_gate/`
+- Demo: `python scripts/real_slice.py` runs the chain and prints each stage
+- Remaining: new midline net (autotrace) before any non-provisional real result
+- Bottlenecks: none for this item
