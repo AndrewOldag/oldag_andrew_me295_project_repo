@@ -1,10 +1,10 @@
 # dispatcher
-Updated: 2026-10-23 15:30 (local)
+Updated: 2026-10-23 18:30 (local)
 Lane: course
 Branch: wip/dispatcher
 Last inbox item done: 10
 State: waiting on Andrew
-Now: item 9 stopped: no net scale brings the midline to the tip; GPU rerun, closure and plane sections on the net midline wait
+Now: item 11 (contrast-stretch sweep, factor 2.506, low percentiles 0.3, 0.1, 0.01, min-max) waiting for the lab-server load: 1 min load 26 of 32 (another user); retry every 15 min, 3 tries
 Done since last update:
 - Item 9: net-scale sweep, 5 frames, CPU, lab server: midline end to true tip median 617 (1.0), 543 (1.5), 282 (2.0), 299 (2.506) px; tip net within 19-30 px at all factors; tip confidence 0.16-0.38
 - Item 9: preview shows the tip zone (last 250-300 px) clipped to black by the 1-99.5 % contrast stretch; the midline stops there. No factor recorded, no GPU rerun
