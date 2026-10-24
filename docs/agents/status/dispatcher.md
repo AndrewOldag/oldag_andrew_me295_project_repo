@@ -1,5 +1,5 @@
 # dispatcher
-Updated: 2026-10-23 18:40 (local)
+Updated: 2026-10-23 18:50 (local)
 Lane: course
 Branch: wip/dispatcher
 Last inbox item done: 10
@@ -12,6 +12,7 @@ Done since last update:
 - Item 8 follow-up: cluster CPU job timed out at 2 h (midline 85 s per frame on 8 cpus), $0.193; ledger actuals written; spent today $0.45
 - Item 10: noted; job scripts here start only when no other job of this account runs
 - Item 12: noted; no workstation work assigned yet; will use only the approved ssh form when host-setup assigns it
+- Item 13: private workstation file copied and read (20 GB cap on the work folder, at least 20 GB free, df before and after every step, frame subsets only); no workstation work assigned yet
 Needs Andrew:
 - Net midline: the contrast stretch, not the scale, seems to stop it short of the tip. Try a lower low percentile for the stretch (now 1 %; the darkest 1 % of a frame is about 29k px, close to the size of the tip zone, about 300 x 70 px) on the same 5 frames? Net and contrast settings not changed by this session
 - Until a midline reaches the tip, closure and plane sections on real windows cannot be judged; the provisional midline is pixel-quantized (tip jitter 0-6 px per pair, curvature noise 0.04-0.09 /px)
