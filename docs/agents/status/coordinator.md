@@ -1,12 +1,16 @@
 # coordinator
-Updated: 2026-10-24 13:05 (local)
+Updated: 2026-10-24 13:24 (local)
 Lane: course
 Branch: main
-Last inbox item done: 18
+Last inbox item done: 20
 State: working
-Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8, 10, 11, 16, 17
-Last-seen main: 2c373d1 (inboxes as of e3c0268)
+Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8 (relay part), 10, 11, 16, 17 (item 20)
+Last-seen main: 9aa97bf (inboxes as of 9aa97bf)
 Done since last update:
+- 2026-10-24 13:24 (tick): item 1 and 19(3): merged wip/coord-tick (9aa97bf; ready to merge 13:10). Conflicts: coordinator inbox (both sides added item 19: planning's kept as 19, coord-tick's renumbered 20); decisions (kept main's corrected v3.1 wording, added the tick entry). Suite 259 passed; log entry moved (item number noted). wip/audit-marks already merged (e3c0268)
+- 13:24: item 19(1): v3.1 wording on main seen (b16f82f). Item 19(2): `private/workstation.md` replaced with the refreshed copy (server file of 12:00 plus the host-setup survey section, as in the freeze-v31 worktree); old copy kept beside it with suffix .2026-10-23 (git-ignored)
+- 13:24: item 16: dispatcher `waiting on server job`: lab-server marker `ft2_chain.done` present (13:21), dispatcher last pushed 12:56; workstation `ws_ft2_chain.done`/`.failed` not present yet. Item 8: dispatcher inbox changed (item 27, b16f82f). Pinged dispatcher 13:24 (`check github`)
+- 13:24: item 10: no status waits on an agent. Item 2: pre-push hook ran on push (0 hits)
 - 2026-10-24 13:05 (tick): item 1: merged wip/freeze-v31 (2c373d1; ready to merge 12:55); suite 256 passed; log entry moved. No other branch ready
 - 13:05: item 8: no inbox change since e3c0268 (the e3c0268 changes were path redactions, seen at the last check); no pings. Item 10: no status waits on an agent. Item 16: no status says `waiting on server job`
 - 13:05: item 2: pre-push hook installed; `private/blocklist.txt` has lines (count only). Live sessions: audit-marks, dispatcher, freeze-v31, coord-tick, turn-long; no coordinator loop session live
@@ -48,19 +52,18 @@ Branches (last commit, state):
 - wip/autotrace: 2026-10-24 11:39, ready to merge, merged 915859a (by audit-marks)
 - wip/audit-marks: 2026-10-24 12:11, ready to merge, merged e3c0268
 - wip/freeze-v31: 2026-10-24 12:50, ready to merge, merged 2c373d1
-- wip/coord-tick: 2026-10-24 12:52, waiting on Andrew (hand test, install)
+- wip/coord-tick: 2026-10-24 13:09, ready to merge, merged 9aa97bf
 - wip/freeze-v3: 2026-10-24 04:16, ready to merge, merged 2ebd422
 - status/turn-long: 2026-10-24 02:42, done (research lane, not merged)
-- wip/dispatcher: 2026-10-24 11:36, working (ft2 midline chain on the lab server)
+- wip/dispatcher: 2026-10-24 12:56, waiting on server job (lab-server marker now present; pinged)
 - wip/lab-report-2: 2026-10-23 13:29, working
 - status/spec-audit-r: 2026-10-23 13:42, done (research lane, not merged)
 - status/gate2: 2026-10-16 12:27, delete approved, Andrew runs it (research lane, not merged)
 - wip/readme-check, wip/vm-setup, wip/auditor-v1b, wip/fq-real, wip/auditor-v1, wip/scored-v1, wip/freeze-v2, heldout/faults, wip/baselines, wip/diag-review, wip/lab-report-1, wip/gatekeeper: merged
 Needs Andrew:
-- freeze-v31: decisions entry 'v3.1 ended' wording is broader than run; it suggests 'fewer than 3 of 5 faults qualify on 3 of 3 seeds' (freeze-v31 status)
-- freeze-v31: main checkout `private/workstation.md` is the old copy; refreshed copy is in the freeze-v31 worktree `private/`
-- coord-tick: hand test, then install of the scheduled tick (coord-tick status)
-- Finished sessions still live and idle: audit-marks, freeze-v31 (merged), turn-long (done); can be closed
+- coord-tick (merged): install the scheduled task elevated: `scripts\ops\install_coordinator_tick.ps1`; confirm one scheduled S4U full pass in the tick log with exit 0
+- A live session named `coordinator` (started about 13:17, idle) is listed beside this tick pass; stop it once the tick is installed (coord-tick status)
+- Finished sessions still live and idle: freeze-v31 (merged), turn-long (done), coord-tick (merged); can be closed
 - `git push origin --delete status/gate2` (audit-marks item 2; refused for sessions)
 - freeze-v3: review `results/2026-10-23_freeze_v3/README.md` (all 12 accept_repaired rods measure well unremedied; second_root 0 correct for every method)
 - Workstation disk: host-setup work folder 9.9 of 20 GB after one root; sessions cannot delete there (host-setup status)
