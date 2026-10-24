@@ -27,7 +27,7 @@ Background for the measurement: quantities, mechanics relations, the tracker and
 - The older uncoupled path (`couple=False`) is a fair stand-in for PatchTrack
 
 ## Known numbers and limits
-- Tracker fails at about 7 degrees of rotation per frame. Real roots turn about 0.1 degrees per frame
+- On synthetic rods, 2 degrees of rotation per frame fails all three checks (`results/2026-10-12_heldout_faults/checker_sizes.md`); no run near 7 degrees per frame. Real roots turn about 0.1 degrees per frame
 - Classical midline jittered about 3 px per frame at the origin. The ML midline has not been tested on still roots
 - Pixel scale 0.84 um/px is nominal, not calibrated
 - The flexible logistic fit (Morris 1992) has one peak and goes to zero at the tip. Real REGR near the tip is about 4 %/h. Flank profiles should come from tracked velocities, not from the difference of two fits
