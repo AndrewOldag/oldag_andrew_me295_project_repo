@@ -1,0 +1,87 @@
+"""Real-slice plumbing with a fake runner: no ssh, no tracker, no LLM call."""
+import importlib.util
+from pathlib import Path
+
+import pytest
+
+from agents import dispatcher as D
+from agents.executors import Slice
+from measure.real_runner import RealRunner, RealWindow
+from measure.runner import FieldRunner, Rod
+
+ROOT = Path(__file__).resolve().parents[1]
+spec = importlib.util.spec_from_file_location("real_slice", ROOT / "scripts" / "real_slice.py")
+RS = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(RS)
+
+ROW = {"id": "r1", "include": "yes", "usable_from_h": "4", "usable_to_h": "6", "step_s": "90.0",
+       "condition": "mannitol", "experiment_type": "drought"}
+
+
+class FakeRunner:
+    """Stands in for RealRunner: a field-level rod record for any window; can fail the first job."""
+    form = "fake"
+
+    def __init__(self, fail_first=False):
+        self.field, self.calls, self.fail_first = FieldRunner(), [], fail_first
+
+    def initial_settings(self, w):
+        return self.field.initial_settings(Rod())
+
+    def measure(self, w, settings):
+        self.calls.append((w.id(), settings.tag()))
+        if self.fail_first and len(self.calls) == 1:
+            raise RuntimeError("host busy")
+        m = self.field.measure(Rod(), settings)
+        m.moved = None                                # as for real movies
+        return m
+
+    def host_state(self):
+        return {"cores": 14, "load1": 0.1, "own_jobs": 0, "free_gb": 30.0}
+
+
+def test_window_id():
+    assert RealWindow("0708_m12", 4.0, 6.0).id() == "0708_m12__w4-6"
+
+
+def test_inline_queue_runs_job_and_engine_collects():
+    runner, seen = FakeRunner(), []
+    q = RS.InlineQueue(runner)
+    e = D.Engine(q, D.load_config(), rows=[ROW], budget={"core_hours": 0.0, "usd": 0.0, "approved": False},
+                 collector=lambda t: seen.append(t.id) or {"ok": True})
+    out = D.run_script_batch(e, poll_minutes=15, round_limit=5)
+    assert out["status"] == "finish" and out["states"] == {"collected": 1} and seen == ["r1__w4"]
+    assert runner.calls[0][0] == "r1__w4-6"
+    assert e.max_lab_workers() == 1                   # 14 cores: one eighth rounds down to 1
+
+
+def test_failed_job_is_retried():
+    runner = FakeRunner(fail_first=True)
+    e = D.Engine(RS.InlineQueue(runner), D.load_config(), rows=[ROW],
+                 budget={"core_hours": 0.0, "usd": 0.0, "approved": False})
+    out = D.run_script_batch(e, poll_minutes=15, round_limit=5)
+    assert out["retries"] == 1 and out["states"] == {"collected": 1}
+
+
+def test_cluster_backend_refused_by_inline_queue():
+    q = RS.InlineQueue(FakeRunner())
+    t = D.make_tasks(ROW, D.load_config())[0]
+    with pytest.raises(RuntimeError, match="no cluster job"):
+        q.start(t, "cluster")
+
+
+def test_slice_on_real_style_measurement_has_no_rigid_check():
+    sl = Slice(FakeRunner(), RealWindow("r1", 4, 6))
+    rigid = next(c for c in sl.checks if c.check == "rigid_invariance")
+    assert rigid.passed is None and "no rigidly moved run" in rigid.detail
+    s = RS.summarize(sl, RS.Accepted())
+    assert s["outcome"]["status"] == "accept" and s["remedies"] == []
+
+
+def test_real_runner_reads_config(tmp_path):
+    cfg = tmp_path / "r.yaml"
+    cfg.write_text("host: h\nwork_dir: /w\ncode_dir: /c\ntracker_code: /t\npython: /p\n"
+                   "windows:\n  r1__w4-6:\n    imgdir: /d.imgdir\n    midline: /m.npz\n")
+    r = RealRunner(cfg, cache=tmp_path / "cache")
+    assert r.min_free_gb == 21 and r.windows["r1__w4-6"]["midline"] == "/m.npz"
+    assert r.initial_settings(RealWindow("r1", 4, 6)).tag() == "st1"

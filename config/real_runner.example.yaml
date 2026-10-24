@@ -1,0 +1,12 @@
+# Template for private/real_runner.yaml, read by measure/real_runner.py (RealRunner).
+# Copy to private/real_runner.yaml and fill in. Keep the real file out of git.
+host: <ssh host alias of the compute host>
+work_dir: <folder there for tracker outputs of this task>
+code_dir: <folder there for a copy of measure/ and scripts/remote/>
+tracker_code: <tracker checkout there with the stage-tracking loader (branch gate2-windowed-coupling or later)>
+python: <Python of the tracker environment there (envs/qb.yml)>
+min_free_gb: 21                 # do not start a run below this free space on the work disk
+windows:                        # window id <root>__w<from_h>-<to_h> -> movie folder and midline file there
+  <root_id>__w4-6:
+    imgdir: <montage .imgdir of the root>
+    midline: <midline file for the window (net midline, midline_ml/batch_midlines.py tile mode)>
