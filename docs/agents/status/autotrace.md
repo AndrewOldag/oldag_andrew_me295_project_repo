@@ -1,15 +1,22 @@
 # autotrace
-Updated: 2026-10-23 20:31 (local)
+Updated: 2026-10-23 21:05 (local)
 Lane: course
 Branch: wip/autotrace
-Last inbox item done: 2
-State: working
-Now: item 3, net on the 140 pack frames (workstation, nice 19, 10 threads, about 14.5 s per frame; 44 of 140 done at 20:29)
+Last inbox item done: 10
+State: waiting on Andrew
+Now: review set ready in the tracing pack folder, `review/` (lab data root, `me295/tracing_pack_20261023/review/`); waiting for Andrew's y/n and hand tracing. Nothing fine-tuned
 Done since last update:
-- Item 2, landmark (as before): drafts end on the midline 35 px behind the apex; July traces run tip -> base
-- Draft converter: picks the valley component that ends nearest the net tip (tip_val >= 0.3), else the largest; trims a skeleton end that curls back; apex = net tip when confident and within 120 px of the midline end, else the classical darkness mask walked out to the first background gap
-- Net tip vs mask apex on the first 28 frames: 20 frames, median 5.9 px, max 12.5 px
-- Items 6-7 tools written: review_traces.py (y/n/b/q, skips held-out, review.csv after every key, resumable), apply_review.py (traces_reviewed.json, non-held-out only, keeps hand traces on re-run, --frames-root for a local copy)
-- 3-frame test (+1 held-out), headless: resume, last decision wins, held-out skipped and listed, hand trace kept, trace_midlines.py opens both output files: all passed. MacOSX backend not testable here
+- Item 2, landmark rule: drafts end on the midline 35 px (74 um) behind the root apex. Measured on 9 July frames: median 35.3 px, range 23.4-63.5 px; 1 frame excluded (mask merged with a bubble). July traces run tip -> base; drafts run base -> tip as the inbox says
+- Item 3, drafts: 140 of 140 frames; net found no root on 0. Run time: net 2338 s (16.7 s/frame, CPU, nice 19, 10 threads), conversion 81 s, previews 36 s
+- Apex: net tip in 104 frames, root mask in 36; net tip vs mask apex median 5.0 px. Flags: 5 curled skeleton ends trimmed, 2 mask apex far ahead (#15 bubble at the tip, #135 crossing fibre); both show the flag in yellow on the preview
+- Items 4, 9: 28 held-out frames (16 roots) drafted with review_only; previews `HELDOUT_TRACE-BY-HAND_<n>_<key>.png`, 40 px red border, banner; skipped by the review tool and listed at its end; `HELD_OUT_TRACE_BY_HAND.csv` and `held_out_worklist.json` (28 frames)
+- Item 5: 140 previews (1200 px wide), `index.csv`; "||" in keys is "__" in file names
+- Item 6: `review_traces.py` (y/n/b/q, k of 112, review.csv after every key, resumable, `--backend MacOSX`), `apply_review.py` (traces_reviewed.json with non-held-out frames only, accepted drafts as traced, keeps hand traces on re-run, `--frames-root` for a local copy). `README.txt` in the folder gives the steps
+- Item 7: both tested headless on 3 frames + 1 held-out: all checks passed. MacOSX backend not testable here
+- Item 10: nothing large on the VM (previews viewed as small samples in the session temp folder only); workstation work folder 11 GB of 20, 35 GB free; no deletes anywhere
+- Results README `results/2026-10-23_autotrace/README.md`; log entry `docs/running_log_pending/autotrace.md`
 Needs Andrew:
-- none yet
+- Review: copy `review/` next to your pack copy, then `python review_traces.py . --backend MacOSX` (112 frames), then `python apply_review.py . --frames-root <your frames folder>`
+- Hand-trace rejected frames (traces_reviewed.json) and the 28 held-out frames (held_out_worklist_local.json) with trace_midlines.py
+- Two-root frames (#48, #49 held out; #57): the draft follows one root; check it is the one you want
+- Say if drafts should run tip -> base like the July traces (order does not change the fine-tune)
