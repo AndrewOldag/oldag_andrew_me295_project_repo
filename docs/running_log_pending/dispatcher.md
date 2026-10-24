@@ -47,3 +47,13 @@
 - Item 10 noted: at most 2 lab-server jobs of this account; this session's job scripts start only when no other job of this account runs
 - Remaining: Andrew: contrast setting for the net midline, or another midline source; then GPU rerun, closure and plane sections with the net midline; B5 part 2
 - Bottlenecks: net midline does not reach the tip (Andrew)
+
+## 2026-10-23 (build account, session dispatcher, inbox items 11-15)
+- Item 11 replaced by item 14 before it ran (lab-server load 26 of 32 from another user; no job started)
+- Done, item 14: tracker tile mode, fine-tuned net2, workstation, 5 frames of 0708_m12 t3: midline end to tip median 2.0, 2.2, 3.2 px at low percentile 1, 0.3, 0.1 %; tip confidence 0.67, 0.75, 0.76. Kept 0.1 % (decisions)
+- Done: net midline on the whole t3 window: 80 frames, 1411 s on 8 threads; tracked at 400, 700, 950 px: closure 0.95 (pass), 1.48, 2.26 px/h; plane_sections 134, 216, 247 %/h (fail). Cause of plane_sections: midline curvature noise (0.01-0.04 /px per frame at smoothing 0)
+- Done, item 14: tracing pack, 140 frames, 84 roots, 769 MB, 16 held-out roots; worklist in trace_midlines.py state format
+- Items 12, 13, 15 noted: workstation ssh form, disk rule (36 GB free before and after every step; work folder 9.9 GB), host assignment
+- Demo: `python scripts/demo_dispatcher.py` (unchanged)
+- Remaining: Andrew: plane-sections curvature source (freeze item); traces; then B5 part 2 (real slice)
+- Bottlenecks: plane sections on real movies (Andrew)
