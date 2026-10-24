@@ -7,7 +7,7 @@ state: working
 branch: wip/autotrace
 host: workstation, lab server
 created: 2026-10-23 20:12
-last_update: 2026-10-23 20:15
+last_update: 2026-10-23 20:35
 blocker: none
 done_marker: review/review_traces.py and 140 previews in the tracing pack folder; status waiting on Andrew
 ---
@@ -15,7 +15,7 @@ done_marker: review/review_traces.py and 140 previews in the tracing pack folder
 Inbox: `docs/agents/inbox/autotrace.md`.
 
 ## Parts
-- [ ] Landmark rule from the July traces
+- [x] Landmark rule from the July traces (35 px behind mask apex)
 - [ ] 140 drafts (net, tile mode)
 - [ ] Previews and index.csv
 - [ ] review_traces.py and apply_review.py, tested on 3 frames
