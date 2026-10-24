@@ -86,3 +86,13 @@
 - Demo: `python scripts/real_slice.py` runs the chain and prints each stage
 - Remaining: Andrew: rigid invariance on real windows above its synthetic threshold
 - Bottlenecks: rigid-invariance reading on real movies (Andrew)
+
+## 2026-10-24 (build account, session dispatcher, inbox item 19)
+- Done: whole-pixel moved copy of a real window (`scripts/remote/real_moved.py --mode whole_pixel`, cropped reference + shifted twin; exact in a test); `RealRunner` default whole_pixel
+- Failed, step 1: rigid_invariance 7.29 %/h (threshold 2.0) on 0708_m12 4-6 h; first 250 px agree within 1.0 %/h, difference grows toward the chain end (5.8 %/h centre at 350-400 px, 7.3 minus flank at 400-450 px). `results/2026-10-24_rigid_whole_pixel/`
+- Done: profile-window rule fixed in decisions before the rerun (s up to the last centre point tracked in every frame, both copies); `agents/executors.py` real_rigid_invariance; tests; suite 242 passed, 1 skipped
+- Failed, step 2: rigid_invariance 5.76 %/h at s = 375 px (window s <= 398 px). `results/2026-10-24_rigid_window/`
+- Stopped for Andrew (step 3): no threshold change
+- Demo: `python scripts/real_slice.py --no-agent` prints the check values
+- Remaining: Andrew's decision on rigid invariance for real windows
+- Bottlenecks: rigid invariance on real windows (Andrew)
