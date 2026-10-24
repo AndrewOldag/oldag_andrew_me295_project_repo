@@ -38,7 +38,7 @@ Course project for AM/ME/CE 295, Caltech, Fall 2026. Start with `CLAUDE.md` and 
 
 ## Diagnostician on a synthetic rod (one slice)
 - `request_info` answers come from the measurement record and the check results (`measure/info.py`). `apply_remedy` changes the run settings (`measure/remedies.py`; table in `docs/decisions.md`), re-runs the measurement and re-checks it (`agents/executors.py`)
-- Runner (`measure/runner.py`), one interface with two forms: `FieldRunner` in process for field-level rods; `RemoteRunner` renders and tracks on the machine that has the tracker. For the remote form copy `config/runner.example.yaml` to `private/runner.yaml` and fill it in (ssh host alias, work and code directories there, tracker env Python)
+- Runner (`measure/runner.py`), one interface with two forms: `FieldRunner` in process for field-level rods; `RemoteRunner` renders and tracks on the machine that has the tracker. For the remote form copy `config/runner.example.yaml` to `private/runner.yaml` and fill it in (host alias, work and code directories there, tracker env Python)
 - `python scripts/demo_slice.py --fault displacement_exceeds_patch` renders one rod with that fault, tracks and checks it, runs the diagnostician, and prints the truth, the error before and after, and the outcome. Trace and summary in `results/<date>_demo_slice/`. `--no-agent` stops after the first check; `--runner field` runs a field-level rod in process
 
 ## Single-agent baseline

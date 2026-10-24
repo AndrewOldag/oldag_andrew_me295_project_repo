@@ -9,7 +9,7 @@
 7. Andrew, 2026-10-24 12:05: v3.1 tracker runs go on the workstation (option B). Ends the hold of the last item.
    - Copy the private workstation file again (`me295/cluster/WORKSTATION.md` under the lab data root) into `private/workstation.md`: it now has the one delete exception below
    - First a cache-match test: one v3 rod already cached on the lab server, rendered and tracked on the workstation, must match (tracks within 1e-6 px; render byte-identical). host-setup did this on 23 Oct for one rod; repeat for one bent rod and one fault rod. Fail: stop and report
-   - Run the sweeps on the workstation: task folder `~/me295_work/c014/`, renders in `c014/renders/`. Workstation limits: at most 2 Claude jobs, each at most half the cores, nice 19, check other users first; `df -h / ~` before and after every sweep; work folder total 20 GB cap; 20 GB free floor
+   - Run the sweeps on the workstation: task folder `c014/` in the workstation work folder, renders in `c014/renders/`. Workstation limits: at most 2 Claude jobs, each at most half the cores, nice 19, check other users first; `df -h / ~` before and after every sweep; work folder total 20 GB cap; 20 GB free floor
    - Delete exception (Andrew approved, only this): after a sweep's outputs (tracks, cache, logs) are copied to the v3.1 work folder on the lab server and verified (file count and sha256), delete the render files that this session created in `c014/renders/` for that sweep. Log every deleted path, with time and size, in `c014/DELETED.log`. Never delete anything else: not outputs, not other folders, not the 0708_m12 frames, nothing on the lab server
    - The lab server holds the v3.1 outputs (storage only); no sweeps there
    - LLM runs on the VM as planned (blocks of 10, 1.5 GB floor)
