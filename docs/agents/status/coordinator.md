@@ -1,15 +1,16 @@
 # coordinator
-Updated: 2026-10-23 22:22 (local)
+Updated: 2026-10-23 23:01 (local)
 Lane: course
 Branch: main
 Last inbox item done: 14
 State: working
 Now: relay loop every 10 min (item 8): merges per item 1, `check github` to live sessions whose inbox changed
-Last-seen main: 476ad22 (inboxes as of e0713e3)
+Last-seen main: f4e8fbd (inboxes as of f4e8fbd)
 Done since last update:
 - Item 9: board allows `waiting on Andrew` and `waiting on <agent>` (`scripts/board.py`, `tasks/README.md`), 8223616; full suite 203 passed
 - Item 1: merged wip/spec-audit (2c0eb60) and then wip/spec-audit-check (f7ec454), `--no-ff`; pending log entries moved into `docs/running_log.md`; suite 203 passed on each merge
 - Item 8: pinged dispatcher 01:22 (inbox changed in 588f052). Coordinator inbox also changed (own). Message tool available: SendMessage + ListAgents
+- 23:01: pinged autotrace (inbox changed in f4e8fbd: fine-tune from base net2 on compliant traces)
 - 22:22: item 14: Claude Code pin 2.1.310 brought to main from freeze-v3 e1e672a (only `config/models.yaml`, `tests/test_auditor.py` and the re-pin decisions entry; the label changes in that commit stay on wip/freeze-v3); decisions entries for midline smoothing option 1 and the provisional fine-tuned net; suite 205 passed; 476ad22. Pinged dispatcher and autotrace
 - 19:56: pinged dispatcher (inbox changed in 553f5f9: net midline accepted, smoothing as a proposal, B5 part 2)
 - 18:47: item 1: merged wip/host-setup (b9a3a06, ready to merge 18:37, test passed); suite 205 passed; log entry moved. Items 12-13: host assignment appended to turn-long (8), dispatcher (15), freeze-v3 (9) inboxes (6d84335); pinged all three (dispatcher also for item 14, 54456a2)
@@ -31,10 +32,10 @@ Branches (last commit, state):
 - wip/spec-audit: 2026-10-23 01:04, ready to merge, merged 2c0eb60
 - wip/spec-audit-check: 2026-10-23 01:14, ready to merge, merged f7ec454
 - wip/host-setup: 2026-10-23 18:37, merged b9a3a06
-- wip/autotrace: 2026-10-23 22:02, waiting on Andrew (review and hand tracing)
-- wip/freeze-v3: 2026-10-23 21:51, waiting on Andrew (method rounds stopped, VM low on memory)
+- wip/autotrace: 2026-10-23 22:44, working
+- wip/freeze-v3: 2026-10-23 22:35, working
 - status/turn-long: 2026-10-23 18:42, working (research lane, not merged)
-- wip/dispatcher: 2026-10-23 19:24, waiting on Andrew
+- wip/dispatcher: 2026-10-23 22:22, waiting on Andrew (spline fit failed v3 validation; not adopted)
 - wip/lab-report-2: 2026-10-23 13:29, working
 - status/spec-audit-r: 2026-10-23 13:42, done (research lane, not merged)
 - status/gate2: 2026-10-16 12:27, waiting on Andrew (research lane, not merged)
