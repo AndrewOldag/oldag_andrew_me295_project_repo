@@ -31,9 +31,10 @@ TREE = {
 
 
 def failing(checks):
-    """Failing checks; a check that cannot be computed counts as failing, one skipped on purpose does not."""
+    """Failing checks; a check that cannot be computed counts as failing, one skipped on purpose or reported
+    without gating (real-movie profile, agents/executors.py) does not."""
     return [c.check for c in checks
-            if c.passed is False or (c.passed is None and not c.detail.startswith("skipped"))]
+            if c.passed is False or (c.passed is None and not c.detail.startswith(("skipped", "reported, not gating")))]
 
 
 def next_remedy(fail, tried, stride):

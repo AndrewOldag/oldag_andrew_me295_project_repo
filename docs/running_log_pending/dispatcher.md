@@ -76,3 +76,13 @@
 - Demo: `python scripts/real_slice.py` runs the chain and prints each stage's result
 - Remaining: plane sections on real movies (Andrew: after option 1 failed); fine-tuning after traces
 - Bottlenecks: plane-sections approach (Andrew)
+
+## 2026-10-24 (build account, session dispatcher, inbox item 18)
+- Done: real-movie checker profile (`agents/executors.py` CHECK_PROFILES; plane sections reported, not gating on real windows); baselines' `failing` skips non-gating checks; `audit/view.py` marks non-gating checks only when present; `tests/test_check_profiles.py` 6 passed
+- Done: rigidly moved copy of a real window (`scripts/remote/real_moved.py`, `RealRunner.ensure_moved`); warp checked against the point transform (0.3 px)
+- Done: real slice with agents, 0708_m12 4-6 h (provisional net): rigid_invariance 8.83 %/h FAIL (2.0), closure 0.945 pass, plane_sections 133.6 reported; diagnostician smooth_midline light rolled back (rigid 16.76), decline; auditor report. `results/2026-10-24_real_slice/`
+- Found: rigid-invariance difference on the real window 0.8-3.4 %/h in the centre profile interior, 8.8 at the chain end, flanks up to 4-6 %/h
+- Tests: 240 passed, 1 skipped (cv2 test, tracker env only; checked there), 73 s
+- Demo: `python scripts/real_slice.py` runs the chain and prints each stage
+- Remaining: Andrew: rigid invariance on real windows above its synthetic threshold
+- Bottlenecks: rigid-invariance reading on real movies (Andrew)

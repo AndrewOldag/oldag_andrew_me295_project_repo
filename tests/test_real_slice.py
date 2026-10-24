@@ -85,3 +85,20 @@ def test_real_runner_reads_config(tmp_path):
     r = RealRunner(cfg, cache=tmp_path / "cache")
     assert r.min_free_gb == 21 and r.windows["r1__w4-6"]["midline"] == "/m.npz"
     assert r.initial_settings(RealWindow("r1", 4, 6)).tag() == "st1"
+
+
+def test_moved_copy_warp_matches_point_transform():
+    pytest.importorskip("cv2")                         # tracker environment only (envs/qb.yml)
+    spec2 = importlib.util.spec_from_file_location("real_moved", ROOT / "scripts" / "remote" / "real_moved.py")
+    RM = importlib.util.module_from_spec(spec2)
+    spec2.loader.exec_module(RM)
+    import numpy as np
+    img = np.zeros((300, 500), np.float32)
+    p = np.array([120.0, 340.0])                       # (row, col)
+    img[int(p[0]) - 2:int(p[0]) + 3, int(p[1]) - 2:int(p[1]) + 3] = 1000.0
+    about, t = np.array([150.0, 250.0]), 3600.0         # 1 h: 4 deg and (20, 12) px
+    out = RM.warp(img, t, about)
+    rr, cc = np.nonzero(out > 500)
+    q = RM.move_points(p[None], t, about)[0]
+    assert abs(rr.mean() - q[0]) < 0.6 and abs(cc.mean() - q[1]) < 0.6
+    assert np.allclose(RM.move_points(p[None], 0.0, about)[0], p)
