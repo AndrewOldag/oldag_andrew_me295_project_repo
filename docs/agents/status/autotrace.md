@@ -1,11 +1,15 @@
 # autotrace
-Updated: 2026-10-23 22:50 (local)
+Updated: 2026-10-23 22:55 (local)
 Lane: course
 Branch: wip/autotrace
 Last inbox item done: 11
 State: working
 Now: item 12, fine-tune net2_midline_ft2.pt from base net2 on 72 July + 109 pack traces (cluster GPU, under the $5 cap; $0.45 spent so far), then score 3 nets on the 28 held-out frames
 Done since last update:
+- Item 12: Andrew's files checked: 112 reviewed (72 y, 40 n), 109 traced + 3 skipped, 28 held-out traced; key sets match the pack
+- Item 12: training list 181 traces (72 July include-yes in-window + 109 pack), checked against the manifest and the held-out list (no held-out frame or root); 43 July traces refused (c1, c7, c3, c12). Keys in `train_keys.csv` with the run on the cluster; seed 20261023; recipe defaults unchanged, from base net2
+- Item 12: 181 frames (994 MB) copied to the cluster work folder; GPU job 5383578 (P100, 4 CPUs, 2 h limit) running. Ledger: spent 0.45 + worst case 0.34 = 0.79 of 5.00
+- Item 12: held-out scoring of base net2 and net2_midline_ft running on the workstation (tile, lo 0.1); ft2 follows when the job ends
 - Item 11 recorded: the next fine-tune starts from base net2 and trains only on include-yes, in-window traces (72 July + reviewed pack), never held-out frames; draft order stays base -> tip. For the coordinator: this decision belongs in docs/decisions.md (this task may not edit it)
 - Item 2, landmark rule: drafts end on the midline 35 px (74 um) behind the root apex. Measured on 9 July frames: median 35.3 px, range 23.4-63.5 px; 1 frame excluded (mask merged with a bubble). July traces run tip -> base; drafts run base -> tip as the inbox says
 - Item 3, drafts: 140 of 140 frames; net found no root on 0. Run time: net 2338 s (16.7 s/frame, CPU, nice 19, 10 threads), conversion 81 s, previews 36 s
