@@ -6,8 +6,8 @@ owner: dispatcher
 state: needs-input
 branch: wip/dispatcher
 created: 2026-10-23 00:30
-last_update: 2026-10-23 15:30
-blocker: net midline does not reach the tip (Andrew)
+last_update: 2026-10-23 19:40
+blocker: plane sections curvature source (Andrew, freeze item)
 done_marker: proposal + results/2026-10-23_tracker_timing/; after approval, slice runs from README
 ---
 

@@ -132,3 +132,23 @@ Spec `docs/specs/2026-10-23_next-steps-lr2-dispatcher.md`, items B2 and B4 (clus
 - All three reach the tip. Kept: 0.1 % (highest tip confidence), recorded in decisions. Preview: the midline band covers the root to the tip marker
 - 8 threads, nice 19; workstation disk 36 GB free before and after; work folder 9.9 GB (this sweep 8.4 MB; frames are links to the existing copy)
 - Caveat: the fine-tuned net was trained on 0708 hand traces (includes this root)
+
+### Net midline on the whole t3 window (workstation)
+- 80 frames, 1411 s on 8 threads (17.6 s per frame); every frame has a midline; tip confidence median 0.74; net tip 2.8 px (median) from the segmentation tip
+- Tracked with the stage-corrected tracker (52e9bd1), uncoupled; course checker unchanged:
+
+| Tracked length | closure px/h (threshold 1.0) | plane_sections %/h (threshold 3.25) | flank difference at that s, %/h |
+| :-- | --: | --: | --: |
+| 400 px | 0.95 (pass) | 134 | 34 |
+| 700 px | 1.48 | 216 | 9 |
+| 950 px | 2.26 | 247 | -21 |
+| (provisional midline: 5.53, 0.65, 4.71 px/h; 257, 558, 465 %/h) | | | |
+
+- Closure: passes at 400 px and grows with tracked length. The tip path is now smooth (net midline), so the residual follows the tracked chain, not tip jitter
+- Plane sections: lower than with the provisional midline but still 40-75x the threshold. Cause: curvature of the midline source. Frame-to-frame curvature change 0.01-0.04 /px (net midline) against a mean of about 0.002 /px, at `curvature_smooth_px` 0 (frozen); the net midline is also a skeleton polyline at 5 px spacing. With 28.5 px flank spacing this gives -195 %/h at s = 575 px. Flank placement and width look normal (spacing 28-29 px, flank difference within +-34 %/h). Scale: curvature in 1/px and spacing in px, consistent. Checker not changed
+- What would change it (for Andrew; freeze item): curvature from a time-smoothed or spline-fitted midline, or from the tracked centre chain, instead of the per-frame skeleton
+
+### Tracing pack (lab server)
+- Folder `me295/tracing_pack_20261023/` under the lab data root: 140 frames (35 each from 0711, 0714, 0721, 0727), 84 roots, include-yes montage roots and usable hours only, stratified over each root's usable window; 769 MB
+- `traces.json`: worklist of 140 frames in the state format of `midline_ml/finetune/trace_midlines.py` (keys `<imgdir>||<tp>`), no traces yet. `pack.json`: roots, conditions, usable hours, seed, rule
+- Held-out roots (16, about 19 %; evaluation only, never for fine-tuning): 0711_c5, 0711_c7, 0711_c8, 0714_c10, 0714_c5, 0714_m1, 0714_m11, 0721_c4, 0721_c6, 0721_c9, 0721_m8, 0727_cc2, 0727_mc2, 0727_mc7, 0727_mc8, 0727_mc9
