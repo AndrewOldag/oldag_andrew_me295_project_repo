@@ -12,7 +12,8 @@ folder:
 Format and states: `tasks/README.md`.
 
 A task in state working whose last_update is older than 30 min is shown as
-stale. A file in `tasks/` whose lane is not course is an error. The page is
+stale. The optional `host` field names where the task runs: one of HOSTS, or
+a comma list for a task with parts on several hosts; shown as "-" if absent. A file in `tasks/` whose lane is not course is an error. The page is
 never written inside a git repo, so research rows cannot be committed.
 """
 
@@ -29,7 +30,8 @@ FIELDS = ["id", "title", "lane", "owner", "state", "branch", "created",
 STATES = ["queued", "working", "needs-input", "review", "done", "blocked", "interrupted",
           "waiting on Andrew"]
 WAITING_PREFIX = "waiting on "  # also "waiting on <agent>"
-COLUMNS = ["id", "lane", "owner", "state", "branch", "last_update", "blocker"]
+HOSTS = ["VM", "workstation", "lab server", "cluster"]  # spec 2026-10-23c
+COLUMNS = ["id", "lane", "owner", "state", "branch", "host", "last_update", "blocker"]
 STALE_AFTER = timedelta(minutes=30)
 
 
@@ -60,6 +62,12 @@ def parse_task(path):
     if task["state"] not in STATES and not (
             task["state"].startswith(WAITING_PREFIX) and task["state"] != WAITING_PREFIX):
         raise BoardError(f"{Path(path).name}: unknown state {task['state']!r}")
+    if "host" in task:
+        bad = [h for h in (x.strip() for x in task["host"].split(",")) if h not in HOSTS]
+        if bad:
+            raise BoardError(f"{Path(path).name}: unknown host {', '.join(map(repr, bad))}")
+    else:
+        task["host"] = "-"
     task["file"] = Path(path).name
     return task
 

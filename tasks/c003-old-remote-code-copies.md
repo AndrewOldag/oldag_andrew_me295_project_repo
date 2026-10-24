@@ -9,6 +9,7 @@ created: 2026-10-16 17:45
 last_update: 2026-10-16 17:45
 blocker: end of project; no Claude session deletes on the lab server
 done_marker: Andrew confirms in the running log
+host: lab server
 ---
 
 From spec 2026-10-12b item 1 (per-branch remote code directory).
