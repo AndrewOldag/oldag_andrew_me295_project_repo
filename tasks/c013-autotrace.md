@@ -7,8 +7,8 @@ state: waiting on Andrew
 branch: wip/autotrace
 host: workstation, lab server
 created: 2026-10-23 20:12
-last_update: 2026-10-23 22:20
-blocker: Andrew review (y/n) and hand tracing
+last_update: 2026-10-24 01:40
+blocker: fine-tune does not fit a 16 GB P100; Andrew to pick a memory option
 done_marker: review/review_traces.py and 140 previews in the tracing pack folder; status waiting on Andrew
 ---
 
