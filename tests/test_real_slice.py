@@ -225,6 +225,20 @@ def test_midline_tag_in_every_name_and_weights_passed(tmp_path, monkeypatch):
     assert r.log[-1]["weights"] == "net2_midline_ft2.pt"
 
 
+def test_runner_set_routes_each_window_to_its_config(tmp_path):
+    from measure.real_runner import RunnerSet
+    base = "code_dir: /c\ntracker_code: /t\npython: /p\nmidline_tag: ft2\n"
+    (tmp_path / "ws.yaml").write_text(f"host: ws\nwork_dir: /ws\n{base}windows:\n  a__w4-6:\n    imgdir: /a\n")
+    (tmp_path / "lab.yaml").write_text(f"host: lab\nwork_dir: /lab\n{base}windows:\n  b__w4-6:\n    imgdir: /b\n")
+    rs = RunnerSet([tmp_path / "ws.yaml", tmp_path / "lab.yaml"], cache=tmp_path / "cache")
+    assert rs.runner_for(RealWindow("a", 4, 6)).host == "ws" and rs.runner_for(RealWindow("b", 4, 6)).host == "lab"
+    with pytest.raises(KeyError):
+        rs.runner_for(RealWindow("c", 4, 6))
+    rs.runners[1].log.append({"track": "x"})
+    assert rs.log == [{"track": "x", "host_config": 1}]
+    assert isinstance(RS.make_runner([str(tmp_path / "ws.yaml")]), RealRunner)
+
+
 def test_wait_vm_memory(tmp_path, monkeypatch):
     import measure.real_runner as RR
     cfg = tmp_path / "r.yaml"

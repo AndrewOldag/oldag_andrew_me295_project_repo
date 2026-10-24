@@ -1,7 +1,9 @@
 """The smallest real slice, end to end: dispatcher -> tracker -> checker -> diagnostician -> auditor.
 
   python scripts/real_slice.py [--root 0708_m12 --from-h 4 --to-h 6] [--dispatcher agent|script] [--no-agent] [--audit-only] [--out DIR]
-  python scripts/real_slice.py --windows 0708_m12:4-6 0711_c1:4-6 0721_m10:4-6 [--config private/real_runner_lab.yaml]
+  python scripts/real_slice.py --windows 0708_m12:4-6 0711_c1:4-6 0721_m10:4-6 --config private/real_runner.yaml private/real_runner_lab.yaml
+
+With several --config files, each window runs on the host of the first config that lists it (RunnerSet).
 
 One or more include-yes roots, one window each inside its usable hours. The dispatcher (LLM agent by default, or the
 script baseline) splits the window into a task and submits it; the job tracks the window on the compute
@@ -33,7 +35,7 @@ from agents.actions import ACTION_SETS, ActionSet  # noqa: E402
 from agents.orchestrator import Orchestrator  # noqa: E402
 from audit.llm import AuditBatch  # noqa: E402
 from audit.view import batch_table, batch_view  # noqa: E402
-from measure.real_runner import REAL_CONFIG, RealRunner, RealWindow  # noqa: E402
+from measure.real_runner import REAL_CONFIG, RealRunner, RealWindow, RunnerSet  # noqa: E402
 
 
 class InlineQueue:
@@ -129,7 +131,7 @@ def audit_only(out, config):
     from measure.remedies import TrackSettings
     from agents.launcher import Launcher
     summ = json.loads((out / "summary.json").read_text())
-    runner, launcher = RealRunner(config), Launcher()
+    runner, launcher = make_runner(config), Launcher()
     summaries, records = [], []
     for tid, s in summ["tasks"].items():
         root, frm = tid.rsplit("__w", 1)
@@ -142,6 +144,11 @@ def audit_only(out, config):
     (out / "summary.json").write_text(json.dumps(summ, indent=1, default=str))
     a = summ["auditor"]
     print(f"auditor: {a['status']}" + (f": {a.get('report')}" if a.get("report") else ""))
+
+
+def make_runner(configs):
+    configs = [configs] if isinstance(configs, (str, Path)) else list(configs)
+    return RealRunner(configs[0]) if len(configs) == 1 else RunnerSet(configs)
 
 
 def parse_window(text):
@@ -158,7 +165,8 @@ def main():
     ap.add_argument("--to-h", type=float, default=6.0)
     ap.add_argument("--windows", nargs="+", default=None, metavar="ROOT:FROM-TO",
                     help="several roots, one window each (replaces --root, --from-h, --to-h)")
-    ap.add_argument("--config", default=str(REAL_CONFIG), help="runner config (host, folders, windows)")
+    ap.add_argument("--config", nargs="+", default=[str(REAL_CONFIG)],
+                    help="runner configs (host, folders, windows); a window runs on the first config that lists it")
     ap.add_argument("--dispatcher", choices=["agent", "script"], default="agent")
     ap.add_argument("--no-agent", action="store_true",
                     help="script dispatcher, tracker and checker only; no LLM call (diagnostician and auditor skipped)")
@@ -189,7 +197,7 @@ def main():
         rows.append(dict(row, usable_from_h=str(frm), usable_to_h=str(to)))
     conditions = {r["id"]: r["condition"] for r in rows}
 
-    runner = RealRunner(a.config)
+    runner = make_runner(a.config)
     runner.sync_code()
     launcher = None
     if not a.no_agent:
