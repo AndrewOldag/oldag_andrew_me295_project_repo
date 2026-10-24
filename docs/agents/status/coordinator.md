@@ -1,15 +1,16 @@
 # coordinator
-Updated: 2026-10-23 15:21 (local)
+Updated: 2026-10-23 17:31 (local)
 Lane: course
 Branch: main
 Last inbox item done: 11 (item 12 waiting on host-setup)
 State: waiting on host-setup
 Now: relay loop every 10 min (item 8): merges per item 1, `check github` to live sessions whose inbox changed
-Last-seen main: de744c6 (inboxes as of de744c6)
+Last-seen main: ccca080 (inboxes as of ccca080)
 Done since last update:
 - Item 9: board allows `waiting on Andrew` and `waiting on <agent>` (`scripts/board.py`, `tasks/README.md`), 8223616; full suite 203 passed
 - Item 1: merged wip/spec-audit (2c0eb60) and then wip/spec-audit-check (f7ec454), `--no-ff`; pending log entries moved into `docs/running_log.md`; suite 203 passed on each merge
 - Item 8: pinged dispatcher 01:22 (inbox changed in 588f052). Coordinator inbox also changed (own). Message tool available: SendMessage + ListAgents
+- 17:31: inboxes changed in ccca080: pinged dispatcher (item 11). freeze-v3 (item 7) and host-setup (item 4) sessions not live; not pinged
 - 15:11: item 12 read; waits for host-setup status to say the test passed, then merge and host-assignment items to turn-long, dispatcher, freeze-v3. host-setup started after de744c6; not pinged
 - 15:01: item 11 (standing lab-server job limit) noted; the coordinator runs no server jobs. Pinged dispatcher, freeze-v3, turn-long (inboxes changed in 4c2a813)
 - 14:49: pinged freeze-v3 (inbox item 5, ec6026b). Correction: the 21:31 status time was GMT; local was 14:31; no gap in checks
@@ -33,7 +34,7 @@ Branches (last commit, state):
 - status/gate2: 2026-10-16 12:27, waiting on Andrew (research lane, not merged)
 - wip/readme-check, wip/vm-setup, wip/auditor-v1b, wip/fq-real, wip/auditor-v1, wip/scored-v1, wip/freeze-v2, heldout/faults, wip/baselines, wip/diag-review, wip/lab-report-1, wip/gatekeeper: merged
 Needs Andrew:
-- freeze-v3 STOP: clean rod v3_bend30_clean_s20 fails closure (4.51 vs 1.0 px/h); keep as accept_clean, label as fault, or drop (freeze-v3 status)
+- Restart freeze-v3 and host-setup: their inboxes have new items (ccca080) and their sessions are not live
 - lab-report-2 and spec-audit-r sessions no longer live; wip/lab-report-2 status still says working (13:29)
 - Old lab-report-2 session (started 00:37) stopped 13:45 on Andrew's go-ahead; the 13:27 one remains
 - Dispatcher: cluster submit refused by its permission check; tracker branch stage-auxdata not merged; checker still fails after the stage fix (dispatcher status)
