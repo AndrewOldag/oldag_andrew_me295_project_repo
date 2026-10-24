@@ -1,11 +1,12 @@
 # turn-long
-Updated: 2026-10-23 18:15 (local)
+Updated: 2026-10-23 18:22 (local)
 Lane: research
 Branch: status/turn-long
-Last inbox item done: 5
+Last inbox item done: 6
 State: working
-Now: research spec step 4 (curvature references) queued on the lab server; waiting for the 1-min load to fall below 16 (other users' load)
+Now: research spec step 4 (curvature) queued on the lab server; 1-min load 24-26 from other users since 17:29, above the limit of 16; starts when it drops
 Done since last update:
+- Item 6 (workstation ssh): noted; no workstation work assigned to this session
 - Step 2: seeds rerun with one root's span cut; 103 of 106 entries usable; cut checked (no other entry changed)
 - Step 3: default tracker on 103 entries, rc 0, 8127 s
 - Steps 4-5 chained on the server; they start when the load allows
