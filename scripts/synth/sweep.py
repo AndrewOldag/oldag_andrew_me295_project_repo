@@ -22,7 +22,8 @@ Limits for the shared machine (docs/decisions.md, 2026-10-11), all built in:
 - before each run: load above 3/4 of the cores holds new runs until it is
   under half
 - one sweep at a time (lock file DIR/sweep.lock); `stop` ends the sweep and
-  its workers
+  its workers. A sweep removes only the lock it wrote (pid and start time);
+  any other lock, live or stale, refuses the run and stays for Andrew
 - after 10 runs: projected wall time; over --max-hours the sweep stops
 - the space under --size-root is kept under --max-gb (checked before each
   run and projected after 10 runs)
@@ -129,25 +130,34 @@ def read_lock(work):
         return None
 
 
+_OWN_LOCK = {}                                       # the lock this process wrote: pid and start time
+
+
 def take_lock(work, plan_name):
-    if read_lock(work):
-        return False
-    p = lock_path(work)
-    p.unlink(missing_ok=True)                        # stale
+    """Create DIR/sweep.lock. A lock already there, live or stale, is never removed: only the sweep
+    that wrote a lock removes it (rules-3, 2026-10-24)."""
     try:
-        fd = os.open(p, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+        fd = os.open(lock_path(work), os.O_CREAT | os.O_EXCL | os.O_WRONLY)
     except FileExistsError:
         return False
+    info = {"pid": os.getpid(), "pgid": os.getpgid(0), "plan": plan_name,
+            "started": time.strftime("%Y-%m-%d %H:%M:%S")}
     with os.fdopen(fd, "w") as fh:
-        fh.write(json.dumps({"pid": os.getpid(), "pgid": os.getpgid(0), "plan": plan_name,
-                             "started": time.strftime("%Y-%m-%d %H:%M:%S")}))
+        fh.write(json.dumps(info))
+    _OWN_LOCK.clear()
+    _OWN_LOCK.update(info)
     return True
 
 
 def release_lock(work):
-    info = read_lock(work)
-    if info is None or info["pid"] == os.getpid():
+    """Remove DIR/sweep.lock only if it is the one this process wrote (same pid and start time)."""
+    try:
+        info = json.loads(lock_path(work).read_text())
+    except (OSError, ValueError):
+        return
+    if _OWN_LOCK and info.get("pid") == _OWN_LOCK["pid"] and info.get("started") == _OWN_LOCK["started"]:
         lock_path(work).unlink(missing_ok=True)
+        _OWN_LOCK.clear()
 
 
 # ------------------------------------------------------------------ worker
@@ -268,7 +278,10 @@ def cmd_run(a):
     size_root = Path(a.size_root) if a.size_root else work
     lowest_priority()
     if not take_lock(work, Path(a.plan).name):
-        emit({"status": "refused", "reason": "another sweep is running"})
+        if read_lock(work):
+            emit({"status": "refused", "reason": "another sweep is running"})
+        else:                                            # stale: left in place for Andrew
+            emit({"status": "refused", "reason": "stale lock from another sweep; not removed; report to Andrew"})
         return 2
     rods.mkdir(parents=True, exist_ok=True)
     tracks.mkdir(parents=True, exist_ok=True)
@@ -404,10 +417,9 @@ def cmd_stop(a):
             os.kill(p["pid"], signal.SIGKILL)
         except ProcessLookupError:
             pass
-    time.sleep(1)
-    if read_lock(a.work) is None:
-        lock_path(a.work).unlink(missing_ok=True)
-    emit({"stopped": True, "killed_after_30s": len(left), "left": len(sweep_processes(info["pgid"]))})
+    time.sleep(1)                                        # the stopped sweep removes its own lock; a killed one leaves it
+    emit({"stopped": True, "killed_after_30s": len(left), "left": len(sweep_processes(info["pgid"])),
+          "lock_left": lock_path(a.work).exists()})
     return 0
 
 
