@@ -1,13 +1,15 @@
 # turn-long
-Updated: 2026-10-24 01:50 (local)
+Updated: 2026-10-24 02:42 (local)
 Lane: research
 Branch: status/turn-long
-Last inbox item done: 9
-State: working
-Now: inbox item 10 part 2: one root rerun (span end moved) on the lab server, then tables recombined with summaries with and without the single-track rule (part 1)
+Last inbox item done: 10
+State: done
+Now: inbox items 9 and 10 done; hand-back updated in the research locations
 Done since last update:
-- Item 10 part 3 done: 18 Oct full-span CIs recomputed with the corrected bootstrap into this run's folder, read only on that run. Old form reproduces the 18 Oct tables byte for byte. Corrected form: tracker call unchanged (12 of 12 rows); point estimates unchanged; 3 primary-route CIs change whether they exclude 0; 19 diagnostic or check-only rows change too
-- Item 10 code: tracker repo bbad8a1 (summaries both ways, combine script, bootstrap form selectable)
-- One rerun folder used a wrong span start (it shifted the root's window grid, not only its end). Its outputs are marked unused in the run log; it could not be stopped from this session (process kill not permitted) and runs to its end inside new folders. Corrected rerun queued behind it with a window check
+- Item 10 part 1: single-track rule kept; every summary written with and without it; only single-track summaries differ
+- Item 10 part 2: one root's span end moved about 3 min earlier; that root rerun seeds through compare; windows before the cut reproduce the earlier tracks exactly; no call changed; tables recombined; findings, report (md + pdf) and vault note updated
+- Item 10 part 3: earlier run's CIs recomputed with the corrected bootstrap, read only on that run; call unchanged; 3 primary-route CIs change whether they exclude 0
+- Two reruns used a wrong span start; their folders are marked unused in the run log; nothing overwritten. The first could not be stopped from this session (process kill not permitted)
+- Tracker repo: bbad8a1 (code), 2eaa54f (run pointer)
 Needs Andrew:
 - none
