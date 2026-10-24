@@ -11,5 +11,6 @@
 - Done: cluster P100 job with gradient accumulation (batch 3 x 2, Andrew's option A): net2_midline_ft2, 20 epochs, best validation loss 0.0022, 1 h 23 min, $0.234; spend today $0.691 of $5
 - Done: held-out score (28 frames, 16 roots): base net2 off the root on 24; net2_midline_ft distance median 2.9 px, p90 7.4 px, end +28 px; net2_midline_ft2 distance median 2.4 px, p90 6.4 px, end +23 px; 0 no root and 0 off the root for both fine-tuned nets
 - Demo: the score table in `results/2026-10-23_autotrace/README.md`
-- Remaining: Andrew decides whether to adopt net2_midline_ft2 as the real-movie midline source; then the 0708_m12 slice is rerun with it
-- Bottlenecks: adoption decision, on Andrew
+- Done: net2_midline_ft2 adopted by planning (2026-10-24 05:05); weights copied beside the dispatcher's tracker weights on lab server and workstation, new file name, md5 checked (item 14)
+- Remaining: none for autotrace; the dispatcher reruns the 3-root slice with ft2
+- Bottlenecks: none
