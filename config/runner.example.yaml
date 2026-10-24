@@ -4,3 +4,5 @@ host: <ssh host alias of the machine that has the tracker>
 work_dir: <directory there for rendered rods and tracker outputs>
 code_dir: <directory there for a copy of measure/ and scripts/>
 python: <Python of the tracker environment there (envs/qb.yml)>
+rods_dir: <optional: folder for rendered rods under work_dir (default rods)>
+max_gb: <optional: sweep work-space limit in GB (default the sweep.py default)>

@@ -132,6 +132,8 @@ class RemoteRunner:
         branch: names the code directory; default the checked-out branch."""
         self.couple = couple
         cfg = yaml.safe_load(Path(config).read_text())
+        self.rods = cfg.get("rods_dir", "rods")           # rendered rods, under work_dir
+        self.max_gb = cfg.get("max_gb")                    # sweep work-space limit; None = sweep.py default
         self.host, self.work, self.code_base, self.python = (cfg["host"], cfg["work_dir"],
                                                              cfg["code_dir"], cfg["python"])
         self.code_branch = branch_code_dir(self.code_base, branch or current_branch())
@@ -244,8 +246,9 @@ class RemoteRunner:
         self._ssh(f"mkdir -p {q(self.work)} && set -C && cat > {q(self.work)}/{plan_f}", stdin=json.dumps(plan).encode())
         self.start_detached(f"cd {q(self.work)} && set -C && " + self._low(
             self._py("scripts/synth/sweep.py", ["run", "--plan", plan_f, "--work", ".",
-                                                "--tracks", tracks, "--rods", "rods", "--size-root", self.size_root,
-                                                "--max-hours", str(max_hours)]))
+                                                "--tracks", tracks, "--rods", self.rods, "--size-root", self.size_root,
+                                                "--max-hours", str(max_hours)]
+                                                + (["--max-gb", str(self.max_gb)] if self.max_gb else [])))
             + f" > {log_f} 2>&1")
         return log_f
 
@@ -277,16 +280,16 @@ class RemoteRunner:
         for rid in {f.name.split("__")[0] for f in cache.glob("*__*.npz") if "_moved__" not in f.name}:
             local = cache / f"{rid}_truth.npz"
             if not local.exists():
-                self._fetch(f"{self.work}/rods/{rid}_truth.npz", local)
+                self._fetch(f"{self.work}/{self.rods}/{rid}_truth.npz", local)
         return cache
 
     def render(self, rod, moved=False):
         """Render the rod on the tracker machine unless it exists. Returns the rod id."""
-        args = ["--out", f"{self.work}/rods"] + rod.options() + (["--moved"] if moved else [])
-        cmd = (f"mkdir -p {shlex.quote(self.work)}/rods {shlex.quote(self.work)}/tracks && "
+        args = ["--out", f"{self.work}/{self.rods}"] + rod.options() + (["--moved"] if moved else [])
+        cmd = (f"mkdir -p {shlex.quote(self.work)}/{self.rods} {shlex.quote(self.work)}/tracks && "
                + self._py("scripts/synth/make_rod.py", args + ["--dry-run"]))
         rid = json.loads(self._ssh(cmd).decode().strip().splitlines()[-1])["id"]
-        r = f"{shlex.quote(self.work)}/rods/{rid}"
+        r = f"{shlex.quote(self.work)}/{self.rods}/{rid}"
         state = self._ssh(f"if test -e {r}.ok -o -e {r}_truth.npz; then echo done; elif test -e {r}.imgdir; "
                           f"then echo partial; else echo none; fi").decode().strip()
         if state == "partial":
@@ -315,8 +318,8 @@ class RemoteRunner:
         if state == "done":
             self._fetch(f"{self.work}/tracks/{name}", local)
         if state == "none":
-            args = ["--imgdir", f"{self.work}/rods/{rid}.imgdir",
-                    "--midline", f"{self.work}/rods/{rid}_midline.npz",
+            args = ["--imgdir", f"{self.work}/{self.rods}/{rid}.imgdir",
+                    "--midline", f"{self.work}/{self.rods}/{rid}_midline.npz",
                     "--out", f"{self.work}/tracks/{name}"] + settings.args()
             self._load_ok()
             out = json.loads(self._ssh(self._low(self._py("scripts/remote/qb_track.py", args)))
@@ -329,7 +332,7 @@ class RemoteRunner:
     def truth(self, rid):
         local = self.cache / f"{rid}_truth.npz"
         if not local.exists():
-            self._fetch(f"{self.work}/rods/{rid}_truth.npz", local)
+            self._fetch(f"{self.work}/{self.rods}/{rid}_truth.npz", local)
         with np.load(local) as z:
             return {k: z[k] for k in z.files}
 
