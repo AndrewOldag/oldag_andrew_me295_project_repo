@@ -11,8 +11,9 @@ file is missing on the host gets its net midline built there first (`ensure_midl
 segmentation midline (scripts/remote/real_midline.py, for the frame list and mask0), the tracker's
 `midline_ml/batch_midlines.py --mode tile` with the fine-tuned net2 at low 0.1 %, high 99.5 %
 (decisions 2026-10-23), then scripts/remote/net_to_midline.py. `midline_weights` and `midline_tag` in the config
-select another net (inbox item 22: `net2_midline_ft2.pt`, tag `ft2`); the tag goes into every net-midline, moved-copy,
-host track and cache name, so outputs of different nets never overwrite each other.
+select another net (inbox item 22: `net2_midline_ft2.pt`, tag `ft2`); the tag goes into every net-midline, moved-copy
+midline, host track and cache name, so outputs of different nets never overwrite each other. Whole-pixel copy frames do
+not depend on the midline; an existing copy of the window is reused (scripts/remote/real_moved.py).
 
 VM memory (inbox item 22): before every host step the runner waits while free VM memory is below 1.5 GB.
 
@@ -189,10 +190,11 @@ class RealRunner:
 
     def copy_paths(self, window, which):
         """which: 'moved' or 'ref'. Whole-pixel mode (inbox item 19): cropped reference and moved copies."""
-        base = f"{self.work}/moved/{window.id()}{self.tag}"
+        base = f"{self.work}/moved/{window.id()}"
         if self.moved_mode == "rotate":
-            return {"imgdir": base + "_moved.imgdir", "midline": base + "_moved_midline.npz"}
-        return {"imgdir": f"{base}_wp_{which}.imgdir", "midline": f"{base}_wp_{which}_midline.npz"}
+            return {"imgdir": f"{base}{self.tag}_moved.imgdir", "midline": f"{base}{self.tag}_moved_midline.npz"}
+        # whole-pixel frames do not depend on the midline: one copy per window, shared by every net (item 22)
+        return {"imgdir": f"{base}_wp_{which}.imgdir", "midline": f"{base}{self.tag}_wp_{which}_midline.npz"}
 
     def ensure_moved(self, window):
         """Make the rigidly moved copy (and, whole-pixel mode, the cropped reference) on the host unless they exist."""

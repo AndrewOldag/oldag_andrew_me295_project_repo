@@ -71,29 +71,36 @@ def whole_pixel(src, m, win, tw, a):
     t0 = time.time()
     if a.pad:
         return whole_pixel_padded(src, m, win, d, a, t0)
+    reused = []
     for name, shift in (("ref", np.zeros_like(d)), ("moved", d)):
         dst = Path(a.out_ref_imgdir if name == "ref" else a.out_imgdir)
-        tmp = dst.with_name(dst.name + ".part")
-        tmp.mkdir(parents=True, exist_ok=False)
-        names = {f"ImageData_Ch0_TP{int(f):07d}.npy": k for k, f in enumerate(win)}
-        for p in sorted(src.iterdir()):
-            if p.name in names:
-                k = names[p.name]
-                a3 = np.load(p)
-                H, W = a3.shape[-2:]
-                r0, c0 = D - shift[k]                                     # box of size (H - D0, W - D1)
-                np.save(tmp / p.name, np.ascontiguousarray(a3[:, r0:r0 + H - D[0], c0:c0 + W - D[1]]))
-            else:
-                os.symlink(p.resolve(), tmp / p.name)
+        # The copy's frames depend only on the window, not on the midline (inbox item 22): an existing copy
+        # of the same window is reused and only the midline file is written
+        tmp = dst if dst.is_dir() else dst.with_name(dst.name + ".part")
+        if tmp is dst:
+            reused.append(name)
+        else:
+            tmp.mkdir(parents=True, exist_ok=False)
+            names = {f"ImageData_Ch0_TP{int(f):07d}.npy": k for k, f in enumerate(win)}
+            for p in sorted(src.iterdir()):
+                if p.name in names:
+                    k = names[p.name]
+                    a3 = np.load(p)
+                    H, W = a3.shape[-2:]
+                    r0, c0 = D - shift[k]                                     # box of size (H - D0, W - D1)
+                    np.save(tmp / p.name, np.ascontiguousarray(a3[:, r0:r0 + H - D[0], c0:c0 + W - D[1]]))
+                else:
+                    os.symlink(p.resolve(), tmp / p.name)
         mid = m["midline_image"][:len(win)] - D + shift[:, None, :]
         out = {k: m[k] for k in m.files}
         out.update(midline_image=mid, seed=mid[0])
         if "mask0" in m.files:
             out["mask0"] = m["mask0"][D[0]:, D[1]:]
         np.savez_compressed(a.out_ref_midline if name == "ref" else a.out_midline, **out)
-        os.rename(tmp, dst)
+        if tmp is not dst:
+            os.rename(tmp, dst)
     print(json.dumps({"mode": "whole_pixel", "frames": int(len(win)), "shift_px_end": d[-1].tolist(),
-                      "crop_px": D.tolist(), "run_s": round(time.time() - t0, 1)}))
+                      "crop_px": D.tolist(), "reused_imgdirs": reused, "run_s": round(time.time() - t0, 1)}))
 
 
 def whole_pixel_padded(src, m, win, d, a, t0):
