@@ -7,7 +7,7 @@ state: working
 branch: wip/freeze-v31
 host: workstation (tracker), lab server (storage), VM (LLM runs)
 created: 2026-10-24 11:40
-last_update: 2026-10-24 12:07
+last_update: 2026-10-24 12:20
 blocker: none
 done_marker: tag freeze-v3.1 and results/2026-10-24_freeze_v3.1/README.md
 ---
