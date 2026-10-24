@@ -1,14 +1,14 @@
 # freeze-v31
-Updated: 2026-10-24 11:46 (local)
+Updated: 2026-10-24 11:55 (local)
 Lane: course
 Branch: wip/freeze-v31
 Last inbox item done: 1
-State: working
-Now: item 2: sizing sweep 1 running on the lab server (114 tracker runs, 45 rods, seeds 10-12; log sweep_freeze_v31_20261024-114448)
+State: waiting on Andrew
+Now: item 2 blocked: sizing sweep 1 stopped by the sweep's 10 GB work-space limit after 13 of 114 runs, 0 failed
 Done since last update:
-- Driver `scripts/synth/scored_v31.py` on top of the v3 driver (v3 code unchanged); `tests/test_freeze_v31.py` 3 passed; 1c1a548 (sweep code is fbd65bb, same synced code)
-- second_root cause from the v3 runs: only plane_sections fails; crop_or_mask leaves every value unchanged; after `use_width_free_ratio` all applied checks pass and the centre is good, so methods accept (accept_on_decline). Alternative repair: remedy tree 3 of 3, diagnostician 9 of 9, single agent 6 of 9 (`results/2026-10-24_freeze_v3.1/second_root.md`)
-- Sizes tried: rigid_drift 0.5-5.5 (unit 1), bad_stage_correction 3-8 px, displacement_exceeds_patch 2x2/2x3/2x4; width_change has one size at v3 geometry; stage_log_missing 1 is the largest size (judged from the v3 cache)
-- Earlier status time 12:00 was wrong (VM clock); local time from the server
+- Sizing sweep 1 (log sweep_freeze_v31_20261024-114448): status `projected_space`, 13 runs done, 0 failed, 67 s; work space 8.06 -> 8.32 GB; projection for the full plan 10.25 GB, over the 10 GB limit. 13 outputs fetched
+- Partial sizing (`results/2026-10-24_freeze_v3.1/sizing.md`): rigid_drift 0.5 and 1.5, bad_stage_correction 3, stage_log_missing 1: check fails 3 of 3, unremedied measurement good 3 of 3 (rule part 2 fails). 51 rod states (102 runs) still needed
+- Driver `scripts/synth/scored_v31.py`, `tests/test_freeze_v31.py` 3 passed (1c1a548); second_root note (`second_root.md`)
 Needs Andrew:
-- none
+- Lab-server work space: 8.32 of 10 GB. About 0.02 GB per tracker run (mostly renders); the rest of v3.1 needs about 290 runs, about 6 GB. Sessions cannot delete there. Options: (a) Andrew frees space in the work folder (e.g. v3 renders no longer needed); (b) Andrew raises the sweep's `--max-gb` limit for this freeze (a limit change, docs/decisions.md). I start the next sweep on your word
+- Size steps I chose (spec says "the fault's own unit"): rigid_drift factor steps of 1 (0.5-5.5), bad_stage_correction 1 px (3-8 px). If you want steps of the v3 size instead (bad_stage 3, 6, ..., 18 px), say so before the next sweep
