@@ -75,6 +75,9 @@ EXPECTED = {**{c: "accept_clean" for c in CLEAN},
 NAMES = {**{f: {f} for f in DEV}, "second_root": {"second_root"}, "fast_rotation": {"fast_rotation"},
          "bad_stage_correction": {"bad_stage_correction"}, "flank_swap": {"unknown"},
          "partial_occlusion": {"low_texture", "unknown"}, "stage_log_missing": {"bad_stage_correction", "rigid_drift"}}
+# clean scored rods whose good unremedied run fails a check: kept accept_clean, reported as checker false alarms
+# (Andrew, 2026-10-23 18:15, inbox freeze-v3 item 7, option a)
+CLEAN_FALSE_ALARM = {"v3_bend30_clean_s20"}
 METHODS = ("script", "remedy_tree", "diagnostician", "single_agent")
 LLM = ("diagnostician", "single_agent")
 REPEATS = (0, 1, 2)
@@ -411,7 +414,8 @@ def labels_report():
         exp = EXPECTED[kind(rod)]
         u = ev[0][1]
         if rod.fault is None:
-            cls, seq = ("accept_clean" if u["all_pass"] and u["good"] else "clean_fails"), None
+            ok = (u["all_pass"] or rod.id() in CLEAN_FALSE_ALARM) and u["good"]
+            cls, seq = ("accept_clean" if ok else "clean_fails"), None
         else:
             lab, seq = label_rod([{"sequence": s, "checks_pass": e["all_pass"], "good": e["good"]} for s, e in ev])
             cls = "accept_repaired" if lab == "repairable" else "decline"

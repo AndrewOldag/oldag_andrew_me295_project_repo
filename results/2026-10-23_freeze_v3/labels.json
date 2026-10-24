@@ -97,7 +97,7 @@
    "size": null
   },
   "v3_bend30_clean_s20": {
-   "class": "clean_fails",
+   "class": "accept_clean",
    "expected": "accept_clean",
    "sequence": null,
    "kind": "v3_bend30",
@@ -434,11 +434,11 @@
   }
  },
  "counts": {
-  "accept_clean": 17,
+  "accept_clean": 18,
   "accept_repaired": 12,
   "decline": 21,
-  "clean_fails": 1
+  "clean_fails": 0
  },
  "complete": true,
- "stop": true
+ "stop": false
 }
