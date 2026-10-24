@@ -115,3 +115,11 @@
 - Demo: the README 3-root command prints check values, diagnostician outcomes and the auditor report per window
 - Remaining: Andrew's or planning's call on the ft2 closure regression and on 0711_c1
 - Bottlenecks: closure fails on every ft2 window (Andrew, planning)
+
+## 2026-10-24 (build account, session dispatcher, inbox item 28)
+- Done: closure cause, 0708_m12 4-6 h, ft vs ft2 (`scripts/closure_tip_compare.py`, `results/2026-10-24_closure_ft_vs_ft2/`): tip jump median 2.00 px both, p90 4.58 / 4.30; closure 0.945 / 4.52; with the tip fitted in time 2.96-3.75 / 4.36-5.15 px/h. Jitter does not explain the change; tip stabilization not applied; stopped
+- Done: control-root candidates, ft2 tip confidence on 5 frames (rule >= 0.5): 0714_c10 0.310, 0714_c11 0.026, 0711_c2 0.418. None passed; no full run; stopped
+- Done: decisions entries for Andrew's two choices with these outcomes
+- Demo: the `closure_tip_compare.py` command in the results README prints the table values as JSON
+- Remaining: Andrew's call on closure on real windows (neither net closes with a smoothed tip) and on the control root
+- Bottlenecks: real slice blocked on both (Andrew)
