@@ -104,3 +104,14 @@
 - Demo: `python scripts/real_slice.py` runs the chain and prints each stage
 - Remaining: new midline net (autotrace) before any non-provisional real result
 - Bottlenecks: none for this item
+
+## 2026-10-24 (build account, session dispatcher, inbox items 22-27)
+- Done: runner takes midline weights and tag from config (ft2); tag in every net-midline, copy-midline, track and cache name; VM memory wait (1.5 GB) before host steps (089a340)
+- Done: whole-pixel rigid copies shared across nets, only midline files tagged (ce70876); `--config` takes several runner configs, each window on the host whose config lists it (c0284e1); suite 249 passed, 1 skipped
+- Done: ft2 net midlines, 4-6 h: 0708_m12 2939 s and 0711_c1 3452 s (lab server, started before item 25), 0721_m10 1663 s (workstation); tip confidence medians 0.572, 0.176, 0.249
+- Done: 0721_m10 montage copied to the workstation (832 frames); work folder 18.0 GiB of 20, 27 GB free
+- Done: 3-root agent run, wall 1459 s: closure 4.52, 64.2, 4.66 px/h (threshold 1.0), all FAIL; diagnostician declined all 3 (bad_stage_correction; 2 registration remedies rolled back); auditor 0 accepted. `results/2026-10-24_real_slice_3roots/`
+- Done: 0708_m12 4-6 h closure 0.945 with ft, 4.52 with ft2 (same tracker, settings, window)
+- Demo: the README 3-root command prints check values, diagnostician outcomes and the auditor report per window
+- Remaining: Andrew's or planning's call on the ft2 closure regression and on 0711_c1
+- Bottlenecks: closure fails on every ft2 window (Andrew, planning)
