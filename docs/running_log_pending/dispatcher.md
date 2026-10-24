@@ -123,3 +123,12 @@
 - Demo: the `closure_tip_compare.py` command in the results README prints the table values as JSON
 - Remaining: Andrew's call on closure on real windows (neither net closes with a smoothed tip) and on the control root
 - Bottlenecks: real slice blocked on both (Andrew)
+
+## 2026-10-24 (build account, session dispatcher, inbox items 29-30)
+- Done: decisions: real-movie closure known limit; control-root rule (ft2 net tip within 15 px of the mask apex, median of 5 frames) replaces the confidence bar; "midline end" read as the net tip point, confirmed by planning
+- Done: `scripts/remote/tip_apex_probe.py`: net tip to apex 0711_c2 4.5, 0714_c10 4.1, 0708_m12 6.4, 0721_m10 9.2 px; tracking-polyline end 27-43 px on every root (by design)
+- Done: 0711_c2 4-6 h ft2 net midline on the workstation from its 80 window frames, 1829 s; work folder 19.27 GiB of 20
+- Done: 3-root agent run (0708_m12, 0711_c2, 0721_m10), wall 597 s: closure 4.52, 20.4, 4.66 px/h, all FAIL; rigid 7.13, 3.51, 7.26; diagnostician declined all 3 (bad_stage_correction, remedies rolled back); auditor 0 accepted, no condition conclusion. `results/2026-10-24_real_slice_3roots_c2/`
+- Demo: the README command in that results folder prints check values, diagnostician outcomes and the auditor report
+- Remaining: merge wip/dispatcher (ready); real-movie closure root cause is a research-lane item after 28 Oct
+- Bottlenecks: none for the course slice

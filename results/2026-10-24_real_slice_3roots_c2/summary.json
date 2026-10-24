@@ -1,0 +1,436 @@
+{
+ "windows": [
+  [
+   "0708_m12",
+   4.0,
+   6.0
+  ],
+  [
+   "0711_c2",
+   4.0,
+   6.0
+  ],
+  [
+   "0721_m10",
+   4.0,
+   6.0
+  ]
+ ],
+ "dispatcher_mode": "agent",
+ "dispatcher": {
+  "status": "finish",
+  "rounds": 2,
+  "minute": 30.0,
+  "windows": 3,
+  "states": {
+   "collected": 3
+  },
+  "lab_core_hours": 0.13,
+  "cluster_core_hours": 0,
+  "refused": 0,
+  "cluster_refused": 0,
+  "approvals": 0,
+  "retries": 0,
+  "retry_successes": 0,
+  "lab_peak_workers": 3
+ },
+ "tasks": {
+  "0708_m12__w4": {
+   "outcome": {
+    "task_id": "0708_m12__w4",
+    "agent": "diagnostician",
+    "status": "decline",
+    "args": {
+     "fault": "bad_stage_correction",
+     "reason": "All of the closure error (4.52 px/h) falls at stage moves, with a 6.86 px/h velocity jump at each move. Registering the frames only lowered it to 3.61 px/h, so it was rolled back, and this remedy has no other setting. Light midline smoothing also failed, and no other fault has its own evidence."
+    },
+    "steps": 7,
+    "failed_steps": 0,
+    "calls": 7,
+    "input_tokens": 33632,
+    "output_tokens": 5853,
+    "call_ms": 61733
+   },
+   "remedies": [
+    "frames registered on the non-growing tissue (from 460 px from the tip) before tracking",
+    "rolled back: frames registered on the non-growing tissue (from 460 px from the tip) before tracking",
+    "midline source smoothed (light)",
+    "rolled back: midline source smoothed (light)"
+   ],
+   "roll_backs": 2,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 7.133266945076339,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "where_s_px": 455.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; would fail): largest change in regr_mid; profile window value 5.436 %/h (real-movie profile window s <= 398 px)"
+    },
+    {
+     "check": "closure",
+     "passed": false,
+     "value": 4.521029157483442,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "where_s_px": 488.6546830623496,
+     "where_frame_pair": 6,
+     "detail": "tip path 129.0 px/h; base at s = 489 px; largest single-pair residual at pair 6"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 213.8620558636782,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "where_s_px": 435.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; would fail): flank difference 10.92 %/h, predicted 224.78 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 7.133266945076339,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "where_s_px": 455.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; would fail): largest change in regr_mid; profile window value 5.436 %/h (real-movie profile window s <= 398 px)"
+    },
+    {
+     "check": "closure",
+     "passed": false,
+     "value": 4.521029157483442,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "where_s_px": 488.6546830623496,
+     "where_frame_pair": 6,
+     "detail": "tip path 129.0 px/h; base at s = 489 px; largest single-pair residual at pair 6"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 213.8620558636782,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "where_s_px": 435.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; would fail): flank difference 10.92 %/h, predicted 224.78 %/h"
+    }
+   ],
+   "condition": "mannitol",
+   "window_h": [
+    4.0,
+    6.0
+   ]
+  },
+  "0711_c2__w4": {
+   "outcome": {
+    "task_id": "0711_c2__w4",
+    "agent": "diagnostician",
+    "status": "decline",
+    "args": {
+     "fault": "bad_stage_correction",
+     "reason": "Closure still fails (16.06 px/h after frame registration vs 1.0 px/h threshold; rolled back). All of the error falls at the 79 stage moves, and register_frames has no further setting."
+    },
+    "steps": 3,
+    "failed_steps": 0,
+    "calls": 3,
+    "input_tokens": 11514,
+    "output_tokens": 1763,
+    "call_ms": 20108
+   },
+   "remedies": [
+    "frames registered on the non-growing tissue (from 455 px from the tip) before tracking",
+    "rolled back: frames registered on the non-growing tissue (from 455 px from the tip) before tracking"
+   ],
+   "roll_backs": 1,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 3.510657536338454,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "where_s_px": 430.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; would fail): largest change in regr_mid; profile window value 2.813 %/h (real-movie profile window s <= 397 px)"
+    },
+    {
+     "check": "closure",
+     "passed": false,
+     "value": 20.431514086006505,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "where_s_px": 464.4816222457936,
+     "where_frame_pair": 17,
+     "detail": "tip path 188.7 px/h; base at s = 464 px; largest single-pair residual at pair 17"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 210.08182407047045,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "where_s_px": 445.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; would fail): flank difference 2.91 %/h, predicted -207.18 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 3.510657536338454,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "where_s_px": 430.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; would fail): largest change in regr_mid; profile window value 2.813 %/h (real-movie profile window s <= 397 px)"
+    },
+    {
+     "check": "closure",
+     "passed": false,
+     "value": 20.431514086006505,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "where_s_px": 464.4816222457936,
+     "where_frame_pair": 17,
+     "detail": "tip path 188.7 px/h; base at s = 464 px; largest single-pair residual at pair 17"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 210.08182407047045,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "where_s_px": 445.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; would fail): flank difference 2.91 %/h, predicted -207.18 %/h"
+    }
+   ],
+   "condition": "control",
+   "window_h": [
+    4.0,
+    6.0
+   ]
+  },
+  "0721_m10__w4": {
+   "outcome": {
+    "task_id": "0721_m10__w4",
+    "agent": "diagnostician",
+    "status": "decline",
+    "args": {
+     "fault": "bad_stage_correction",
+     "reason": "The closure residual is confined to stage moves (4.66 px/h at moves, 0.0 elsewhere), and the velocity jumps 5.87 px/h at each move. This points to a bad stage correction. Registering the frames, the only remedy for this fault, made closure worse (4.656 to 9.033 px/h) and was rolled back. That remedy has no other setting, so closure cannot be fixed and the measurement cannot be trusted."
+    },
+    "steps": 3,
+    "failed_steps": 0,
+    "calls": 3,
+    "input_tokens": 11515,
+    "output_tokens": 1507,
+    "call_ms": 17006
+   },
+   "remedies": [
+    "frames registered on the non-growing tissue (from 450 px from the tip) before tracking",
+    "rolled back: frames registered on the non-growing tissue (from 450 px from the tip) before tracking"
+   ],
+   "roll_backs": 1,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 7.262437365927879,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "where_s_px": 445.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; would fail): largest change in regr_mid; profile window value 2.939 %/h (real-movie profile window s <= 397 px)"
+    },
+    {
+     "check": "closure",
+     "passed": false,
+     "value": 4.656067307904486,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "where_s_px": 457.949541714005,
+     "where_frame_pair": 68,
+     "detail": "tip path 133.4 px/h; base at s = 458 px; largest single-pair residual at pair 68"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 167.82035443290042,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "where_s_px": 90.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; would fail): flank difference 0.81 %/h, predicted -167.01 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 7.262437365927879,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "where_s_px": 445.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; would fail): largest change in regr_mid; profile window value 2.939 %/h (real-movie profile window s <= 397 px)"
+    },
+    {
+     "check": "closure",
+     "passed": false,
+     "value": 4.656067307904486,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "where_s_px": 457.949541714005,
+     "where_frame_pair": 68,
+     "detail": "tip path 133.4 px/h; base at s = 458 px; largest single-pair residual at pair 68"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 167.82035443290042,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "where_s_px": 90.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; would fail): flank difference 0.81 %/h, predicted -167.01 %/h"
+    }
+   ],
+   "condition": "mannitol then control",
+   "window_h": [
+    4.0,
+    6.0
+   ]
+  }
+ },
+ "auditor": {
+  "status": "report",
+  "report": "Batch: 3 runs (real movies), 0 accepted, 0 flagged, 0 cleared. r01, r02 and r03 were all declined.\nWhat the declines have in common: every run failed closure (r01 4.66, r02 20.43, r03 4.52; threshold 1.0). Two checks that don't block acceptance were also far over their thresholds in every run. Rigid-body invariance was 3.5 to 7.3 (threshold 2.0). Plane sections was 168 to 214 (threshold 3.25). No run used the width-free ratio. No remedy was kept in the final measurement (r01 and r02 had 1 roll-back each, r03 had 2). The tracked kinematics and the tip motion don't agree in any run, so none of these profiles can be reported.\nProfiles by condition (for context only, since all are declined; one root per condition):\n- control (r02): centre REGR peak 31.2 %/h at 726 \u00b5m from the tip, growth zone 589 \u00b5m, largest flank difference -12.3 %/h at 84 \u00b5m.\n- mannitol (r03): peak 51.0 %/h at 579 \u00b5m, growth zone 779 \u00b5m, flank difference -28.8 %/h at 547 \u00b5m. This profile has a different shape from the other two: the peak is closer to the tip and the growth zone is longer (z -2.5 and 1.7), and the flank difference is unusually large (z -4.2).\n- mannitol then control (r01): peak 35.6 %/h at 695 \u00b5m, growth zone 642 \u00b5m, flank difference -9.6 %/h at 916 \u00b5m.\nNo conclusion about the conditions can be drawn. There is one root per condition and every measurement failed closure. The movies need re-tracking, or new movies are needed, before conditions can be compared.",
+  "decisions": {},
+  "accepted": [],
+  "runs": {
+   "r01": "decline",
+   "r02": "decline",
+   "r03": "decline"
+  },
+  "steps": 1,
+  "calls": 1,
+  "input_tokens": 4881,
+  "output_tokens": 853
+ },
+ "runner_log": [
+  {
+   "track": "0708_m12__w4-6_ft2_wp_ref__st1_mslight4__L400.npz",
+   "run_s": 9.6,
+   "frames": 80,
+   "load1_before": 0.31,
+   "free_gb_before": 26.0,
+   "free_gb_after": 26.0,
+   "host_config": 0
+  },
+  {
+   "track": "0708_m12__w4-6_ft2_wp_moved__st1_mslight4__L400.npz",
+   "run_s": 11.3,
+   "frames": 80,
+   "load1_before": 0.39,
+   "free_gb_before": 26.0,
+   "free_gb_after": 26.0,
+   "host_config": 0
+  },
+  {
+   "moved_copy": "0711_c2__w4-6",
+   "mode": "whole_pixel",
+   "frames": 80,
+   "shift_px_end": [
+    40,
+    24
+   ],
+   "crop_px": [
+    40,
+    24
+   ],
+   "reused_imgdirs": [],
+   "run_s": 8.5,
+   "free_gb_before": 16672.0,
+   "free_gb_after": 16671.0,
+   "host_config": 1
+  },
+  {
+   "track": "0711_c2__w4-6_ft2_wp_ref__st1__L400.npz",
+   "run_s": 11.7,
+   "frames": 80,
+   "load1_before": 0.15,
+   "free_gb_before": 16671.0,
+   "free_gb_after": 16671.0,
+   "host_config": 1
+  },
+  {
+   "track": "0711_c2__w4-6_ft2_wp_moved__st1__L400.npz",
+   "run_s": 14.1,
+   "frames": 80,
+   "load1_before": 0.68,
+   "free_gb_before": 16671.0,
+   "free_gb_after": 16671.0,
+   "host_config": 1
+  },
+  {
+   "track": "0711_c2__w4-6_ft2_wp_ref__st1_reg2p455__L400.npz",
+   "run_s": 11.5,
+   "frames": 80,
+   "load1_before": 0.09,
+   "free_gb_before": 16671.0,
+   "free_gb_after": 16671.0,
+   "host_config": 1
+  },
+  {
+   "track": "0711_c2__w4-6_ft2_wp_moved__st1_reg2p455__L400.npz",
+   "run_s": 11.4,
+   "frames": 80,
+   "load1_before": 1.01,
+   "free_gb_before": 16671.0,
+   "free_gb_after": 16671.0,
+   "host_config": 1
+  }
+ ],
+ "wall_s": 596.5,
+ "model": "claude-opus-5-5",
+ "claude_code": "2.1.310"
+}
