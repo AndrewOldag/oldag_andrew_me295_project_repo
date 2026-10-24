@@ -40,7 +40,7 @@ def test_rigid_profile_window():
 
 def test_profiles_defined():
     assert CHECK_PROFILES["synthetic"] == ("rigid_invariance", "closure", "plane_sections")
-    assert CHECK_PROFILES["real"] == ("rigid_invariance", "closure")
+    assert CHECK_PROFILES["real"] == ("closure",)          # inbox item 20: rigid invariance reported, not gating
 
 
 def test_synthetic_profile_unchanged():
@@ -58,10 +58,12 @@ def test_real_profile_reports_plane_sections_without_gating():
     ps = prof["plane_sections"]
     assert ps.passed is None and ps.value == raw["plane_sections"].value
     assert ps.detail.startswith(NOT_GATING) and "would fail" in ps.detail
-    for k in ("rigid_invariance", "closure"):
-        assert prof[k].passed == raw[k].passed and prof[k].detail == raw[k].detail
+    assert prof["closure"].passed == raw["closure"].passed and prof["closure"].detail == raw["closure"].detail
+    rig = prof["rigid_invariance"]
+    assert rig.passed is None and rig.value == raw["rigid_invariance"].value and rig.detail.startswith(NOT_GATING)
     s = _summary(list(prof.values()))
-    assert "plane_sections" not in s["failed_checks"] and s["reported_not_gating"] == ["plane_sections"]
+    assert "plane_sections" not in s["failed_checks"]
+    assert s["reported_not_gating"] == ["rigid_invariance", "plane_sections"]
     assert "plane_sections" not in s["not_run"] and s["check_values"]["plane_sections"]["value"] == round(ps.value, 3)
     assert "plane_sections" not in failing(list(prof.values()))
 
@@ -92,7 +94,7 @@ class RealLikeRunner:
 def test_slice_uses_real_profile_for_real_movies():
     sl = Slice(RealLikeRunner(), Rod())
     t = sl.task()
-    assert "plane_sections" not in t["failed_checks"] and t["reported_not_gating"] == ["plane_sections"]
+    assert "plane_sections" not in t["failed_checks"] and t["reported_not_gating"] == ["rigid_invariance", "plane_sections"]
     sl2 = Slice(RealLikeRunner(), Rod(), profile="synthetic")
     assert "plane_sections" in sl2.task()["failed_checks"]
 

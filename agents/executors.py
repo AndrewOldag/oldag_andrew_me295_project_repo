@@ -26,7 +26,7 @@ ROLL_BACK_FRACTION = 0.75      # a failing check must fall to at most 3/4 of its
 # checker code and thresholds do not change; a check outside the profile is computed and reported, its
 # value kept, and `passed` set to None with the detail prefix below. Synthetic rods keep all three checks.
 CHECK_PROFILES = {"synthetic": ("rigid_invariance", "closure", "plane_sections"),
-                  "real": ("rigid_invariance", "closure")}
+                  "real": ("closure",)}          # rigid invariance not gating on real windows: inbox item 20
 NOT_GATING = "reported, not gating"
 
 
@@ -131,11 +131,14 @@ class Slice:
         m = self.runner.measure(self.rod, settings)
         skip = ("plane_sections",) if settings.width_free else ()
         profile = self.profile or profile_of(m.record)
-        checks = apply_profile(run_checks(m.record, m.moved, self.thresholds, skip), profile)
+        checks = run_checks(m.record, m.moved, self.thresholds, skip)
         if profile == "real" and m.moved is not None:
-            rigid = real_rigid_invariance(m.record, m.moved, self.thresholds)
-            if rigid is not None:
-                checks = [rigid if c.check == "rigid_invariance" else c for c in checks]
+            # full-range value is the reported one; the item-19 profile-window value is shown next to it
+            win = real_rigid_invariance(m.record, m.moved, self.thresholds)
+            for c in checks:
+                if c.check == "rigid_invariance" and win is not None:
+                    c.detail = f"{c.detail}; profile window value {win.value:.3f} %/h ({win.detail.split(';')[0]})"
+        checks = apply_profile(checks, profile)
         self.runs.append((settings, m, checks, change))
 
     @property

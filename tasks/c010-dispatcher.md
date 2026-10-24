@@ -6,8 +6,8 @@ owner: dispatcher
 state: needs-input
 branch: wip/dispatcher
 created: 2026-10-23 00:30
-last_update: 2026-10-24 02:00
-blocker: rigid invariance on real windows fails both ways (Andrew)
+last_update: 2026-10-24 02:10
+blocker: none (real results provisional until the new midline net)
 done_marker: proposal + results/2026-10-23_tracker_timing/; after approval, slice runs from README
 host: lab server, cluster
 ---

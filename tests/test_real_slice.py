@@ -122,7 +122,8 @@ def test_whole_pixel_moved_copy(tmp_path, monkeypatch):
     m = {"midline_image": np.tile(np.array([[30.0, 50.0], [30.0, 20.0]]), (3, 1, 1)), "mask0": np.ones((60, 80), bool)}
     np.savez(tmp_path / "m.npz", **m)
     a = types.SimpleNamespace(out_imgdir=str(tmp_path / "mv.imgdir"), out_midline=str(tmp_path / "mv.npz"),
-                              out_ref_imgdir=str(tmp_path / "ref.imgdir"), out_ref_midline=str(tmp_path / "ref.npz"))
+                              out_ref_imgdir=str(tmp_path / "ref.imgdir"), out_ref_midline=str(tmp_path / "ref.npz"),
+                              shift_scale=1.0, pad=False)
     tw = np.array([0.0, 900.0, 1800.0])                # shifts round((5, 3) px per 900 s): (0,0), (5,3), (10,6)
     RM.whole_pixel(src, np.load(tmp_path / "m.npz"), np.arange(3), tw, a)
     ref = [np.load(tmp_path / "ref.imgdir" / f"ImageData_Ch0_TP{k:07d}.npy")[0] for k in range(3)]
