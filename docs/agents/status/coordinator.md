@@ -1,5 +1,5 @@
 # coordinator
-Updated: 2026-10-24 16:50 (local)
+Updated: 2026-10-24 16:40 (local)
 Lane: course
 Branch: main
 Last inbox item done: 22
@@ -7,8 +7,8 @@ State: working
 Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8 (relay part), 10, 11, 16, 17 (item 20)
 Last-seen main: ccb2dbf
 Done since last update:
-- 2026-10-24 16:50 (tick): item 1: no branch ready to merge and unmerged (only wip/lab-report-2 unmerged, working, 13:29)
-- 16:50: item 8: inboxes changed in ccb2dbf (spec 2026-10-24b): dispatcher (item 31, c019), new closure-fix, real-calib, diag-analysis. None live (live: freeze-v31, turn-long); no pings. Item 10: no status waits on an agent. Item 16: no status says `waiting on server job`
+- 2026-10-24 16:40 (tick): item 1: no branch ready to merge and unmerged (only wip/lab-report-2 unmerged, working, 13:29)
+- 16:40: item 8: inboxes changed in ccb2dbf (spec 2026-10-24b): dispatcher (item 31, c019), new closure-fix, real-calib, diag-analysis. None live (live: freeze-v31, turn-long); no pings. Item 10: no status waits on an agent. Item 16: no status says `waiting on server job`
 - 2026-10-24 15:50 (tick): item 1: merged wip/dispatcher (5a4767f; ready to merge 15:41). Conflicts: docs/decisions.md (kept both sides); scripts/remote/qb_track.py (main's track-length default and write-once output, plus the branch's --from-h/--to-h window and `window_h` setting). Suite 303 passed, 1 skipped; log entry moved
 - 15:50: item 8: no inbox change since 8ba1dbe; no pings. Item 10: no status waits on an agent. Item 16: no status says `waiting on server job` (dispatcher now ready to merge, merged)
 - 2026-10-24 15:31 (tick): item 1: no branch ready to merge and unmerged (wip/dispatcher waiting on server job, 15:21; wip/lab-report-2 working; research status branches done)
