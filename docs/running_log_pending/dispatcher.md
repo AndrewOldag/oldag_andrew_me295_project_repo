@@ -57,3 +57,12 @@
 - Demo: `python scripts/demo_dispatcher.py` (unchanged)
 - Remaining: Andrew: plane-sections curvature source (freeze item); traces; then B5 part 2 (real slice)
 - Bottlenecks: plane sections on real movies (Andrew)
+
+## 2026-10-23 (build account, session dispatcher, inbox item 16)
+- Done: proposal `docs/proposals/2026-10-23_real-midline-smoothing.md` (recommend spline fit per frame, residual = pixel quantization; v3 synthetic validation within 1e-3). Not implemented
+- Done: B5 part 2 code: `measure/real_runner.py`, `scripts/real_slice.py`, `tests/test_real_slice.py` 6 passed; full suite 228 passed, 66 s
+- Done: `python scripts/real_slice.py --no-agent` on 0708_m12 4-6 h: dispatcher script finished in 1 round; closure 0.945 px/h pass; plane_sections 134 %/h fail; rigid invariance not run. `results/2026-10-23_real_slice_noagent/`
+- Blocked: agent run; Claude Code 2.1.310 installed, 2.1.302 pinned on main; re-pin on wip/freeze-v3
+- Demo: `python scripts/real_slice.py --no-agent` prints the dispatcher summary and the check values
+- Remaining: agent run after the re-pin; smoothing decision (Andrew)
+- Bottlenecks: Claude Code pin (freeze-v3, Andrew); smoothing proposal (Andrew)
