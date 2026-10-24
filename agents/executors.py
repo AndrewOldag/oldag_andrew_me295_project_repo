@@ -12,6 +12,8 @@ The step still counts. The agent never sees the rod's name, fault or truth.
 """
 import math
 
+import numpy as np
+
 from agents.actions import REMEDIES
 from checker import run_checks, load_thresholds
 from measure import info
@@ -30,6 +32,44 @@ NOT_GATING = "reported, not gating"
 
 def profile_of(record):
     return "real" if record.settings.get("movie") == "real" else "synthetic"
+
+
+def coverage_s(*records):
+    """Profile window for rigid invariance on real windows (decisions 2026-10-24): the smallest arc length,
+    over all frames and records, from the tip to the most basal centre point tracked in every frame."""
+    from checker.checks import _common_base
+    from measure.record import arclength
+    out = []
+    for r in records:
+        b = _common_base(r.centre)
+        if b is None or b == 0:
+            return None
+        out.append(float(np.nanmin(arclength(r.centre)[:, b])))
+    return min(out)
+
+
+def windowed(record, s_max):
+    """Copy of a record whose derived grid fields are missing past s_max (the checker reads `fields`)."""
+    from dataclasses import replace
+    f = dict(record.fields)
+    cut = f["s_grid"] > s_max
+    for k, v in f.items():
+        if k != "s_grid" and isinstance(v, np.ndarray) and v.ndim == 2 and v.shape[1] == len(cut):
+            v = v.copy()
+            v[:, cut] = np.nan
+            f[k] = v
+    return replace(record, _fields=f)
+
+
+def real_rigid_invariance(rec, moved, thresholds):
+    """The checker's rigid_invariance on the real-movie profile window. None if it cannot be set."""
+    from checker.checks import rigid_invariance
+    s_cov = coverage_s(rec, moved)
+    if s_cov is None:
+        return None
+    c = rigid_invariance(windowed(rec, s_cov), windowed(moved, s_cov), thresholds.get("rigid_invariance"))
+    c.detail = f"real-movie profile window s <= {s_cov:.0f} px; {c.detail}"
+    return c
 
 
 def apply_profile(checks, profile):
@@ -90,8 +130,12 @@ class Slice:
     def _measure(self, settings, change):
         m = self.runner.measure(self.rod, settings)
         skip = ("plane_sections",) if settings.width_free else ()
-        checks = apply_profile(run_checks(m.record, m.moved, self.thresholds, skip),
-                               self.profile or profile_of(m.record))
+        profile = self.profile or profile_of(m.record)
+        checks = apply_profile(run_checks(m.record, m.moved, self.thresholds, skip), profile)
+        if profile == "real" and m.moved is not None:
+            rigid = real_rigid_invariance(m.record, m.moved, self.thresholds)
+            if rigid is not None:
+                checks = [rigid if c.check == "rigid_invariance" else c for c in checks]
         self.runs.append((settings, m, checks, change))
 
     @property

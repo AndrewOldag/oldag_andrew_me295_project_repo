@@ -102,3 +102,35 @@ def test_moved_copy_warp_matches_point_transform():
     q = RM.move_points(p[None], t, about)[0]
     assert abs(rr.mean() - q[0]) < 0.6 and abs(cc.mean() - q[1]) < 0.6
     assert np.allclose(RM.move_points(p[None], 0.0, about)[0], p)
+
+
+def test_whole_pixel_moved_copy(tmp_path, monkeypatch):
+    import shutil
+    import types
+    import numpy as np
+    spec3 = importlib.util.spec_from_file_location("real_moved_wp", ROOT / "scripts" / "remote" / "real_moved.py")
+    RM = importlib.util.module_from_spec(spec3)
+    spec3.loader.exec_module(RM)
+    monkeypatch.setattr(RM.os, "symlink", lambda s, d: shutil.copy(s, d))   # links need privileges on Windows
+    src = tmp_path / "x.imgdir"
+    src.mkdir()
+    rng = np.random.default_rng(0)
+    frames = [rng.integers(0, 4000, (1, 60, 80)).astype(np.uint16) for _ in range(3)]
+    for k, f in enumerate(frames):
+        np.save(src / f"ImageData_Ch0_TP{k:07d}.npy", f)
+    (src / "ElapsedTimes.yaml").write_text("theElapsedTimes: [3, 0, 900000, 1800000]\n")
+    m = {"midline_image": np.tile(np.array([[30.0, 50.0], [30.0, 20.0]]), (3, 1, 1)), "mask0": np.ones((60, 80), bool)}
+    np.savez(tmp_path / "m.npz", **m)
+    a = types.SimpleNamespace(out_imgdir=str(tmp_path / "mv.imgdir"), out_midline=str(tmp_path / "mv.npz"),
+                              out_ref_imgdir=str(tmp_path / "ref.imgdir"), out_ref_midline=str(tmp_path / "ref.npz"))
+    tw = np.array([0.0, 900.0, 1800.0])                # shifts round((5, 3) px per 900 s): (0,0), (5,3), (10,6)
+    RM.whole_pixel(src, np.load(tmp_path / "m.npz"), np.arange(3), tw, a)
+    ref = [np.load(tmp_path / "ref.imgdir" / f"ImageData_Ch0_TP{k:07d}.npy")[0] for k in range(3)]
+    mov = [np.load(tmp_path / "mv.imgdir" / f"ImageData_Ch0_TP{k:07d}.npy")[0] for k in range(3)]
+    assert ref[0].shape == mov[2].shape == (50, 74)    # cropped by the largest shift (10, 6)
+    for k, (dr, dc) in enumerate([(0, 0), (5, 3), (10, 6)]):
+        assert np.array_equal(ref[k], frames[k][0, 10:, 6:])
+        assert np.array_equal(mov[k][dr:, dc:], ref[k][:50 - dr, :74 - dc])   # content moved by (dr, dc), exactly
+    rm, mm = np.load(tmp_path / "ref.npz"), np.load(tmp_path / "mv.npz")
+    assert np.allclose(rm["midline_image"][2, 0], [20.0, 44.0]) and np.allclose(mm["midline_image"][2, 0], [30.0, 50.0])
+    assert rm["mask0"].shape == (50, 74)

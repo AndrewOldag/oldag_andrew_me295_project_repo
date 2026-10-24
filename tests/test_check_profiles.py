@@ -22,6 +22,22 @@ def failing_record():
     return replace(rec, plus=plus, _fields=None), m.moved
 
 
+def test_rigid_profile_window():
+    from agents.executors import coverage_s, real_rigid_invariance, windowed
+    from checker.checks import rigid_invariance
+    from measure.record import arclength
+    rec, mov = failing_record()
+    s_cov = coverage_s(rec, mov)
+    assert s_cov == min(float(np.nanmin(arclength(r.centre)[:, -1])) for r in (rec, mov))
+    w = windowed(rec, 100.0)
+    cut = w.fields["s_grid"] > 100.0
+    assert np.all(np.isnan(w.fields["regr_mid"][:, cut])) and np.array_equal(
+        w.fields["regr_mid"][:, ~cut], rec.fields["regr_mid"][:, ~cut], equal_nan=True)
+    full = rigid_invariance(rec, mov, TH["rigid_invariance"])
+    win = real_rigid_invariance(rec, mov, TH)
+    assert win.detail.startswith("real-movie profile window") and win.value <= full.value + 1e-12
+
+
 def test_profiles_defined():
     assert CHECK_PROFILES["synthetic"] == ("rigid_invariance", "closure", "plane_sections")
     assert CHECK_PROFILES["real"] == ("rigid_invariance", "closure")
