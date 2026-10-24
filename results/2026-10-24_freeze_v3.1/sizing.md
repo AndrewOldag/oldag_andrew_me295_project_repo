@@ -13,7 +13,7 @@ Sizing seeds 10, 11, 12. Rule, each part on 3 of 3 seeds: (1) a listed check fai
 | width_change | v3 (one size) | 3 of 3 | 3 of 3 | 0 of 3 | 3 of 3 | no |
 | bad_stage_correction | 3 | 3 of 3 | 3 of 3 | 0 of 3 | 0 of 3 | no |
 | bad_stage_correction | 4 | 3 of 3 | 3 of 3 | 1 of 3 | 0 of 3 | no |
-| bad_stage_correction | 5 | 3 of 3 | 3 of 3 | 3 of 3 | 0 of 3 | not yet |
+| bad_stage_correction | 5 | 3 of 3 | 3 of 3 | 3 of 3 | 1 of 3 | no |
 | bad_stage_correction | 6 | 3 of 3 | 3 of 3 | 3 of 3 | 0 of 3 | not yet |
 | bad_stage_correction | 7 | 3 of 3 | 3 of 3 | 3 of 3 | 0 of 3 | not yet |
 | bad_stage_correction | 8 | 3 of 3 | 3 of 3 | 3 of 3 | 0 of 3 | not yet |
@@ -62,8 +62,11 @@ Sizing seeds 10, 11, 12. Rule, each part on 3 of 3 seeds: (1) a listed check fai
 | v3_growth_zone_bad_stage_correction_z4_s11 | none | 1.07 | 3.81 F | 0.39 | 4.72 (1.35) | 0.16 (1.00) | no | no |
 | v3_growth_zone_bad_stage_correction_z4_s12 | none | 0.65 | 3.87 F | 0.88 | 0.35 (1.35) | 0.20 (1.00) | no | yes |
 | v3_growth_zone_bad_stage_correction_z5_s10 | none | 36.32 F | 5.03 F | 135.19 F | 22.39 (1.35) | 23.63 (1.00) | no | no |
+| v3_growth_zone_bad_stage_correction_z5_s10 | register_frames | 1.91 | 0.11 | 0.62 | 0.40 (1.35) | 0.25 (1.00) | yes | yes |
 | v3_growth_zone_bad_stage_correction_z5_s11 | none | 87.68 F | 5.30 F | 75.44 F | 19.69 (1.35) | 16.99 (1.00) | no | no |
+| v3_growth_zone_bad_stage_correction_z5_s11 | register_frames | 92.43 F | 6.35 F | 159.95 F | 23.20 (1.35) | 43.97 (1.00) | no | no |
 | v3_growth_zone_bad_stage_correction_z5_s12 | none | 36.46 F | 12.41 F | 35.00 F | 13.37 (1.35) | 14.37 (1.00) | no | no |
+| v3_growth_zone_bad_stage_correction_z5_s12 | register_frames | 3.02 F | 0.15 | 1.12 | 0.40 (1.35) | 0.26 (1.00) | no | yes |
 | v3_growth_zone_bad_stage_correction_z6_s10 | none | 126.19 F | 3.91 F | 148.97 F | 18.28 (1.35) | 39.32 (1.00) | no | no |
 | v3_growth_zone_bad_stage_correction_z6_s11 | none | 165.80 F | 6.11 F | 86.67 F | 41.11 (1.35) | 26.23 (1.00) | no | no |
 | v3_growth_zone_bad_stage_correction_z6_s12 | none | 131.25 F | 9.24 F | 89.37 F | 24.54 (1.35) | 36.86 (1.00) | no | no |
