@@ -10,7 +10,11 @@ private/real_runner.yaml (git-ignored; template config/real_runner.example.yaml)
 file is missing on the host gets its net midline built there first (`ensure_midline`, inbox item 21):
 segmentation midline (scripts/remote/real_midline.py, for the frame list and mask0), the tracker's
 `midline_ml/batch_midlines.py --mode tile` with the fine-tuned net2 at low 0.1 %, high 99.5 %
-(decisions 2026-10-23), then scripts/remote/net_to_midline.py.
+(decisions 2026-10-23), then scripts/remote/net_to_midline.py. `midline_weights` and `midline_tag` in the config
+select another net (inbox item 22: `net2_midline_ft2.pt`, tag `ft2`); the tag goes into every net-midline, moved-copy,
+host track and cache name, so outputs of different nets never overwrite each other.
+
+VM memory (inbox item 22): before every host step the runner waits while free VM memory is below 1.5 GB.
 
 Limits on the host, checked before every tracker run: 1 min load at most half the cores; fewer than
 2 jobs of this account already running; at least `min_free_gb` free on the work disk (workstation rule,
@@ -30,6 +34,7 @@ from pathlib import Path
 import shlex
 import subprocess
 import tarfile
+import time
 
 import yaml
 
@@ -42,9 +47,34 @@ REAL_CONFIG = ROOT / "private" / "real_runner.yaml"
 JOB_PATTERN = "qb_track.py|batch_midlines.py|sweep.py run"
 # The same pattern with one letter in brackets, so that the shell running the count does not count itself
 COUNT_PATTERN = "[q]b_track.py|[b]atch_midlines.py|[s]weep.py run"
-MIDLINE_ARGS = ["--mode", "tile", "--midline-weights", "net2_midline_ft.pt", "--lo", "0.1", "--hi", "99.5",
-                "--workers", "1"]
+MIDLINE_WEIGHTS = "net2_midline_ft.pt"
+MIDLINE_ARGS = ["--mode", "tile", "--lo", "0.1", "--hi", "99.5", "--workers", "1"]
 MIDLINE_THREADS = 3
+VM_MIN_FREE_GB = 1.5
+
+
+def vm_free_gb():
+    """Free physical memory of this machine, GB (psutil if present, else the Windows API, else /proc/meminfo)."""
+    try:
+        import psutil
+        return psutil.virtual_memory().available / 2 ** 30
+    except ImportError:
+        pass
+    try:
+        import ctypes
+
+        class MS(ctypes.Structure):
+            _fields_ = [("dwLength", ctypes.c_ulong), ("dwMemoryLoad", ctypes.c_ulong)] + [
+                (n, ctypes.c_ulonglong) for n in ("total", "avail", "tpage", "apage", "tvirt", "avirt", "aext")]
+        m = MS()
+        m.dwLength = ctypes.sizeof(MS)
+        ctypes.windll.kernel32.GlobalMemoryStatusEx(ctypes.byref(m))
+        return m.avail / 2 ** 30
+    except AttributeError:
+        for line in Path("/proc/meminfo").read_text().splitlines():
+            if line.startswith("MemAvailable:"):
+                return int(line.split()[1]) / 2 ** 20
+    return float("inf")
 
 
 @dataclass(frozen=True)
@@ -70,6 +100,8 @@ class RealRunner:
             cfg["host"], cfg["work_dir"], cfg["code_dir"], cfg["tracker_code"], cfg["python"])
         self.min_free_gb = float(cfg.get("min_free_gb", 21))
         self.windows = cfg["windows"]                 # window id -> {imgdir, midline (optional)}
+        self.weights = cfg.get("midline_weights", MIDLINE_WEIGHTS)
+        self.tag = f"_{cfg['midline_tag']}" if cfg.get("midline_tag") else ""
         self.track_length = float(track_length)
         self.with_moved = bool(moved)
         self.moved_mode = moved_mode            # whole_pixel (inbox item 19) or rotate (first 2026-10-24 run)
@@ -102,7 +134,15 @@ class RealRunner:
         return {"cores": int(out[0]), "load1": float(out[1]), "own_jobs": int(out[2]),
                 "free_gb": float(out[3].rstrip("G"))}
 
+    def wait_vm_memory(self, poll_s=60):
+        """Wait while free VM memory is below VM_MIN_FREE_GB (inbox item 22)."""
+        while (free := vm_free_gb()) < VM_MIN_FREE_GB:
+            print(f"VM memory {free:.2f} GB free, below {VM_MIN_FREE_GB} GB; waiting", flush=True)
+            time.sleep(poll_s)
+        return free
+
     def check_host(self):
+        self.wait_vm_memory()
         s = self.host_state()
         if s["load1"] > 0.5 * s["cores"]:
             raise HostBusy(f"load {s['load1']} above half of {s['cores']} cores")
@@ -113,7 +153,7 @@ class RealRunner:
         return s
 
     def midline_path(self, window):
-        return self.windows[window.id()].get("midline") or f"{self.work}/midline/{window.id()}_netmid.npz"
+        return self.windows[window.id()].get("midline") or f"{self.work}/midline/{window.id()}{self.tag}_netmid.npz"
 
     def ensure_midline(self, window):
         """Build the window's net midline on the host unless the file exists. Each step skips an output that
@@ -124,7 +164,7 @@ class RealRunner:
             return out
         wid, img = window.id(), self.windows[window.id()]["imgdir"]
         d = f"{self.work}/midline"
-        seg, bm = f"{d}/{wid}_seg.npz", f"{d}/{wid}_bm"
+        seg, bm = f"{d}/{wid}_seg.npz", f"{d}/{wid}{self.tag}_bm"      # the segmentation midline does not use the net
         env = (f"OMP_NUM_THREADS={MIDLINE_THREADS} MKL_NUM_THREADS={MIDLINE_THREADS} OPENBLAS_NUM_THREADS=1 "
                f"PYTHONPATH={q(self.tracker)}:{q(self.code)}")
         before = self.check_host()
@@ -136,20 +176,20 @@ class RealRunner:
         self.check_host()
         t = self._ssh(f"test -n \"$(ls {q(bm)}/*_htpmid.npz 2>/dev/null)\" || (date +%s; {env} nice -n 19 "
                       f"{q(self.python)} {q(self.tracker)}/midline_ml/batch_midlines.py {q(img)} --out {q(bm)} "
-                      + " ".join(MIDLINE_ARGS) + f" --start {frames[0]} --end {frames[1] + 1} > {q(bm)}.log 2>&1;"
+                      + " ".join(MIDLINE_ARGS) + f" --midline-weights {q(self.weights)} --start {frames[0]} --end {frames[1] + 1} > {q(bm)}.log 2>&1;"
                       " date +%s)").decode().split()
         res = json.loads(self._ssh(f"cd {q(self.code)} && {env} nice -n 19 {q(self.python)} "
                                    f"scripts/remote/net_to_midline.py {q(self.tracker)} {q(bm)}/*_htpmid.npz "
                                    f"{q(seg)} {q(out)}").decode().strip().splitlines()[-1])
         after = self.host_state()
-        self.log.append({"midline": wid, **res, "net_s": int(t[1]) - int(t[0]) if len(t) == 2 else None,
+        self.log.append({"midline": wid, "weights": Path(self.weights).name, **res, "net_s": int(t[1]) - int(t[0]) if len(t) == 2 else None,
                          "first_frame": frames[0], "last_frame": frames[1], "load1_before": before["load1"],
                          "free_gb_before": before["free_gb"], "free_gb_after": after["free_gb"]})
         return out
 
     def copy_paths(self, window, which):
         """which: 'moved' or 'ref'. Whole-pixel mode (inbox item 19): cropped reference and moved copies."""
-        base = f"{self.work}/moved/{window.id()}"
+        base = f"{self.work}/moved/{window.id()}{self.tag}"
         if self.moved_mode == "rotate":
             return {"imgdir": base + "_moved.imgdir", "midline": base + "_moved_midline.npz"}
         return {"imgdir": f"{base}_wp_{which}.imgdir", "midline": f"{base}_wp_{which}_midline.npz"}
@@ -180,7 +220,7 @@ class RealRunner:
     def cache_path(self, window, settings, which="window"):
         settings = replace(settings, width_free=False)
         tag = {"window": "", "moved": "_moved" if self.moved_mode == "rotate" else "_wp_moved", "ref": "_wp_ref"}[which]
-        return self.cache / f"{window.id()}{tag}__{settings.tag()}__L{self.track_length:g}.npz"
+        return self.cache / f"{window.id()}{self.tag}{tag}__{settings.tag()}__L{self.track_length:g}.npz"
 
     def track(self, window, settings, which="window"):
         """which: 'window' (the movie as is), 'moved' or 'ref' (copies made by ensure_moved)."""

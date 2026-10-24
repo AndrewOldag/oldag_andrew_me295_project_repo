@@ -181,3 +181,46 @@ def test_condition_in_real_view_only():
     assert sorted("condition" in v for v in views) == [False, True]
     rows = batch_table(views, stats)["runs"]
     assert sorted(r.get("condition", "") for r in rows) == ["", "control"]
+
+
+def test_midline_tag_in_every_name_and_weights_passed(tmp_path, monkeypatch):
+    cfg = tmp_path / "r.yaml"
+    cfg.write_text("host: h\nwork_dir: /w\ncode_dir: /c\ntracker_code: /t\npython: /p\n"
+                   "midline_weights: /x/net2_midline_ft2.pt\nmidline_tag: ft2\n"
+                   "windows:\n  r1__w4-6:\n    imgdir: /d.imgdir\n")
+    r = RealRunner(cfg, cache=tmp_path / "cache")
+    w, st = RealWindow("r1", 4, 6), r.initial_settings(RealWindow("r1", 4, 6))
+    assert r.midline_path(w) == "/w/midline/r1__w4-6_ft2_netmid.npz"
+    assert r.copy_paths(w, "moved")["imgdir"] == "/w/moved/r1__w4-6_ft2_wp_moved.imgdir"
+    assert r.cache_path(w, st, "ref").name == "r1__w4-6_ft2_wp_ref__st1__L400.npz"
+    calls = []
+
+    def ssh(cmd, stdin=None):
+        calls.append(cmd)
+        if cmd.startswith("test -f"):
+            return b"no\n"
+        if "batch_midlines" in cmd:
+            return b"1\n2\n"
+        if "net_to_midline" in cmd:
+            return b'{"frames": 80}\n'
+        if "frames" in cmd:
+            return b"[10, 89]\n"
+        return b""
+    monkeypatch.setattr(r, "_ssh", ssh)
+    monkeypatch.setattr(r, "check_host", lambda: {"load1": 0.1, "free_gb": 900.0})
+    monkeypatch.setattr(r, "host_state", lambda: {"load1": 0.1, "free_gb": 900.0})
+    r.ensure_midline(w)
+    net = next(c for c in calls if "batch_midlines" in c)
+    assert "--midline-weights /x/net2_midline_ft2.pt" in net and "/w/midline/r1__w4-6_ft2_bm" in net
+    assert r.log[-1]["weights"] == "net2_midline_ft2.pt"
+
+
+def test_wait_vm_memory(tmp_path, monkeypatch):
+    import measure.real_runner as RR
+    cfg = tmp_path / "r.yaml"
+    cfg.write_text("host: h\nwork_dir: /w\ncode_dir: /c\ntracker_code: /t\npython: /p\nwindows: {}\n")
+    r = RealRunner(cfg, cache=tmp_path / "cache")
+    free = iter([0.5, 1.0, 2.0])
+    monkeypatch.setattr(RR, "vm_free_gb", lambda: next(free))
+    monkeypatch.setattr(RR.time, "sleep", lambda s: None)
+    assert r.wait_vm_memory() == 2.0
