@@ -13,12 +13,14 @@ Format and states: `tasks/README.md`.
 
 A task in state working whose last_update is older than 30 min is shown as
 stale. The optional `host` field names where the task runs: one of HOSTS, or
-a comma list for a task with parts on several hosts; shown as "-" if absent. A file in `tasks/` whose lane is not course is an error. The page is
+a comma list for a task with parts on several hosts; each may carry a note in
+parentheses, e.g. "VM (LLM runs)"; shown as "-" if absent. A file in `tasks/` whose lane is not course is an error. The page is
 never written inside a git repo, so research rows cannot be committed.
 """
 
 import argparse
 import html
+import re
 import subprocess
 import sys
 from datetime import datetime, timedelta
@@ -63,7 +65,8 @@ def parse_task(path):
             task["state"].startswith(WAITING_PREFIX) and task["state"] != WAITING_PREFIX):
         raise BoardError(f"{Path(path).name}: unknown state {task['state']!r}")
     if "host" in task:
-        bad = [h for h in (x.strip() for x in task["host"].split(",")) if h not in HOSTS]
+        bad = [h for h in (x.strip() for x in task["host"].split(","))
+               if re.sub(r"\s*\(.*\)$", "", h) not in HOSTS]
         if bad:
             raise BoardError(f"{Path(path).name}: unknown host {', '.join(map(repr, bad))}")
     else:
