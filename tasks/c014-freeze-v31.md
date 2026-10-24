@@ -3,11 +3,11 @@ id: c014
 title: Freeze v3.1, accept_repaired rods that need their repair; rerun methods on them
 lane: course
 owner: freeze-v31
-state: queued
+state: working
 branch: wip/freeze-v31
 host: lab server, VM (LLM runs)
 created: 2026-10-24 11:40
-last_update: 2026-10-24 11:40
+last_update: 2026-10-24 12:00
 blocker: none
 done_marker: tag freeze-v3.1 and results/2026-10-24_freeze_v3.1/README.md
 ---
