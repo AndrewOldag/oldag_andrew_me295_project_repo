@@ -1,12 +1,14 @@
 # coordinator
-Updated: 2026-10-24 14:15 (local)
+Updated: 2026-10-24 14:40 (local)
 Lane: course
 Branch: main
 Last inbox item done: 20
 State: working
 Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8 (relay part), 10, 11, 16, 17 (item 20)
-Last-seen main: 64d03bc (dispatcher inbox changed in 64d03bc)
+Last-seen main: 20b131d (no inbox change since 64d03bc)
 Done since last update:
+- 2026-10-24 14:40 (tick): item 1: no branch ready to merge and unmerged (wip/dispatcher waiting on Andrew, 14:33; wip/lab-report-2 working; research status branches done)
+- 14:40: item 8: no inbox change since 64d03bc; no pings. Item 10: no status waits on an agent. Item 16: no status says `waiting on server job`. Item 21 still open
 - 2026-10-24 14:15 (tick): item 1: no branch ready to merge and unmerged (wip/dispatcher waiting on Andrew, 14:05; wip/lab-report-2 working; research status branches done)
 - 14:15: item 8: dispatcher inbox changed in 64d03bc (keep ft2, diagnose closure; replace 0711_c1 with a confidence check). Pinged dispatcher 14:15 (`check github`). Item 10: no status waits on an agent. Item 16: no status says `waiting on server job`. Item 21 still open
 - 2026-10-24 14:00 (tick): item 1: no branch ready to merge and unmerged (wip/dispatcher waiting on Andrew, 13:52; wip/lab-report-2 working; research status branches done)
@@ -62,7 +64,7 @@ Branches (last commit, state):
 - wip/coord-tick: 2026-10-24 13:09, ready to merge, merged 9aa97bf
 - wip/freeze-v3: 2026-10-24 04:16, ready to merge, merged 2ebd422
 - status/turn-long: 2026-10-24 02:42, done (research lane, not merged)
-- wip/dispatcher: 2026-10-24 13:52, waiting on Andrew (3-root run done; all 3 windows declined)
+- wip/dispatcher: 2026-10-24 14:33, waiting on Andrew (item 28: closure and control-root decisions)
 - wip/lab-report-2: 2026-10-23 13:29, working
 - status/spec-audit-r: 2026-10-23 13:42, done (research lane, not merged)
 - status/gate2: 2026-10-16 12:27, delete approved, Andrew runs it (research lane, not merged)
