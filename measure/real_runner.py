@@ -263,3 +263,39 @@ class RealRunner:
         rec = from_tracker_npz(self.track(window, settings, main), root_id=window.id())
         moved = from_tracker_npz(self.track(window, settings, "moved"), root_id=window.id() + "_moved")
         return Measurement(rec, moved, settings, {})
+
+
+class RunnerSet:
+    """Several RealRunners, one per host config; each window goes to the runner whose config lists it (inbox
+    item 27: 0711_c1 tracked on the lab server, the other roots on the workstation). The first config that lists
+    a window wins. Same interface as RealRunner for the slice."""
+
+    form = "real_window"
+
+    def __init__(self, configs, cache=None, **kw):
+        self.runners = [RealRunner(c, cache=cache, **kw) for c in configs]
+
+    def runner_for(self, window):
+        for r in self.runners:
+            if window.id() in r.windows:
+                return r
+        raise KeyError(f"no runner config lists window {window.id()}")
+
+    def initial_settings(self, window):
+        return self.runner_for(window).initial_settings(window)
+
+    def measure(self, window, settings):
+        return self.runner_for(window).measure(window, settings)
+
+    def sync_code(self):
+        for r in self.runners:
+            r.sync_code()
+
+    def host_state(self):
+        """Load of the busiest host (the dispatcher's queue load reads one value)."""
+        states = [r.host_state() for r in self.runners]
+        return max(states, key=lambda s: s["load1"] / s["cores"])
+
+    @property
+    def log(self):
+        return [dict(e, host_config=k) for k, r in enumerate(self.runners) for e in r.log]
