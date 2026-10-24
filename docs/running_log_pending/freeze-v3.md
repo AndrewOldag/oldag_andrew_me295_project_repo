@@ -11,6 +11,16 @@
 - Done (47a3c47, ece537c, 9eb747d): `scripts/synth/scored_v3.py`; v3 seeds in `config/scoring_seeds.yaml`; README steps. Suite 242 passed, 5 skipped
 - Run: one smoke rod as single jobs, 44 s, checks pass, centre error 0.35 against 1.35 %/h
 - Run (433fdcf): clean basis, 30 rods x seeds 10-14, 100 tracker runs in 2 sweeps, 0 failed, 405 s and 149 s wall, load at most 6.13 on 32 cores, work space 7.57 -> 9.47 GB. Largest clean values rigid_invariance 1.42, closure 0.36, plane_sections 2.97 %/h; flank error 0.575 %/h. Thresholds and tolerance stay. `results/2026-10-23_freeze_v3/basis.md`
-- Demo: `python scripts/synth/scored_v3.py basis` prints the basis summary from the cache
-- Remaining: held-out sizing (36 runs), labels (about 228), tag `freeze-v3`, rule methods, LLM methods x 3 repeats (306 runs), `eval`, results README
-- Bottlenecks: lab-server work space 9.47 of 10 GB; about 3.5 GB more needed; sessions may not delete (Andrew)
+- Andrew freed lab-server space (v2 renders removed, 4.9 GB). Lab-server limit of 2 jobs per account built into `RemoteRunner` (e454378)
+- Run (f599564): held-out sizing at v3 geometry, seeds 10-12, 36 tracker runs, 0 failed; all six faults fail 3 of 3 at the v2 sizes; no size change
+- Run (6ebc9db): labels of 51 rods, 228 tracker runs, 0 failed. `v3_bend30_clean_s20` fails closure 4.51 px/h with a good measurement: kept accept_clean (Andrew, option a). `displacement_exceeds_patch` 2x6 not repairable at v3 speed: decline. Classes 18 / 12 / 21
+- Claude Code re-pinned to 2.1.310 (installed version); tag `freeze-v3` on e1e672a
+- Run (869f130): method-phase tracker runs, 124 in 7 rounds, 0 failed (loop stopped once by Claude Code on VM memory; restarted in the foreground by Andrew). Script and remedy tree, 102 runs; second runs from the cache identical 102 of 102
+- Run: 306 LLM runs (diagnostician and single agent, 3 repeats), 0 harness errors, CLI 2.1.310 throughout. Stopped twice on VM memory (157 of 306); resumed in 15 blocks of 8-13 runs, free-memory floor 1.5 GB (Andrew), free 1.7-2.4 GB before each block
+- Tracker runs in all: 528 of the 600 cap, 0 failed
+- Results (`results/2026-10-23_freeze_v3/README.md`): balanced accuracy remedy tree 0.81, diagnostician 0.69 (0.69-0.69), script 0.67, single agent 0.60 (0.57-0.64), all-accept 0.67, all-decline 0.33. False accepts per run set: script 18, remedy tree 4, diagnostician 0, single agent 0. Unanimity over 3 repeats: diagnostician 39 of 51 (Fleiss kappa 0.776), single agent 24 of 51 (0.503)
+- Found: all 12 accept_repaired rods have a good unremedied measurement, so accepting without a remedy scores them correct (script 12 of 12). `stage_log_missing`: no LLM run and no remedy-tree run correct (0 of 9, 0 of 3). `second_root`: 0 correct for every method
+- Also found: Edge crash dumps took 54.5 GB in the user profile on the VM (reported to Andrew, who cleared them)
+- Demo: `python scripts/synth/scored_v3.py eval` prints the metrics tables from the committed runs
+- Remaining: coordinator merge of `wip/freeze-v3`; Andrew reviews the results README
+- Bottlenecks: none

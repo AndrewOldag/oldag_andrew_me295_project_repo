@@ -1,15 +1,14 @@
 # freeze-v3
-Updated: 2026-10-24 05:20 (local)
+Updated: 2026-10-24 05:35 (local)
 Lane: course
 Branch: wip/freeze-v3
 Last inbox item done: 12
-State: working
-Now: LLM runs in blocks of 9 (one at a time), floor 1.5 GB (items 11-12). 297 of 306 done. Last block: 8 runs, 0 harness errors, free 2.4 GB at start, CLI 2.1.310
+State: ready to merge
+Now: done. Results in `results/2026-10-23_freeze_v3/README.md`; log entry in `docs/running_log_pending/freeze-v3.md`
 Done since last update:
-- Item 10: auto-update off (read); per-block CLI version check kept. CLI 2.1.310 on every block so far
-- Method-phase tracker runs complete: 488 of 600 cached, 0 failed. Script and remedy tree: 102 runs; a second run from the cache identical on 102 of 102 (869f130)
-- LLM runs: 157 of 306 (diagnostician r0 51, r1 51; single agent r0 51, r1 4); 0 harness errors. Stopped once more on VM memory (second stop) (b3829b3)
-- `agents --max-runs N` for blocks (b3829b3)
-- Memory checks (free / total): 1.9 / 7.7 GB at 02:00; 2.0 / 7.7 at 02:12; 2.1 / 7.7 at 02:24 and 02:35 (24 `claude` processes each time). Largest: 24 `claude` processes 4.63 GB, `svchost` 0.78, `MsMpEng` 0.31
+- LLM runs complete: 306 of 306 (diagnostician, single agent, 3 repeats), 0 harness errors, CLI 2.1.310 on every block; 15 blocks of 8-13 runs, free memory 1.7-2.4 GB before each (floor 1.5 GB, items 11-12)
+- `eval`: balanced accuracy remedy tree 0.81, diagnostician 0.69, script 0.67, single agent 0.60, all-accept 0.67, all-decline 0.33. False accepts: script 18, remedy tree 4, LLM methods 0. Unanimity over 3 repeats: diagnostician 39 of 51 (kappa 0.776), single agent 24 of 51 (0.503)
+- Tracker runs in all 528 of 600, 0 failed. Tag `freeze-v3` on e1e672a; after it only harness code changed
+- Full suite 245 passed, 5 skipped
 Needs Andrew:
-- none (memory floor lowered to 1.5 GB by Andrew)
+- Review `results/2026-10-23_freeze_v3/README.md`. Two points for the evaluation: all 12 accept_repaired rods have a good unremedied measurement (so accepting without a remedy is scored correct there; script 12 of 12), and `second_root` is 0 correct for every method
