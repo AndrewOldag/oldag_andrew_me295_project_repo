@@ -17,7 +17,7 @@ from scipy.ndimage import gaussian_filter, map_coordinates
 from scipy.spatial import cKDTree
 
 from measure.rod import (RodSpec, field_cases, make_record, simulate, normals, stage_track,
-                         width_change_spec, rigid_rotation_spec)
+                         width_change_spec, rigid_rotation_spec, v3_cases, V3_BEND_RATES)
 
 DEV_FAULTS = ("rigid_drift", "displacement_exceeds_patch", "midline_jitter",
               "low_texture", "width_change")
@@ -258,6 +258,8 @@ def image_case(case, fault=None, seed=0, moved=False, width_kappa_inv=None, rota
     size: fault size, see fault_settings.
     """
     movie_kw, spec_override, speed = fault_settings(fault, size)
+    if case.startswith("v3_"):
+        return _image_case_v3(case, spec_override, movie_kw, speed, seed, moved)
     name = spec_override or case
     if name == "width_change":
         spec = width_change_spec(width_kappa_inv or 400.0)
@@ -274,11 +276,33 @@ def image_case(case, fault=None, seed=0, moved=False, width_kappa_inv=None, rota
         movie_kw = dict(movie_kw, width=640)
         spec = replace(spec, base_xy=(spec.base_xy[0], 400.0))
     spec = faster(spec, speed)
+    return spec, _movie(seed, movie_kw, moved)
+
+
+def _movie(seed, movie_kw, moved):
     movie = Movie(seed=seed, **movie_kw)
     if moved:
         movie = replace(movie, rigid_rotation=movie.rigid_rotation + np.deg2rad(0.1) / 90.0,
                         rigid_velocity=tuple(np.add(movie.rigid_velocity, (0.5 / 90.0, 0.3 / 90.0))))
-    return spec, movie
+    return movie
+
+
+# Freeze v3 frame sizes (height, width), px. The tip sits near row 680 (the stage follows it); bent rods span
+# about 260 px across over the hour, v3_width_change (curvature 1/400 px over 640 px) about 510 px.
+V3_FRAME = {"v3_width_change": (768, 704)}
+V3_FRAME.update({f"v3_bend{d}": (768, 640) for d in V3_BEND_RATES})
+
+
+def _image_case_v3(case, spec_override, movie_kw, speed, seed, moved):
+    """Freeze v3 rods (measure.rod.v3_cases): tracked length 500 px; the width_change fault on v3_growth_zone
+    uses v3_width_change."""
+    name = "v3_width_change" if spec_override == "width_change" else case
+    if spec_override == "width_change" and case != "v3_growth_zone":
+        raise ValueError("width_change is injected on v3_growth_zone only")
+    spec = next(s for s in v3_cases() if s.name == name)
+    h, w = V3_FRAME.get(name, (768, 320))
+    movie_kw = dict(movie_kw, height=h, width=w, track_length=500.0)
+    return faster(spec, speed), _movie(seed, movie_kw, moved)
 
 
 def build(out_dir, case, fault=None, seed=0, moved=False, pixel_um=2.105, width_kappa_inv=None,
@@ -291,7 +315,7 @@ def build(out_dir, case, fault=None, seed=0, moved=False, pixel_um=2.105, width_
     write_imgdir(out_dir / f"{rid}.imgdir", r["frames"], r["times"], r["stage_px"], pixel_um)
     np.savez_compressed(out_dir / f"{rid}_midline.npz", midline_image=r["midline_image"],
                         seed=seed_midline(r["midline_image"][0], movie.track_length),
-                        mask0=r["mask0"])
+                        mask0=r["mask0"], track_length=movie.track_length)
     truth = make_record(replace(spec, n_frames=r["spec_frames"])).truth
     np.savez_compressed(out_dir / f"{rid}_truth.npz", stride=movie.stride,
                         fault=str(fault), case=case, size=str(size), variant=variant_tag(width_kappa_inv, rotation_deg),

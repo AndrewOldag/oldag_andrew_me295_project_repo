@@ -73,12 +73,32 @@ def flank_spacing_rate(rec):
 
 
 def width_free_ratio(rec, step_um=50.0):
-    """(plus - minus) / (plus + minus) of the window-mean flank strain rates, where the sum exceeds 5 %/h."""
+    """Width-free bending ratio -h (Dkappa/Dt) / REGR from the window-mean flank strain rates, where their sum
+    exceeds 5 %/h. Corrected for curvature (freeze v3, kinematics-1).
+
+    With D = plus - minus, S = plus + minus, h = half the flank spacing and g = d ln(spacing)/dt, the flank
+    relations of measure/rod.py give h Dkappa/Dt = -D (1 - kappa^2 h^2) / 2 - kappa h g and
+    REGR = (S - kappa h D) / 2, so the ratio is (D (1 - kappa^2 h^2) + 2 kappa h g) / (S - kappa h D).
+    Numerator and denominator are formed per frame pair, then window-averaged. On the field-level rods it
+    equals the true ratio to under 1e-3, with or without a width change (tests/test_freeze_v3.py). With g = 0
+    and small kappa h it is D / S, the v2 form, which keeps the kappa dh/dt term of a curved rod whose
+    width changes.
+    """
     f = rec.fields
     s_um = f["s_grid"] * rec.pixel_um
-    p, m = _wmean(f["regr_plus"]), _wmean(f["regr_minus"])
-    total = (p + m) * PER_S_TO_PCT_PER_H
-    ratio = np.where(total > 5.0, (p - m) / (p + m), np.nan)
+    p, m = np.asarray(f["regr_plus"], float), np.asarray(f["regr_minus"], float)
+    sp = np.asarray(f["spacing"], float)
+    kh = np.asarray(f["kappa"], float) * sp / 2.0
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", RuntimeWarning)
+        ln = np.log(np.where(sp > 0, sp, np.nan))
+        dt = np.diff(rec.frame_times_s)[:len(sp)]
+        t_mid = np.cumsum(dt) - dt / 2.0
+        g = np.gradient(ln, t_mid, axis=0) if len(sp) > 1 else np.zeros_like(ln)    # per frame pair, 1/s
+        d = p - m
+        num, den = _wmean(d * (1.0 - kh ** 2) + 2.0 * kh * g), _wmean((p + m) - kh * d)
+        total = (_wmean(p) + _wmean(m)) * PER_S_TO_PCT_PER_H
+        ratio = np.where(total > 5.0, num / den, np.nan)
     grid = np.arange(0.0, np.nanmax(s_um[np.isfinite(ratio)]) + 1e-9, step_um) if np.isfinite(ratio).any() else []
     return {"width_free_ratio_s_um": [round(x) for x in grid],
             "width_free_ratio": [_r(x, 3) for x in np.interp(grid, s_um, ratio)] if len(grid) else []}

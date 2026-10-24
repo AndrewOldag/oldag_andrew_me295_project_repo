@@ -20,6 +20,13 @@ outcomes wait for Andrew):
 - partial_occlusion: an opaque drop of radius `size` px, fixed on the
   sample, covers the frame-0 midline at s = 150 px (the REGR peak) for the
   middle third of the frames
+- stage_log_missing (freeze v3): images as recorded; the stage log stays at
+  its last logged value for the last `size` fraction of the frames (1 = no
+  stage move logged). Basis: the real montage movies, whose stage-tracking
+  moves are not in the table the tracker reads
+
+On a v3 rod (case `v3_...`) the growth-zone position and tip speed are the
+v3 values (measure.rod.V3_S_MID, V3_V_END).
 
 Second root and drop are fixed to the sample: the rigid motion of the
 invariance check moves them with the root.
@@ -32,9 +39,10 @@ from scipy.ndimage import gaussian_filter, map_coordinates
 
 from measure import render as base
 from measure.rod import make_record, normals, simulate, stage_track
-from measure.rod import V_END
+from measure.rod import V_END, V3_S_MID, V3_V_END
 
-HELDOUT_FAULTS = ("second_root", "fast_rotation", "bad_stage_correction", "flank_swap", "partial_occlusion")
+HELDOUT_FAULTS = ("second_root", "fast_rotation", "bad_stage_correction", "flank_swap", "partial_occlusion",
+                  "stage_log_missing")
 
 # Name the diagnostician should give (agents/actions.py FAULTS) and the expected correct outcome.
 # Proposal of 2026-10-12, not approved; labels need the remedy sweep at the approved sizes.
@@ -44,6 +52,7 @@ EXPECTED = {
     "bad_stage_correction": {"fault": "bad_stage_correction", "outcome": "accept", "remedy": "register_frames"},
     "flank_swap": {"fault": "unknown", "outcome": "decline"},
     "partial_occlusion": {"fault": "low_texture", "outcome": "decline"},
+    "stage_log_missing": {"fault": "bad_stage_correction", "outcome": "accept", "remedy": "register_frames"},
 }
 
 GROWTH_PEAK_S = 150.0          # px from the tip, REGR peak of the growth_zone case
@@ -94,6 +103,20 @@ def occluded(i, n_frames):
     return n_frames // 3 <= i < (2 * n_frames) // 3
 
 
+def zone(spec):
+    """(REGR peak position px, tip speed px/s) of the rod the fault is injected on: v2 growth_zone or v3."""
+    return (V3_S_MID, V3_V_END) if spec.name.startswith("v3_") else (GROWTH_PEAK_S, V_END)
+
+
+def missing_stage_log(stage, size):
+    """stage_log_missing: the stage log stays at its last logged value for the last `size` fraction of the
+    frames (1 = the frame-0 value throughout: no stage move is logged)."""
+    out = stage.copy()
+    k = max(1, swap_from(len(stage), size))
+    out[k:] = stage[k - 1]
+    return out
+
+
 def logged_stage(stage, size):
     """bad_stage_correction: the stage log with one move under-reported by size px."""
     T = len(stage)
@@ -114,7 +137,8 @@ class _SecondRoot:
 
     def __init__(self, spec, movie, centre0, t_end):
         self.R = 2.0 * float(spec.h(0.0))
-        C, j = _frame0_point(centre0, GROWTH_PEAK_S)
+        peak_s, self.speed = zone(spec)
+        C, j = _frame0_point(centre0, peak_s)
         nrm = normals(centre0)[j]
         tng = centre0[max(j - 1, 0)] - centre0[j + 1]          # toward the tip
         tng /= np.linalg.norm(tng)
@@ -124,7 +148,7 @@ class _SecondRoot:
         # Tip centre at the end of the window. The rounded tip has radius R, so the outline reaches
         # (R - size) from the main midline: size px past the main root's near edge
         self.tip_end = C + (self.R - movie.size + self.R) * nrm
-        self.speed, self.t_end = V_END, t_end
+        self.t_end = t_end
         rng = np.random.default_rng(movie.seed + SECOND_ROOT_SEED)
         self.a = np.arange(-2000.0, 100.0, 1.0)
         self.q = np.arange(-1.4, 1.4 + 1e-9, 1.0 / self.R)
@@ -164,7 +188,7 @@ def render(spec, movie):
 
     pivot = _frame0_point(centre[0], movie.track_length / 2.0)[0]
     second = _SecondRoot(spec, movie, centre[0], times[-1]) if on and fault == "second_root" else None
-    drop = _frame0_point(centre[0], GROWTH_PEAK_S)[0]
+    drop = _frame0_point(centre[0], zone(spec)[0])[0]
     k_swap = swap_from(T, size) if on and fault == "flank_swap" else T
 
     rows, cols = np.mgrid[0:movie.height, 0:movie.width]
@@ -215,7 +239,11 @@ def render(spec, movie):
     mid_img = np.stack(mid_img)
     if movie.midline_jitter > 0:
         mid_img = base._jitter(mid_img, movie, rng)
-    stage_log = logged_stage(stage, size)[0] if on and fault == "bad_stage_correction" else stage
+    stage_log = stage
+    if on and fault == "bad_stage_correction":
+        stage_log = logged_stage(stage, size)[0]
+    elif on and fault == "stage_log_missing":
+        stage_log = missing_stage_log(stage, size)
     return {"frames": np.stack(frames), "times": times, "stage_px": stage_log,
             "midline_image": mid_img, "mask0": mask0, "shift": shift,
             "spec_frames": full.n_frames}
@@ -239,7 +267,7 @@ def build(out_dir, case, fault=None, seed=0, moved=False, pixel_um=2.105, width_
     base.write_imgdir(out_dir / f"{rid}.imgdir", r["frames"], r["times"], r["stage_px"], pixel_um)
     np.savez_compressed(out_dir / f"{rid}_midline.npz", midline_image=r["midline_image"],
                         seed=base.seed_midline(r["midline_image"][0], movie.track_length),
-                        mask0=r["mask0"])
+                        mask0=r["mask0"], track_length=movie.track_length)
     truth = make_record(replace(spec, n_frames=r["spec_frames"])).truth
     np.savez_compressed(out_dir / f"{rid}_truth.npz", stride=movie.stride,
                         fault=str(fault), case=case, size=str(size),
