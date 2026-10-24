@@ -1,15 +1,16 @@
 # coordinator
-Updated: 2026-10-23 18:32 (local)
+Updated: 2026-10-23 18:47 (local)
 Lane: course
 Branch: main
-Last inbox item done: 13 (item 12 as changed by 13 waits on host-setup)
-State: waiting on host-setup
+Last inbox item done: 13
+State: working
 Now: relay loop every 10 min (item 8): merges per item 1, `check github` to live sessions whose inbox changed
-Last-seen main: 21fef9e (inboxes as of 21fef9e)
+Last-seen main: 6d84335 (inboxes as of 6d84335)
 Done since last update:
 - Item 9: board allows `waiting on Andrew` and `waiting on <agent>` (`scripts/board.py`, `tasks/README.md`), 8223616; full suite 203 passed
 - Item 1: merged wip/spec-audit (2c0eb60) and then wip/spec-audit-check (f7ec454), `--no-ff`; pending log entries moved into `docs/running_log.md`; suite 203 passed on each merge
 - Item 8: pinged dispatcher 01:22 (inbox changed in 588f052). Coordinator inbox also changed (own). Message tool available: SendMessage + ListAgents
+- 18:47: item 1: merged wip/host-setup (b9a3a06, ready to merge 18:37, test passed); suite 205 passed; log entry moved. Items 12-13: host assignment appended to turn-long (8), dispatcher (15), freeze-v3 (9) inboxes (6d84335); pinged all three (dispatcher also for item 14, 54456a2)
 - 18:32: item 13 read (turn-long stays on the lab server; workstation: dispatcher sweeps and probes, freeze-v3 overflow after a cache-match test; disk 20 GB cap, 20 GB free floor). Pinged host-setup, turn-long, dispatcher (21fef9e, f86f3b8). freeze-v3 (items 7-8) not live
 - 18:21: workstation ssh approval (3e41548): pinged dispatcher and turn-long. host-setup (item 5) not live
 - 17:31: inboxes changed in ccca080: pinged dispatcher (item 11). freeze-v3 (item 7) and host-setup (item 4) sessions not live; not pinged
@@ -27,7 +28,7 @@ Done since last update:
 Branches (last commit, state):
 - wip/spec-audit: 2026-10-23 01:04, ready to merge, merged 2c0eb60
 - wip/spec-audit-check: 2026-10-23 01:14, ready to merge, merged f7ec454
-- wip/host-setup: 2026-10-23 15:19, working (item 1)
+- wip/host-setup: 2026-10-23 18:37, ready to merge, merged b9a3a06
 - wip/freeze-v3: 2026-10-23 15:12, waiting on Andrew (stop rule: clean scored rod fails closure)
 - status/turn-long: 2026-10-23 18:17, working (research lane, not merged)
 - wip/dispatcher: 2026-10-23 18:18, waiting on Andrew
@@ -36,7 +37,7 @@ Branches (last commit, state):
 - status/gate2: 2026-10-16 12:27, waiting on Andrew (research lane, not merged)
 - wip/readme-check, wip/vm-setup, wip/auditor-v1b, wip/fq-real, wip/auditor-v1, wip/scored-v1, wip/freeze-v2, heldout/faults, wip/baselines, wip/diag-review, wip/lab-report-1, wip/gatekeeper: merged
 Needs Andrew:
-- Restart freeze-v3: inbox items 7-8 waiting; session not live
+- Workstation disk: host-setup work folder 9.9 of 20 GB after one root; sessions cannot delete there (host-setup status)
 - lab-report-2 and spec-audit-r sessions no longer live; wip/lab-report-2 status still says working (13:29)
 - Old lab-report-2 session (started 00:37) stopped 13:45 on Andrew's go-ahead; the 13:27 one remains
 - Dispatcher: cluster submit refused by its permission check; tracker branch stage-auxdata not merged; checker still fails after the stage fix (dispatcher status)
