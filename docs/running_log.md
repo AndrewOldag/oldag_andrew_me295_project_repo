@@ -305,7 +305,7 @@ Required by the course. One entry per work session: done, remaining, bottlenecks
 - Result, dev seeds 1-5, correct of 25: script 10, remedy tree 24, diagnostician 24, single agent 11. False accepts: script 10, others 0. Not reported (step limit): diagnostician 1, single agent 13
 - Result, held-out seeds 0-2, correct of 15: script 3, remedy tree 9, diagnostician 11, single agent 7. False accepts: script 12, tree 3 (partial_occlusion), agents 0. Terminal fault correct: tree 1, diagnostician 3, single agent 1
 - Result: second_root: tree, diagnostician and single agent applied the width-free ratio, named width_change and accepted a good centre on 3 of 3 each; counted neither correct nor false accept under the label
-- Result, both sets, per run mean: diagnostician 5.2 steps, 23.0k tokens in, 2.7k out, 31.6 s call time; single agent 6.8 steps, 28.4k, 3.3k, 38.8 s. Totals 0.92M and 1.14M tokens in
+- Result, both sets, per run mean: diagnostician 5.25 steps, 23.0k tokens in, 2.7k out, 31.6 s call time; single agent 6.8 steps, 28.4k, 3.3k, 38.8 s. Totals 0.92M and 1.14M tokens in
 - Done, item 7 (30b78e1): `results/2026-10-12b_scored_v1/README.md`, `table_dev.md`, `table_heldout.md`, `scores.json`. Lab report 1 root-count mark replaced as the spec gives it
 - Done: `python -m pytest -q tests`: 169 passed
 - Setup, not tracked: worktree links to `private/` and the staging caches of the main checkout and the baselines, freeze-v2 and held-out worktrees
@@ -319,8 +319,8 @@ Required by the course. One entry per work session: done, remaining, bottlenecks
 - Done (99d70bd): definition `docs/proposals/2026-10-13_auditor-v1.md`, committed before any auditor run. `audit/view.py` (view from an allow-list, field summaries, robust z), `audit/rule.py`, `audit/llm.py` (actions through the unchanged orchestrator), `agents/prompts/auditor.md`, `scripts/synth/auditor_v1.py`; auditor step limit 20 in `config/models.yaml`; `tests/test_auditor.py`, 18 tests including the sentinel leak test
 - Done: all 160 final records found in the cache; 0 tracker runs
 - Done (d15db20): 8 batch views and rule auditor. Rule flags false accepts dev 10 / 10, held-out 15 / 15; good reports flagged dev tree 6 / 14, diagnostician 7 / 15, held-out 5 / 11
-- Done: LLM auditor dev, 3 prompt rounds x 4 batches, 12 calls (b1055da, aa8483a, 23d93ef). Good reports flagged, tree 4 -> 0 -> 0 / 14, diagnostician 7 -> 5 -> 0 / 15, single agent 5 -> 0 -> 5 / 6; script 10 / 10 false accepts and 15 / 15 good reports flagged every round
-- Done (46a9d6f): held-out, prompt aa8483a, 4 batches x 3, 12 calls, no change between runs (one system prompt hash over 74 calls). False accepts flagged 14 / 15 in each run (rule 15 / 15); good reports flagged 7, 5, 5 / 11 (rule 5 / 11); alt_repair 0 / 9 (rule 0 / 9)
+- Done: LLM auditor dev, 3 prompt rounds x 4 batches, 12 runs (b1055da, aa8483a, 23d93ef). Good reports flagged, tree 4 -> 0 -> 0 / 14, diagnostician 7 -> 5 -> 0 / 15, single agent 5 -> 0 -> 5 / 6; script 10 / 10 false accepts and 15 / 15 good reports flagged every round
+- Done (46a9d6f): held-out, prompt aa8483a, 4 batches x 3, 12 runs, no change between runs (one system prompt hash over 74 model calls). False accepts flagged 14 / 15 in each run (rule 15 / 15); good reports flagged 7, 5, 5 / 11 (rule 5 / 11); alt_repair 0 / 9 (rule 0 / 9)
 - Result: LLM miss on held-out: remedy tree partial_occlusion s1 (checks pass, normal shape, REGR peak z 6.7), cleared 3 of 3 under the round 2 prompt rule that a peak unlike the batch with a normal shape is a faster root
 - Result: 24 LLM auditor runs, all ended with report, 0 undecided, 0 errors; mean 80.2k tokens in and 48.6 s call time per dev run, 68.2k and 45.0 s per held-out run
 - Found: dev round 1 runs record commit 8a01264, a status commit made while they ran; code and prompt as 99d70bd
