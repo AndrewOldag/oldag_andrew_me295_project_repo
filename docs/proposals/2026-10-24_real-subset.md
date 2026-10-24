@@ -18,7 +18,7 @@ Dispatcher session, 2026-10-24. Spec `docs/specs/2026-10-24b_real-movie-push.md`
 | C2 | control | 0708 | 0708_c5 | 0708_c6 |
 | C3 | control | 0714 | 0714_c10 | 0714_c11 |
 | C4 | control | 0721 | 0721_c1 | 0721_c3 |
-| C5 | control | 0711 | 0711_c4 | 0711_c7 |
+| C5 | control | 0711 | 0711_c4 | 0714_c12 |
 | D1 | drought | 0708 | 0708_m12 (fixed) | - |
 | D2 | drought | 0711 | 0711_m4 | 0711_m6 |
 | D3 | drought | 0714 | 0714_m10 | 0714_m13 |
@@ -32,6 +32,7 @@ Dispatcher session, 2026-10-24. Spec `docs/specs/2026-10-24b_real-movie-push.md`
 | R6 | recovery | 0727 | 0727_mc5 | 0727_mc11 |
 
 - D5 has no second clean 0708 mannitol root; its backup is from 0714
+- C5: the other clean 0711 control roots are in the B calibration set (0711_c5, 0711_c7) or left out (0711_c1); its backup is from 0714
 
 ## Windows
 - 3 per root, 2 h each: early 4-6 h, middle 11-13 h, late 17-19 h. Same for every root
