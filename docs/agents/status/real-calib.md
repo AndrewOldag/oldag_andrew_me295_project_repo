@@ -1,11 +1,13 @@
 # real-calib
-Updated: 2026-10-24 16:45 (local)
+Updated: 2026-10-24 17:00 (local)
 Lane: course
 Branch: wip/real-calib
 Last inbox item done: 1
-State: working
-Now: item 2, spec 2026-10-24b section B: choosing the calibration set (proposal first, nothing computed yet)
+State: waiting on dispatcher
+Now: item 2 (section B): calibration set fixed; waiting for the dispatcher's cluster ft2 midline runner (spec B: midlines through C's runner and ledger)
 Done since last update:
-- item 1: read CLAUDE.md, agents README, spec 2026-10-24b; worktree on wip/real-calib; task c018 working
+- Calibration set and rule committed before any compute: `docs/proposals/2026-10-24_real-calibration.md` (16 windows: 0708_c8, 0708_c9, 0711_c5, 0711_c7, 0714_c4, 0714_c9, 0721_c5, 0721_c6; 7-9 h and 15-17 h)
+- Agreed with dispatcher: 0711_c7 stays in B (it was a C backup); replacement list cut to roots not reserved for C (0714_c13, 0711_c1); amended before any compute
+- Fixed non-growing roots checked: other rig, about 0.84 um/px; not used
 Needs Andrew:
 - none
