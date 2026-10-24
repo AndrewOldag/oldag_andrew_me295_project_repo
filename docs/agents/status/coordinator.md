@@ -1,12 +1,14 @@
 # coordinator
-Updated: 2026-10-24 15:20 (local)
+Updated: 2026-10-24 15:31 (local)
 Lane: course
 Branch: main
 Last inbox item done: 22
 State: working
 Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8 (relay part), 10, 11, 16, 17 (item 20)
-Last-seen main: ea86020
+Last-seen main: 8ba1dbe
 Done since last update:
+- 2026-10-24 15:31 (tick): item 1: no branch ready to merge and unmerged (wip/dispatcher waiting on server job, 15:21; wip/lab-report-2 working; research status branches done)
+- 15:31: item 8: no inbox change since ea86020. Item 10: no status waits on an agent. Item 16: dispatcher `waiting on server job` (c2_chain, workstation c010): `c2_chain.done` present (15:24, read only), dispatcher last pushed 15:21. Pinged dispatcher 15:31 (`check github`)
 - 2026-10-24 15:20 (tick): item 1: no branch ready to merge and unmerged (wip/dispatcher waiting on server job, 14:55; wip/lab-report-2 working; research status branches done)
 - 15:20: item 8: dispatcher inbox changed in ea86020 (item 30: midline end = net tip point). Pinged dispatcher 15:20 (`check github`). Item 10: no status waits on an agent. Item 16: dispatcher `waiting on server job` (c2_chain, workstation c010): neither `c2_chain.done` nor `c2_chain.failed` present (read only). Item 22: item 21 withdrawn, dropped from Needs Andrew
 - 2026-10-24 15:00 (tick): item 1: no branch ready to merge and unmerged (wip/dispatcher waiting on server job, 14:55; wip/lab-report-2 working; research status branches done)
@@ -70,7 +72,7 @@ Branches (last commit, state):
 - wip/coord-tick: 2026-10-24 13:09, ready to merge, merged 9aa97bf
 - wip/freeze-v3: 2026-10-24 04:16, ready to merge, merged 2ebd422
 - status/turn-long: 2026-10-24 02:42, done (research lane, not merged)
-- wip/dispatcher: 2026-10-24 14:55, waiting on server job (item 29, c2_chain on the workstation; item 30 pinged)
+- wip/dispatcher: 2026-10-24 15:21, waiting on server job (item 29, c2_chain done 15:24; pinged 15:31)
 - wip/lab-report-2: 2026-10-23 13:29, working
 - status/spec-audit-r: 2026-10-23 13:42, done (research lane, not merged)
 - status/gate2: 2026-10-16 12:27, delete approved, Andrew runs it (research lane, not merged)
