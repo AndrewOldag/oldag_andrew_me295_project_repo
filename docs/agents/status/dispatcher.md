@@ -1,19 +1,19 @@
 # dispatcher
-Updated: 2026-10-23 18:50 (local)
+Updated: 2026-10-23 19:40 (local)
 Lane: course
 Branch: wip/dispatcher
-Last inbox item done: 10
+Last inbox item done: 15
 State: waiting on Andrew
-Now: item 11 (contrast-stretch sweep, factor 2.506, low percentiles 0.3, 0.1, 0.01, min-max) waiting for the lab-server load: 1 min load 26 of 32 (another user); retry every 15 min, 3 tries
+Now: items 14-15 done; closure passes on the net midline (400 px); plane sections fails from midline curvature noise; B5 part 2 waits
 Done since last update:
-- Item 9: net-scale sweep, 5 frames, CPU, lab server: midline end to true tip median 617 (1.0), 543 (1.5), 282 (2.0), 299 (2.506) px; tip net within 19-30 px at all factors; tip confidence 0.16-0.38
-- Item 9: preview shows the tip zone (last 250-300 px) clipped to black by the 1-99.5 % contrast stretch; the midline stops there. No factor recorded, no GPU rerun
-- Item 9: closure worst pairs: whole-pixel jumps of the provisional midline tip (0-6 px per pair) against a smooth tracked tip; residual is midline-source jitter
-- Item 8 follow-up: cluster CPU job timed out at 2 h (midline 85 s per frame on 8 cpus), $0.193; ledger actuals written; spent today $0.45
-- Item 10: noted; job scripts here start only when no other job of this account runs
-- Item 12: noted; no workstation work assigned yet; will use only the approved ssh form when host-setup assigns it
-- Item 13: private workstation file copied and read (20 GB cap on the work folder, at least 20 GB free, df before and after every step, frame subsets only); no workstation work assigned yet
+- Item 11: replaced by item 14 before it ran (lab-server load 26 of 32 from another user; no job started)
+- Item 14, midline: tracker tile mode + fine-tuned net2 on 5 frames (workstation): midline end to tip median 2.0 / 2.2 / 3.2 px at low percentile 1 / 0.3 / 0.1 %; tip confidence 0.67 / 0.75 / 0.76. Kept 0.1 %, in decisions
+- Item 14, whole t3 window with the net midline: 80 frames, 1411 s on 8 threads, tip confidence 0.74. Closure 0.95 (400 px, pass), 1.48 (700), 2.26 (950) px/h. Plane sections 134 / 216 / 247 %/h (fail)
+- Item 14, plane-sections cause: curvature of the per-frame midline (skeleton polyline) changes 0.01-0.04 /px frame to frame against a mean of about 0.002 /px at curvature_smooth_px 0 (frozen); flank spacing 28-29 px and flank difference within +-34 %/h look normal. Checker not changed
+- Item 14, tracing pack: lab-server folder `me295/tracing_pack_20261023/`, 140 frames (35 per experiment, 84 roots), 769 MB, worklist in trace_midlines.py format; held-out roots (16): 0711_c5, 0711_c7, 0711_c8, 0714_c10, 0714_c5, 0714_m1, 0714_m11, 0721_c4, 0721_c6, 0721_c9, 0721_m8, 0727_cc2, 0727_mc2, 0727_mc7, 0727_mc8, 0727_mc9
+- Item 15: workstation used for the sweep and the closure runs; 0708_m12 copy reused (frames linked, nothing pulled); disk 36 GB free before and after every step; work folder 9.9 GB
+- No cluster job needed (CPU fast enough for 80 frames)
 Needs Andrew:
-- Net midline: the contrast stretch, not the scale, seems to stop it short of the tip. Try a lower low percentile for the stretch (now 1 %; the darkest 1 % of a frame is about 29k px, close to the size of the tip zone, about 300 x 70 px) on the same 5 frames? Net and contrast settings not changed by this session
-- Until a midline reaches the tip, closure and plane sections on real windows cannot be judged; the provisional midline is pixel-quantized (tip jitter 0-6 px per pair, curvature noise 0.04-0.09 /px)
-- Lab-server work folders left as they are
+- Plane sections on real movies: the curvature term needs a smooth midline. Options: curvature from a time-smoothed or spline-fitted midline, or from the tracked centre chain. Each changes a frozen setting or the checker input (freeze item)
+- Fine-tuned net was trained on 0708 hand traces (includes 0708_m12); tip reach on other experiments not yet measured. The tracing pack's held-out roots can measure it after you trace
+- Tracing pack ready for tracing: `python midline_ml/finetune/trace_midlines.py <pack>/frames --out <pack>/traces.json`
