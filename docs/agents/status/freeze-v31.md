@@ -1,11 +1,12 @@
 # freeze-v31
-Updated: 2026-10-24 12:24 (local)
+Updated: 2026-10-24 12:35 (local)
 Lane: course
 Branch: wip/freeze-v31
 Last inbox item done: 7
 State: waiting on Andrew
 Now: stopped at the spec stop rule: at most 1 of 5 faults can qualify (fewer than 3). No label sweep, no tag, no method runs
 Done since last update:
+- Main merged (82c48c7; blocklist line fixed on main in b8bf79e); decisions entry for v3.1 size steps, cache-match test, runner settings; full suite 256 passed
 - Sizing round 3 (workstation): bad_stage_correction 5 px, register_frames, 6 runs, 0 failed. Stored on the lab server and verified (460 files, sha256 equal)
 - Sizing result, seeds 10-12 (`results/2026-10-24_freeze_v3.1/sizing.md`):
   - rigid_drift 0.5-5.5: unremedied good 3 of 3 up to 4.5; 5.5 not good 2 of 3. Out
@@ -19,4 +20,3 @@ Needs Andrew:
   - (b) Finish bad_stage_correction 6-8 px (18 runs) and score a 1-fault v3.1 set (3 rods), below the spec minimum of 9
   - (c) Change the rule or sizes (e.g. 2 of 3 seeds; rigid_drift above 5.5; displacement at speed 1). A spec change; planning to write it
 - Main checkout `private/workstation.md` is the old copy; refreshed copy in this worktree's `private/`
-- Pre-push blocklist flags line 22 of `docs/agents/inbox/autotrace.md` (on main); not pushed again from here
