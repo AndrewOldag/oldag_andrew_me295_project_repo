@@ -3,8 +3,8 @@ Updated: 2026-10-14 (local)
 Lane: course
 Branch: wip/auditor-v1b
 Last inbox item done: 3
-State: ready to merge
-Now: items 2-3 done; wip/auditor-v1b ready to merge (one commit, no runs)
+State: done
+Now: done; wip/auditor-v1b merged in f52dbdd (state set by audit-marks 2026-10-24, spec audit specs-11)
 Done since last update:
 - Item 1: merged by the coordinator (f53a07f)
 - Item 2: cache location written to `private/`, not tracked; records read in place, read only, no copy

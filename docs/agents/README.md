@@ -44,8 +44,8 @@ Needs Andrew:
 | review | course | wip/review | 6 | never run; not needed after freeze v2 |
 | freeze-v2 | course | wip/freeze-v2 | spec 2026-10-12 | done, merged |
 | scored-v1 | course | wip/scored-v1 | spec 2026-10-12b | done, merged |
-| auditor-v1 | course | wip/auditor-v1 | spec 2026-10-13 Task A | to start |
-| fq-real | course | wip/fq-real | spec 2026-10-13 Task B | to start |
+| auditor-v1 | course | wip/auditor-v1 | spec 2026-10-13 Task A | done, merged (f52dbdd) |
+| fq-real | course | wip/fq-real | spec 2026-10-13 Task B | done, merged (742dc79) |
 | data-steward | research | status/data-steward | 7 | unknown |
 | gate2 | research | status/gate2 | 8 | unknown |
 | litreview | research | status/litreview | 9 | unknown |
