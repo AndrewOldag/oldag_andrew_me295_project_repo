@@ -8,7 +8,7 @@ the per-frame midline in the world frame and the settings used.
   python qb_track.py --imgdir X.imgdir --midline X_midline.npz --out X_track.npz
       [--stride 1] [--disk-radius R] [--spacing 15] [--couple]
       [--register] [--midline-smooth light|strong]
-      [--band-mask mask_second_root|crop_to_main_root]
+      [--band-mask mask_second_root|crop_to_main_root] [--from-h H0 --to-h H1]
 
 The last three run before tracking (measure/preprocess.py); they carry out
 remedies the tracker has no setting for.
@@ -16,6 +16,10 @@ remedies the tracker has no setting for.
 The midline file holds `midline_image` (T, K, 2; row, col; tip first) for
 every frame of the movie, `seed` (frame-0 midline for the tracker) and
 `mask0` (frame-0 root mask).
+
+With --from-h and --to-h only the frames inside that window of movie time are
+read, and the midline file holds those frames only, with their movie indices
+in `frames` (scripts/remote/real_midline.py).
 """
 import argparse
 import json
@@ -79,18 +83,33 @@ def main():
     ap.add_argument("--track-length", type=float, default=None,
                     help="px of midline handed to the tracker (default: the rod's own, from the midline file; "
                          "400 for files without it)")
+    ap.add_argument("--from-h", type=float, default=None, help="window start, h of movie time (real movies)")
+    ap.add_argument("--to-h", type=float, default=None, help="window end, h of movie time")
     a = ap.parse_args()
+    if (a.from_h is None) != (a.to_h is None):
+        ap.error("--from-h and --to-h go together")
     if Path(a.out).exists():
         sys.exit(f"output exists, not overwritten: {Path(a.out).name}")
 
     imgdir = Path(a.imgdir)
-    rec = load_root_recording(imgdir, pixel_size_um=a.pixel_um, lazy=False)
-    keep = np.arange(0, rec.images.shape[0], a.stride)
-    rec = replace(rec, images=np.asarray(rec.images)[keep], stage_xy_um=rec.stage_xy_um[keep],
-                  elapsed_s=rec.elapsed_s[keep])
     m = np.load(a.midline)
+    if a.from_h is None:
+        rec = load_root_recording(imgdir, pixel_size_um=a.pixel_um, lazy=False)
+        keep = np.arange(0, rec.images.shape[0], a.stride)
+        mid_img = m["midline_image"][keep].astype(float)
+        rec = replace(rec, images=np.asarray(rec.images)[keep], stage_xy_um=rec.stage_xy_um[keep],
+                      elapsed_s=rec.elapsed_s[keep])
+    else:                                       # one window of a real movie; only its frames are read
+        rec = load_root_recording(imgdir, pixel_size_um=a.pixel_um, lazy=True)
+        t_h = rec.elapsed_s / 3600.0
+        win = np.nonzero((t_h >= a.from_h) & (t_h <= a.to_h))[0]
+        if "frames" in m.files and not np.array_equal(m["frames"], win):
+            ap.error("midline file frames do not match the window")
+        keep = win[::a.stride]
+        mid_img = m["midline_image"][::a.stride].astype(float)
+        rec = replace(rec, images=rec.images[keep].materialize(), stage_xy_um=rec.stage_xy_um[keep],
+                      elapsed_s=rec.elapsed_s[keep])
     mask = m["mask0"].astype(bool) if "mask0" in m.files else None
-    mid_img = m["midline_image"][keep].astype(float)
     if a.track_length is None:
         a.track_length = float(m["track_length"]) if "track_length" in m.files else 400.0
     corr0 = cumulative_correction_px(rec)
@@ -133,7 +152,8 @@ def main():
                 "track_centre": True, "used_mask": bool(res.split.used_mask),
                 "run_s": round(run_s, 1), "n_frames": int(len(keep)),
                 "register": bool(a.register), "midline_smooth": a.midline_smooth,
-                "band_mask": a.band_mask, "movie": a.movie, "track_length": a.track_length, "preprocess": pre, "frame_quality": quality}
+                "band_mask": a.band_mask, "movie": a.movie, "track_length": a.track_length, "preprocess": pre,
+                "frame_quality": quality, "window_h": None if a.from_h is None else [a.from_h, a.to_h]}
     meta = {"root_id": imgdir.stem, "pixel_um": a.pixel_um, "settings": settings}
     # Write once, never rename or overwrite (no move or rename on the lab server, CLAUDE.md; spec audit rules-2).
     # The output is complete only when <out>.ok exists; a stopped run leaves the .npz without it

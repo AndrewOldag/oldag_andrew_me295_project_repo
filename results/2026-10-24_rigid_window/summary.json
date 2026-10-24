@@ -1,0 +1,128 @@
+{
+ "root": "0708_m12",
+ "window_h": [
+  4.0,
+  6.0
+ ],
+ "dispatcher_mode": "script",
+ "dispatcher": {
+  "status": "finish",
+  "rounds": 1,
+  "first_submit": {
+   "submitted_windows": 1,
+   "backend": "lab_server"
+  },
+  "minute": 0.0,
+  "windows": 1,
+  "states": {
+   "collected": 1
+  },
+  "lab_core_hours": 0.05,
+  "cluster_core_hours": 0,
+  "refused": 0,
+  "cluster_refused": 0,
+  "approvals": 0,
+  "retries": 0,
+  "retry_successes": 0,
+  "lab_peak_workers": 1
+ },
+ "tasks": {
+  "0708_m12__w4": {
+   "outcome": {
+    "status": "not_called",
+    "args": {},
+    "steps": 0,
+    "failed_steps": 0,
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "call_ms": 0,
+    "note": "--no-agent: diagnostician not called"
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": false,
+     "value": 5.7571189495975466,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "where_s_px": 375.0,
+     "where_frame_pair": null,
+     "detail": "real-movie profile window s <= 398 px; largest change in regr_mid"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 0.9451584314749232,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "where_s_px": 488.67688868484885,
+     "where_frame_pair": 26,
+     "detail": "tip path 123.3 px/h; base at s = 489 px; largest single-pair residual at pair 26"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 133.56398187134667,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "where_s_px": 475.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; would fail): flank difference 33.99 %/h, predicted 167.56 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": false,
+     "value": 5.7571189495975466,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "where_s_px": 375.0,
+     "where_frame_pair": null,
+     "detail": "real-movie profile window s <= 398 px; largest change in regr_mid"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 0.9451584314749232,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "where_s_px": 488.67688868484885,
+     "where_frame_pair": 26,
+     "detail": "tip path 123.3 px/h; base at s = 489 px; largest single-pair residual at pair 26"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 133.56398187134667,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "where_s_px": 475.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; would fail): flank difference 33.99 %/h, predicted 167.56 %/h"
+    }
+   ]
+  }
+ },
+ "auditor": {
+  "status": "not_called",
+  "note": "--no-agent"
+ },
+ "runner_log": [],
+ "wall_s": 1.7,
+ "model": null,
+ "claude_code": null
+}

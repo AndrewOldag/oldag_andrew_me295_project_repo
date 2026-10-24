@@ -12,6 +12,8 @@ The step still counts. The agent never sees the rod's name, fault or truth.
 """
 import math
 
+import numpy as np
+
 from agents.actions import REMEDIES
 from checker import run_checks, load_thresholds
 from measure import info
@@ -19,6 +21,64 @@ from measure.remedies import NotAvailable, apply_remedy
 
 
 ROLL_BACK_FRACTION = 0.75      # a failing check must fall to at most 3/4 of its value to count as lowered
+
+# Checker profiles (Andrew, 2026-10-23, dispatcher inbox item 18): which checks gate pass or fail. The
+# checker code and thresholds do not change; a check outside the profile is computed and reported, its
+# value kept, and `passed` set to None with the detail prefix below. Synthetic rods keep all three checks.
+CHECK_PROFILES = {"synthetic": ("rigid_invariance", "closure", "plane_sections"),
+                  "real": ("closure",)}          # rigid invariance not gating on real windows: inbox item 20
+NOT_GATING = "reported, not gating"
+
+
+def profile_of(record):
+    return "real" if record.settings.get("movie") == "real" else "synthetic"
+
+
+def coverage_s(*records):
+    """Profile window for rigid invariance on real windows (decisions 2026-10-24): the smallest arc length,
+    over all frames and records, from the tip to the most basal centre point tracked in every frame."""
+    from checker.checks import _common_base
+    from measure.record import arclength
+    out = []
+    for r in records:
+        b = _common_base(r.centre)
+        if b is None or b == 0:
+            return None
+        out.append(float(np.nanmin(arclength(r.centre)[:, b])))
+    return min(out)
+
+
+def windowed(record, s_max):
+    """Copy of a record whose derived grid fields are missing past s_max (the checker reads `fields`)."""
+    from dataclasses import replace
+    f = dict(record.fields)
+    cut = f["s_grid"] > s_max
+    for k, v in f.items():
+        if k != "s_grid" and isinstance(v, np.ndarray) and v.ndim == 2 and v.shape[1] == len(cut):
+            v = v.copy()
+            v[:, cut] = np.nan
+            f[k] = v
+    return replace(record, _fields=f)
+
+
+def real_rigid_invariance(rec, moved, thresholds):
+    """The checker's rigid_invariance on the real-movie profile window. None if it cannot be set."""
+    from checker.checks import rigid_invariance
+    s_cov = coverage_s(rec, moved)
+    if s_cov is None:
+        return None
+    c = rigid_invariance(windowed(rec, s_cov), windowed(moved, s_cov), thresholds.get("rigid_invariance"))
+    c.detail = f"real-movie profile window s <= {s_cov:.0f} px; {c.detail}"
+    return c
+
+
+def apply_profile(checks, profile):
+    gates = CHECK_PROFILES[profile]
+    for c in checks:
+        if c.check not in gates and c.passed is not None:
+            c.detail = f"{NOT_GATING} ({profile}-movie profile; would {'pass' if c.passed else 'fail'}): {c.detail}"
+            c.passed = None
+    return checks
 
 
 def _before_after(before, after):
@@ -46,17 +106,23 @@ def no_progress(before, after):
 
 
 def _summary(checks):
-    return {"failed_checks": [c.check for c in checks if c.passed is False],
-            "passed_checks": [c.check for c in checks if c.passed is True],
-            "not_run": [c.check for c in checks if c.passed is None],
+    reported = [c.check for c in checks if c.passed is None and c.detail.startswith(NOT_GATING)]
+    out = {"failed_checks": [c.check for c in checks if c.passed is False],
+           "passed_checks": [c.check for c in checks if c.passed is True],
+           "not_run": [c.check for c in checks if c.passed is None and c.check not in reported]}
+    if reported:
+        out["reported_not_gating"] = reported
+    return {**out,
             "check_values": {c.check: {"value": round(c.value, 3), "threshold": c.threshold, "unit": c.unit}
                              for c in checks}}
 
 
 class Slice:
-    def __init__(self, runner, rod, label="rod-1", thresholds=None):
+    def __init__(self, runner, rod, label="rod-1", thresholds=None, profile=None):
+        """profile: a CHECK_PROFILES key; None = from the record (movie real -> "real", else "synthetic")."""
         self.runner, self.rod, self.label = runner, rod, label
         self.thresholds = thresholds or load_thresholds()
+        self.profile = profile
         self.runs = []                       # (settings, measurement, checks, change)
         self._measure(runner.initial_settings(rod), "initial run")
         self.base_disk_radius = int(self.current.record.settings.get("disk_radius") or 15)
@@ -64,7 +130,15 @@ class Slice:
     def _measure(self, settings, change):
         m = self.runner.measure(self.rod, settings)
         skip = ("plane_sections",) if settings.width_free else ()
+        profile = self.profile or profile_of(m.record)
         checks = run_checks(m.record, m.moved, self.thresholds, skip)
+        if profile == "real" and m.moved is not None:
+            # full-range value is the reported one; the item-19 profile-window value is shown next to it
+            win = real_rigid_invariance(m.record, m.moved, self.thresholds)
+            for c in checks:
+                if c.check == "rigid_invariance" and win is not None:
+                    c.detail = f"{c.detail}; profile window value {win.value:.3f} %/h ({win.detail.split(';')[0]})"
+        checks = apply_profile(checks, profile)
         self.runs.append((settings, m, checks, change))
 
     @property
