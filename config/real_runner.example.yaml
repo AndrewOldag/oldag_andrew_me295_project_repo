@@ -6,6 +6,8 @@ code_dir: <folder there for a copy of measure/ and scripts/remote/>
 tracker_code: <tracker checkout there with the stage-tracking loader (branch gate2-windowed-coupling or later)>
 python: <Python of the tracker environment there (envs/qb.yml)>
 min_free_gb: 21                 # do not start a run below this free space on the work disk
+midline_weights: <net2 weights for batch_midlines.py (path, or a name under cascade/weights); default net2_midline_ft.pt>
+midline_tag: <short tag added to every net-midline, moved-copy and track name, e.g. ft2; optional>
 windows:                        # window id <root>__w<from_h>-<to_h> -> movie folder and midline file there
   <root_id>__w4-6:
     imgdir: <montage .imgdir of the root>
