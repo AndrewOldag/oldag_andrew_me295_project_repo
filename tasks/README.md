@@ -20,13 +20,15 @@ created: YYYY-MM-DD HH:MM
 last_update: YYYY-MM-DD HH:MM
 blocker: none | one line
 done_marker: file or check that shows the task is done
+host: VM | workstation | lab server | cluster | comma list (e.g. workstation, cluster)
 ---
 ```
+- `host` (spec 2026-10-23c): where the task runs; a task with parts on several hosts lists them. One host per part. Outputs and done markers live on the lab server in the task's own folder. Older files without it show `-`
 - Times are VM local time
 - A task in state `working` with `last_update` older than 30 min is shown as stale
 - On restart, the coordinator sets `working` tasks with no live session to `interrupted` and re-dispatches them
 - Below the front matter: parts, each marked done when finished, so a restarted task skips them
 
 ## Board
-- `python scripts/board.py` prints one table (id, lane, owner, state, branch, last_update, blocker) from both folders
+- `python scripts/board.py` prints one table (id, lane, owner, state, branch, host, last_update, blocker) from both folders
 - `python scripts/board.py --html` also writes the local page (location in `private/board.conf`). The page is never written inside a git repo

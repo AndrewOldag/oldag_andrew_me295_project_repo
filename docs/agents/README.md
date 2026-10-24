@@ -54,6 +54,8 @@ Needs Andrew:
 | spec-audit-check | course | wip/spec-audit-check | spec 2026-10-23_spec-audit | after spec-audit |
 | lab-report-2 | course | wip/lab-report-2 | spec 2026-10-23_next-steps | to start (2026-10-23) |
 | dispatcher | course | wip/dispatcher | spec 2026-10-23_next-steps | to start (2026-10-23) |
-| spec-audit-r | research | status/spec-audit-r | research spec, tracker repo | to start (2026-10-23) |
+| spec-audit-r | research | status/spec-audit-r | research spec, tracker repo | done (2026-10-23) |
+| freeze-v3 | course | wip/freeze-v3 | spec 2026-10-23b_freeze-v3 | working (2026-10-23) |
+| turn-long | research | status/turn-long | research spec, tracker repo | to start (2026-10-23) |
 
 Finished sessions can be closed. A new task gets a new name and a new inbox.
