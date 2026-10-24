@@ -1,12 +1,16 @@
 # coordinator
-Updated: 2026-10-24 11:30 (local)
+Updated: 2026-10-24 12:58 (local)
 Lane: course
 Branch: main
-Last inbox item done: 14
+Last inbox item done: 18
 State: working
-Now: relay loop every 10 min (item 8): merges per item 1, `check github` to live sessions whose inbox changed
-Last-seen main: 4692019 (inboxes as of 8c5bcff)
+Now: one check per `check github`; standing items 1, 8, 10, 11, 16, 17. coord-tick (task c016) is replacing the loop
+Last-seen main: e3c0268 (inboxes as of cb5df17)
 Done since last update:
+- 2026-10-24 12:55: item 1: merged wip/audit-marks (e3c0268; ready to merge 12:10). Conflict in docs/decisions.md (freeze v3.1 end and status/gate2 delete entries): kept both. Suite 253 passed; log entry moved
+- Item 18: items 15 and 17 done by audit-marks on main, kept by Andrew: 915859a (merge wip/autotrace), 074e102 (board host note), eaaa37b (sweep.py removes only its own lock). Not redone
+- Item 16: no status says `waiting on server job`; no marker checked
+- Item 8, 12:57: inboxes changed since 4692019: audit-marks, autotrace, coord-tick, dispatcher, freeze-v31. Pinged freeze-v31 (item 8, 9b7ea8c) and dispatcher (item 26, cb5df17). Not pinged: audit-marks (did item 6 after its inbox change), coord-tick (started after its inbox), autotrace (not live; merged, done). The second dispatcher session was gone when pinged
 - 2026-10-24 11:30: nothing ready to merge; no inbox change since 8c5bcff. dispatcher and autotrace restarted (live since 11:28): pinged both for the 8c5bcff items. turn-long status now done (02:42)
 - Item 9: board allows `waiting on Andrew` and `waiting on <agent>` (`scripts/board.py`, `tasks/README.md`), 8223616; full suite 203 passed
 - Item 1: merged wip/spec-audit (2c0eb60) and then wip/spec-audit-check (f7ec454), `--no-ff`; pending log entries moved into `docs/running_log.md`; suite 203 passed on each merge
@@ -38,15 +42,19 @@ Branches (last commit, state):
 - wip/spec-audit: 2026-10-23 01:04, ready to merge, merged 2c0eb60
 - wip/spec-audit-check: 2026-10-23 01:14, ready to merge, merged f7ec454
 - wip/host-setup: 2026-10-23 18:37, merged b9a3a06
-- wip/autotrace: 2026-10-24 03:17, waiting on Andrew (adopt net2_midline_ft2?)
+- wip/autotrace: 2026-10-24 11:39, ready to merge, merged 915859a (by audit-marks)
+- wip/audit-marks: 2026-10-24 12:11, ready to merge, merged e3c0268
+- wip/freeze-v31: 2026-10-24 12:39, waiting on Andrew (item 8 since given: v3.1 ended, option a)
 - wip/freeze-v3: 2026-10-24 04:16, ready to merge, merged 2ebd422
 - status/turn-long: 2026-10-24 02:42, done (research lane, not merged)
-- wip/dispatcher: 2026-10-24 03:31, waiting on Andrew (0711_c1 run stopped for low VM memory; restart needs go-ahead)
+- wip/dispatcher: 2026-10-24 11:36, working (ft2 midline chain on the lab server)
 - wip/lab-report-2: 2026-10-23 13:29, working
 - status/spec-audit-r: 2026-10-23 13:42, done (research lane, not merged)
-- status/gate2: 2026-10-16 12:27, waiting on Andrew (research lane, not merged)
+- status/gate2: 2026-10-16 12:27, delete approved, Andrew runs it (research lane, not merged)
 - wip/readme-check, wip/vm-setup, wip/auditor-v1b, wip/fq-real, wip/auditor-v1, wip/scored-v1, wip/freeze-v2, heldout/faults, wip/baselines, wip/diag-review, wip/lab-report-1, wip/gatekeeper: merged
 Needs Andrew:
+- Two coordinator sessions are listed live (the other started about 11:45, idle now). Stop one so merges and pings are not doubled; coord-tick will replace both
+- `git push origin --delete status/gate2` (audit-marks item 2; refused for sessions)
 - freeze-v3: review `results/2026-10-23_freeze_v3/README.md` (all 12 accept_repaired rods measure well unremedied; second_root 0 correct for every method)
 - Workstation disk: host-setup work folder 9.9 of 20 GB after one root; sessions cannot delete there (host-setup status)
 - lab-report-2 and spec-audit-r sessions no longer live; wip/lab-report-2 status still says working (13:29)
