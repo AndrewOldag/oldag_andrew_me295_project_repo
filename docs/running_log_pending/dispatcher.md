@@ -66,3 +66,13 @@
 - Demo: `python scripts/real_slice.py --no-agent` prints the dispatcher summary and the check values
 - Remaining: agent run after the re-pin; smoothing decision (Andrew)
 - Bottlenecks: Claude Code pin (freeze-v3, Andrew); smoothing proposal (Andrew)
+
+## 2026-10-23 (build account, session dispatcher, inbox item 17)
+- Done (b972c29): `measure/midline_fit.py` (spline fit, residual 0.289 px rms), `tests/test_midline_fit.py` 4 passed, `scripts/synth/validate_midline_fit.py`
+- Failed: v3 synthetic validation of the fit: 164 of 241 runs within 1e-3; every bending, width-change and midline-jitter rod changed; max change closure 1.14 px/h, plane_sections 10.7 %/h; 3 pass/fail flips. Not adopted, rule not retuned. Real t3 for information: plane_sections 134 -> 36 %/h with the fit
+- Done: main merged (re-pin 2.1.310); suite 234 passed
+- Done: real slice with agents, 0708_m12 4-6 h (provisional net): dispatcher agent 2 rounds; closure 0.945 pass, plane_sections 133.6 fail; diagnostician smooth_midline light then decline (midline_jitter); auditor report (0 accepted). `results/2026-10-23_real_slice/`
+- Fixed: auditor call with no accepted run (empty id list was not a valid schema); slice script gives request_info and report only; `--audit-only`
+- Demo: `python scripts/real_slice.py` runs the chain and prints each stage's result
+- Remaining: plane sections on real movies (Andrew: after option 1 failed); fine-tuning after traces
+- Bottlenecks: plane-sections approach (Andrew)
