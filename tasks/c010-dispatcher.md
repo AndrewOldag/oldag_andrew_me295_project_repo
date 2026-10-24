@@ -6,8 +6,8 @@ owner: dispatcher
 state: needs-input
 branch: wip/dispatcher
 created: 2026-10-23 00:30
-last_update: 2026-10-23 22:40
-blocker: plane-sections approach after option 1 failed (Andrew)
+last_update: 2026-10-24 00:40
+blocker: rigid invariance on real windows above its synthetic threshold (Andrew)
 done_marker: proposal + results/2026-10-23_tracker_timing/; after approval, slice runs from README
 host: lab server, cluster
 ---

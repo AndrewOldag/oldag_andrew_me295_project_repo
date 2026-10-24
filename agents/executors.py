@@ -20,6 +20,26 @@ from measure.remedies import NotAvailable, apply_remedy
 
 ROLL_BACK_FRACTION = 0.75      # a failing check must fall to at most 3/4 of its value to count as lowered
 
+# Checker profiles (Andrew, 2026-10-23, dispatcher inbox item 18): which checks gate pass or fail. The
+# checker code and thresholds do not change; a check outside the profile is computed and reported, its
+# value kept, and `passed` set to None with the detail prefix below. Synthetic rods keep all three checks.
+CHECK_PROFILES = {"synthetic": ("rigid_invariance", "closure", "plane_sections"),
+                  "real": ("rigid_invariance", "closure")}
+NOT_GATING = "reported, not gating"
+
+
+def profile_of(record):
+    return "real" if record.settings.get("movie") == "real" else "synthetic"
+
+
+def apply_profile(checks, profile):
+    gates = CHECK_PROFILES[profile]
+    for c in checks:
+        if c.check not in gates and c.passed is not None:
+            c.detail = f"{NOT_GATING} ({profile}-movie profile; would {'pass' if c.passed else 'fail'}): {c.detail}"
+            c.passed = None
+    return checks
+
 
 def _before_after(before, after):
     b = {c.check: c for c in before}
@@ -46,17 +66,23 @@ def no_progress(before, after):
 
 
 def _summary(checks):
-    return {"failed_checks": [c.check for c in checks if c.passed is False],
-            "passed_checks": [c.check for c in checks if c.passed is True],
-            "not_run": [c.check for c in checks if c.passed is None],
+    reported = [c.check for c in checks if c.passed is None and c.detail.startswith(NOT_GATING)]
+    out = {"failed_checks": [c.check for c in checks if c.passed is False],
+           "passed_checks": [c.check for c in checks if c.passed is True],
+           "not_run": [c.check for c in checks if c.passed is None and c.check not in reported]}
+    if reported:
+        out["reported_not_gating"] = reported
+    return {**out,
             "check_values": {c.check: {"value": round(c.value, 3), "threshold": c.threshold, "unit": c.unit}
                              for c in checks}}
 
 
 class Slice:
-    def __init__(self, runner, rod, label="rod-1", thresholds=None):
+    def __init__(self, runner, rod, label="rod-1", thresholds=None, profile=None):
+        """profile: a CHECK_PROFILES key; None = from the record (movie real -> "real", else "synthetic")."""
         self.runner, self.rod, self.label = runner, rod, label
         self.thresholds = thresholds or load_thresholds()
+        self.profile = profile
         self.runs = []                       # (settings, measurement, checks, change)
         self._measure(runner.initial_settings(rod), "initial run")
         self.base_disk_radius = int(self.current.record.settings.get("disk_radius") or 15)
@@ -64,7 +90,8 @@ class Slice:
     def _measure(self, settings, change):
         m = self.runner.measure(self.rod, settings)
         skip = ("plane_sections",) if settings.width_free else ()
-        checks = run_checks(m.record, m.moved, self.thresholds, skip)
+        checks = apply_profile(run_checks(m.record, m.moved, self.thresholds, skip),
+                               self.profile or profile_of(m.record))
         self.runs.append((settings, m, checks, change))
 
     @property

@@ -88,8 +88,11 @@ def remedies_kept(changes):
 
 def _check(c):
     v = c.get("value")
-    return {"check": c["check"], "value": None if v is None or not np.isfinite(v) else round(float(v), 3),
-            "threshold": c.get("threshold"), "unit": c.get("unit"), "passed": c.get("passed")}
+    out = {"check": c["check"], "value": None if v is None or not np.isfinite(v) else round(float(v), 3),
+           "threshold": c.get("threshold"), "unit": c.get("unit"), "passed": c.get("passed")}
+    if str(c.get("detail", "")).startswith("reported, not gating"):
+        out["gating"] = False             # real-movie profile: computed and reported, not a pass/fail gate
+    return out
 
 
 def run_view(run_id, summary, record):
@@ -153,13 +156,19 @@ def batch_view(summaries, records, key):
 
 def batch_table(views, stats):
     """Compact table of the batch for the auditor: one row per run."""
-    rows = []
+    rows, any_not_gating = [], False
     for v in views:
-        rows.append({"run_id": v["run_id"], "status": v["status"],
-                     "checks": {c["check"]: [c["value"], c["threshold"], c["passed"]] for c in v["final_checks"]},
+        checks = {}
+        for c in v["final_checks"]:
+            not_gating = c.get("gating") is False
+            any_not_gating |= not_gating
+            checks[c["check"]] = [c["value"], c["threshold"], "not gating" if not_gating else c["passed"]]
+        rows.append({"run_id": v["run_id"], "status": v["status"], "checks": checks,
                      "steps": v["steps"], "remedies_kept": len(v["remedies_kept"]), "roll_backs": v["roll_backs"],
                      "width_free": v["final_settings"]["width_free"],
                      "summaries": {k: [v["summaries"][k], v["z"][k]] for k in SUMMARIES}})
-    return {"columns": {"checks": "check: [value, threshold, passed]; passed null = not run",
-                        "summaries": "summary: [value, robust z in this batch]"},
+    note = "check: [value, threshold, passed]; passed null = not run"
+    if any_not_gating:                    # only real-movie batches; synthetic tables are unchanged
+        note += "; passed 'not gating' = computed and reported, not a pass/fail gate (real-movie profile)"
+    return {"columns": {"checks": note, "summaries": "summary: [value, robust z in this batch]"},
             "batch_median_mad": stats, "runs": rows}

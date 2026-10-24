@@ -12,7 +12,9 @@ Limits on the host, checked before every tracker run: 1 min load at most half th
 2 jobs of this account already running; at least `min_free_gb` free on the work disk (workstation rule,
 2026-10-23). Single-thread tracker, nice 19.
 
-No rigidly moved copy exists for real movies yet: `moved` is None, so rigid invariance is "not run".
+Rigid invariance: the runner makes a rigidly moved copy of the window on the host once
+(scripts/remote/real_moved.py: the synthetic rods' rigid motion, unlogged) and tracks it with the same
+settings, as RemoteRunner does for synthetic rods. `moved=False` skips it (rigid invariance not run).
 """
 from dataclasses import dataclass, replace
 import io
@@ -50,13 +52,14 @@ class HostBusy(RuntimeError):
 class RealRunner:
     form = "real_window"
 
-    def __init__(self, config=REAL_CONFIG, cache=None, track_length=400.0):
+    def __init__(self, config=REAL_CONFIG, cache=None, track_length=400.0, moved=True):
         cfg = yaml.safe_load(Path(config).read_text())
         self.host, self.work, self.code, self.tracker, self.python = (
             cfg["host"], cfg["work_dir"], cfg["code_dir"], cfg["tracker_code"], cfg["python"])
         self.min_free_gb = float(cfg.get("min_free_gb", 21))
         self.windows = cfg["windows"]                 # window id -> {imgdir, midline}
         self.track_length = float(track_length)
+        self.with_moved = bool(moved)
         self.cache = Path(cache or ROOT / "staging" / "tracks_real")
         self.cache.mkdir(parents=True, exist_ok=True)
         self.log = []
@@ -96,10 +99,32 @@ class RealRunner:
             raise HostBusy(f"{s['free_gb']} GB free, below {self.min_free_gb} GB")
         return s
 
-    def track(self, window, settings):
+    def moved_paths(self, window):
+        base = f"{self.work}/moved/{window.id()}"
+        return {"imgdir": base + "_moved.imgdir", "midline": base + "_moved_midline.npz"}
+
+    def ensure_moved(self, window):
+        """Make the rigidly moved copy of the window on the host unless it exists."""
+        w, mv = self.windows[window.id()], self.moved_paths(window)
+        q = shlex.quote
+        exists = self._ssh(f"test -d {q(mv['imgdir'])} && test -f {q(mv['midline'])} && echo yes || echo no")
+        if exists.decode().strip() == "yes":
+            return mv
+        before = self.check_host()
+        args = ["--imgdir", w["imgdir"], "--midline", w["midline"], "--from-h", f"{window.from_h:g}",
+                "--to-h", f"{window.to_h:g}", "--out-imgdir", mv["imgdir"], "--out-midline", mv["midline"]]
+        cmd = (f"mkdir -p {q(self.work)}/moved && cd {q(self.code)} && nice -n 19 {q(self.python)} "
+               f"scripts/remote/real_moved.py " + " ".join(q(a) for a in args))
+        out = json.loads(self._ssh(cmd).decode().strip().splitlines()[-1])
+        after = self.host_state()
+        self.log.append({"moved_copy": window.id(), **out, "free_gb_before": before["free_gb"],
+                         "free_gb_after": after["free_gb"]})
+        return mv
+
+    def track(self, window, settings, moved=False):
         settings = replace(settings, width_free=False)
-        w = self.windows[window.id()]
-        name = f"{window.id()}__{settings.tag()}__L{self.track_length:g}.npz"
+        w = self.moved_paths(window) if moved else self.windows[window.id()]
+        name = f"{window.id()}{'_moved' if moved else ''}__{settings.tag()}__L{self.track_length:g}.npz"
         local = self.cache / name
         if not local.exists():
             before = self.check_host()
@@ -121,4 +146,8 @@ class RealRunner:
 
     def measure(self, window, settings):
         rec = from_tracker_npz(self.track(window, settings), root_id=window.id())
-        return Measurement(rec, None, settings, {})
+        moved = None
+        if self.with_moved:
+            self.ensure_moved(window)
+            moved = from_tracker_npz(self.track(window, settings, moved=True), root_id=window.id() + "_moved")
+        return Measurement(rec, moved, settings, {})
