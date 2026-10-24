@@ -3,11 +3,11 @@ id: c010
 title: Dispatcher proposal, tracker timing, cost estimate; then first real slice
 lane: course
 owner: dispatcher
-state: needs-input
+state: working
 branch: wip/dispatcher
 created: 2026-10-23 00:30
-last_update: 2026-10-24 12:58
-blocker: Andrew: host for 0711_c1 tracking (does not fit under the workstation cap); server jobs running
+last_update: 2026-10-24 13:30
+blocker: none
 done_marker: proposal + results/2026-10-23_tracker_timing/; after approval, slice runs from README
 host: lab server, workstation, cluster
 ---
