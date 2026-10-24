@@ -1,12 +1,15 @@
 """The smallest real slice, end to end: dispatcher -> tracker -> checker -> diagnostician -> auditor.
 
   python scripts/real_slice.py [--root 0708_m12 --from-h 4 --to-h 6] [--dispatcher agent|script] [--no-agent] [--audit-only] [--out DIR]
+  python scripts/real_slice.py --windows 0708_m12:4-6 0711_c1:4-6 0721_m10:4-6 [--config private/real_runner_lab.yaml]
 
-One include-yes root, one window inside its usable hours. The dispatcher (LLM agent by default, or the
+One or more include-yes roots, one window each inside its usable hours. The dispatcher (LLM agent by default, or the
 script baseline) splits the window into a task and submits it; the job tracks the window on the compute
 host (measure/real_runner.py, net midline, settings from private/real_runner.yaml). Collecting a task
 checks it (checker, approved thresholds) and, if a check fails, hands it to the diagnostician with the
-real request_info and apply_remedy (agents/executors.py). The auditor then reviews the batch.
+real request_info and apply_remedy (agents/executors.py). The auditor then reviews the batch. Each run
+carries its root's condition, and with more than one condition in the batch the auditor's task asks it to
+compare them (inbox item 21); the auditor prompt is not changed.
 
 A plane-sections failure on real movies is an expected result here (midline curvature noise,
 docs/proposals/2026-10-23_real-midline-smoothing.md) and is reported, not fixed. Rigid invariance is
@@ -30,7 +33,7 @@ from agents.actions import ACTION_SETS, ActionSet  # noqa: E402
 from agents.orchestrator import Orchestrator  # noqa: E402
 from audit.llm import AuditBatch  # noqa: E402
 from audit.view import batch_table, batch_view  # noqa: E402
-from measure.real_runner import RealRunner, RealWindow  # noqa: E402
+from measure.real_runner import REAL_CONFIG, RealRunner, RealWindow  # noqa: E402
 
 
 class InlineQueue:
@@ -93,11 +96,20 @@ class NotCalled(Accepted):
         self.status, self.args, self.note = "not_called", {}, "--no-agent: diagnostician not called"
 
 
+CONDITION_NOTE = ("Real movies. Each run is one root and carries its root's condition. In the report, compare the "
+                  "runs of each condition: centre REGR peak, peak position, growth-zone length, flank difference. "
+                  "A difference between conditions is a measurement result, not by itself a reason to flag.")
+
+
 def run_auditor(summaries, records, launcher, out):
     """The LLM auditor on the batch. With no accepted run there is nothing to flag or clear; the auditor still
-    reviews the batch and writes its report."""
+    reviews the batch and writes its report. With more than one condition, the task asks for a comparison."""
     views, stats, _ = batch_view(summaries, records, key="real_slice")
     batch = AuditBatch({"batch": "real_slice", "table": batch_table(views, stats), "runs": views})
+    conditions = sorted({s["condition"] for s in summaries if s.get("condition")})
+    task = batch.task()
+    if len(conditions) > 1:
+        task["note"] = CONDITION_NOTE
     if not batch.accepted:
         # flag and clear take accepted run ids only; with none, an empty id list is not a valid schema.
         # The auditor keeps request_info and report (audit/llm.py unchanged).
@@ -106,22 +118,23 @@ def run_auditor(summaries, records, launcher, out):
                                                          "clear. Review the batch and report.")
         ACTION_SETS["auditor"] = batch.actions
     (out / "auditor_trace.jsonl").unlink(missing_ok=True)
-    o = Orchestrator(launcher, out / "auditor_trace.jsonl").run("auditor", batch.label, batch.task(), batch.executors())
+    o = Orchestrator(launcher, out / "auditor_trace.jsonl").run("auditor", batch.label, task, batch.executors())
     return {"status": o.status, "report": o.args.get("text"), "decisions": batch.decisions, "accepted": batch.accepted,
             "runs": {v["run_id"]: v["status"] for v in views}, "steps": o.steps, "calls": o.calls,
             "input_tokens": o.input_tokens, "output_tokens": o.output_tokens}
 
 
-def audit_only(out):
+def audit_only(out, config):
     """Rebuild the batch from out/summary.json and the cached tracker outputs; run the auditor; update the summary."""
     from measure.remedies import TrackSettings
     from agents.launcher import Launcher
     summ = json.loads((out / "summary.json").read_text())
-    runner, launcher = RealRunner(), Launcher()
+    runner, launcher = RealRunner(config), Launcher()
     summaries, records = [], []
     for tid, s in summ["tasks"].items():
         root, frm = tid.rsplit("__w", 1)
-        w = RealWindow(root, float(frm), float(summ["window_h"][1]))
+        to_h = s["window_h"][1] if "window_h" in s else summ["window_h"][1]      # older summaries: one window
+        w = RealWindow(root, float(frm), float(to_h))
         records.append(runner.measure(w, TrackSettings(**s["final_settings"])).record)
         summaries.append(s)
     summ["auditor"] = run_auditor(summaries, records, launcher, out)
@@ -131,11 +144,21 @@ def audit_only(out):
     print(f"auditor: {a['status']}" + (f": {a.get('report')}" if a.get("report") else ""))
 
 
+def parse_window(text):
+    """'0711_c1:4-6' -> ('0711_c1', 4.0, 6.0)"""
+    root, span = text.rsplit(":", 1)
+    frm, to = span.split("-")
+    return root, float(frm), float(to)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--root", default="0708_m12")
     ap.add_argument("--from-h", type=float, default=4.0)
     ap.add_argument("--to-h", type=float, default=6.0)
+    ap.add_argument("--windows", nargs="+", default=None, metavar="ROOT:FROM-TO",
+                    help="several roots, one window each (replaces --root, --from-h, --to-h)")
+    ap.add_argument("--config", default=str(REAL_CONFIG), help="runner config (host, folders, windows)")
     ap.add_argument("--dispatcher", choices=["agent", "script"], default="agent")
     ap.add_argument("--no-agent", action="store_true",
                     help="script dispatcher, tracker and checker only; no LLM call (diagnostician and auditor skipped)")
@@ -145,7 +168,7 @@ def main():
     a = ap.parse_args()
     if a.audit_only:
         out = Path(a.out).resolve() if a.out else ROOT / "results" / f"{datetime.date.today().isoformat()}_real_slice"
-        return audit_only(out)
+        return audit_only(out, a.config)
     if a.no_agent:
         a.dispatcher = "script"
 
@@ -154,14 +177,19 @@ def main():
     for f in ("dispatcher_trace.jsonl", "diagnostician_trace.jsonl", "auditor_trace.jsonl"):
         (out / f).unlink(missing_ok=True)
 
-    row = next((r for r in D.manifest_rows() if r["id"] == a.root), None)
-    if row is None:
-        sys.exit(f"{a.root} is not an include-yes root")
-    if not float(row["usable_from_h"]) <= a.from_h < a.to_h <= float(row["usable_to_h"]):
-        sys.exit(f"window {a.from_h}-{a.to_h} h is outside the usable hours of {a.root}")
-    row = dict(row, usable_from_h=str(a.from_h), usable_to_h=str(a.to_h))
+    windows = [parse_window(w) for w in a.windows] if a.windows else [(a.root, a.from_h, a.to_h)]
+    manifest = {r["id"]: r for r in D.manifest_rows()}
+    rows = []
+    for root, frm, to in windows:
+        row = manifest.get(root)
+        if row is None:
+            sys.exit(f"{root} is not an include-yes root")
+        if not float(row["usable_from_h"]) <= frm < to <= float(row["usable_to_h"]):
+            sys.exit(f"window {frm:g}-{to:g} h is outside the usable hours of {root}")
+        rows.append(dict(row, usable_from_h=str(frm), usable_to_h=str(to)))
+    conditions = {r["id"]: r["condition"] for r in rows}
 
-    runner = RealRunner()
+    runner = RealRunner(a.config)
     runner.sync_code()
     launcher = None
     if not a.no_agent:
@@ -179,11 +207,12 @@ def main():
                 "diagnostician", task.id, sl.task(), sl.executors())
         else:
             o = Accepted()
-        results[task.id] = (summarize(sl, o), sl.current.record)
+        s = dict(summarize(sl, o), condition=conditions[task.root_id], window_h=[task.from_h, task.to_h])
+        results[task.id] = (s, sl.current.record)
         return {"diagnostician": o.status}
 
     cfg = D.load_config()
-    engine = D.Engine(InlineQueue(runner), cfg, rows=[row], budget={"core_hours": 0.0, "usd": 0.0, "approved": False},
+    engine = D.Engine(InlineQueue(runner), cfg, rows=rows, budget={"core_hours": 0.0, "usd": 0.0, "approved": False},
                       collector=collect)
     t0 = time.time()
     if a.dispatcher == "agent":
@@ -205,7 +234,7 @@ def main():
         audit = {"status": "not_called", "note": "--no-agent"} if a.no_agent else             run_auditor(summaries, records, launcher, out)
         print(f"auditor: {audit['status']}" + (f": {audit.get('report')}" if audit.get("report") else ""))
 
-    summary = {"root": a.root, "window_h": [a.from_h, a.to_h], "dispatcher_mode": a.dispatcher,
+    summary = {"windows": [[r, f, t] for r, f, t in windows], "dispatcher_mode": a.dispatcher,
                "dispatcher": disp, "tasks": {k: s for k, (s, _) in results.items()}, "auditor": audit,
                "runner_log": runner.log, "wall_s": round(time.time() - t0, 1),
                "model": launcher.cfg["model"] if launcher else None,
