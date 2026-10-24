@@ -1,9 +1,15 @@
-"""Rigidly moved copy of one window of a real movie, for the rigid-invariance check (inbox item 18).
+"""Rigidly moved copy of one window of a real movie, for the rigid-invariance check (inbox items 18, 19).
 
   python real_moved.py --imgdir X.imgdir --midline W_midline.npz --from-h H0 --to-h H1 --out-imgdir Y.imgdir
-                       --out-midline Y_midline.npz
+                       --out-midline Y_midline.npz [--mode whole_pixel --out-ref-imgdir R.imgdir
+                       --out-ref-midline R_midline.npz | --mode rotate]
 
-The same rigid motion as the synthetic rods' moved twin (measure/render.py, image_case moved=True):
+whole_pixel (default, Andrew 2026-10-24): translation only, by whole pixels, round(v t) with the synthetic
+rods' velocity (0.5, 0.3) px per 90 s; no rotation, no resampling. Both copies are cropped to the common
+area: a reference copy (the cropped window) and the moved copy (the same crop box shifted back by each
+frame's offset). The two are compared by rigid invariance.
+
+rotate (2026-10-24 first run): the same rigid motion as the synthetic rods' moved twin (measure/render.py, image_case moved=True):
 rotation 0.1 deg per 90 s about the frame-0 tip and translation (0.5, 0.3) px per 90 s in (row, col),
 growing with the time since the first window frame. It is unlogged: the stage tables are unchanged.
 Applied in image coordinates: window frame i is warped by T_i (bilinear; uncovered pixels take the frame
@@ -20,10 +26,8 @@ from pathlib import Path
 for _v in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS", "NUMEXPR_NUM_THREADS"):
     os.environ[_v] = "1"
 
-import cv2                                      # noqa: E402
 import numpy as np                              # noqa: E402
 
-cv2.setNumThreads(1)
 ROT_RATE = np.deg2rad(0.1) / 90.0               # rad/s, as measure/render.image_case(moved=True)
 VELOCITY = np.array([0.5, 0.3]) / 90.0          # px/s, (row, col)
 
@@ -41,6 +45,8 @@ def move_points(P, t, about):
 
 
 def warp(img, t, about):
+    import cv2
+    cv2.setNumThreads(1)
     R, b = transform(t, about)
     # (row, col) map -> OpenCV (x=col, y=row) forward matrix
     M = np.array([[R[1, 1], R[1, 0], b[1]], [R[0, 1], R[0, 0], b[0]]])
@@ -56,6 +62,38 @@ def elapsed_s(imgdir):
     return np.array(v[1:]) / 1000.0
 
 
+def whole_pixel(src, m, win, tw, a):
+    """Whole-pixel translation only (inbox item 19): shift d_i = round(v t_i) px, no rotation, no resampling.
+    Both copies are cropped to the common area: rows from max d_row, cols from max d_col. Reference copy:
+    the crop of each window frame; moved copy: the same box shifted back by d_i, so content moves by +d_i."""
+    d = np.rint(np.outer(tw, VELOCITY)).astype(int)                 # (T, 2) row, col; >= 0
+    D = d.max(axis=0)
+    t0 = time.time()
+    for name, shift in (("ref", np.zeros_like(d)), ("moved", d)):
+        dst = Path(a.out_ref_imgdir if name == "ref" else a.out_imgdir)
+        tmp = dst.with_name(dst.name + ".part")
+        tmp.mkdir(parents=True, exist_ok=False)
+        names = {f"ImageData_Ch0_TP{int(f):07d}.npy": k for k, f in enumerate(win)}
+        for p in sorted(src.iterdir()):
+            if p.name in names:
+                k = names[p.name]
+                a3 = np.load(p)
+                H, W = a3.shape[-2:]
+                r0, c0 = D - shift[k]                                     # box of size (H - D0, W - D1)
+                np.save(tmp / p.name, np.ascontiguousarray(a3[:, r0:r0 + H - D[0], c0:c0 + W - D[1]]))
+            else:
+                os.symlink(p.resolve(), tmp / p.name)
+        mid = m["midline_image"][:len(win)] - D + shift[:, None, :]
+        out = {k: m[k] for k in m.files}
+        out.update(midline_image=mid, seed=mid[0])
+        if "mask0" in m.files:
+            out["mask0"] = m["mask0"][D[0]:, D[1]:]
+        np.savez_compressed(a.out_ref_midline if name == "ref" else a.out_midline, **out)
+        os.rename(tmp, dst)
+    print(json.dumps({"mode": "whole_pixel", "frames": int(len(win)), "shift_px_end": d[-1].tolist(),
+                      "crop_px": D.tolist(), "run_s": round(time.time() - t0, 1)}))
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--imgdir", required=True)
@@ -64,6 +102,10 @@ def main():
     ap.add_argument("--to-h", type=float, required=True)
     ap.add_argument("--out-imgdir", required=True)
     ap.add_argument("--out-midline", required=True)
+    ap.add_argument("--mode", choices=["whole_pixel", "rotate"], default="whole_pixel",
+                    help="whole_pixel (item 19; needs --out-ref-*) or rotate (the synthetic rods' motion, bilinear)")
+    ap.add_argument("--out-ref-imgdir", default=None, help="whole_pixel: cropped reference copy")
+    ap.add_argument("--out-ref-midline", default=None)
     a = ap.parse_args()
     t0 = time.time()
     src, dst = Path(a.imgdir), Path(a.out_imgdir)
@@ -73,6 +115,10 @@ def main():
     if "frames" in m.files and not np.array_equal(m["frames"], win):
         raise SystemExit("midline file frames do not match the window")
     tw = t[win] - t[win[0]]
+    if a.mode == "whole_pixel":
+        if not (a.out_ref_imgdir and a.out_ref_midline):
+            ap.error("whole_pixel needs --out-ref-imgdir and --out-ref-midline")
+        return whole_pixel(src, m, win, tw, a)
     about = np.asarray(m["midline_image"][0, 0], float)        # frame-0 tip, (row, col)
     tmp = dst.with_name(dst.name + ".part")
     tmp.mkdir(parents=True, exist_ok=False)
