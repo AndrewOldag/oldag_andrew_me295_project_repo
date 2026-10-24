@@ -1,15 +1,16 @@
 # coordinator
-Updated: 2026-10-23 23:01 (local)
+Updated: 2026-10-23 23:41 (local)
 Lane: course
 Branch: main
 Last inbox item done: 14
 State: working
 Now: relay loop every 10 min (item 8): merges per item 1, `check github` to live sessions whose inbox changed
-Last-seen main: f4e8fbd (inboxes as of f4e8fbd)
+Last-seen main: 5253f17 (inboxes as of 5253f17)
 Done since last update:
 - Item 9: board allows `waiting on Andrew` and `waiting on <agent>` (`scripts/board.py`, `tasks/README.md`), 8223616; full suite 203 passed
 - Item 1: merged wip/spec-audit (2c0eb60) and then wip/spec-audit-check (f7ec454), `--no-ff`; pending log entries moved into `docs/running_log.md`; suite 203 passed on each merge
 - Item 8: pinged dispatcher 01:22 (inbox changed in 588f052). Coordinator inbox also changed (own). Message tool available: SendMessage + ListAgents
+- 23:41: inboxes changed in 5253f17: pinged freeze-v3. dispatcher session not live; not pinged
 - 23:01: pinged autotrace (inbox changed in f4e8fbd: fine-tune from base net2 on compliant traces)
 - 22:22: item 14: Claude Code pin 2.1.310 brought to main from freeze-v3 e1e672a (only `config/models.yaml`, `tests/test_auditor.py` and the re-pin decisions entry; the label changes in that commit stay on wip/freeze-v3); decisions entries for midline smoothing option 1 and the provisional fine-tuned net; suite 205 passed; 476ad22. Pinged dispatcher and autotrace
 - 19:56: pinged dispatcher (inbox changed in 553f5f9: net midline accepted, smoothing as a proposal, B5 part 2)
@@ -41,6 +42,7 @@ Branches (last commit, state):
 - status/gate2: 2026-10-16 12:27, waiting on Andrew (research lane, not merged)
 - wip/readme-check, wip/vm-setup, wip/auditor-v1b, wip/fq-real, wip/auditor-v1, wip/scored-v1, wip/freeze-v2, heldout/faults, wip/baselines, wip/diag-review, wip/lab-report-1, wip/gatekeeper: merged
 Needs Andrew:
+- Restart dispatcher: inbox item (real-movie checker profile, 5253f17) waiting; session not live
 - Workstation disk: host-setup work folder 9.9 of 20 GB after one root; sessions cannot delete there (host-setup status)
 - lab-report-2 and spec-audit-r sessions no longer live; wip/lab-report-2 status still says working (13:29)
 - Old lab-report-2 session (started 00:37) stopped 13:45 on Andrew's go-ahead; the 13:27 one remains
