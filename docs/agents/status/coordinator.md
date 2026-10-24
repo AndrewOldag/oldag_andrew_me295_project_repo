@@ -1,12 +1,14 @@
 # coordinator
-Updated: 2026-10-24 13:30 (local)
+Updated: 2026-10-24 14:00 (local)
 Lane: course
 Branch: main
 Last inbox item done: 20
 State: working
 Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8 (relay part), 10, 11, 16, 17 (item 20)
-Last-seen main: feba21b (inboxes as of feba21b)
+Last-seen main: be99733 (inboxes as of feba21b; unchanged)
 Done since last update:
+- 2026-10-24 14:00 (tick): item 1: no branch ready to merge and unmerged (wip/dispatcher waiting on Andrew, 13:52; wip/lab-report-2 working; research status branches done)
+- 14:00: item 8: no inbox change since feba21b; no pings. Item 10: no status waits on an agent. Item 16: no status says `waiting on server job`. Item 2: hook installed. Item 21 still open (needs a live session)
 - 2026-10-24 13:30 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working, wip/lab-report-2 working, status/turn-long and status/spec-audit-r research lane)
 - 13:30: item 8: only the coordinator inbox changed since 9aa97bf (item 21, feba21b); no pings. Item 10: no status waits on an agent. Item 16: no status says `waiting on server job` (dispatcher now working, 13:30). Item 2: hook ran on push
 - 13:30: item 21 (tick cost cut) read, not done in this pass: it edits the script running this pass and needs a test full pass, i.e. starting a headless session, which a tick pass may not do. Under Needs Andrew
@@ -58,12 +60,13 @@ Branches (last commit, state):
 - wip/coord-tick: 2026-10-24 13:09, ready to merge, merged 9aa97bf
 - wip/freeze-v3: 2026-10-24 04:16, ready to merge, merged 2ebd422
 - status/turn-long: 2026-10-24 02:42, done (research lane, not merged)
-- wip/dispatcher: 2026-10-24 13:27, working (3-root agent run started 13:29)
+- wip/dispatcher: 2026-10-24 13:52, waiting on Andrew (3-root run done; all 3 windows declined)
 - wip/lab-report-2: 2026-10-23 13:29, working
 - status/spec-audit-r: 2026-10-23 13:42, done (research lane, not merged)
 - status/gate2: 2026-10-16 12:27, delete approved, Andrew runs it (research lane, not merged)
 - wip/readme-check, wip/vm-setup, wip/auditor-v1b, wip/fq-real, wip/auditor-v1, wip/scored-v1, wip/freeze-v2, heldout/faults, wip/baselines, wip/diag-review, wip/lab-report-1, wip/gatekeeper: merged
 Needs Andrew:
+- Dispatcher (status 14:05): keep ft2 for real movies despite the 0708_m12 closure regression (0.945 -> 4.52 px/h), or look into it first? Replace control root 0711_c1 (closure 64.2) or look into it?
 - Coordinator item 21 (tick cost cut: marker check in the script, smaller model, token log) needs a live session (e.g. coord-tick or a new one): a tick pass cannot test a full pass without starting a session
 - coord-tick (merged): install the scheduled task elevated: `scripts\ops\install_coordinator_tick.ps1`; confirm one scheduled S4U full pass in the tick log with exit 0
 - A live session named `coordinator` (started about 13:17, idle) is listed beside this tick pass; stop it once the tick is installed (coord-tick status)
