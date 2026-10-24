@@ -3,11 +3,11 @@ id: c013
 title: Net-drafted midline traces for the tracing pack, previews and y/n review tool
 lane: course
 owner: autotrace
-state: done
+state: ready to merge
 branch: wip/autotrace
 host: workstation, lab server, cluster
 created: 2026-10-23 20:12
-last_update: 2026-10-24 11:30
+last_update: 2026-10-24 11:38
 blocker: none
 done_marker: review/review_traces.py and 140 previews in the tracing pack folder; net2_midline_ft2.pt and held-out score in the lab-server work folder; ft2 weights beside the dispatcher's tracker weights on lab server and workstation (md5 checked); status done
 ---
