@@ -1,12 +1,14 @@
 # coordinator
-Updated: 2026-10-24 15:50 (local)
+Updated: 2026-10-24 16:50 (local)
 Lane: course
 Branch: main
 Last inbox item done: 22
 State: working
 Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8 (relay part), 10, 11, 16, 17 (item 20)
-Last-seen main: 5a4767f
+Last-seen main: ccb2dbf
 Done since last update:
+- 2026-10-24 16:50 (tick): item 1: no branch ready to merge and unmerged (only wip/lab-report-2 unmerged, working, 13:29)
+- 16:50: item 8: inboxes changed in ccb2dbf (spec 2026-10-24b): dispatcher (item 31, c019), new closure-fix, real-calib, diag-analysis. None live (live: freeze-v31, turn-long); no pings. Item 10: no status waits on an agent. Item 16: no status says `waiting on server job`
 - 2026-10-24 15:50 (tick): item 1: merged wip/dispatcher (5a4767f; ready to merge 15:41). Conflicts: docs/decisions.md (kept both sides); scripts/remote/qb_track.py (main's track-length default and write-once output, plus the branch's --from-h/--to-h window and `window_h` setting). Suite 303 passed, 1 skipped; log entry moved
 - 15:50: item 8: no inbox change since 8ba1dbe; no pings. Item 10: no status waits on an agent. Item 16: no status says `waiting on server job` (dispatcher now ready to merge, merged)
 - 2026-10-24 15:31 (tick): item 1: no branch ready to merge and unmerged (wip/dispatcher waiting on server job, 15:21; wip/lab-report-2 working; research status branches done)
@@ -80,6 +82,7 @@ Branches (last commit, state):
 - status/gate2: 2026-10-16 12:27, delete approved, Andrew runs it (research lane, not merged)
 - wip/readme-check, wip/vm-setup, wip/auditor-v1b, wip/fq-real, wip/auditor-v1, wip/scored-v1, wip/freeze-v2, heldout/faults, wip/baselines, wip/diag-review, wip/lab-report-1, wip/gatekeeper: merged
 Needs Andrew:
+- Start or restart for spec 2026-10-24b (inboxes changed in ccb2dbf, sessions not live): dispatcher (item 31), closure-fix, real-calib, diag-analysis
 - `scripts/remote/real_moved.py` (merged with wip/dispatcher) writes `<name>.part` and then `os.rename`s it to the final name, on the compute host; the 3-root slice ran on the lab server. CLAUDE.md forbids renames there (only sweep locks excepted); `qb_track.py` was changed to write-once for the same reason (rules-2). Keep, or ask for a write-once fix
 - coord-tick (merged): install the scheduled task elevated: `scripts\ops\install_coordinator_tick.ps1`; confirm one scheduled S4U full pass in the tick log with exit 0
 - Finished sessions still live and idle: freeze-v31 (merged), turn-long (done), autotrace (merged); can be closed. The live `coordinator` session is no longer listed
