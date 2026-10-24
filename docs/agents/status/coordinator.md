@@ -1,15 +1,16 @@
 # coordinator
-Updated: 2026-10-23 17:31 (local)
+Updated: 2026-10-23 18:21 (local)
 Lane: course
 Branch: main
 Last inbox item done: 11 (item 12 waiting on host-setup)
 State: waiting on host-setup
 Now: relay loop every 10 min (item 8): merges per item 1, `check github` to live sessions whose inbox changed
-Last-seen main: ccca080 (inboxes as of ccca080)
+Last-seen main: 3e41548 (inboxes as of 3e41548)
 Done since last update:
 - Item 9: board allows `waiting on Andrew` and `waiting on <agent>` (`scripts/board.py`, `tasks/README.md`), 8223616; full suite 203 passed
 - Item 1: merged wip/spec-audit (2c0eb60) and then wip/spec-audit-check (f7ec454), `--no-ff`; pending log entries moved into `docs/running_log.md`; suite 203 passed on each merge
 - Item 8: pinged dispatcher 01:22 (inbox changed in 588f052). Coordinator inbox also changed (own). Message tool available: SendMessage + ListAgents
+- 18:21: workstation ssh approval (3e41548): pinged dispatcher and turn-long. host-setup (item 5) not live
 - 17:31: inboxes changed in ccca080: pinged dispatcher (item 11). freeze-v3 (item 7) and host-setup (item 4) sessions not live; not pinged
 - 15:11: item 12 read; waits for host-setup status to say the test passed, then merge and host-assignment items to turn-long, dispatcher, freeze-v3. host-setup started after de744c6; not pinged
 - 15:01: item 11 (standing lab-server job limit) noted; the coordinator runs no server jobs. Pinged dispatcher, freeze-v3, turn-long (inboxes changed in 4c2a813)
@@ -27,8 +28,8 @@ Branches (last commit, state):
 - wip/spec-audit-check: 2026-10-23 01:14, ready to merge, merged f7ec454
 - wip/host-setup: 2026-10-23 15:19, working (item 1)
 - wip/freeze-v3: 2026-10-23 15:12, waiting on Andrew (stop rule: clean scored rod fails closure)
-- status/turn-long: 2026-10-23 15:04, working (research lane, not merged)
-- wip/dispatcher: 2026-10-23 13:53, waiting on Andrew
+- status/turn-long: 2026-10-23 18:17, working (research lane, not merged)
+- wip/dispatcher: 2026-10-23 18:18, waiting on Andrew
 - wip/lab-report-2: 2026-10-23 13:29, working
 - status/spec-audit-r: 2026-10-23 13:42, done (research lane, not merged)
 - status/gate2: 2026-10-16 12:27, waiting on Andrew (research lane, not merged)
