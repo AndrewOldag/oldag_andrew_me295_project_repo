@@ -135,6 +135,15 @@ def test_whole_pixel_moved_copy(tmp_path, monkeypatch):
     rm, mm = np.load(tmp_path / "ref.npz"), np.load(tmp_path / "mv.npz")
     assert np.allclose(rm["midline_image"][2, 0], [20.0, 44.0]) and np.allclose(mm["midline_image"][2, 0], [30.0, 50.0])
     assert rm["mask0"].shape == (50, 74)
+    # a second midline for the same window reuses the copies (inbox item 22): frames untouched, new midline files
+    stamp = (tmp_path / "mv.imgdir" / "ImageData_Ch0_TP0000002.npy").stat().st_mtime_ns
+    np.savez(tmp_path / "m2.npz", **dict(m, midline_image=m["midline_image"] + 1.0))
+    a2 = types.SimpleNamespace(**dict(vars(a), out_midline=str(tmp_path / "mv2.npz"),
+                                      out_ref_midline=str(tmp_path / "ref2.npz")))
+    RM.whole_pixel(src, np.load(tmp_path / "m2.npz"), np.arange(3), tw, a2)
+    assert (tmp_path / "mv.imgdir" / "ImageData_Ch0_TP0000002.npy").stat().st_mtime_ns == stamp
+    assert np.allclose(np.load(tmp_path / "mv2.npz")["midline_image"][2, 0], [31.0, 51.0])
+    assert np.allclose(np.load(tmp_path / "mv.npz")["midline_image"][2, 0], [30.0, 50.0])
 
 
 def test_parse_window():
@@ -191,7 +200,8 @@ def test_midline_tag_in_every_name_and_weights_passed(tmp_path, monkeypatch):
     r = RealRunner(cfg, cache=tmp_path / "cache")
     w, st = RealWindow("r1", 4, 6), r.initial_settings(RealWindow("r1", 4, 6))
     assert r.midline_path(w) == "/w/midline/r1__w4-6_ft2_netmid.npz"
-    assert r.copy_paths(w, "moved")["imgdir"] == "/w/moved/r1__w4-6_ft2_wp_moved.imgdir"
+    assert r.copy_paths(w, "moved") == {"imgdir": "/w/moved/r1__w4-6_wp_moved.imgdir",
+                                        "midline": "/w/moved/r1__w4-6_ft2_wp_moved_midline.npz"}
     assert r.cache_path(w, st, "ref").name == "r1__w4-6_ft2_wp_ref__st1__L400.npz"
     calls = []
 
