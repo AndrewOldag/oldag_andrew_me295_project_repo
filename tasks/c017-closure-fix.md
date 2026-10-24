@@ -3,7 +3,7 @@ id: c017
 title: Real-movie closure definition (measurement fix)
 lane: course
 owner: closure-fix
-state: queued
+state: working
 branch: wip/closure-fix
 host: VM, lab server (light)
 created: 2026-10-24 16:45
