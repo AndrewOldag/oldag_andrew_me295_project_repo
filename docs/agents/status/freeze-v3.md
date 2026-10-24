@@ -2,9 +2,9 @@
 Updated: 2026-10-24 02:35 (local)
 Lane: course
 Branch: wip/freeze-v3
-Last inbox item done: 10
+Last inbox item done: 11
 State: working
-Now: item 11: LLM runs in blocks of 12 (at most 25), free-memory check before each block. 157 of 306 done. Block 1 waiting: free memory 1.9 GB (rule: at least 4 GB); next check in 10 min
+Now: item 11: LLM runs in blocks of 12; free-memory floor 1.5 GB (Andrew, 2026-10-24). 157 of 306 done
 Done since last update:
 - Item 10: auto-update off (read); per-block CLI version check kept. CLI 2.1.310 on every block so far
 - Method-phase tracker runs complete: 488 of 600 cached, 0 failed. Script and remedy tree: 102 runs; a second run from the cache identical on 102 of 102 (869f130)
@@ -12,4 +12,4 @@ Done since last update:
 - `agents --max-runs N` for blocks (b3829b3)
 - Memory checks (free / total): 1.9 / 7.7 GB at 02:00; 2.0 / 7.7 at 02:12; 2.1 / 7.7 at 02:24 and 02:35 (24 `claude` processes each time). Largest: 24 `claude` processes 4.63 GB, `svchost` 0.78, `MsMpEng` 0.31
 Needs Andrew:
-- Free VM memory is 1.9 of 7.7 GB; 24 Claude processes hold 4.6 GB. The 4 GB rule may not be met while these sessions run. Closing idle sessions would free memory; until then each block waits 10 min and checks again
+- none (memory floor lowered to 1.5 GB by Andrew)
