@@ -3,3 +3,4 @@
 1. Read `CLAUDE.md`, `docs/agents/README.md`, `docs/specs/2026-10-23c_host-setup.md`. Branch `wip/host-setup`. Task `tasks/c012-host-setup.md`. First status, push
 2. Do the spec, items 1-7. Andrew added the VM's key on the workstation on 2026-10-23
 3. When the test passes: write the assignment (spec item 6) under `Done since last update` and set status `ready to merge`
+4. Andrew, 2026-10-23 18:15: work-folder cap on the workstation 40 GB (46 GB free). Andrew copies the `0708_m12` montage folder to the workstation work folder himself with the workstation's upload key, which also tests that key. When `data/` holds it, run the real-window test (spec item 4), then item 3
