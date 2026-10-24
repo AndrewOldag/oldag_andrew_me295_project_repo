@@ -254,8 +254,8 @@ class RemoteRunner:
                          .decode().strip().splitlines()[-1])
         if name:
             q = shlex.quote
-            # the newest log of this sweep name (sweep_<name>_<stamp>.log), or the old single name
-            log = self._ssh(f"cd {q(self.work)} && f=$(ls -1 sweep_{name}_*.log 2>/dev/null | sort | tail -1); "
+            # the newest log of this sweep name by modification time (the VM clock is not monotonic), or the old single name
+            log = self._ssh(f"cd {q(self.work)} && f=$(ls -1t sweep_{name}_*.log 2>/dev/null | head -1); "
                             f"cat \"${{f:-sweep_{name}.log}}\" 2>/dev/null || true").decode()
             out["log"] = [json.loads(x) for x in log.splitlines() if x.startswith("{")]
         return out
