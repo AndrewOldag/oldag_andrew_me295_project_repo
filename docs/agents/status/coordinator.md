@@ -1,15 +1,16 @@
 # coordinator
-Updated: 2026-10-24 01:52 (local)
+Updated: 2026-10-24 04:22 (local)
 Lane: course
 Branch: main
 Last inbox item done: 14
 State: working
 Now: relay loop every 10 min (item 8): merges per item 1, `check github` to live sessions whose inbox changed
-Last-seen main: 114b286 (inboxes as of 114b286)
+Last-seen main: 2ebd422 (inboxes as of 0b16387)
 Done since last update:
 - Item 9: board allows `waiting on Andrew` and `waiting on <agent>` (`scripts/board.py`, `tasks/README.md`), 8223616; full suite 203 passed
 - Item 1: merged wip/spec-audit (2c0eb60) and then wip/spec-audit-check (f7ec454), `--no-ff`; pending log entries moved into `docs/running_log.md`; suite 203 passed on each merge
 - Item 8: pinged dispatcher 01:22 (inbox changed in 588f052). Coordinator inbox also changed (own). Message tool available: SendMessage + ListAgents
+- 2026-10-24 04:22: item 1: merged wip/freeze-v3 (2ebd422; ready to merge 04:16): 852 files, 827 of them small JSON/JSONL results (4.6 MB, no images). Conflict in docs/decisions.md (re-pin entry on both sides, from item 14): kept both sides, one re-pin entry. Suite 250 passed; log entry moved. No session waits on freeze-v3
 - 2026-10-24 01:52: pinged dispatcher (restarted; inbox changed in 114b286, after its last check)
 - 2026-10-24 01:41: inboxes changed in f1aa878, 4285985, 6848a23: pinged freeze-v3, autotrace, turn-long. dispatcher session not live; not pinged
 - 23:41: inboxes changed in 5253f17: pinged freeze-v3. dispatcher session not live; not pinged
@@ -35,15 +36,18 @@ Branches (last commit, state):
 - wip/spec-audit: 2026-10-23 01:04, ready to merge, merged 2c0eb60
 - wip/spec-audit-check: 2026-10-23 01:14, ready to merge, merged f7ec454
 - wip/host-setup: 2026-10-23 18:37, merged b9a3a06
-- wip/autotrace: 2026-10-24 01:43, working
-- wip/freeze-v3: 2026-10-24 01:43, working
+- wip/autotrace: 2026-10-24 03:17, waiting on Andrew (adopt net2_midline_ft2?)
+- wip/freeze-v3: 2026-10-24 04:16, ready to merge, merged 2ebd422
 - status/turn-long: 2026-10-24 01:41, working (research lane, not merged)
-- wip/dispatcher: 2026-10-24 01:48, waiting on Andrew
+- wip/dispatcher: 2026-10-24 03:31, waiting on Andrew (0711_c1 run stopped for low VM memory; restart needs go-ahead)
 - wip/lab-report-2: 2026-10-23 13:29, working
 - status/spec-audit-r: 2026-10-23 13:42, done (research lane, not merged)
 - status/gate2: 2026-10-16 12:27, waiting on Andrew (research lane, not merged)
 - wip/readme-check, wip/vm-setup, wip/auditor-v1b, wip/fq-real, wip/auditor-v1, wip/scored-v1, wip/freeze-v2, heldout/faults, wip/baselines, wip/diag-review, wip/lab-report-1, wip/gatekeeper: merged
 Needs Andrew:
+- freeze-v3: review `results/2026-10-23_freeze_v3/README.md` (all 12 accept_repaired rods measure well unremedied; second_root 0 correct for every method)
+- dispatcher: go-ahead to restart 0711_c1 (freeze-v3 LLM runs have ended, so VM memory should be freer)
+- autotrace: adopt net2_midline_ft2 (may be planning's call under the 2026-10-24 delegation)
 - Workstation disk: host-setup work folder 9.9 of 20 GB after one root; sessions cannot delete there (host-setup status)
 - lab-report-2 and spec-audit-r sessions no longer live; wip/lab-report-2 status still says working (13:29)
 - Old lab-report-2 session (started 00:37) stopped 13:45 on Andrew's go-ahead; the 13:27 one remains
