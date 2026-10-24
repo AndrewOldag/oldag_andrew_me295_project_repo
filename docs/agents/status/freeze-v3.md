@@ -2,7 +2,7 @@
 Updated: 2026-10-23 18:45 (local)
 Lane: course
 Branch: wip/freeze-v3
-Last inbox item done: 8
+Last inbox item done: 9
 State: working
 Now: tracker runs the rule methods need (rounds of `plan --phase methods`), then script and remedy tree, then LLM methods x 3 repeats
 Done since last update:

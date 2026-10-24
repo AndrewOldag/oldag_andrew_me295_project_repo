@@ -6,9 +6,10 @@ owner: freeze-v3
 state: working
 branch: wip/freeze-v3
 created: 2026-10-23 13:25
-last_update: 2026-10-23 18:40
+last_update: 2026-10-23 18:55
 blocker: none
 done_marker: tag freeze-v3 and results/2026-10-2x_freeze_v3/README.md
+host: lab server, VM
 ---
 
 Spec: `docs/specs/2026-10-23b_freeze-v3.md`.

@@ -9,6 +9,7 @@ created: 2026-10-23 00:30
 last_update: 2026-10-23 01:13
 blocker: none
 done_marker: docs/reviews/2026-10-23_spec-audit/SUMMARY.md and CHECK.md
+host: VM
 ---
 
 Spec: `docs/specs/2026-10-23_spec-audit.md`.
