@@ -24,3 +24,4 @@ Lane: course (items 1-3) and research (item 4). Branch `wip/audit-marks`. Task `
    - everything else: accepted, no action
    Also write `PLAN_AMENDMENTS_2026-10-24.md` in the same folder: the plan-2 reason and the plan-5 two readings, as text Andrew copies into his Analysis Plan
 5. Status ready to merge with the list of commits. No server deletes, moves or renames
+6. Andrew, 2026-10-24 12:05: keep the three commits (option 1); the coordinator records them. From now on act only as audit-marks: work on `wip/audit-marks` in your own worktree, never on main. Then do items 1-5. Add to item 3: `docs/agents/status/autotrace.md` line 11 names lab-server paths; replace with role names ("the dispatcher's tracker weights folder on the lab server")
