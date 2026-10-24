@@ -119,3 +119,16 @@ Spec `docs/specs/2026-10-23_next-steps-lr2-dispatcher.md`, items B2 and B4 (clus
 - t3 pair 7, t2 pair 16. The tracked tip point moves smoothly, 1.8-2.3 px per pair. The provisional midline tip moves in whole-pixel jumps: t3 pairs 6-9: 0, 6, 0, 5 px; t2 pairs 13-17: 5, -2, 2, 6, 0 px in col. Stage steps are a steady 2 px per pair and do not line up with the jumps
 - The residual at these pairs is pixel jitter of the segmentation tip, not stage or tracking. In t3 the jumps cancel over the window (sum -1.2 px; closure 0.65 px/h). In t2 they leave a net 14 px (7 px/h): the segmentation tip runs ahead of the tracked tip over 2 h
 - Closure therefore depends on the midline source. Recheck with the net midline waits on its tip reach
+
+## Inbox item 14: tracker's SlideBook midline path (workstation, CPU, 5 frames of t3)
+- `batch_midlines.py --mode tile` (native resolution), fine-tuned net2, high percentile 99.5; tracker 52e9bd1
+
+| Low percentile | Midline end to true tip, median px (range) | Tip net to true tip, median px | Tip confidence, median (range) | s per frame |
+| :-- | :-- | --: | :-- | --: |
+| 1 % | 2.0 (0.0-2.2) | 23 | 0.67 (0.49-0.68) | 17 |
+| 0.3 % | 2.2 (1.0-5.0) | 22 | 0.75 (0.64-0.76) | 17 |
+| 0.1 % | 3.2 (3.2-6.1) | 21 | 0.76 (0.67-0.78) | 17 |
+
+- All three reach the tip. Kept: 0.1 % (highest tip confidence), recorded in decisions. Preview: the midline band covers the root to the tip marker
+- 8 threads, nice 19; workstation disk 36 GB free before and after; work folder 9.9 GB (this sweep 8.4 MB; frames are links to the existing copy)
+- Caveat: the fine-tuned net was trained on 0708 hand traces (includes this root)
