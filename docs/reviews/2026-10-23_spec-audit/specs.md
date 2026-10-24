@@ -146,7 +146,7 @@ States: met, partial, not met, changed by decision, not shown, in progress.
 - Evidence: `git diff freeze-v2 origin/main -- config/models.yaml` shows the version line changed. No freeze v3 file, no new tag. The 80 scored agent runs record 2.1.293. Any later diagnostician or auditor run under freeze v2 will run 2.1.302. The decision records Andrew's approval and the reason, not a freeze version
 - Severity: would change a design choice
 - Frozen item: yes (freeze v2 section 4, Claude Code version)
-- Andrew:
+- Andrew: accepted, handled (freeze v3)
 
 ### specs-2: Literature-reviewer stages of the VM-setup spec (items 4-8) not done; no task file
 - Ours: no `docs/lit/pitfalls/`, `tests/lit/`, `.claude/agents/lit-*.md`, `docs/reviews/<date>_<paper>.md`, `eval/planted-pitfalls` branch or planted-pitfalls proposal on any branch (`git log --all` on those paths and messages: none). No papers folder in `private/`. `tasks/c001-vm-setup.md` covers items 1-3 only; no task file for items 4-9. running_log.md:408 "then items 4-9 (new session)"
@@ -154,7 +154,7 @@ States: met, partial, not met, changed by decision, not shown, in progress.
 - Evidence: done: item 9 log entry at merge (running_log.md:391-409); item 9 decisions partial (decisions.md:110-113 cover board, Agent View and resume rules; none of the five reviewer decisions: component, five papers, Paper2Agent for two, read-only, PDFs not committed). Item 9 Lab report 2 line exists as an open `[ANDREW]` mark ("keep in the plan, or replace with the spec audit", `origin/wip/lab-report-2`, line 17). Not done: items 4, 5, 6, 7, 8
 - Severity: would change a design choice
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, handled (freeze v3)
 
 ### specs-3: Task board does not print; board test fails
 - Ours: `scripts/board.py:59`; `tests/test_board.py:97`
@@ -162,7 +162,7 @@ States: met, partial, not met, changed by decision, not shown, in progress.
 - Evidence: `python scripts/board.py` exits with an unknown-state error on one research-lane task file outside the repo (state "waiting on Andrew", not in the state list). `tests/test_board.py::test_research_rows_never_in_tracked_files` fails for the same reason. The coordinator status on `origin/main` (c730662) lists it under Needs Andrew
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, fixed (8223616)
 
 ### specs-4: Held-out injectors written and sized before the freeze tag
 - Ours: 8109764 (2026-10-12 20:07, `measure/render_heldout.py`); fe7dda1 (20:19, checker-only held-out sizes); tag commit 5b64897 (22:10); `docs/decisions.md:91`
@@ -170,7 +170,7 @@ States: met, partial, not met, changed by decision, not shown, in progress.
 - Evidence: injectors and checker-only held-out results exist on `heldout/faults` before the freeze v2 approval (5593c65, 22:00) and the tag. Frozen items finished in that interval on another branch: prompt 5b896cb (20:32), freeze v2 file a3a0dbf (20:33). P1-P5 text was fixed earlier, in 55edff8 (20:02), before 8109764. The decision line keeps the branch separate "until the freeze (no development session reads it)"; no decision replaces the spec rule, and open item 4 (branch on GitHub) has no decision. No agent run on a held-out fault before 1e5e2c2 (labels) and c9d5a0c (harness)
 - Severity: record only
 - Frozen item: yes (freeze v2: held-out separation; prompt 5b896cb)
-- Andrew:
+- Andrew: accepted, no action
 
 ### specs-5: First heartbeat gap not shown as reported to Andrew
 - Ours: VM health log (location in `private/paths.md`) and its `FIRST_GAP` marker; running_log.md:408; `tasks/c001-vm-setup.md` (state done)
@@ -178,7 +178,7 @@ States: met, partial, not met, changed by decision, not shown, in progress.
 - Evidence: the health log has 7 gap lines from 2026-10-17 to 2026-10-23; the first is 2026-10-17 01:40 to 13:25 (705 min). No log entry, status or task file reports it. Two gap lines on 2026-10-18 have the same start time and end 74 s apart
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, no action
 
 ### specs-6: Bent rods part C delivered in part
 - Ours: `results/2026-10-11_remedy_fixes/item7_bent.md`; `docs/decisions.md:59`
@@ -186,7 +186,7 @@ States: met, partial, not met, changed by decision, not shown, in progress.
 - Evidence: 3 seeds per case, not 5 (decisions.md:59 follows spec 2026-10-11 item 7, which gives about 24 runs; no decision changes the 5). One "Peak at s" column, not the peak of each check. No profile plot and no first-frame or last-frame image in `git ls-files results` (only `results/2026-10-10_checker_synthetic/clean_profiles.png`). Parts A-B in `results/2026-10-10_width_rotation/`, part C in `results/2026-10-11_remedy_fixes/`. Coupled runs not made: changed by decision (decisions.md:69)
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, no action
 
 ### specs-7: `rigid_rotation` still listed as clean in the 2026-10-10 results
 - Ours: `results/2026-10-10_checker_synthetic/image_level.md:10` ("rigid_rotation clean"); `results/2026-10-10_checker_synthetic/README.md:19` ("Clean check values over 20 rods: rigid_invariance max 1.08")
@@ -194,7 +194,7 @@ States: met, partial, not met, changed by decision, not shown, in progress.
 - Evidence: the thresholds comment was changed (`config/checker_thresholds.yaml:5`, `:9`: 15 rods, max 1.04; d1b6100). The results folder was last changed in aebc749 and still counts 20 clean rods
 - Severity: record only
 - Frozen item: no (the approved thresholds do not change)
-- Andrew:
+- Andrew: accepted, no action
 
 ### specs-8: Label recompute of 11b item 2 narrowed to the frozen rods
 - Ours: `results/2026-10-12_freeze_v2/item1_labels.md` (15 rods, 36 runs)
@@ -202,7 +202,7 @@ States: met, partial, not met, changed by decision, not shown, in progress.
 - Evidence: labels of other sizes in those folders (for example `rigid_drift` sizes other than 0.5) are not recomputed at 1.00 %/h. The narrower scope comes from the later spec, not from a decisions entry
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, no action
 
 ### specs-9: Spec-done notes missing from the running log
 - Ours: `docs/running_log.md` (no done note for these specs)
@@ -210,7 +210,7 @@ States: met, partial, not met, changed by decision, not shown, in progress.
 - Evidence: running_log.md:150, :178 and :196 state "spec not done" for 11, 11b and 11c; only 11 is later closed (by 11b, :178). The freeze-v2 and scored-v1 entries (:266, :293) state their specs done. No entry closes 2026-10-09, both 2026-10-10 specs, 11b or 11c
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, fixed (3163fec; notes in the pending log entry)
 
 ### specs-10: Task c007 state and record do not match the repo
 - Ours: `tasks/c007-litnet.md` (state done, all 7 parts unchecked); 84c69c8 (2026-10-18, state working); 2170ca5 (2026-10-23, state done)
@@ -218,7 +218,7 @@ States: met, partial, not met, changed by decision, not shown, in progress.
 - Evidence: state `working` from 2026-10-18 22:42 to 2026-10-23 00:32 with no update and no session on the board; not set to interrupted. Set to done by the coordinator, not the owner `litnet`, with none of its parts marked. The done marker changed from a checkable file to "network on lab server; not in this repo by decision", which no file in the repo shows. No running-log entry for c007. The network is now also on the VM (`litnet:` line in `private/paths.md`, added for c008)
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, no action
 
 ### specs-11: Status files, roster and freeze v2 header out of date
 - Ours: `docs/agents/status/fq-real.md` and `docs/agents/status/auditor-v1.md` ("State: ready to merge"); `docs/agents/README.md:47-48` (auditor-v1, fq-real "to start"); `docs/proposals/2026-10-12_freeze-v2.md:3` ("Not tagged")
@@ -226,7 +226,7 @@ States: met, partial, not met, changed by decision, not shown, in progress.
 - Evidence: `wip/fq-real` merged in 742dc79, `wip/auditor-v1b` in f52dbdd (merge commits). Tag `freeze-v2` exists on 5b64897 and on origin
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, fixed (ed8279a)
 
 ### specs-12: Task c003 omits one server item left for Andrew
 - Ours: `tasks/c003-old-remote-code-copies.md`; `docs/agents/status/vm-setup.md` (Needs Andrew)
@@ -234,7 +234,7 @@ States: met, partial, not met, changed by decision, not shown, in progress.
 - Evidence: the vm-setup status asks Andrew to delete the `2026-10-16_test` backup folder and `_verify/`. c003 lists `_verify/` and the old code copies, not the test backup folder
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, no action
 
 ### specs-13: No running-log entry after 2026-10-17 on main
 - Ours: `docs/running_log.md` (last entry 2026-10-17, readme-check)
@@ -242,7 +242,7 @@ States: met, partial, not met, changed by decision, not shown, in progress.
 - Evidence: work after 2026-10-17 with no entry on `main`: c004 marks filled 2026-10-17 by Andrew with the planning account (task c004 text); c007 2026-10-18 to 2026-10-23; coordinator items 6-7 (2170ca5, b563b33, c730662). Pending entries for 2026-10-23 sessions are on their branches
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, fixed (3163fec; gap note in the pending log entry)
 
 ### specs-14: Auditor v1 open choices not shown decided; next step has no task
 - Ours: `docs/proposals/2026-10-13_auditor-v1.md:48-49`, `:54`; running_log.md:330
@@ -250,7 +250,7 @@ States: met, partial, not met, changed by decision, not shown, in progress.
 - Evidence: decisions.md:106 fixes the z cutoff and the MAD-0 fallback only. No entry for batch statistics over all runs or for run id lists in `flag` and `clear` (decisions.md:103 records them as defined). No task file for the flank-spacing rate in the view
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, no action
 
 ### specs-15: Auditor call limit counted per run, not per CLI call
 - Ours: `results/2026-10-13_auditor_v1/README.md:17-18`; `docs/proposals/2026-10-13_auditor-v1.md:40`
@@ -258,7 +258,7 @@ States: met, partial, not met, changed by decision, not shown, in progress.
 - Evidence: from `results/2026-10-13_auditor_v1/llm/*_result.json`: 66 CLI calls in the 12 dev runs, 74 in the 12 held-out runs. The proposal defines one call as one run; the spec arithmetic (40 + 12 = 52) fits that reading. No decisions entry
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, no action
 
 ### specs-16: Course-staff answer on typed actions as tool use not shown
 - Ours: `docs/proposals/2026-10-09_structured-action-agents.md:79`; running_log.md:45 to :208 (bottleneck repeated through session 10)
@@ -266,7 +266,7 @@ States: met, partial, not met, changed by decision, not shown, in progress.
 - Evidence: the bottleneck line stops after 2026-10-11 session 10; no log entry, decision or report line records an answer
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, no action
 
 ### specs-17: Dispatcher spec extrapolates to 118 roots
 - Ours: `origin/main:docs/specs/2026-10-23_next-steps-lr2-dispatcher.md:40`
@@ -274,7 +274,7 @@ States: met, partial, not met, changed by decision, not shown, in progress.
 - Evidence: manifest recount: 123 rows, `include` yes 102, unsure 11, no 10
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, no action
 
 ### specs-18: Conditional cluster approval not in decisions; spec Limits line disagrees
 - Ours: `origin/main:docs/specs/2026-10-23_next-steps-lr2-dispatcher.md:46` (conditional approval under $5) and `:55` ("nothing submitted without Andrew's approval of a cost estimate"); inbox dispatcher item 5
@@ -282,7 +282,7 @@ States: met, partial, not met, changed by decision, not shown, in progress.
 - Evidence: `docs/decisions.md` on `origin/main` has no 2026-10-23 entry for the cluster rules, the $5 cap or the conditional approval. The spec's own Limits line and CLAUDE.md:34 still state the earlier rule
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, no action
 
 ### specs-19: Dispatcher spec names a process owner
 - Ours: `origin/main:docs/specs/2026-10-23_next-steps-lr2-dispatcher.md:40` ("check for other ... jobs first", with an account name in backticks)
@@ -290,7 +290,7 @@ States: met, partial, not met, changed by decision, not shown, in progress.
 - Evidence: the word in backticks is a login name. For the rules reviewer
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, no action
 
 ### specs-20: `status/gate2` holds a VM path and an account identity
 - Ours: `origin/status/gate2:docs/agents/status/gate2.md` (Needs Andrew, second line); author fields of the 11 commits in `origin/main..origin/status/gate2`
@@ -298,7 +298,7 @@ States: met, partial, not met, changed by decision, not shown, in progress.
 - Evidence: what the branch holds that `main` lacks: one file, `docs/agents/status/gate2.md` (16 lines): state waiting on Andrew, last inbox item 7, full run 7 of 7 roots, window counts, Gate 2 pass/fail with counts, two Needs Andrew lines. One Needs Andrew line names a folder under a home directory on the VM. All 11 commits carry an author identity of the form account-at-domain (a personal address); `main` commits carry the repo identity or the noreply address. `pre_push_check.py` on the 11 commits: 0 hits (the path rule does not cover a home-relative path; author fields are not scanned)
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, fixed (branch `status/gate2` removed from the remote, inbox audit-marks item 2)
 
 ### specs-21: Checker definitions written alongside the code
 - Ours: running_log.md:81; decisions.md:14-19; commits 6547010, f606fb1
@@ -306,7 +306,7 @@ States: met, partial, not met, changed by decision, not shown, in progress.
 - Evidence: the log states the definitions "were worked out alongside the code, then committed before it"
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, no action
 
 ## 3. Checked, no finding
 - `wip/readme-check`: 0 commits not on `main`; merged in 7d7cbbd (2026-10-17). It holds nothing `main` lacks. Task c006 done matches

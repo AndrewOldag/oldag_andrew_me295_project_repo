@@ -114,7 +114,7 @@ Method:
 - Evidence: manifest 123 rows; include yes 102, unsure 11, no 10; yes + unsure 113. No subset gives 118. Log (2026-10-08) :18 gives 118 as the earlier inventory, with per-folder counts that disagree with the scan
 - Severity: would change a design choice (cluster cost estimate scaled to 118 instead of 102 include-yes roots: +16 %)
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, handled (freeze v3)
 
 ### numbers-2: "over 24 h" for every root; 7 include-yes roots have a shorter usable window
 - Ours: `CLAUDE.md`:6 ("each of 118 roots over 24 h"); `docs/context/project_summary.md`:42
@@ -122,7 +122,7 @@ Method:
 - Evidence: 9 manifest rows have `usable_to_h` below the movie end (9.5, 10, 12, 17.5, 18 x4, 20 h); 7 of them include yes. Movie durations 23.61-24.02 h
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, no action
 
 ### numbers-3: Lab report 1 states the 118 difference without the reason the spec gives
 - Ours: `docs/reports/2026-10-16_lab-report-1.md`:79 ("the submitted summary gives 118"); final text from commit b9e67ef
@@ -130,7 +130,7 @@ Method:
 - Evidence: current line names the difference but not its cause (earlier inventory, log :18)
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, fixed (af951e1; corrections section in Lab report 1)
 
 ### numbers-4: Summary date 7 Oct against the log's 8 Oct
 - Ours: `docs/context/project_summary.md`:3 ("Final summary settled 7 Oct 2026")
@@ -138,7 +138,7 @@ Method:
 - Evidence: no tracked record dated 7 Oct; first commit 304a3cb is 2026-10-09
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, fixed (af951e1)
 
 ### numbers-5: "Rotation near 7 degrees per frame" has no result source; results show failure at 2 deg/frame
 - Ours: `docs/context/project_summary.md`:23
@@ -146,7 +146,7 @@ Method:
 - Evidence: fast_rotation at 2 deg/frame for 3 frames fails all three checks on 3 of 3 seeds and is labelled not repairable; unlogged 0.1 deg/frame fails closure (`results/2026-10-10_width_rotation/rotation.md`). No run at or near 7 deg/frame in `results/`
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, fixed (af951e1)
 
 ### numbers-6: "131 passed (12 Oct)" is not the 12 Oct end count
 - Ours: `docs/reports/2026-10-16_lab-report-1.md`:22
@@ -154,7 +154,7 @@ Method:
 - Evidence: 131 is the gatekeeper and diag-review count; the last 12 Oct suite count is 169 (scored-v1 branch). Log :253 says the report cited the last logged count at drafting
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, fixed (af951e1; corrections section in Lab report 1)
 
 ### numbers-7: Lab report gives 90 frames pulled; 111 were pulled
 - Ours: `docs/reports/2026-10-16_lab-report-1.md`:26 ("90 frames pulled read-only")
@@ -162,7 +162,7 @@ Method:
 - Evidence: 90 + 21 = 111 frames pulled; the final set holds 90 (staging count 90)
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, fixed (af951e1; corrections section in Lab report 1)
 
 ### numbers-8: Diagnostician mean steps 5.25 shown as 5.2
 - Ours: `docs/reports/2026-10-16_lab-report-1.md`:51; `docs/running_log.md`:308; `results/2026-10-12b_scored_v1/README.md` steps table
@@ -170,7 +170,7 @@ Method:
 - Evidence: 210 steps / 40 runs = 5.25 (half-even rounding gives 5.2; half-up gives 5.3). Other means match to the stated digit
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, fixed (af951e1; log and Lab report 1 corrections; results README unchanged)
 
 ### numbers-9: "calls" counts two different things for the auditor
 - Ours: `docs/running_log.md`:323 ("12 calls" and "one system prompt hash over 74 calls"); `results/2026-10-13_auditor_v1/README.md` Runs ("12 calls (of 40)", "all 74 held-out calls", "limit 52")
@@ -178,7 +178,7 @@ Method:
 - Evidence: 12 held-out auditor runs; 74 steps (model calls) summed over them. "Calls" means runs in one place and model calls in the other
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, fixed (af951e1; log wording; results README unchanged)
 
 ### numbers-10: 50 MB/s transfer limit has no tracked source
 - Ours: `docs/reports/2026-10-16_lab-report-1.md`:60; `docs/running_log.md`:386; `docs/decisions.md`:116
@@ -186,7 +186,7 @@ Method:
 - Evidence: the 50 MB/s figure appears only as a reference to the limit the backup exceeded. Other caps in the log: 40 Mbit/s (fq-real pull, :337), 40 MB/s (backup script, :400). No tracked spec or decision sets 50 MB/s
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, no action
 
 ### numbers-11: Agent-paper numbers in the related-work note have no source in the repo
 - Ours: `docs/reports/2026-10-16_lab-report-1.md`:101-111 (Wei et al. four levels, five capabilities; ReAct 47 %, 23 %, 0 %, 56 %, Table 2; Geifman & El-Yaniv 2 % top-5 error at 99.9 %, about 60 % coverage)
@@ -194,7 +194,7 @@ Method:
 - Evidence: grep for the paper names and arXiv ids in `docs/` finds only the lab report. Not checked against the papers (no PDF opened)
 - Severity: record only (needs Andrew to check the papers: Yao2023 Table 2; Geifman2017 ImageNet result; Wei2025 sec. 2-3)
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, no action
 
 ### numbers-12: Operational numbers in the log with no result file
 - Ours: `docs/running_log.md`:285 (held-out size sweep wall, wait, load, work space); :310, :328, :372 (suite counts at past commits); :380-386 (backup sizes, checksums, rates, load); :394 (per-file restore counts 21, 43, 24, 503); :400 (backup test times and sizes); :414-425 (disk, env, versions, timings); `docs/reports/2026-10-16_lab-report-1.md`:16 (check_cli 1.5 s, log :62), :57-62
@@ -202,7 +202,7 @@ Method:
 - Evidence: these numbers exist only in the log text (the log commit is the only record). Cross-checks that hold: work-space chain 5.83 -> 6.70 -> 7.28 -> 7.30 -> 7.52 GB across entries; 43 + 24 + 503 = 570; 1.14 GB / 74 MB/s = 15.4 s; branch heads and tag resolve in git; staging cache counts 124/81/81/99/142; 198 + 5 = 203 tests collected
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, no action
 
 ### numbers-13: fq-real window composition and the not_clean values are only in `private/`
 - Ours: `docs/running_log.md`:335-339, :349, :352, :363
@@ -210,7 +210,7 @@ Method:
 - Evidence: per-experiment window counts (6/5/8/7/4, then 4/4/5/8/9; each sums to 30), frame steps, load, 530 MB, and fq12 values have no tracked result file. Labels 24 / 5 / 1 and 90 frames confirmed from `staging/fq_real_labeling/`. Reference values confirmed in `config/frame_quality_reference.yaml`. No `results/` folder for fq-real
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, no action
 
 ## 3. Checked, no finding
 - Commit count and per-day counts of Lab report 1 (142; 23/26/15/37/29/12)

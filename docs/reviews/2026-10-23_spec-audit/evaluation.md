@@ -13,7 +13,7 @@ No STOP item. The literature network location is now recorded in the private pat
 - Evidence: 4 of 5 held-out faults are labelled not repairable (`results/2026-10-12b_heldout_labels/`, commit 1e5e2c2). The held-out repairable class is one fault (bad_stage_correction, 3 rods)
 - Severity: would change a design choice
 - Frozen item: yes (held-out fault sizes and labels, approved 2026-10-12; scoring seeds, freeze v2 section 7)
-- Andrew:
+- Andrew: accepted, handled (freeze v3)
 
 ### evaluation-2: Abstention precision and recall are listed as metrics but not defined or computed anywhere
 - Ours: `docs/context/project_summary.md:33`; `docs/reports/2026-10-16_lab-report-1.md:165`; draft `docs/reports/2026-10-30_lab-report-2.md:46` on `wip/lab-report-2`; `measure/score.py:57` (five outcome categories only); `scripts/synth/scored_v1.py:69,265` (single `correct` flag)
@@ -33,7 +33,7 @@ No STOP item. The literature network location is now recorded in the private pat
 - Evidence: 9 held-out second_root runs and 5 dev script midline_jitter runs are good reports on not-repairable rods; they count as neither correct nor false accept (`results/2026-10-12b_scored_v1/README.md`), so they lower every method's `correct` and do not lower all-decline's
 - Severity: would change a design choice
 - Frozen item: no (no metric section in `docs/proposals/2026-10-12_freeze-v2.md`)
-- Andrew:
+- Andrew: accepted, handled (freeze v3)
 
 ### evaluation-3: No scored rod has a correct outcome of accept without a remedy
 - Ours: `scripts/synth/scored_v1.py:10-11,78-80` (dev: five faults x seeds 1-5; held-out: five faults x seeds 0-2); `docs/proposals/2026-10-12_heldout-faults.md:57` (held-out sizes chosen so the checker fails 3 of 3 seeds)
@@ -41,7 +41,7 @@ No STOP item. The literature network location is now recorded in the private pat
 - Evidence: all 40 scored rods carry an injected fault; none is a clean rod. Unnecessary declines of a clean measurement are not measured for any method. Fixed non-growing roots are listed as remaining (`docs/reports/2026-10-16_lab-report-1.md:67`) and not run
 - Severity: would change a design choice
 - Frozen item: yes (scoring seeds and set, freeze v2 section 7)
-- Andrew:
+- Andrew: accepted, handled (freeze v3 / v3.1)
 
 ### evaluation-4: Held-out fault sizes were set on the same seeds that are scored
 - Ours: `docs/proposals/2026-10-12_heldout-faults.md:32,57`; `results/2026-10-12_heldout_faults/checker_sizes.md:1`; `scripts/synth/scored_v1.py:11`
@@ -49,7 +49,7 @@ No STOP item. The literature network location is now recorded in the private pat
 - Evidence: sizes are "the smallest tested size at which the checker fails on 3 of 3 seeds", seeds 0-2 (commit fe7dda1, 2026-10-12 20:19). Held-out scoring uses seeds 0-2 at those sizes (commit f2b727e, 2026-10-13 00:00). No agent was run on them before sizing; the sizing used the checker only. Every held-out rod therefore fails the checker by construction
 - Severity: record only
 - Frozen item: yes (held-out sizes, approved 2026-10-12)
-- Andrew:
+- Andrew: accepted, no action
 
 ### evaluation-5: Checker thresholds and the P5 frame-quality reference come from clean rods that share the random seed of scored rods
 - Ours: `measure/render.py:134` (`rng = np.random.default_rng(movie.seed)`, texture and noise from it); `scripts/synth/scored_v1.py:80` (scored rods are case `growth_zone`); `docs/proposals/2026-10-12_freeze-v2.md:51,59` (basis: 15 clean rods, growth_zone, bending, rigid_translation, seeds 0-4)
@@ -57,7 +57,7 @@ No STOP item. The literature network location is now recorded in the private pat
 - Evidence: clean growth_zone seeds 1-4 (threshold basis, commit aebc749, 2026-10-10) and dev scored rods growth_zone + fault seeds 1-4 use the same seed for the texture generator; held-out scored seeds 0-2 likewise. The fault changes the rod; the base texture realisation is shared. The thresholds were set on the clean versions only, before any fault rod was scored
 - Severity: record only
 - Frozen item: yes (checker thresholds; P5 reference, freeze v2 sections 3 and 5)
-- Andrew:
+- Andrew: accepted, no action
 
 ### evaluation-6: Auditor prompt tuned on the dev batches whose auditor results are then reported
 - Ours: `results/2026-10-13_auditor_v1/README.md:17,39-44`; commits b1055da, c708fb0, aa8483a, 23d93ef (2026-10-13 21:36-21:45)
@@ -65,7 +65,7 @@ No STOP item. The literature network location is now recorded in the private pat
 - Evidence: 3 prompt rounds on the 4 dev batches (dev seeds 1-5 scored records). Dev table reports all 3 rounds; diagnostician good reports flagged 7, 5, 0 of 15 over rounds 1-3. Held-out prompt fixed at aa8483a before the 12 held-out runs (46a9d6f). Lab report 1 (`:53`) reports held-out only
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, no action
 
 ### evaluation-7: Single-agent prompt keeps rules that need checker results the single agent cannot get
 - Ours: `agents/prompts/single_agent.md:10` ("You will then see the re-checked result"), `:11` ("accept only when the checks pass"), `:16`, `:18`; `agents/executors.py:143-154` (BlindSlice `apply_remedy` returns `rerun`, `change`, `settings_left` only); `docs/decisions.md:95`
@@ -73,7 +73,7 @@ No STOP item. The literature network location is now recorded in the private pat
 - Evidence: the decision of 2026-10-12 keeps these rules on purpose. The single agent ended at the step limit in 13 of 25 dev and 5 of 15 held-out runs (`results/2026-10-12b_scored_v1/README.md`); diagnostician 1 of 40. Whether the step limits come from missing information or from rules it cannot satisfy is not separated by any run
 - Severity: would change a design choice
 - Frozen item: no (single-agent definition, `docs/proposals/2026-10-12_single-agent-baseline.md`, not part of freeze v2)
-- Andrew:
+- Andrew: accepted, known limit (report)
 
 ### evaluation-8: The single-agent baseline measures the checker, not one agent against several
 - Ours: `docs/proposals/2026-10-12_single-agent-baseline.md:6` ("Measures what the deterministic checker adds"); `CLAUDE.md:25` ("single-agent version"); `docs/context/project_summary.md:14` (why several agents)
@@ -81,7 +81,7 @@ No STOP item. The literature network location is now recorded in the private pat
 - Evidence: the single agent is the diagnostician with checker output removed. No baseline has one agent doing the dispatcher, diagnostician and auditor jobs. The dispatcher is not built (`docs/reports/2026-10-16_lab-report-1.md:66`). No result compares the multi-agent split against a single agent with the same information
 - Severity: would change a design choice
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, known limit (report)
 
 ### evaluation-9: Repeated-run agreement not measured; no statistic or repeat count defined
 - Ours: `docs/context/project_summary.md:30,33`; `CLAUDE.md:26`; `results/2026-10-12b_scored_v1/scores.json` (160 records, one per method x rod); `results/2026-10-13_auditor_v1/README.md:18,32-34`; draft `docs/reports/2026-10-30_lab-report-2.md:46`
@@ -89,7 +89,7 @@ No STOP item. The literature network location is now recorded in the private pat
 - Evidence: summary places repeated runs on the 12-16 root real subset and names no statistic and no repeat count. Diagnostician and single agent: 1 run per rod; no repeats. LLM auditor: 3 repeats per held-out batch; counts reported per repeat (false accepts 14, 14, 14 of 15; good reports 7, 5, 5 of 11), no agreement statistic. No real-movie run exists
 - Severity: would change a design choice
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, handled (freeze v3)
 
 ### evaluation-10: `paper_digests.md` has no agent-system digests; selective classification and ReAct are cited without a digest
 - Ours: `docs/context/literature/paper_digests.md` (26 headings, all root kinematics, lines 10-290); `docs/reports/2026-10-16_lab-report-1.md:100-112` (Wei 2025, Yao 2023, Geifman & El-Yaniv 2017)
@@ -97,7 +97,7 @@ No STOP item. The literature network location is now recorded in the private pat
 - Evidence: grep for Geifman, ReAct, Yao, Wei, selective, agent in `docs/context/literature/`: 0 hits. The literature network has no key for these papers (checked by key in its paper list). No paper location exists to check the lab report 1 claims against, so no literature finding on the metric design is made
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, no action
 
 ### evaluation-11: Lab guideline names five lab reports; no date for a fifth exists in the repo
 - Ours: `CLAUDE.md` Dates (lab reports 1-4 only); `docs/specs/2026-10-23_next-steps-lr2-dispatcher.md` A2 ("Plan to Lab reports 3-5 with dates")
@@ -105,7 +105,7 @@ No STOP item. The literature network location is now recorded in the private pat
 - Evidence: the guideline lists reports 1-4 with dates; no Lab Report 5 section and no date. Needs Andrew to check the syllabus
 - Severity: record only
 - Frozen item: no
-- Andrew:
+- Andrew: accepted, no action (syllabus lists reports 1-4)
 
 ## 2. Course deliverables (as of 2026-10-23)
 
