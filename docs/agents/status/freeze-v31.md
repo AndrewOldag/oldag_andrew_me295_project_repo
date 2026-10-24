@@ -1,22 +1,16 @@
 # freeze-v31
-Updated: 2026-10-24 12:35 (local)
+Updated: 2026-10-24 12:55 (local)
 Lane: course
 Branch: wip/freeze-v31
-Last inbox item done: 7
-State: waiting on Andrew
-Now: stopped at the spec stop rule: at most 1 of 5 faults can qualify (fewer than 3). No label sweep, no tag, no method runs
+Last inbox item done: 8
+State: ready to merge
+Now: done. v3.1 ended at its stop rule (Andrew, option a); results in `results/2026-10-24_freeze_v3.1/README.md`; log entry in `docs/running_log_pending/freeze-v31.md`
 Done since last update:
-- Main merged (82c48c7; blocklist line fixed on main in b8bf79e); decisions entry for v3.1 size steps, cache-match test, runner settings; full suite 256 passed
-- Sizing round 3 (workstation): bad_stage_correction 5 px, register_frames, 6 runs, 0 failed. Stored on the lab server and verified (460 files, sha256 equal)
-- Sizing result, seeds 10-12 (`results/2026-10-24_freeze_v3.1/sizing.md`):
-  - rigid_drift 0.5-5.5: unremedied good 3 of 3 up to 4.5; 5.5 not good 2 of 3. Out
-  - width_change (one size), stage_log_missing 1: unremedied good 3 of 3. Out
-  - displacement_exceeds_patch 2x2, 2x3, 2x4: unremedied not good 3 of 3; stride 1 fails rigid_invariance on every seed (35-55 %/h at 2x2). Out
-  - bad_stage_correction: unremedied not good 3 of 3 from 5 px; at 5 px register_frames repairs 1 of 3 (s11 still fails; s12 good but rigid_invariance 3.02, just over). 6-8 px registration not run: the stop rule holds whatever they give
-- Tracker runs new: 120 of 300 (13 lab server, 107 workstation). Renders on the workstation kept (sizing renders deletable under the exception; not deleted yet)
+- Item 8: README with the sizing sweeps (faults, sizes, seeds, per-seed outcome against the three rule parts, run counts, storage), the second_root cause and the finding; README section for the driver
+- Storage: lab-server c014 folder, 464 files, count and sha256 equal to the workstation copies (incl. the 2 cache-match runs)
+- Delete exception used once: 3,660 render files (1.74 GB) of the 78 sweep rods in the workstation c014/renders, each after its rod's files matched the verified checksums; every path logged in c014/DELETED.log (3,738 lines), copy on the lab server. 2 cache-match rods' renders kept. Workstation after: work folder 14 GB, 32 GB free
+- Main merged (9310c35; decisions conflict: both entries kept). Full suite 256 passed
+- Task c014 done
 Needs Andrew:
-- Stop rule (spec): fewer than 3 faults qualify. Options:
-  - (a) End v3.1 here. v3 stays the scored set; the README states that no listed fault at these sizes needs its repair under the fixed checker and remedies (a finding about the set, not a method result)
-  - (b) Finish bad_stage_correction 6-8 px (18 runs) and score a 1-fault v3.1 set (3 rods), below the spec minimum of 9
-  - (c) Change the rule or sizes (e.g. 2 of 3 seeds; rigid_drift above 5.5; displacement at speed 1). A spec change; planning to write it
-- Main checkout `private/workstation.md` is the old copy; refreshed copy in this worktree's `private/`
+- Main checkout `private/workstation.md` is the old copy; refreshed copy with the delete exception is in this worktree's `private/`
+- Decisions entry 2026-10-24 (v3.1 ended) says "no listed fault both degrades the measurement and is repaired by a listed remedy". As run it is narrower: no fault met the rule on 3 of 3 seeds; bad_stage_correction 5 px was repaired on 1 of 3 (seed 12 good but rigid_invariance 3.02 against 2.0); 6-8 px registration not run. Suggest wording it "fewer than 3 of 5 faults qualify on 3 of 3 seeds" in the entry and the paper. Not edited here (your entry). The README states the narrow form
