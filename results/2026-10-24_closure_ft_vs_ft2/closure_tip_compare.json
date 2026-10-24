@@ -1,0 +1,76 @@
+[
+ {
+  "net": "ft",
+  "frames": 80,
+  "closure_px_per_h": 0.945,
+  "closure_fitted_tip_px_per_h": {
+   "deg1": 3.745,
+   "deg2": 3.745,
+   "deg3": 2.96
+  },
+  "tip_jump_px": {
+   "median": 2.0,
+   "p90": 4.58
+  },
+  "pair_residual_px": {
+   "median": 1.67,
+   "p90": 4.67,
+   "max": 7.07
+  },
+  "tip_world_first_last": [
+   [
+    584.0,
+    1156.0
+   ],
+   [
+    579.0,
+    1345.0
+   ]
+  ],
+  "tip_net_change_px": [
+   -5.0,
+   189.02
+  ],
+  "chain_net_change_px": [
+   -5.42,
+   187.2
+  ]
+ },
+ {
+  "net": "ft2",
+  "frames": 80,
+  "closure_px_per_h": 4.521,
+  "closure_fitted_tip_px_per_h": {
+   "deg1": 5.149,
+   "deg2": 5.149,
+   "deg3": 4.363
+  },
+  "tip_jump_px": {
+   "median": 2.0,
+   "p90": 4.3
+  },
+  "pair_residual_px": {
+   "median": 1.91,
+   "p90": 4.34,
+   "max": 7.25
+  },
+  "tip_world_first_last": [
+   [
+    582.0,
+    1151.0
+   ],
+   [
+    577.0,
+    1346.0
+   ]
+  ],
+  "tip_net_change_px": [
+   -5.0,
+   195.02
+  ],
+  "chain_net_change_px": [
+   -5.5,
+   186.1
+  ]
+ }
+]
