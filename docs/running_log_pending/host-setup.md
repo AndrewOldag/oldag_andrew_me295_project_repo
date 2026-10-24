@@ -1,10 +1,13 @@
 ## 2026-10-23 (build account, session host-setup)
-- Done: workstation key login from the VM works; survey in `private/workstation.md`: 14 cores / 20 threads, 62 GB RAM, no usable GPU, 46 GB free disk, imaging drive not mounted
+- Done: workstation key login from the VM works; survey in `private/workstation.md`: 14 cores / 20 threads, 62 GB RAM, no usable GPU, 41-46 GB free disk, imaging drive not mounted
 - Done: tracker environment built on the workstation from `envs/qb.yml` (micromamba, work folder, nice 19); tracker master d5f1829, gate2-windowed-coupling 52e9bd1 and stage-auxdata 888f972 copied there as git archives made on the VM
-- Done: synthetic test, rod `v3_growth_zone_clean_s10`, state st1: render byte-identical, tracks max |d| 2.3e-13 px against the lab-server run (limit 1e-6); tracking loop 4.4 s against 6.2 s (`results/2026-10-23_host_setup/README.md`)
-- Failed: real-window test (0708_m12, 4-6 h) not run; frame transfer to the workstation refused by the session's permission check, both routes
+- Done: synthetic test, rod `v3_growth_zone_clean_s10`, state st1: render byte-identical, tracks max |d| 2.3e-13 px against the lab-server run (limit 1e-6); tracking loop 4.4 s against 6.2 s
+- Failed, 15:20: first attempt at the real-window frame transfer refused by the session's permission check (both routes); Andrew approved workstation ssh at 18:20 (inbox item 5)
+- Done: real-window test, root 0708_m12, 4-6 h: tracks max |d| 1.1e-12 px; checker closure 5.533 px/h and plane_sections 256.99 %/h on both; tracking loop 8.8 s against 12.3 s (`results/2026-10-23_host_setup/README.md`)
+- Done: frames for the test: the root's montage folder without histograms (961 frames, 5.54 GB); a frame subset does not load (the tracker checks the frame count against the stage table). Work folder 9.9 GB of the 20 GB cap; 36 GB free
+- Done: upload key from the workstation to the lab server works; test outputs and done marker in the task's lab-server folder (11 files)
 - Done: optional `host:` field on the task board (`scripts/board.py`, `tasks/README.md`), set on every open course task; `tests/test_board.py` 10 passed; full suite 205 passed
-- Done: decisions entries for host roles, the one-host-per-part rule and the synthetic reproduction
+- Done: decisions entries for host roles, the one-host-per-part rule, the reproduction and the whole-folder frame rule
 - Demo: `python scripts/board.py` prints the board with a host column
-- Remaining: real-window test once Andrew allows a transfer route; then status ready to merge and the coordinator applies the host assignment (spec item 6)
-- Bottlenecks: on Andrew: permission for lab-server to workstation frame transfer
+- Remaining: coordinator merges and applies the host assignment (status file, item 3)
+- Bottlenecks: workstation disk: room for about one more root montage under the 20 GB cap
