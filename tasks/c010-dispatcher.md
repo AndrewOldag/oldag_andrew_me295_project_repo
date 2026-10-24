@@ -3,11 +3,11 @@ id: c010
 title: Dispatcher proposal, tracker timing, cost estimate; then first real slice
 lane: course
 owner: dispatcher
-state: working
+state: needs-input
 branch: wip/dispatcher
 created: 2026-10-23 00:30
-last_update: 2026-10-24 02:12
-blocker: none (real results provisional until the new midline net)
+last_update: 2026-10-24 03:32
+blocker: Andrew: go-ahead to restart the 0711_c1 run (local run killed for VM low memory)
 done_marker: proposal + results/2026-10-23_tracker_timing/; after approval, slice runs from README
 host: lab server, cluster
 ---
