@@ -53,6 +53,17 @@ Course project for AM/ME/CE 295, Caltech, Fall 2026. Start with `CLAUDE.md` and 
 - `python scripts/synth/scored_v1.py next --set dev|heldout` starts the tracker runs the script and remedy tree still need as one sweep; `status`, `fetch`; repeat until `next` needs nothing. Then `rules --set S`, `agents --set S --method diagnostician|single_agent` (needs a clean tracked tree; each run records the freeze tag and commit; runs with a summary are skipped), and `eval`, which writes `results/2026-10-12b_scored_v1/table_dev.md`, `table_heldout.md` and `scores.json`
 - Held-out labels: `python scripts/synth/heldout_labels.py start`, `status`, `fetch`, `eval --out results/2026-10-12b_heldout_labels`
 
+## Freeze v3 scored runs (51 rods, five methods, repeats)
+- Definition: `docs/proposals/2026-10-23_freeze-v3.md`. Driver `scripts/synth/scored_v3.py`; outputs in `results/2026-10-23_freeze_v3/`; tracker cache `staging/tracks_freeze_v3/`
+- Each phase: `python scripts/synth/scored_v3.py plan --phase P` (`--dry-run` prints the run count) starts one sweep of the tracker runs still needed; `status`; `fetch` after it ends; then the phase's report. Repeat `plan` until it needs nothing (registration and `enlarge_patch` states need the unremedied run first)
+  1. `--phase basis`, then `basis`: clean v3 rods, seeds 10-14, against the approved thresholds and flank tolerance (`basis.md`)
+  2. `--phase sizing`, then `sizing`: held-out sizes at v3 geometry, seeds 10-12 (`sizing.md`, `sizing.json`)
+  3. `--phase labels`, then `labels`: labels of the 51 scored rods, seeds 20-22 (`labels.md`, `labels.json`)
+  4. Tag `freeze-v3`. `--phase methods`, then `rules` (script and remedy tree), then `agents --method diagnostician|single_agent --repeat 0|1|2` (clean tracked tree needed)
+  5. `eval`: metrics from `measure/metrics.py` (`table_metrics.md`, `metrics.json`, `scores.json`)
+- Stops: a clean basis value over a threshold or the flank tolerance, a held-out size that changes, more than half of the labelled set in decline, or more than 600 tracker runs. Each stop is for Andrew
+- On the tracker machine nothing is renamed or overwritten: outputs and rods are complete when their `.ok` marker exists; code goes to a folder per commit (`docs/decisions.md`, 2026-10-23)
+
 ## Auditor v1 (scored runs v1, no tracker runs)
 - Reads the cached final records of `results/2026-10-12b_scored_v1/` from `staging/` (the scored runs' caches). Definition: `docs/proposals/2026-10-13_auditor-v1.md`
 - `python scripts/synth/auditor_v1.py views` writes the 8 batch views; `rule` runs the rule auditor; `llm --set dev|heldout [--method M] [--repeat K]` runs the LLM auditor (needs a clean tracked tree); `eval` writes `results/2026-10-13_auditor_v1/scores.md`. Test: `tests/test_auditor.py`

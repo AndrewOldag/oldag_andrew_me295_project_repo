@@ -1,0 +1,131 @@
+{
+ "freeze_tag": "freeze-v3",
+ "commit": "b527786",
+ "method": "single_agent",
+ "rod": {
+  "case": "v3_growth_zone",
+  "fault": "fast_rotation",
+  "size": "2",
+  "seed": 21,
+  "id": "v3_growth_zone_fast_rotation_z2_s21"
+ },
+ "runner": "remote_job",
+ "truth": {
+  "peak_regr_pct_per_h": 54.0,
+  "peak_at_um": 421,
+  "largest_flank_difference_pct_per_h": 0.0
+ },
+ "error_before": {
+  "regr_rms_pct_per_h": 28.582,
+  "regr_max_pct_per_h": 113.443,
+  "regr_covered_um": 1179,
+  "flank_difference_rms_pct_per_h": 33.882,
+  "flank_difference_max_pct_per_h": 116.797,
+  "flank_difference_covered_um": 1179
+ },
+ "initial_checks": [
+  {
+   "check": "rigid_invariance",
+   "passed": false,
+   "value": 155.13434741261358,
+   "threshold": 2.0,
+   "unit": "%/h",
+   "where_s_px": 15.0,
+   "where_frame_pair": null,
+   "detail": "largest change in regr_mid"
+  },
+  {
+   "check": "closure",
+   "passed": false,
+   "value": 54.729556226857646,
+   "threshold": 1.0,
+   "unit": "px/h",
+   "where_s_px": 573.3392136770287,
+   "where_frame_pair": 23,
+   "detail": "tip path 120.9 px/h; base at s = 573 px; largest single-pair residual at pair 23"
+  },
+  {
+   "check": "plane_sections",
+   "passed": false,
+   "value": 116.79685581703411,
+   "threshold": 3.25,
+   "unit": "%/h",
+   "where_s_px": 550.0,
+   "where_frame_pair": null,
+   "detail": "flank difference -116.80 %/h, predicted -0.00 %/h"
+  }
+ ],
+ "outcome": {
+  "task_id": "rod-1",
+  "agent": "single_agent",
+  "status": "step_limit",
+  "args": {},
+  "steps": 8,
+  "failed_steps": 0,
+  "calls": 8,
+  "input_tokens": 36109,
+  "output_tokens": 3964,
+  "call_ms": 49811
+ },
+ "error_after": {
+  "regr_rms_pct_per_h": 12.625,
+  "regr_max_pct_per_h": 44.252,
+  "regr_covered_um": 1137,
+  "flank_difference_rms_pct_per_h": 15.382,
+  "flank_difference_max_pct_per_h": 52.655,
+  "flank_difference_covered_um": 1137
+ },
+ "remedies": [
+  "frames registered on the non-growing tissue (from 555 px from the tip) before tracking"
+ ],
+ "roll_backs": 0,
+ "final_settings": {
+  "stride": 1,
+  "disk_radius": null,
+  "register": true,
+  "register_from_px": 555,
+  "midline_smooth": null,
+  "band_mask": null,
+  "width_free": false,
+  "couple": false
+ },
+ "final_checks": [
+  {
+   "check": "rigid_invariance",
+   "passed": false,
+   "value": 127.16680584803038,
+   "threshold": 2.0,
+   "unit": "%/h",
+   "where_s_px": 540.0,
+   "where_frame_pair": null,
+   "detail": "largest change in regr_minus"
+  },
+  {
+   "check": "closure",
+   "passed": false,
+   "value": 7.090822950335704,
+   "threshold": 1.0,
+   "unit": "px/h",
+   "where_s_px": 554.144989486584,
+   "where_frame_pair": 21,
+   "detail": "tip path 102.9 px/h; base at s = 554 px; largest single-pair residual at pair 21"
+  },
+  {
+   "check": "plane_sections",
+   "passed": false,
+   "value": 52.655054395663406,
+   "threshold": 3.25,
+   "unit": "%/h",
+   "where_s_px": 505.0,
+   "where_frame_pair": null,
+   "detail": "flank difference -52.66 %/h, predicted 0.00 %/h"
+  }
+ ],
+ "reported": false,
+ "repeat": 1,
+ "trace": "single_agent_v3_growth_zone_fast_rotation_z2_s21_r1_trace.jsonl",
+ "claude_code": "2.1.310",
+ "wall_s": 61.5,
+ "tracker_runs_new": 0,
+ "runner_log": []
+}

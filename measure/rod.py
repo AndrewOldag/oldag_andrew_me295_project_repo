@@ -59,6 +59,7 @@ class RodSpec:
     pivot_offset: float = 0.0                # pivot distance basal to the base along the base tangent, px; 0 = the base
     stage_velocity: Optional[tuple] = None   # logged stage velocity, px/s (world static)
     stage_follow_px: Optional[float] = 10.0  # stage step to follow the tip, px; None = fixed
+    stage_round_px: float = 0.1              # stage positions are logged rounded to this, px
     substeps: int = 20
     notes: str = ""
     expected: dict = field(default_factory=dict)
@@ -135,7 +136,8 @@ def stage_track(spec, times, tip_world):
         stage[i] = stage[i - 1]
         off = (tip_world[i] - tip_world[0]) - stage[i]
         if np.linalg.norm(off) > spec.stage_follow_px:
-            stage[i] = np.round(tip_world[i] - tip_world[0], 1)
+            d, r = tip_world[i] - tip_world[0], spec.stage_round_px
+            stage[i] = np.round(d, 1) if r == 0.1 else np.round(d / r) * r    # 0.1: v2 rods, bit for bit
     return stage
 
 
@@ -195,15 +197,18 @@ def growth_zone():
 WIDTH_RATE = 0.40          # flank half-spacing growth, 1/h, in the width-change cases
 
 
-def width_change_spec(kappa_inv=400.0):
+def width_change_spec(kappa_inv=400.0, v3=False):
     """Curved rod (constant curvature 1/kappa_inv px) whose flank spacing grows 40 %/h.
 
     True plane-sections residual 2 kappa dh/dt: 1.5 %/h at 1/800, 3.0 at 1/400, 4.5 at 1/267.
+    v3: on the freeze v3 growth zone, length and stage (`v3_width_change`).
     """
-    v_gz, regr_gz = growth_zone()
+    v_gz, regr_gz = growth_zone_v3() if v3 else growth_zone()
     h0, hdot = 15.0, 15.0 * WIDTH_RATE / 3600.0
     k0 = 1.0 / kappa_inv
-    return RodSpec("width_change", v=v_gz, regr=regr_gz, kappa0=lambda X: k0 + 0 * np.asarray(X, float),
+    extra = dict(length=V3_LENGTH, **V3_STAGE) if v3 else {}
+    return RodSpec("v3_width_change" if v3 else "width_change", v=v_gz, regr=regr_gz, **extra,
+                   kappa0=lambda X: k0 + 0 * np.asarray(X, float),
                    h=lambda t: h0 + hdot * np.asarray(t, float), dh=lambda t: hdot + 0 * np.asarray(t, float),
                    notes=f"constant curvature 1/{kappa_inv:g} px; flank spacing grows 40 %/h; constant-width assumption broken",
                    expected={"rigid_invariance": True, "closure": True, "plane_sections": False})
@@ -279,3 +284,40 @@ def field_cases():
         width_change_spec(400.0),          # size chosen by Andrew, 2026-10-10
         *bent_specs(),
     ]
+
+
+# ---------------------------------------------------------------- freeze v3 cases (docs/proposals/2026-10-23_freeze-v3.md, section 4)
+
+V3_V_END = 96.0 / 3600.0   # tip speed, px/s (96 px/h, 2.4 px per 90 s frame; 202 um/h at 2.105 um/px)
+V3_S_MID, V3_WIDTH = 200.0, 45.0     # growth zone: peak REGR 54.0 %/h at 200 px, REGR > 20 % of peak at 71-329 px
+V3_LENGTH = 640.0          # chain length, px; tracked length 500 px (REGR under 1 % of peak from 470 px)
+V3_BEND_SIGMA = 50.0       # px, bend profiles centred on the growth zone (s = 200 px)
+V3_BEND_RATES = (16, 20, 24, 30)     # deg/h; reported 16-24 (MullenEtAl1998b, WolvertonEtAl2002), plus one above
+V3_STAGE = {"stage_follow_px": 0.5, "stage_round_px": 1.0}   # stage follows the tip every frame, whole-pixel steps
+
+
+def growth_zone_v3():
+    return richards_velocity(V3_V_END, s_mid=V3_S_MID, width=V3_WIDTH, shape=1.0)
+
+
+def v3_cases():
+    """The freeze v3 field-level cases: v3_growth_zone, v3_bend16 ... v3_bend30, v3_still, v3_width_change."""
+    v_gz, regr_gz = growth_zone_v3()
+    all_pass = {"rigid_invariance": True, "closure": True, "plane_sections": True}
+    k0 = _turning(30.0, V3_BEND_SIGMA)
+    out = [RodSpec("v3_growth_zone", length=V3_LENGTH, v=v_gz, regr=regr_gz, **V3_STAGE,
+                   notes="v3 growth zone: tip speed 96 px/h, peak REGR 54 %/h at s = 200 px",
+                   expected=dict(all_pass))]
+    for deg in V3_BEND_RATES:
+        c = _turning(float(deg), V3_BEND_SIGMA) / 3600.0
+        out.append(RodSpec(f"v3_bend{deg}", length=V3_LENGTH, v=v_gz, regr=regr_gz, **V3_STAGE,
+                           kappa0=lambda X, k0=k0: k0 * _gauss(X, V3_S_MID, V3_BEND_SIGMA),
+                           kappa_rate=lambda s, c=c: c * _gauss(s, V3_S_MID, V3_BEND_SIGMA),
+                           notes=f"v3 growth zone; starts bent 30 deg (Gaussian in X at 200 px, sigma 50) and "
+                                 f"keeps bending the same way at {deg} deg/h (Gaussian in s at 200 px, sigma 50)",
+                           expected=dict(all_pass)))
+    out.append(RodSpec("v3_still", length=V3_LENGTH, **V3_STAGE,
+                       notes="fixed non-growing root: no growth, no bending; the stage does not move",
+                       expected=dict(all_pass)))
+    out.append(width_change_spec(400.0, v3=True))
+    return out

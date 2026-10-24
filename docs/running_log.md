@@ -466,3 +466,30 @@ Required by the course. One entry per work session: done, remaining, bottlenecks
 - Demo: `python scripts/board.py` prints the board with a host column
 - Remaining: coordinator merges and applies the host assignment (status file, item 3)
 - Bottlenecks: workstation disk: room for about one more root montage under the 20 GB cap
+
+## 2026-10-23 (build account, session freeze-v3)
+- Done, item 1: status and task c011 started (first commit on `wip/freeze-v3`)
+- Done, item 2: `docs/proposals/2026-10-23_freeze-v3.md`. Scoring set 48 rods on new seeds 20-22: accept_clean 15, accept_repaired 15, decline 18 (expected; labels from a tracker-only sweep). All-decline 18 of 48, balanced accuracy 1/3
+- Proposal: metrics in `measure/metrics.py` (per-class accuracy, balanced accuracy, false-accept rate, coverage, abstention precision and recall); 3 repeats per rod for the LLM methods, unanimity rate and Fleiss kappa
+- Proposal: v3 rods at 2.105 um/px, tip 96 px/h (2.4 px/frame, from the timing run on `wip/dispatcher`), growth zone s_mid 200 px, width 45 (peak REGR 54.0 %/h at 421 um, zone 543 um; computed from `measure.rod.richards_velocity`), tracked length 500 px, stage follows the tip every frame; bent rods 16, 20, 24 and 30 deg/h
+- Proposal: kinematics-1, width-free ratio corrected for curvature (exact on field-level rods); not dropped. Claude Code 2.1.302 recorded in v3. New held-out injector `stage_log_missing`
+- Proposal: about 490 tracker runs (over the 300 limit; asks a cap of 600), 288 LLM runs. No run made
+- Approved by Andrew 13:41 with a fixed non-growing rod added (set of 51: accept_clean 18, accept_repaired 15, decline 18), cap 600 tracker runs; recorded in `docs/decisions.md` (d9d5318)
+- Done (1a16f11): v3 cases in `measure/rod.py`, v3 frames in `measure/render.py`, `stage_log_missing` and v3 zone in `measure/render_heldout.py`, corrected `width_free_ratio` (field-level error under 1e-3 on 11 rods; v2 width_change max 0.435 -> 0.000), no-growth limit 0.5 %/h, `measure/metrics.py`; `tests/test_freeze_v3.py`
+- Done (7eb7cc3): no rename or overwrite on the lab server (spec audit rules-2): `qb_track.py` writes once and marks `.ok`, `make_rod.py` refuses an existing rod, `sweep.py` counts only `.ok` outputs and leaves partial files, code folder per commit from `git archive`, plan and log names per start; per-rod track length
+- Done (47a3c47, ece537c, 9eb747d): `scripts/synth/scored_v3.py`; v3 seeds in `config/scoring_seeds.yaml`; README steps. Suite 242 passed, 5 skipped
+- Run: one smoke rod as single jobs, 44 s, checks pass, centre error 0.35 against 1.35 %/h
+- Run (433fdcf): clean basis, 30 rods x seeds 10-14, 100 tracker runs in 2 sweeps, 0 failed, 405 s and 149 s wall, load at most 6.13 on 32 cores, work space 7.57 -> 9.47 GB. Largest clean values rigid_invariance 1.42, closure 0.36, plane_sections 2.97 %/h; flank error 0.575 %/h. Thresholds and tolerance stay. `results/2026-10-23_freeze_v3/basis.md`
+- Andrew freed lab-server space (v2 renders removed, 4.9 GB). Lab-server limit of 2 jobs per account built into `RemoteRunner` (e454378)
+- Run (f599564): held-out sizing at v3 geometry, seeds 10-12, 36 tracker runs, 0 failed; all six faults fail 3 of 3 at the v2 sizes; no size change
+- Run (6ebc9db): labels of 51 rods, 228 tracker runs, 0 failed. `v3_bend30_clean_s20` fails closure 4.51 px/h with a good measurement: kept accept_clean (Andrew, option a). `displacement_exceeds_patch` 2x6 not repairable at v3 speed: decline. Classes 18 / 12 / 21
+- Claude Code re-pinned to 2.1.310 (installed version); tag `freeze-v3` on e1e672a
+- Run (869f130): method-phase tracker runs, 124 in 7 rounds, 0 failed (loop stopped once by Claude Code on VM memory; restarted in the foreground by Andrew). Script and remedy tree, 102 runs; second runs from the cache identical 102 of 102
+- Run: 306 LLM runs (diagnostician and single agent, 3 repeats), 0 harness errors, CLI 2.1.310 throughout. Stopped twice on VM memory (157 of 306); resumed in 15 blocks of 8-13 runs, free-memory floor 1.5 GB (Andrew), free 1.7-2.4 GB before each block
+- Tracker runs in all: 528 of the 600 cap, 0 failed
+- Results (`results/2026-10-23_freeze_v3/README.md`): balanced accuracy remedy tree 0.81, diagnostician 0.69 (0.69-0.69), script 0.67, single agent 0.60 (0.57-0.64), all-accept 0.67, all-decline 0.33. False accepts per run set: script 18, remedy tree 4, diagnostician 0, single agent 0. Unanimity over 3 repeats: diagnostician 39 of 51 (Fleiss kappa 0.776), single agent 24 of 51 (0.503)
+- Found: all 12 accept_repaired rods have a good unremedied measurement, so accepting without a remedy scores them correct (script 12 of 12). `stage_log_missing`: no LLM run and no remedy-tree run correct (0 of 9, 0 of 3). `second_root`: 0 correct for every method
+- Also found: Edge crash dumps took 54.5 GB in the user profile on the VM (reported to Andrew, who cleared them)
+- Demo: `python scripts/synth/scored_v3.py eval` prints the metrics tables from the committed runs
+- Remaining: coordinator merge of `wip/freeze-v3`; Andrew reviews the results README
+- Bottlenecks: none
