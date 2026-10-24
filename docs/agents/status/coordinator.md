@@ -1,15 +1,16 @@
 # coordinator
-Updated: 2026-10-24 01:41 (local)
+Updated: 2026-10-24 01:52 (local)
 Lane: course
 Branch: main
 Last inbox item done: 14
 State: working
 Now: relay loop every 10 min (item 8): merges per item 1, `check github` to live sessions whose inbox changed
-Last-seen main: 6848a23 (inboxes as of 6848a23)
+Last-seen main: 114b286 (inboxes as of 114b286)
 Done since last update:
 - Item 9: board allows `waiting on Andrew` and `waiting on <agent>` (`scripts/board.py`, `tasks/README.md`), 8223616; full suite 203 passed
 - Item 1: merged wip/spec-audit (2c0eb60) and then wip/spec-audit-check (f7ec454), `--no-ff`; pending log entries moved into `docs/running_log.md`; suite 203 passed on each merge
 - Item 8: pinged dispatcher 01:22 (inbox changed in 588f052). Coordinator inbox also changed (own). Message tool available: SendMessage + ListAgents
+- 2026-10-24 01:52: pinged dispatcher (restarted; inbox changed in 114b286, after its last check)
 - 2026-10-24 01:41: inboxes changed in f1aa878, 4285985, 6848a23: pinged freeze-v3, autotrace, turn-long. dispatcher session not live; not pinged
 - 23:41: inboxes changed in 5253f17: pinged freeze-v3. dispatcher session not live; not pinged
 - 23:01: pinged autotrace (inbox changed in f4e8fbd: fine-tune from base net2 on compliant traces)
@@ -34,16 +35,15 @@ Branches (last commit, state):
 - wip/spec-audit: 2026-10-23 01:04, ready to merge, merged 2c0eb60
 - wip/spec-audit-check: 2026-10-23 01:14, ready to merge, merged f7ec454
 - wip/host-setup: 2026-10-23 18:37, merged b9a3a06
-- wip/autotrace: 2026-10-24 01:36, waiting on Andrew
-- wip/freeze-v3: 2026-10-23 22:35, working
-- status/turn-long: 2026-10-24 00:47, done (research lane, not merged)
-- wip/dispatcher: 2026-10-24 00:25, waiting on Andrew
+- wip/autotrace: 2026-10-24 01:43, working
+- wip/freeze-v3: 2026-10-24 01:43, working
+- status/turn-long: 2026-10-24 01:41, working (research lane, not merged)
+- wip/dispatcher: 2026-10-24 01:48, waiting on Andrew
 - wip/lab-report-2: 2026-10-23 13:29, working
 - status/spec-audit-r: 2026-10-23 13:42, done (research lane, not merged)
 - status/gate2: 2026-10-16 12:27, waiting on Andrew (research lane, not merged)
 - wip/readme-check, wip/vm-setup, wip/auditor-v1b, wip/fq-real, wip/auditor-v1, wip/scored-v1, wip/freeze-v2, heldout/faults, wip/baselines, wip/diag-review, wip/lab-report-1, wip/gatekeeper: merged
 Needs Andrew:
-- Restart dispatcher: inbox item (whole-pixel moved copy, f1aa878) waiting; session not live
 - Workstation disk: host-setup work folder 9.9 of 20 GB after one root; sessions cannot delete there (host-setup status)
 - lab-report-2 and spec-audit-r sessions no longer live; wip/lab-report-2 status still says working (13:29)
 - Old lab-report-2 session (started 00:37) stopped 13:45 on Andrew's go-ahead; the 13:27 one remains
