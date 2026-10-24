@@ -1,12 +1,15 @@
 # coordinator
-Updated: 2026-10-24 12:58 (local)
+Updated: 2026-10-24 13:05 (local)
 Lane: course
 Branch: main
 Last inbox item done: 18
 State: working
-Now: one check per `check github`; standing items 1, 8, 10, 11, 16, 17. coord-tick (task c016) is replacing the loop
-Last-seen main: e3c0268 (inboxes as of cb5df17)
+Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8, 10, 11, 16, 17
+Last-seen main: 2c373d1 (inboxes as of e3c0268)
 Done since last update:
+- 2026-10-24 13:05 (tick): item 1: merged wip/freeze-v31 (2c373d1; ready to merge 12:55); suite 256 passed; log entry moved. No other branch ready
+- 13:05: item 8: no inbox change since e3c0268 (the e3c0268 changes were path redactions, seen at the last check); no pings. Item 10: no status waits on an agent. Item 16: no status says `waiting on server job`
+- 13:05: item 2: pre-push hook installed; `private/blocklist.txt` has lines (count only). Live sessions: audit-marks, dispatcher, freeze-v31, coord-tick, turn-long; no coordinator loop session live
 - 2026-10-24 12:55: item 1: merged wip/audit-marks (e3c0268; ready to merge 12:10). Conflict in docs/decisions.md (freeze v3.1 end and status/gate2 delete entries): kept both. Suite 253 passed; log entry moved
 - Item 18: items 15 and 17 done by audit-marks on main, kept by Andrew: 915859a (merge wip/autotrace), 074e102 (board host note), eaaa37b (sweep.py removes only its own lock). Not redone
 - Item 16: no status says `waiting on server job`; no marker checked
@@ -44,7 +47,8 @@ Branches (last commit, state):
 - wip/host-setup: 2026-10-23 18:37, merged b9a3a06
 - wip/autotrace: 2026-10-24 11:39, ready to merge, merged 915859a (by audit-marks)
 - wip/audit-marks: 2026-10-24 12:11, ready to merge, merged e3c0268
-- wip/freeze-v31: 2026-10-24 12:39, waiting on Andrew (item 8 since given: v3.1 ended, option a)
+- wip/freeze-v31: 2026-10-24 12:50, ready to merge, merged 2c373d1
+- wip/coord-tick: 2026-10-24 12:52, waiting on Andrew (hand test, install)
 - wip/freeze-v3: 2026-10-24 04:16, ready to merge, merged 2ebd422
 - status/turn-long: 2026-10-24 02:42, done (research lane, not merged)
 - wip/dispatcher: 2026-10-24 11:36, working (ft2 midline chain on the lab server)
@@ -53,7 +57,10 @@ Branches (last commit, state):
 - status/gate2: 2026-10-16 12:27, delete approved, Andrew runs it (research lane, not merged)
 - wip/readme-check, wip/vm-setup, wip/auditor-v1b, wip/fq-real, wip/auditor-v1, wip/scored-v1, wip/freeze-v2, heldout/faults, wip/baselines, wip/diag-review, wip/lab-report-1, wip/gatekeeper: merged
 Needs Andrew:
-- Two coordinator sessions are listed live (the other started about 11:45, idle now). Stop one so merges and pings are not doubled; coord-tick will replace both
+- freeze-v31: decisions entry 'v3.1 ended' wording is broader than run; it suggests 'fewer than 3 of 5 faults qualify on 3 of 3 seeds' (freeze-v31 status)
+- freeze-v31: main checkout `private/workstation.md` is the old copy; refreshed copy is in the freeze-v31 worktree `private/`
+- coord-tick: hand test, then install of the scheduled tick (coord-tick status)
+- Finished sessions still live and idle: audit-marks, freeze-v31 (merged), turn-long (done); can be closed
 - `git push origin --delete status/gate2` (audit-marks item 2; refused for sessions)
 - freeze-v3: review `results/2026-10-23_freeze_v3/README.md` (all 12 accept_repaired rods measure well unremedied; second_root 0 correct for every method)
 - Workstation disk: host-setup work folder 9.9 of 20 GB after one root; sessions cannot delete there (host-setup status)
