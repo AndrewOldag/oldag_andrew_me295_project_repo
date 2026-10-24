@@ -3,10 +3,10 @@ id: c010
 title: Dispatcher proposal, tracker timing, cost estimate; then first real slice
 lane: course
 owner: dispatcher
-state: needs-input
+state: working
 branch: wip/dispatcher
 created: 2026-10-23 00:30
-last_update: 2026-10-24 02:10
+last_update: 2026-10-24 02:12
 blocker: none (real results provisional until the new midline net)
 done_marker: proposal + results/2026-10-23_tracker_timing/; after approval, slice runs from README
 host: lab server, cluster
@@ -23,3 +23,4 @@ Spec: `docs/specs/2026-10-23_next-steps-lr2-dispatcher.md`.
 - [x] B5 part 1: dispatcher code, fake queue, script baseline (tests/test_dispatcher.py, 19 passed)
 - [x] B5 part 2: real slice code and no-agent run (results/2026-10-23_real_slice_noagent/)
 - [x] B5 part 2: agent run (results/2026-10-23_real_slice/)
+- [ ] B5 item 21: real slice on 3 roots (control, drought, recovery), lab server
