@@ -66,6 +66,11 @@ def test_host_field(tmp_path):
     write_task(tmp_path / "b", "c004", "course", "queued", host="lab server, laptop")
     with pytest.raises(board.BoardError, match="unknown host 'laptop'"):
         board.collect(tmp_path / "b")
+    write_task(tmp_path / "c", "c005", "course", "queued", host="lab server, VM (LLM runs)")
+    assert board.collect(tmp_path / "c")[0]["host"] == "lab server, VM (LLM runs)"
+    write_task(tmp_path / "d", "c006", "course", "queued", host="laptop (new files only)")
+    with pytest.raises(board.BoardError, match=r"unknown host 'laptop \(new files only\)'"):
+        board.collect(tmp_path / "d")
 
 
 def test_repo_open_tasks_have_host():
