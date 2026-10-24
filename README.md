@@ -64,6 +64,11 @@ Course project for AM/ME/CE 295, Caltech, Fall 2026. Start with `CLAUDE.md` and 
 - Stops: a clean basis value over a threshold or the flank tolerance, a held-out size that changes, more than half of the labelled set in decline, or more than 600 tracker runs. Each stop is for Andrew
 - On the tracker machine nothing is renamed or overwritten: outputs and rods are complete when their `.ok` marker exists; code goes to a folder per commit (`docs/decisions.md`, 2026-10-23)
 
+## Freeze v3.1 sizing (ended at its stop rule; v3 stays the scored set)
+- Spec `docs/specs/2026-10-24_freeze-v3.1.md`. Driver `scripts/synth/scored_v31.py` (the v3 driver with a new cache `staging/tracks_freeze_v31/` and output folder `results/2026-10-24_freeze_v3.1/`; states in a local copy of the v3 cache `staging/tracks_freeze_v3/` are reused)
+- `plan --phase sizing` starts one sweep of the states still needed; `status`; `fetch`; `sizing` writes `sizing.md`. `second-root` writes `second_root.md` from the v3 runs. Test: `tests/test_freeze_v31.py`
+- The tracker host comes from `private/runner.yaml`; optional `rods_dir` and `max_gb` (template `config/runner.example.yaml`)
+
 ## Auditor v1 (scored runs v1, no tracker runs)
 - Reads the cached final records of `results/2026-10-12b_scored_v1/` from `staging/` (the scored runs' caches). Definition: `docs/proposals/2026-10-13_auditor-v1.md`
 - `python scripts/synth/auditor_v1.py views` writes the 8 batch views; `rule` runs the rule auditor; `llm --set dev|heldout [--method M] [--repeat K]` runs the LLM auditor (needs a clean tracked tree); `eval` writes `results/2026-10-13_auditor_v1/scores.md`. Test: `tests/test_auditor.py`
