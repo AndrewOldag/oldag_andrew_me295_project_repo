@@ -1,4 +1,4 @@
-"""Tests for scripts/board.py: reading each state, the stale rule, lane guards."""
+"""Tests for scripts/board.py: reading each state, the stale rule, host field, lane guards."""
 
 import subprocess
 import sys
@@ -54,6 +54,28 @@ def test_unknown_state_and_missing_field_rejected(tmp_path):
     (tmp_path / "b" / "c002-x.md").write_text("---\nid: c002\n---\n", encoding="utf-8")
     with pytest.raises(board.BoardError, match="missing"):
         board.collect(tmp_path / "b")
+
+
+def test_host_field(tmp_path):
+    write_task(tmp_path / "a", "c001", "course", "working", host="workstation")
+    write_task(tmp_path / "a", "c002", "course", "queued", host="workstation, cluster")
+    write_task(tmp_path / "a", "c003", "course", "queued")                  # no host line
+    tasks = board.collect(tmp_path / "a")
+    assert [t["host"] for t in tasks] == ["workstation", "workstation, cluster", "-"]
+    assert "workstation, cluster" in board.table(board.rows(tasks, NOW))
+    write_task(tmp_path / "b", "c004", "course", "queued", host="lab server, laptop")
+    with pytest.raises(board.BoardError, match="unknown host 'laptop'"):
+        board.collect(tmp_path / "b")
+    write_task(tmp_path / "c", "c005", "course", "queued", host="lab server, VM (LLM runs)")
+    assert board.collect(tmp_path / "c")[0]["host"] == "lab server, VM (LLM runs)"
+    write_task(tmp_path / "d", "c006", "course", "queued", host="laptop (new files only)")
+    with pytest.raises(board.BoardError, match=r"unknown host 'laptop \(new files only\)'"):
+        board.collect(tmp_path / "d")
+
+
+def test_repo_open_tasks_have_host():
+    open_tasks = [t for t in board.read_folder(ROOT / "tasks", "course") if t["state"] != "done"]
+    assert all(t["host"] != "-" for t in open_tasks), [t["id"] for t in open_tasks if t["host"] == "-"]
 
 
 def test_research_row_in_course_folder_rejected(tmp_path):

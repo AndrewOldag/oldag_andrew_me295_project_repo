@@ -9,6 +9,7 @@ created: 2026-10-16 17:45
 last_update: 2026-10-16 17:45
 blocker: real-tracking midline source does not exist yet
 done_marker: config/frame_quality_reference.yaml real section no longer marked provisional
+host: lab server
 ---
 
 From spec 2026-10-12 (freeze v2 open item), carried by spec 2026-10-13 Task B and inbox fq-real item 5.

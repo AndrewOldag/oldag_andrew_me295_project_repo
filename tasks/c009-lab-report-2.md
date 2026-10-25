@@ -9,6 +9,7 @@ created: 2026-10-23 00:30
 last_update: 2026-10-23 13:30
 blocker: none; final text from the log Thu 29 Oct
 done_marker: docs/reports/2026-10-30_lab-report-2.md, [ANDREW] items resolved
+host: VM
 ---
 
 Spec: `docs/specs/2026-10-23_next-steps-lr2-dispatcher.md`.

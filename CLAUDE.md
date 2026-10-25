@@ -33,7 +33,7 @@ A growing plant root is a slender rod whose material generates its own strain: t
 - Real movies: only roots with `include` yes in `manifest/root_manifest.csv`, and only time inside `usable_from_h` to `usable_to_h`. Nothing outside these windows is used for labeling, training, thresholds, tests or results (Andrew, 2026-10-13)
 - Tracking runs on the lab compute server by default. The computing cluster is used only after Andrew approves a cost estimate
 - No Claude session deletes, moves or renames any file or folder on the lab server, by any means. Andrew deletes there himself, at the end of the project. Only exception: the lock files `scripts/synth/sweep.py` creates and removes for its own sweep. If a step needs a server delete, stop and tell Andrew (Andrew, 2026-10-13)
-- The lab compute server is shared. Every job there: at most 4 single-thread workers, lowest priority, load checked before and between runs, one sweep at a time. Limits in `docs/decisions.md`, 2026-10-11
+- The lab compute server is shared. At most 2 jobs of this account at once (Andrew, 2026-10-23), each at most 4 single-thread workers (8 in total, one quarter of the cores), lowest priority, load checked before and between runs (start only if the 1-min load is below half the cores), at most one `sweep.py` sweep at a time. Limits in `docs/decisions.md`, 2026-10-11 and 2026-10-23
 - The checker contains no LLM calls
 - Remedies come from a fixed list set in advance. No free parameter tuning on data that may go into paper figures
 - Pin the model ID in config. Never commit API keys, tokens or SSH keys
@@ -46,6 +46,7 @@ A growing plant root is a slender rod whose material generates its own strain: t
 ## Agents
 - Every session has a name. Its instructions are in `docs/agents/inbox/<name>.md` on `main`; it reports in `docs/agents/status/<name>.md`. Protocol in `docs/agents/README.md`
 - When Andrew says `check github`, follow that protocol
+- The coordinator is a scheduled tick, not a live session: every 10 min `scripts/ops/coordinator_tick.ps1` skips if no remote ref changed (and the last full pass is under 60 min old), else runs one headless coordinator pass. It replaces the `/loop` of coordinator inbox item 8 (Andrew, 2026-10-24)
 - Live sessions run in Claude Code Agent View (`claude agents`). Worktrees live under `.claude/worktrees/` (git-ignored); branch names stay `wip/<name>`, `heldout/<name>`
 - The task board (`tasks/`, format in `tasks/README.md`) is the source of truth for who is doing what. Each session updates only its own task file, on its own branch: at start, at each commit, at stop. `python scripts/board.py` prints the board
 
@@ -99,6 +100,7 @@ Lab reports go in `docs/reports/`, one file per report, started from `docs/repor
 
 ## Dates
 - Lab report 1: Sun 18 Oct, 11:59 pm (Andrew checked; syllabus and lab guideline say Fri 16 Oct) (related-work note, repo and environment, running log, draft proposal)
+- Build stops: Wed 28 Oct
 - Lab report 2: Fri 30 Oct (1-page proposal; commitment point)
 - Lab report 3: Fri 13 Nov (smallest slice running end to end)
 - Lab report 4: Mon 23 Nov (integrated run; failure modes)

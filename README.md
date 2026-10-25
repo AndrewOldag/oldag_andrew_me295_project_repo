@@ -38,7 +38,7 @@ Course project for AM/ME/CE 295, Caltech, Fall 2026. Start with `CLAUDE.md` and 
 
 ## Diagnostician on a synthetic rod (one slice)
 - `request_info` answers come from the measurement record and the check results (`measure/info.py`). `apply_remedy` changes the run settings (`measure/remedies.py`; table in `docs/decisions.md`), re-runs the measurement and re-checks it (`agents/executors.py`)
-- Runner (`measure/runner.py`), one interface with two forms: `FieldRunner` in process for field-level rods; `RemoteRunner` renders and tracks on the machine that has the tracker. For the remote form copy `config/runner.example.yaml` to `private/runner.yaml` and fill it in (ssh host alias, work and code directories there, tracker env Python)
+- Runner (`measure/runner.py`), one interface with two forms: `FieldRunner` in process for field-level rods; `RemoteRunner` renders and tracks on the machine that has the tracker. For the remote form copy `config/runner.example.yaml` to `private/runner.yaml` and fill it in (host alias, work and code directories there, tracker env Python)
 - `python scripts/demo_slice.py --fault displacement_exceeds_patch` renders one rod with that fault, tracks and checks it, runs the diagnostician, and prints the truth, the error before and after, and the outcome. Trace and summary in `results/<date>_demo_slice/`. `--no-agent` stops after the first check; `--runner field` runs a field-level rod in process
 
 ## Single-agent baseline
@@ -53,9 +53,33 @@ Course project for AM/ME/CE 295, Caltech, Fall 2026. Start with `CLAUDE.md` and 
 - `python scripts/synth/scored_v1.py next --set dev|heldout` starts the tracker runs the script and remedy tree still need as one sweep; `status`, `fetch`; repeat until `next` needs nothing. Then `rules --set S`, `agents --set S --method diagnostician|single_agent` (needs a clean tracked tree; each run records the freeze tag and commit; runs with a summary are skipped), and `eval`, which writes `results/2026-10-12b_scored_v1/table_dev.md`, `table_heldout.md` and `scores.json`
 - Held-out labels: `python scripts/synth/heldout_labels.py start`, `status`, `fetch`, `eval --out results/2026-10-12b_heldout_labels`
 
+## Freeze v3 scored runs (51 rods, five methods, repeats)
+- Definition: `docs/proposals/2026-10-23_freeze-v3.md`. Driver `scripts/synth/scored_v3.py`; outputs in `results/2026-10-23_freeze_v3/`; tracker cache `staging/tracks_freeze_v3/`
+- Each phase: `python scripts/synth/scored_v3.py plan --phase P` (`--dry-run` prints the run count) starts one sweep of the tracker runs still needed; `status`; `fetch` after it ends; then the phase's report. Repeat `plan` until it needs nothing (registration and `enlarge_patch` states need the unremedied run first)
+  1. `--phase basis`, then `basis`: clean v3 rods, seeds 10-14, against the approved thresholds and flank tolerance (`basis.md`)
+  2. `--phase sizing`, then `sizing`: held-out sizes at v3 geometry, seeds 10-12 (`sizing.md`, `sizing.json`)
+  3. `--phase labels`, then `labels`: labels of the 51 scored rods, seeds 20-22 (`labels.md`, `labels.json`)
+  4. Tag `freeze-v3`. `--phase methods`, then `rules` (script and remedy tree), then `agents --method diagnostician|single_agent --repeat 0|1|2` (clean tracked tree needed)
+  5. `eval`: metrics from `measure/metrics.py` (`table_metrics.md`, `metrics.json`, `scores.json`)
+- Stops: a clean basis value over a threshold or the flank tolerance, a held-out size that changes, more than half of the labelled set in decline, or more than 600 tracker runs. Each stop is for Andrew
+- On the tracker machine nothing is renamed or overwritten: outputs and rods are complete when their `.ok` marker exists; code goes to a folder per commit (`docs/decisions.md`, 2026-10-23)
+
+## Freeze v3.1 sizing (ended at its stop rule; v3 stays the scored set)
+- Spec `docs/specs/2026-10-24_freeze-v3.1.md`. Driver `scripts/synth/scored_v31.py` (the v3 driver with a new cache `staging/tracks_freeze_v31/` and output folder `results/2026-10-24_freeze_v3.1/`; states in a local copy of the v3 cache `staging/tracks_freeze_v3/` are reused)
+- `plan --phase sizing` starts one sweep of the states still needed; `status`; `fetch`; `sizing` writes `sizing.md`. `second-root` writes `second_root.md` from the v3 runs. Test: `tests/test_freeze_v31.py`
+- The tracker host comes from `private/runner.yaml`; optional `rods_dir` and `max_gb` (template `config/runner.example.yaml`)
+
 ## Auditor v1 (scored runs v1, no tracker runs)
 - Reads the cached final records of `results/2026-10-12b_scored_v1/` from `staging/` (the scored runs' caches). Definition: `docs/proposals/2026-10-13_auditor-v1.md`
 - `python scripts/synth/auditor_v1.py views` writes the 8 batch views; `rule` runs the rule auditor; `llm --set dev|heldout [--method M] [--repeat K]` runs the LLM auditor (needs a clean tracked tree); `eval` writes `results/2026-10-13_auditor_v1/scores.md`. Test: `tests/test_auditor.py`
+
+## Dispatcher (fake queue, no real jobs)
+- Proposal `docs/proposals/2026-10-23_dispatcher.md` (approved 2026-10-23); settings `config/dispatcher.yaml`; code `agents/dispatcher.py`, prompt `agents/prompts/dispatcher.md`
+- `python scripts/demo_dispatcher.py` runs the script baseline over every include-yes root on the fake queue (2 h windows, 4 lab-server workers, 20 injected crashes retried once) and prints the summary: windows by state, core-hours, retries, peak workers, wall hours. No LLM call
+- The engine, not the agent, enforces the limits: include-yes rows and usable windows only; lab-server worker limit and load rule; cluster submits only inside an approved budget in `config/compute_budget.yaml` (absent = 0). Test: `tests/test_dispatcher.py`
+- Real-movie tracking of one window: `scripts/remote/qb_track.py --from-h H0 --to-h H1 --movie real` with a midline from `scripts/remote/real_midline.py` (provisional); timing driver `scripts/remote/time_window.sh`. Results `results/2026-10-23_tracker_timing/`
+- Smallest real slice, end to end (dispatcher -> tracker -> checker -> diagnostician -> auditor): `python scripts/real_slice.py` (defaults: root 0708_m12, 4-6 h; `--dispatcher script` for the baseline; `--no-agent` for dispatcher script, tracker and checker only; `--audit-only` re-runs only the auditor on a recorded batch). Needs `private/real_runner.yaml` (template `config/real_runner.example.yaml`; `--config` for another file). A window without a `midline` entry gets its net midline built on the compute host first (segmentation midline, the tracker's `batch_midlines.py` in tile mode with the fine-tuned net2, `scripts/remote/net_to_midline.py`). Writes traces and `summary.json` to `results/<date>_real_slice/`. Real-movie profile: closure gates; rigid invariance and plane sections are reported, not gating (`docs/decisions.md`, 2026-10-24). Test: `tests/test_real_slice.py`
+- Three-root real slice (control, drought, recovery): `python scripts/real_slice.py --windows 0708_m12:4-6 0711_c2:4-6 0721_m10:4-6 --config private/real_runner.yaml private/real_runner_lab.yaml --out results/2026-10-24_real_slice_3roots_c2`. With several configs each window runs on the host of the first config that lists it (here 0708_m12 and 0721_m10 on the workstation, 0711_c2 on the lab server; control 0711_c2 replaced 0711_c1, decisions 2026-10-24). Each run carries its root's condition; the auditor's task asks it to compare the conditions. Midline net `net2_midline_ft2.pt` (`docs/decisions.md`, 2026-10-24), set by `midline_weights` and `midline_tag: ft2` in the runner config; the tag goes into every output name. The runner waits before each host step while free VM memory is below 1.5 GB
 
 ## Task board
 - One file per task in `tasks/` (format in `tasks/README.md`). Research-lane tasks use the same format in a folder outside every git repo
@@ -65,6 +89,7 @@ Course project for AM/ME/CE 295, Caltech, Fall 2026. Start with `CLAUDE.md` and 
 ## VM heartbeat and backup by hand (Windows VM)
 - Copy `config/backup.example.conf` to `private/backup.conf` and fill it in (server alias and backup folder, sources, scheduler paths)
 - `powershell -File scripts/ops/install_schedule.ps1` copies `heartbeat.sh` and `hidden.vbs` to `OPS_DIR` and registers the scheduled task `me295-heartbeat`, every 5 min: it appends date and uptime to the health log; a gap over 10 min adds a `GAP` line, the first gap also writes `FIRST_GAP` beside the log. `-S4U` (elevated shell) runs it when nobody is logged on; `-Remove` unregisters it
+- Coordinator tick (elevated shell): `powershell -File scripts/ops/install_coordinator_tick.ps1` copies `coordinator_tick.ps1` and `hidden.vbs` to `OPS_DIR` and registers `me295-coordinator-tick`, every 10 min, S4U. A tick skips (no Claude call) if no remote ref changed and the last full pass is under 60 min old; else it runs one headless coordinator pass (`claude -p`), stopped at 20 min. Log: `OPS_DIR/coordinator_tick/tick.log`. Check: `Get-ScheduledTask me295-coordinator-tick | Get-ScheduledTaskInfo`. By hand: `powershell -File scripts/ops/coordinator_tick.ps1 [-Force]`. `-Remove` unregisters it
 - There is no scheduled backup. `bash scripts/ops/backup_vm.sh --conf private/backup.conf [--tag T] run` makes one backup by hand: bundles, tarballs, `SHA256SUMS`, `RESTORE.md` in a dated folder on the server, checked there with `sha256sum -c`. It never overwrites a folder and never deletes anything on the server. Test: `tests/test_ops.py`
 
 ## Tools

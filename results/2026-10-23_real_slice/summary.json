@@ -1,0 +1,149 @@
+{
+ "root": "0708_m12",
+ "window_h": [
+  4.0,
+  6.0
+ ],
+ "dispatcher_mode": "agent",
+ "dispatcher": {
+  "status": "finish",
+  "rounds": 2,
+  "minute": 15.0,
+  "windows": 1,
+  "states": {
+   "collected": 1
+  },
+  "lab_core_hours": 0.05,
+  "cluster_core_hours": 0,
+  "refused": 0,
+  "cluster_refused": 0,
+  "approvals": 0,
+  "retries": 0,
+  "retry_successes": 0,
+  "lab_peak_workers": 1
+ },
+ "tasks": {
+  "0708_m12__w4": {
+   "outcome": {
+    "task_id": "0708_m12__w4",
+    "agent": "diagnostician",
+    "status": "decline",
+    "args": {
+     "fault": "midline_jitter",
+     "reason": "Light midline smoothing lowered plane sections from 133.6 to 25.9 %/h, but it still fails the 3.25 %/h threshold. Closure now fails too (2.857 vs 1.0 px/h). Smoothing cannot be applied again, and no other fault has its own evidence, so the strain-rate and curvature measurements cannot be trusted."
+    },
+    "steps": 5,
+    "failed_steps": 0,
+    "calls": 5,
+    "input_tokens": 21594,
+    "output_tokens": 2077,
+    "call_ms": 24391
+   },
+   "remedies": [
+    "midline source smoothed (light)"
+   ],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": NaN,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "where_s_px": null,
+     "where_frame_pair": null,
+     "detail": "no rigidly moved run supplied"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 0.9451584314749232,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "where_s_px": 488.6768886848489,
+     "where_frame_pair": 26,
+     "detail": "tip path 123.3 px/h; base at s = 489 px; largest single-pair residual at pair 26"
+    },
+    {
+     "check": "plane_sections",
+     "passed": false,
+     "value": 133.56398187134477,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "where_s_px": 475.0,
+     "where_frame_pair": null,
+     "detail": "flank difference 33.99 %/h, predicted 167.56 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": "light",
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": NaN,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "where_s_px": null,
+     "where_frame_pair": null,
+     "detail": "no rigidly moved run supplied"
+    },
+    {
+     "check": "closure",
+     "passed": false,
+     "value": 2.8571246437554954,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "where_s_px": 488.33889557939136,
+     "where_frame_pair": 78,
+     "detail": "tip path 97.9 px/h; base at s = 488 px; largest single-pair residual at pair 78"
+    },
+    {
+     "check": "plane_sections",
+     "passed": false,
+     "value": 25.929747017365838,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "where_s_px": 335.0,
+     "where_frame_pair": null,
+     "detail": "flank difference 24.49 %/h, predicted -1.44 %/h"
+    }
+   ]
+  }
+ },
+ "auditor": {
+  "status": "report",
+  "report": "Batch: 1 run (r01). Accepted: 0. Flagged: 0. Cleared: 0.\nr01 was declined. Its final closure check failed (2.857 against a threshold of 1.0). Its plane-sections check also failed (25.93 against 3.25), with constant width assumed. Rigid-body invariance was not run. The run took 5 steps, kept 1 remedy and had 0 roll backs.\nNo accepted runs were flagged, so there is nothing they share. With only one run, there are no batch medians or z-scores to compare against. Nothing from this batch will be reported.",
+  "decisions": {},
+  "accepted": [],
+  "runs": {
+   "r01": "decline"
+  },
+  "steps": 1,
+  "calls": 1,
+  "input_tokens": 3923,
+  "output_tokens": 406,
+  "mode": "--audit-only on the recorded batch"
+ },
+ "runner_log": [
+  {
+   "track": "0708_m12__w4-6__st1_mslight4__L400.npz",
+   "run_s": 8.4,
+   "frames": 80,
+   "load1_before": 0.06,
+   "free_gb_before": 35.0,
+   "free_gb_after": 35.0
+  }
+ ],
+ "wall_s": 71.0,
+ "model": "claude-opus-5-5",
+ "claude_code": "2.1.310"
+}

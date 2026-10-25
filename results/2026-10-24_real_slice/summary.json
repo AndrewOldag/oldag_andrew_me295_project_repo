@@ -1,0 +1,170 @@
+{
+ "root": "0708_m12",
+ "window_h": [
+  4.0,
+  6.0
+ ],
+ "dispatcher_mode": "agent",
+ "dispatcher": {
+  "status": "finish",
+  "rounds": 2,
+  "minute": 30.0,
+  "windows": 1,
+  "states": {
+   "collected": 1
+  },
+  "lab_core_hours": 0.05,
+  "cluster_core_hours": 0,
+  "refused": 0,
+  "cluster_refused": 0,
+  "approvals": 0,
+  "retries": 0,
+  "retry_successes": 0,
+  "lab_peak_workers": 1
+ },
+ "tasks": {
+  "0708_m12__w4": {
+   "outcome": {
+    "task_id": "0708_m12__w4",
+    "agent": "diagnostician",
+    "status": "decline",
+    "args": {
+     "fault": "midline_jitter",
+     "reason": "Rigid invariance still fails (8.83 %/h vs 2.0). Light midline smoothing raised it to 16.76 %/h, smooth_midline has no other setting, and no other fault has its own evidence."
+    },
+    "steps": 5,
+    "failed_steps": 0,
+    "calls": 5,
+    "input_tokens": 20833,
+    "output_tokens": 2660,
+    "call_ms": 31286
+   },
+   "remedies": [
+    "midline source smoothed (light)",
+    "rolled back: midline source smoothed (light)"
+   ],
+   "roll_backs": 1,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": false,
+     "value": 8.833899198812892,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "where_s_px": 435.0,
+     "where_frame_pair": null,
+     "detail": "largest change in regr_mid"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 0.9451584314749232,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "where_s_px": 488.6768886848489,
+     "where_frame_pair": 26,
+     "detail": "tip path 123.3 px/h; base at s = 489 px; largest single-pair residual at pair 26"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 133.56398187134477,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "where_s_px": 475.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; would fail): flank difference 33.99 %/h, predicted 167.56 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": false,
+     "value": 8.833899198812892,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "where_s_px": 435.0,
+     "where_frame_pair": null,
+     "detail": "largest change in regr_mid"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 0.9451584314749232,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "where_s_px": 488.6768886848489,
+     "where_frame_pair": 26,
+     "detail": "tip path 123.3 px/h; base at s = 489 px; largest single-pair residual at pair 26"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 133.56398187134477,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "where_s_px": 475.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; would fail): flank difference 33.99 %/h, predicted 167.56 %/h"
+    }
+   ]
+  }
+ },
+ "auditor": {
+  "status": "report",
+  "report": "Batch: 1 run (r01). Accepted: 0. Flagged: none. Cleared: none.\nr01 was declined. Its final rigid-body invariance check failed (8.834 against a threshold of 2.0), so the tracker's strain-rate field changed when a known rigid motion was added. Closure passed (0.945 against 1.0). Plane sections was computed (133.564 against 3.25) but doesn't gate on this profile.\nr01 finished with 5 steps, 0 remedies kept and 1 roll back. Its centre REGR peak was 55.51 %/h at 579 \u00b5m from the tip, with a growth zone of 674 \u00b5m and a largest flank difference of 34.45 %/h at 989 \u00b5m. These can't be compared with other roots because this is the only run in the batch.\nNothing was flagged, so the flagged runs have nothing in common to report. The decline matches the failed invariance check.",
+  "decisions": {},
+  "accepted": [],
+  "runs": {
+   "r01": "decline"
+  },
+  "steps": 1,
+  "calls": 1,
+  "input_tokens": 3962,
+  "output_tokens": 530,
+  "mode": "--audit-only on the recorded batch"
+ },
+ "runner_log": [
+  {
+   "moved_copy": "0708_m12__w4-6",
+   "frames_moved": 80,
+   "rotation_deg_end": 7.9,
+   "shift_px_end": [
+    39.5,
+    23.7
+   ],
+   "run_s": 1.9,
+   "free_gb_before": 35.0,
+   "free_gb_after": 34.0
+  },
+  {
+   "track": "0708_m12__w4-6_moved__st1__L400.npz",
+   "run_s": 8.7,
+   "frames": 80,
+   "load1_before": 0.08,
+   "free_gb_before": 34.0,
+   "free_gb_after": 34.0
+  },
+  {
+   "track": "0708_m12__w4-6_moved__st1_mslight4__L400.npz",
+   "run_s": 8.7,
+   "frames": 80,
+   "load1_before": 0.22,
+   "free_gb_before": 34.0,
+   "free_gb_after": 34.0
+  }
+ ],
+ "wall_s": 129.1,
+ "model": "claude-opus-5-5",
+ "claude_code": "2.1.310"
+}

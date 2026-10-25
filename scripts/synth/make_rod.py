@@ -3,11 +3,14 @@
   python scripts/synth/make_rod.py --out DIR --case growth_zone [--fault low_texture] [--seed 0] [--moved]
 
 Writes DIR/<id>.imgdir (tracker input), DIR/<id>_midline.npz (midline source,
-tracker seed, frame-0 mask) and DIR/<id>_truth.npz, and prints <id> and the
-analysis stride. Held-out faults are rendered by measure/render_heldout.py.
+tracker seed, frame-0 mask, track length) and DIR/<id>_truth.npz, then
+DIR/<id>.ok, and prints <id> and the analysis stride. Refuses a rod whose
+.imgdir exists (write once). Held-out faults are rendered by
+measure/render_heldout.py.
 """
 import argparse
 import json
+import os
 import sys
 import time
 from pathlib import Path
@@ -36,7 +39,12 @@ if a.dry_run:
     rid = rod_id(a.case, a.fault, a.seed, a.moved, a.width_kappa_inv, a.rotation_deg, a.size)
     print(json.dumps({"id": rid, "stride": movie.stride}))
     sys.exit(0)
+rid = rod_id(a.case, a.fault, a.seed, a.moved, a.width_kappa_inv, a.rotation_deg, a.size)
+if (Path(a.out) / f"{rid}.imgdir").exists():          # write once: never overwrite a rendered rod (CLAUDE.md)
+    sys.exit(f"rod exists, not overwritten: {rid}")
 rid = build(a.out, a.case, a.fault, a.seed, a.moved, width_kappa_inv=a.width_kappa_inv,
             rotation_deg=a.rotation_deg, size=a.size)
+fd = os.open(Path(a.out) / f"{rid}.ok", os.O_CREAT | os.O_EXCL | os.O_WRONLY)    # the rod is complete
+os.close(fd)
 _, movie = image_case(a.case, a.fault, a.seed, a.moved, a.width_kappa_inv, a.rotation_deg, a.size)
 print(json.dumps({"id": rid, "stride": movie.stride, "render_s": round(time.time() - t0, 1)}))

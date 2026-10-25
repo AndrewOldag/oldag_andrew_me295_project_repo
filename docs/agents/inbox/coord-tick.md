@@ -1,0 +1,14 @@
+# Inbox: coord-tick
+
+Lane: course (operations). Branch `wip/coord-tick`. Task `tasks/c016-coord-tick.md`. Read `CLAUDE.md`, `docs/agents/README.md`, `docs/agents/inbox/coordinator.md` (all standing items), `scripts/ops/` (heartbeat and schedule scripts from the 16 Oct VM setup).
+
+1. Andrew, 2026-10-24: the coordinator keeps stopping (its `/loop` lives in one background session, which ends on VM memory pressure or idle). Replace it with a scheduled tick that does not depend on a live session:
+   - `scripts/ops/coordinator_tick.ps1`: (a) lock file in a local ops folder outside the repo so two ticks never overlap; (b) `git fetch origin` in the main checkout; (c) hash of all remote refs (`git ls-remote origin` sorted) compared with the last tick's hash, kept in the ops folder; (d) unchanged and fewer than 60 min since the last full run: log one line and exit, no Claude call; (e) otherwise run one headless coordinator pass: `claude -p "<prompt>"` from the main checkout, with the prompt: act as the coordinator session for exactly one check per `docs/agents/README.md` and every standing item in `docs/agents/inbox/coordinator.md`, then update and push `docs/agents/status/coordinator.md` and exit; (f) log start, end, exit code and the commit it saw, one line each, to the ops log; (g) a pass longer than 20 min is stopped and logged
+   - The full run at least every 60 min also covers server-job markers (coordinator item 16) when no ref changed
+   - Pings: if the headless pass has the message tool for other local sessions, it pings as item 8 says. If not, it writes the names to ping under Needs Andrew and the tick log; do not start new sessions from the tick
+   - `scripts/ops/install_coordinator_tick.ps1`: registers a Windows Scheduled Task `me295-coordinator-tick`, every 10 min, run whether the user is logged on or not (S4U, as the heartbeat), hidden window, no overlap (`MultipleInstances IgnoreNew`). Do not run it yourself: Andrew runs it from an elevated shell
+   - `tests/test_ops.py`: the hash compare and the skip path (no Claude call on unchanged refs), with git stubbed
+2. Test the script once by hand (not scheduled): one skip tick and one full pass. Report run time and tokens of the full pass if the CLI prints them
+3. Update `docs/agents/README.md` and `CLAUDE.md` (Agents): the coordinator is a scheduled tick, not a live session; the old `/loop` item 8 is replaced. Decisions entry. Add a line to the coordinator inbox saying the same
+4. Status ready to merge, with the exact command Andrew runs to install the task and the command to check it (`Get-ScheduledTask me295-coordinator-tick | Get-ScheduledTaskInfo`)
+5. Rules: no deletes; nothing in tracked files names machines, accounts or paths outside the repo (ops folder location goes in `private/`); the tick never runs tracker or server jobs itself
