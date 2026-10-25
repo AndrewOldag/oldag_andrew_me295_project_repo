@@ -32,12 +32,14 @@ for f, v, txy in zip(np.asarray(z["frames"], int), z["midline"], np.asarray(z["t
     m = root_mask(img)
     P = seg["midline_image"][seg_frames.index(f)]                       # (K, 2) row, col, tip first
     s = np.concatenate([[0.0], np.cumsum(np.linalg.norm(np.diff(P, axis=0), axis=1))])
-    back = P[int(np.searchsorted(s, 40.0))]
-    u = (P[0] - back) / np.linalg.norm(P[0] - back)
-    ys, xs = np.nonzero(m)
-    pts = np.column_stack([ys, xs]).astype(float)
-    near = np.linalg.norm(pts - P[0], axis=1) < 80.0
-    apex = pts[near][np.argmax((pts[near] - P[0]) @ u)] if near.any() else None
+    k = int(np.searchsorted(s, 40.0))
+    apex = None
+    if k < len(P):                                                      # seg midline shorter than 40 px: no apex
+        u = (P[0] - P[k]) / np.linalg.norm(P[0] - P[k])
+        ys, xs = np.nonzero(m)
+        pts = np.column_stack([ys, xs]).astype(float)
+        near = np.linalg.norm(pts - P[0], axis=1) < 80.0
+        apex = pts[near][np.argmax((pts[near] - P[0]) @ u)] if near.any() else None
     poly = valley_to_polyline(v, float(tf["scale"]), valley_thresh=128, spacing=10.5 / 2.105)
     if poly is None or apex is None:
         rows.append({"frame": int(f), "end_to_apex_px": None, "seg_tip_in_mask": bool(m[tuple(np.round(P[0]).astype(int))])})

@@ -3,7 +3,7 @@
 Dispatcher session, 2026-10-24. Spec `docs/specs/2026-10-24b_real-movie-push.md`, section C; dispatcher inbox item 31. Fixed before any run of this subset. Nothing here is a result.
 
 ## Rule
-- Pool: `include` yes, montage imgdir, `stage_tracking_log` yes, empty `notes` and `flags`, usable window covering 4-19 h. 0711_c1 is left out (replaced in the 3-root slice; its run stays a reported failure)
+- Pool: `include` yes, montage imgdir, `stage_tracking_log` yes, empty `notes`, no `flags` other than the 0727 acquisition gap (every 0727 root has it; the windows end before it), usable window covering 4-19 h. The gap exception was written in on 2026-10-24 after the first probe, when the 0727 backup check showed the first version excluded every 0727 root it had picked 0711_c1 is left out (replaced in the 3-root slice; its run stays a reported failure)
 - 16 slots: 5 control, 5 drought (mannitol; 0727 "mannitol then mannitol" counts as drought), 6 recovery (mannitol then control). All 5 experiments appear
 - 0708_m12, 0711_c2, 0721_m10 are fixed slots (spec C)
 - Each other slot has a pick and a backup from the same experiment and condition. The backup is used only if the pick fails the tip rule. If both fail: the next pool root of the same experiment and condition in manifest order, at most 3 tries per slot; then the slot is left empty and reported
