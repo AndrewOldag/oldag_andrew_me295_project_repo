@@ -1,0 +1,11 @@
+## 2026-10-24 (build account, real-calib session)
+- Done: spec 2026-10-24b B. Calibration set and threshold rule committed before any compute (fce35c7, 0eb0839, 2aa1b9b; `docs/proposals/2026-10-24_real-calibration.md`): 16 control windows, 8 roots, 4 experiments, 7-9 h and 15-17 h; no overlap with the section C subset (agreed with the dispatcher session); fixed non-growing roots not used (other rig, about 0.84 um/px)
+- Done: cluster work folder cap raised from 30 to 40 GB (Andrew; 51ff21f). ft2 midlines built by the section C chain on the cluster GPU (2 jobs on its ledger; spend since 2026-10-23 $0.92 of $15 after the first)
+- Done: main merged (section A, 1000 px real tracks; 68ed54e); calibration at 1000 px with base diagnostics and short-midline flag (2c84074)
+- Done: `scripts/real_calib.py` run on the lab server (single thread, nice 19, host checks): 18 windows from 9 roots; 12 measured; 5 screened out (tip 15.8-1189 px from the apex); 1 probe error; replacement root 0714_c13 added by the rule
+- Done: real thresholds by the rule: closure 18 px/h (p95 17.35, median 3.50, max 28.9, p95 without the largest 6.73); rigid invariance 92 %/h (p95 91.81, median 35.8, max 97.8); plane sections no threshold (p95 363). Decisions entry; `results/2026-10-25_real_calibration/`
+- Done: `python -m pytest -q tests`: 305 passed, 1 skipped
+- Failed: first-pass host log overwritten by the second pass (script fixed to append)
+- Demo: `python scripts/real_calib.py summary` prints the per-window table and the p95 and threshold rows (closure 18, rigid invariance 92)
+- Remaining: section C applies the thresholds in its real-movie profile; Andrew decides whether rigid invariance gates on real windows
+- Bottlenecks: none
