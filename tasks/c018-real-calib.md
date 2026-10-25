@@ -3,12 +3,12 @@ id: c018
 title: Real-image noise floor and real-movie thresholds
 lane: course
 owner: real-calib
-state: waiting on Andrew
+state: working
 branch: wip/real-calib
 host: cluster, lab server (light)
 created: 2026-10-24 16:45
-last_update: 2026-10-24 20:30
-blocker: cluster work folder cap for 24 new calibration midlines
+last_update: 2026-10-24 22:00
+blocker: none
 done_marker: proposal committed first; thresholds in decisions
 ---
 
