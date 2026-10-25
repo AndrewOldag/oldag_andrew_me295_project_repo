@@ -1,12 +1,14 @@
 # coordinator
-Updated: 2026-10-24 17:25 (local)
+Updated: 2026-10-24 17:40 (local)
 Lane: course
 Branch: main
 Last inbox item done: 22
 State: working
 Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8 (relay part), 10, 11, 16, 17 (item 20)
-Last-seen main: 835b522
+Last-seen main: 9c16696
 Done since last update:
+- 2026-10-24 17:40 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working 17:37, wip/real-calib waiting on Andrew 17:00, wip/lab-report-2 working 13:29)
+- 17:40: item 8: no inbox change since 835b522; no pings. Item 10: no status waits on an agent. Item 16: no status says `waiting on server job`
 - 2026-10-24 17:25 (tick): item 1: merged wip/closure-fix (835b522; ready to merge 17:03); no conflicts; suite 303 passed, 1 skipped; log entry moved. Other unmerged: wip/dispatcher working 16:56, wip/real-calib waiting on Andrew 17:00, wip/lab-report-2 working 13:29
 - 17:25: item 8: no inbox change since ccb2dbf; no pings. Item 10: no status waits on an agent (real-calib waits on Andrew). Item 16: no status says `waiting on server job`. Note for dispatcher (section C): closure-fix says real windows now track to 1000 px (cache names L1000); no inbox item carries this yet
 - 2026-10-24 17:03 (tick): item 1: merged wip/diag-analysis (1ff1369; ready to merge 16:50); no conflicts; suite 303 passed, 1 skipped; log entry moved. Other unmerged: wip/dispatcher working 16:56, wip/closure-fix working 16:52, wip/real-calib waiting on Andrew 16:57, wip/lab-report-2 working 13:29
@@ -82,7 +84,7 @@ Branches (last commit, state):
 - wip/coord-tick: 2026-10-24 13:09, ready to merge, merged 9aa97bf
 - wip/freeze-v3: 2026-10-24 04:16, ready to merge, merged 2ebd422
 - status/turn-long: 2026-10-24 02:42, done (research lane, not merged)
-- wip/dispatcher: 2026-10-24 16:56, working (15:37 merged 5a4767f)
+- wip/dispatcher: 2026-10-24 17:37, working (15:37 merged 5a4767f)
 - wip/lab-report-2: 2026-10-23 13:29, working
 - wip/closure-fix: 2026-10-24 17:03, ready to merge, merged 835b522
 - wip/diag-analysis: 2026-10-24 16:50, ready to merge, merged 1ff1369
