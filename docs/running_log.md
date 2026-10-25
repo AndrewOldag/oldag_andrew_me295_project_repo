@@ -684,3 +684,26 @@ Required by the course. One entry per work session: done, remaining, bottlenecks
 - Demo: the README command in that results folder prints check values, diagnostician outcomes and the auditor report
 - Remaining: merge wip/dispatcher (ready); real-movie closure root cause is a research-lane item after 28 Oct
 - Bottlenecks: none for the course slice
+
+## 2026-10-24 (build account, session diag-analysis)
+- Done: task c020, spec 2026-10-24b section D. From the freeze v3 traces only; 0 tracker runs, 0 LLM calls
+- Done: `docs/proposals/2026-10-25_diagnostician-repair-misses.md`; read-only table `scripts/synth/repair_misses.py`
+- Found: accept_repaired, diagnostician 16 of 36 correct, 20 misses, all decline, 0 at the step limit. Remedy tree 9 of 12
+- Found: group A, 11 runs (rigid_drift 6, bad_stage_correction 5): declined with no remedy tried, 10 at step 2 after `stage_log_summary` only. Stated reason: no listed remedy fixes a stage-correction error. `register_frames` repairs all 6 rods in the label sweep; the 7 correct runs applied it on identical evidence
+- Found: at v3 geometry the stage moves on 40 of 40 pairs, so the at-moves / elsewhere split of `stage_log_summary` carries no information. rigid_drift named bad_stage_correction in 9 of 9 runs
+- Found: group B, 9 runs (stage_log_missing): `register_frames` applied 9 of 9, then rolled back, because closure after registration is not computable and `no_progress` counts that as unresolved. The label rule (`checks_pass`) drops it and labels the rod repairable. Remedy tree fails the same way (0 of 3)
+- Proposal: C1 prompt fault-to-remedy map; C2 per-pair spread in `stage_log_summary`; C3 roll-back and label rules to agree (Andrew, option a or b). None applied
+- Note for the planning account: `docs/proposals/2026-10-25_not-computable-check-rule.md` (C3, to resolve with Andrew)
+- Demo: `python scripts/synth/repair_misses.py` prints one line per run and the counts per fault and group
+- Remaining: Andrew decides C1-C3 for a later freeze (not v3.1: prompts unchanged there)
+- Bottlenecks: none
+
+## 2026-10-24 (build account, session closure-fix, task c017)
+- Done: spec 2026-10-24b A. Tests (1)-(4) on the cached ft2 tracks of 0708_m12, 0711_c2, 0721_m10 (4-6 h): no definition closes at 400 px (2.73-20.43 px/h); `scripts/closure_definitions.py`, `results/2026-10-25_closure_definition/definitions.json`
+- Done: cause found at the chain base, not at the tip: the 400 px base lies in the growth zone (world speed about 0 only past s = 550-650 px); base moved 5.4, 38.8, 11.1 px over 2 h. The chain starts at the midline end (gap 0 px), not 35 px behind it
+- Done: chain-base test on the lab server, 9 tracker runs (400, 700, 1000 px; one at a time, single thread, nice 19, own task folder c017): closure at 1000 px 2.36, 3.17, 2.19 px/h; `scripts/closure_base_test.py`, `base_test.json`
+- Done: stage checks: steps whole multiples of 2.105 um; sign + and lag 0 best on 0708_m12 and 0721_m10
+- Done: fix: definition (1) kept, real windows tracked to 1000 px (`measure/real_runner.py`); decisions entry; v3 validation 153 values unchanged (largest change 0.0, `scripts/closure_v3_validate.py`); pytest 303 passed, 1 skipped
+- Demo: `python scripts/closure_v3_validate.py --tracks staging/tracks_freeze_v3` prints max_diff 0.0 and pass_changed 0
+- Remaining: B computes real thresholds with 1000 px tracks; C reruns its windows at 1000 px (new cache names, L1000); rigid invariance at 1000 px not yet tested
+- Bottlenecks: none

@@ -15,6 +15,9 @@ select another net (inbox item 22: `net2_midline_ft2.pt`, tag `ft2`); the tag go
 midline, host track and cache name, so outputs of different nets never overwrite each other. Whole-pixel copy frames do
 not depend on the midline; an existing copy of the window is reused (scripts/remote/real_moved.py).
 
+Tracked length 1000 px (spec 2026-10-24b A): the chain base, which closure takes as fixed in the world, lies past
+the growth zone; at 400 px it moved 5-39 px over 2 h with growth (results/2026-10-25_closure_definition/).
+
 VM memory (inbox item 22): before every host step the runner waits while free VM memory is below 1.5 GB.
 
 Limits on the host, checked before every tracker run: 1 min load at most half the cores; fewer than
@@ -52,6 +55,9 @@ MIDLINE_WEIGHTS = "net2_midline_ft.pt"
 MIDLINE_ARGS = ["--mode", "tile", "--lo", "0.1", "--hi", "99.5", "--workers", "1"]
 MIDLINE_THREADS = 3
 VM_MIN_FREE_GB = 1.5
+# Tracked length on real windows (spec 2026-10-24b A): closure assumes a basal point fixed in the world, and on
+# real roots the growth zone reaches 550-650 px from the tip, so a 400 px chain ends in growing tissue
+TRACK_LENGTH = 1000.0
 
 
 def vm_free_gb():
@@ -95,7 +101,7 @@ class HostBusy(RuntimeError):
 class RealRunner:
     form = "real_window"
 
-    def __init__(self, config=REAL_CONFIG, cache=None, track_length=400.0, moved=True, moved_mode="whole_pixel"):
+    def __init__(self, config=REAL_CONFIG, cache=None, track_length=TRACK_LENGTH, moved=True, moved_mode="whole_pixel"):
         cfg = yaml.safe_load(Path(config).read_text())
         self.host, self.work, self.code, self.tracker, self.python = (
             cfg["host"], cfg["work_dir"], cfg["code_dir"], cfg["tracker_code"], cfg["python"])
