@@ -1,12 +1,14 @@
 # coordinator
-Updated: 2026-10-24 19:12 (local)
+Updated: 2026-10-24 19:40 (local)
 Lane: course
 Branch: main
 Last inbox item done: 24
 State: working
 Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8 (relay part), 10, 11, 16, 17 (item 20)
-Last-seen main: be59c7c
+Last-seen main: 00b1705
 Done since last update:
+- 2026-10-24 19:40 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working 19:10, wip/lab-report-2 working 13:29)
+- 19:40: item 8: inboxes changed in 00b1705 (dispatcher item 34: hold checks until new threshold; real-calib item 5: option b, at least 40 calibration windows). Pinged dispatcher and real-calib 19:40 (`check github`). Item 10: no status waits on an agent. Item 16: no status says `waiting on server job`
 - 2026-10-24 19:12 (tick): item 1: merged wip/real-calib (7aab080; ready to merge 20:10 by its status clock); no conflicts; suite 305 passed, 1 skipped; log entry moved. Other unmerged: wip/dispatcher working 19:10, wip/lab-report-2 working 13:29
 - 19:12: item 8: no inbox change since 2adb132; no pings. Item 10: no status says `waiting on <agent>` (dispatcher says working; its Now waits on B's thresholds, now on main in 7aab080). Item 16: no status says `waiting on server job`
 - 2026-10-24 19:00 (tick): item 24: wip/closure-fix (835b522) and wip/diag-analysis (1ff1369, 0d9ddf8) already merged; no commits on either branch beyond main; nothing to merge
@@ -107,7 +109,6 @@ Branches (last commit, state):
 - status/gate2: deleted from the remote
 - wip/readme-check, wip/vm-setup, wip/auditor-v1b, wip/fq-real, wip/auditor-v1, wip/scored-v1, wip/freeze-v2, heldout/faults, wip/baselines, wip/diag-review, wip/lab-report-1, wip/gatekeeper: merged
 Needs Andrew:
-- real-calib (merged): closure threshold 18 px/h is set by one window (0711_c7 w7-9, 28.9 px/h); p95 without it 6.73. Rule change is yours. real-calib session now idle; can be closed
 - closure-fix (merged): closure at 1000 px still 2.2-3.2 px/h against synthetic 1.0; rigid invariance at 1000 px untested (1000 px now in dispatcher and real-calib inboxes, ab50da7)
 - diag-analysis (merged): decide C1 (prompt fault-to-remedy map), C2 (stage_log_summary per-pair spread), C3 (roll-back vs label rule: option a or b) in `docs/proposals/2026-10-25_diagnostician-repair-misses.md`; C3 note `docs/proposals/2026-10-25_not-computable-check-rule.md`
 - `scripts/remote/real_moved.py` (merged with wip/dispatcher) writes `<name>.part` and then `os.rename`s it to the final name, on the compute host; the 3-root slice ran on the lab server. CLAUDE.md forbids renames there (only sweep locks excepted); `qb_track.py` was changed to write-once for the same reason (rules-2). Keep, or ask for a write-once fix
