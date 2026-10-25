@@ -5,11 +5,11 @@ Branch: main
 Last inbox item done: 25
 State: working
 Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8 (relay part), 10, 11, 16, 17 (item 20)
-Last-seen main: f4eb2a1
+Last-seen main: 91b55d7
 Done since last update:
-- 2026-10-25 14:45 (tick; first pass since 23:50, VM was down overnight): item 25: local branch worktree-coordinator-c007 already gone when checked (b563b33 differed from 2170ca5 only in wording of the c007 task note and decisions reason; same decision and done marker on main). Nothing to keep
+- 2026-10-25 14:45 (tick; first pass since 23:50; no tick ran overnight): item 25: local branch worktree-coordinator-c007 already gone when checked (b563b33 differed from 2170ca5 only in wording of the c007 task note and decisions reason; same decision and done marker on main). Nothing to keep
 - 14:45: item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher waiting on Andrew 14:39, subset run stopped for low VM memory; wip/lab-report-2 working 13:29 on 23 Oct)
-- 14:45: item 8: inboxes changed since 9278077 (204ba71, 0a7aadc, f41d9ae): dispatcher 36, freeze-v31 9, closure-fix 3, diag-analysis 3-4, real-calib 7-8. Pinged dispatcher and freeze-v31 14:45 (`check github`). closure-fix, diag-analysis, real-calib not live; not pinged. Item 10: no status says `waiting on <agent>`. Item 16: no status says `waiting on server job`
+- 14:45: item 8: inboxes changed since 9278077 (204ba71, 0a7aadc, f41d9ae, 91b55d7): dispatcher 36-37, freeze-v31 9, closure-fix 3, diag-analysis 3-4, real-calib 7-8. Pinged dispatcher and freeze-v31 14:45 (`check github`). closure-fix, diag-analysis, real-calib not live; not pinged. Item 10: no status says `waiting on <agent>`. Item 16: no status says `waiting on server job`
 - 2026-10-24 23:50 (tick, hourly pass; no ref changed): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working 22:44 (status 23:05 by its clock; agent run over 48 subset windows), wip/lab-report-2 working 13:29)
 - 23:50: item 8: no inbox change since 1730bf3; no pings. Item 10: no status says `waiting on <agent>`. Item 16: no status says `waiting on server job`
 - 2026-10-24 22:50 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working 22:44 (status 23:05 by its clock; agent run over 48 subset windows), wip/lab-report-2 working 13:29). wip/real-calib status still ready to merge; already merged (1730bf3)
