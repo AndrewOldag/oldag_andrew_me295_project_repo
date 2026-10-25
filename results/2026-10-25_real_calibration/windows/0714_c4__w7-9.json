@@ -1,0 +1,56 @@
+{
+ "window": "0714_c4__w7-9",
+ "root": "0714_c4",
+ "window_h": [
+  7.0,
+  9.0
+ ],
+ "midline": "ft2 (net2_midline_ft2.pt, tile mode, low 0.1 %, high 99.5 %)",
+ "screen": {
+  "median_net_tip_to_apex_px": 878.4,
+  "frames": [
+   {
+    "frame": 252,
+    "end_to_apex_px": 451.5,
+    "net_tip_to_apex_px": 763.0,
+    "end_behind_apex_px": -449.1,
+    "seg_tip_to_apex_px": 14.1,
+    "seg_tip_in_mask": true
+   },
+   {
+    "frame": 270,
+    "end_to_apex_px": 391.6,
+    "net_tip_to_apex_px": 818.0,
+    "end_behind_apex_px": -385.5,
+    "seg_tip_to_apex_px": 14.1,
+    "seg_tip_in_mask": true
+   },
+   {
+    "frame": 287,
+    "end_to_apex_px": 331.1,
+    "net_tip_to_apex_px": 878.4,
+    "end_behind_apex_px": -328.6,
+    "seg_tip_to_apex_px": 36.4,
+    "seg_tip_in_mask": true
+   },
+   {
+    "frame": 304,
+    "end_to_apex_px": 378.9,
+    "net_tip_to_apex_px": 918.3,
+    "end_behind_apex_px": -362.2,
+    "seg_tip_to_apex_px": 28.2,
+    "seg_tip_in_mask": true
+   },
+   {
+    "frame": 322,
+    "end_to_apex_px": 366.5,
+    "net_tip_to_apex_px": 963.0,
+    "end_behind_apex_px": -356.6,
+    "seg_tip_to_apex_px": 24.7,
+    "seg_tip_in_mask": true
+   }
+  ],
+  "passed": false
+ },
+ "status": "screened out"
+}

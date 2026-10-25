@@ -138,7 +138,9 @@ def run(a):
             res["status"] = "screen failed" if res["screen"].get("error") else "screened out"
         f.write_text(json.dumps(res, indent=1))
         print(f"{w.id()}: {res['status']} {res.get('values', '')}", flush=True)
-    (Path(a.out) / "runner_log.json").write_text(json.dumps(runner.log, indent=1, default=str))
+    log = Path(a.out) / "runner_log.json"           # appended per run, so a resumed run keeps earlier entries
+    old = json.loads(log.read_text()) if log.exists() else []
+    log.write_text(json.dumps(old + runner.log, indent=1, default=str))
 
 
 def summary(a):
