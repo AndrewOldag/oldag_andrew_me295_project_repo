@@ -1,12 +1,14 @@
 # coordinator
-Updated: 2026-10-25 15:12 (local)
+Updated: 2026-10-25 15:20 (local)
 Lane: course
 Branch: main
 Last inbox item done: 25
 State: working
 Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8 (relay part), 10, 11, 16, 17 (item 20)
-Last-seen main: b9e3ffe
+Last-seen main: 1b2e8d4
 Done since last update:
+- 2026-10-25 15:20 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working 15:14, item 36 (2) repeat run 2 waits for VM memory; wip/diag-analysis waiting on Andrew 15:11, label sweep host and run cap; wip/real-calib waiting on Andrew 15:06, cluster connection; wip/v4-candidate 15:11, no status file; wip/lab-report-2 working; wip/freeze-v31 done, no merge asked)
+- 15:20: item 8: no inbox change since 132e4ed; no pings. Item 10: no status says `waiting on <agent>`. Item 16: no status says `waiting on server job`
 - 2026-10-25 15:12 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working 15:10, item 37 subset run, 1 of 48 windows done; wip/real-calib waiting on Andrew 15:06, cluster connection; wip/diag-analysis working 15:01, items 3-4 on new wip/v4-candidate (6a19514, 15:08, no status file); wip/lab-report-2 working; wip/freeze-v31 done, no merge asked)
 - 15:12: item 8: no inbox change since 132e4ed; no pings. Item 10: no status says `waiting on <agent>`. Item 16: no status says `waiting on server job` (real-calib names seg_chain.done but its State is waiting on Andrew)
 - 2026-10-25 15:03 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working 14:52, item 37 subset run, real_subset_report.py 1873fa7; wip/real-calib working 15:00, items 7-8 read, full-batch proposal; wip/lab-report-2 working, status 23 Oct; wip/freeze-v31 done 14:46, no merge asked). Correction: the previous pass was stamped 15:10 but committed 14:50
@@ -140,6 +142,8 @@ Branches (last commit, state):
 - status/gate2: deleted from the remote
 - wip/readme-check, wip/vm-setup, wip/auditor-v1b, wip/fq-real, wip/auditor-v1, wip/scored-v1, wip/freeze-v2, heldout/faults, wip/baselines, wip/diag-review, wip/lab-report-1, wip/gatekeeper: merged
 Needs Andrew:
+- diag-analysis: host for the seed 26-28 label sweep (workstation work folder at its 20 GB cap; lab server under its limits, or free workstation space)
+- diag-analysis: run cap: labels need 228 tracker runs (cap 150); with v3 methods about 420 (cap 300). Raise, or keep the caps (labels stop after phase 1)
 - Restart closure-fix (not live; inbox item 3, real_moved.py write-once)
 - real-calib: cluster connection down; reopen the cluster connection master on the lab server (route in private notes). Its item 7 (2) GPU midlines, staging and tracking of the first batch wait for it
 - real-calib: full batch leaves about 1.0 TB of moved copies on the lab server; keep for all windows or only a sample? First batch keeps them (110 GB)
