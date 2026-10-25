@@ -1,0 +1,776 @@
+[
+ {
+  "root": "0708_m12",
+  "track": "0708_m12__w4-6_ft2_wp_ref__st1__L400.npz",
+  "checker_px_per_h": 4.521,
+  "def1_apex": 4.521,
+  "def2_net_tip": 3.583,
+  "def3_chain_c0": 2.732,
+  "def4_apex_minus_segment_growth": 4.499,
+  "tip_side_term_px_per_h": 1.868,
+  "base_term_px_per_h": 2.732,
+  "apex_minus_c0_trend_px_per_h": 1.711,
+  "net_tip_minus_c0_trend_px_per_h": 1.561,
+  "gap_apex_c0_px_first_last_max": [
+   0.0,
+   3.54,
+   5.65
+  ],
+  "apical_segment_growth_px": 0.043,
+  "net_tip_ahead_of_end_median_px": 23.19,
+  "net_tip_confidence_median": 0.572,
+  "crop_offset_spread_px": [
+   0.0,
+   0.0
+  ],
+  "base_index": 26,
+  "base_s_px": 488.7,
+  "base_world_disp_px": [
+   -0.53,
+   5.37
+  ],
+  "stage_total_px": [
+   0.0,
+   162.02
+  ],
+  "stage_steps_px": [
+   [
+    0.0,
+    2.0
+   ],
+   [
+    0.0,
+    3.0
+   ]
+  ],
+  "stage_steps_um": [
+   [
+    0.0,
+    4.21
+   ],
+   [
+    0.0,
+    6.32
+   ]
+  ],
+  "stage_sign_lag_jitter_px": {
+   "sign+1_lag-1": 0.296,
+   "sign+1_lag+0": 0.229,
+   "sign+1_lag+1": 0.277,
+   "sign-1_lag-1": 0.291,
+   "sign-1_lag+0": 0.341,
+   "sign-1_lag+1": 0.309
+  },
+  "speed_profile_px_per_h": [
+   [
+    0,
+    97.97
+   ],
+   [
+    46,
+    97.44
+   ],
+   [
+    95,
+    94.8
+   ],
+   [
+    144,
+    91.84
+   ],
+   [
+    197,
+    83.49
+   ],
+   [
+    261,
+    60.41
+   ],
+   [
+    344,
+    22.95
+   ],
+   [
+    399,
+    10.97
+   ],
+   [
+    454,
+    5.49
+   ]
+  ]
+ },
+ {
+  "root": "0711_c2",
+  "track": "0711_c2__w4-6_ft2_wp_ref__st1__L400.npz",
+  "checker_px_per_h": 20.432,
+  "def1_apex": 20.432,
+  "def2_net_tip": 19.581,
+  "def3_chain_c0": 19.602,
+  "def4_apex_minus_segment_growth": 20.329,
+  "tip_side_term_px_per_h": 0.831,
+  "base_term_px_per_h": 19.602,
+  "apex_minus_c0_trend_px_per_h": 3.276,
+  "net_tip_minus_c0_trend_px_per_h": 0.573,
+  "gap_apex_c0_px_first_last_max": [
+   0.0,
+   1.48,
+   14.12
+  ],
+  "apical_segment_growth_px": 0.214,
+  "net_tip_ahead_of_end_median_px": 27.01,
+  "net_tip_confidence_median": 0.385,
+  "crop_offset_spread_px": [
+   0.0,
+   0.0
+  ],
+  "base_index": 26,
+  "base_s_px": 464.5,
+  "base_world_disp_px": [
+   10.47,
+   37.29
+  ],
+  "stage_total_px": [
+   0.0,
+   158.02
+  ],
+  "stage_steps_px": [
+   [
+    0.0,
+    2.0
+   ]
+  ],
+  "stage_steps_um": [
+   [
+    0.0,
+    4.21
+   ]
+  ],
+  "stage_sign_lag_jitter_px": {
+   "sign+1_lag-1": 0.2,
+   "sign+1_lag+0": 0.2,
+   "sign+1_lag+1": 0.2,
+   "sign-1_lag-1": 0.2,
+   "sign-1_lag+0": 0.2,
+   "sign-1_lag+1": 0.2
+  },
+  "speed_profile_px_per_h": [
+   [
+    0,
+    91.17
+   ],
+   [
+    47,
+    89.47
+   ],
+   [
+    94,
+    88.94
+   ],
+   [
+    142,
+    87.54
+   ],
+   [
+    191,
+    83.43
+   ],
+   [
+    245,
+    74.43
+   ],
+   [
+    306,
+    57.11
+   ],
+   [
+    368,
+    40.19
+   ],
+   [
+    427,
+    25.8
+   ]
+  ]
+ },
+ {
+  "root": "0721_m10",
+  "track": "0721_m10__w4-6_ft2_wp_ref__st1__L400.npz",
+  "checker_px_per_h": 4.656,
+  "def1_apex": 4.656,
+  "def2_net_tip": 3.963,
+  "def3_chain_c0": 5.636,
+  "def4_apex_minus_segment_growth": 4.607,
+  "tip_side_term_px_per_h": 1.277,
+  "base_term_px_per_h": 5.636,
+  "apex_minus_c0_trend_px_per_h": 0.956,
+  "net_tip_minus_c0_trend_px_per_h": 2.697,
+  "gap_apex_c0_px_first_last_max": [
+   0.0,
+   0.0,
+   10.32
+  ],
+  "apical_segment_growth_px": 0.1,
+  "net_tip_ahead_of_end_median_px": 36.35,
+  "net_tip_confidence_median": 0.249,
+  "crop_offset_spread_px": [
+   0.0,
+   0.0
+  ],
+  "base_index": 26,
+  "base_s_px": 457.9,
+  "base_world_disp_px": [
+   -4.29,
+   10.28
+  ],
+  "stage_total_px": [
+   -47.01,
+   122.02
+  ],
+  "stage_steps_px": [
+   [
+    -1.0,
+    2.0
+   ],
+   [
+    0.0,
+    1.0
+   ],
+   [
+    0.0,
+    2.0
+   ]
+  ],
+  "stage_steps_um": [
+   [
+    -2.11,
+    4.21
+   ],
+   [
+    0.0,
+    2.11
+   ],
+   [
+    0.0,
+    4.21
+   ]
+  ],
+  "stage_sign_lag_jitter_px": {
+   "sign+1_lag-1": 0.571,
+   "sign+1_lag+0": 0.204,
+   "sign+1_lag+1": 0.558,
+   "sign-1_lag-1": 0.772,
+   "sign-1_lag+0": 0.944,
+   "sign-1_lag+1": 0.795
+  },
+  "speed_profile_px_per_h": [
+   [
+    0,
+    70.92
+   ],
+   [
+    47,
+    69.8
+   ],
+   [
+    93,
+    68.82
+   ],
+   [
+    140,
+    67.04
+   ],
+   [
+    189,
+    63.63
+   ],
+   [
+    244,
+    53.06
+   ],
+   [
+    306,
+    36.12
+   ],
+   [
+    368,
+    17.57
+   ],
+   [
+    423,
+    8.75
+   ]
+  ]
+ },
+ {
+  "root": "0708_m12",
+  "track": "0708_m12__w4-6_ft2__st1__L1000.npz",
+  "checker_px_per_h": 2.356,
+  "def1_apex": 2.356,
+  "def2_net_tip": 1.487,
+  "def3_chain_c0": 0.665,
+  "def4_apex_minus_segment_growth": 2.324,
+  "tip_side_term_px_per_h": 1.87,
+  "base_term_px_per_h": 0.665,
+  "apex_minus_c0_trend_px_per_h": 1.716,
+  "net_tip_minus_c0_trend_px_per_h": 1.563,
+  "gap_apex_c0_px_first_last_max": [
+   0.0,
+   3.56,
+   5.68
+  ],
+  "apical_segment_growth_px": 0.065,
+  "net_tip_ahead_of_end_median_px": 23.19,
+  "net_tip_confidence_median": 0.572,
+  "crop_offset_spread_px": [
+   0.0,
+   0.0
+  ],
+  "base_index": 66,
+  "base_s_px": 1092.0,
+  "base_world_disp_px": [
+   -0.73,
+   1.09
+  ],
+  "stage_total_px": [
+   0.0,
+   162.02
+  ],
+  "stage_steps_px": [
+   [
+    0.0,
+    2.0
+   ],
+   [
+    0.0,
+    3.0
+   ]
+  ],
+  "stage_steps_um": [
+   [
+    0.0,
+    4.21
+   ],
+   [
+    0.0,
+    6.32
+   ]
+  ],
+  "stage_sign_lag_jitter_px": {
+   "sign+1_lag-1": 0.33,
+   "sign+1_lag+0": 0.271,
+   "sign+1_lag+1": 0.313,
+   "sign-1_lag-1": 0.329,
+   "sign-1_lag+0": 0.376,
+   "sign-1_lag+1": 0.345
+  },
+  "speed_profile_px_per_h": [
+   [
+    0,
+    97.97
+   ],
+   [
+    46,
+    97.58
+   ],
+   [
+    94,
+    94.66
+   ],
+   [
+    142,
+    92.07
+   ],
+   [
+    194,
+    83.88
+   ],
+   [
+    255,
+    64.39
+   ],
+   [
+    338,
+    26.65
+   ],
+   [
+    393,
+    13.69
+   ],
+   [
+    448,
+    5.97
+   ],
+   [
+    499,
+    2.77
+   ],
+   [
+    546,
+    1.16
+   ],
+   [
+    591,
+    3.01
+   ],
+   [
+    637,
+    1.71
+   ],
+   [
+    681,
+    1.41
+   ],
+   [
+    727,
+    0.93
+   ],
+   [
+    775,
+    -0.24
+   ],
+   [
+    819,
+    0.99
+   ],
+   [
+    865,
+    0.92
+   ],
+   [
+    912,
+    1.26
+   ],
+   [
+    954,
+    1.5
+   ],
+   [
+    1000,
+    1.22
+   ],
+   [
+    1045,
+    2.88
+   ],
+   [
+    1092,
+    1.54
+   ]
+  ]
+ },
+ {
+  "root": "0711_c2",
+  "track": "0711_c2__w4-6_ft2__st1__L1000.npz",
+  "checker_px_per_h": 3.172,
+  "def1_apex": 3.172,
+  "def2_net_tip": 2.978,
+  "def3_chain_c0": 2.505,
+  "def4_apex_minus_segment_growth": 3.085,
+  "tip_side_term_px_per_h": 0.669,
+  "base_term_px_per_h": 2.505,
+  "apex_minus_c0_trend_px_per_h": 3.168,
+  "net_tip_minus_c0_trend_px_per_h": 0.625,
+  "gap_apex_c0_px_first_last_max": [
+   0.0,
+   1.24,
+   13.98
+  ],
+  "apical_segment_growth_px": 0.173,
+  "net_tip_ahead_of_end_median_px": 27.01,
+  "net_tip_confidence_median": 0.385,
+  "crop_offset_spread_px": [
+   0.0,
+   0.0
+  ],
+  "base_index": 66,
+  "base_s_px": 1086.5,
+  "base_world_disp_px": [
+   0.17,
+   4.95
+  ],
+  "stage_total_px": [
+   0.0,
+   158.02
+  ],
+  "stage_steps_px": [
+   [
+    0.0,
+    2.0
+   ]
+  ],
+  "stage_steps_um": [
+   [
+    0.0,
+    4.21
+   ]
+  ],
+  "stage_sign_lag_jitter_px": {
+   "sign+1_lag-1": 0.237,
+   "sign+1_lag+0": 0.237,
+   "sign+1_lag+1": 0.237,
+   "sign-1_lag-1": 0.237,
+   "sign-1_lag+0": 0.237,
+   "sign-1_lag+1": 0.237
+  },
+  "speed_profile_px_per_h": [
+   [
+    0,
+    91.28
+   ],
+   [
+    47,
+    90.0
+   ],
+   [
+    92,
+    89.44
+   ],
+   [
+    140,
+    87.78
+   ],
+   [
+    187,
+    84.97
+   ],
+   [
+    242,
+    74.64
+   ],
+   [
+    302,
+    58.45
+   ],
+   [
+    363,
+    41.9
+   ],
+   [
+    423,
+    25.48
+   ],
+   [
+    477,
+    18.81
+   ],
+   [
+    530,
+    10.72
+   ],
+   [
+    582,
+    6.39
+   ],
+   [
+    632,
+    3.03
+   ],
+   [
+    675,
+    5.26
+   ],
+   [
+    725,
+    1.14
+   ],
+   [
+    771,
+    -0.71
+   ],
+   [
+    817,
+    0.26
+   ],
+   [
+    861,
+    2.38
+   ],
+   [
+    908,
+    0.91
+   ],
+   [
+    953,
+    1.33
+   ],
+   [
+    998,
+    1.18
+   ],
+   [
+    1043,
+    0.5
+   ],
+   [
+    1086,
+    3.42
+   ]
+  ]
+ },
+ {
+  "root": "0721_m10",
+  "track": "0721_m10__w4-6_ft2__st1__L1000.npz",
+  "checker_px_per_h": 2.187,
+  "def1_apex": 2.187,
+  "def2_net_tip": 2.576,
+  "def3_chain_c0": 0.858,
+  "def4_apex_minus_segment_growth": 2.223,
+  "tip_side_term_px_per_h": 1.339,
+  "base_term_px_per_h": 0.858,
+  "apex_minus_c0_trend_px_per_h": 0.993,
+  "net_tip_minus_c0_trend_px_per_h": 2.759,
+  "gap_apex_c0_px_first_last_max": [
+   0.0,
+   0.0,
+   10.29
+  ],
+  "apical_segment_growth_px": 0.088,
+  "net_tip_ahead_of_end_median_px": 36.35,
+  "net_tip_confidence_median": 0.249,
+  "crop_offset_spread_px": [
+   0.0,
+   0.0
+  ],
+  "base_index": 66,
+  "base_s_px": 1065.1,
+  "base_world_disp_px": [
+   -0.76,
+   -1.52
+  ],
+  "stage_total_px": [
+   -47.01,
+   122.02
+  ],
+  "stage_steps_px": [
+   [
+    -1.0,
+    2.0
+   ],
+   [
+    0.0,
+    1.0
+   ],
+   [
+    0.0,
+    2.0
+   ]
+  ],
+  "stage_steps_um": [
+   [
+    -2.11,
+    4.21
+   ],
+   [
+    0.0,
+    2.11
+   ],
+   [
+    0.0,
+    4.21
+   ]
+  ],
+  "stage_sign_lag_jitter_px": {
+   "sign+1_lag-1": 0.568,
+   "sign+1_lag+0": 0.197,
+   "sign+1_lag+1": 0.556,
+   "sign-1_lag-1": 0.785,
+   "sign-1_lag+0": 0.954,
+   "sign-1_lag+1": 0.807
+  },
+  "speed_profile_px_per_h": [
+   [
+    0,
+    70.93
+   ],
+   [
+    47,
+    69.79
+   ],
+   [
+    92,
+    69.09
+   ],
+   [
+    139,
+    67.14
+   ],
+   [
+    187,
+    63.91
+   ],
+   [
+    240,
+    55.12
+   ],
+   [
+    301,
+    37.87
+   ],
+   [
+    362,
+    19.89
+   ],
+   [
+    419,
+    7.56
+   ],
+   [
+    471,
+    3.85
+   ],
+   [
+    520,
+    0.75
+   ],
+   [
+    565,
+    -0.38
+   ],
+   [
+    612,
+    -0.08
+   ],
+   [
+    657,
+    -0.22
+   ],
+   [
+    702,
+    -0.78
+   ],
+   [
+    748,
+    -1.16
+   ],
+   [
+    793,
+    -0.29
+   ],
+   [
+    838,
+    0.66
+   ],
+   [
+    883,
+    -0.18
+   ],
+   [
+    929,
+    -0.17
+   ],
+   [
+    973,
+    0.69
+   ],
+   [
+    1019,
+    0.22
+   ],
+   [
+    1065,
+    -0.43
+   ]
+  ]
+ }
+]
