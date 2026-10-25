@@ -1,12 +1,14 @@
 # coordinator
-Updated: 2026-10-24 16:51 (local)
+Updated: 2026-10-24 17:03 (local)
 Lane: course
 Branch: main
 Last inbox item done: 22
 State: working
 Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8 (relay part), 10, 11, 16, 17 (item 20)
-Last-seen main: d32d707
+Last-seen main: 1ff1369
 Done since last update:
+- 2026-10-24 17:03 (tick): item 1: merged wip/diag-analysis (1ff1369; ready to merge 16:50); no conflicts; suite 303 passed, 1 skipped; log entry moved. Other unmerged: wip/dispatcher working 16:56, wip/closure-fix working 16:52, wip/real-calib waiting on Andrew 16:57, wip/lab-report-2 working 13:29
+- 17:03: item 8: no inbox change since ccb2dbf; no pings. Item 10: real-calib now waits on Andrew, not on an agent; not pinged. Item 16: no status says `waiting on server job`. status/gate2 no longer on the remote
 - 2026-10-24 16:51 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working 16:48, wip/closure-fix working 16:44, wip/diag-analysis working 16:44, wip/real-calib waiting on dispatcher 16:48, wip/lab-report-2 working 13:29)
 - 16:51: item 8: no inbox change since ccb2dbf; no pings. Item 10: real-calib waits on dispatcher; dispatcher working, not done; not pinged. Item 16: no status says `waiting on server job`. Spec 2026-10-24b sessions now live (dispatcher, closure-fix, real-calib, diag-analysis); dropped from Needs Andrew
 - 2026-10-24 16:40 (tick): item 1: no branch ready to merge and unmerged (only wip/lab-report-2 unmerged, working, 13:29)
@@ -78,19 +80,20 @@ Branches (last commit, state):
 - wip/coord-tick: 2026-10-24 13:09, ready to merge, merged 9aa97bf
 - wip/freeze-v3: 2026-10-24 04:16, ready to merge, merged 2ebd422
 - status/turn-long: 2026-10-24 02:42, done (research lane, not merged)
-- wip/dispatcher: 2026-10-24 16:48, working (15:37 merged 5a4767f)
+- wip/dispatcher: 2026-10-24 16:56, working (15:37 merged 5a4767f)
 - wip/lab-report-2: 2026-10-23 13:29, working
-- wip/closure-fix: 2026-10-24 16:44, working
-- wip/diag-analysis: 2026-10-24 16:44, working
-- wip/real-calib: 2026-10-24 16:48, waiting on dispatcher
+- wip/closure-fix: 2026-10-24 16:52, working
+- wip/diag-analysis: 2026-10-24 16:50, ready to merge, merged 1ff1369
+- wip/real-calib: 2026-10-24 16:57, waiting on Andrew
 - status/spec-audit-r: 2026-10-23 13:42, done (research lane, not merged)
-- status/gate2: 2026-10-16 12:27, delete approved, Andrew runs it (research lane, not merged)
+- status/gate2: deleted from the remote
 - wip/readme-check, wip/vm-setup, wip/auditor-v1b, wip/fq-real, wip/auditor-v1, wip/scored-v1, wip/freeze-v2, heldout/faults, wip/baselines, wip/diag-review, wip/lab-report-1, wip/gatekeeper: merged
 Needs Andrew:
+- real-calib (and dispatcher): cluster work folder too small for the 16 calibration windows (about 26 of 30 GB used; 7 GB more needed): (a) cap to about 40 GB, (b) unpack on node-local disk, (c) build on the lab server CPU (about 8 h). Answer in either inbox
+- diag-analysis (merged): decide C1 (prompt fault-to-remedy map), C2 (stage_log_summary per-pair spread), C3 (roll-back vs label rule: option a or b) in `docs/proposals/2026-10-25_diagnostician-repair-misses.md`
 - `scripts/remote/real_moved.py` (merged with wip/dispatcher) writes `<name>.part` and then `os.rename`s it to the final name, on the compute host; the 3-root slice ran on the lab server. CLAUDE.md forbids renames there (only sweep locks excepted); `qb_track.py` was changed to write-once for the same reason (rules-2). Keep, or ask for a write-once fix
 - coord-tick (merged): install the scheduled task elevated: `scripts\ops\install_coordinator_tick.ps1`; confirm one scheduled S4U full pass in the tick log with exit 0
 - Finished sessions still live and idle: freeze-v31 (merged), turn-long (done), autotrace (merged); can be closed. The live `coordinator` session is no longer listed
-- `git push origin --delete status/gate2` (audit-marks item 2; refused for sessions)
 - freeze-v3: review `results/2026-10-23_freeze_v3/README.md` (all 12 accept_repaired rods measure well unremedied; second_root 0 correct for every method)
 - Workstation disk: host-setup work folder 9.9 of 20 GB after one root; sessions cannot delete there (host-setup status)
 - lab-report-2 and spec-audit-r sessions no longer live; wip/lab-report-2 status still says working (13:29)
