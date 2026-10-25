@@ -14,6 +14,7 @@ import math
 
 import numpy as np
 
+from agents import candidate
 from agents.actions import REMEDIES
 from checker import run_checks, load_thresholds
 from measure import info
@@ -160,6 +161,8 @@ class Slice:
         out = info.request_info(args["kind"], self.current.record, self.checks)
         if args["kind"] == "velocity_profile" and self.runs[-1][0].width_free:
             out.update(info.width_free_ratio(self.current.record))
+        if args["kind"] == "stage_log_summary" and candidate.v4():
+            out.update(info.stage_log_spread(self.current.record))
         return out
 
     def apply_remedy(self, args, task):
