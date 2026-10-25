@@ -160,14 +160,14 @@ def test_midline_path_default_and_cached_run_needs_no_host(tmp_path, monkeypatch
     w, st = RealWindow("r1", 4, 6), r.initial_settings(RealWindow("r1", 4, 6))
     assert r.midline_path(w) == "/w/midline/r1__w4-6_netmid.npz"
     assert r.midline_path(RealWindow("r2", 4, 6)) == "/m.npz"
-    assert r.cache_path(w, st, "ref").name == "r1__w4-6_wp_ref__st1__L400.npz"
+    assert r.cache_path(w, st, "ref").name == "r1__w4-6_wp_ref__st1__L1000.npz"
     calls = []
     monkeypatch.setattr(r, "_ssh", lambda cmd, stdin=None: calls.append(cmd) or b"")
     monkeypatch.setattr("measure.real_runner.from_tracker_npz", lambda path, root_id: (path.name, root_id))
     for k in ("ref", "moved"):
         r.cache_path(w, st, k).write_bytes(b"")
     m = r.measure(w, st)
-    assert calls == [] and m.record == ("r1__w4-6_wp_ref__st1__L400.npz", "r1__w4-6")
+    assert calls == [] and m.record == ("r1__w4-6_wp_ref__st1__L1000.npz", "r1__w4-6")
 
 
 def test_job_count_pattern_does_not_match_its_own_command():
@@ -202,7 +202,7 @@ def test_midline_tag_in_every_name_and_weights_passed(tmp_path, monkeypatch):
     assert r.midline_path(w) == "/w/midline/r1__w4-6_ft2_netmid.npz"
     assert r.copy_paths(w, "moved") == {"imgdir": "/w/moved/r1__w4-6_wp_moved.imgdir",
                                         "midline": "/w/moved/r1__w4-6_ft2_wp_moved_midline.npz"}
-    assert r.cache_path(w, st, "ref").name == "r1__w4-6_ft2_wp_ref__st1__L400.npz"
+    assert r.cache_path(w, st, "ref").name == "r1__w4-6_ft2_wp_ref__st1__L1000.npz"
     calls = []
 
     def ssh(cmd, stdin=None):
