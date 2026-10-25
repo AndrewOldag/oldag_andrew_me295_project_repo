@@ -133,7 +133,7 @@ Branches (last commit, state):
 - wip/readme-check, wip/vm-setup, wip/auditor-v1b, wip/fq-real, wip/auditor-v1, wip/scored-v1, wip/freeze-v2, heldout/faults, wip/baselines, wip/diag-review, wip/lab-report-1, wip/gatekeeper: merged
 Needs Andrew:
 - Restart sessions not live whose inboxes changed overnight: real-calib (items 7-8, full batch), diag-analysis (items 3-4, v4 candidate and scored v4 run), closure-fix (item 3, real_moved.py write-once)
-- dispatcher: restart of the 48-window subset agent run after the low-memory stop (its Needs Andrew; VM 7.7 GB, several sessions open). Pinged for item 36
+- Coordinator tick: no pass pushed between 23:50 and 14:45 (planning 14:45 correction: cause unknown); check the tick log
 - dispatcher: its tracking run started a net-midline build on the lab-server CPU (0721_m10, 3 threads, nice 19), against inbox item 25; its kill was blocked. Pid in its status; stop it if wanted. real_track.py now skips windows without a host midline (85e20da)
 - closure-fix (merged): closure at 1000 px still 2.2-3.2 px/h against synthetic 1.0; rigid invariance at 1000 px untested (1000 px now in dispatcher and real-calib inboxes, ab50da7)
 - diag-analysis (merged): decide C1 (prompt fault-to-remedy map), C2 (stage_log_summary per-pair spread), C3 (roll-back vs label rule: option a or b) in `docs/proposals/2026-10-25_diagnostician-repair-misses.md`; C3 note `docs/proposals/2026-10-25_not-computable-check-rule.md`
