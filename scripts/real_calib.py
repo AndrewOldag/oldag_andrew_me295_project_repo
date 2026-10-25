@@ -110,8 +110,12 @@ def run(a):
         try:
             res["screen"] = screen(runner, w)
         except Exception as e:
-            print(f"{w.id()}: screen not ready or failed: {e}", flush=True)
-            continue                                  # no file: retried on the next run
+            if "Error:" not in str(e):                # ssh or missing input: no file, retried on the next run
+                print(f"{w.id()}: screen not ready: {e}", flush=True)
+                continue
+            # the probe itself raised (e.g. a segmentation midline shorter than its 40 px step): the screen
+            # fails for this window; listed with the reason, left out (proposal)
+            res["screen"] = {"passed": False, "error": str(e)[:300]}
         if res["screen"]["passed"]:
             try:
                 m = runner.measure(w, runner.initial_settings(w))
@@ -127,7 +131,7 @@ def run(a):
                     return
                 res["status"], res["error"] = "failed", f"{type(e).__name__}: {str(e)[:300]}"
         else:
-            res["status"] = "screened out"
+            res["status"] = "screen failed" if res["screen"].get("error") else "screened out"
         f.write_text(json.dumps(res, indent=1))
         print(f"{w.id()}: {res['status']} {res.get('values', '')}", flush=True)
     (Path(a.out) / "runner_log.json").write_text(json.dumps(runner.log, indent=1, default=str))
