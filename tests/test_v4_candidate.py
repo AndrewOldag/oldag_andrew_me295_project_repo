@@ -98,3 +98,14 @@ def test_c3a_skipped_and_not_gating_still_dropped():
     checks = [_c("rigid_invariance", None, "reported, not gating (real-movie profile; would pass): x"),
               _c("closure", True), _c("plane_sections", None, "skipped: width-free ratio reported; x")]
     assert checks_pass(checks, not_computable_fails=True)
+
+
+def test_v4_scored_set_offline():
+    import sys
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts" / "synth"))
+    import scored_v4
+    rods = scored_v4.scored_rods()
+    assert len(rods) == 51 and {r.seed for r in rods} == {26, 27, 28}
+    sizes = {r.fault: r.size for r in rods if r.fault}
+    assert sizes["bad_stage_correction"] == "3" and sizes["stage_log_missing"] == "1" and sizes["rigid_drift"] == "0.5"
+    assert scored_v4.EXPECTED["stage_log_missing"] == "decline"
