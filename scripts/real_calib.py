@@ -127,8 +127,13 @@ def summary(a):
         if not v:
             continue
         p95 = float(np.percentile(v, 95))
+        by = sorted(((r["values"][k], r["window"]) for r in meas if r["values"].get(k) is not None), reverse=True)
         s["checks"][k] = {"n": len(v), "min": min(v), "median": float(np.median(v)), "max": max(v),
                           "p95": round(p95, 4), "threshold_rule": ceil_2sf(p95),
+                          # sensitivity, reported only (proposal): no window is dropped
+                          "largest_two": [{"window": w, "value": x} for x, w in by[:2]],
+                          "p95_without_largest": (round(float(np.percentile([x for x, _ in by[1:]], 95)), 4)
+                                                  if len(by) > 1 else None),
                           "values": {r["window"]: r["values"][k] for r in meas}}
     (out / "summary.json").write_text(json.dumps(s, indent=1))
     lines = ["| Window | Screen (px) | " + " | ".join(CHECKS) + " |", "| :-- | --: |" + " --: |" * len(CHECKS)]
