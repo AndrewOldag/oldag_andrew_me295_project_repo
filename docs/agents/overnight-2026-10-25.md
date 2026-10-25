@@ -16,3 +16,8 @@ Planning account, under Andrew's delegation at 00:21: make decisions that keep t
 - Spec-audit marks and workstation disk: Andrew, 25 Oct daytime
 - Local branch worktree-coordinator-c007: drop if not needed (coordinator item 25)
 - C3 option (a) and the scored v4 run approved (diag-analysis item 4): tag freeze-v4 after the seed 26-28 labels are committed, then all methods on 26-28, LLM methods 3 repeats
+
+## 01:00 check
+- No push from any session since 23:05 (dispatcher status) and none from the coordinator since its 23:50 pass, although main changed at 00:25 and 00:40; a tick pass should have followed within 10 min
+- Reading: the VM, or the tick and the live sessions on it, may have stopped (known VM timeout). Not confirmed: the planning account cannot reach the VM tonight
+- No new decisions. The 00:40 and 00:45 items stand and will be picked up when the tick runs again. Next check 03:00
