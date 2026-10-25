@@ -3,12 +3,12 @@ id: c019
 title: 16-root real subset end to end
 lane: course
 owner: dispatcher
-state: working
+state: waiting on Andrew
 branch: wip/dispatcher
 host: cluster, lab server (light)
 created: 2026-10-24 16:45
-last_update: 2026-10-24 23:05
-blocker: none
+last_update: 2026-10-25 00:10
+blocker: agent run stopped for low VM memory; restart needs Andrew
 done_marker: results/2026-10-2x_real_subset/README.md
 ---
 
