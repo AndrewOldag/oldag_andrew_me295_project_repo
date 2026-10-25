@@ -1,10 +1,10 @@
 # real-calib
-Updated: 2026-10-24 22:00 (local)
+Updated: 2026-10-24 23:20 (local)
 Lane: course
 Branch: wip/real-calib
 Last inbox item done: 4
-State: waiting on dispatcher
-Now: items 5-6: 23 calibration windows measured; the cluster folder is cleared (item 6), so the 15 planned and 6 fallback windows go through the dispatcher's copy and GPU chain; `real_calib.py run --ext --fallback` measures each as its midline appears; 17 of the 21 must pass for 40
+State: working
+Now: items 5-6: all 48 calibration midlines built (dispatcher GPU, spend $1.03 of $15); `real_calib.py run --ext --fallback` on the lab server: 30 of 36 extension windows done; summary and threshold when the last lands
 Done since last update:
 - Item 6 read: cluster folder 6.8 of 40 GB after the planning account's approved delete; dispatcher asked to copy and run the 21 windows
 - 9 windows 11-13 h (dispatcher GPU job, $0.028; spend $0.96 of $15): 7 measured; 0714_c4 screen failed (third of three), 0714_c9 screened out
