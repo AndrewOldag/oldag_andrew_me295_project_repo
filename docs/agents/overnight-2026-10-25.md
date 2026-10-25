@@ -21,3 +21,8 @@ Planning account, under Andrew's delegation at 00:21: make decisions that keep t
 - No push from any session since 23:05 (dispatcher status) and none from the coordinator since its 23:50 pass, although main changed at 00:25 and 00:40; a tick pass should have followed within 10 min
 - Reading: the VM, or the tick and the live sessions on it, may have stopped (known VM timeout). Not confirmed: the planning account cannot reach the VM tonight
 - No new decisions. The 00:40 and 00:45 items stand and will be picked up when the tick runs again. Next check 03:00
+
+## 03:00 check
+- Still no push from any VM session or the coordinator since 23:50 (3 h). The VM is very likely stopped; it cannot be reached from the planning account
+- Planning work done here instead: full-batch sizing from the manifest. 102 include-yes roots, 2368 usable hours, 1189 two-hour windows (5 trials, 11 experiment-condition groups, 55-156 windows each). GPU midlines about $3.85 in total; cluster staging about 511 GB. Storage is the limit, not spend
+- Decision (real-calib item 8): rolling staging on the cluster. Sessions may delete window-frame copies that a Claude session made in the c019 cluster folder, after md5-verified outputs are on the lab server, logged in `DELETED.log`. Reason: within tonight's hard limit (Claude-written files only); without it, only about 50 more windows fit before Andrew clears the folder. Lab server and workstation stay no-delete
