@@ -35,6 +35,9 @@ OUT = ROOT / "results" / "2026-10-25_real_calibration"
 ROOTS = ["0708_c8", "0708_c9", "0711_c5", "0711_c7", "0714_c4", "0714_c9", "0721_c5", "0721_c6"]
 SPANS = [(7.0, 9.0), (15.0, 17.0)]
 WINDOWS = [RealWindow(r, a, b) for r in ROOTS for a, b in SPANS]
+# Proposal replacement order (roots not reserved for section C), added only while fewer than 12 windows or 3
+# experiments are measured; `run --replacements N` adds the first N
+REPLACEMENTS = ["0714_c13", "0711_c1"]
 SCREEN_PX, SCREEN_FRAMES = 15.0, 5
 CLOSURE_DEFINITION = ("2026-10-10 definition kept by section A (midline end against the most basal centre point "
                       "tracked in every frame), 1000 px tracks")
@@ -100,7 +103,8 @@ def run(a):
     runner.sync_code()
     out = Path(a.out) / "windows"
     out.mkdir(parents=True, exist_ok=True)
-    wins = [w for w in WINDOWS if not a.windows or w.id() in a.windows]
+    extra = [RealWindow(r, x, y) for r in REPLACEMENTS[:a.replacements] for x, y in SPANS]
+    wins = [w for w in WINDOWS + extra if not a.windows or w.id() in a.windows]
     for w in wins:
         f = out / f"{w.id()}.json"
         if f.exists():
@@ -180,6 +184,7 @@ def main():
     ap.add_argument("cmd", choices=["run", "summary"])
     ap.add_argument("--config", default=str(ROOT / "private" / "real_runner_c018.yaml"))
     ap.add_argument("--windows", nargs="*", default=None)
+    ap.add_argument("--replacements", type=int, default=0, help="add the first N replacement roots (proposal)")
     ap.add_argument("--out", default=str(OUT))
     a = ap.parse_args()
     {"run": run, "summary": summary}[a.cmd](a)
