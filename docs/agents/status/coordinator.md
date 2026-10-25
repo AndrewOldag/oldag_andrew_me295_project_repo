@@ -1,5 +1,5 @@
 # coordinator
-Updated: 2026-10-24 02:00 (local)
+Updated: 2026-10-24 19:00 (local)
 Lane: course
 Branch: main
 Last inbox item done: 24
@@ -7,9 +7,9 @@ State: working
 Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8 (relay part), 10, 11, 16, 17 (item 20)
 Last-seen main: 2adb132
 Done since last update:
-- 2026-10-24 02:00 (tick): item 24: wip/closure-fix (835b522) and wip/diag-analysis (1ff1369, 0d9ddf8) already merged; no commits on either branch beyond main; nothing to merge
-- 02:00: item 1: no branch ready to merge and unmerged (unmerged: wip/real-calib waiting on dispatcher 19:30, wip/dispatcher working 18:15, wip/lab-report-2 working 13:29)
-- 02:00: item 8: inboxes changed in 2adb132 (dispatcher item 33, real-calib item 4). Pinged dispatcher and real-calib 02:00 (`check github`). Item 10: real-calib waits on dispatcher; dispatcher working, not done. Item 16: no status says `waiting on server job`
+- 2026-10-24 19:00 (tick): item 24: wip/closure-fix (835b522) and wip/diag-analysis (1ff1369, 0d9ddf8) already merged; no commits on either branch beyond main; nothing to merge
+- 19:00: item 1: no branch ready to merge and unmerged (unmerged: wip/real-calib waiting on dispatcher 19:30, wip/dispatcher working 18:15, wip/lab-report-2 working 13:29)
+- 19:00: item 8: inboxes changed in 2adb132 (dispatcher item 33, real-calib item 4). Pinged dispatcher and real-calib 19:00 (`check github`). Item 10: real-calib waits on dispatcher; dispatcher working, not done. Item 16: no status says `waiting on server job`
 - 2026-10-24 18:50 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/real-calib working 18:48, wip/dispatcher working 18:16, wip/lab-report-2 working 13:29)
 - 18:50: item 8: no inbox change since db49634; no pings. Item 10: no status waits on an agent. Item 16: no status says `waiting on server job`
 - 2026-10-24 18:40 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/real-calib working 18:30, wip/dispatcher working 18:16, wip/lab-report-2 working 13:29)
