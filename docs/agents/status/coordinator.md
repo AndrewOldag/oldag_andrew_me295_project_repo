@@ -1,12 +1,14 @@
 # coordinator
-Updated: 2026-10-24 20:10 (local)
+Updated: 2026-10-24 20:40 (local)
 Lane: course
 Branch: main
 Last inbox item done: 24
 State: working
 Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8 (relay part), 10, 11, 16, 17 (item 20)
-Last-seen main: 0d28306
+Last-seen main: 9aa0bf8
 Done since last update:
+- 2026-10-24 20:40 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/real-calib waiting on Andrew 20:33, wip/dispatcher working 20:08, wip/lab-report-2 working 13:29)
+- 20:40: item 8: no inbox change since 00b1705; no pings. Item 10: no status says `waiting on <agent>`; not pinged. Item 16: no status says `waiting on server job`
 - 2026-10-24 20:10 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working 20:08, wip/real-calib waiting on Andrew 20:01, wip/lab-report-2 working 13:29)
 - 20:10: item 8: no inbox change since 00b1705; no pings. Item 10: no status says `waiting on <agent>`; not pinged. Item 16: no status says `waiting on server job`
 - 2026-10-24 19:50 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working 19:45, wip/real-calib waiting on Andrew 19:44, wip/lab-report-2 working 13:29)
@@ -108,7 +110,7 @@ Branches (last commit, state):
 - wip/lab-report-2: 2026-10-23 13:29, working
 - wip/closure-fix: 2026-10-24 17:03, ready to merge, merged 835b522
 - wip/diag-analysis: 2026-10-24 18:06, ready to merge, merged 1ff1369 and 0d9ddf8
-- wip/real-calib: 2026-10-24 20:01, waiting on Andrew (merged 7aab080 at 19:12)
+- wip/real-calib: 2026-10-24 20:33, waiting on Andrew (merged 7aab080 at 19:12)
 - status/spec-audit-r: 2026-10-23 13:42, done (research lane, not merged)
 - status/gate2: deleted from the remote
 - wip/readme-check, wip/vm-setup, wip/auditor-v1b, wip/fq-real, wip/auditor-v1, wip/scored-v1, wip/freeze-v2, heldout/faults, wip/baselines, wip/diag-review, wip/lab-report-1, wip/gatekeeper: merged
