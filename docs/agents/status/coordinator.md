@@ -1,12 +1,14 @@
 # coordinator
-Updated: 2026-10-24 22:20 (local)
+Updated: 2026-10-24 22:42 (local)
 Lane: course
 Branch: main
 Last inbox item done: 24
 State: working
 Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8 (relay part), 10, 11, 16, 17 (item 20)
-Last-seen main: 5c180cf
+Last-seen main: 1730bf3
 Done since last update:
+- 2026-10-24 22:42 (tick): item 1: merged wip/real-calib (1730bf3; ready to merge 22:35): closure threshold 19 px/h from 41 control windows. Conflict on its pending log file (deleted on main): entry moved into docs/running_log.md. Suite 306 passed, 1 skipped. Other unmerged: wip/dispatcher waiting on real-calib 22:20, wip/lab-report-2 working 13:29
+- 22:42: item 8: no inbox change since 0543812. Item 10: dispatcher waited on real-calib, now merged: pinged dispatcher 22:42 (`check github`). Item 16: no status says `waiting on server job`
 - 2026-10-24 22:20 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher waiting on real-calib 22:16, wip/real-calib waiting on dispatcher 21:41 (status 22:00), wip/lab-report-2 working 13:29)
 - 22:20: item 8: no inbox change since 0543812. Item 10: dispatcher took item 35 (27e75ff): all 21 calibration midlines done; real-calib waits on it: pinged real-calib 22:20 (`check github`). Dispatcher waits on real-calib, not done; not pinged. Item 16: no status says `waiting on server job`
 - 2026-10-24 21:50 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/real-calib waiting on dispatcher 21:41 (status 22:00 by its clock), wip/dispatcher waiting on real-calib 20:55, wip/lab-report-2 working 13:29)
@@ -128,7 +130,7 @@ Needs Andrew:
 - diag-analysis (merged): decide C1 (prompt fault-to-remedy map), C2 (stage_log_summary per-pair spread), C3 (roll-back vs label rule: option a or b) in `docs/proposals/2026-10-25_diagnostician-repair-misses.md`; C3 note `docs/proposals/2026-10-25_not-computable-check-rule.md`
 - `scripts/remote/real_moved.py` (merged with wip/dispatcher) writes `<name>.part` and then `os.rename`s it to the final name, on the compute host; the 3-root slice ran on the lab server. CLAUDE.md forbids renames there (only sweep locks excepted); `qb_track.py` was changed to write-once for the same reason (rules-2). Keep, or ask for a write-once fix
 - coord-tick (merged): install the scheduled task elevated: `scripts\ops\install_coordinator_tick.ps1`; confirm one scheduled S4U full pass in the tick log with exit 0
-- Finished sessions still live and idle: freeze-v31 (merged), turn-long (done), closure-fix (merged), diag-analysis (merged); can be closed. The live `coordinator` session is no longer listed
+- Finished sessions still live and idle: real-calib (merged), freeze-v31 (merged), turn-long (done), closure-fix (merged), diag-analysis (merged); can be closed. The live `coordinator` session is no longer listed
 - freeze-v3: review `results/2026-10-23_freeze_v3/README.md` (all 12 accept_repaired rods measure well unremedied; second_root 0 correct for every method)
 - Workstation disk: host-setup work folder 9.9 of 20 GB after one root; sessions cannot delete there (host-setup status)
 - lab-report-2 and spec-audit-r sessions no longer live; wip/lab-report-2 status still says working (13:29)
