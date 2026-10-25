@@ -22,7 +22,8 @@ Limits for the shared machine (docs/decisions.md, 2026-10-11), all built in:
 - before each run: load above 3/4 of the cores holds new runs until it is
   under half
 - one sweep at a time (lock file DIR/sweep.lock); `stop` ends the sweep and
-  its workers
+  its workers. A sweep removes only the lock it wrote (pid and start time);
+  any other lock, live or stale, refuses the run and stays for Andrew
 - after 10 runs: projected wall time; over --max-hours the sweep stops
 - the space under --size-root is kept under --max-gb (checked before each
   run and projected after 10 runs)
@@ -129,25 +130,34 @@ def read_lock(work):
         return None
 
 
+_OWN_LOCK = {}                                       # the lock this process wrote: pid and start time
+
+
 def take_lock(work, plan_name):
-    if read_lock(work):
-        return False
-    p = lock_path(work)
-    p.unlink(missing_ok=True)                        # stale
+    """Create DIR/sweep.lock. A lock already there, live or stale, is never removed: only the sweep
+    that wrote a lock removes it (rules-3, 2026-10-24)."""
     try:
-        fd = os.open(p, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+        fd = os.open(lock_path(work), os.O_CREAT | os.O_EXCL | os.O_WRONLY)
     except FileExistsError:
         return False
+    info = {"pid": os.getpid(), "pgid": os.getpgid(0), "plan": plan_name,
+            "started": time.strftime("%Y-%m-%d %H:%M:%S")}
     with os.fdopen(fd, "w") as fh:
-        fh.write(json.dumps({"pid": os.getpid(), "pgid": os.getpgid(0), "plan": plan_name,
-                             "started": time.strftime("%Y-%m-%d %H:%M:%S")}))
+        fh.write(json.dumps(info))
+    _OWN_LOCK.clear()
+    _OWN_LOCK.update(info)
     return True
 
 
 def release_lock(work):
-    info = read_lock(work)
-    if info is None or info["pid"] == os.getpid():
+    """Remove DIR/sweep.lock only if it is the one this process wrote (same pid and start time)."""
+    try:
+        info = json.loads(lock_path(work).read_text())
+    except (OSError, ValueError):
+        return
+    if _OWN_LOCK and info.get("pid") == _OWN_LOCK["pid"] and info.get("started") == _OWN_LOCK["started"]:
         lock_path(work).unlink(missing_ok=True)
+        _OWN_LOCK.clear()
 
 
 # ------------------------------------------------------------------ worker
@@ -164,6 +174,22 @@ def wait_for_load():
     return round(held, 1)
 
 
+def output_done(path):
+    """A tracker output is complete when <path>.ok exists (qb_track.py writes it after the output; nothing on
+    the lab server is renamed or overwritten, CLAUDE.md, spec audit rules-2)."""
+    return Path(f"{path}.ok").exists()
+
+
+def rod_done(rods, rid):
+    """A rendered rod is complete when <rid>.ok exists (make_rod.py), or, for rods rendered before the .ok
+    marker, when its truth file (written last) exists."""
+    return (rods / f"{rid}.ok").exists() or (rods / f"{rid}_truth.npz").exists()
+
+
+class Partial(Exception):
+    """A file from a stopped run is in the way. It is left in place (no delete or overwrite) for Andrew."""
+
+
 def _render(rods, options, rid):
     """Render a rod unless present. A per-rod file lock keeps two workers from rendering the same rod."""
     import fcntl
@@ -172,20 +198,30 @@ def _render(rods, options, rid):
         if not (rods / f"{rid}.imgdir").exists():
             subprocess.run([sys.executable, str(HERE / "make_rod.py"), "--out", str(rods)] + options,
                            check=True, capture_output=True, text=True)
+        elif not rod_done(rods, rid):
+            raise Partial(f"partial render left in place: {rid}")
     (rods / f"{rid}.lock").unlink(missing_ok=True)
 
 
 def run_one(task):
     """One tracker run. task: rid, options, tag, args, rods, tracks."""
-    import resource
     rods, tracks = Path(task["rods"]), Path(task["tracks"])
     rid, name = task["rid"], f"{task['rid']}__{task['tag']}.npz"
     rec = {"id": rid, "tag": task["tag"]}
-    if (tracks / name).exists():
+    if output_done(tracks / name):
         rec["cached"] = True
         return rec
+    if (tracks / name).exists():
+        rec.update(ok=False, partial=True, error=[f"partial output left in place, not overwritten: {name}"])
+        return rec
+    import resource
     rec["held_s"] = wait_for_load()
-    _render(rods, task["options"], rid)
+    try:
+        _render(rods, task["options"], rid)
+    except Partial as e:
+        (rods / f"{rid}.lock").unlink(missing_ok=True)
+        rec.update(ok=False, partial=True, error=[str(e)])
+        return rec
     load0 = os.getloadavg()[0]
     ru0 = resource.getrusage(resource.RUSAGE_CHILDREN)
     t0 = time.time()
@@ -242,7 +278,10 @@ def cmd_run(a):
     size_root = Path(a.size_root) if a.size_root else work
     lowest_priority()
     if not take_lock(work, Path(a.plan).name):
-        emit({"status": "refused", "reason": "another sweep is running"})
+        if read_lock(work):
+            emit({"status": "refused", "reason": "another sweep is running"})
+        else:                                            # stale: left in place for Andrew
+            emit({"status": "refused", "reason": "stale lock from another sweep; not removed; report to Andrew"})
         return 2
     rods.mkdir(parents=True, exist_ok=True)
     tracks.mkdir(parents=True, exist_ok=True)
@@ -275,7 +314,7 @@ def cmd_run(a):
             return 4
         plan = json.loads(Path(a.plan).read_text())
         tasks = tasks_of(plan, rods, tracks)
-        todo = [t for t in tasks if not (tracks / f"{t['rid']}__{t['tag']}.npz").exists()]
+        todo = [t for t in tasks if not output_done(tracks / f"{t['rid']}__{t['tag']}.npz")]
         workers = max_workers(a.workers)
         summary.update(load_before=pre["load_1_5_15"], work_gb_before=pre["work_gb"], workers=workers,
                        runs_planned=len(tasks), runs_to_do=len(todo))
@@ -378,10 +417,9 @@ def cmd_stop(a):
             os.kill(p["pid"], signal.SIGKILL)
         except ProcessLookupError:
             pass
-    time.sleep(1)
-    if read_lock(a.work) is None:
-        lock_path(a.work).unlink(missing_ok=True)
-    emit({"stopped": True, "killed_after_30s": len(left), "left": len(sweep_processes(info["pgid"]))})
+    time.sleep(1)                                        # the stopped sweep removes its own lock; a killed one leaves it
+    emit({"stopped": True, "killed_after_30s": len(left), "left": len(sweep_processes(info["pgid"])),
+          "lock_left": lock_path(a.work).exists()})
     return 0
 
 

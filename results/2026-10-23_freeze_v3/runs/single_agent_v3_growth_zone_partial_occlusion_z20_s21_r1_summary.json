@@ -1,0 +1,134 @@
+{
+ "freeze_tag": "freeze-v3",
+ "commit": "b527786",
+ "method": "single_agent",
+ "rod": {
+  "case": "v3_growth_zone",
+  "fault": "partial_occlusion",
+  "size": "20",
+  "seed": 21,
+  "id": "v3_growth_zone_partial_occlusion_z20_s21"
+ },
+ "runner": "remote_job",
+ "truth": {
+  "peak_regr_pct_per_h": 54.0,
+  "peak_at_um": 421,
+  "largest_flank_difference_pct_per_h": 0.0
+ },
+ "error_before": {
+  "regr_rms_pct_per_h": 17.569,
+  "regr_max_pct_per_h": 88.658,
+  "regr_covered_um": 1137,
+  "flank_difference_rms_pct_per_h": 4.532,
+  "flank_difference_max_pct_per_h": 18.829,
+  "flank_difference_covered_um": 1137
+ },
+ "initial_checks": [
+  {
+   "check": "rigid_invariance",
+   "passed": false,
+   "value": 80.0733322465467,
+   "threshold": 2.0,
+   "unit": "%/h",
+   "where_s_px": 270.0,
+   "where_frame_pair": null,
+   "detail": "largest change in regr_mid"
+  },
+  {
+   "check": "closure",
+   "passed": true,
+   "value": 0.1611742835053458,
+   "threshold": 1.0,
+   "unit": "px/h",
+   "where_s_px": 549.5204639210956,
+   "where_frame_pair": 3,
+   "detail": "tip path 96.0 px/h; base at s = 550 px; largest single-pair residual at pair 3"
+  },
+  {
+   "check": "plane_sections",
+   "passed": false,
+   "value": 18.828933251214952,
+   "threshold": 3.25,
+   "unit": "%/h",
+   "where_s_px": 230.0,
+   "where_frame_pair": null,
+   "detail": "flank difference 18.83 %/h, predicted 0.00 %/h"
+  }
+ ],
+ "outcome": {
+  "task_id": "rod-1",
+  "agent": "single_agent",
+  "status": "decline",
+  "args": {
+   "fault": "width_change",
+   "reason": "After the width-free ratio rerun, the strain rate at 550 \u00b5m is still -44.4 %/h and the width-free ratio spikes to -0.495 there, against about \u00b10.05 elsewhere. The remedy has no further setting, and frame quality, patch displacement, midline jitter and drift give no evidence for another fault, so the measurement can't be trusted."
+  },
+  "steps": 8,
+  "failed_steps": 0,
+  "calls": 8,
+  "input_tokens": 37285,
+  "output_tokens": 4774,
+  "call_ms": 55656
+ },
+ "error_after": {
+  "regr_rms_pct_per_h": 17.569,
+  "regr_max_pct_per_h": 88.658,
+  "regr_covered_um": 1137,
+  "flank_difference_rms_pct_per_h": 4.532,
+  "flank_difference_max_pct_per_h": 18.829,
+  "flank_difference_covered_um": 1137
+ },
+ "remedies": [
+  "report the centre strain rate and the width-free ratio; plane-sections check skipped"
+ ],
+ "roll_backs": 0,
+ "final_settings": {
+  "stride": 1,
+  "disk_radius": null,
+  "register": false,
+  "register_from_px": null,
+  "midline_smooth": null,
+  "band_mask": null,
+  "width_free": true,
+  "couple": false
+ },
+ "final_checks": [
+  {
+   "check": "rigid_invariance",
+   "passed": false,
+   "value": 80.0733322465467,
+   "threshold": 2.0,
+   "unit": "%/h",
+   "where_s_px": 270.0,
+   "where_frame_pair": null,
+   "detail": "largest change in regr_mid"
+  },
+  {
+   "check": "closure",
+   "passed": true,
+   "value": 0.1611742835053458,
+   "threshold": 1.0,
+   "unit": "px/h",
+   "where_s_px": 549.5204639210956,
+   "where_frame_pair": 3,
+   "detail": "tip path 96.0 px/h; base at s = 550 px; largest single-pair residual at pair 3"
+  },
+  {
+   "check": "plane_sections",
+   "passed": null,
+   "value": 18.828933251214952,
+   "threshold": 3.25,
+   "unit": "%/h",
+   "where_s_px": 230.0,
+   "where_frame_pair": null,
+   "detail": "skipped: width-free ratio reported; flank difference 18.83 %/h, predicted 0.00 %/h"
+  }
+ ],
+ "reported": false,
+ "repeat": 1,
+ "trace": "single_agent_v3_growth_zone_partial_occlusion_z20_s21_r1_trace.jsonl",
+ "claude_code": "2.1.310",
+ "wall_s": 67.0,
+ "tracker_runs_new": 0,
+ "runner_log": []
+}

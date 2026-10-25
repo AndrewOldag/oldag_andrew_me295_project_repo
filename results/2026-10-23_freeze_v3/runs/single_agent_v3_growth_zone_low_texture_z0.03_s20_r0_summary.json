@@ -1,0 +1,134 @@
+{
+ "freeze_tag": "freeze-v3",
+ "commit": "f8b6729",
+ "method": "single_agent",
+ "rod": {
+  "case": "v3_growth_zone",
+  "fault": "low_texture",
+  "size": "0.03",
+  "seed": 20,
+  "id": "v3_growth_zone_low_texture_z0.03_s20"
+ },
+ "runner": "remote_job",
+ "truth": {
+  "peak_regr_pct_per_h": 54.0,
+  "peak_at_um": 421,
+  "largest_flank_difference_pct_per_h": 0.0
+ },
+ "error_before": {
+  "regr_rms_pct_per_h": 20.884,
+  "regr_max_pct_per_h": 68.266,
+  "regr_covered_um": 1137,
+  "flank_difference_rms_pct_per_h": 32.232,
+  "flank_difference_max_pct_per_h": 124.335,
+  "flank_difference_covered_um": 1137
+ },
+ "initial_checks": [
+  {
+   "check": "rigid_invariance",
+   "passed": false,
+   "value": 207.93492199864986,
+   "threshold": 2.0,
+   "unit": "%/h",
+   "where_s_px": 110.0,
+   "where_frame_pair": null,
+   "detail": "largest change in regr_minus"
+  },
+  {
+   "check": "closure",
+   "passed": false,
+   "value": 3.9920749149453356,
+   "threshold": 1.0,
+   "unit": "px/h",
+   "where_s_px": 549.2546296505014,
+   "where_frame_pair": 21,
+   "detail": "tip path 96.0 px/h; base at s = 549 px; largest single-pair residual at pair 21"
+  },
+  {
+   "check": "plane_sections",
+   "passed": false,
+   "value": 124.33462014789805,
+   "threshold": 3.25,
+   "unit": "%/h",
+   "where_s_px": 25.0,
+   "where_frame_pair": null,
+   "detail": "flank difference 124.33 %/h, predicted 0.00 %/h"
+  }
+ ],
+ "outcome": {
+  "task_id": "rod-1",
+  "agent": "single_agent",
+  "status": "decline",
+  "args": {
+   "fault": "bad_stage_correction",
+   "reason": "Frame registration, the remedy for the bad stage correction, made the velocity jump at stage moves worse (18.14 \u2192 743.69 px/h) and cannot be applied again. The resulting strain-rate profile is erratic (\u2212122 to 334 %/h, basal velocity 1731 vs about 1290 \u00b5m/h at the end of the profile), so the kinematics cannot be trusted."
+  },
+  "steps": 6,
+  "failed_steps": 0,
+  "calls": 6,
+  "input_tokens": 23538,
+  "output_tokens": 3059,
+  "call_ms": 34984
+ },
+ "error_after": {
+  "regr_rms_pct_per_h": 106.015,
+  "regr_max_pct_per_h": 328.044,
+  "regr_covered_um": 1231,
+  "flank_difference_rms_pct_per_h": 171.979,
+  "flank_difference_max_pct_per_h": 461.589,
+  "flank_difference_covered_um": 1221
+ },
+ "remedies": [
+  "frames registered on the non-growing tissue (from 545 px from the tip) before tracking"
+ ],
+ "roll_backs": 0,
+ "final_settings": {
+  "stride": 1,
+  "disk_radius": null,
+  "register": true,
+  "register_from_px": 545,
+  "midline_smooth": null,
+  "band_mask": null,
+  "width_free": false,
+  "couple": false
+ },
+ "final_checks": [
+  {
+   "check": "rigid_invariance",
+   "passed": false,
+   "value": 410.0861479163401,
+   "threshold": 2.0,
+   "unit": "%/h",
+   "where_s_px": 75.0,
+   "where_frame_pair": null,
+   "detail": "largest change in regr_minus"
+  },
+  {
+   "check": "closure",
+   "passed": null,
+   "value": NaN,
+   "threshold": 1.0,
+   "unit": "px/h",
+   "where_s_px": 638.7574641169992,
+   "where_frame_pair": 36,
+   "detail": "tip path 389.6 px/h; base at s = 639 px; largest single-pair residual at pair 36"
+  },
+  {
+   "check": "plane_sections",
+   "passed": false,
+   "value": 461.5889140258897,
+   "threshold": 3.25,
+   "unit": "%/h",
+   "where_s_px": 80.0,
+   "where_frame_pair": null,
+   "detail": "flank difference -461.59 %/h, predicted -0.00 %/h"
+  }
+ ],
+ "reported": false,
+ "repeat": 0,
+ "trace": "single_agent_v3_growth_zone_low_texture_z0.03_s20_r0_trace.jsonl",
+ "claude_code": "2.1.310",
+ "wall_s": 42.7,
+ "tracker_runs_new": 0,
+ "runner_log": []
+}

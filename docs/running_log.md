@@ -14,7 +14,7 @@ Required by the course. One entry per work session: done, remaining, bottlenecks
 - Update, same session: Andrew added read-only access. Quantum Borland cloned on the server (HEAD 2c6cebd, 21 Aug 2026), installed in env `qb`. Its tests: 24 passed, 7 skipped (sample data not in repo). All five midline-cascade weight files load on CPU
 - Remaining now: API key (Andrew's Console account shows no Billing page; likely a non-admin org seat, being checked)
 - Update: Andrew pushed his Oct edits to the Quantum Borland repo (d5f1829, 8 Oct: coupling fixes, two-side pipeline, `root_kinematics/paths.py`, affine readout test). Pulled on the server. No dependency changes. Tests: 35 passed, 7 skipped (sample data absent). `paths.py` defaults to a local Windows layout; on the server set `QB_DATA_ROOT` and related variables or its config file before running
-- Update: instructor says no API keys; agents must run through Claude Code under Andrew's Enterprise seat. Build machine CLI signed in. One test call with `claude -p --safe-mode --model claude-opus-5-5 --json-schema ...` succeeded; `modelUsage` showed only the pinned model. Code changes wait for approval
+- Update: agents run through Claude Code, with no API keys (course rule). Build machine CLI signed in. One test call with `claude -p --safe-mode --model claude-opus-5-5 --json-schema ...` succeeded; `modelUsage` showed only the pinned model. Code changes wait for approval
 - Done: draft root manifest. `scripts/manifest/scan_imgdirs.py` (runs on the server, reads metadata and a few frames, writes nothing in the data folders) found 192 .imgdir in 123 root positions (the earlier inventory said 118; per-folder counts disagree: 23/19/28/25/28 found vs 10/28/24/28/28). Each position has a stitched Montage folder; drought positions also have a raw two-position folder. Outputs in `data/manifest/` (git-ignored). Review app: `scripts/manifest/open_review.bat` or `python scripts/manifest/review_server.py`, saves to `data/manifest/manifest_reviewed.csv`
 - Found: 27 Jul roots each have one ~40 min gap (likely the transfer). 21 Jul `test1.dir` is empty. `0714_m6` has no montage. Two 21 Jul roots labelled 3DMontage. The context note's "2-tile montage" is right: raw folders alternate between two stage x positions 2.27 mm apart, stitched into 2400x1200 montages
 - Remaining: Andrew reviews the 123 roots and confirms the c/m, cc/mc/mm meanings
@@ -305,7 +305,7 @@ Required by the course. One entry per work session: done, remaining, bottlenecks
 - Result, dev seeds 1-5, correct of 25: script 10, remedy tree 24, diagnostician 24, single agent 11. False accepts: script 10, others 0. Not reported (step limit): diagnostician 1, single agent 13
 - Result, held-out seeds 0-2, correct of 15: script 3, remedy tree 9, diagnostician 11, single agent 7. False accepts: script 12, tree 3 (partial_occlusion), agents 0. Terminal fault correct: tree 1, diagnostician 3, single agent 1
 - Result: second_root: tree, diagnostician and single agent applied the width-free ratio, named width_change and accepted a good centre on 3 of 3 each; counted neither correct nor false accept under the label
-- Result, both sets, per run mean: diagnostician 5.2 steps, 23.0k tokens in, 2.7k out, 31.6 s call time; single agent 6.8 steps, 28.4k, 3.3k, 38.8 s. Totals 0.92M and 1.14M tokens in
+- Result, both sets, per run mean: diagnostician 5.25 steps, 23.0k tokens in, 2.7k out, 31.6 s call time; single agent 6.8 steps, 28.4k, 3.3k, 38.8 s. Totals 0.92M and 1.14M tokens in
 - Done, item 7 (30b78e1): `results/2026-10-12b_scored_v1/README.md`, `table_dev.md`, `table_heldout.md`, `scores.json`. Lab report 1 root-count mark replaced as the spec gives it
 - Done: `python -m pytest -q tests`: 169 passed
 - Setup, not tracked: worktree links to `private/` and the staging caches of the main checkout and the baselines, freeze-v2 and held-out worktrees
@@ -319,8 +319,8 @@ Required by the course. One entry per work session: done, remaining, bottlenecks
 - Done (99d70bd): definition `docs/proposals/2026-10-13_auditor-v1.md`, committed before any auditor run. `audit/view.py` (view from an allow-list, field summaries, robust z), `audit/rule.py`, `audit/llm.py` (actions through the unchanged orchestrator), `agents/prompts/auditor.md`, `scripts/synth/auditor_v1.py`; auditor step limit 20 in `config/models.yaml`; `tests/test_auditor.py`, 18 tests including the sentinel leak test
 - Done: all 160 final records found in the cache; 0 tracker runs
 - Done (d15db20): 8 batch views and rule auditor. Rule flags false accepts dev 10 / 10, held-out 15 / 15; good reports flagged dev tree 6 / 14, diagnostician 7 / 15, held-out 5 / 11
-- Done: LLM auditor dev, 3 prompt rounds x 4 batches, 12 calls (b1055da, aa8483a, 23d93ef). Good reports flagged, tree 4 -> 0 -> 0 / 14, diagnostician 7 -> 5 -> 0 / 15, single agent 5 -> 0 -> 5 / 6; script 10 / 10 false accepts and 15 / 15 good reports flagged every round
-- Done (46a9d6f): held-out, prompt aa8483a, 4 batches x 3, 12 calls, no change between runs (one system prompt hash over 74 calls). False accepts flagged 14 / 15 in each run (rule 15 / 15); good reports flagged 7, 5, 5 / 11 (rule 5 / 11); alt_repair 0 / 9 (rule 0 / 9)
+- Done: LLM auditor dev, 3 prompt rounds x 4 batches, 12 runs (b1055da, aa8483a, 23d93ef). Good reports flagged, tree 4 -> 0 -> 0 / 14, diagnostician 7 -> 5 -> 0 / 15, single agent 5 -> 0 -> 5 / 6; script 10 / 10 false accepts and 15 / 15 good reports flagged every round
+- Done (46a9d6f): held-out, prompt aa8483a, 4 batches x 3, 12 runs, no change between runs (one system prompt hash over 74 model calls). False accepts flagged 14 / 15 in each run (rule 15 / 15); good reports flagged 7, 5, 5 / 11 (rule 5 / 11); alt_repair 0 / 9 (rule 0 / 9)
 - Result: LLM miss on held-out: remedy tree partial_occlusion s1 (checks pass, normal shape, REGR peak z 6.7), cleared 3 of 3 under the round 2 prompt rule that a peak unlike the batch with a normal shape is a faster root
 - Result: 24 LLM auditor runs, all ended with report, 0 undecided, 0 errors; mean 80.2k tokens in and 48.6 s call time per dev run, 68.2k and 45.0 s per held-out run
 - Found: dev round 1 runs record commit 8a01264, a status commit made while they ran; code and prompt as 99d70bd
@@ -334,7 +334,7 @@ Required by the course. One entry per work session: done, remaining, bottlenecks
 - Done: Task B1-B3 of spec 2026-10-13 (real-movie frame-quality labeling set), branch wip/fq-real
 - B1: 30 windows of 1 h, ids fq01-fq30 in shuffled order: 20 control roots with include yes inside usable hours, 10 likely poor (notes on lighting, focus, dark region, banding, artifacts). Experiments 0708/0711/0714/0721/0727: 6/5/8/7/4 windows. Start hours 1.7-21.7 h. List in the git-ignored private folder
 - B1 deviation: 0727 has 2 control roots with include yes and no image-problem note, so it gives 2 clean-candidate windows; 0714 and 0721 give 5 each instead of 4
-- B2: 90 frames (start, middle, end of each hour) from the montage image folders, read-only on the lab server: sftp at nice 19, ionice idle, 40 Mbit/s cap, load checked before each window (1 min load 0.3-0.7 of 32 cores), no other transfer running. Nothing written, moved or deleted on the server
+- B2: 90 frames (start, middle, end of each hour) from the montage image folders, read-only on the lab server: copied at nice 19, ionice idle, 40 Mbit/s cap, load checked before each window (1 min load 0.3-0.7 of 32 cores), no other transfer running. Nothing written, moved or deleted on the server
 - B2: frame step inside the windows 90-114 s; no window crosses an acquisition gap
 - B2: set in staging/fq_real_labeling/ (git-ignored): frames/ (90 .npy, 12-bit, 1200 x 2280 px), view/ (30 PNG, 3 frames stacked, 12-bit range mapped to 8-bit, no auto-levels, downscaled 3x), labels.csv (30 rows, label empty), HOW_TO_LABEL.txt. 530 MB on disk (cap 5 GB)
 - B3: frame_quality (texture_contrast, focus) for all 90 frames with measure.preprocess.frame_quality, band radius 45 px as in qb_track.py. Values in the private folder, not in view/ or labels.csv
@@ -379,13 +379,13 @@ Required by the course. One entry per work session: done, remaining, bottlenecks
 - Stopped check: no sweep running; slice sweep.lock from 2026-10-14 is stale (its process is gone), left in place. 5 Claude Code processes, 0 python processes on the VM; none killed
 - Course repo: all 10 worktrees clean, nothing to commit; every branch already on origin; tag freeze-v2 already on origin. Pre-push hook blocked nothing
 - Heads: main 8759d4f, heldout/faults fe7dda1, wip/auditor-v1 cb7f65f, wip/auditor-v1b 1c55763, wip/baselines ffaacf5, wip/diag-review 55edff8, wip/fq-real 149ff37, wip/freeze-v2 5593c65, wip/gatekeeper 52600c0, wip/lab-report-1 d911c6a, wip/scored-v1 5562438; tag freeze-v2 6a68610
-- Course lane: me295-all.bundle (3.1 MB, all refs), planning-clone bundle (0.2 MB, main 52c1f80), me295-nongit.tar.gz (1.14 GB: private/, data/, staging/ incl. tracks .npz/.npy 917 MB, worktree staging/, one ignored results file, .claude settings/skills/projects, env exports, pip freeze, Python versions, ssh config)
-- Research lane: tracker repo bundle (124 MB; 1 local commit not pushed, no GitLab remote, kept in bundle per Andrew) and working-files tarball (219 MB). Contents listed in RESTORE.md in the backup folder, not here
-- Left out: *.tif, *.tiff, *.sldy (raw frames, re-pulled later against checksums); SSH and API keys; Claude caches and telemetry. Not present on the VM: the lit-review folder, crontab, docs/running_log_pending/
+- Course lane: me295-all.bundle (3.1 MB, all refs), planning-clone bundle (0.2 MB, main 52c1f80), me295-nongit.tar.gz (1.14 GB: private/, data/, staging/ incl. tracks .npz/.npy 917 MB, worktree staging/, one ignored results file, .claude settings/skills/projects, env exports, pip freeze, Python versions, access config)
+- Research lane: tracker repo bundle (124 MB; 1 local commit not pushed, no remote, kept in bundle per Andrew) and working-files tarball (219 MB). Contents listed in RESTORE.md in the backup folder, not here
+- Left out: *.tif, *.tiff, *.sldy (raw frames, re-pulled later against checksums); access keys; Claude caches and telemetry. Not present on the VM: the lit-review folder, crontab, docs/running_log_pending/
 - Verified on the server: sha256sum -c 5 of 5 OK; each bundle cloned and fsck clean, branch hashes match. Clones left in the backup folder's _verify/ for Andrew to delete (CLAUDE.md: no server deletes)
-- Deviation: the VM has no rsync. Files were piped over ssh to a nice/ionice receiver. The 1.14 GB tarball ran at 74 MB/s for 15 s, above the 50 MB/s limit; other files under 54 MB/s. Server 1-min load 2.2 of 32 before the copy
+- Deviation: the VM has no rsync. Files were piped to a nice/ionice receiver on the server. The 1.14 GB tarball ran at 74 MB/s for 15 s, above the 50 MB/s limit; other files under 54 MB/s. Server 1-min load 2.2 of 32 before the copy
 - Demo: on the server, `sha256sum -c SHA256SUMS` in course/ and research/ prints OK for each file
-- Remaining: after rebuild, follow RESTORE.md; push the tracker commit to GitLab; Andrew deletes _verify/
+- Remaining: after rebuild, follow RESTORE.md; push the tracker commit to its remote; Andrew deletes _verify/
 - Bottlenecks: none
 
 ## 2026-10-16 (build account, session vm-setup)
@@ -399,7 +399,7 @@ Required by the course. One entry per work session: done, remaining, bottlenecks
 - Done, item 3 (129b1a5): resume rules and Agent View worktree rule in CLAUDE.md; `.claude/worktrees/` in `.gitignore`; `scripts/ops/heartbeat.sh`, `backup_vm.sh`, `hidden.vbs`, `install_schedule.ps1`; `config/backup.example.conf`; `tests/test_ops.py`. Windows scheduled tasks, not cron (no cron on the VM)
 - Done, item 3: backup tested by hand as `2026-10-16_test`: build 7 min, course 1.1 GB, research 328 MB, sent in 53 s (about 28 MB/s, cap 40), sha256sum -c on the server 5 of 5 OK (script and by hand), local stage removed
 - Changed by Andrew: the backup never deletes on the lab server (pruning code removed; test fails on any server rm, mv, rsync or find); no scheduled backup (me295-backup unregistered; script by hand only)
-- Done: heartbeat installed by Andrew with -S4U from an elevated shell; run at 18:10 under S4U, result 0; no gap so far. S4U ssh check: a scheduled backup run reached the server and stopped on the existing 2026-10-16 folder, as designed
+- Done: heartbeat installed by Andrew with -S4U from an elevated shell; run at 18:10 under S4U, result 0; no gap so far. S4U server check: a scheduled backup run reached the server and stopped on the existing 2026-10-16 folder, as designed
 - Done: 9 old sibling worktrees removed (all clean, merged into origin/main, equal to origin; branches kept; no --force). 16 junctions unlinked first, targets kept (private/ 18 entries before and after). Caches moved into the main checkout's staging/: tracks_baselines 124 files, tracks_2026-10-12 81, tracks_heldout 81, tracks_heldout_labels 99, tracks_scored_v1 142; id_map.json into results/2026-10-13_auditor_v1/
 - Checked: all 8 auditor batch views (dev 4 x 25 runs, held-out 4 x 15) rebuild from the main checkout's caches and equal the committed views
 - Tests: full suite 203 passed, 0 skipped, 62 s, after all changes
@@ -425,4 +425,309 @@ Required by the course. One entry per work session: done, remaining, bottlenecks
 - Step 5 after re-pin: 198 passed, 5 skipped, 0 failed, 70 s
 - Demo: `python scripts/check_cli.py` prints the version, login, model and `OK`
 - Remaining: merge wip/readme-check; "README checked on 2026-10-17" in Lab report 1, noting the re-pin
+- Bottlenecks: none
+
+## 2026-10-23 (build account, session spec-audit)
+- Done: spec `docs/specs/2026-10-23_spec-audit.md`, course half; branch `wip/spec-audit`; task c008
+- Done: literature network location missing from the private paths file at start (stop item, reported in status 6915060); then added by spec-audit-r, which had copied the network to the VM; not copied again
+- Done: six reviewer agent files `.claude/agents/audit-*.md`, one commit each (c7d3df3, f2f7d46, ab85c0b, fa7f248, 8a391f8, 52f32a7); `.claude/` is in the local git exclude, files added with `git add -f`
+- Done: reviewers run as six parallel subagents, each writing one file in `docs/reviews/2026-10-23_spec-audit/`. Run times 7-20 min
+- Results: specs 21 findings (1fa8f12), rules 11 (0176ce3), numbers 13 (c123706), kinematics 6 (c0e5136), bending-and-tracking 9 (5bcb744), evaluation 11 (f847be5)
+- Results: 71 findings: 0 would change a reported number, 17 would change a design choice, 54 record only; 12 touch a frozen item. One STOP item (rules-1, the known 2026-10-12 hook hit in 304a3cb)
+- Done: `SUMMARY.md` (2eb1215): findings ranked, spec item states (121 rows: 78 met, 7 partial, 6 not met, 11 not shown, 7 changed by decision), papers for Andrew to check
+- Pre-push hook blocked one push: a literal account-at-domain placeholder in `specs.md`; reworded and amended before the push
+- Tests re-run by the specs reviewer: 174 of 203, 173 passed, 1 failed (`tests/test_board.py::test_research_rows_never_in_tracked_files`, specs-3)
+- No code, config, threshold, prompt or result changed. No server jobs, no tracker runs, no pipeline agent calls, no PDF opened
+- Demo: `cat docs/reviews/2026-10-23_spec-audit/SUMMARY.md` prints the counts table, ranked findings and the paper list
+- Remaining: spec-audit-check writes `CHECK.md`; Andrew marks findings; merge `wip/spec-audit`
+- Bottlenecks: findings marks (Andrew); rules-4 and specs-20 on `origin/status/gate2` (Andrew)
+
+## 2026-10-23 (build account, session spec-audit-check)
+- Done: "spec-audit-check" section of `docs/specs/2026-10-23_spec-audit.md`; branch `wip/spec-audit-check` from `wip/spec-audit` (6b33b84); task c008, CHECK.md part
+- Done: fresh check; read the reviewer files, SUMMARY.md and the cited sources only; no reviewer agent file, trace or transcript read
+- Results: 17 of 17 design-choice findings confirmed; 10 of 10 record-only findings (seed 0) confirmed; 10 of 10 literature citations (seed 0) confirmed against the digests; 0 not reproduced; 0 wrong location
+- Results: line offsets inside confirmed findings: rules-3 `PATH_RE` at `:52` (cited `:49`); rules-7 `:373` (cited `:374`); rules-10 one time in UTC
+- Recomputed: width-free ratio on `width_change` -0.435 to -0.035 (1/400 px); growth-zone geometry at 2.105 and 0.84 um/px; all-decline replay 22 of 40 (held-out 12 of 15); pre-push scan `origin/main` 175 commits, 1 known hit
+- No code, config, threshold, prompt or result changed. No server access, no tracker runs, no agent calls, no PDF opened. Reviewer files not edited
+- Demo: `cat docs/reviews/2026-10-23_spec-audit/CHECK.md` prints the counts per reviewer and one row per checked item
+- Remaining: Andrew marks findings in the reviewer files; coordinator merges `wip/spec-audit` and `wip/spec-audit-check`
+- Bottlenecks: finding marks (Andrew)
+
+## 2026-10-23 (build account, session host-setup)
+- Done: workstation key login from the VM works; survey in `private/workstation.md`: 14 cores / 20 threads, 62 GB RAM, no usable GPU, 41-46 GB free disk, imaging drive not mounted
+- Done: tracker environment built on the workstation from `envs/qb.yml` (micromamba, work folder, nice 19); tracker master d5f1829, gate2-windowed-coupling 52e9bd1 and stage-auxdata 888f972 copied there as git archives made on the VM
+- Done: synthetic test, rod `v3_growth_zone_clean_s10`, state st1: render byte-identical, tracks max |d| 2.3e-13 px against the lab-server run (limit 1e-6); tracking loop 4.4 s against 6.2 s
+- Failed, 15:20: first attempt at the real-window frame transfer refused by the session's permission check (both routes); Andrew approved workstation access at 18:20 (inbox item 5)
+- Done: real-window test, root 0708_m12, 4-6 h: tracks max |d| 1.1e-12 px; checker closure 5.533 px/h and plane_sections 256.99 %/h on both; tracking loop 8.8 s against 12.3 s (`results/2026-10-23_host_setup/README.md`)
+- Done: frames for the test: the root's montage folder without histograms (961 frames, 5.54 GB); a frame subset does not load (the tracker checks the frame count against the stage table). Work folder 9.9 GB of the 20 GB cap; 36 GB free
+- Done: upload key from the workstation to the lab server works; test outputs and done marker in the task's lab-server folder (11 files)
+- Done: optional `host:` field on the task board (`scripts/board.py`, `tasks/README.md`), set on every open course task; `tests/test_board.py` 10 passed; full suite 205 passed
+- Done: decisions entries for host roles, the one-host-per-part rule, the reproduction and the whole-folder frame rule
+- Demo: `python scripts/board.py` prints the board with a host column
+- Remaining: coordinator merges and applies the host assignment (status file, item 3)
+- Bottlenecks: workstation disk: room for about one more root montage under the 20 GB cap
+
+## 2026-10-23 (build account, session freeze-v3)
+- Done, item 1: status and task c011 started (first commit on `wip/freeze-v3`)
+- Done, item 2: `docs/proposals/2026-10-23_freeze-v3.md`. Scoring set 48 rods on new seeds 20-22: accept_clean 15, accept_repaired 15, decline 18 (expected; labels from a tracker-only sweep). All-decline 18 of 48, balanced accuracy 1/3
+- Proposal: metrics in `measure/metrics.py` (per-class accuracy, balanced accuracy, false-accept rate, coverage, abstention precision and recall); 3 repeats per rod for the LLM methods, unanimity rate and Fleiss kappa
+- Proposal: v3 rods at 2.105 um/px, tip 96 px/h (2.4 px/frame, from the timing run on `wip/dispatcher`), growth zone s_mid 200 px, width 45 (peak REGR 54.0 %/h at 421 um, zone 543 um; computed from `measure.rod.richards_velocity`), tracked length 500 px, stage follows the tip every frame; bent rods 16, 20, 24 and 30 deg/h
+- Proposal: kinematics-1, width-free ratio corrected for curvature (exact on field-level rods); not dropped. Claude Code 2.1.302 recorded in v3. New held-out injector `stage_log_missing`
+- Proposal: about 490 tracker runs (over the 300 limit; asks a cap of 600), 288 LLM runs. No run made
+- Approved by Andrew 13:41 with a fixed non-growing rod added (set of 51: accept_clean 18, accept_repaired 15, decline 18), cap 600 tracker runs; recorded in `docs/decisions.md` (d9d5318)
+- Done (1a16f11): v3 cases in `measure/rod.py`, v3 frames in `measure/render.py`, `stage_log_missing` and v3 zone in `measure/render_heldout.py`, corrected `width_free_ratio` (field-level error under 1e-3 on 11 rods; v2 width_change max 0.435 -> 0.000), no-growth limit 0.5 %/h, `measure/metrics.py`; `tests/test_freeze_v3.py`
+- Done (7eb7cc3): no rename or overwrite on the lab server (spec audit rules-2): `qb_track.py` writes once and marks `.ok`, `make_rod.py` refuses an existing rod, `sweep.py` counts only `.ok` outputs and leaves partial files, code folder per commit from `git archive`, plan and log names per start; per-rod track length
+- Done (47a3c47, ece537c, 9eb747d): `scripts/synth/scored_v3.py`; v3 seeds in `config/scoring_seeds.yaml`; README steps. Suite 242 passed, 5 skipped
+- Run: one smoke rod as single jobs, 44 s, checks pass, centre error 0.35 against 1.35 %/h
+- Run (433fdcf): clean basis, 30 rods x seeds 10-14, 100 tracker runs in 2 sweeps, 0 failed, 405 s and 149 s wall, load at most 6.13 on 32 cores, work space 7.57 -> 9.47 GB. Largest clean values rigid_invariance 1.42, closure 0.36, plane_sections 2.97 %/h; flank error 0.575 %/h. Thresholds and tolerance stay. `results/2026-10-23_freeze_v3/basis.md`
+- Andrew freed lab-server space (v2 renders removed, 4.9 GB). Lab-server limit of 2 jobs per account built into `RemoteRunner` (e454378)
+- Run (f599564): held-out sizing at v3 geometry, seeds 10-12, 36 tracker runs, 0 failed; all six faults fail 3 of 3 at the v2 sizes; no size change
+- Run (6ebc9db): labels of 51 rods, 228 tracker runs, 0 failed. `v3_bend30_clean_s20` fails closure 4.51 px/h with a good measurement: kept accept_clean (Andrew, option a). `displacement_exceeds_patch` 2x6 not repairable at v3 speed: decline. Classes 18 / 12 / 21
+- Claude Code re-pinned to 2.1.310 (installed version); tag `freeze-v3` on e1e672a
+- Run (869f130): method-phase tracker runs, 124 in 7 rounds, 0 failed (loop stopped once by Claude Code on VM memory; restarted in the foreground by Andrew). Script and remedy tree, 102 runs; second runs from the cache identical 102 of 102
+- Run: 306 LLM runs (diagnostician and single agent, 3 repeats), 0 harness errors, CLI 2.1.310 throughout. Stopped twice on VM memory (157 of 306); resumed in 15 blocks of 8-13 runs, free-memory floor 1.5 GB (Andrew), free 1.7-2.4 GB before each block
+- Tracker runs in all: 528 of the 600 cap, 0 failed
+- Results (`results/2026-10-23_freeze_v3/README.md`): balanced accuracy remedy tree 0.81, diagnostician 0.69 (0.69-0.69), script 0.67, single agent 0.60 (0.57-0.64), all-accept 0.67, all-decline 0.33. False accepts per run set: script 18, remedy tree 4, diagnostician 0, single agent 0. Unanimity over 3 repeats: diagnostician 39 of 51 (Fleiss kappa 0.776), single agent 24 of 51 (0.503)
+- Found: all 12 accept_repaired rods have a good unremedied measurement, so accepting without a remedy scores them correct (script 12 of 12). `stage_log_missing`: no LLM run and no remedy-tree run correct (0 of 9, 0 of 3). `second_root`: 0 correct for every method
+- Also found: Edge crash dumps took 54.5 GB in the user profile on the VM (reported to Andrew, who cleared them)
+- Demo: `python scripts/synth/scored_v3.py eval` prints the metrics tables from the committed runs
+- Remaining: coordinator merge of `wip/freeze-v3`; Andrew reviews the results README
+- Bottlenecks: none
+
+## 2026-10-23 (build account, session autotrace)
+- Done: task c013. Landmark rule from 9 July hand traces: drafts end 35 px (74 um) behind the root apex; July traces run tip to base
+- Done: net drafts for all 140 tracing-pack frames on the workstation (tile mode, fine-tuned midline net): 140 drafted, 0 with no root; net 2338 s, conversion 81 s, previews 36 s
+- Done: 140 previews (28 held out, labelled and skipped), index, held-out list and worklist, review tool and apply step in the pack's `review/` folder on the lab server; tested headless on 3 frames. Counts in `results/2026-10-23_autotrace/README.md`
+- Demo: `python review_traces.py . --backend MacOSX` in the review folder shows frame 1 of 112 and saves each y/n to `review.csv`
+
+## 2026-10-24 (build account, session autotrace)
+- Done: Andrew's review checked (72 y, 40 n; 109 traced, 3 skipped; 28 held-out hand-traced)
+- Done: training list of 181 compliant traces (72 July include-yes in-window + 109 pack; 43 July traces refused; no held-out frame or root), seed 20261023
+- Failed: cluster P100 job with the original recipe ran out of GPU memory at the first step ($0.008); V100 job cancelled while pending (start estimate 10 days out, $0)
+- Done: cluster P100 job with gradient accumulation (batch 3 x 2, Andrew's option A): net2_midline_ft2, 20 epochs, best validation loss 0.0022, 1 h 23 min, $0.234; spend today $0.691 of $5
+- Done: held-out score (28 frames, 16 roots): base net2 off the root on 24; net2_midline_ft distance median 2.9 px, p90 7.4 px, end +28 px; net2_midline_ft2 distance median 2.4 px, p90 6.4 px, end +23 px; 0 no root and 0 off the root for both fine-tuned nets
+- Demo: the score table in `results/2026-10-23_autotrace/README.md`
+- Done: net2_midline_ft2 adopted by planning (2026-10-24 05:05); weights copied beside the dispatcher's tracker weights on lab server and workstation, new file name, md5 checked (item 14)
+- Remaining: none for autotrace; the dispatcher reruns the 3-root slice with ft2
+- Bottlenecks: none
+
+## 2026-10-24 (build account, notes for spec audit specs-9 and specs-13)
+- Spec closed: `2026-10-09_checker-and-synthetic-rods.md`, closed by the 2026-10-23 spec audit: 12 items met, 1 partial, 1 not met, 1 not shown, 2 changed by decision (`docs/reviews/2026-10-23_spec-audit/specs.md` section 1)
+- Spec closed: `2026-10-10_bent-rods-width-change-rotation.md` and `2026-10-10_repair-criteria.md`, closed by the same audit: 9 met, 3 partial, 2 not shown (both specs together; specs-6, specs-7)
+- Spec closed: `2026-10-11b_padding-flank-tolerance-coupling-weight.md`, closed by the same audit: 5 met, 1 partial, 1 not shown (specs-8)
+- Spec closed: `2026-10-11c_world-coordinate-smoothing-uncoupled.md`, closed by the same audit: 4 met, 1 not shown
+- Gap 2026-10-17 to 2026-10-23, no session entry on main at the time: task c004, Lab report 1 marks filled 2026-10-17 by Andrew with the planning account; task c007, literature network built outside the VM 2026-10-18 to 2026-10-23, kept out of this repo by decision (2170ca5); coordinator items 6-7 on 2026-10-23 (2170ca5, c730662)
+
+## 2026-10-24 (build account, session audit-marks)
+- Mistake: at start the session took itself for the coordinator and pushed coordinator items 15 and 17 to main: 915859a (merge wip/autotrace), 074e102 (board accepts a host note in parentheses; c014 and c015 had failed `test_board`), eaaa37b (`sweep.py` removes only the lock it wrote). Suite 253 passed. Andrew kept them; the coordinator records them
+- Done: item 3, small fixes, one commit each: rules-3 069d5e8 (11 home-relative or server paths to role names; locations in `private/paths.md`), rules-5 3378952 (14 access-method wordings), numbers-3 to -9 af951e1 (corrections section in Lab report 1; log, summary, background wording), kinematics-3 and -5 0469497, specs-11 ed8279a, specs-9 and -13 3163fec (notes above)
+- Done: item 1, all 71 course audit findings marked: 13 handled (freeze v3 / v3.1), 17 fixed, 2 known limit (report), 39 no action; marks line in SUMMARY.md
+- Done: item 4, research audit: MARKS_2026-10-24.md (58 ids) and PLAN_AMENDMENTS_2026-10-24.md written as new files in the research audit folder on the lab server, md5 checked; tracker repo docs commits on `offshoot-structure-tensor`, 919c740 (kinematics-3) and 7f69563 (tracking-8), pushed
+- Blocked: item 2, `git push origin --delete status/gate2` refused by the session's permission check; decisions entry written; Andrew runs the delete
+- Demo: `cat docs/reviews/2026-10-23_spec-audit/*.md | grep -c -- "- Andrew: accepted"` prints 71
+- Remaining: Andrew deletes `status/gate2`; coordinator merges wip/audit-marks
+- Bottlenecks: the remote branch delete, on Andrew
+
+## 2026-10-24 (build account, session freeze-v31)
+- Done: `scripts/synth/scored_v31.py`, freeze v3.1 driver on top of `scored_v3.py` (v3 code unchanged); `tests/test_freeze_v31.py` 3 passed (1c1a548)
+- Done: second_root cause from the v3 runs: only plane_sections fails; crop_or_mask leaves every value unchanged; `use_width_free_ratio` makes all applied checks pass with a good centre, so methods accept. Alternative repair: remedy tree 3 of 3, diagnostician 9 of 9, single agent 6 of 9 (`results/2026-10-24_freeze_v3.1/second_root.md`)
+- Done: sizing sweep 1 on the lab server: stopped by the 10 GB work-space limit after 13 of 114 runs, 0 failed. Lab server then set to storage only (Andrew); tracker runs moved to the workstation
+- Done: runner settings `rods_dir`, `max_gb` (95764c7); cache-match test on the workstation passed: renders identical 44 of 44 files, tracks within 3.4e-13 px (`cache_match.md`, ec9c589)
+- Done: sizing sweeps 2-3 on the workstation: 108 runs, 0 failed. 121 tracker runs logged in all, 120 distinct outputs (cap 300)
+- Done: sizing (`sizing.md`): no fault qualifies on 3 of 3 seeds; register_frames repairs bad_stage_correction at 5 px on 1 of 3. Spec stop rule met (fewer than 3 faults). Andrew chose option a: v3.1 ends, v3 stays the scored set; no tag, no labels, no method runs
+- Done: outputs on the lab server, 464 files, count and sha256 verified; then 3,660 workstation render files of the 78 sweep rods deleted (1.74 GB) under Andrew's one exception, each logged; log stored on the lab server
+- Done: `results/2026-10-24_freeze_v3.1/README.md`; README section; decisions entry (size steps, cache-match test, runner settings); full suite 256 passed
+- Demo: `python scripts/synth/scored_v31.py sizing` prints the sizing table
+- Remaining: none for c014. Coordinator merges wip/freeze-v31
+- Bottlenecks: none
+
+## 2026-10-24 (build account, session coord-tick)
+- Done: `scripts/ops/coordinator_tick.ps1` (lock, fetch, sorted ls-remote hash, skip under 60 min, headless `claude -p` pass stopped at 20 min, log lines start/commit/exit/end/pings) and `scripts/ops/install_coordinator_tick.ps1` (task `me295-coordinator-tick`, 10 min, S4U, IgnoreNew); 2adff36
+- Done: 3 tick tests in `tests/test_ops.py` with stubbed git and claude (skip on unchanged refs, order-independent hash, hourly full pass, live lock); `tests/test_ops.py` 8 passed
+- Done: docs: `CLAUDE.md` Agents, `docs/agents/README.md`, `docs/decisions.md`, coordinator inbox item 20 (19 on its branch; renumbered at merge), `README.md`
+- Done: hand test (Andrew, main repo folder): full pass 168 s, exit 0, 15 turns, out 5816 tokens, cache read 625818, 0.56 USD; merged wip/freeze-v31 (2c373d1, suite 256 passed), status 6608cca. Skip tick 13:08: no Claude call
+- Demo: `powershell -File scripts/ops/coordinator_tick.ps1` appends to `OPS_DIR/coordinator_tick/tick.log` (skip line, or start/commit/exit/end/pings)
+- Remaining: Andrew installs the task elevated; check the first scheduled (S4U) full pass in the log; stop live coordinator sessions
+- Bottlenecks: install on Andrew (elevated shell)
+
+## 2026-10-23 (build account, session dispatcher)
+- Done, B1 (23443d2): `docs/proposals/2026-10-23_dispatcher.md`. Typed actions split_root, estimate_cost, request_approval, submit, wait, collect, retry, finish; orchestrator enforces budget and shared-machine limits; fixed-script baseline; fake-queue tests. No dispatcher code until Andrew approves
+- Done, B2 (9bfb316): one real window timed on the lab server, root 0708_m12 (drought, mannitol), 80 frames per 2 h window, uncoupled, one single-thread job at lowest priority. Midline 31-33 CPU s, 0.25 GB; tracker 26-50 s wall (tracking loop 12-13 s), 3.95 GB peak; output 0.92 MB per window. Load (1 min) at most 1.45 of 32 cores
+- New: `qb_track.py --from-h --to-h` (window only); `scripts/remote/real_midline.py` (provisional midline); `scripts/remote/time_window.sh` (load check, nice, ionice, `/usr/bin/time -v`)
+- Checker on the timing root failed, t2 (2-4 h) and t3 (4-6 h): closure 68.2 and 76.5 px/h (threshold 1.0), plane_sections 358 and 254 %/h (threshold 3.25). Cause: stage-tracking moves are in the movie's auxiliary data table, not in the stage-position table the tracker reads, so stage correction is zero. Not in the fault list. Stopped for Andrew
+- Done, B4: `results/2026-10-23_tracker_timing/` (README, timing.json, estimate.py, estimate.md). 1.04 core-s per frame. All 102 include-yes roots once at 3 settings per window: 153 core-hours, about 38 h at 4 lab-server workers, $1.84 on the cluster. Worst case 118 roots x 24 h x 10 settings: 652 core-hours, $7.83
+- B3 cluster trials: connection up, work folder made, no job submitted, $0.00 spent. The first data copy to the cluster was refused by the session permission check; not retried
+- Tests: 202 passed, 1 failed (`tests/test_board.py::test_research_rows_never_in_tracked_files`: a research task file outside the repo has state 'waiting on Andrew', not in the board's state list; not this session's file), 130 s
+- Demo: `python results/2026-10-23_tracker_timing/estimate.py` prints the cost table
+- Remaining: Andrew approves or changes the proposal; stage-correction source for real movies; cluster copy permission; then B5 (dispatcher, real slice)
+- Bottlenecks: proposal approval, stage-tracking table, cluster copy permission (Andrew)
+
+## 2026-10-23 (build account, session dispatcher, inbox item 6)
+- Done: cluster copy of 0708_m12 checked against the lab-server copy: 1931 files, same names and sizes, 5,599,241,881 bytes
+- Done: two runner configs (CPU, P100) and a ledger check script written, both outside the repo. Spent today $0.23 (earlier runner test). P100 nodes free at check time
+- Found: the cluster runner, like the lab tracker, reads no stage-tracking table; montage movies get zero stage correction
+- Done: probe on the lab server, t3 re-tracked with cumulative stage-tracking moves: closure 76.5 -> 5.5 px/h (sign +), 158.6 px/h (sign -); plane_sections 254 -> 256 %/h, unchanged. `results/2026-10-23_tracker_timing/README.md`
+- Decision (Andrew): stage correction goes into the tracker repo loader, then the runner install; no dispatching before that. Cluster jobs not submitted
+- Demo: `python results/2026-10-23_tracker_timing/estimate.py` prints the cost table
+- Remaining: stage correction in the tracker repo and runner (Andrew or research lane); then the two cluster jobs; closure residual 5.5 px/h and plane_sections on real movies; proposal approval
+- Bottlenecks: tracker-repo stage correction (Andrew); proposal approval (Andrew)
+
+## 2026-10-23 (build account, session dispatcher, inbox item 7)
+- Done: tracker repo branch `stage-auxdata` 888f972: stage-tracking table reader, summed positions for constant stage tables, `stage_source`, raw two-tile folders raise; tracker tests 46 passed, 9 skipped
+- Done: validation on 0708_m12 t2, t3 (lab server): background drift 80-85 -> 1-3 px/h with sign +, step after frame; pass. Course checker closure t3 76.5 -> 5.53, t2 68.2 -> 11.2 px/h (fail; tracked length inside growth zone); plane_sections unchanged
+- Done: scan of 122 montage folders: 121 counts match; 0727_cc7 155 steps for 857 frames, flagged
+- Done: private runner copy on the cluster with 888f972; root listing works
+- Failed: cluster job script not written; permission check refused it. No job submitted; no compute node used
+- Remaining: permission or Andrew to write and submit the 2 cluster jobs; 0727_cc7 decision; proposal approval
+- Bottlenecks: cluster submit permission (Andrew); 0727_cc7 (Andrew)
+
+## 2026-10-23 (build account, session dispatcher, inbox item 8)
+- Done (696784d): `0727_cc7` usable_to_h 9.5 -> 4.05 (stage-tracking table ends at frame 154, 4.059 h); rule in decisions and manifest README
+- Done: closure vs tracked length, lab server, t2 and t3 at 700 and 950 px: t3 0.65 (pass at 700) and 4.71; t2 7.22 and 5.08 px/h. Not monotonic; checker unchanged
+- Done: plane_sections 440-558 %/h; cause: curvature noise of the provisional pixel-skeleton midline (0.04-0.09 /px per frame at smoothing 0)
+- Done: cluster GPU job 5350185 (P100): ok, 80 frames, 11 min 15 s, $0.032, stage_source aux_stage_tracking. Previews fail: midline ends about 280 px short of the tip. Stopped for Andrew. CPU job 5350184 still running at 31 min
+- Done (697321b, c42dfca, and the next commit): B5 part 1: `agents/dispatcher.py` (engine, typed actions, fake queue, script baseline), `agents/prompts/dispatcher.md`, `config/dispatcher.yaml`, `scripts/demo_dispatcher.py`; `tests/test_dispatcher.py` 19 passed; full suite 222 passed, 0 failed, 64 s
+- Done: tracker `stage-auxdata` merged into `gate2-windowed-coupling` with --no-ff, 52e9bd1, pushed; tracker tests 46 passed, 9 skipped
+- Demo: `python scripts/demo_dispatcher.py` prints 1189 windows collected, 51.1 core-hours, 20 retries, 20 succeeded, peak 4 workers, 15.5 h fake wall time
+- Remaining: CPU job result and ledger; net midline at SlideBook scale (Andrew); closure residual cause; plane sections with a smooth midline; B5 part 2 (real slice)
+- Bottlenecks: runner net scale on SlideBook frames (Andrew); closure and plane sections not understood yet
+
+## 2026-10-23 (build account, session dispatcher, inbox items 9-10)
+- Done: cluster CPU job 5350184: TIMEOUT at 2 h 0 min 20 s; midline stage 6805 s (85 s per frame on 8 cpus); $0.193. Ledger actuals written; spent today $0.45 actual
+- Done: net-scale sweep, lab server CPU, 5 frames, factors 1.0, 1.5, 2.0, 2.506: midline end to tip median 617, 543, 282, 299 px; tip net within 19-30 px at all factors. No factor reaches the tip; cause seen in the preview: tip zone clipped black by the contrast stretch. No GPU rerun. Stopped for Andrew
+- Done: closure worst pairs (t3 pair 7, t2 pair 16): whole-pixel jumps of the provisional midline tip (0-6 px per pair) against a smooth tracked tip (about 2 px per pair); not stage, not tracking
+- Item 10 noted: at most 2 lab-server jobs of this account; this session's job scripts start only when no other job of this account runs
+- Remaining: Andrew: contrast setting for the net midline, or another midline source; then GPU rerun, closure and plane sections with the net midline; B5 part 2
+- Bottlenecks: net midline does not reach the tip (Andrew)
+
+## 2026-10-23 (build account, session dispatcher, inbox items 11-15)
+- Item 11 replaced by item 14 before it ran (lab-server load 26 of 32 from another user; no job started)
+- Done, item 14: tracker tile mode, fine-tuned net2, workstation, 5 frames of 0708_m12 t3: midline end to tip median 2.0, 2.2, 3.2 px at low percentile 1, 0.3, 0.1 %; tip confidence 0.67, 0.75, 0.76. Kept 0.1 % (decisions)
+- Done: net midline on the whole t3 window: 80 frames, 1411 s on 8 threads; tracked at 400, 700, 950 px: closure 0.95 (pass), 1.48, 2.26 px/h; plane_sections 134, 216, 247 %/h (fail). Cause of plane_sections: midline curvature noise (0.01-0.04 /px per frame at smoothing 0)
+- Done, item 14: tracing pack, 140 frames, 84 roots, 769 MB, 16 held-out roots; worklist in trace_midlines.py state format
+- Items 12, 13, 15 noted: workstation ssh form, disk rule (36 GB free before and after every step; work folder 9.9 GB), host assignment
+- Demo: `python scripts/demo_dispatcher.py` (unchanged)
+- Remaining: Andrew: plane-sections curvature source (freeze item); traces; then B5 part 2 (real slice)
+- Bottlenecks: plane sections on real movies (Andrew)
+
+## 2026-10-23 (build account, session dispatcher, inbox item 16)
+- Done: proposal `docs/proposals/2026-10-23_real-midline-smoothing.md` (recommend spline fit per frame, residual = pixel quantization; v3 synthetic validation within 1e-3). Not implemented
+- Done: B5 part 2 code: `measure/real_runner.py`, `scripts/real_slice.py`, `tests/test_real_slice.py` 6 passed; full suite 228 passed, 66 s
+- Done: `python scripts/real_slice.py --no-agent` on 0708_m12 4-6 h: dispatcher script finished in 1 round; closure 0.945 px/h pass; plane_sections 134 %/h fail; rigid invariance not run. `results/2026-10-23_real_slice_noagent/`
+- Blocked: agent run; Claude Code 2.1.310 installed, 2.1.302 pinned on main; re-pin on wip/freeze-v3
+- Demo: `python scripts/real_slice.py --no-agent` prints the dispatcher summary and the check values
+- Remaining: agent run after the re-pin; smoothing decision (Andrew)
+- Bottlenecks: Claude Code pin (freeze-v3, Andrew); smoothing proposal (Andrew)
+
+## 2026-10-23 (build account, session dispatcher, inbox item 17)
+- Done (b972c29): `measure/midline_fit.py` (spline fit, residual 0.289 px rms), `tests/test_midline_fit.py` 4 passed, `scripts/synth/validate_midline_fit.py`
+- Failed: v3 synthetic validation of the fit: 164 of 241 runs within 1e-3; every bending, width-change and midline-jitter rod changed; max change closure 1.14 px/h, plane_sections 10.7 %/h; 3 pass/fail flips. Not adopted, rule not retuned. Real t3 for information: plane_sections 134 -> 36 %/h with the fit
+- Done: main merged (re-pin 2.1.310); suite 234 passed
+- Done: real slice with agents, 0708_m12 4-6 h (provisional net): dispatcher agent 2 rounds; closure 0.945 pass, plane_sections 133.6 fail; diagnostician smooth_midline light then decline (midline_jitter); auditor report (0 accepted). `results/2026-10-23_real_slice/`
+- Fixed: auditor call with no accepted run (empty id list was not a valid schema); slice script gives request_info and report only; `--audit-only`
+- Demo: `python scripts/real_slice.py` runs the chain and prints each stage's result
+- Remaining: plane sections on real movies (Andrew: after option 1 failed); fine-tuning after traces
+- Bottlenecks: plane-sections approach (Andrew)
+
+## 2026-10-24 (build account, session dispatcher, inbox item 18)
+- Done: real-movie checker profile (`agents/executors.py` CHECK_PROFILES; plane sections reported, not gating on real windows); baselines' `failing` skips non-gating checks; `audit/view.py` marks non-gating checks only when present; `tests/test_check_profiles.py` 6 passed
+- Done: rigidly moved copy of a real window (`scripts/remote/real_moved.py`, `RealRunner.ensure_moved`); warp checked against the point transform (0.3 px)
+- Done: real slice with agents, 0708_m12 4-6 h (provisional net): rigid_invariance 8.83 %/h FAIL (2.0), closure 0.945 pass, plane_sections 133.6 reported; diagnostician smooth_midline light rolled back (rigid 16.76), decline; auditor report. `results/2026-10-24_real_slice/`
+- Found: rigid-invariance difference on the real window 0.8-3.4 %/h in the centre profile interior, 8.8 at the chain end, flanks up to 4-6 %/h
+- Tests: 240 passed, 1 skipped (cv2 test, tracker env only; checked there), 73 s
+- Demo: `python scripts/real_slice.py` runs the chain and prints each stage
+- Remaining: Andrew: rigid invariance on real windows above its synthetic threshold
+- Bottlenecks: rigid-invariance reading on real movies (Andrew)
+
+## 2026-10-24 (build account, session dispatcher, inbox item 19)
+- Done: whole-pixel moved copy of a real window (`scripts/remote/real_moved.py --mode whole_pixel`, cropped reference + shifted twin; exact in a test); `RealRunner` default whole_pixel
+- Failed, step 1: rigid_invariance 7.29 %/h (threshold 2.0) on 0708_m12 4-6 h; first 250 px agree within 1.0 %/h, difference grows toward the chain end (5.8 %/h centre at 350-400 px, 7.3 minus flank at 400-450 px). `results/2026-10-24_rigid_whole_pixel/`
+- Done: profile-window rule fixed in decisions before the rerun (s up to the last centre point tracked in every frame, both copies); `agents/executors.py` real_rigid_invariance; tests; suite 242 passed, 1 skipped
+- Failed, step 2: rigid_invariance 5.76 %/h at s = 375 px (window s <= 398 px). `results/2026-10-24_rigid_window/`
+- Stopped for Andrew (step 3): no threshold change
+- Demo: `python scripts/real_slice.py --no-agent` prints the check values
+- Remaining: Andrew's decision on rigid invariance for real windows
+- Bottlenecks: rigid invariance on real windows (Andrew)
+
+## 2026-10-24 (build account, session dispatcher, inbox item 20)
+- Done, step A: controls (zero shift 0.000 %/h; padded uncropped 7.286 %/h, equal to cropped); basal points 520-575 px from frame edges (margin 54 px), no frozen points, valid frame pairs equal in both copies. `scripts/rigid_cause_test.py`, `results/2026-10-24_rigid_cause_test/`
+- Done, step B (second branch): real-movie profile gates closure only; rigid invariance reported with full-range and profile-window values; decisions entry (planning account under delegation); `agents/executors.py`, tests updated; suite 242 passed, 1 skipped
+- Done: real slice with agents: closure 0.945 pass; rigid 7.29 (window 5.76) and plane sections 133.6 reported; diagnostician not called (no gating failure); auditor flagged the accepted run from the non-gating values. `results/2026-10-24_real_slice_closure_gate/`
+- Demo: `python scripts/real_slice.py` runs the chain and prints each stage
+- Remaining: new midline net (autotrace) before any non-provisional real result
+- Bottlenecks: none for this item
+
+## 2026-10-24 (build account, session dispatcher, inbox items 22-27)
+- Done: runner takes midline weights and tag from config (ft2); tag in every net-midline, copy-midline, track and cache name; VM memory wait (1.5 GB) before host steps (089a340)
+- Done: whole-pixel rigid copies shared across nets, only midline files tagged (ce70876); `--config` takes several runner configs, each window on the host whose config lists it (c0284e1); suite 249 passed, 1 skipped
+- Done: ft2 net midlines, 4-6 h: 0708_m12 2939 s and 0711_c1 3452 s (lab server, started before item 25), 0721_m10 1663 s (workstation); tip confidence medians 0.572, 0.176, 0.249
+- Done: 0721_m10 montage copied to the workstation (832 frames); work folder 18.0 GiB of 20, 27 GB free
+- Done: 3-root agent run, wall 1459 s: closure 4.52, 64.2, 4.66 px/h (threshold 1.0), all FAIL; diagnostician declined all 3 (bad_stage_correction; 2 registration remedies rolled back); auditor 0 accepted. `results/2026-10-24_real_slice_3roots/`
+- Done: 0708_m12 4-6 h closure 0.945 with ft, 4.52 with ft2 (same tracker, settings, window)
+- Demo: the README 3-root command prints check values, diagnostician outcomes and the auditor report per window
+- Remaining: Andrew's or planning's call on the ft2 closure regression and on 0711_c1
+- Bottlenecks: closure fails on every ft2 window (Andrew, planning)
+
+## 2026-10-24 (build account, session dispatcher, inbox item 28)
+- Done: closure cause, 0708_m12 4-6 h, ft vs ft2 (`scripts/closure_tip_compare.py`, `results/2026-10-24_closure_ft_vs_ft2/`): tip jump median 2.00 px both, p90 4.58 / 4.30; closure 0.945 / 4.52; with the tip fitted in time 2.96-3.75 / 4.36-5.15 px/h. Jitter does not explain the change; tip stabilization not applied; stopped
+- Done: control-root candidates, ft2 tip confidence on 5 frames (rule >= 0.5): 0714_c10 0.310, 0714_c11 0.026, 0711_c2 0.418. None passed; no full run; stopped
+- Done: decisions entries for Andrew's two choices with these outcomes
+- Demo: the `closure_tip_compare.py` command in the results README prints the table values as JSON
+- Remaining: Andrew's call on closure on real windows (neither net closes with a smoothed tip) and on the control root
+- Bottlenecks: real slice blocked on both (Andrew)
+
+## 2026-10-24 (build account, session dispatcher, inbox items 29-30)
+- Done: decisions: real-movie closure known limit; control-root rule (ft2 net tip within 15 px of the mask apex, median of 5 frames) replaces the confidence bar; "midline end" read as the net tip point, confirmed by planning
+- Done: `scripts/remote/tip_apex_probe.py`: net tip to apex 0711_c2 4.5, 0714_c10 4.1, 0708_m12 6.4, 0721_m10 9.2 px; tracking-polyline end 27-43 px on every root (by design)
+- Done: 0711_c2 4-6 h ft2 net midline on the workstation from its 80 window frames, 1829 s; work folder 19.27 GiB of 20
+- Done: 3-root agent run (0708_m12, 0711_c2, 0721_m10), wall 597 s: closure 4.52, 20.4, 4.66 px/h, all FAIL; rigid 7.13, 3.51, 7.26; diagnostician declined all 3 (bad_stage_correction, remedies rolled back); auditor 0 accepted, no condition conclusion. `results/2026-10-24_real_slice_3roots_c2/`
+- Demo: the README command in that results folder prints check values, diagnostician outcomes and the auditor report
+- Remaining: merge wip/dispatcher (ready); real-movie closure root cause is a research-lane item after 28 Oct
+- Bottlenecks: none for the course slice
+
+## 2026-10-24 (build account, session diag-analysis)
+- Done: task c020, spec 2026-10-24b section D. From the freeze v3 traces only; 0 tracker runs, 0 LLM calls
+- Done: `docs/proposals/2026-10-25_diagnostician-repair-misses.md`; read-only table `scripts/synth/repair_misses.py`
+- Found: accept_repaired, diagnostician 16 of 36 correct, 20 misses, all decline, 0 at the step limit. Remedy tree 9 of 12
+- Found: group A, 11 runs (rigid_drift 6, bad_stage_correction 5): declined with no remedy tried, 10 at step 2 after `stage_log_summary` only. Stated reason: no listed remedy fixes a stage-correction error. `register_frames` repairs all 6 rods in the label sweep; the 7 correct runs applied it on identical evidence
+- Found: at v3 geometry the stage moves on 40 of 40 pairs, so the at-moves / elsewhere split of `stage_log_summary` carries no information. rigid_drift named bad_stage_correction in 9 of 9 runs
+- Found: group B, 9 runs (stage_log_missing): `register_frames` applied 9 of 9, then rolled back, because closure after registration is not computable and `no_progress` counts that as unresolved. The label rule (`checks_pass`) drops it and labels the rod repairable. Remedy tree fails the same way (0 of 3)
+- Proposal: C1 prompt fault-to-remedy map; C2 per-pair spread in `stage_log_summary`; C3 roll-back and label rules to agree (Andrew, option a or b). None applied
+- Note for the planning account: `docs/proposals/2026-10-25_not-computable-check-rule.md` (C3, to resolve with Andrew)
+- Demo: `python scripts/synth/repair_misses.py` prints one line per run and the counts per fault and group
+- Remaining: Andrew decides C1-C3 for a later freeze (not v3.1: prompts unchanged there)
+- Bottlenecks: none
+
+## 2026-10-24 (build account, session closure-fix, task c017)
+- Done: spec 2026-10-24b A. Tests (1)-(4) on the cached ft2 tracks of 0708_m12, 0711_c2, 0721_m10 (4-6 h): no definition closes at 400 px (2.73-20.43 px/h); `scripts/closure_definitions.py`, `results/2026-10-25_closure_definition/definitions.json`
+- Done: cause found at the chain base, not at the tip: the 400 px base lies in the growth zone (world speed about 0 only past s = 550-650 px); base moved 5.4, 38.8, 11.1 px over 2 h. The chain starts at the midline end (gap 0 px), not 35 px behind it
+- Done: chain-base test on the lab server, 9 tracker runs (400, 700, 1000 px; one at a time, single thread, nice 19, own task folder c017): closure at 1000 px 2.36, 3.17, 2.19 px/h; `scripts/closure_base_test.py`, `base_test.json`
+- Done: stage checks: steps whole multiples of 2.105 um; sign + and lag 0 best on 0708_m12 and 0721_m10
+- Done: fix: definition (1) kept, real windows tracked to 1000 px (`measure/real_runner.py`); decisions entry; v3 validation 153 values unchanged (largest change 0.0, `scripts/closure_v3_validate.py`); pytest 303 passed, 1 skipped
+- Demo: `python scripts/closure_v3_validate.py --tracks staging/tracks_freeze_v3` prints max_diff 0.0 and pass_changed 0
+- Remaining: B computes real thresholds with 1000 px tracks; C reruns its windows at 1000 px (new cache names, L1000); rigid invariance at 1000 px not yet tested
+- Bottlenecks: none
+
+## 2026-10-24 (build account, real-calib session)
+- Done: spec 2026-10-24b B. Calibration set and threshold rule committed before any compute (fce35c7, 0eb0839, 2aa1b9b; `docs/proposals/2026-10-24_real-calibration.md`): 16 control windows, 8 roots, 4 experiments, 7-9 h and 15-17 h; no overlap with the section C subset (agreed with the dispatcher session); fixed non-growing roots not used (other rig, about 0.84 um/px)
+- Done: cluster work folder cap raised from 30 to 40 GB (Andrew; 51ff21f). ft2 midlines built by the section C chain on the cluster GPU (2 jobs on its ledger; spend since 2026-10-23 $0.92 of $15 after the first)
+- Done: main merged (section A, 1000 px real tracks; 68ed54e); calibration at 1000 px with base diagnostics and short-midline flag (2c84074)
+- Done: `scripts/real_calib.py` run on the lab server (single thread, nice 19, host checks): 18 windows from 9 roots; 12 measured; 5 screened out (tip 15.8-1189 px from the apex); 1 probe error; replacement root 0714_c13 added by the rule
+- Done: real closure threshold by the rule: 18 px/h (p95 17.35, median 3.50, max 28.9, p95 without the largest 6.73). Rigid invariance reported only (inbox item 4): 6.52-97.8 %/h, median 35.8, p95 91.81. Plane sections no threshold (p95 363). Decisions entry; `results/2026-10-25_real_calibration/`
+- Done: `python -m pytest -q tests`: 305 passed, 1 skipped
+- Failed: first-pass host log overwritten by the second pass (script fixed to append)
+- Demo: `python scripts/real_calib.py summary` prints the per-window table and the p95 rows (closure threshold 18)
+- Remaining: section C applies the 18 px/h closure threshold in its real-movie profile
+- Bottlenecks: none
+
+## 2026-10-24 (build account, real-calib session, continued)
+- Done: inbox item 5 (Andrew, option b): calibration extended; pool, windows (7-9, 11-13, 15-17 h), polyline-end tip rule (50 px) and fallback roots appended to `docs/proposals/2026-10-24_real-calibration.md` before computing
+- Done: 48 ft2 midlines in total through the section C chain on the cluster GPU (4 jobs on its ledger; spend since 2026-10-23 $1.03 of $15); cluster folder cleared by the planning account under Andrew's one-time approval (inbox item 6)
+- Done: `python scripts/real_calib.py run --ext --fallback` on the lab server (single thread, nice 19): 36 extension windows, 29 measured; with the first 12, 41 measured from 16 roots, 4 experiments. Fallback roots 0708_c10, 0708_c11 added by the rule (planned set reached at most 38)
+- Done: real closure threshold 19 px/h (p95 18.87, median 3.60, max 28.9, p95 without the largest 17.47); 18 px/h marked superseded in decisions. Rigid invariance (median 27.5, max 201 %/h) and plane sections reported only. `results/2026-10-25_real_calibration/`
+- Done: `measure/real_runner.py` job count counts python processes only (a bash-wrapped midline build counted as 3 and blocked every RealRunner); `nproc --all`
+- Failed: 0714_c11 w7-9 and w11-13 measurement errors (`ValueError: arange: cannot compute length`, not traced); 0714_c4 failed the screen on all 3 windows
+- Done: `python -m pytest -q tests`: 306 passed, 1 skipped
+- Demo: `python scripts/real_calib.py summary` prints the 48-window table and the p95 rows (closure threshold 19)
+- Remaining: section C applies 19 px/h in its real-movie profile and runs its checks and agents
 - Bottlenecks: none

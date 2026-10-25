@@ -28,3 +28,61 @@ def test_tasks_carry_moved_ids(tmp_path):
     t = sweep.tasks_of(plan, tmp_path, tmp_path)
     assert [x["rid"] for x in t] == ["growth_zone_clean_s0"] * 2 + ["growth_zone_clean_s0_moved"] * 2
     assert t[2]["options"][-1] == "--moved"
+
+
+def _task(tmp_path):
+    (tmp_path / "rods").mkdir(exist_ok=True)
+    (tmp_path / "tracks").mkdir(exist_ok=True)
+    return {"rid": "r_s0", "options": [], "tag": "st1", "args": [], "rods": str(tmp_path / "rods"),
+            "tracks": str(tmp_path / "tracks")}
+
+
+def test_output_done_only_with_marker(tmp_path):
+    t = _task(tmp_path)
+    out = tmp_path / "tracks" / "r_s0__st1.npz"
+    out.write_bytes(b"partial")
+    rec = sweep.run_one(t)                       # a stopped run's file: left in place, reported, not re-run
+    assert rec["ok"] is False and rec["partial"] and out.read_bytes() == b"partial"
+    (tmp_path / "tracks" / "r_s0__st1.npz.ok").write_bytes(b"")
+    assert sweep.run_one(t) == {"id": "r_s0", "tag": "st1", "cached": True}
+
+
+def test_rod_done(tmp_path):
+    rods = tmp_path / "rods"
+    rods.mkdir()
+    (rods / "a.imgdir").mkdir()
+    assert not sweep.rod_done(rods, "a")
+    (rods / "a.ok").write_bytes(b"")
+    assert sweep.rod_done(rods, "a")
+    (rods / "b_truth.npz").write_bytes(b"")      # rendered before the marker existed
+    assert sweep.rod_done(rods, "b")
+
+
+def test_lock_removes_only_its_own(tmp_path, monkeypatch):
+    monkeypatch.setattr(sweep.os, "getpgid", lambda _: 0, raising=False)
+    assert sweep.take_lock(tmp_path, "plan.json")
+    assert not sweep.take_lock(tmp_path, "plan.json")    # one sweep at a time
+    sweep.release_lock(tmp_path)
+    assert not sweep.lock_path(tmp_path).exists()
+
+
+def test_foreign_stale_lock_left_in_place(tmp_path, monkeypatch):
+    monkeypatch.setattr(sweep.os, "getpgid", lambda _: 0, raising=False)
+    foreign = '{"pid": 999999, "pgid": 999999, "plan": "other.json", "started": "2026-10-20 08:00:00"}'
+    sweep.lock_path(tmp_path).write_text(foreign)
+    assert not sweep.take_lock(tmp_path, "plan.json")    # stale or live: refused, not replaced
+    sweep.release_lock(tmp_path)
+    assert sweep.lock_path(tmp_path).read_text() == foreign
+    sweep.lock_path(tmp_path).write_text("not json")      # unreadable lock: also left alone
+    sweep.release_lock(tmp_path)
+    assert sweep.lock_path(tmp_path).read_text() == "not json"
+
+
+def test_same_pid_other_start_time_not_removed(tmp_path, monkeypatch):
+    monkeypatch.setattr(sweep.os, "getpgid", lambda _: 0, raising=False)
+    assert sweep.take_lock(tmp_path, "plan.json")
+    other = {**sweep._OWN_LOCK, "started": "2000-01-01 00:00:00"}
+    sweep.lock_path(tmp_path).write_text(sweep.json.dumps(other))
+    sweep.release_lock(tmp_path)
+    assert sweep.lock_path(tmp_path).exists()
+    sweep._OWN_LOCK.clear()

@@ -1,30 +1,144 @@
 # coordinator
-Updated: 2026-10-23 00:35 (local)
+Updated: 2026-10-25 14:45 (local)
 Lane: course
 Branch: main
-Last inbox item done: 7
-State: waiting on Andrew
-Now: no branch ready to merge; new sessions spec-audit, spec-audit-check, lab-report-2, dispatcher not started yet
+Last inbox item done: 25
+State: working
+Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8 (relay part), 10, 11, 16, 17 (item 20)
+Last-seen main: 91b55d7
 Done since last update:
-- Item 1: no unmerged course-lane branch says ready to merge; no merge, no test run
-- Item 2: pre-push hook installed in the main repo folder; `private/blocklist.txt` has lines (23)
-- Item 6: read both 2026-10-23 specs; item 1 will apply to wip/spec-audit, wip/spec-audit-check (after wip/spec-audit), wip/lab-report-2, wip/dispatcher
-- Item 7: task c007 set to done (done_marker "network on lab server; not in this repo by decision"); `docs/decisions.md` entry 2026-10-23 added; wip/readme-check already merged into main
+- 2026-10-25 14:45 (tick; first pass since 23:50; no tick ran overnight): item 25: local branch worktree-coordinator-c007 already gone when checked (b563b33 differed from 2170ca5 only in wording of the c007 task note and decisions reason; same decision and done marker on main). Nothing to keep
+- 14:45: item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher waiting on Andrew 14:39, subset run stopped for low VM memory; wip/lab-report-2 working 13:29 on 23 Oct)
+- 14:45: item 8: inboxes changed since 9278077 (204ba71, 0a7aadc, f41d9ae, 91b55d7): dispatcher 36-37, freeze-v31 9, closure-fix 3, diag-analysis 3-4, real-calib 7-8. Pinged dispatcher and freeze-v31 14:45 (`check github`). closure-fix, diag-analysis, real-calib not live; not pinged. Item 10: no status says `waiting on <agent>`. Item 16: no status says `waiting on server job`
+- 2026-10-24 23:50 (tick, hourly pass; no ref changed): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working 22:44 (status 23:05 by its clock; agent run over 48 subset windows), wip/lab-report-2 working 13:29)
+- 23:50: item 8: no inbox change since 1730bf3; no pings. Item 10: no status says `waiting on <agent>`. Item 16: no status says `waiting on server job`
+- 2026-10-24 22:50 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working 22:44 (status 23:05 by its clock; agent run over 48 subset windows), wip/lab-report-2 working 13:29). wip/real-calib status still ready to merge; already merged (1730bf3)
+- 22:50: item 8: no inbox change since 1730bf3; no pings. Item 10: no status says `waiting on <agent>`. Item 16: no status says `waiting on server job`
+- 2026-10-24 22:42 (tick): item 1: merged wip/real-calib (1730bf3; ready to merge 22:35): closure threshold 19 px/h from 41 control windows. Conflict on its pending log file (deleted on main): entry moved into docs/running_log.md. Suite 306 passed, 1 skipped. Other unmerged: wip/dispatcher waiting on real-calib 22:20, wip/lab-report-2 working 13:29
+- 22:42: item 8: no inbox change since 0543812. Item 10: dispatcher waited on real-calib, now merged: pinged dispatcher 22:42 (`check github`). Item 16: no status says `waiting on server job`
+- 2026-10-24 22:20 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher waiting on real-calib 22:16, wip/real-calib waiting on dispatcher 21:41 (status 22:00), wip/lab-report-2 working 13:29)
+- 22:20: item 8: no inbox change since 0543812. Item 10: dispatcher took item 35 (27e75ff): all 21 calibration midlines done; real-calib waits on it: pinged real-calib 22:20 (`check github`). Dispatcher waits on real-calib, not done; not pinged. Item 16: no status says `waiting on server job`
+- 2026-10-24 21:50 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/real-calib waiting on dispatcher 21:41 (status 22:00 by its clock), wip/dispatcher waiting on real-calib 20:55, wip/lab-report-2 working 13:29)
+- 21:50: item 8: no inbox change since 0543812; no pings. Item 10: real-calib and dispatcher each wait on the other; neither done; not pinged. dispatcher (live, running a shell) was pinged 21:40 for inbox item 35 (copy and GPU chain for the 21 windows) and has not pushed since. Item 16: no status says `waiting on server job`
+- 2026-10-24 21:40 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/real-calib waiting on Andrew 21:45 by its clock, wip/dispatcher waiting on real-calib 20:55, wip/lab-report-2 working 13:29)
+- 21:40: item 8: inboxes changed in 0543812 (dispatcher item 35, real-calib item 6: cluster window frames cleared, folder 6.8 of 40 GB). Pinged dispatcher and real-calib 21:40 (`check github`). Item 10: dispatcher waits on real-calib, not done. Item 16: no status says `waiting on server job`. Cluster-cap lines dropped from Needs Andrew (answered by 0543812)
+- 2026-10-24 21:00 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher waiting on real-calib 20:55, wip/real-calib waiting on Andrew 20:33, wip/lab-report-2 working 13:29)
+- 21:00: item 8: no inbox change since 00b1705; no pings. Item 10: dispatcher waits on real-calib; real-calib waits on Andrew, not done; not pinged. Item 16: no status says `waiting on server job`
+- 2026-10-24 20:40 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/real-calib waiting on Andrew 20:33, wip/dispatcher working 20:08, wip/lab-report-2 working 13:29)
+- 20:40: item 8: no inbox change since 00b1705; no pings. Item 10: no status says `waiting on <agent>`; not pinged. Item 16: no status says `waiting on server job`
+- 2026-10-24 20:10 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working 20:08, wip/real-calib waiting on Andrew 20:01, wip/lab-report-2 working 13:29)
+- 20:10: item 8: no inbox change since 00b1705; no pings. Item 10: no status says `waiting on <agent>`; not pinged. Item 16: no status says `waiting on server job`
+- 2026-10-24 19:50 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working 19:45, wip/real-calib waiting on Andrew 19:44, wip/lab-report-2 working 13:29)
+- 19:50: item 8: no inbox change since 00b1705; no pings. Item 10: real-calib waits on Andrew (cluster cap); dispatcher working, holds checks for real-calib (item 34); no status says `waiting on <agent>`; not pinged. Item 16: no status says `waiting on server job`
+- 2026-10-24 19:40 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working 19:10, wip/lab-report-2 working 13:29)
+- 19:40: item 8: inboxes changed in 00b1705 (dispatcher item 34: hold checks until new threshold; real-calib item 5: option b, at least 40 calibration windows). Pinged dispatcher and real-calib 19:40 (`check github`). Item 10: no status waits on an agent. Item 16: no status says `waiting on server job`
+- 2026-10-24 19:12 (tick): item 1: merged wip/real-calib (7aab080; ready to merge 20:10 by its status clock); no conflicts; suite 305 passed, 1 skipped; log entry moved. Other unmerged: wip/dispatcher working 19:10, wip/lab-report-2 working 13:29
+- 19:12: item 8: no inbox change since 2adb132; no pings. Item 10: no status says `waiting on <agent>` (dispatcher says working; its Now waits on B's thresholds, now on main in 7aab080). Item 16: no status says `waiting on server job`
+- 2026-10-24 19:00 (tick): item 24: wip/closure-fix (835b522) and wip/diag-analysis (1ff1369, 0d9ddf8) already merged; no commits on either branch beyond main; nothing to merge
+- 19:00: item 1: no branch ready to merge and unmerged (unmerged: wip/real-calib waiting on dispatcher 19:30, wip/dispatcher working 18:15, wip/lab-report-2 working 13:29)
+- 19:00: item 8: inboxes changed in 2adb132 (dispatcher item 33, real-calib item 4). Pinged dispatcher and real-calib 19:00 (`check github`). Item 10: real-calib waits on dispatcher; dispatcher working, not done. Item 16: no status says `waiting on server job`
+- 2026-10-24 18:50 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/real-calib working 18:48, wip/dispatcher working 18:16, wip/lab-report-2 working 13:29)
+- 18:50: item 8: no inbox change since db49634; no pings. Item 10: no status waits on an agent. Item 16: no status says `waiting on server job`
+- 2026-10-24 18:40 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/real-calib working 18:30, wip/dispatcher working 18:16, wip/lab-report-2 working 13:29)
+- 18:40: item 8: no inbox change since 91d6835; no pings. Item 10: real-calib now working (no longer waits on dispatcher); no status waits on an agent. Item 16: no status says `waiting on server job`
+- 2026-10-24 18:21 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working 18:16, wip/real-calib waiting on dispatcher 18:09, wip/lab-report-2 working 13:29)
+- 18:21: item 8: no inbox change since 0d9ddf8; no pings. Item 10: real-calib waits on dispatcher; dispatcher working, not done; not pinged. Item 16: no status says `waiting on server job`. Correction: the previous pass was stamped 18:25 but committed 18:12 (91d6835)
+- 2026-10-24 18:25 (tick): item 23: wip/closure-fix already merged (835b522). wip/diag-analysis merged again (0d9ddf8): one new commit d1aa186 (note `docs/proposals/2026-10-25_not-computable-check-rule.md`); conflict on its pending log file (deleted on main): the one new line moved into its running log entry. Suite 303 passed, 1 skipped
+- 18:25: item 1: no other branch ready to merge (unmerged: wip/dispatcher working 17:45, wip/real-calib waiting on dispatcher 18:20, wip/lab-report-2 working 13:29)
+- 18:25: item 8 and 23: inboxes changed in ab50da7 (dispatcher, real-calib: 1000 px tracks). Pinged dispatcher and real-calib 18:25 (`check github`). Item 10: real-calib waits on dispatcher; dispatcher working, not done. Item 16: no status says `waiting on server job`
+- 2026-10-24 17:40 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working 17:37, wip/real-calib waiting on Andrew 17:00, wip/lab-report-2 working 13:29)
+- 17:40: item 8: no inbox change since 835b522; no pings. Item 10: no status waits on an agent. Item 16: no status says `waiting on server job`
+- 2026-10-24 17:25 (tick): item 1: merged wip/closure-fix (835b522; ready to merge 17:03); no conflicts; suite 303 passed, 1 skipped; log entry moved. Other unmerged: wip/dispatcher working 16:56, wip/real-calib waiting on Andrew 17:00, wip/lab-report-2 working 13:29
+- 17:25: item 8: no inbox change since ccb2dbf; no pings. Item 10: no status waits on an agent (real-calib waits on Andrew). Item 16: no status says `waiting on server job`. Note for dispatcher (section C): closure-fix says real windows now track to 1000 px (cache names L1000); no inbox item carries this yet
+- 2026-10-24 17:03 (tick): item 1: merged wip/diag-analysis (1ff1369; ready to merge 16:50); no conflicts; suite 303 passed, 1 skipped; log entry moved. Other unmerged: wip/dispatcher working 16:56, wip/closure-fix working 16:52, wip/real-calib waiting on Andrew 16:57, wip/lab-report-2 working 13:29
+- 17:03: item 8: no inbox change since ccb2dbf; no pings. Item 10: real-calib now waits on Andrew, not on an agent; not pinged. Item 16: no status says `waiting on server job`. status/gate2 no longer on the remote
+- 2026-10-24 16:51 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working 16:48, wip/closure-fix working 16:44, wip/diag-analysis working 16:44, wip/real-calib waiting on dispatcher 16:48, wip/lab-report-2 working 13:29)
+- 16:51: item 8: no inbox change since ccb2dbf; no pings. Item 10: real-calib waits on dispatcher; dispatcher working, not done; not pinged. Item 16: no status says `waiting on server job`. Spec 2026-10-24b sessions now live (dispatcher, closure-fix, real-calib, diag-analysis); dropped from Needs Andrew
+- 2026-10-24 16:40 (tick): item 1: no branch ready to merge and unmerged (only wip/lab-report-2 unmerged, working, 13:29)
+- 16:40: item 8: inboxes changed in ccb2dbf (spec 2026-10-24b): dispatcher (item 31, c019), new closure-fix, real-calib, diag-analysis. None live (live: freeze-v31, turn-long); no pings. Item 10: no status waits on an agent. Item 16: no status says `waiting on server job`
+- 2026-10-24 15:50 (tick): item 1: merged wip/dispatcher (5a4767f; ready to merge 15:41). Conflicts: docs/decisions.md (kept both sides); scripts/remote/qb_track.py (main's track-length default and write-once output, plus the branch's --from-h/--to-h window and `window_h` setting). Suite 303 passed, 1 skipped; log entry moved
+- 15:50: item 8: no inbox change since 8ba1dbe; no pings. Item 10: no status waits on an agent. Item 16: no status says `waiting on server job` (dispatcher now ready to merge, merged)
+- 2026-10-24 15:31 (tick): item 1: no branch ready to merge and unmerged (wip/dispatcher waiting on server job, 15:21; wip/lab-report-2 working; research status branches done)
+- 15:31: item 8: no inbox change since ea86020. Item 10: no status waits on an agent. Item 16: dispatcher `waiting on server job` (c2_chain, workstation c010): `c2_chain.done` present (15:24, read only), dispatcher last pushed 15:21. Pinged dispatcher 15:31 (`check github`)
+- 2026-10-24 15:20 (tick): item 1: no branch ready to merge and unmerged (wip/dispatcher waiting on server job, 14:55; wip/lab-report-2 working; research status branches done)
+- 15:20: item 8: dispatcher inbox changed in ea86020 (item 30: midline end = net tip point). Pinged dispatcher 15:20 (`check github`). Item 10: no status waits on an agent. Item 16: dispatcher `waiting on server job` (c2_chain, workstation c010): neither `c2_chain.done` nor `c2_chain.failed` present (read only). Item 22: item 21 withdrawn, dropped from Needs Andrew
+- 2026-10-24 15:00 (tick): item 1: no branch ready to merge and unmerged (wip/dispatcher waiting on server job, 14:55; wip/lab-report-2 working; research status branches done)
+- 15:00: item 8: no inbox change since a785332; no pings. Item 10: no status waits on an agent. Item 16: dispatcher `waiting on server job` (c2_chain, workstation c010): neither `c2_chain.done` nor `c2_chain.failed` present (read only); not pinged. Item 21 still open
+- 2026-10-24 14:50 (tick): item 1: no branch ready to merge and unmerged (wip/dispatcher waiting on Andrew, 14:33; wip/lab-report-2 working; research status branches done)
+- 14:50: item 8: dispatcher inbox changed in a785332 (closure as known limit, control root by midline-to-apex rule, final 3-root run). Pinged dispatcher 14:50 (`check github`). Item 10: no status waits on an agent. Item 16: no status says `waiting on server job`. Item 21 still open
+- 2026-10-24 14:40 (tick): item 1: no branch ready to merge and unmerged (wip/dispatcher waiting on Andrew, 14:33; wip/lab-report-2 working; research status branches done)
+- 14:40: item 8: no inbox change since 64d03bc; no pings. Item 10: no status waits on an agent. Item 16: no status says `waiting on server job`. Item 21 still open
+- 2026-10-24 14:15 (tick): item 1: no branch ready to merge and unmerged (wip/dispatcher waiting on Andrew, 14:05; wip/lab-report-2 working; research status branches done)
+- 14:15: item 8: dispatcher inbox changed in 64d03bc (keep ft2, diagnose closure; replace 0711_c1 with a confidence check). Pinged dispatcher 14:15 (`check github`). Item 10: no status waits on an agent. Item 16: no status says `waiting on server job`. Item 21 still open
+- 2026-10-24 14:00 (tick): item 1: no branch ready to merge and unmerged (wip/dispatcher waiting on Andrew, 13:52; wip/lab-report-2 working; research status branches done)
+- 14:00: item 8: no inbox change since feba21b; no pings. Item 10: no status waits on an agent. Item 16: no status says `waiting on server job`. Item 2: hook installed. Item 21 still open (needs a live session)
+- 2026-10-24 13:30 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working, wip/lab-report-2 working, status/turn-long and status/spec-audit-r research lane)
+- 13:30: item 8: only the coordinator inbox changed since 9aa97bf (item 21, feba21b); no pings. Item 10: no status waits on an agent. Item 16: no status says `waiting on server job` (dispatcher now working, 13:30). Item 2: hook ran on push
+- 13:30: item 21 (tick cost cut) read, not done in this pass: it edits the script running this pass and needs a test full pass, i.e. starting a headless session, which a tick pass may not do. Under Needs Andrew
+- 2026-10-24 13:24 (tick): item 1 and 19(3): merged wip/coord-tick (9aa97bf; ready to merge 13:10). Conflicts: coordinator inbox (both sides added item 19: planning's kept as 19, coord-tick's renumbered 20); decisions (kept main's corrected v3.1 wording, added the tick entry). Suite 259 passed; log entry moved (item number noted). wip/audit-marks already merged (e3c0268)
+- 13:24: item 19(1): v3.1 wording on main seen (b16f82f). Item 19(2): `private/workstation.md` replaced with the refreshed copy (server file of 12:00 plus the host-setup survey section, as in the freeze-v31 worktree); old copy kept beside it with suffix .2026-10-23 (git-ignored)
+- 13:24: item 16: dispatcher `waiting on server job`: lab-server marker `ft2_chain.done` present (13:21), dispatcher last pushed 12:56; workstation `ws_ft2_chain.done`/`.failed` not present yet. Item 8: dispatcher inbox changed (item 27, b16f82f). Pinged dispatcher 13:24 (`check github`)
+- 13:24: item 10: no status waits on an agent. Item 2: pre-push hook ran on push (0 hits)
+- 2026-10-24 13:05 (tick): item 1: merged wip/freeze-v31 (2c373d1; ready to merge 12:55); suite 256 passed; log entry moved. No other branch ready
+- 13:05: item 8: no inbox change since e3c0268 (the e3c0268 changes were path redactions, seen at the last check); no pings. Item 10: no status waits on an agent. Item 16: no status says `waiting on server job`
+- 13:05: item 2: pre-push hook installed; `private/blocklist.txt` has lines (count only). Live sessions: audit-marks, dispatcher, freeze-v31, coord-tick, turn-long; no coordinator loop session live
+- 2026-10-24 12:55: item 1: merged wip/audit-marks (e3c0268; ready to merge 12:10). Conflict in docs/decisions.md (freeze v3.1 end and status/gate2 delete entries): kept both. Suite 253 passed; log entry moved
+- Item 18: items 15 and 17 done by audit-marks on main, kept by Andrew: 915859a (merge wip/autotrace), 074e102 (board host note), eaaa37b (sweep.py removes only its own lock). Not redone
+- Item 16: no status says `waiting on server job`; no marker checked
+- Item 8, 12:57: inboxes changed since 4692019: audit-marks, autotrace, coord-tick, dispatcher, freeze-v31. Pinged freeze-v31 (item 8, 9b7ea8c) and dispatcher (item 26, cb5df17). Not pinged: audit-marks (did item 6 after its inbox change), coord-tick (started after its inbox), autotrace (not live; merged, done). The second dispatcher session was gone when pinged
+- 2026-10-24 11:30: nothing ready to merge; no inbox change since 8c5bcff. dispatcher and autotrace restarted (live since 11:28): pinged both for the 8c5bcff items. turn-long status now done (02:42)
+- Item 9: board allows `waiting on Andrew` and `waiting on <agent>` (`scripts/board.py`, `tasks/README.md`), 8223616; full suite 203 passed
+- Item 1: merged wip/spec-audit (2c0eb60) and then wip/spec-audit-check (f7ec454), `--no-ff`; pending log entries moved into `docs/running_log.md`; suite 203 passed on each merge
+- Item 8: pinged dispatcher 01:22 (inbox changed in 588f052). Coordinator inbox also changed (own). Message tool available: SendMessage + ListAgents
+- 2026-10-24 05:11: inboxes changed in 8c5bcff (ft2 adopted by planning; dispatcher restarts the 3-root slice with ft2, heavy steps off the VM). dispatcher and autotrace sessions not live; not pinged
+- 2026-10-24 04:22: item 1: merged wip/freeze-v3 (2ebd422; ready to merge 04:16): 852 files, 827 of them small JSON/JSONL results (4.6 MB, no images). Conflict in docs/decisions.md (re-pin entry on both sides, from item 14): kept both sides, one re-pin entry. Suite 250 passed; log entry moved. No session waits on freeze-v3
+- 2026-10-24 01:52: pinged dispatcher (restarted; inbox changed in 114b286, after its last check)
+- 2026-10-24 01:41: inboxes changed in f1aa878, 4285985, 6848a23: pinged freeze-v3, autotrace, turn-long. dispatcher session not live; not pinged
+- 23:41: inboxes changed in 5253f17: pinged freeze-v3. dispatcher session not live; not pinged
+- 23:01: pinged autotrace (inbox changed in f4e8fbd: fine-tune from base net2 on compliant traces)
+- 22:22: item 14: Claude Code pin 2.1.310 brought to main from freeze-v3 e1e672a (only `config/models.yaml`, `tests/test_auditor.py` and the re-pin decisions entry; the label changes in that commit stay on wip/freeze-v3); decisions entries for midline smoothing option 1 and the provisional fine-tuned net; suite 205 passed; 476ad22. Pinged dispatcher and autotrace
+- 19:56: pinged dispatcher (inbox changed in 553f5f9: net midline accepted, smoothing as a proposal, B5 part 2)
+- 18:47: item 1: merged wip/host-setup (b9a3a06, ready to merge 18:37, test passed); suite 205 passed; log entry moved. Items 12-13: host assignment appended to turn-long (8), dispatcher (15), freeze-v3 (9) inboxes (6d84335); pinged all three (dispatcher also for item 14, 54456a2)
+- 18:32: item 13 read (turn-long stays on the lab server; workstation: dispatcher sweeps and probes, freeze-v3 overflow after a cache-match test; disk 20 GB cap, 20 GB free floor). Pinged host-setup, turn-long, dispatcher (21fef9e, f86f3b8). freeze-v3 (items 7-8) not live
+- 18:21: workstation ssh approval (3e41548): pinged dispatcher and turn-long. host-setup (item 5) not live
+- 17:31: inboxes changed in ccca080: pinged dispatcher (item 11). freeze-v3 (item 7) and host-setup (item 4) sessions not live; not pinged
+- 15:11: item 12 read; waits for host-setup status to say the test passed, then merge and host-assignment items to turn-long, dispatcher, freeze-v3. host-setup started after de744c6; not pinged
+- 15:01: item 11 (standing lab-server job limit) noted; the coordinator runs no server jobs. Pinged dispatcher, freeze-v3, turn-long (inboxes changed in 4c2a813)
+- 14:49: pinged freeze-v3 (inbox item 5, ec6026b). Correction: the 21:31 status time was GMT; local was 14:31; no gap in checks
+- 14:01: pinged dispatcher (inbox item 9, 7939e21). turn-long inbox new; session not live, not pinged
+- 13:50: freeze-v3 inbox item 4 (4d9d4b6) already being worked by freeze-v3; not pinged. spec-audit-r done
+- Item 10: decisions entries (build to 28 Oct, 102 include-yes roots, design-choice findings into freeze v3) and `Build stops: Wed 28 Oct` in CLAUDE.md; suite 203 passed
+- Item 8: pinged dispatcher and spec-audit-r 13:33 (inboxes changed in cc00016). Not pinged: freeze-v3 and lab-report-2, both started after cc00016 and already pushed work on it
+- Item 8: pinged dispatcher 12:41 (inbox item 7, 43576b6)
+- Checks every 10 min, 01:35-12:30: no inbox change, nothing ready to merge, no pings
+- dispatcher replied 11:00: item 6 held before submit (stage correction goes into the tracker first); no cluster job submitted
+- Item 2: pre-push hook installed (ran on each push, 0 hits)
 Branches (last commit, state):
-- wip/readme-check: 2026-10-17 15:26, merged
-- wip/vm-setup: 2026-10-16 18:24, done, merged
-- status/gate2: 2026-10-16 12:27, waiting on Andrew (research lane, not merged)
-- wip/auditor-v1b: 2026-10-14 13:29, merged (f52dbdd)
-- wip/fq-real: 2026-10-14 13:10, merged (742dc79)
-- wip/auditor-v1: 2026-10-14 04:58, merged (f53a07f)
-- wip/scored-v1: 2026-10-13 00:01, merged (2733c2c)
-- wip/freeze-v2: 2026-10-12 22:00, merged (2606168)
-- heldout/faults: 2026-10-12 20:19, merged (a0cae6a)
-- wip/baselines: 2026-10-12 20:18, merged (aa594c2)
-- wip/diag-review: 2026-10-12 20:02, merged (781c9d0)
-- wip/lab-report-1: 2026-10-12 20:00, merged (f93203b)
-- wip/gatekeeper: 2026-10-12 19:23, merged (cbcb4ba)
-- wip/spec-audit, wip/spec-audit-check, wip/lab-report-2, wip/dispatcher: not on GitHub yet
-- status/data-steward, status/litreview: not on GitHub yet
+- wip/spec-audit: 2026-10-23 01:04, ready to merge, merged 2c0eb60
+- wip/spec-audit-check: 2026-10-23 01:14, ready to merge, merged f7ec454
+- wip/host-setup: 2026-10-23 18:37, merged b9a3a06
+- wip/autotrace: 2026-10-24 11:39, ready to merge, merged 915859a (by audit-marks)
+- wip/audit-marks: 2026-10-24 12:11, ready to merge, merged e3c0268
+- wip/freeze-v31: 2026-10-24 12:50, ready to merge, merged 2c373d1
+- wip/coord-tick: 2026-10-24 13:09, ready to merge, merged 9aa97bf
+- wip/freeze-v3: 2026-10-24 04:16, ready to merge, merged 2ebd422
+- status/turn-long: 2026-10-24 02:42, done (research lane, not merged)
+- wip/dispatcher: 2026-10-25 14:39, waiting on Andrew (subset agent run stopped by low VM memory after 1 window, baeb280) (15:37 merged 5a4767f)
+- wip/lab-report-2: 2026-10-23 13:29, working
+- wip/closure-fix: 2026-10-24 17:03, ready to merge, merged 835b522
+- wip/diag-analysis: 2026-10-24 18:06, ready to merge, merged 1ff1369 and 0d9ddf8
+- wip/real-calib: 2026-10-24 22:33, ready to merge, merged 1730bf3 (also 7aab080 at 19:12)
+- status/spec-audit-r: 2026-10-23 13:42, done (research lane, not merged)
+- status/gate2: deleted from the remote
+- wip/readme-check, wip/vm-setup, wip/auditor-v1b, wip/fq-real, wip/auditor-v1, wip/scored-v1, wip/freeze-v2, heldout/faults, wip/baselines, wip/diag-review, wip/lab-report-1, wip/gatekeeper: merged
 Needs Andrew:
-- start sessions spec-audit, lab-report-2, dispatcher (inboxes on main); spec-audit-check after spec-audit is ready to merge
+- Restart sessions not live whose inboxes changed overnight: real-calib (items 7-8, full batch), diag-analysis (items 3-4, v4 candidate and scored v4 run), closure-fix (item 3, real_moved.py write-once)
+- Coordinator tick: no pass pushed between 23:50 and 14:45 (planning 14:45 correction: cause unknown); check the tick log
+- dispatcher: its tracking run started a net-midline build on the lab-server CPU (0721_m10, 3 threads, nice 19), against inbox item 25; its kill was blocked. Pid in its status; stop it if wanted. real_track.py now skips windows without a host midline (85e20da)
+- closure-fix (merged): closure at 1000 px still 2.2-3.2 px/h against synthetic 1.0; rigid invariance at 1000 px untested (1000 px now in dispatcher and real-calib inboxes, ab50da7)
+- diag-analysis (merged): decide C1 (prompt fault-to-remedy map), C2 (stage_log_summary per-pair spread), C3 (roll-back vs label rule: option a or b) in `docs/proposals/2026-10-25_diagnostician-repair-misses.md`; C3 note `docs/proposals/2026-10-25_not-computable-check-rule.md`
+- `scripts/remote/real_moved.py` (merged with wip/dispatcher) writes `<name>.part` and then `os.rename`s it to the final name, on the compute host; the 3-root slice ran on the lab server. CLAUDE.md forbids renames there (only sweep locks excepted); `qb_track.py` was changed to write-once for the same reason (rules-2). Keep, or ask for a write-once fix
+- Finished sessions still live and idle: real-calib (merged), freeze-v31 (merged), turn-long (done), closure-fix (merged), diag-analysis (merged); can be closed. The live `coordinator` session is no longer listed
+- freeze-v3: review `results/2026-10-23_freeze_v3/README.md` (all 12 accept_repaired rods measure well unremedied; second_root 0 correct for every method)
+- lab-report-2 and spec-audit-r sessions no longer live; wip/lab-report-2 status still says working (13:29)
+- Old lab-report-2 session (started 00:37) stopped 13:45 on Andrew's go-ahead; the 13:27 one remains

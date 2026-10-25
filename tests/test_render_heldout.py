@@ -17,7 +17,7 @@ from measure import render_heldout as H
 
 ROOT = Path(__file__).resolve().parents[1]
 SIZES = {"second_root": 30, "fast_rotation": 4, "bad_stage_correction": 10, "flank_swap": 0.5,
-         "partial_occlusion": 30}
+         "partial_occlusion": 30, "stage_log_missing": 1}
 N = 9
 
 
@@ -64,6 +64,9 @@ def test_injector_changes_movie(fault, clean):
         assert not any(changed)                                     # images as recorded; only the log is wrong
         err = np.linalg.norm(clean["stage_px"] - r["stage_px"], axis=1)
         assert np.allclose(err[:k], 0) and np.allclose(err[k:], SIZES[fault])
+    elif fault == "stage_log_missing":
+        assert not any(changed)                                     # images as recorded; moves left out of the log
+        assert np.allclose(r["stage_px"], clean["stage_px"][0]) and not np.allclose(clean["stage_px"], 0)
     elif fault == "flank_swap":
         k = H.swap_from(T, SIZES[fault])
         assert changed == [i >= k for i in range(T)]

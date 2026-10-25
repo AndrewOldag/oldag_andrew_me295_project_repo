@@ -9,10 +9,13 @@ Two forms:
   output. Host, paths and Python come from private/runner.yaml (git-ignored;
   template config/runner.example.yaml)
 
-Code goes to one directory per branch on the tracker machine:
-<code_dir>/<branch, "/" replaced by "_">, so sessions on different branches
-cannot overwrite each other's code. The sweep lock stays in the shared work
-directory, one per machine (decisions, 2026-10-12).
+Code goes to one directory per branch and commit on the tracker machine:
+<code_dir>/<branch, "/" replaced by "_">/<commit>, written once from
+`git archive` (freeze v3; nothing on the lab server is overwritten or
+renamed, CLAUDE.md, spec audit rules-2). The sweep lock stays in the shared
+work directory, one per machine (decisions, 2026-10-12). Sweep plans and logs
+get a new name per start; tracker outputs and rendered rods are complete when
+their `.ok` marker exists.
 
 Both return a Measurement: the record, the rigidly moved record for the
 invariance check, and the settings used.
@@ -23,6 +26,7 @@ from pathlib import Path
 import shlex
 import subprocess
 import tarfile
+import time
 import io
 from typing import Optional
 
@@ -36,6 +40,9 @@ from measure import preprocess
 ROOT = Path(__file__).resolve().parents[1]
 RUNNER_CONFIG = ROOT / "private" / "runner.yaml"
 MOVED = (np.deg2rad(0.1) / 90.0, (0.5 / 90.0, 0.3 / 90.0))   # rotation rad/s, translation px/s
+SYNCED = ("measure", "scripts/synth", "scripts/remote")      # code copied to the tracker machine
+MAX_JOBS = 2                 # jobs of this account at once on the lab server (CLAUDE.md, Andrew 2026-10-23)
+JOB_PATTERN = "sweep|qb_track|make_rod|g2_run|st_run|curv.py|run_default"   # docs/decisions.md, 2026-10-23
 
 
 @dataclass(frozen=True)
@@ -125,9 +132,12 @@ class RemoteRunner:
         branch: names the code directory; default the checked-out branch."""
         self.couple = couple
         cfg = yaml.safe_load(Path(config).read_text())
+        self.rods = cfg.get("rods_dir", "rods")           # rendered rods, under work_dir
+        self.max_gb = cfg.get("max_gb")                    # sweep work-space limit; None = sweep.py default
         self.host, self.work, self.code_base, self.python = (cfg["host"], cfg["work_dir"],
                                                              cfg["code_dir"], cfg["python"])
-        self.code = branch_code_dir(self.code_base, branch or current_branch())
+        self.code_branch = branch_code_dir(self.code_base, branch or current_branch())
+        self.code = None                        # the commit folder; set by sync_code on first use
         self.cache = Path(cache or ROOT / "staging" / "tracks")
         self.cache.mkdir(parents=True, exist_ok=True)
         self.log = []
@@ -158,26 +168,59 @@ class RemoteRunner:
                        check=True, capture_output=True)
 
     def sync_code(self):
-        buf = io.BytesIO()
-        with tarfile.open(fileobj=buf, mode="w") as tar:
-            for d in ("measure", "scripts/synth", "scripts/remote"):
-                tar.add(ROOT / d, arcname=d,
-                        filter=lambda ti: None if "__pycache__" in ti.name else ti)
-        self._ssh(f"mkdir -p {shlex.quote(self.code)} && cd {shlex.quote(self.code)} && tar xf -",
-                  stdin=buf.getvalue())
+        """Copy the committed code to <branch dir>/<commit>, once. Nothing there is overwritten (CLAUDE.md, spec
+        audit rules-2): a new commit gets a new folder; a folder with its .ok marker is reused. Refuses when the
+        synced folders have uncommitted changes, so every run's code is a commit."""
+        if not self._code_committed():
+            raise RuntimeError("uncommitted changes in the code synced to the tracker machine; commit first")
+        code = f"{self.code_branch}/{self._git('rev-parse', '--short=12', 'HEAD').decode().strip()}"
+        q = shlex.quote(code)
+        self.code = code
+        if self._ssh(f"test -e {q}/.ok && echo yes || echo no").decode().strip() == "yes":
+            return self.code
+        data = self._git("archive", "--format=tar", "HEAD", *SYNCED)
+        # mkdir without -p on the commit folder: fails if a partial copy exists (left for Andrew)
+        self._ssh(f"mkdir -p {shlex.quote(self.code_branch)} && mkdir {q} && cd {q} && tar xkf - && "
+                  f"set -C && : > .ok", stdin=data)
+        return self.code
+
+    @staticmethod
+    def _git(*args):
+        return subprocess.run(["git", *args], cwd=ROOT, capture_output=True, check=True).stdout
+
+    def _code_committed(self):
+        return not self._git("status", "--porcelain", "--", *SYNCED).strip()
 
     def _py(self, script, args):
+        if self.code is None:
+            self.sync_code()
         return " ".join([self.python, shlex.quote(f"{self.code}/{script}")] + [shlex.quote(a) for a in args])
 
     def _low(self, cmd):
         """Lowest CPU and I/O priority on the shared machine (decisions, 2026-10-11)."""
         return f"nice -n 19 $(command -v ionice >/dev/null && echo ionice -c 3) {cmd}"
 
-    def _load_ok(self):
-        """A single job starts only if the 1 min load is at most half the cores."""
-        n, l1 = self._ssh("nproc; cut -d' ' -f1 /proc/loadavg").decode().split()
-        if float(l1) > 0.5 * int(n):
-            raise RuntimeError(f"load {l1} is above half of {n} cores; not starting a job on the shared machine")
+    def account_jobs(self):
+        """Jobs of this account on the tracker machine: distinct process groups of its processes matching
+        JOB_PATTERN (a sweep, its workers and their tracker runs share one group)."""
+        cmd = (f"ps -u \"$(id -u)\" -o pgid=,args= | awk '$2 !~ /^(awk|ps|grep|sh|bash)$/' "
+               f"| grep -E {shlex.quote(JOB_PATTERN)} | grep -v -E 'sweep[.]py (status|stop)' "
+               f"| awk '{{print $1}}' | sort -u | wc -l")
+        return int(self._ssh(cmd).decode().split()[-1])
+
+    def _load_ok(self, wait_s=1800, poll_s=60):
+        """A job starts only if the 1 min load is below half the cores and fewer than MAX_JOBS jobs of this
+        account run (CLAUDE.md, Andrew 2026-10-23). Waits up to wait_s, then refuses."""
+        t0 = time.time()
+        while True:
+            n, l1 = self._ssh("nproc; cut -d' ' -f1 /proc/loadavg").decode().split()
+            jobs = self.account_jobs()
+            if float(l1) < 0.5 * int(n) and jobs < MAX_JOBS:
+                return
+            if time.time() - t0 > wait_s:
+                raise RuntimeError(f"load {l1} on {n} cores, {jobs} jobs of this account; not starting a job "
+                                   "on the shared machine")
+            time.sleep(poll_s)
 
     # ---- sweeps (scripts/synth/sweep.py holds the limits for the shared machine)
 
@@ -193,20 +236,30 @@ class RemoteRunner:
         st = self.sweep_status()
         if st.get("running"):
             raise RuntimeError(f"a sweep is running ({st.get('plan')}); not starting another")
+        jobs = self.account_jobs()
+        if jobs >= MAX_JOBS:
+            raise RuntimeError(f"{jobs} jobs of this account run on the tracker machine; at most {MAX_JOBS}")
         q = shlex.quote
-        self._ssh(f"mkdir -p {q(self.work)} && cat > {q(self.work)}/plan_{name}.json", stdin=json.dumps(plan).encode())
-        self.start_detached(f"cd {q(self.work)} && " + self._low(
-            self._py("scripts/synth/sweep.py", ["run", "--plan", f"plan_{name}.json", "--work", ".",
-                                                "--tracks", tracks, "--rods", "rods", "--size-root", self.size_root,
-                                                "--max-hours", str(max_hours)]))
-            + f" > sweep_{name}.log 2>&1")
+        # New plan and log names per start, written with noclobber: nothing on the lab server is overwritten
+        stamp = time.strftime("%Y%m%d-%H%M%S")
+        plan_f, log_f = f"plan_{name}_{stamp}.json", f"sweep_{name}_{stamp}.log"
+        self._ssh(f"mkdir -p {q(self.work)} && set -C && cat > {q(self.work)}/{plan_f}", stdin=json.dumps(plan).encode())
+        self.start_detached(f"cd {q(self.work)} && set -C && " + self._low(
+            self._py("scripts/synth/sweep.py", ["run", "--plan", plan_f, "--work", ".",
+                                                "--tracks", tracks, "--rods", self.rods, "--size-root", self.size_root,
+                                                "--max-hours", str(max_hours)]
+                                                + (["--max-gb", str(self.max_gb)] if self.max_gb else [])))
+            + f" > {log_f} 2>&1")
+        return log_f
 
     def sweep_status(self, name=None):
         out = json.loads(self._ssh(self._py("scripts/synth/sweep.py", ["status", "--work", self.work]))
                          .decode().strip().splitlines()[-1])
         if name:
             q = shlex.quote
-            log = self._ssh(f"cd {q(self.work)} && cat sweep_{name}.log 2>/dev/null || true").decode()
+            # the newest log of this sweep name by modification time (the VM clock is not monotonic), or the old single name
+            log = self._ssh(f"cd {q(self.work)} && f=$(ls -1t sweep_{name}_*.log 2>/dev/null | head -1); "
+                            f"cat \"${{f:-sweep_{name}.log}}\" 2>/dev/null || true").decode()
             out["log"] = [json.loads(x) for x in log.splitlines() if x.startswith("{")]
         return out
 
@@ -219,24 +272,29 @@ class RemoteRunner:
         cache = Path(cache or self.cache)
         cache.mkdir(parents=True, exist_ok=True)
         q = shlex.quote
-        data = self._ssh(f"cd {q(self.work)}/{q(tracks)} && ls | grep -E '__.+[.]npz$' | grep -v '[.]part[.]npz$' "
+        # finished outputs only: those with their .ok marker (qb_track.py)
+        data = self._ssh(f"cd {q(self.work)}/{q(tracks)} && ls | grep -E '__.+[.]npz[.]ok$' | sed 's/[.]ok$//' "
                          f"| tar cf - -T -")
         with tarfile.open(fileobj=io.BytesIO(data)) as tar:
             tar.extractall(cache, filter="data")
         for rid in {f.name.split("__")[0] for f in cache.glob("*__*.npz") if "_moved__" not in f.name}:
             local = cache / f"{rid}_truth.npz"
             if not local.exists():
-                self._fetch(f"{self.work}/rods/{rid}_truth.npz", local)
+                self._fetch(f"{self.work}/{self.rods}/{rid}_truth.npz", local)
         return cache
 
     def render(self, rod, moved=False):
         """Render the rod on the tracker machine unless it exists. Returns the rod id."""
-        args = ["--out", f"{self.work}/rods"] + rod.options() + (["--moved"] if moved else [])
-        cmd = (f"mkdir -p {shlex.quote(self.work)}/rods {shlex.quote(self.work)}/tracks && "
+        args = ["--out", f"{self.work}/{self.rods}"] + rod.options() + (["--moved"] if moved else [])
+        cmd = (f"mkdir -p {shlex.quote(self.work)}/{self.rods} {shlex.quote(self.work)}/tracks && "
                + self._py("scripts/synth/make_rod.py", args + ["--dry-run"]))
         rid = json.loads(self._ssh(cmd).decode().strip().splitlines()[-1])["id"]
-        exists = self._ssh(f"test -d {shlex.quote(self.work)}/rods/{rid}.imgdir && echo yes || echo no")
-        if exists.decode().strip() != "yes":
+        r = f"{shlex.quote(self.work)}/{self.rods}/{rid}"
+        state = self._ssh(f"if test -e {r}.ok -o -e {r}_truth.npz; then echo done; elif test -e {r}.imgdir; "
+                          f"then echo partial; else echo none; fi").decode().strip()
+        if state == "partial":
+            raise RuntimeError(f"partial render left in place on the tracker machine: {rid}; needs Andrew")
+        if state == "none":
             self._load_ok()
             out = json.loads(self._ssh(self._low(self._py("scripts/synth/make_rod.py", args)))
                              .decode().strip().splitlines()[-1])
@@ -251,9 +309,17 @@ class RemoteRunner:
         settings = replace(settings, width_free=False)      # not a tracker setting
         name = f"{rid}__{settings.tag()}.npz"
         local = self.cache / name
-        if not local.exists():
-            args = ["--imgdir", f"{self.work}/rods/{rid}.imgdir",
-                    "--midline", f"{self.work}/rods/{rid}_midline.npz",
+        remote = f"{shlex.quote(self.work)}/tracks/{name}"
+        state = "local" if local.exists() else self._ssh(
+            f"if test -e {remote}.ok; then echo done; elif test -e {remote}; then echo partial; else echo none; fi"
+        ).decode().strip()
+        if state == "partial":
+            raise RuntimeError(f"partial tracker output left in place on the tracker machine: {name}; needs Andrew")
+        if state == "done":
+            self._fetch(f"{self.work}/tracks/{name}", local)
+        if state == "none":
+            args = ["--imgdir", f"{self.work}/{self.rods}/{rid}.imgdir",
+                    "--midline", f"{self.work}/{self.rods}/{rid}_midline.npz",
                     "--out", f"{self.work}/tracks/{name}"] + settings.args()
             self._load_ok()
             out = json.loads(self._ssh(self._low(self._py("scripts/remote/qb_track.py", args)))
@@ -266,7 +332,7 @@ class RemoteRunner:
     def truth(self, rid):
         local = self.cache / f"{rid}_truth.npz"
         if not local.exists():
-            self._fetch(f"{self.work}/rods/{rid}_truth.npz", local)
+            self._fetch(f"{self.work}/{self.rods}/{rid}_truth.npz", local)
         with np.load(local) as z:
             return {k: z[k] for k in z.files}
 
