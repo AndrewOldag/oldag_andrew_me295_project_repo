@@ -13,4 +13,4 @@ Done since last update:
 - log entry in `docs/running_log_pending/diag-analysis.md`; task c020 done
 Needs Andrew:
 - C1 (prompt fault-to-remedy map) and C2 (stage_log_summary per-pair spread): approve, edit or reject for a later freeze
-- C3: roll-back and label rules disagree on a not-computable check: option (a) labels count it as failing, or (b) roll-back counts it as resolved
+- C3, for the planning account with Andrew: note `docs/proposals/2026-10-25_not-computable-check-rule.md` (label rule vs roll-back rule on a not-computable check; option a or b; effect on v3 accept_repaired)

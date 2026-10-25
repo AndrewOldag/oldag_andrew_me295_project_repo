@@ -693,6 +693,7 @@ Required by the course. One entry per work session: done, remaining, bottlenecks
 - Found: at v3 geometry the stage moves on 40 of 40 pairs, so the at-moves / elsewhere split of `stage_log_summary` carries no information. rigid_drift named bad_stage_correction in 9 of 9 runs
 - Found: group B, 9 runs (stage_log_missing): `register_frames` applied 9 of 9, then rolled back, because closure after registration is not computable and `no_progress` counts that as unresolved. The label rule (`checks_pass`) drops it and labels the rod repairable. Remedy tree fails the same way (0 of 3)
 - Proposal: C1 prompt fault-to-remedy map; C2 per-pair spread in `stage_log_summary`; C3 roll-back and label rules to agree (Andrew, option a or b). None applied
+- Note for the planning account: `docs/proposals/2026-10-25_not-computable-check-rule.md` (C3, to resolve with Andrew)
 - Demo: `python scripts/synth/repair_misses.py` prints one line per run and the counts per fault and group
 - Remaining: Andrew decides C1-C3 for a later freeze (not v3.1: prompts unchanged there)
 - Bottlenecks: none
