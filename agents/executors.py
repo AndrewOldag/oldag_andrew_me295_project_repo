@@ -176,7 +176,10 @@ class Slice:
                                        self.current.record)
         except NotAvailable as e:
             return {"rechecked": False, "error": f"remedy not available: {e}"}
-        self._measure(new, change)
+        try:
+            self._measure(new, change)
+        except NotAvailable as e:              # a cached-only runner has no track for these settings (item 36)
+            return {"rechecked": False, "error": f"remedy not available: {e}"}
         after = self.checks
         out = {"rechecked": True, "change": change, **_summary(after),
                "check_values": _before_after(before, after)}

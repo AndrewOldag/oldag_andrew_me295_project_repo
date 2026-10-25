@@ -163,6 +163,20 @@ def test_several_windows_of_one_root_get_one_task_each():
     assert RealWindow(RS.root_of(tasks[1].root_id), tasks[1].from_h, tasks[1].to_h).id() == "0711_c2__w11-13"
 
 
+def test_cached_only_runner_makes_uncached_settings_not_available(tmp_path):
+    """Inbox item 36: repeat runs use cached tracks only; an uncached setting raises NotAvailable, no host step."""
+    from measure.remedies import NotAvailable
+    cfg = tmp_path / "r.yaml"
+    cfg.write_text("host: h\nwork_dir: /w\ncode_dir: /c\ntracker_code: /t\npython: /p\n"
+                   "windows:\n  r1__w4-6:\n    imgdir: /d.imgdir\n")
+    r = RealRunner(cfg, cache=tmp_path / "cache")
+    r.cached_only = True
+    r._ssh = lambda *a, **k: pytest.fail("host step in a cached-only run")
+    w = RealWindow("r1", 4, 6)
+    with pytest.raises(NotAvailable):
+        r.measure(w, r.initial_settings(w))
+
+
 def test_midline_path_default_and_cached_run_needs_no_host(tmp_path, monkeypatch):
     cfg = tmp_path / "r.yaml"
     cfg.write_text("host: h\nwork_dir: /w\ncode_dir: /c\ntracker_code: /t\npython: /p\n"

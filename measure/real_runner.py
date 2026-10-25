@@ -43,7 +43,7 @@ import time
 import yaml
 
 from measure.record import from_tracker_npz
-from measure.remedies import TrackSettings
+from measure.remedies import NotAvailable, TrackSettings
 from measure.runner import Measurement
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -114,6 +114,7 @@ class RealRunner:
         self.tag = f"_{cfg['midline_tag']}" if cfg.get("midline_tag") else ""
         self.track_length = float(track_length)
         self.with_moved = bool(moved)
+        self.cached_only = False                # repeat runs (item 36): cached tracks only, no tracker rerun
         self.moved_mode = moved_mode            # whole_pixel (inbox item 19) or rotate (first 2026-10-24 run)
         self.cache = Path(cache or ROOT / "staging" / "tracks_real")
         self.cache.mkdir(parents=True, exist_ok=True)
@@ -264,6 +265,8 @@ class RealRunner:
         main = "window" if self.moved_mode == "rotate" else "ref"
         need = [main, "moved"] if self.with_moved else ["window"]
         if not all(self.cache_path(window, settings, k).exists() for k in need):   # cached runs need no host step
+            if self.cached_only:
+                raise NotAvailable("no cached track for these settings (repeat run: cached tracks only)")
             self.ensure_midline(window)
             if self.with_moved:
                 self.ensure_moved(window)
