@@ -178,6 +178,8 @@ def main():
     ap.add_argument("--audit-only", action="store_true",
                     help="run only the auditor on the batch recorded in --out (cached tracker outputs; no re-run)")
     ap.add_argument("--out", default=None)
+    ap.add_argument("--cached-only", action="store_true",
+                    help="repeat runs (inbox item 36): cached tracks only; an uncached remedy setting is not available")
     ap.add_argument("--min-free-gb", type=float, default=2.0,
                     help="wait before each window while free VM memory is below this (inbox item 37)")
     a = ap.parse_args()
@@ -206,6 +208,8 @@ def main():
     conditions = {r["id"]: r["condition"] for r in rows}
 
     runner = make_runner(a.config)
+    for r in getattr(runner, "runners", [runner]):
+        r.cached_only = a.cached_only
     runner.sync_code()
     launcher = None
     if not a.no_agent:
