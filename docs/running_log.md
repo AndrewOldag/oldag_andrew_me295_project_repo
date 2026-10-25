@@ -719,3 +719,15 @@ Required by the course. One entry per work session: done, remaining, bottlenecks
 - Demo: `python scripts/real_calib.py summary` prints the per-window table and the p95 rows (closure threshold 18)
 - Remaining: section C applies the 18 px/h closure threshold in its real-movie profile
 - Bottlenecks: none
+
+## 2026-10-24 (build account, real-calib session, continued)
+- Done: inbox item 5 (Andrew, option b): calibration extended; pool, windows (7-9, 11-13, 15-17 h), polyline-end tip rule (50 px) and fallback roots appended to `docs/proposals/2026-10-24_real-calibration.md` before computing
+- Done: 48 ft2 midlines in total through the section C chain on the cluster GPU (4 jobs on its ledger; spend since 2026-10-23 $1.03 of $15); cluster folder cleared by the planning account under Andrew's one-time approval (inbox item 6)
+- Done: `python scripts/real_calib.py run --ext --fallback` on the lab server (single thread, nice 19): 36 extension windows, 29 measured; with the first 12, 41 measured from 16 roots, 4 experiments. Fallback roots 0708_c10, 0708_c11 added by the rule (planned set reached at most 38)
+- Done: real closure threshold 19 px/h (p95 18.87, median 3.60, max 28.9, p95 without the largest 17.47); 18 px/h marked superseded in decisions. Rigid invariance (median 27.5, max 201 %/h) and plane sections reported only. `results/2026-10-25_real_calibration/`
+- Done: `measure/real_runner.py` job count counts python processes only (a bash-wrapped midline build counted as 3 and blocked every RealRunner); `nproc --all`
+- Failed: 0714_c11 w7-9 and w11-13 measurement errors (`ValueError: arange: cannot compute length`, not traced); 0714_c4 failed the screen on all 3 windows
+- Done: `python -m pytest -q tests`: 306 passed, 1 skipped
+- Demo: `python scripts/real_calib.py summary` prints the 48-window table and the p95 rows (closure threshold 19)
+- Remaining: section C applies 19 px/h in its real-movie profile and runs its checks and agents
+- Bottlenecks: none

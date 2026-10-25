@@ -1,28 +1,33 @@
 # Real-movie calibration: noise floor and the real closure threshold (spec 2026-10-24b B, task c018)
 
-2026-10-24. Set and rule: `docs/proposals/2026-10-24_real-calibration.md`, committed before any value was computed. Midline ft2 (`net2_midline_ft2.pt`, tile mode, low 0.1 %, high 99.5 %). Tracked length 1000 px (inbox item 3). Closure definition: the 2026-10-10 one, kept by section A. Uncoupled, every frame, initial settings, no remedy, no agent.
+2026-10-24. Set and rule: `docs/proposals/2026-10-24_real-calibration.md` (first set, and the extension of inbox item 5), each committed before its values were computed. Midline ft2 (`net2_midline_ft2.pt`, tile mode, low 0.1 %, high 99.5 %). Tracked length 1000 px (inbox item 3). Closure definition: the 2026-10-10 one, kept by section A. Uncoupled, every frame, initial settings, no remedy, no agent.
 
-Commands: `python scripts/real_calib.py run --config private/real_runner_c018.yaml` (lab server, single thread, nice 19, host checks before each run); replacement root: `run --replacements 1 --windows 0714_c13__w7-9 0714_c13__w15-17`; then `python scripts/real_calib.py summary`. Per-window files in `windows/`; `summary.json`, `table.md`. ft2 midlines built by the section C chain on the cluster GPU (2 jobs, on its ledger).
+Commands (lab server, single thread, nice 19, host checks before each run): `python scripts/real_calib.py run --config private/real_runner_c018.yaml` (first set; `--replacements 1` for 0714_c13), `python scripts/real_calib.py run --ext --fallback --config private/real_runner_c018.yaml` (extension), then `python scripts/real_calib.py summary`. Per-window files in `windows/` (first set) and `windows_ext/` (extension); `summary.json`, `table.md`. ft2 midlines built by the section C chain on the cluster GPU (4 jobs on its ledger; spend since 2026-10-23 $1.03 of $15 after the last).
 
-## Counts
-- 18 windows from 9 control roots, 4 experiments (16 planned; replacement root 0714_c13 added by the proposal rule after 5 windows dropped out)
-- 12 measured; 5 screened out (net tip 15.8, 17.8, 176.6, 878.4, 1188.7 px from the mask apex); 1 screen failed (probe error: segmentation midline shorter than the probe's 40 px step). Minimums met (12 windows, 4 experiments)
-- Four of the six drop-outs are far from the 15 px line (177-1189 px or a probe error): the net tip or the segmentation is on another object there, not a near miss
-- No window flagged 'base may be in growing tissue': every frame-0 midline is longer than 1000 px
-- `runner_log.json` holds the replacement root's runs only; the first pass's host log was overwritten by the second (script fixed to append). The host checks ran before every tracker run
+## Result
+- Real closure threshold: 19 px/h (95th percentile 18.87 over 41 control windows, rounded up to 2 significant figures). Supersedes 18 px/h (12 windows)
+- Rigid invariance and plane sections: no real threshold; reported (inbox item 4)
 
-## Threshold (closure only, inbox item 4: 95th percentile, numpy linear, rounded up to 2 significant figures)
 | Check | n | Min | Median | Max | p95 | Real threshold | Two largest | p95 without the largest | Synthetic threshold |
 | :-- | --: | --: | --: | --: | --: | --: | :-- | --: | --: |
-| Closure (px/h) | 12 | 0.698 | 3.50 | 28.9 | 17.3 | 18 | 0711_c7 w7-9 28.9; 0714_c9 w7-9 7.93 | 6.73 | 1.0 |
-| Rigid invariance, full range (%/h, reported, no threshold) | 12 | 6.52 | 35.8 | 97.8 | 91.8 | - | 0714_c9 w7-9 97.8; 0711_c7 w7-9 86.9 | 77.0 | 2.0 |
-| Rigid invariance, profile window (%/h, reported) | 12 | 6.52 | 32.6 | 97.8 | 91.8 | - | as full range | 77.0 | - |
-| Plane sections (%/h, reported, no threshold) | 12 | 150 | 238 | 383 | 363 | - | 0721_c5 w15-17 383; 0711_c7 w15-17 347 | 338 | 3.25 |
+| Closure (px/h) | 41 | 0.52 | 3.60 | 28.9 | 18.87 | 19 | 0711_c7 w7-9 28.9; 0714_c13 w11-13 27.4 | 17.47 | 1.0 |
+| Rigid invariance, full range (%/h, reported) | 41 | 6.35 | 27.5 | 201 | 86.9 | - | 0714_c11 w15-17 201; 0714_c9 w7-9 97.8 | 84.1 | 2.0 |
+| Rigid invariance, profile window (%/h, reported) | 41 | 6.35 | 19.6 | 201 | 86.9 | - | as full range | 84.1 | - |
+| Plane sections (%/h, reported) | 41 | 150 | 248 | 519 | 390 | - | 0721_c6 w11-13 519; 0711_c1 w7-9 469 | 383 | 3.25 |
 
-## Per window
-See `table.md`. Every measured window also records the tracked length reached (1060-1092 px), base arc length, basal-point world speed and the closure tip-side and base terms.
+## Counts
+- 48 windows from 16 control roots, 4 experiments (0708, 0711, 0714, 0721). 41 measured: 12 of the first set, 23 of the planned extension, 6 of the fallback roots 0708_c10 and 0708_c11
+- First set (net-tip rule, 15 px): 18 windows, 12 measured, 6 dropped. Superseded threshold 18 px/h (p95 17.35 over 12)
+- Extension (polyline-end rule, 50 px; dispatcher inbox item 33): the 6 first-set drop-outs screened again (4 measured), 24 new windows on the pool, 6 fallback windows. The fallback was added by the proposal rule once the planned set could reach at most 38 (after the 11-13 h round)
+- Not measured (7): 0714_c4 w7-9 screened out (polyline end 379 px from the apex), w11-13 and w15-17 screen failed (probe error: segmentation midline shorter than the probe's 40 px step); 0714_c9 w11-13 screened out (67.5 px); 0721_c3 w7-9 screened out (50.4 px); 0714_c11 w7-9 and w11-13 failed in the measurement (`ValueError: arange: cannot compute length`, cause not traced)
+- No window flagged 'base may be in growing tissue': tracked length reached 1060-1136 px; every frame-0 midline at least 1133 px
+- `runner_log.json` lacks the first pass of the first set (overwritten; script fixed to append). The host checks ran before every tracker run
 
 ## Reading
-- The closure threshold is set by one window: 0711_c7 w7-9 (28.9 px/h; tip-side term 27.0 px/h, largest single-pair residual at pair 1). Without it the p95 is 6.73. The rule keeps it (no window dropped after its value is seen)
-- Rigid invariance at 1000 px spans 6.5-98 %/h on control windows (median 36). In most windows the profile-window value equals the full-range value, so the difference lies where both copies are covered in every frame. A gate near its 95th percentile would pass almost every window, so it gets no real threshold and stays reported, not gating (inbox item 4, planning under Andrew's real-movie delegation)
-- Whether a check gates on real windows is not changed here (real-movie profile today: closure gates; rigid invariance and plane sections reported)
+- Closure: the two largest windows (28.9, 27.4 px/h) are mostly tip-side motion (0711_c7 w7-9: tip-side term 27.0 px/h). With 41 windows the 95th percentile is the third largest value (18.87), so one window no longer sets it: without the largest it is 17.47 (with 12 windows it was 6.73)
+- The threshold is 19 times the synthetic one. On real windows, closure at 19 px/h separates only gross failures; median closure on control windows is 3.6 px/h
+- Rigid invariance at 1000 px spans 6.4-201 %/h (median 28); it stays reported, not gating
+- Gating on real windows unchanged: closure gates; rigid invariance and plane sections reported
+
+## Per window
+See `table.md`. Every measured window records the tracked length reached, base arc length, basal-point world speed and the closure tip-side and base terms.
