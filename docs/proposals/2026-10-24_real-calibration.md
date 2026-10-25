@@ -38,9 +38,11 @@ From: build account, real-calib session. Date: 2026-10-24. Spec 2026-10-24b, sec
 
 ## Measurement (same as the real slice)
 - Midline: ft2 net (`net2_midline_ft2.pt`), tile mode, low 0.1 %, high 99.5 %, window frames only
-- Tracking: initial settings only (every frame, uncoupled, 400 px tracked length). No remedy, no diagnostician
+- Tracking: initial settings only (every frame, uncoupled, 1000 px tracked length; changed from 400 px by inbox item 3 after section A, before any value was computed). No remedy, no diagnostician. Thresholds come only from 1000 px tracks
+- Per window also: tracked length reached, base arc length, world speed of the basal points, frame-0 midline length; a window whose frame-0 midline is shorter than 1000 px is flagged "base may be in growing tissue" (reported, not a gate, and not left out of the percentile)
 - Rigid invariance: the whole-pixel moved copy against the cropped reference copy (decisions 2026-10-24). The threshold is set on the value the checker reports (full range). The profile-window value (s <= s_cov) is reported next to it, with its own 95th percentile, for information
-- Closure: after section A is merged, with the A definition, on the same tracker outputs (the cropped reference copy is the measurement record)
+- Closure: the definition section A kept (2026-10-10: midline end against the most basal centre point tracked in every frame), on the same 1000 px tracker outputs (the cropped reference copy is the measurement record)
+- Rigid invariance at 1000 px is untested before this set (section A tracked no moved copy)
 - Plane sections: computed and reported; no threshold (it stays reported, not gating)
 
 ## Threshold rule
