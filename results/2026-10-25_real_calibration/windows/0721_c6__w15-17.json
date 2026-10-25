@@ -1,0 +1,97 @@
+{
+ "window": "0721_c6__w15-17",
+ "root": "0721_c6",
+ "window_h": [
+  15.0,
+  17.0
+ ],
+ "midline": "ft2 (net2_midline_ft2.pt, tile mode, low 0.1 %, high 99.5 %)",
+ "screen": {
+  "median_net_tip_to_apex_px": 7.2,
+  "frames": [
+   {
+    "frame": 537,
+    "end_to_apex_px": 30.4,
+    "net_tip_to_apex_px": 7.3,
+    "end_behind_apex_px": 29.7,
+    "seg_tip_to_apex_px": 17.3,
+    "seg_tip_in_mask": true
+   },
+   {
+    "frame": 553,
+    "end_to_apex_px": 25.6,
+    "net_tip_to_apex_px": 7.2,
+    "end_behind_apex_px": 24.6,
+    "seg_tip_to_apex_px": 19.1,
+    "seg_tip_in_mask": true
+   },
+   {
+    "frame": 570,
+    "end_to_apex_px": 28.2,
+    "net_tip_to_apex_px": 5.8,
+    "end_behind_apex_px": 27.5,
+    "seg_tip_to_apex_px": 17.1,
+    "seg_tip_in_mask": true
+   },
+   {
+    "frame": 587,
+    "end_to_apex_px": 29.4,
+    "net_tip_to_apex_px": 7.3,
+    "end_behind_apex_px": 28.5,
+    "seg_tip_to_apex_px": 19.6,
+    "seg_tip_in_mask": true
+   },
+   {
+    "frame": 603,
+    "end_to_apex_px": 26.9,
+    "net_tip_to_apex_px": 6.4,
+    "end_behind_apex_px": 26.6,
+    "seg_tip_to_apex_px": 17.0,
+    "seg_tip_in_mask": true
+   }
+  ],
+  "passed": true
+ },
+ "values": {
+  "rigid_invariance": 6.5194,
+  "closure": 4.0374,
+  "plane_sections": 237.5367,
+  "rigid_invariance_profile_window": 6.5194
+ },
+ "detail": {
+  "rigid_invariance": "largest change in regr_mid",
+  "closure": "tip path 140.3 px/h; base at s = 1099 px; largest single-pair residual at pair 15",
+  "plane_sections": "flank difference 0.46 %/h, predicted 238.00 %/h",
+  "rigid_invariance_profile_window": "real-movie profile window s <= 997 px; largest change in regr_mid"
+ },
+ "base": {
+  "tracked_length_reached_px": 1098.8,
+  "base_s_px": 1098.8,
+  "base_term_px_per_h": 2.897,
+  "tip_side_term_px_per_h": 1.19,
+  "basal_speed_px_per_h": [
+   [
+    890.0,
+    -0.39
+   ],
+   [
+    948.0,
+    2.05
+   ],
+   [
+    1008.0,
+    2.52
+   ],
+   [
+    1070.0,
+    0.47
+   ]
+  ],
+  "frame0_midline_px": 1284.1,
+  "flag": null
+ },
+ "track_length_px": 1000.0,
+ "closure_definition": "2026-10-10 definition kept by section A (midline end against the most basal centre point tracked in every frame), 1000 px tracks",
+ "n_frames": 67,
+ "status": "measured"
+}
