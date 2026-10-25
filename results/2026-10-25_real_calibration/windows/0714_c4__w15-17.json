@@ -1,0 +1,14 @@
+{
+ "window": "0714_c4__w15-17",
+ "root": "0714_c4",
+ "window_h": [
+  15.0,
+  17.0
+ ],
+ "midline": "ft2 (net2_midline_ft2.pt, tile mode, low 0.1 %, high 99.5 %)",
+ "screen": {
+  "passed": false,
+  "error": "host command failed (1): ['IndexError: index 50 is out of bounds for axis 0 with size 50']"
+ },
+ "status": "screen failed"
+}

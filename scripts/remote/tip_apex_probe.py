@@ -1,6 +1,9 @@
 """Net midline end against the root-mask apex on a few window frames (inbox item 29, control-root rule).
 
-usage: python tip_apex_probe.py QB_CODE HTPMID.npz SEG_MIDLINE.npz FRAMES.imgdir
+usage: python tip_apex_probe.py QB_CODE HTPMID.npz SEG_MIDLINE.npz FRAMES.imgdir [N]
+
+N (optional): probe only N frames of HTPMID, the first, the last and N-2 evenly spaced between (real calibration
+screen, docs/proposals/2026-10-24_real-calibration.md). Without N every HTPMID frame is probed.
 
 HTPMID: batch_midlines output for the probe frames (any subset of the window). SEG_MIDLINE: the window's segmentation
 midline (scripts/remote/real_midline.py), for the tip side. Per probe frame: root mask (real_midline.root_mask) of
@@ -25,8 +28,12 @@ seg = np.load(sys.argv[3])
 imgdir = Path(sys.argv[4])
 tf = z["transform"].item() if z["transform"].dtype == object else json.loads(str(z["transform"]))
 seg_frames = list(np.asarray(seg["frames"], int))
+pick = np.arange(len(z["frames"]))
+if len(sys.argv) > 5:
+    pick = np.unique(np.round(np.linspace(0, len(pick) - 1, int(sys.argv[5]))).astype(int))
 rows = []
-for f, v, txy in zip(np.asarray(z["frames"], int), z["midline"], np.asarray(z["tip_xy"], float)):
+for f, v, txy in zip(np.asarray(z["frames"], int)[pick], np.asarray(z["midline"])[pick],
+                     np.asarray(z["tip_xy"], float)[pick]):
     img = np.load(imgdir / f"ImageData_Ch0_TP{f:07d}.npy")
     img = np.asarray(img[0] if img.ndim == 3 else img, float)
     m = root_mask(img)
