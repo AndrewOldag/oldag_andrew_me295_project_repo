@@ -5,10 +5,12 @@
 Every window listed in the config (or only --windows) is tracked on its host as the slice would track it: the
 whole-pixel reference copy and its shifted twin, at TRACK_LENGTH (measure/real_runner.py). Outputs land in the
 runner cache, so a later scripts/real_slice.py run reuses them and a restarted run skips finished windows. A busy
-host (load, 2-job limit, disk) is waited out, 120 s per check. One line of JSON per window goes to --log.
+host (load, 2-job limit, disk) is waited out, 120 s per check. A window whose midline file is missing on the host is
+skipped, not built there. One line of JSON per window goes to --log.
 """
 import argparse
 import json
+import shlex
 import sys
 import time
 from pathlib import Path
@@ -36,6 +38,11 @@ def main():
     log = Path(a.log) if a.log else None
     for wid in wids:
         w = parse_wid(wid)
+        try:                       # never build a net midline on the host here (lab server: storage, light jobs only)
+            runner._ssh(f"test -f {shlex.quote(runner.midline_path(w))}")
+        except RuntimeError:
+            print(json.dumps({"window": wid, "skipped": "no midline file on the host"}), flush=True)
+            continue
         t0 = time.time()
         while True:
             try:
