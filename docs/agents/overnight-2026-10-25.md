@@ -26,3 +26,12 @@ Planning account, under Andrew's delegation at 00:21: make decisions that keep t
 - Still no push from any VM session or the coordinator since 23:50 (3 h). The VM is very likely stopped; it cannot be reached from the planning account
 - Planning work done here instead: full-batch sizing from the manifest. 102 include-yes roots, 2368 usable hours, 1189 two-hour windows (5 trials, 11 experiment-condition groups, 55-156 windows each). GPU midlines about $3.85 in total; cluster staging about 511 GB. Storage is the limit, not spend
 - Decision (real-calib item 8): rolling staging on the cluster. Sessions may delete window-frame copies that a Claude session made in the c019 cluster folder, after md5-verified outputs are on the lab server, logged in `DELETED.log`. Reason: within tonight's hard limit (Claude-written files only); without it, only about 50 more windows fit before Andrew clears the folder. Lab server and workstation stay no-delete
+
+## 05:00 check
+- No push from any VM session or the coordinator since 23:50 (5 h). Dispatcher's last push 22:44 (run started); no subset results on `wip/dispatcher`. VM not reachable from the planning account
+- No work could be queued to finish by 08:00: every queued item needs the VM, the tick or a live session
+- Restart order when the VM is back (resume rules in `CLAUDE.md`):
+  - (1) Check `~/vm-health/uptime.log` for the gap start; check free memory and disk (Edge crash dumps, `build-vm` notes)
+  - (2) Confirm the coordinator tick runs; its first pass picks up coordinator item 25 and pings sessions with changed inboxes
+  - (3) dispatcher: restart the 48-window agent run; runs already in the results folder are skipped. Then item 36 (repeats, README)
+  - (4) real-calib items 7-8, diag-analysis items 3-4, freeze-v31 item 9, closure-fix item 3: sessions read their inboxes on `check github`; restart any that are gone
