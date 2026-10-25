@@ -1,12 +1,14 @@
 # coordinator
-Updated: 2026-10-25 15:10 (local)
+Updated: 2026-10-25 15:03 (local)
 Lane: course
 Branch: main
 Last inbox item done: 25
 State: working
 Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8 (relay part), 10, 11, 16, 17 (item 20)
-Last-seen main: 132e4ed
+Last-seen main: 3843743
 Done since last update:
+- 2026-10-25 15:03 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working 14:52, item 37 subset run, real_subset_report.py 1873fa7; wip/real-calib working 15:00, items 7-8 read, full-batch proposal; wip/lab-report-2 working, status 23 Oct; wip/freeze-v31 done 14:46, no merge asked). Correction: the previous pass was stamped 15:10 but committed 14:50
+- 15:03: item 8: no inbox change since 132e4ed; no pings. real-calib and diag-analysis restarted (live, started after the inbox change). Item 10: no status says `waiting on <agent>`. Item 16: no status says `waiting on server job`. Live: dispatcher, real-calib, diag-analysis; freeze-v31 and turn-long no longer live
 - 2026-10-25 15:10 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working 14:49, item 37 subset run restarted with 2 GB memory wait; wip/lab-report-2 working, status 23 Oct, draft refreshed 0060c20 by freeze-v31; wip/freeze-v31 done 14:46, its Needs Andrew asks a report review, not a merge)
 - 15:10: item 8: no inbox change since 91b55d7 (132e4ed only adds the overnight note); no pings. Item 10: no status says `waiting on <agent>`. Item 16: no status says `waiting on server job`. Live: freeze-v31, dispatcher, turn-long
 - 2026-10-25 14:45 (tick; first pass since 23:50; no tick ran overnight): item 25: local branch worktree-coordinator-c007 already gone when checked (b563b33 differed from 2170ca5 only in wording of the c007 task note and decisions reason; same decision and done marker on main). Nothing to keep
@@ -125,23 +127,23 @@ Branches (last commit, state):
 - wip/coord-tick: 2026-10-24 13:09, ready to merge, merged 9aa97bf
 - wip/freeze-v3: 2026-10-24 04:16, ready to merge, merged 2ebd422
 - status/turn-long: 2026-10-24 02:42, done (research lane, not merged)
-- wip/dispatcher: 2026-10-25 14:49, working (item 37 subset run restarted, d9c3ca3) (15:37 merged 5a4767f)
+- wip/dispatcher: 2026-10-25 14:52, working (item 37 subset run; 1873fa7) (15:37 merged 5a4767f)
 - wip/lab-report-2: 2026-10-25 14:46, working (status of 23 Oct; draft refreshed 0060c20 by freeze-v31)
 - wip/freeze-v31: 2026-10-25 14:46, done (item 9; status and log only since merge 2c373d1)
 - wip/closure-fix: 2026-10-24 17:03, ready to merge, merged 835b522
 - wip/diag-analysis: 2026-10-24 18:06, ready to merge, merged 1ff1369 and 0d9ddf8
-- wip/real-calib: 2026-10-24 22:33, ready to merge, merged 1730bf3 (also 7aab080 at 19:12)
+- wip/real-calib: 2026-10-25 15:00, working (items 7-8; merged 1730bf3 and 7aab080 earlier)
 - status/spec-audit-r: 2026-10-23 13:42, done (research lane, not merged)
 - status/gate2: deleted from the remote
 - wip/readme-check, wip/vm-setup, wip/auditor-v1b, wip/fq-real, wip/auditor-v1, wip/scored-v1, wip/freeze-v2, heldout/faults, wip/baselines, wip/diag-review, wip/lab-report-1, wip/gatekeeper: merged
 Needs Andrew:
-- Restart sessions not live whose inboxes changed overnight: real-calib (items 7-8, full batch), diag-analysis (items 3-4, v4 candidate and scored v4 run), closure-fix (item 3, real_moved.py write-once)
+- Restart closure-fix (not live; inbox item 3, real_moved.py write-once). real-calib and diag-analysis restarted
+- real-calib: cluster connection down; reopen the cluster connection master on the lab server (route in private notes). Its item 7 (2) midlines wait for it
 - Lab report 2 draft (freeze-v31 item 9): review on wip/lab-report-2 (0060c20); real-subset line waits for a README in `results/2026-10-25_real_subset/`
 - dispatcher: its tracking run started a net-midline build on the lab-server CPU (0721_m10, 3 threads, nice 19), against inbox item 25; its kill was blocked. Pid in its status; stop it if wanted. real_track.py now skips windows without a host midline (85e20da)
 - closure-fix (merged): closure at 1000 px still 2.2-3.2 px/h against synthetic 1.0; rigid invariance at 1000 px untested (1000 px now in dispatcher and real-calib inboxes, ab50da7)
 - diag-analysis (merged): decide C1 (prompt fault-to-remedy map), C2 (stage_log_summary per-pair spread), C3 (roll-back vs label rule: option a or b) in `docs/proposals/2026-10-25_diagnostician-repair-misses.md`; C3 note `docs/proposals/2026-10-25_not-computable-check-rule.md`
 - `scripts/remote/real_moved.py` (merged with wip/dispatcher) writes `<name>.part` and then `os.rename`s it to the final name, on the compute host; the 3-root slice ran on the lab server. CLAUDE.md forbids renames there (only sweep locks excepted); `qb_track.py` was changed to write-once for the same reason (rules-2). Keep, or ask for a write-once fix
-- Finished sessions still live and idle: freeze-v31 (done), turn-long (done); can be closed (VM memory)
 - freeze-v3: review `results/2026-10-23_freeze_v3/README.md` (all 12 accept_repaired rods measure well unremedied; second_root 0 correct for every method)
 - lab-report-2 and spec-audit-r sessions no longer live; wip/lab-report-2 status still says working (13:29)
 - Old lab-report-2 session (started 00:37) stopped 13:45 on Andrew's go-ahead; the 13:27 one remains
