@@ -151,6 +151,18 @@ def test_parse_window():
     assert RS.parse_window("0721_m10:4.5-6.5") == ("0721_m10", 4.5, 6.5)
 
 
+def test_several_windows_of_one_root_get_one_task_each():
+    """Inbox item 37: a root with 3 windows gives 3 dispatcher rows and 3 tasks, each mapped back to its root."""
+    cfg = D.load_config()
+    m = {r["id"]: r for r in D.manifest_rows()}
+    rows = [dict(m["0711_c2"], id=f"0711_c2~{a:g}-{b:g}", usable_from_h=str(a), usable_to_h=str(b))
+            for a, b in [(4, 6), (11, 13), (17, 19)]]
+    tasks = [t for r in rows for t in D.make_tasks(r, cfg)]
+    assert [(t.from_h, t.to_h) for t in tasks] == [(4, 6), (11, 13), (17, 19)]
+    assert {RS.root_of(t.root_id) for t in tasks} == {"0711_c2"} and RS.root_of("0711_c2") == "0711_c2"
+    assert RealWindow(RS.root_of(tasks[1].root_id), tasks[1].from_h, tasks[1].to_h).id() == "0711_c2__w11-13"
+
+
 def test_midline_path_default_and_cached_run_needs_no_host(tmp_path, monkeypatch):
     cfg = tmp_path / "r.yaml"
     cfg.write_text("host: h\nwork_dir: /w\ncode_dir: /c\ntracker_code: /t\npython: /p\n"
