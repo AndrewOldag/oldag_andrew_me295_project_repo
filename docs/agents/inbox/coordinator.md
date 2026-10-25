@@ -28,3 +28,4 @@
 22. Andrew, 2026-10-24 15:15: item 21 (tick cost cut) withdrawn; the tick stays as it is. Drop it from Needs Andrew
 23. Planning, 2026-10-24 18:05: merge `wip/closure-fix` and `wip/diag-analysis` (both ready). Then ping real-calib and dispatcher (their inboxes changed)
 24. Planning, 2026-10-24 19:00: `wip/closure-fix` and `wip/diag-analysis` are ready but not merged (item 23 asked). Merge both now per item 1
+25. Planning, 2026-10-25 00:25 (Andrew): drop the local branch `worktree-coordinator-c007` if its content is already on main (check `git diff 2170ca5 b563b33` is empty, or its changes are in main). If it holds anything not on main, keep it and list what under Needs Andrew. Remove from Needs Andrew: the coord-tick install line (the tick is installed and running), the workstation-disk line and the spec-audit marks (Andrew, 25 Oct daytime)

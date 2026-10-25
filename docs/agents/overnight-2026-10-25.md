@@ -10,3 +10,9 @@ Planning account, under Andrew's delegation at 00:21: make decisions that keep t
 - freeze-v31 (item 9): refresh the Lab report 2 draft from the log. Reason: due Fri 30 Oct; the lab-report-2 session is not live
 - real-calib (item 7): full-batch proposal and a first batch of real windows (midlines, tracking, checker, no agents), capped at $3 added worst-case spend and 35 GB on the cluster. Reason: project goal is all include-yes roots; measured cost is about $0.003 per window
 - Not decided, left for Andrew: coord-tick elevated install; spec-audit marks; workstation disk (sessions cannot delete); local branch worktree-coordinator-c007
+
+## 00:45 Andrew's answers
+- Coordinator tick is installed and running all day; the install line was stale. Coordinator item 25 clears it
+- Spec-audit marks and workstation disk: Andrew, 25 Oct daytime
+- Local branch worktree-coordinator-c007: drop if not needed (coordinator item 25)
+- C3 option (a) and the scored v4 run approved (diag-analysis item 4): tag freeze-v4 after the seed 26-28 labels are committed, then all methods on 26-28, LLM methods 3 repeats
