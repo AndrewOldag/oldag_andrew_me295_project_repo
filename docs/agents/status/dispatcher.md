@@ -1,10 +1,10 @@
 # dispatcher
-Updated: 2026-10-24 22:20 (local)
+Updated: 2026-10-24 23:05 (local)
 Lane: course
 Branch: wip/dispatcher
 Last inbox item done: 35
-State: waiting on real-calib
-Now: all 48 subset windows tracked at 1000 px; checks and agent run held for the 40-window closure threshold (item 34)
+State: working
+Now: section B merged (19 px/h) and main merged into wip/dispatcher (suite 307 passed, 1 skipped); agent run over the 48 subset windows running (`scripts/real_slice.py`, results/2026-10-25_real_subset/)
 Done since last update:
 - Item 33 (1): tip rule v2 (polyline end within 50 px of the mask apex) applied to every probed root; refilled by the proposal's slot order: 0714_m10, 0708_m8, 0727_mc3 return as picks; 0711_m4 still fails (618 px). Subset back to 16 roots, 48 windows; all 48 have ft2 midlines. Decisions entry and proposal section added
 - Item 33 (2): noted, c019 lab-server folder up to 100 GB

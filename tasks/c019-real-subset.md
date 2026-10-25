@@ -3,12 +3,12 @@ id: c019
 title: 16-root real subset end to end
 lane: course
 owner: dispatcher
-state: waiting on real-calib
+state: working
 branch: wip/dispatcher
 host: cluster, lab server (light)
 created: 2026-10-24 16:45
-last_update: 2026-10-24 20:45
-blocker: real closure threshold from 40+ calibration windows (item 34)
+last_update: 2026-10-24 23:05
+blocker: none
 done_marker: results/2026-10-2x_real_subset/README.md
 ---
 
