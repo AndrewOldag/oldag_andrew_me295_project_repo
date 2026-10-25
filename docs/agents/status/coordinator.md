@@ -1,12 +1,14 @@
 # coordinator
-Updated: 2026-10-25 15:03 (local)
+Updated: 2026-10-25 15:12 (local)
 Lane: course
 Branch: main
 Last inbox item done: 25
 State: working
 Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8 (relay part), 10, 11, 16, 17 (item 20)
-Last-seen main: 3843743
+Last-seen main: b9e3ffe
 Done since last update:
+- 2026-10-25 15:12 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working 15:10, item 37 subset run, 1 of 48 windows done; wip/real-calib waiting on Andrew 15:06, cluster connection; wip/diag-analysis working 15:01, items 3-4 on new wip/v4-candidate (6a19514, 15:08, no status file); wip/lab-report-2 working; wip/freeze-v31 done, no merge asked)
+- 15:12: item 8: no inbox change since 132e4ed; no pings. Item 10: no status says `waiting on <agent>`. Item 16: no status says `waiting on server job` (real-calib names seg_chain.done but its State is waiting on Andrew)
 - 2026-10-25 15:03 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working 14:52, item 37 subset run, real_subset_report.py 1873fa7; wip/real-calib working 15:00, items 7-8 read, full-batch proposal; wip/lab-report-2 working, status 23 Oct; wip/freeze-v31 done 14:46, no merge asked). Correction: the previous pass was stamped 15:10 but committed 14:50
 - 15:03: item 8: no inbox change since 132e4ed; no pings. real-calib and diag-analysis restarted (live, started after the inbox change). Item 10: no status says `waiting on <agent>`. Item 16: no status says `waiting on server job`. Live: dispatcher, real-calib, diag-analysis; freeze-v31 and turn-long no longer live
 - 2026-10-25 15:10 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working 14:49, item 37 subset run restarted with 2 GB memory wait; wip/lab-report-2 working, status 23 Oct, draft refreshed 0060c20 by freeze-v31; wip/freeze-v31 done 14:46, its Needs Andrew asks a report review, not a merge)
@@ -127,18 +129,21 @@ Branches (last commit, state):
 - wip/coord-tick: 2026-10-24 13:09, ready to merge, merged 9aa97bf
 - wip/freeze-v3: 2026-10-24 04:16, ready to merge, merged 2ebd422
 - status/turn-long: 2026-10-24 02:42, done (research lane, not merged)
-- wip/dispatcher: 2026-10-25 14:52, working (item 37 subset run; 1873fa7) (15:37 merged 5a4767f)
+- wip/dispatcher: 2026-10-25 15:10, working (item 37 subset run, 1 of 48 windows) (15:37 merged 5a4767f)
 - wip/lab-report-2: 2026-10-25 14:46, working (status of 23 Oct; draft refreshed 0060c20 by freeze-v31)
 - wip/freeze-v31: 2026-10-25 14:46, done (item 9; status and log only since merge 2c373d1)
 - wip/closure-fix: 2026-10-24 17:03, ready to merge, merged 835b522
-- wip/diag-analysis: 2026-10-24 18:06, ready to merge, merged 1ff1369 and 0d9ddf8
-- wip/real-calib: 2026-10-25 15:00, working (items 7-8; merged 1730bf3 and 7aab080 earlier)
+- wip/real-calib: 2026-10-25 15:06, waiting on Andrew (item 7 (2); merged 1730bf3 and 7aab080 earlier)
+- wip/diag-analysis: 2026-10-25 15:01, working (items 3-4; code on wip/v4-candidate)
+- wip/v4-candidate: 2026-10-25 15:08, code branch of diag-analysis, no status file; not merged
 - status/spec-audit-r: 2026-10-23 13:42, done (research lane, not merged)
 - status/gate2: deleted from the remote
 - wip/readme-check, wip/vm-setup, wip/auditor-v1b, wip/fq-real, wip/auditor-v1, wip/scored-v1, wip/freeze-v2, heldout/faults, wip/baselines, wip/diag-review, wip/lab-report-1, wip/gatekeeper: merged
 Needs Andrew:
-- Restart closure-fix (not live; inbox item 3, real_moved.py write-once). real-calib and diag-analysis restarted
-- real-calib: cluster connection down; reopen the cluster connection master on the lab server (route in private notes). Its item 7 (2) midlines wait for it
+- Restart closure-fix (not live; inbox item 3, real_moved.py write-once)
+- real-calib: cluster connection down; reopen the cluster connection master on the lab server (route in private notes). Its item 7 (2) GPU midlines, staging and tracking of the first batch wait for it
+- real-calib: full batch leaves about 1.0 TB of moved copies on the lab server; keep for all windows or only a sample? First batch keeps them (110 GB)
+- real-calib reports it moved (`mv`) its own uploaded window list on the lab server at 15:03, against the no-move rule; one file only
 - Lab report 2 draft (freeze-v31 item 9): review on wip/lab-report-2 (0060c20); real-subset line waits for a README in `results/2026-10-25_real_subset/`
 - dispatcher: its tracking run started a net-midline build on the lab-server CPU (0721_m10, 3 threads, nice 19), against inbox item 25; its kill was blocked. Pid in its status; stop it if wanted. real_track.py now skips windows without a host midline (85e20da)
 - closure-fix (merged): closure at 1000 px still 2.2-3.2 px/h against synthetic 1.0; rigid invariance at 1000 px untested (1000 px now in dispatcher and real-calib inboxes, ab50da7)
