@@ -1,16 +1,11 @@
 # diag-analysis
-Updated: 2026-10-24 16:50 (local)
+Updated: 2026-10-25 22:00 (local)
 Lane: course
-Branch: wip/diag-analysis
+Branch: wip/diag-analysis (status, task c021); code on wip/v4-candidate
 Last inbox item done: 2
-State: ready to merge
-Now: section D done; proposal written; nothing applied
+State: working
+Now: items 3 and 4: C1, C2, C3 (a) behind `candidate: v4` on `wip/v4-candidate`
 Done since last update:
-- item 2: `docs/proposals/2026-10-25_diagnostician-repair-misses.md` and `scripts/synth/repair_misses.py` (read-only table); from v3 traces only, 0 tracker runs, 0 LLM calls
-- accept_repaired: diagnostician 16 of 36, 20 declines; remedy tree 9 of 12
-- group A, 11 runs: declined with no remedy tried, believing no remedy fits a stage-correction error; `register_frames` repairs all 6 rods
-- group B, 9 runs (stage_log_missing): `register_frames` rolled back because closure becomes not computable; the label rule drops that check, the roll-back rule does not
-- log entry in `docs/running_log_pending/diag-analysis.md`; task c020 done
+- read inbox items 3-4, overnight log; task c021 created; branch `wip/v4-candidate` from main 3843743
 Needs Andrew:
-- C1 (prompt fault-to-remedy map) and C2 (stage_log_summary per-pair spread): approve, edit or reject for a later freeze
-- C3, for the planning account with Andrew: note `docs/proposals/2026-10-25_not-computable-check-rule.md` (label rule vs roll-back rule on a not-computable check; option a or b; effect on v3 accept_repaired)
+- none
