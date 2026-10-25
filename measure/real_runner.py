@@ -234,6 +234,18 @@ class RealRunner:
         tag = {"window": "", "moved": "_moved" if self.moved_mode == "rotate" else "_wp_moved", "ref": "_wp_ref"}[which]
         return self.cache / f"{window.id()}{self.tag}{tag}__{settings.tag()}__L{self.track_length:g}.npz"
 
+    def fetch_host_track(self, name, local):
+        """A host track of the same name (same window, settings and length) written by an earlier run whose
+        local copy is missing: fetch it instead of tracking again. qb_track never overwrites its output."""
+        q = shlex.quote
+        try:
+            self._ssh(f"test -s {q(self.work)}/tracks/{q(name)}")
+        except RuntimeError:
+            return False
+        local.write_bytes(self._ssh(f"cat {q(self.work)}/tracks/{q(name)}"))
+        self.log.append({"track": name, "fetched": "existing host output"})
+        return True
+
     def track(self, window, settings, which="window"):
         """which: 'window' (the movie as is), 'moved' or 'ref' (copies made by ensure_moved)."""
         settings = replace(settings, width_free=False)
@@ -241,7 +253,11 @@ class RealRunner:
              else self.copy_paths(window, which))
         local = self.cache_path(window, settings, which)
         name = local.name
+        if not local.exists() and self.fetch_host_track(name, local):
+            return local
         if not local.exists():
+            if self.cached_only:
+                raise NotAvailable("no cached track for these settings (repeat run: cached tracks only)")
             before = self.check_host()
             q = shlex.quote
             args = (["--imgdir", w["imgdir"], "--midline", w["midline"], "--out", f"{self.work}/tracks/{name}",
@@ -265,8 +281,11 @@ class RealRunner:
         main = "window" if self.moved_mode == "rotate" else "ref"
         need = [main, "moved"] if self.with_moved else ["window"]
         if not all(self.cache_path(window, settings, k).exists() for k in need):   # cached runs need no host step
-            if self.cached_only:
-                raise NotAvailable("no cached track for these settings (repeat run: cached tracks only)")
+            if self.cached_only:       # host outputs of earlier runs count as cached; track() raises if one is missing
+                rec = from_tracker_npz(self.track(window, settings, need[0]), root_id=window.id())
+                moved = (from_tracker_npz(self.track(window, settings, "moved"), root_id=window.id() + "_moved")
+                         if self.with_moved else None)
+                return Measurement(rec, moved, settings, {})
             self.ensure_midline(window)
             if self.with_moved:
                 self.ensure_moved(window)

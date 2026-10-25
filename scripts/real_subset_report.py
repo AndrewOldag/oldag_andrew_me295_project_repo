@@ -20,7 +20,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "scripts"))
-from audit.view import field_summaries  # noqa: E402
+from audit.view import field_summaries, opaque_ids  # noqa: E402
 from measure.real_runner import RealRunner, RealWindow  # noqa: E402
 from measure.record import from_tracker_npz  # noqa: E402
 from measure.remedies import TrackSettings  # noqa: E402
@@ -47,6 +47,8 @@ def main():
     run = Path(a.run)
     s = json.loads((run / "summary.json").read_text())
     runner = RealRunner(a.config)
+    rid = dict(zip(s["tasks"], opaque_ids(len(s["tasks"]), "real_slice")))     # the auditor's run ids (blind order)
+    adec = (s.get("auditor") or {}).get("decisions") or {}
     rows = []
     for tid, t in sorted(s["tasks"].items(), key=lambda kv: (kv[1].get("root_id", kv[0]), kv[1]["window_h"][0])):
         root = t.get("root_id") or tid.split("__")[0]
@@ -59,7 +61,7 @@ def main():
         o = t["outcome"]
         clo, clo_pass = check(t["final_checks"], "closure")
         rows.append({
-            "window": w.id(), "root": root, "condition": t["condition"], "group": GROUP[t["condition"]],
+            "window": w.id(), "run_id": rid[tid], "root": root, "condition": t["condition"], "group": GROUP[t["condition"]],
             "outcome": o["status"], "fault": (o.get("args") or {}).get("fault", ""),
             "remedies_kept": "; ".join(x for x in t["remedies"] if not x.startswith("rolled back")),
             "roll_backs": t["roll_backs"],
@@ -72,6 +74,8 @@ def main():
             "frame0_midline_px": b["frame0_midline_px"], "base_flag": b["flag"] or "",
             "peak_regr_pct_h": f.get("centre_peak_regr_pct_per_h"),
             "growth_zone_um": f.get("growth_zone_length_um"),
+            "auditor": (adec.get(rid[tid]) or {}).get("decision", ""),
+            "auditor_reason": (adec.get(rid[tid]) or {}).get("reason", ""),
         })
     with (run / "windows.csv").open("w", newline="") as fh:
         wr = csv.DictWriter(fh, fieldnames=list(rows[0]))
@@ -79,11 +83,11 @@ def main():
         wr.writerows(rows)
 
     accepted = ("accept", "accepted", "accept_repaired")
-    md = ["| Window | Group | Outcome | Fault | Closure px/h (initial, final) | Rigid %/h | Plane %/h | "
+    md = ["| Window | Run | Group | Outcome | Auditor | Fault | Closure px/h (initial, final) | Rigid %/h | Plane %/h | "
           "Tracked px | Base s px | Base flag | Peak REGR %/h | Growth zone um |",
-          "| :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- |"]
+          "| :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- |"]
     for r in rows:
-        md.append(f"| {r['window']} | {r['group']} | {r['outcome']} | {r['fault']} | {r['closure_initial_px_h']}, "
+        md.append(f"| {r['window']} | {r['run_id']} | {r['group']} | {r['outcome']} | {r['auditor']} | {r['fault']} | {r['closure_initial_px_h']}, "
                   f"{r['closure_final_px_h']} | {r['rigid_invariance_pct_h']} | {r['plane_sections_pct_h']} | "
                   f"{r['tracked_length_px']} | {r['base_s_px']} | {'yes' if r['base_flag'] else ''} | "
                   f"{r['peak_regr_pct_h']} | {r['growth_zone_um']} |")
