@@ -1,0 +1,10 @@
+## 2026-10-24 (build account, dispatcher session, task c019)
+- Done: subset proposal `docs/proposals/2026-10-24_real-subset.md` (ea853da): 16 slots, 5 control, 5 drought, 6 recovery, all 5 experiments; windows 4-6, 11-13, 17-19 h; disjoint from the B calibration set (checked against wip/real-calib)
+- Done: ft2 net midlines on the cluster GPU (P100) for 48 subset windows, 7 backup windows and 27 calibration windows for real-calib: 7 jobs, 60-100 s per 80-frame window; actual spend since 2026-10-23 $0.96 of $15; seg midlines on the lab server, about 30 s per window
+- Done: tip rule v1 (net tip point within 15 px): 12 of 18 probed roots pass; all 6 fails are drought or recovery. Rule v2 (inbox item 33, polyline end within 50 px): 16 of 18 pass (fails 0711_m4 618 px, 0727_mc13 357 px); subset refilled to 16 roots; decisions entry
+- Done: `scripts/real_track.py` tracks real windows ahead of the checks; all 48 subset windows tracked at 1000 px (whole-pixel reference copy and shifted twin), 80-117 s per window on the lab server, single thread, nice 19
+- Done: `scripts/remote/tip_apex_probe.py` fix: no apex for a frame whose seg midline is under 40 px (was IndexError)
+- Failed (my error): the first tracking run built the 0721_m10 4-6 h net midline on the lab-server CPU (58 min, 3 threads, nice 19) because its ft2 midline existed only on the workstation; my kill was blocked by the permission check; reported to Andrew; `real_track.py` now skips windows without a host midline
+- Demo: `python scripts/real_track.py --config private/real_runner_c019.yaml` prints one JSON line per window; all 48 are cached (wall_s 0.0)
+- Remaining: (1) real-calib's closure threshold from 40+ windows (inbox item 34); (2) checks, diagnostician and auditor over the 48 windows with `scripts/real_slice.py`; (3) per window: tracked length, base arc length, basal world speed, frame-0 length flag (item 32); (4) results `results/2026-10-2x_real_subset/` and the README run step
+- Bottlenecks: real closure threshold (real-calib; 15 calibration windows wait on Andrew's cluster cap decision); cluster folder at the 40 GiB cap
