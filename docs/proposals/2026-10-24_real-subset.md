@@ -49,3 +49,10 @@ Dispatcher session, 2026-10-24. Spec `docs/specs/2026-10-24b_real-movie-push.md`
 ## Report per window
 - Pass or fail per check, diagnostician decision, peak REGR, growth-zone length; auditor's batch report (control against drought against recovery)
 - Every result names the midline (ft2) and the closure definition used
+
+## Outcome of the tip rule (2026-10-24, added after the probes; the rule above is unchanged)
+- Medians of net tip to mask apex over the 5 frames (px). Pass: 0708_c5 5.0, 0711_c4 3.2, 0714_c10 5.7, 0721_c1 7.8, 0721_m4 11.4, 0721_m9 6.4, 0727_mc1 8.2, 0727_mc5 7.2, 0727_mm6 5.4, 0714_m2 2.2, 0711_m6 5.1, 0714_m13 7.6
+- Fail: 0708_m8 695, 0711_m4 693, 0714_m10 797, 0727_mc3 582, 0727_mc4 1139, 0727_mc13 381
+- Slots: C1-C5 0711_c2, 0708_c5, 0714_c10, 0721_c1, 0711_c4; D1-D5 0708_m12, 0711_m6 (backup), 0714_m13 (backup), 0727_mm6, 0714_m2 (backup); R1-R4 0721_m10, 0721_m4, 0721_m9, 0727_mc1; R6 0727_mc5
+- R5 is empty: pick 0727_mc3, backup 0727_mc4 and third try 0727_mc13 (first unreserved pool root of 0727 recovery in manifest order) all fail. The subset has 15 roots, 45 windows
+- On every failing frame the tracking polyline end lies 19-30 px behind the apex, as on passing roots; the net's separate tip point jumps toward the far end of the root. Reported to Andrew; the rule is not changed here
