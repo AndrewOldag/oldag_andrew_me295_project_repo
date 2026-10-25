@@ -5,6 +5,10 @@
 model: claude-opus-5-5          # pinned 2026-10-08. Exact ID, no alias
 claude_code_version: 2.1.310    # pinned 2026-10-23 for freeze v3 (was 2.1.302; 2.1.293 before 2026-10-17). The launcher refuses any other version
 
+# Freeze v4 candidate (agents/candidate.py; inbox diag-analysis item 3, 2026-10-25). null = off: v3 and v3.1
+# unchanged. v4 = C1, C2 and C3 option (a). The v4 driver turns it on for its own process only.
+candidate: null
+
 # One agent step is one `claude -p` call that returns one typed action.
 # max_turns: CLI turns per call (the structured-output tool uses one).
 # step_limit: actions per task before the orchestrator stops it.

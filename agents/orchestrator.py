@@ -14,9 +14,16 @@ import json
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 
+from . import candidate
 from .actions import ACTION_SETS
 
 PROMPTS = Path(__file__).resolve().parent / "prompts"
+
+
+def system_prompt_file(agent):
+    """<agent>.md; <agent>_v4.md when the freeze v4 candidate is on and that file exists (C1)."""
+    f = PROMPTS / f"{agent}_v4.md"
+    return f if candidate.v4() and f.exists() else PROMPTS / f"{agent}.md"
 
 
 @dataclass
@@ -69,7 +76,7 @@ class Orchestrator:
         cfg = self.launcher.cfg["agents"][agent]
         action_set = ACTION_SETS[agent]
         schema = action_set.schema(cfg.get("schema_form", "optional"))
-        system = (PROMPTS / f"{agent}.md").read_text(encoding="utf-8")
+        system = system_prompt_file(agent).read_text(encoding="utf-8")
         terminal = {a.name for a in action_set.actions if a.terminal}
         history, failed_in_row = [], 0
         out = Outcome(task_id, agent, "step_limit")

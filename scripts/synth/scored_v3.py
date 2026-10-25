@@ -34,6 +34,7 @@ import yaml
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from agents import candidate  # noqa: E402
 from agents.baselines import run_script, run_tree  # noqa: E402
 from agents.executors import BlindSlice, Slice  # noqa: E402
 from agents.launcher import load_config  # noqa: E402
@@ -143,8 +144,9 @@ def tracker_runs_cached():
     return len(list(CACHE.glob("*__*.npz"))) if CACHE.exists() else 0
 
 
-def evaluate(rod, st):
-    """Checks, truth error and goodness of one state. None if not cached."""
+def evaluate(rod, st, after_remedy=False):
+    """Checks, truth error and goodness of one state. None if not cached. after_remedy: the state follows a
+    remedy; with the freeze v4 candidate on, a check it cannot compute counts as failing (C3 option a)."""
     if not cached(rod, st) or truth(rod) is None:
         return None
     rec, moved = from_tracker_npz(out_file(rod, st)), from_tracker_npz(out_file(rod, st, True))
@@ -154,7 +156,8 @@ def evaluate(rod, st):
     tol = rod_tolerance(t, PIXEL_UM, load_tolerance())
     return {"rod": rod.id(), "tag": st.tag() + ("_wf" if st.width_free else ""),
             **{c.check: c.value for c in checks}, **{f"{c.check}_pass": c.passed for c in checks},
-            "all_pass": checks_pass(checks), **err, "good": measurement_good(err, tol, st.width_free),
+            "all_pass": checks_pass(checks, after_remedy and candidate.v4()), **err,
+            "good": measurement_good(err, tol, st.width_free),
             "regr_limit": tol["regr_rms_pct_per_h"], "flank_limit": tol["flank_difference_rms_pct_per_h"],
             "truth": truth_summary(t, PIXEL_UM), "preprocess": rec.settings.get("preprocess", {})}
 
@@ -400,7 +403,7 @@ def labels_report():
         sts = label_states(rod)
         ev = []
         for seq, st in sts:
-            e = evaluate(rod, st) if st is not None else None
+            e = evaluate(rod, st, after_remedy=bool(seq)) if st is not None else None
             if e is None:
                 missing += 1
                 continue
