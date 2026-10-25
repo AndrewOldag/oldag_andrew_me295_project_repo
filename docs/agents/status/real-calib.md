@@ -1,15 +1,14 @@
 # real-calib
-Updated: 2026-10-24 23:20 (local)
+Updated: 2026-10-24 22:35 (local)
 Lane: course
 Branch: wip/real-calib
-Last inbox item done: 4
-State: working
-Now: items 5-6: all 48 calibration midlines built (dispatcher GPU, spend $1.03 of $15); `real_calib.py run --ext --fallback` on the lab server: 30 of 36 extension windows done; summary and threshold when the last lands
+Last inbox item done: 6
+State: ready to merge
+Now: items 5-6 done: real closure threshold 19 px/h from 41 control windows (supersedes 18 px/h); decisions entry
 Done since last update:
-- Item 6 read: cluster folder 6.8 of 40 GB after the planning account's approved delete; dispatcher asked to copy and run the 21 windows
-- 9 windows 11-13 h (dispatcher GPU job, $0.028; spend $0.96 of $15): 7 measured; 0714_c4 screen failed (third of three), 0714_c9 screened out
-- Fallback roots 0708_c10, 0708_c11 in play by the proposal rule (the planned set reaches at most 38)
-- Re-screen of the 6 first-screen drop-outs: 4 measured; 0714_c4 w7-9 and w15-17 out again
-- `measure/real_runner.py`: job count counts python processes only (one bash-wrapped midline build counted as 3 and blocked every RealRunner); `nproc --all`
+- 48 windows, 16 control roots, 4 experiments; 41 measured (12 first, 23 planned extension, 6 fallback); 7 not measured (5 screen or probe, 2 measurement errors on 0714_c11)
+- Closure: p95 18.87 -> threshold 19 px/h; median 3.60, max 28.9; without the largest window 17.47. Rigid invariance (6.4-201 %/h, median 27.5) and plane sections reported only. `results/2026-10-25_real_calibration/README.md`
+- `python -m pytest -q tests`: 306 passed, 1 skipped. Log entry in `docs/running_log_pending/real-calib.md`
+- Dispatcher to be told when merged (it holds its subset checks until then)
 Needs Andrew:
 - none
