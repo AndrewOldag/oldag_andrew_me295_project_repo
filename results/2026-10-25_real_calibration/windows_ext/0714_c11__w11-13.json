@@ -1,0 +1,59 @@
+{
+ "window": "0714_c11__w11-13",
+ "root": "0714_c11",
+ "window_h": [
+  11.0,
+  13.0
+ ],
+ "midline": "ft2 (net2_midline_ft2.pt, tile mode, low 0.1 %, high 99.5 %)",
+ "screen": {
+  "rule": "polyline end within 50 px",
+  "median_end_to_apex_px": 45.1,
+  "median_net_tip_to_apex_px": 1103.1,
+  "frames": [
+   {
+    "frame": 395,
+    "end_to_apex_px": 45.1,
+    "net_tip_to_apex_px": 1023.8,
+    "end_behind_apex_px": 44.8,
+    "seg_tip_to_apex_px": 25.0,
+    "seg_tip_in_mask": true
+   },
+   {
+    "frame": 413,
+    "end_to_apex_px": 45.4,
+    "net_tip_to_apex_px": 1103.1,
+    "end_behind_apex_px": 44.7,
+    "seg_tip_to_apex_px": 22.2,
+    "seg_tip_in_mask": true
+   },
+   {
+    "frame": 430,
+    "end_to_apex_px": 41.2,
+    "net_tip_to_apex_px": 1150.9,
+    "end_behind_apex_px": 41.2,
+    "seg_tip_to_apex_px": 7.8,
+    "seg_tip_in_mask": true
+   },
+   {
+    "frame": 447,
+    "end_to_apex_px": 46.6,
+    "net_tip_to_apex_px": 1225.5,
+    "end_behind_apex_px": 45.6,
+    "seg_tip_to_apex_px": 20.6,
+    "seg_tip_in_mask": true
+   },
+   {
+    "frame": 465,
+    "end_to_apex_px": 42.7,
+    "net_tip_to_apex_px": 905.4,
+    "end_behind_apex_px": 41.3,
+    "seg_tip_to_apex_px": 20.6,
+    "seg_tip_in_mask": true
+   }
+  ],
+  "passed": true
+ },
+ "status": "failed",
+ "error": "ValueError: arange: cannot compute length"
+}

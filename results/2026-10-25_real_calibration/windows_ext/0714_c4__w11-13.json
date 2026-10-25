@@ -1,0 +1,14 @@
+{
+ "window": "0714_c4__w11-13",
+ "root": "0714_c4",
+ "window_h": [
+  11,
+  13
+ ],
+ "midline": "ft2 (net2_midline_ft2.pt, tile mode, low 0.1 %, high 99.5 %)",
+ "screen": {
+  "passed": false,
+  "error": "host command failed (1): ['IndexError: index 599 is out of bounds for axis 0 with size 599']"
+ },
+ "status": "screen failed"
+}
