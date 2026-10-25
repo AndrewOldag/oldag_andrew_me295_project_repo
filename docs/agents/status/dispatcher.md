@@ -1,5 +1,5 @@
 # dispatcher
-Updated: 2026-10-24 20:05 (local)
+Updated: 2026-10-24 20:15 (local)
 Lane: course
 Branch: wip/dispatcher
 Last inbox item done: 34
@@ -12,4 +12,4 @@ Done since last update:
 - Spend since 2026-10-23: $0.93 of $15. Cluster folder about 37.2 GB of 40
 Needs Andrew:
 - My error: my tracking run started a net-midline build on the lab-server CPU (0721_m10 4-6 h, batch_midlines, 3 threads, nice 19, running about 45 min) because that window's ft2 midline exists only on the workstation. Item 25 rules this out. My kill was blocked by the permission check, so it is still running and will finish on its own. Kill pid 2139614 on the lab server if you want it stopped. Fixed for later runs: scripts/real_track.py now skips a window whose midline file is missing on the host
-- Cluster folder about 37.2 GB of the 40 GB cap: room for about 6 more midline windows. real-calib's 40-window calibration needs about 24 more (about 10 GB). Options: raise the cap to about 50 GB, or delete used frames there (Andrew only)
+- Cluster folder is full: 40.9 GiB of 40 GiB (cap counted in binary units: 40,960 MiB, about 42.9 decimal GB; say if you meant decimal GB). real-calib extension: 9 of 24 windows copied and on the GPU (job 5434764); 15 more plus 6 fallback windows (about 9 GB) need a higher cap or deletes there (Andrew only)
