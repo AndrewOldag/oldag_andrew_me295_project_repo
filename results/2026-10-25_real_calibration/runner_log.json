@@ -1,1 +1,35 @@
-[]
+[
+ {
+  "moved_copy": "0714_c13__w15-17",
+  "mode": "whole_pixel",
+  "frames": 70,
+  "shift_px_end": [
+   39,
+   24
+  ],
+  "crop_px": [
+   39,
+   24
+  ],
+  "reused_imgdirs": [],
+  "run_s": 9.1,
+  "free_gb_before": 16641.0,
+  "free_gb_after": 16640.0
+ },
+ {
+  "track": "0714_c13__w15-17_ft2_wp_ref__st1__L1000.npz",
+  "run_s": 29.4,
+  "frames": 70,
+  "load1_before": 1.31,
+  "free_gb_before": 16640.0,
+  "free_gb_after": 16639.0
+ },
+ {
+  "track": "0714_c13__w15-17_ft2_wp_moved__st1__L1000.npz",
+  "run_s": 36.3,
+  "frames": 70,
+  "load1_before": 1.75,
+  "free_gb_before": 16639.0,
+  "free_gb_after": 16639.0
+ }
+]
