@@ -684,3 +684,15 @@ Required by the course. One entry per work session: done, remaining, bottlenecks
 - Demo: the README command in that results folder prints check values, diagnostician outcomes and the auditor report
 - Remaining: merge wip/dispatcher (ready); real-movie closure root cause is a research-lane item after 28 Oct
 - Bottlenecks: none for the course slice
+
+## 2026-10-24 (build account, session diag-analysis)
+- Done: task c020, spec 2026-10-24b section D. From the freeze v3 traces only; 0 tracker runs, 0 LLM calls
+- Done: `docs/proposals/2026-10-25_diagnostician-repair-misses.md`; read-only table `scripts/synth/repair_misses.py`
+- Found: accept_repaired, diagnostician 16 of 36 correct, 20 misses, all decline, 0 at the step limit. Remedy tree 9 of 12
+- Found: group A, 11 runs (rigid_drift 6, bad_stage_correction 5): declined with no remedy tried, 10 at step 2 after `stage_log_summary` only. Stated reason: no listed remedy fixes a stage-correction error. `register_frames` repairs all 6 rods in the label sweep; the 7 correct runs applied it on identical evidence
+- Found: at v3 geometry the stage moves on 40 of 40 pairs, so the at-moves / elsewhere split of `stage_log_summary` carries no information. rigid_drift named bad_stage_correction in 9 of 9 runs
+- Found: group B, 9 runs (stage_log_missing): `register_frames` applied 9 of 9, then rolled back, because closure after registration is not computable and `no_progress` counts that as unresolved. The label rule (`checks_pass`) drops it and labels the rod repairable. Remedy tree fails the same way (0 of 3)
+- Proposal: C1 prompt fault-to-remedy map; C2 per-pair spread in `stage_log_summary`; C3 roll-back and label rules to agree (Andrew, option a or b). None applied
+- Demo: `python scripts/synth/repair_misses.py` prints one line per run and the counts per fault and group
+- Remaining: Andrew decides C1-C3 for a later freeze (not v3.1: prompts unchanged there)
+- Bottlenecks: none
