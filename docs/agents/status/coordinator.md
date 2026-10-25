@@ -1,12 +1,14 @@
 # coordinator
-Updated: 2026-10-24 17:03 (local)
+Updated: 2026-10-24 17:25 (local)
 Lane: course
 Branch: main
 Last inbox item done: 22
 State: working
 Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8 (relay part), 10, 11, 16, 17 (item 20)
-Last-seen main: 1ff1369
+Last-seen main: 835b522
 Done since last update:
+- 2026-10-24 17:25 (tick): item 1: merged wip/closure-fix (835b522; ready to merge 17:03); no conflicts; suite 303 passed, 1 skipped; log entry moved. Other unmerged: wip/dispatcher working 16:56, wip/real-calib waiting on Andrew 17:00, wip/lab-report-2 working 13:29
+- 17:25: item 8: no inbox change since ccb2dbf; no pings. Item 10: no status waits on an agent (real-calib waits on Andrew). Item 16: no status says `waiting on server job`. Note for dispatcher (section C): closure-fix says real windows now track to 1000 px (cache names L1000); no inbox item carries this yet
 - 2026-10-24 17:03 (tick): item 1: merged wip/diag-analysis (1ff1369; ready to merge 16:50); no conflicts; suite 303 passed, 1 skipped; log entry moved. Other unmerged: wip/dispatcher working 16:56, wip/closure-fix working 16:52, wip/real-calib waiting on Andrew 16:57, wip/lab-report-2 working 13:29
 - 17:03: item 8: no inbox change since ccb2dbf; no pings. Item 10: real-calib now waits on Andrew, not on an agent; not pinged. Item 16: no status says `waiting on server job`. status/gate2 no longer on the remote
 - 2026-10-24 16:51 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working 16:48, wip/closure-fix working 16:44, wip/diag-analysis working 16:44, wip/real-calib waiting on dispatcher 16:48, wip/lab-report-2 working 13:29)
@@ -82,13 +84,14 @@ Branches (last commit, state):
 - status/turn-long: 2026-10-24 02:42, done (research lane, not merged)
 - wip/dispatcher: 2026-10-24 16:56, working (15:37 merged 5a4767f)
 - wip/lab-report-2: 2026-10-23 13:29, working
-- wip/closure-fix: 2026-10-24 16:52, working
+- wip/closure-fix: 2026-10-24 17:03, ready to merge, merged 835b522
 - wip/diag-analysis: 2026-10-24 16:50, ready to merge, merged 1ff1369
-- wip/real-calib: 2026-10-24 16:57, waiting on Andrew
+- wip/real-calib: 2026-10-24 17:00, waiting on Andrew
 - status/spec-audit-r: 2026-10-23 13:42, done (research lane, not merged)
 - status/gate2: deleted from the remote
 - wip/readme-check, wip/vm-setup, wip/auditor-v1b, wip/fq-real, wip/auditor-v1, wip/scored-v1, wip/freeze-v2, heldout/faults, wip/baselines, wip/diag-review, wip/lab-report-1, wip/gatekeeper: merged
 Needs Andrew:
+- closure-fix (merged): sections B and C must use 1000 px tracks (L1000); closure at 1000 px still 2.2-3.2 px/h against synthetic 1.0; rigid invariance at 1000 px untested. Planning may want an inbox item for dispatcher and real-calib
 - real-calib (and dispatcher): cluster work folder too small for the 16 calibration windows (about 26 of 30 GB used; 7 GB more needed): (a) cap to about 40 GB, (b) unpack on node-local disk, (c) build on the lab server CPU (about 8 h). Answer in either inbox
 - diag-analysis (merged): decide C1 (prompt fault-to-remedy map), C2 (stage_log_summary per-pair spread), C3 (roll-back vs label rule: option a or b) in `docs/proposals/2026-10-25_diagnostician-repair-misses.md`
 - `scripts/remote/real_moved.py` (merged with wip/dispatcher) writes `<name>.part` and then `os.rename`s it to the final name, on the compute host; the 3-root slice ran on the lab server. CLAUDE.md forbids renames there (only sweep locks excepted); `qb_track.py` was changed to write-once for the same reason (rules-2). Keep, or ask for a write-once fix
