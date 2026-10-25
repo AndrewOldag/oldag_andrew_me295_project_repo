@@ -1,12 +1,14 @@
 # coordinator
-Updated: 2026-10-24 21:40 (local)
+Updated: 2026-10-24 21:50 (local)
 Lane: course
 Branch: main
 Last inbox item done: 24
 State: working
 Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8 (relay part), 10, 11, 16, 17 (item 20)
-Last-seen main: 0543812
+Last-seen main: 77d4370
 Done since last update:
+- 2026-10-24 21:50 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/real-calib waiting on dispatcher 21:41 (status 22:00 by its clock), wip/dispatcher waiting on real-calib 20:55, wip/lab-report-2 working 13:29)
+- 21:50: item 8: no inbox change since 0543812; no pings. Item 10: real-calib and dispatcher each wait on the other; neither done; not pinged. dispatcher (live, running a shell) was pinged 21:40 for inbox item 35 (copy and GPU chain for the 21 windows) and has not pushed since. Item 16: no status says `waiting on server job`
 - 2026-10-24 21:40 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/real-calib waiting on Andrew 21:45 by its clock, wip/dispatcher waiting on real-calib 20:55, wip/lab-report-2 working 13:29)
 - 21:40: item 8: inboxes changed in 0543812 (dispatcher item 35, real-calib item 6: cluster window frames cleared, folder 6.8 of 40 GB). Pinged dispatcher and real-calib 21:40 (`check github`). Item 10: dispatcher waits on real-calib, not done. Item 16: no status says `waiting on server job`. Cluster-cap lines dropped from Needs Andrew (answered by 0543812)
 - 2026-10-24 21:00 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher waiting on real-calib 20:55, wip/real-calib waiting on Andrew 20:33, wip/lab-report-2 working 13:29)
@@ -110,15 +112,16 @@ Branches (last commit, state):
 - wip/coord-tick: 2026-10-24 13:09, ready to merge, merged 9aa97bf
 - wip/freeze-v3: 2026-10-24 04:16, ready to merge, merged 2ebd422
 - status/turn-long: 2026-10-24 02:42, done (research lane, not merged)
-- wip/dispatcher: 2026-10-24 20:55, waiting on real-calib (15:37 merged 5a4767f)
+- wip/dispatcher: 2026-10-24 20:55, waiting on real-calib (pinged 21:40, no push since) (15:37 merged 5a4767f)
 - wip/lab-report-2: 2026-10-23 13:29, working
 - wip/closure-fix: 2026-10-24 17:03, ready to merge, merged 835b522
 - wip/diag-analysis: 2026-10-24 18:06, ready to merge, merged 1ff1369 and 0d9ddf8
-- wip/real-calib: 2026-10-24 20:33 (status 21:45), waiting on Andrew (merged 7aab080 at 19:12)
+- wip/real-calib: 2026-10-24 21:41 (status 22:00), waiting on dispatcher (merged 7aab080 at 19:12)
 - status/spec-audit-r: 2026-10-23 13:42, done (research lane, not merged)
 - status/gate2: deleted from the remote
 - wip/readme-check, wip/vm-setup, wip/auditor-v1b, wip/fq-real, wip/auditor-v1, wip/scored-v1, wip/freeze-v2, heldout/faults, wip/baselines, wip/diag-review, wip/lab-report-1, wip/gatekeeper: merged
 Needs Andrew:
+- real-calib waits on dispatcher (21 windows to copy and run, inbox item 35); dispatcher status still says it waits on real-calib (status 20:45, before item 35). Pinged at 21:40; if dispatcher has not pushed by the next tick, check that it took item 35
 - dispatcher: its tracking run started a net-midline build on the lab-server CPU (0721_m10, 3 threads, nice 19), against inbox item 25; its kill was blocked. Pid in its status; stop it if wanted. real_track.py now skips windows without a host midline (85e20da)
 - closure-fix (merged): closure at 1000 px still 2.2-3.2 px/h against synthetic 1.0; rigid invariance at 1000 px untested (1000 px now in dispatcher and real-calib inboxes, ab50da7)
 - diag-analysis (merged): decide C1 (prompt fault-to-remedy map), C2 (stage_log_summary per-pair spread), C3 (roll-back vs label rule: option a or b) in `docs/proposals/2026-10-25_diagnostician-repair-misses.md`; C3 note `docs/proposals/2026-10-25_not-computable-check-rule.md`
