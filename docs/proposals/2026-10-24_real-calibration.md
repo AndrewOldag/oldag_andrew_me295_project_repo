@@ -60,3 +60,27 @@ From: build account, real-calib session. Date: 2026-10-24. Spec 2026-10-24b, sec
 - Midlines on the cluster GPU (P100 or V100), with the ledger check before every job; the spend since 2026-10-23 stays under $15 together with section C
 - Copies, moved copies and tracking on the lab server: single thread, nice 19, at most 2 jobs of this account, 1-min load below half the cores. Frames stay on the lab server and the cluster work folder; nothing is deleted
 - Every result is marked ft2 and with the closure definition used
+
+## Extension to at least 40 windows (inbox item 5, Andrew 2026-10-24 19:35, option b)
+Appended before any new value is computed. The first 12 measured windows stay as they are (`results/2026-10-25_real_calibration/windows/`); their values were seen (closure p95 17.35 px/h, superseded threshold 18 px/h). The rule is unchanged: 95th percentile, numpy linear, rounded up to 2 significant figures, over all measured windows. Closure only (item 4); rigid invariance and plane sections reported.
+
+### Pool (same rules)
+- `include` yes, `condition` exactly `control`, montage folder, stage-tracking table covering the window, empty `notes` and `flags`, inside usable hours, not in the final section C subset (0711_c2, 0708_c5, 0714_c10, 0721_c1, 0711_c4). Unused section C backups (0708_c6, 0714_c11, 0714_c12, 0721_c3) are no longer reserved and join the pool
+- 14 roots, 4 experiments: 0708_c6, c8, c9; 0711_c1, c5, c7; 0714_c4, c9, c11, c12, c13; 0721_c3, c5, c6
+- 3 windows per root, 2 h each: 7-9 h, 11-13 h, 15-17 h (every pool root is usable from 0 h to at least 23.88 h). 42 windows
+
+### Windows
+- The 12 measured windows: kept
+- The 6 windows that dropped at the first screen (0708_c9 w15-17, 0714_c4 w7-9 and w15-17, 0714_c13 w7-9, 0721_c5 w7-9, 0721_c6 w7-9): screened again with the new tip rule. No check value was computed for them
+- New: 11-13 h on the 9 roots already in the set (0708_c8, 0708_c9, 0711_c5, 0711_c7, 0714_c4, 0714_c9, 0714_c13, 0721_c5, 0721_c6); 7-9, 11-13 and 15-17 h on 0708_c6, 0711_c1, 0714_c11, 0714_c12, 0721_c3. 24 new windows
+
+### Tip rule for every window screened from now on
+- The tracking-polyline end within 50 px of the root-mask apex, median over the same 5 window frames (`median_end_to_apex_px` of `tip_apex_probe.py`; dispatcher inbox item 33). It replaces the net-tip-point rule, which jumps on some roots. The 12 measured windows passed the earlier rule and are not screened again
+- A window that fails the screen, or whose midline, probe or tracker run fails, is listed with its reason and left out
+
+### If fewer than 40 windows are measured
+- Fixed now: add the two roots whose notes name no problem, in this order, 3 windows each at the same hours: 0708_c10 ("this root should be fine"), 0708_c11 ("should be fine"). If still fewer than 40, report the count reached and stop for Andrew; no other root is added
+
+### Output
+- New and re-screened windows go to `results/2026-10-25_real_calibration/windows_ext/` (the first files are not overwritten). The summary pools the 12 measured windows with the measured windows of `windows_ext/`
+- Reported: threshold over all measured windows, the distribution (n, min, median, max, p95), and for information the two largest windows and the p95 without the largest
