@@ -46,6 +46,7 @@ From: build account, real-calib session. Date: 2026-10-24. Spec 2026-10-24b, sec
 ## Threshold rule
 - Per check: `numpy.percentile(values, 95)` (linear interpolation) over the windows that passed the screen, rounded up to 2 significant figures (for example 6.213 -> 6.3, 0.4471 -> 0.45)
 - Reported with every window value, the count, minimum, median and maximum. Recorded in `docs/decisions.md` with the numbers
+- Sensitivity, reported only (added 2026-10-24, before any value was computed): the two largest windows per check by name, and the 95th percentile with the largest window left out. With 16 windows the 95th percentile lies a quarter of the way from the second largest value to the largest, so one window can move it. No window is dropped after its value is seen; any change to the rule is Andrew's
 - Synthetic thresholds and freeze v3 unchanged. Whether a check gates on real windows is not changed here (real-movie profile: closure gates)
 
 ## Limits
