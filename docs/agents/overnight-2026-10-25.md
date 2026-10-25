@@ -35,3 +35,8 @@ Planning account, under Andrew's delegation at 00:21: make decisions that keep t
   - (2) Confirm the coordinator tick runs; its first pass picks up coordinator item 25 and pings sessions with changed inboxes
   - (3) dispatcher: restart the 48-window agent run; runs already in the results folder are skipped. Then item 36 (repeats, README)
   - (4) real-calib items 7-8, diag-analysis items 3-4, freeze-v31 item 9, closure-fix item 3: sessions read their inboxes on `check github`; restart any that are gone
+
+## 14:45 correction
+- The VM did not go down. Claude Code stopped the dispatcher's subset run at 00:10 for low VM memory (7.7 GB total, several idle sessions open) after 1 window. The dispatcher set `waiting on Andrew` at 00:10 but pushed it only at 14:39. The coordinator tick also pushed nothing after 23:50; cause not yet known
+- The 01:00-05:00 notes that the VM was likely stopped were wrong. The planning account also sent no push notification to Andrew overnight
+- dispatcher item 37: restart now, with a memory check before each window
