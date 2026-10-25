@@ -56,3 +56,10 @@ Dispatcher session, 2026-10-24. Spec `docs/specs/2026-10-24b_real-movie-push.md`
 - Slots: C1-C5 0711_c2, 0708_c5, 0714_c10, 0721_c1, 0711_c4; D1-D5 0708_m12, 0711_m6 (backup), 0714_m13 (backup), 0727_mm6, 0714_m2 (backup); R1-R4 0721_m10, 0721_m4, 0721_m9, 0727_mc1; R6 0727_mc5
 - R5 is empty: pick 0727_mc3, backup 0727_mc4 and third try 0727_mc13 (first unreserved pool root of 0727 recovery in manifest order) all fail. The subset has 15 roots, 45 windows
 - On every failing frame the tracking polyline end lies 19-30 px behind the apex, as on passing roots; the net's separate tip point jumps toward the far end of the root. Reported to Andrew; the rule is not changed here
+
+## Tip rule v2 (inbox item 33, 2026-10-24 19:00; set after the first screen, before any check)
+- Rule: tracking-polyline end within 50 px of the mask apex, median over the same 5 frames (decisions 2026-10-24)
+- Medians (px): 0708_c5 30.4, 0708_m8 23.1, 0711_c4 25.6, 0711_m4 617.8, 0711_m6 44.0, 0714_c10 33.4, 0714_m10 31.8, 0714_m13 40.0, 0714_m2 32.0, 0721_c1 40.4, 0721_m4 38.0, 0721_m9 27.1, 0727_mc1 35.1, 0727_mc3 41.0, 0727_mc4 47.8, 0727_mc5 40.8, 0727_mc13 356.8, 0727_mm6 47.4. Fixed slots (item 29 probe): 0708_m12 27.2, 0711_c2 32.1, 0721_m10 43.0
+- Slots refilled in proposal order: D2 0711_m6 (pick 0711_m4 fails), D3 0714_m10, D5 0708_m8, R5 0727_mc3; all other slots unchanged
+- Final subset, 16 roots: control 0711_c2, 0708_c5, 0714_c10, 0721_c1, 0711_c4; drought 0708_m12, 0711_m6, 0714_m10, 0727_mm6, 0708_m8; recovery 0721_m10, 0721_m4, 0721_m9, 0727_mc1, 0727_mc3, 0727_mc5
+- 0714_m13 and 0714_m2 are tracked but not in the subset
