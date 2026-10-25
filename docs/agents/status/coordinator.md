@@ -1,12 +1,14 @@
 # coordinator
-Updated: 2026-10-24 22:50 (local)
+Updated: 2026-10-24 23:50 (local)
 Lane: course
 Branch: main
 Last inbox item done: 24
 State: working
 Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8 (relay part), 10, 11, 16, 17 (item 20)
-Last-seen main: 99947ad
+Last-seen main: 9278077
 Done since last update:
+- 2026-10-24 23:50 (tick, hourly pass; no ref changed): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working 22:44 (status 23:05 by its clock; agent run over 48 subset windows), wip/lab-report-2 working 13:29)
+- 23:50: item 8: no inbox change since 1730bf3; no pings. Item 10: no status says `waiting on <agent>`. Item 16: no status says `waiting on server job`
 - 2026-10-24 22:50 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working 22:44 (status 23:05 by its clock; agent run over 48 subset windows), wip/lab-report-2 working 13:29). wip/real-calib status still ready to merge; already merged (1730bf3)
 - 22:50: item 8: no inbox change since 1730bf3; no pings. Item 10: no status says `waiting on <agent>`. Item 16: no status says `waiting on server job`
 - 2026-10-24 22:42 (tick): item 1: merged wip/real-calib (1730bf3; ready to merge 22:35): closure threshold 19 px/h from 41 control windows. Conflict on its pending log file (deleted on main): entry moved into docs/running_log.md. Suite 306 passed, 1 skipped. Other unmerged: wip/dispatcher waiting on real-calib 22:20, wip/lab-report-2 working 13:29
