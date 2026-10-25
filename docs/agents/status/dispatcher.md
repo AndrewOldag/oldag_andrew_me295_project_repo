@@ -1,11 +1,13 @@
 # dispatcher
-Updated: 2026-10-25 15:10 (local)
+Updated: 2026-10-25 15:45 (local)
 Lane: course
 Branch: wip/dispatcher
-Last inbox item done: 35 (36 and 37 in progress)
+Last inbox item done: 37 (36 in progress)
 State: working
-Now: item 37: 48-window subset agent run running (pid on the VM, detached; 2 GB memory wait per window); 1 window done (0721_c1 4-6 h declined, closure 32.1 px/h against 19); about 10-20 min per failing window
+Now: item 36 (2): repeat run 2 of 48 windows waits for 4 GB free VM memory (3.5-3.9 GB now), then run 3; cached tracks only
 Done since last update:
+- Item 37 / 36 (1): subset run 1 done, 48 windows, wall 1059 s: 43 accepted, 5 declined at closure (19 px/h); auditor 2 flagged, 41 cleared; control 14/15, drought 12/15, recovery 17/18 accepted. README, tables and traces in results/2026-10-25_real_subset/; decisions entries
+- Fault found: 0708_m8 17-19 h register remedy could not run (lab-server output existed, tracker never overwrites); runner now fetches existing host outputs; suite 310 passed, 1 skipped
 - Item 37 restart found a bug: real_slice.py gave the dispatcher one row per root, so only 16 of 48 windows were split; fixed (one row per window, id ROOT~A-B), test added, suite 308 passed, 1 skipped; that run was stopped by me after its dispatcher step and restarted; partial traces in staging/c019/stopped_run_2/
 - real_slice.py: waits before each window while free VM memory is below 2 GB (item 37)
 - scripts/real_subset_report.py: per-window and per-condition tables (item 36)
