@@ -51,6 +51,9 @@ REAL_CONFIG = ROOT / "private" / "real_runner.yaml"
 JOB_PATTERN = "qb_track.py|batch_midlines.py|sweep.py run"
 # The same pattern with one letter in brackets, so that the shell running the count does not count itself
 COUNT_PATTERN = "[q]b_track.py|[b]atch_midlines.py|[s]weep.py run"
+# Only python processes count as jobs: the `bash -c` wrappers that launch a job carry its script name in their
+# command line too, so one midline build counted as 3 jobs (2026-10-24, real-calib)
+COUNT_CMD = f"ps -u $(id -u) -o comm=,args= | awk '$1 ~ /^python/' | grep -cE '{COUNT_PATTERN}'"
 MIDLINE_WEIGHTS = "net2_midline_ft.pt"
 MIDLINE_ARGS = ["--mode", "tile", "--lo", "0.1", "--hi", "99.5", "--workers", "1"]
 MIDLINE_THREADS = 3
@@ -136,7 +139,7 @@ class RealRunner:
 
     def host_state(self):
         q = shlex.quote
-        out = self._ssh(f"nproc; cut -d' ' -f1 /proc/loadavg; ps -u $(id -u) -o args= | grep -cE {q(COUNT_PATTERN)}; "
+        out = self._ssh(f"nproc --all; cut -d' ' -f1 /proc/loadavg; {COUNT_CMD}; "
                         f"df -BG --output=avail {q(self.work)} | tail -1").decode().split()
         return {"cores": int(out[0]), "load1": float(out[1]), "own_jobs": int(out[2]),
                 "free_gb": float(out[3].rstrip("G"))}
