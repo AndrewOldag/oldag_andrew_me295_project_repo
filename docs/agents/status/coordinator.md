@@ -1,12 +1,14 @@
 # coordinator
-Updated: 2026-10-24 18:21 (local)
+Updated: 2026-10-24 18:40 (local)
 Lane: course
 Branch: main
 Last inbox item done: 23
 State: working
 Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8 (relay part), 10, 11, 16, 17 (item 20)
-Last-seen main: 91d6835
+Last-seen main: db49634
 Done since last update:
+- 2026-10-24 18:40 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/real-calib working 18:30, wip/dispatcher working 18:16, wip/lab-report-2 working 13:29)
+- 18:40: item 8: no inbox change since 91d6835; no pings. Item 10: real-calib now working (no longer waits on dispatcher); no status waits on an agent. Item 16: no status says `waiting on server job`
 - 2026-10-24 18:21 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working 18:16, wip/real-calib waiting on dispatcher 18:09, wip/lab-report-2 working 13:29)
 - 18:21: item 8: no inbox change since 0d9ddf8; no pings. Item 10: real-calib waits on dispatcher; dispatcher working, not done; not pinged. Item 16: no status says `waiting on server job`. Correction: the previous pass was stamped 18:25 but committed 18:12 (91d6835)
 - 2026-10-24 18:25 (tick): item 23: wip/closure-fix already merged (835b522). wip/diag-analysis merged again (0d9ddf8): one new commit d1aa186 (note `docs/proposals/2026-10-25_not-computable-check-rule.md`); conflict on its pending log file (deleted on main): the one new line moved into its running log entry. Suite 303 passed, 1 skipped
@@ -93,7 +95,7 @@ Branches (last commit, state):
 - wip/lab-report-2: 2026-10-23 13:29, working
 - wip/closure-fix: 2026-10-24 17:03, ready to merge, merged 835b522
 - wip/diag-analysis: 2026-10-24 18:06, ready to merge, merged 1ff1369 and 0d9ddf8
-- wip/real-calib: 2026-10-24 18:09, waiting on dispatcher
+- wip/real-calib: 2026-10-24 18:30, working
 - status/spec-audit-r: 2026-10-23 13:42, done (research lane, not merged)
 - status/gate2: deleted from the remote
 - wip/readme-check, wip/vm-setup, wip/auditor-v1b, wip/fq-real, wip/auditor-v1, wip/scored-v1, wip/freeze-v2, heldout/faults, wip/baselines, wip/diag-review, wip/lab-report-1, wip/gatekeeper: merged
