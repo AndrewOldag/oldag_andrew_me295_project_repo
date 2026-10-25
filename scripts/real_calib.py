@@ -6,7 +6,7 @@
 Set and rule: docs/proposals/2026-10-24_real-calibration.md (committed before any value was computed).
 `run`, per window: the screen (ft2 net tip point within 15 px of the root-mask apex, median over 5 window
 frames, scripts/remote/tip_apex_probe.py), then the window is measured with RealRunner at its initial settings
-(every frame, uncoupled, 400 px; whole-pixel moved copy and cropped reference copy) and checked: rigid
+(every frame, uncoupled, 1000 px, inbox item 3; whole-pixel moved copy and cropped reference copy) and checked: rigid
 invariance (full range, the reported value; and the profile-window value), closure, plane sections. No remedy,
 no agent. One JSON per window in DIR/windows/; a window with a file is skipped, so an interrupted run resumes.
 `summary`: per check, the 95th percentile (numpy linear) over the windows that passed the screen, rounded up
@@ -28,14 +28,16 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from agents.executors import real_rigid_invariance  # noqa: E402
 from checker import run_checks  # noqa: E402
-from measure.real_runner import RealRunner, RealWindow  # noqa: E402
+from measure.real_runner import TRACK_LENGTH, RealRunner, RealWindow  # noqa: E402
+from closure_base_test import summarize  # noqa: E402
 
 OUT = ROOT / "results" / "2026-10-25_real_calibration"
 ROOTS = ["0708_c8", "0708_c9", "0711_c5", "0711_c7", "0714_c4", "0714_c9", "0721_c5", "0721_c6"]
 SPANS = [(7.0, 9.0), (15.0, 17.0)]
 WINDOWS = [RealWindow(r, a, b) for r in ROOTS for a, b in SPANS]
 SCREEN_PX, SCREEN_FRAMES = 15.0, 5
-CLOSURE_DEFINITION = "pre-A (tip from the midline source against the chain's most basal point tracked in every frame)"
+CLOSURE_DEFINITION = ("2026-10-10 definition kept by section A (midline end against the most basal centre point "
+                      "tracked in every frame), 1000 px tracks")
 MIDLINE = "ft2 (net2_midline_ft2.pt, tile mode, low 0.1 %, high 99.5 %)"
 CHECKS = ("rigid_invariance", "rigid_invariance_profile_window", "closure", "plane_sections")
 C019 = "me295/c019"          # the section C chain's lab-server folder, under the lab data root (read only)
@@ -64,6 +66,21 @@ def screen(runner, w):
             "passed": d is not None and d <= SCREEN_PX}
 
 
+def base_info(rec):
+    """Inbox item 3: tracked length reached, base arc length, world speed of the basal points (closure_base_test),
+    and the flag for a frame-0 midline shorter than the tracked length (reported, not a gate)."""
+    b = summarize(rec)
+    c = rec.centre
+    reach = float(np.nansum(np.nanmean(np.linalg.norm(np.diff(c, axis=1), axis=2), axis=0)))
+    m0 = rec.midline[0]
+    m0 = m0[np.all(np.isfinite(m0), axis=1)]
+    mid0 = float(np.linalg.norm(np.diff(m0, axis=0), axis=1).sum())
+    return {"tracked_length_reached_px": round(reach, 1), "base_s_px": b["base_s_px"],
+            "base_term_px_per_h": b["base_term_px_per_h"], "tip_side_term_px_per_h": b["tip_side_term_px_per_h"],
+            "basal_speed_px_per_h": b["speed_profile_px_per_h"][-4:], "frame0_midline_px": round(mid0, 1),
+            "flag": "base may be in growing tissue" if mid0 < TRACK_LENGTH else None}
+
+
 def check_values(m, thresholds=None):
     checks = {c.check: c for c in run_checks(m.record, m.moved, thresholds)}
     win = real_rigid_invariance(m.record, m.moved, thresholds or {})
@@ -78,6 +95,8 @@ def check_values(m, thresholds=None):
 
 def run(a):
     runner = RealRunner(a.config)
+    if runner.track_length != 1000.0:              # inbox item 3: thresholds only from 1000 px tracks
+        sys.exit(f"tracked length {runner.track_length:g} px; calibration needs 1000 px")
     runner.sync_code()
     out = Path(a.out) / "windows"
     out.mkdir(parents=True, exist_ok=True)
@@ -97,6 +116,8 @@ def run(a):
             try:
                 m = runner.measure(w, runner.initial_settings(w))
                 res["values"], res["detail"] = check_values(m)
+                res["base"] = base_info(m.record)
+                res["track_length_px"] = runner.track_length
                 res["closure_definition"] = CLOSURE_DEFINITION
                 res["n_frames"] = int(m.record.n_frames)
                 res["status"] = "measured"
@@ -119,6 +140,7 @@ def summary(a):
     exps = sorted({r["root"][:4] for r in meas})
     s = {"midline": MIDLINE, "closure_definition": sorted({r.get("closure_definition") for r in meas} - {None}),
          "windows": len(rows), "measured": len(meas), "experiments": exps,
+         "flagged": {r["window"]: r["base"]["flag"] for r in meas if r.get("base", {}).get("flag")},
          "not_measured": {r["window"]: r["status"] + (f": {r.get('error')}" if r.get("error") else "")
                           for r in rows if r["status"] != "measured"},
          "minimums_met": len(meas) >= 12 and len(exps) >= 3, "checks": {}}
