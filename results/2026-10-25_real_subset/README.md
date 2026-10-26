@@ -56,3 +56,17 @@ Per window (all 48): `tables.md` and `windows.csv`. Columns: outcome, auditor de
 - Rigid invariance and plane sections do not gate real movies (decisions 2026-10-23, 2026-10-24); values are reported in every row
 - The tip rule for the subset was changed once before any check (proposal, decisions 2026-10-24): 6 of 18 probed roots failed the first rule, all drought or recovery; 4 of them pass the second
 - Kinematics only; no claim about stress, stiffness or a constitutive law. This run is about agent behaviour; the condition comparison is the auditor's report, not a biology result
+
+## Repeated runs (inbox item 36 (2), item 38)
+- Runs 2 and 3: the same 48 windows, `--cached-only` (no tracker rerun), `--out run2`, `run3`; each started with at least 3 GB free VM memory (item 38). Wall 282 s and 249 s
+- Agreement over the 3 runs (`agreement.md`, `agreement.json`; `python scripts/real_subset_agreement.py results/2026-10-25_real_subset results/2026-10-25_real_subset/run2 results/2026-10-25_real_subset/run3`):
+
+| Decision | Windows | Unanimous | Unanimity rate | Fleiss kappa |
+| :-- | :-- | :-- | :-- | :-- |
+| outcome (accept, accept_repaired, decline) | 48 | 48 | 1.0 | 1.0 |
+| auditor (clear, flag, declined) | 48 | 48 | 1.0 | 1.0 |
+| fault named, windows declined in every run | 5 | 3 | 0.6 | 0.4 |
+
+- Every run: 43 accepted, 5 declined (the same 5 windows), auditor flags r31 and r34 (0714_c10 4-6 h, 0727_mc3 4-6 h)
+- Fault named differs on 2 windows: 0721_c1 4-6 h (midline_jitter in run 1, bad_stage_correction in runs 2-3) and 0721_m10 17-19 h (bad_stage_correction, midline_jitter, bad_stage_correction). The remedies tried also differ; none kept in any run
+- Cached-only effect: one remedy request answered "not available" (run 2, 0721_m10 17-19 h, no cached track for that setting). 0708_m8 17-19 h: no remedy was requested in runs 2-3

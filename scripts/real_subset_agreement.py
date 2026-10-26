@@ -51,9 +51,13 @@ def main():
     per_run = [outcomes(r) for r in runs]
     res = {"runs": runs, "outcome": agree(per_run, "outcome", OUTCOMES), "auditor": agree(per_run, "auditor", AUDIT),
            "counts": [dict(Counter(v["outcome"] for v in r.values())) for r in per_run]}
+    declined = set.intersection(*({w for w, v in r.items() if v["outcome"] == "decline"} for r in per_run))
+    if declined:                               # fault named, on the windows every run declined
+        faults = sorted({r[w]["fault"] for r in per_run for w in declined})
+        res["fault"] = agree([{w: r[w] for w in declined} for r in per_run], "fault", faults)
     md = [f"Runs: {len(runs)}", "", "| Decision | Windows | Unanimous | Unanimity rate | Fleiss kappa |",
           "| :-- | :-- | :-- | :-- | :-- |"]
-    for k in ("outcome", "auditor"):
+    for k in [k for k in ("outcome", "auditor", "fault") if k in res]:
         g = res[k]
         md.append(f"| {k} | {g['windows']} | {g['unanimous']} | {g['unanimity_rate']} | {g['fleiss_kappa']} |")
     md += ["", "| Run | " + " | ".join(OUTCOMES) + " |", "| :-- | " + " | ".join(":--" for _ in OUTCOMES) + " |"]
@@ -61,6 +65,9 @@ def main():
         md.append(f"| {Path(r).name} | " + " | ".join(str(c.get(o, 0)) for o in OUTCOMES) + " |")
     md += ["", "Windows without a unanimous outcome:"]
     md += [f"- {w}: {v}" for w, v in res["outcome"]["split"].items()] or ["- none"]
+    if "fault" in res:
+        md += ["", "Declined windows without a unanimous fault:"]
+        md += [f"- {w}: {v}" for w, v in res["fault"]["split"].items()] or ["- none"]
     md += ["", "Windows without a unanimous auditor decision:"]
     md += [f"- {w}: {v}" for w, v in res["auditor"]["split"].items()] or ["- none"]
     (Path(runs[0]) / "agreement.json").write_text(json.dumps(res, indent=1))
