@@ -6,7 +6,7 @@ owner: diag-analysis
 state: working
 branch: wip/v4-candidate
 created: 2026-10-25 15:00
-last_update: 2026-10-25 18:04
+last_update: 2026-10-26 09:04
 blocker: none
 done_marker: results/2026-10-25_freeze_v4/table_metrics.md
 host: VM (code, LLM runs), lab server (tracker sweeps)
@@ -19,4 +19,4 @@ Inbox diag-analysis items 3 and 4. Proposal `docs/proposals/2026-10-25_diagnosti
 - 3(2). Labels of seeds 26-28 (tracker only, at most 228 runs, item 5), committed before any agent run: done (6b72d6a; 228 runs, 0 failed)
 - 3(3). Development check, switch on, one run per fault class: done (d75717b; 17 runs, 14 correct)
 - 3(4). `docs/proposals/2026-10-25_freeze-v4-candidate.md`: done (b86abef)
-- 4(3). Tag `freeze-v4`; all methods on seeds 26-28, LLM 3 repeats; `results/2026-10-25_freeze_v4/`: tag pushed; method-state sweeps running
+- 4(3). Tag `freeze-v4`; all methods on seeds 26-28, LLM 3 repeats; `results/2026-10-25_freeze_v4/`: tag pushed; rule runs done; LLM runs: 211 valid, 95 usage-limit runs rerunning
