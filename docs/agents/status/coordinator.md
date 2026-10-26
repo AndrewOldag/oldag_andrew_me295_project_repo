@@ -1,12 +1,14 @@
 # coordinator
-Updated: 2026-10-25 20:32 (local)
+Updated: 2026-10-25 20:45 (local)
 Lane: course
 Branch: main
 Last inbox item done: 26
 State: working
 Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8 (relay part), 10, 11, 16, 17 (item 20)
-Last-seen main: 5519892
+Last-seen main: 3400669
 Done since last update:
+- 2026-10-25 20:45 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working 20:32 (9625386), item 39 run 3, 42 of 126 windows collected; wip/real-calib working 19:44 (5c0527d); wip/v4-candidate 20:33 (228d3b5), no status file; wip/diag-analysis working 18:19 (7d07f70); wip/lab-report-2 working 14:46 (0060c20); wip/freeze-v31 done 14:46 (d24feb8), no merge asked)
+- 20:45: item 8: no inbox change since 5519892; no pings. Item 10: no live status says `waiting on <agent>`; no ping. Item 16: no status says `waiting on server job`
 - 2026-10-25 20:32 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working 20:29 (a5d8216), item 39 run 3 over 126 first-batch windows started 20:30 after ssh keepalive fix; wip/real-calib working 19:44 (5c0527d); wip/v4-candidate 20:17 (d5250ff), no status file; wip/diag-analysis working 18:19 (7d07f70); wip/lab-report-2 working 14:46 (0060c20); wip/freeze-v31 done 14:46 (d24feb8), no merge asked)
 - 20:32: item 8: no inbox change since e200291; no pings. Item 10: no status says `waiting on <agent>`; no ping. Item 16: no status says `waiting on server job`
 - 2026-10-25 20:20 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working 19:56 (5e785ae); wip/real-calib working 19:44 (5c0527d); wip/v4-candidate 20:17 (d5250ff), no status file, single_agent repeat 1, 17 of 51 runs; wip/diag-analysis working 18:19 (7d07f70); wip/lab-report-2 working 14:46 (0060c20); wip/freeze-v31 done 14:46 (d24feb8), no merge asked)
