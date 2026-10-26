@@ -1,12 +1,14 @@
 # coordinator
-Updated: 2026-10-25 17:40 (local)
+Updated: 2026-10-25 17:55 (local)
 Lane: course
 Branch: main
 Last inbox item done: 25
 State: working
 Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8 (relay part), 10, 11, 16, 17 (item 20)
-Last-seen main: 74c9211
+Last-seen main: 106658a
 Done since last update:
+- 2026-10-25 17:55 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/real-calib working 17:37, items 9-10 first batch, GPU job 1 of 4; wip/diag-analysis working 17:38, development check waits for 4 GB VM memory; wip/v4-candidate 17:51 (c48cb98, free-memory floor 3.85 GB), no status file; wip/lab-report-2 working; wip/freeze-v31 done, no merge asked)
+- 17:55: item 8: no inbox change since 74c9211; no pings. Item 10: no status says `waiting on <agent>`. Item 16: no status says `waiting on server job`
 - 2026-10-25 17:40 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/real-calib working 17:37, items 9-10 first batch, GPU job 1 of 4; wip/diag-analysis working 17:38, development check waits for 4 GB VM memory; wip/v4-candidate 17:38, no status file; wip/lab-report-2 working; wip/freeze-v31 done, no merge asked). wip/dispatcher merged (2c99900), no commits since
 - 17:40: item 8: no inbox change since 2c99900; no pings. Item 10: no status says `waiting on <agent>`. Item 16: no status says `waiting on server job`
 - 2026-10-25 17:35 (tick): item 1: merged wip/dispatcher (2c99900; ready to merge 17:55 by its clock, last commit 17:22): c019 real subset, 48 windows, runs 1-3, agreement 48/48 unanimous; no conflicts; suite 310 passed, 1 skipped; log entry moved. Other unmerged: wip/real-calib working 17:17, items 9-10 first batch staging; wip/diag-analysis working 17:18, label sweep phase 1; wip/v4-candidate 17:21, no status file; wip/lab-report-2 working; wip/freeze-v31 done, no merge asked
@@ -145,7 +147,7 @@ Branches (last commit, state):
 - wip/closure-fix: 2026-10-24 17:03, ready to merge, merged 835b522
 - wip/real-calib: 2026-10-25 17:37, working (items 9-10; merged 1730bf3 and 7aab080 earlier)
 - wip/diag-analysis: 2026-10-25 17:38, working (development check waits for VM memory; code on wip/v4-candidate)
-- wip/v4-candidate: 2026-10-25 17:38, code branch of diag-analysis, no status file; not merged
+- wip/v4-candidate: 2026-10-25 17:51, code branch of diag-analysis, no status file; not merged
 - status/spec-audit-r: 2026-10-23 13:42, done (research lane, not merged)
 - status/gate2: deleted from the remote
 - wip/readme-check, wip/vm-setup, wip/auditor-v1b, wip/fq-real, wip/auditor-v1, wip/scored-v1, wip/freeze-v2, heldout/faults, wip/baselines, wip/diag-review, wip/lab-report-1, wip/gatekeeper: merged
