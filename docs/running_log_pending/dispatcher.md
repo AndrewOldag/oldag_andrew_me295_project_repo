@@ -1,10 +1,14 @@
-## 2026-10-24 (build account, dispatcher session, task c019)
-- Done: subset proposal `docs/proposals/2026-10-24_real-subset.md` (ea853da): 16 slots, 5 control, 5 drought, 6 recovery, all 5 experiments; windows 4-6, 11-13, 17-19 h; disjoint from the B calibration set (checked against wip/real-calib)
-- Done: ft2 net midlines on the cluster GPU (P100) for 48 subset windows, 7 backup windows and 27 calibration windows for real-calib: 7 jobs, 60-100 s per 80-frame window; actual spend since 2026-10-23 $0.96 of $15; seg midlines on the lab server, about 30 s per window
-- Done: tip rule v1 (net tip point within 15 px): 12 of 18 probed roots pass; all 6 fails are drought or recovery. Rule v2 (inbox item 33, polyline end within 50 px): 16 of 18 pass (fails 0711_m4 618 px, 0727_mc13 357 px); subset refilled to 16 roots; decisions entry
-- Done: `scripts/real_track.py` tracks real windows ahead of the checks; all 48 subset windows tracked at 1000 px (whole-pixel reference copy and shifted twin), 80-117 s per window on the lab server, single thread, nice 19
-- Done: `scripts/remote/tip_apex_probe.py` fix: no apex for a frame whose seg midline is under 40 px (was IndexError)
-- Failed (my error): the first tracking run built the 0721_m10 4-6 h net midline on the lab-server CPU (58 min, 3 threads, nice 19) because its ft2 midline existed only on the workstation; my kill was blocked by the permission check; reported to Andrew; `real_track.py` now skips windows without a host midline
-- Demo: `python scripts/real_track.py --config private/real_runner_c019.yaml` prints one JSON line per window; all 48 are cached (wall_s 0.0)
-- Remaining: (1) real-calib's closure threshold from 40+ windows (inbox item 34); (2) checks, diagnostician and auditor over the 48 windows with `scripts/real_slice.py`; (3) per window: tracked length, base arc length, basal world speed, frame-0 length flag (item 32); (4) results `results/2026-10-2x_real_subset/` and the README run step
-- Bottlenecks: real closure threshold (real-calib; 15 calibration windows wait on Andrew's cluster cap decision); cluster folder at the 40 GiB cap
+## 2026-10-24 to 2026-10-25 (build account, dispatcher session, task c019)
+- Done: subset proposal `docs/proposals/2026-10-24_real-subset.md` (ea853da): 16 roots, 5 control, 5 drought, 6 recovery, all 5 experiments; windows 4-6, 11-13, 17-19 h; disjoint from the B calibration set
+- Done: ft2 net midlines on the cluster GPU (P100) for 48 subset windows, 7 backup windows and 48 calibration windows for real-calib: 9 jobs, 60-100 s per 80-frame window; actual spend since 2026-10-23 $1.03 of $15; seg midlines on the lab server, about 30 s per window
+- Done: tip rule v1 (net tip point within 15 px): 12 of 18 probed roots pass, all 6 fails drought or recovery. Rule v2 (item 33, polyline end within 50 px): 16 of 18 pass; subset refilled to 16 roots
+- Done: all 48 windows tracked at 1000 px with moved copies (`scripts/real_track.py`), 80-117 s per window, lab server, single thread, nice 19
+- Done: `config/checker_thresholds_real.yaml` (closure 19 px/h from section B) used by the slice for movie = real; synthetic thresholds unchanged
+- Done: subset run 1 (`results/2026-10-25_real_subset/`), wall 1059 s: 43 accepted, 5 declined at closure; control 14/15, drought 12/15, recovery 17/18; auditor 2 flagged, 41 cleared; no base flag (frame-0 midlines 1072 px or longer)
+- Done: repeat runs 2 and 3 (cached tracks only), wall 282 s and 249 s: outcome and auditor decision unanimous on all 48 windows (Fleiss kappa 1.0); fault named unanimous on 3 of 5 declined windows (kappa 0.4)
+- Fixed: `real_slice.py` gave one dispatcher row per root (16 of 48 windows split); now one per window. Runner fetches an existing lab-server track instead of failing on the tracker's no-overwrite (0708_m8 17-19 h register remedy could not run in run 1). `tip_apex_probe.py` IndexError on short seg midlines. Suite 310 passed, 1 skipped
+- Failed (my error): the first tracking run built one net midline on the lab-server CPU (0721_m10 4-6 h, 58 min); kill blocked; `real_track.py` now skips windows without a host midline
+- Failed: two agent runs stopped for low VM memory (Claude Code reaper); the run now waits per window below 2 GB and repeats wait for 3 GB (item 38)
+- Demo: `python scripts/real_subset_agreement.py results/2026-10-25_real_subset results/2026-10-25_real_subset/run2 results/2026-10-25_real_subset/run3` prints the agreement table (48/48 unanimous)
+- Remaining: merge; 0727_mm6 profiles (peak about 9 %/h at 1.6-1.9 mm, growth zone 21-63 um) need a manual look before use
+- Bottlenecks: none

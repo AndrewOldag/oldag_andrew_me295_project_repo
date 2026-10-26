@@ -1,11 +1,12 @@
 # dispatcher
-Updated: 2026-10-25 17:15 (local)
+Updated: 2026-10-25 17:55 (local)
 Lane: course
 Branch: wip/dispatcher
-Last inbox item done: 38 (36 in progress)
-State: working
-Now: item 38: repeat run 2 of 48 windows running (cached tracks only; started at 3.8 GB free, bar 3 GB); then run 3, agreement, README
+Last inbox item done: 38
+State: ready to merge
+Now: task c019 done: subset run 1 and repeats 2-3 over 48 windows, agreement, README; ready to merge
 Done since last update:
+- Items 36 (2) and 38: repeat runs 2 and 3 (cached tracks only, 282 s and 249 s): outcome and auditor decision unanimous on all 48 windows (unanimity 1.0, Fleiss kappa 1.0); fault named unanimous on 3 of 5 declined windows (kappa 0.4). results/2026-10-25_real_subset/agreement.md; README run step; decisions; log in docs/running_log_pending/dispatcher.md
 - Item 37 / 36 (1): subset run 1 done, 48 windows, wall 1059 s: 43 accepted, 5 declined at closure (19 px/h); auditor 2 flagged, 41 cleared; control 14/15, drought 12/15, recovery 17/18 accepted. README, tables and traces in results/2026-10-25_real_subset/; decisions entries
 - Fault found: 0708_m8 17-19 h register remedy could not run (lab-server output existed, tracker never overwrites); runner now fetches existing host outputs; suite 310 passed, 1 skipped
 - Item 37 restart found a bug: real_slice.py gave the dispatcher one row per root, so only 16 of 48 windows were split; fixed (one row per window, id ROOT~A-B), test added, suite 308 passed, 1 skipped; that run was stopped by me after its dispatcher step and restarted; partial traces in staging/c019/stopped_run_2/
