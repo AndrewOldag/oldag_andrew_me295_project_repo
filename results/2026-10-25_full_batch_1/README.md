@@ -2,20 +2,22 @@
 
 2026-10-25. Proposal: `docs/proposals/2026-10-25_full-batch.md` (committed before any batch value). 11 roots, one per experiment and condition (all 5 trials, all 11 groups); every dispatcher window of each: 126 windows. ft2 midline (`net2_midline_ft2.pt`, tile mode, low 0.1 %, high 99.5 %), 1000 px tracks, every frame, uncoupled, initial settings. Checker with the real profile: closure gates at 19 px/h (decisions 2026-10-24); rigid invariance and plane sections reported. No screen, no remedy, no agent.
 
-Commands: `python scripts/full_batch.py run --config private/real_runner_fb1.yaml` (lab server, single thread, nice 19, host checks before every run; retried every 10 min while the host was busy), then `python scripts/full_batch.py summary`. Per-window files in `windows/`, `summary.json`, `table.md`, `runner_log.json`.
+Commands: `python scripts/full_batch.py run --config private/real_runner_fb1.yaml` (lab server, single thread, nice 19, host checks before every run; retried every 10 min while the host was busy), then `python scripts/full_batch.py summary`. Public outputs: `windows.csv` (outcome and check values per window), `summary.json`, `table.md`. Full per-window records and the runner log stay git-ignored in `staging/full_batch_1/` (no detail strings, closure terms or basal speeds in the public tree; Andrew, 2026-10-26).
 
-## Closure outcome by condition
-| Condition | Windows | Pass | Fail | Not computable | Failed | Not run |
+## Decision by condition
+Accept = closure passes; decline = closure fails or cannot be computed (Andrew, 2026-10-26; decisions); failed = the measurement itself failed.
+
+| Condition | Windows | Accept | Decline | of which not computable | Failed | Not run |
 | :-- | --: | --: | --: | --: | --: | --: |
-| control | 48 | 40 | 5 | 2 | 1 | 0 |
+| control | 48 | 40 | 7 | 2 | 1 | 0 |
 | control then control | 6 | 5 | 0 | 0 | 1 | 0 |
 | mannitol | 36 | 30 | 5 | 0 | 1 | 0 |
-| mannitol then control | 24 | 22 | 0 | 2 | 0 | 0 |
+| mannitol then control | 24 | 22 | 2 | 2 | 0 | 0 |
 | mannitol then mannitol | 12 | 12 | 0 | 0 | 0 | 0 |
-| all | 126 | 109 | 10 | 4 | 3 | 0 |
+| all | 126 | 109 | 14 | 4 | 3 | 0 |
 
 - Measured 123 of 126. Failed 3 in the measurement, all `ValueError: arange: cannot compute length` (0711_m1 w0-2, 0721_c2 w6-8, 0727_cc1 w0-2); the error seen on 0714_c11 in the calibration; cause not traced; not retried (proposal)
-- Not computable 4: closure value not finite
+- Declined 14: closure above 19 px/h on 10; closure not computable (value not finite) on 4
 - Flag 'base may be in growing tissue' (frame-0 midline shorter than 1000 px; reported, not a gate): 5 windows (0708_m1 w0-2, 0711_c3 w0-2, 0714_c5 w2-4, w4-6, w6-8)
 - Rigid invariance (reported, not gating), w10-12 of each root, 11 moved copies: 3.8-184.5 %/h, median 15.0
 

@@ -12,9 +12,10 @@ the host in both batches.
 1000 px), then the checker with the real profile: closure gates at the real threshold (19 px/h, decisions
 2026-10-24); rigid invariance and plane sections reported, not gating. Moved copies for rigid invariance on one window
 per root only, w10-12 (Andrew, inbox item 9). No screen, no remedy, no agent. One JSON per window in
-DIR/windows/; a window with a file is skipped, so an interrupted run resumes.
-`summary`: windows done and checker outcome counts by condition. Writes DIR/summary.json and DIR/table.md. No
-per-window check values in the table.
+staging/full_batch_<N>/windows/ (git-ignored); a window with a file is skipped, so an interrupted run resumes.
+`summary`: accept, decline (closure fails or cannot be computed, Andrew 2026-10-26) and failed counts by condition.
+Writes results/2026-10-25_full_batch_<N>/table.md, summary.json and windows.csv: outcome and check values only, no
+detail strings, closure terms or basal speeds (inbox item 13).
 """
 import argparse
 import json
@@ -34,6 +35,8 @@ from measure.real_runner import TRACK_LENGTH, RealRunner, RealWindow  # noqa: E4
 from real_calib import CLOSURE_DEFINITION, MIDLINE, base_info  # noqa: E402
 
 OUTS = {1: ROOT / "results" / "2026-10-25_full_batch_1", 2: ROOT / "results" / "2026-10-25_full_batch_2"}
+# Full per-window records (detail strings, closure terms, basal speeds) stay git-ignored (inbox item 13)
+RECORDS = {1: ROOT / "staging" / "full_batch_1", 2: ROOT / "staging" / "full_batch_2"}
 # Proposal, first batch: in each experiment-condition group the first include-yes root in position order that is in
 # neither the calibration set nor the section C subset; every dispatcher window of each
 ROOTS = ["0708_c2", "0708_m1", "0711_c3", "0711_m1", "0714_c5", "0714_m1", "0721_c2", "0721_m1",
@@ -153,35 +156,65 @@ def run(a):
     log.write_text(json.dumps(old + plain.log + moved.log, indent=1, default=str))
 
 
+PUBLIC_COLUMNS = ["window", "root", "condition", "from_h", "to_h", "status", "outcome", "closure_px_per_h",
+                  "rigid_invariance_pct_per_h", "plane_sections_pct_per_h", "moved_copy", "n_frames",
+                  "tracked_length_reached_px", "frame0_midline_px", "flag", "error"]
+
+
+def public_row(r, condition):
+    """Outcome and check values only (Andrew, 2026-10-26, inbox item 13): no detail strings (tip path, flank
+    difference), no basal speeds, no profile values."""
+    v, b = r.get("values", {}), r.get("base", {})
+    return {"window": r["window"], "root": r["root"], "condition": condition, "from_h": r["window_h"][0],
+            "to_h": r["window_h"][1], "status": r["status"], "outcome": r.get("outcome", ""),
+            "closure_px_per_h": v.get("closure"), "rigid_invariance_pct_per_h": v.get("rigid_invariance"),
+            "plane_sections_pct_per_h": v.get("plane_sections"), "moved_copy": r.get("moved_copy"),
+            "n_frames": r.get("n_frames"), "tracked_length_reached_px": b.get("tracked_length_reached_px"),
+            "frame0_midline_px": b.get("frame0_midline_px"), "flag": b.get("flag") or "", "error": r.get("error", "")}
+
+
 def summary(a):
-    out = Path(a.out)
+    """Decision per window (Andrew, 2026-10-26): accept = closure passes; decline = closure fails or cannot be
+    computed (the 'not computable' count is kept beside it); failed = the measurement itself failed."""
+    import csv
+    rec, out = Path(a.records), Path(a.out)
+    out.mkdir(parents=True, exist_ok=True)
     cond = {r["id"]: r["condition"] for r in manifest_rows()}
     planned = batch_windows(a.batch)
-    done = {p.stem: json.loads(p.read_text()) for p in sorted((out / "windows").glob("*.json"))}
+    done = {p.stem: json.loads(p.read_text()) for p in sorted((rec / "windows").glob("*.json"))}
     by = defaultdict(Counter)
     for w in planned:
         r = done.get(w.id())
         key = "not run" if r is None else r["outcome"] if r["status"] == "measured" else "failed"
         by[cond[w.root_id]][key] += 1
-    cols = ["pass", "fail", "not computable", "failed", "not run"]
-    flagged = sum(1 for r in done.values() if r.get("base", {}).get("flag"))
-    s = {"planned": len(planned), "files": len(done),
-         "measured": sum(r["status"] == "measured" for r in done.values()),
-         "failed": sum(r["status"] == "failed" for r in done.values()),
-         "moved_copies": sum(bool(r.get("moved_copy")) and r["status"] == "measured" for r in done.values()),
-         "flag_base_may_be_in_growing_tissue": flagged,
-         "closure_threshold_px_per_h": REAL_CLOSURE_PX_H, "by_condition": {k: dict(v) for k, v in sorted(by.items())},
-         "errors": {k: r["error"] for k, r in done.items() if r["status"] == "failed"}}
-    (out / "summary.json").write_text(json.dumps(s, indent=1))
-    lines = ["| Condition | Windows | " + " | ".join(c.capitalize() for c in cols) + " |",
-             "| :-- | --: | " + " | ".join("--:" for _ in cols) + " |"]
-    for k, v in sorted(by.items()):
-        lines.append(f"| {k} | {sum(v.values())} | " + " | ".join(str(v.get(c, 0)) for c in cols) + " |")
+    def row(name, v):
+        acc, nc = v.get("pass", 0), v.get("not computable", 0)
+        dec = v.get("fail", 0) + nc
+        return (f"| {name} | {sum(v.values())} | {acc} | {dec} | {nc} | {v.get('failed', 0)} | {v.get('not run', 0)} |")
+    lines = ["| Condition | Windows | Accept | Decline | of which not computable | Failed | Not run |",
+             "| :-- | --: | --: | --: | --: | --: | --: |"]
+    lines += [row(k, v) for k, v in sorted(by.items())]
     tot = Counter()
     for v in by.values():
         tot.update(v)
-    lines.append(f"| all | {sum(tot.values())} | " + " | ".join(str(tot.get(c, 0)) for c in cols) + " |")
+    lines.append(row("all", tot))
+    s = {"planned": len(planned), "files": len(done),
+         "measured": sum(r["status"] == "measured" for r in done.values()),
+         "failed": sum(r["status"] == "failed" for r in done.values()),
+         "accept": tot.get("pass", 0), "decline": tot.get("fail", 0) + tot.get("not computable", 0),
+         "decline_not_computable": tot.get("not computable", 0),
+         "moved_copies": sum(bool(r.get("moved_copy")) and r["status"] == "measured" for r in done.values()),
+         "flag_base_may_be_in_growing_tissue": sum(1 for r in done.values() if r.get("base", {}).get("flag")),
+         "closure_threshold_px_per_h": REAL_CLOSURE_PX_H, "by_condition": {k: dict(v) for k, v in sorted(by.items())},
+         "errors": {k: r["error"] for k, r in done.items() if r["status"] == "failed"}}
+    (out / "summary.json").write_text(json.dumps(s, indent=1))
     (out / "table.md").write_text("\n".join(lines) + "\n")
+    with open(out / "windows.csv", "w", newline="") as fh:
+        wr = csv.DictWriter(fh, fieldnames=PUBLIC_COLUMNS)
+        wr.writeheader()
+        for w in planned:
+            if w.id() in done:
+                wr.writerow(public_row(done[w.id()], cond[w.root_id]))
     print("\n".join(lines))
     print({k: v for k, v in s.items() if k not in ("by_condition", "errors")})
 
@@ -194,13 +227,16 @@ def main():
     r.add_argument("--config")
     r.add_argument("--cache")
     r.add_argument("--windows", nargs="*")
-    r.add_argument("--out")
+    r.add_argument("--records", help="per-window records (default staging/full_batch_<N>, git-ignored)")
     s = sub.add_parser("summary")
     s.add_argument("--batch", type=int, choices=(1, 2), default=1)
-    s.add_argument("--out")
+    s.add_argument("--records")
+    s.add_argument("--out", help="public outputs (default results/2026-10-25_full_batch_<N>)")
     a = p.parse_args()
-    a.out = a.out or str(OUTS[a.batch])
+    a.records = a.records or str(RECORDS[a.batch])
+    a.out = getattr(a, "out", None) or str(OUTS[a.batch])
     if a.cmd == "run":
+        a.out = a.records
         a.config = a.config or str(ROOT / "private" / f"real_runner_fb{a.batch}.yaml")
         a.cache = a.cache or str(ROOT / "staging" / f"tracks_real_fb{a.batch}")
     run(a) if a.cmd == "run" else summary(a)
