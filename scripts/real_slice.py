@@ -185,6 +185,7 @@ def main():
     ap.add_argument("--min-free-gb", type=float, default=2.0,
                     help="wait before each window while free VM memory is below this (inbox item 37)")
     a = ap.parse_args()
+    sys.stdout.reconfigure(errors="backslashreplace")    # the auditor's text can hold signs the Windows console lacks
     if a.audit_only:
         out = Path(a.out).resolve() if a.out else ROOT / "results" / f"{datetime.date.today().isoformat()}_real_slice"
         return audit_only(out, a.config)
@@ -261,14 +262,15 @@ def main():
     audit = None
     if summaries:
         audit = {"status": "not_called", "note": "--no-agent"} if a.no_agent else             run_auditor(summaries, records, launcher, out)
-        print(f"auditor: {audit['status']}" + (f": {audit.get('report')}" if audit.get("report") else ""))
 
     summary = {"windows": [[r, f, t] for r, f, t in windows], "dispatcher_mode": a.dispatcher,
                "dispatcher": disp, "tasks": {k: s for k, (s, _) in results.items()}, "auditor": audit,
                "runner_log": runner.log, "wall_s": round(time.time() - t0, 1),
                "model": launcher.cfg["model"] if launcher else None,
                "claude_code": getattr(launcher, "version", None)}
-    (out / "summary.json").write_text(json.dumps(summary, indent=1, default=str))
+    (out / "summary.json").write_text(json.dumps(summary, indent=1, default=str))     # written before any print (c022)
+    if audit:
+        print(f"auditor: {audit['status']}" + (f": {audit.get('report')}" if audit.get("report") else ""))
     print(f"wrote {out.relative_to(ROOT)}")
 
 
