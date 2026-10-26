@@ -301,3 +301,62 @@ def test_wait_vm_memory(tmp_path, monkeypatch):
     monkeypatch.setattr(RR, "vm_free_gb", lambda: next(free))
     monkeypatch.setattr(RR.time, "sleep", lambda s: None)
     assert r.wait_vm_memory() == 2.0
+
+
+def _wp_setup(tmp_path, monkeypatch, name):
+    import shutil
+    import types
+    import numpy as np
+    spec = importlib.util.spec_from_file_location(name, ROOT / "scripts" / "remote" / "real_moved.py")
+    RM = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(RM)
+    monkeypatch.setattr(RM.os, "symlink", lambda s, d: shutil.copy(s, d))
+    src = tmp_path / "x.imgdir"
+    src.mkdir()
+    rng = np.random.default_rng(1)
+    for k in range(3):
+        np.save(src / f"ImageData_Ch0_TP{k:07d}.npy", rng.integers(0, 4000, (1, 60, 80)).astype(np.uint16))
+    (src / "ElapsedTimes.yaml").write_text("theElapsedTimes: [3, 0, 900000, 1800000]\n")
+    np.savez(tmp_path / "m.npz", midline_image=np.tile(np.array([[30.0, 50.0], [30.0, 20.0]]), (3, 1, 1)))
+    a = types.SimpleNamespace(out_imgdir=str(tmp_path / "mv.imgdir"), out_midline=str(tmp_path / "mv.npz"),
+                              out_ref_imgdir=str(tmp_path / "ref.imgdir"), out_ref_midline=str(tmp_path / "ref.npz"),
+                              shift_scale=1.0, pad=False)
+    return RM, src, np.load(tmp_path / "m.npz"), np.array([0.0, 900.0, 1800.0]), a
+
+
+def test_moved_copy_write_once_markers_and_no_rename(tmp_path, monkeypatch):
+    """Inbox closure-fix 3: copies are written in place with .started and .ok markers; no rename, no .part."""
+    import numpy as np
+    RM, src, m, tw, a = _wp_setup(tmp_path, monkeypatch, "real_moved_wo1")
+    monkeypatch.setattr(RM.os, "rename", lambda *x: (_ for _ in ()).throw(AssertionError("rename called")))
+    RM.whole_pixel(src, m, np.arange(3), tw, a)
+    for d in ("mv.imgdir", "ref.imgdir"):
+        assert (tmp_path / (d + ".started")).exists() and (tmp_path / (d + ".ok")).exists()
+        assert RM.copy_state(tmp_path / d) == "complete"
+    assert not list(tmp_path.glob("*.part"))
+    with pytest.raises(SystemExit):                   # same midline names again: never overwritten
+        RM.whole_pixel(src, m, np.arange(3), tw, a)
+
+
+def test_moved_copy_refuses_stopped_copy_and_reuses_legacy(tmp_path, monkeypatch):
+    import numpy as np
+    RM, src, m, tw, a = _wp_setup(tmp_path, monkeypatch, "real_moved_wo2")
+    (tmp_path / "mv.imgdir").mkdir()                  # stopped copy: .started, no .ok
+    (tmp_path / "mv.imgdir.started").write_text("t\n")
+    assert RM.copy_state(tmp_path / "mv.imgdir") == "stopped"
+    with pytest.raises(SystemExit):
+        RM.whole_pixel(src, m, np.arange(3), tw, a)
+    # legacy copy (rename-based version: final name only after the last frame, no markers) is complete and reused
+    (tmp_path / "b").mkdir()
+    RM2, src2, m2, tw2, a2 = _wp_setup(tmp_path / "b", monkeypatch, "real_moved_wo3")
+    RM2.whole_pixel(src2, m2, np.arange(3), tw2, a2)
+    for d in ("mv.imgdir", "ref.imgdir"):
+        for s in (".started", ".ok"):
+            (tmp_path / "b" / (d + s)).unlink()       # test folder only: make it look like a legacy copy
+    import types
+    a3 = types.SimpleNamespace(**dict(vars(a2), out_midline=str(tmp_path / "b" / "mv2.npz"),
+                                      out_ref_midline=str(tmp_path / "b" / "ref2.npz")))
+    stamp = (tmp_path / "b" / "mv.imgdir" / "ImageData_Ch0_TP0000002.npy").stat().st_mtime_ns
+    RM2.whole_pixel(src2, m2, np.arange(3), tw2, a3)
+    assert (tmp_path / "b" / "mv.imgdir" / "ImageData_Ch0_TP0000002.npy").stat().st_mtime_ns == stamp
+    assert (tmp_path / "b" / "mv2.npz").exists()
