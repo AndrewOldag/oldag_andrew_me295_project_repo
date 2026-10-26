@@ -1,12 +1,14 @@
 # coordinator
-Updated: 2026-10-25 17:55 (local)
+Updated: 2026-10-25 18:10 (local)
 Lane: course
 Branch: main
 Last inbox item done: 25
 State: working
 Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8 (relay part), 10, 11, 16, 17 (item 20)
-Last-seen main: 106658a
+Last-seen main: 3566a88
 Done since last update:
+- 2026-10-25 18:10 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/real-calib working 17:37, items 9-10 first batch, GPU job 1 of 4; wip/diag-analysis working 18:05 (38690e7), tag freeze-v4 pushed, method-state sweeps next; wip/v4-candidate 18:04 (b86abef), no status file; wip/lab-report-2 working; wip/freeze-v31 done, no merge asked)
+- 18:10: item 8: no inbox change since 74c9211; no pings. Item 10: no status says `waiting on <agent>`. Item 16: no status says `waiting on server job`
 - 2026-10-25 17:55 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/real-calib working 17:37, items 9-10 first batch, GPU job 1 of 4; wip/diag-analysis working 17:38, development check waits for 4 GB VM memory; wip/v4-candidate 17:51 (c48cb98, free-memory floor 3.85 GB), no status file; wip/lab-report-2 working; wip/freeze-v31 done, no merge asked)
 - 17:55: item 8: no inbox change since 74c9211; no pings. Item 10: no status says `waiting on <agent>`. Item 16: no status says `waiting on server job`
 - 2026-10-25 17:40 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/real-calib working 17:37, items 9-10 first batch, GPU job 1 of 4; wip/diag-analysis working 17:38, development check waits for 4 GB VM memory; wip/v4-candidate 17:38, no status file; wip/lab-report-2 working; wip/freeze-v31 done, no merge asked). wip/dispatcher merged (2c99900), no commits since
