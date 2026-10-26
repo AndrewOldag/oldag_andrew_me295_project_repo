@@ -1,12 +1,14 @@
 # coordinator
-Updated: 2026-10-25 21:32 (local)
+Updated: 2026-10-25 21:42 (local)
 Lane: course
 Branch: main
 Last inbox item done: 26
 State: working
 Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8 (relay part), 10, 11, 16, 17 (item 20)
-Last-seen main: 557c9ea
+Last-seen main: fa7702d
 Done since last update:
+- 2026-10-25 21:42 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working 21:37 (c227714), item 39 run 4, 119 of 126 windows collected; wip/real-calib working 21:18 (4560996), item 11 batch 2 running; wip/v4-candidate 20:33 (228d3b5), no status file; wip/diag-analysis working 18:19 (7d07f70); wip/lab-report-2 working 14:46 (0060c20); wip/freeze-v31 done 14:46 (d24feb8), no merge asked)
+- 21:42: item 8: no inbox change since 557c9ea; no pings. Item 10: no status says `waiting on <agent>`; no ping. Item 16: no status says `waiting on server job`
 - 2026-10-25 21:32 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working 21:21 (13c726e), item 39 run 4, 74 of 126 windows collected; wip/real-calib working 21:18 (4560996), item 11 batch 2 running; wip/v4-candidate 20:33 (228d3b5), no status file; wip/diag-analysis working 18:19 (7d07f70); wip/lab-report-2 working 14:46 (0060c20); wip/freeze-v31 done 14:46 (d24feb8), no merge asked)
 - 21:32: item 8: no inbox change since 04afb1f; no pings. Item 10: no status says `waiting on <agent>`; no ping. Item 16: no status says `waiting on server job`
 - 2026-10-25 21:22 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working 21:12 (5d5f489), item 39 run 4, 35 of 126 windows collected; wip/real-calib working 21:18 (4560996), item 11 batch 2 running; wip/v4-candidate 20:33 (228d3b5), no status file; wip/diag-analysis working 18:19 (7d07f70); wip/lab-report-2 working 14:46 (0060c20); wip/freeze-v31 done 14:46 (d24feb8), no merge asked)
@@ -179,13 +181,13 @@ Branches (last commit, state):
 - wip/coord-tick: 2026-10-24 13:09, ready to merge, merged 9aa97bf
 - wip/freeze-v3: 2026-10-24 04:16, ready to merge, merged 2ebd422
 - status/turn-long: 2026-10-24 02:42, done (research lane, not merged)
-- wip/dispatcher: 2026-10-25 17:22, ready to merge, merged 2c99900 (earlier 5a4767f)
+- wip/dispatcher: 2026-10-25 21:37, working (item 39 run 4); last merged 2c99900 (earlier 5a4767f)
 - wip/lab-report-2: 2026-10-25 14:46, working (status of 23 Oct; draft refreshed 0060c20 by freeze-v31)
 - wip/freeze-v31: 2026-10-25 14:46, done (item 9; status and log only since merge 2c373d1)
 - wip/closure-fix: 2026-10-24 17:03, ready to merge, merged 835b522
-- wip/real-calib: 2026-10-25 20:44, working (item 11, batch 2; items 9-10 merged 1730bf3 and 7aab080 earlier)
-- wip/diag-analysis: 2026-10-25 17:38, working (development check waits for VM memory; code on wip/v4-candidate)
-- wip/v4-candidate: 2026-10-25 18:38, code branch of diag-analysis, no status file; not merged
+- wip/real-calib: 2026-10-25 21:18, working (item 11, batch 2; items 9-10 merged 1730bf3 and 7aab080 earlier)
+- wip/diag-analysis: 2026-10-25 18:19, working (development check waits for VM memory; code on wip/v4-candidate)
+- wip/v4-candidate: 2026-10-25 20:33, code branch of diag-analysis, no status file; not merged
 - status/spec-audit-r: 2026-10-23 13:42, done (research lane, not merged)
 - status/gate2: deleted from the remote
 - wip/readme-check, wip/vm-setup, wip/auditor-v1b, wip/fq-real, wip/auditor-v1, wip/scored-v1, wip/freeze-v2, heldout/faults, wip/baselines, wip/diag-review, wip/lab-report-1, wip/gatekeeper: merged
