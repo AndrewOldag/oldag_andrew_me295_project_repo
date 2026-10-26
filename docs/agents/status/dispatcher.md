@@ -1,14 +1,15 @@
 # dispatcher
-Updated: 2026-10-25 21:37 (local)
+Updated: 2026-10-25 21:45 (local)
 Lane: course
 Branch: wip/dispatcher
-Last inbox item done: 38
-State: working
-Now: item 39 (task c022): run 4, 119 of 126 windows collected (111 accepted, 8 declined so far); status every 20 windows
+Last inbox item done: 39
+State: ready to merge
+Now: task c022 done: agent run over the 126 first-batch windows, results README; ready to merge
 Done since last update:
-- Run 3 finished all windows (123 collected, 3 given up after retries on the tracker 'arange' error; 9 declined among the first 119) but crashed printing the auditor's report (Unicode minus on the Windows console) before summary.json was written; results lost. Fix: summary.json written first, console escapes unencodable characters; decisions (81d4053). Run 3 traces in staging/c022/run3_no_summary/
-- Run 2 stopped (ssh hang on a remedy retrack); fix: keepalive and fetch of a finished host track
-- Run 1 failed at collect (one window's error aborted the batch); fix: the error fails that window only
-- scripts/full_batch_agents_report.py (uncommitted until the run ends): public tables with outcome counts only; auditor comparison with numbers masked; traces and summary.json stay in staging (auditor text holds REGR values)
+- Item 39: run 4 (reported), wall 1892 s: 114 accepted, 9 declined at closure (bad stage correction 8, midline jitter 1), 3 not collected (tracker 'arange' error, real-calib's same 3); auditor 91 cleared, 23 flagged (summary outlier 20, other 3). results/2026-10-25_full_batch_1_agents/ (outcome counts only; traces and summary.json in staging, git-ignored, because the auditor's text quotes REGR values)
+- Runs 1-3 failed on run-code faults, each fixed with a test and a decisions entry: collect error now fails one window only; ssh keepalive and fetch of a finished host track; summary.json written before printing
+- Found: 4 windows with no computable closure were accepted with no gating check; the auditor flagged all 4
+- Suite 317 passed, 1 skipped
 Needs Andrew:
-- none
+- A window with no computable gating check (closure not finite) is accepted by the current rule. Keep, or decline such windows? (4 of 126 here; the auditor caught them)
+- results/2026-10-25_real_subset/ on main (c019, before the 2026-10-25 rule) has REGR, growth-zone and flank values in tables.md and its README. Keep, or strip them?
