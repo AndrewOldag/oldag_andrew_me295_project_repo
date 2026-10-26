@@ -85,3 +85,9 @@
    - (3) Decisions entry for each step, log entry, status `ready to merge`. Push after each step so the 03:00 and 05:00 checks see progress
 37. Planning, 2026-10-25 14:45: restart the 48-window subset agent run now (cached tracks; partial traces in `staging/c019/killed_run_1/` kept). Andrew is closing idle sessions to free VM memory. Check free memory before each window and wait if below 2 GB, instead of letting the run be killed. Push status after every 8 windows. Then item 36
 38. Andrew, 2026-10-25 17:10: free-memory wait for the repeat runs is 3 GB (replaces 4 GB in item 36); the per-window 2 GB wait stays. Continue repeat runs 2 and 3, then agreement and README
+39. Andrew, 2026-10-25 19:05: new task c022, agent run over real-calib's first batch (126 windows, 11 roots, one per experiment and condition). Branch `wip/dispatcher` (merge main first).
+   - Start when real-calib's status reports first-batch tracks and checker results on the lab server (its `results/2026-10-25_full_batch_1/`); until then `State: waiting on real-calib`. Windows with tracks ready may be run in groups of at least 20 as they land
+   - Same system and settings as the 48-window subset: dispatcher agent -> checker (real profile, closure 19 px/h gates) -> diagnostician -> auditor; cached tracks; remedy retracks on the cluster CPU through real-calib's runner (real-calib item 11) or the lab server under its limits
+   - One run (no repeats). Memory: wait while free VM memory is below 3 GB before each window
+   - Results `results/2026-10-25_full_batch_1_agents/`: per-window outcome, fault, remedies; counts per experiment and condition; auditor's control vs stressed comparison. Report outcome counts only in the README; no REGR or growth-zone values in the public repo (Andrew, 2026-10-25: biology values out of course scope)
+   - Push status after every 20 windows; `ready to merge` at the end
