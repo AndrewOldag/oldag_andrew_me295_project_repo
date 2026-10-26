@@ -1,10 +1,10 @@
 # dispatcher
-Updated: 2026-10-25 21:21 (local)
+Updated: 2026-10-25 21:37 (local)
 Lane: course
 Branch: wip/dispatcher
 Last inbox item done: 38
 State: working
-Now: item 39 (task c022): run 4, 74 of 126 windows collected (67 accepted, 7 declined so far); status every 20 windows
+Now: item 39 (task c022): run 4, 119 of 126 windows collected (111 accepted, 8 declined so far); status every 20 windows
 Done since last update:
 - Run 3 finished all windows (123 collected, 3 given up after retries on the tracker 'arange' error; 9 declined among the first 119) but crashed printing the auditor's report (Unicode minus on the Windows console) before summary.json was written; results lost. Fix: summary.json written first, console escapes unencodable characters; decisions (81d4053). Run 3 traces in staging/c022/run3_no_summary/
 - Run 2 stopped (ssh hang on a remedy retrack); fix: keepalive and fetch of a finished host track
