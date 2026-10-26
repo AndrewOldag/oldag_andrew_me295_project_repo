@@ -84,3 +84,4 @@
    - (2) Then repeated runs: the same 48 windows, 2 more agent runs (3 in total), cached tracks only, no tracker reruns. Agreement per window as in freeze v3 (unanimity rate, Fleiss kappa). Before each batch check free VM memory; wait if below 4 GB
    - (3) Decisions entry for each step, log entry, status `ready to merge`. Push after each step so the 03:00 and 05:00 checks see progress
 37. Planning, 2026-10-25 14:45: restart the 48-window subset agent run now (cached tracks; partial traces in `staging/c019/killed_run_1/` kept). Andrew is closing idle sessions to free VM memory. Check free memory before each window and wait if below 2 GB, instead of letting the run be killed. Push status after every 8 windows. Then item 36
+38. Andrew, 2026-10-25 17:10: free-memory wait for the repeat runs is 3 GB (replaces 4 GB in item 36); the per-window 2 GB wait stays. Continue repeat runs 2 and 3, then agreement and README
