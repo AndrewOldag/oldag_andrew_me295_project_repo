@@ -1,12 +1,14 @@
 # coordinator
-Updated: 2026-10-26 13:21 (local)
+Updated: 2026-10-26 13:30 (local)
 Lane: course
 Branch: main
 Last inbox item done: 26
 State: working
 Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8 (relay part), 10, 11, 16, 17 (item 20)
-Last-seen main: 3edb757
+Last-seen main: c68c25b
 Done since last update:
+- 2026-10-26 13:30 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/real-calib working 13:24 (fca270d), batch 2 44 of 91 roots; wip/v4-candidate 13:16 (0eaa806), no status file; wip/diag-analysis working 09:04 (92b0dee); wip/lab-report-2 working 14:46 (0060c20); wip/freeze-v31 done 14:46 (d24feb8), no merge asked)
+- 13:30: item 8: no inbox change since 3edb757; no pings. real-calib's Needs Andrew line (main's real-calib inbox names the cluster) is stale: blocklist check of that inbox on main finds no match since 3edb757. dispatcher still not live; item 40 still waiting. Item 10: no status says `waiting on <agent>`. Item 16: no status says `waiting on server job`. Live: diag-analysis, real-calib
 - 2026-10-26 13:21 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/real-calib working 13:18 (fed24e3), batch 2 on the cluster, driver restarted 13:17; wip/v4-candidate 13:16 (0eaa806), no status file; wip/diag-analysis working 09:04 (92b0dee); wip/lab-report-2 working 14:46 (0060c20); wip/freeze-v31 done 14:46 (d24feb8), no merge asked). wip/dispatcher says ready to merge; already in main
 - 13:21: item 8: inbox changed since a70ca64: real-calib (3edb757, planning: cluster name removed from items 11-12, wording only). Pinged real-calib 13:21. dispatcher still not live; item 40 still waiting (Needs Andrew). Item 10: no live status says `waiting on <agent>`. Item 16: no status says `waiting on server job`. Live: diag-analysis, real-calib
 - 2026-10-26 11:51 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/v4-candidate 10:44 (2318950), no status file; wip/real-calib working 09:14 (594ae6a); wip/diag-analysis working 09:04 (92b0dee); wip/lab-report-2 working 14:46 (0060c20); wip/freeze-v31 done 14:46 (d24feb8), no merge asked). No remote branch changed since 11:50
