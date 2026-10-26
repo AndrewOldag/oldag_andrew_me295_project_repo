@@ -746,3 +746,7 @@ Required by the course. One entry per work session: done, remaining, bottlenecks
 - Demo: `python scripts/real_subset_agreement.py results/2026-10-25_real_subset results/2026-10-25_real_subset/run2 results/2026-10-25_real_subset/run3` prints the agreement table (48/48 unanimous)
 - Remaining: merge; 0727_mm6 profiles need a manual look before use (values kept off the public repo)
 - Bottlenecks: none
+
+## 2026-10-25, closure-fix item 3 (planning account)
+- Done: `real_moved.py` write once with `.started` and `.ok` markers; runner reuse check updated; 2 tests; suite 310 passed, 3 skipped
+- Why: no rename on the lab server (`CLAUDE.md`, rules-2)
