@@ -381,3 +381,30 @@ def test_moved_copy_refuses_stopped_copy_and_reuses_legacy(tmp_path, monkeypatch
     RM2.whole_pixel(src2, m2, np.arange(3), tw2, a3)
     assert (tmp_path / "b" / "mv.imgdir" / "ImageData_Ch0_TP0000002.npy").stat().st_mtime_ns == stamp
     assert (tmp_path / "b" / "mv2.npz").exists()
+
+
+def test_lost_connection_during_tracking_fetches_finished_host_track(tmp_path, monkeypatch):
+    """c022 run 2: the ssh call of a remedy track hung after the host had written the track. With keepalive the
+    call fails; the runner then fetches the finished host track instead of failing the remedy."""
+    cfg = tmp_path / "r.yaml"
+    cfg.write_text("host: h\nwork_dir: /w\ncode_dir: /c\ntracker_code: /t\npython: /p\n"
+                   "windows:\n  r1__w4-6:\n    imgdir: /d.imgdir\n")
+    r = RealRunner(cfg, cache=tmp_path / "cache")
+    monkeypatch.setattr(r, "check_host", lambda: {"load1": 0.0, "free_gb": 2000.0})
+    tracked = []
+
+    def host(cmd, stdin=None):
+        if cmd.startswith("test -s "):
+            if not tracked:                     # no host output before the tracker ran
+                raise RuntimeError("host command failed (1)")
+            return b""
+        if cmd.startswith("cat "):
+            return b"npz bytes"
+        if "qb_track.py" in cmd:
+            tracked.append(cmd)
+            raise RuntimeError("host command failed (255): ['Connection to h closed by remote host.']")
+        pytest.fail(f"unexpected host step: {cmd}")
+    r._ssh = host
+    w = RealWindow("r1", 4, 6)
+    p = r.track(w, r.initial_settings(w))
+    assert len(tracked) == 1 and p.read_bytes() == b"npz bytes" and r.log[-1]["fetched"] == "existing host output"
