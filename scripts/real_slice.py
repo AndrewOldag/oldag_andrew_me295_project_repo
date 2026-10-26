@@ -35,7 +35,7 @@ from agents.actions import ACTION_SETS, ActionSet  # noqa: E402
 from agents.orchestrator import Orchestrator  # noqa: E402
 from audit.llm import AuditBatch  # noqa: E402
 from audit.view import batch_table, batch_view  # noqa: E402
-from measure.real_runner import REAL_CONFIG, RealRunner, RealWindow, RunnerSet  # noqa: E402
+from measure.real_runner import REAL_CONFIG, RealRunner, RealWindow, RunnerSet, vm_free_gb  # noqa: E402
 
 
 class InlineQueue:
@@ -61,7 +61,7 @@ class InlineQueue:
         if backend != "lab_server":
             raise RuntimeError("the slice runs on the compute host only; no cluster job")
         jid = f"j{len(self.jobs) + 1}"
-        w = RealWindow(task.root_id, task.from_h, task.to_h)
+        w = RealWindow(root_of(task.root_id), task.from_h, task.to_h)
         try:
             self.runner.measure(w, self.runner.initial_settings(w))
             self.jobs[jid] = ("done", "", task.core_h)
@@ -158,6 +158,11 @@ def parse_window(text):
     return root, float(frm), float(to)
 
 
+def root_of(rid):
+    """Manifest root of a dispatcher row id: a root with several windows has one row per window, '0711_c2~4-6'."""
+    return rid.split("~", 1)[0]
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--root", default="0708_m12")
@@ -173,6 +178,10 @@ def main():
     ap.add_argument("--audit-only", action="store_true",
                     help="run only the auditor on the batch recorded in --out (cached tracker outputs; no re-run)")
     ap.add_argument("--out", default=None)
+    ap.add_argument("--cached-only", action="store_true",
+                    help="repeat runs (inbox item 36): cached tracks only; an uncached remedy setting is not available")
+    ap.add_argument("--min-free-gb", type=float, default=2.0,
+                    help="wait before each window while free VM memory is below this (inbox item 37)")
     a = ap.parse_args()
     if a.audit_only:
         out = Path(a.out).resolve() if a.out else ROOT / "results" / f"{datetime.date.today().isoformat()}_real_slice"
@@ -194,10 +203,13 @@ def main():
             sys.exit(f"{root} is not an include-yes root")
         if not float(row["usable_from_h"]) <= frm < to <= float(row["usable_to_h"]):
             sys.exit(f"window {frm:g}-{to:g} h is outside the usable hours of {root}")
-        rows.append(dict(row, usable_from_h=str(frm), usable_to_h=str(to)))
+        rid = f"{root}~{frm:g}-{to:g}" if sum(w[0] == root for w in windows) > 1 else root   # one row per window
+        rows.append(dict(row, id=rid, usable_from_h=str(frm), usable_to_h=str(to)))
     conditions = {r["id"]: r["condition"] for r in rows}
 
     runner = make_runner(a.config)
+    for r in getattr(runner, "runners", [runner]):
+        r.cached_only = a.cached_only
     runner.sync_code()
     launcher = None
     if not a.no_agent:
@@ -206,8 +218,11 @@ def main():
     results = {}
 
     def collect(task):
-        w = RealWindow(task.root_id, task.from_h, task.to_h)
-        sl = Slice(runner, w, label=f"{task.root_id} window")
+        while (free := vm_free_gb()) < a.min_free_gb:          # inbox item 37: wait, do not get killed
+            print(f"VM memory {free:.2f} GB free, below {a.min_free_gb} GB; waiting 60 s", flush=True)
+            time.sleep(60)
+        w = RealWindow(root_of(task.root_id), task.from_h, task.to_h)
+        sl = Slice(runner, w, label=f"{w.id()} window")
         if a.no_agent:
             o = NotCalled()
         elif any(c.passed is False for c in sl.checks):
@@ -215,7 +230,8 @@ def main():
                 "diagnostician", task.id, sl.task(), sl.executors())
         else:
             o = Accepted()
-        s = dict(summarize(sl, o), condition=conditions[task.root_id], window_h=[task.from_h, task.to_h])
+        s = dict(summarize(sl, o), condition=conditions[task.root_id], root_id=root_of(task.root_id),
+                 window_h=[task.from_h, task.to_h])
         results[task.id] = (s, sl.current.record)
         return {"diagnostician": o.status}
 

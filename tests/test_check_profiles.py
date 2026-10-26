@@ -118,3 +118,14 @@ def test_auditor_table_unchanged_for_synthetic_and_marks_not_gating():
     real = batch_table([_view(None, NOT_GATING + " (real-movie profile; would fail): x")], {})
     assert real["runs"][0]["checks"]["plane_sections"] == [9.0, 3.25, "not gating"]
     assert "not a pass/fail gate" in real["columns"]["checks"]
+
+
+def test_real_windows_use_real_thresholds():
+    from agents.executors import REAL_THRESHOLDS_FILE
+    real = load_thresholds(REAL_THRESHOLDS_FILE)
+    assert real["closure"] == 19.0 and real["rigid_invariance"] is None and real["plane_sections"] is None
+    assert TH["closure"] == 1.0                                   # synthetic thresholds unchanged
+    sl = Slice(RealLikeRunner(), Rod())
+    assert next(c for c in sl.checks if c.check == "closure").threshold == 19.0
+    sl2 = Slice(RealLikeRunner(), Rod(), thresholds=TH)           # explicit thresholds win
+    assert next(c for c in sl2.checks if c.check == "closure").threshold == 1.0
