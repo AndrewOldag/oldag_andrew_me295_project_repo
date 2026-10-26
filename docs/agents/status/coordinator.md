@@ -1,12 +1,14 @@
 # coordinator
-Updated: 2026-10-25 21:12 (local)
+Updated: 2026-10-25 21:22 (local)
 Lane: course
 Branch: main
 Last inbox item done: 26
 State: working
 Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8 (relay part), 10, 11, 16, 17 (item 20)
-Last-seen main: 14480fd
+Last-seen main: 04afb1f
 Done since last update:
+- 2026-10-25 21:22 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working 21:12 (5d5f489), item 39 run 4, 35 of 126 windows collected; wip/real-calib working 21:18 (4560996), item 11 batch 2 running; wip/v4-candidate 20:33 (228d3b5), no status file; wip/diag-analysis working 18:19 (7d07f70); wip/lab-report-2 working 14:46 (0060c20); wip/freeze-v31 done 14:46 (d24feb8), no merge asked)
+- 21:22: item 8: no inbox change since 14480fd; no pings. Item 10: no status says `waiting on <agent>`; no ping. Item 16: no status says `waiting on server job`
 - 2026-10-25 21:12 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working 21:09 (967dc14), item 39 run 4 over 126 windows started 21:09 (run 3 finished 123 windows, crashed before summary.json; fix 81d4053); wip/real-calib working 20:44 (51d2195); wip/v4-candidate 20:33 (228d3b5), no status file; wip/diag-analysis working 18:19 (7d07f70); wip/lab-report-2 working 14:46 (0060c20); wip/freeze-v31 done 14:46 (d24feb8), no merge asked)
 - 21:12: item 8: no inbox change since d9c4166; no pings. Item 10: no status says `waiting on <agent>`; no ping. Item 16: no status says `waiting on server job`. Item 2: hook installed; blocklist has lines
 - 2026-10-25 20:55 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working 20:48 (697e0c2), item 39 run 3, 64 of 126 windows collected; wip/real-calib working 20:44 (51d2195), item 11, batch 2 started (91 roots); wip/v4-candidate 20:33 (228d3b5), no status file; wip/diag-analysis working 18:19 (7d07f70); wip/lab-report-2 working 14:46 (0060c20); wip/freeze-v31 done 14:46 (d24feb8), no merge asked)
