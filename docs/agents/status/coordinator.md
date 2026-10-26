@@ -1,12 +1,14 @@
 # coordinator
-Updated: 2026-10-26 14:40 (local)
+Updated: 2026-10-26 22:40 (local)
 Lane: course
 Branch: main
 Last inbox item done: 26
 State: working
 Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8 (relay part), 10, 11, 16, 17 (item 20)
-Last-seen main: bf82649
+Last-seen main: 8c3c62f
 Done since last update:
+- 2026-10-26 22:40 (tick): item 1: no remote branch changed since 13:39; main changed only in this status file (8c3c62f). wip/diag-analysis ready to merge 13:39 (55cede1), still unmerged (same board-test failure expected; not retried). Others unmerged: wip/v4-candidate 13:39 (bdc1f94), no status file; wip/real-calib working 13:24 (fca270d); wip/lab-report-2 working 10-25 14:46 (0060c20); wip/freeze-v31 done 10-25 14:46 (d24feb8), no merge asked
+- 22:40: item 8: no inbox change since 3edb757; no pings. dispatcher still not live; item 40 still waiting. Item 10: no status says `waiting on <agent>`. Item 16: no status says `waiting on server job`. Live: real-calib only
 - 2026-10-26 14:40 (tick): item 1: wip/diag-analysis ready to merge 13:39 (55cede1), unchanged since the 13:42 failed merge test; main changed only in this status file; merge not retried (same board-test failure expected). Others unmerged: wip/v4-candidate 13:39 (bdc1f94), no status file; wip/real-calib working 13:24 (fca270d); wip/lab-report-2 working 14:46 (0060c20); wip/freeze-v31 done 14:46 (d24feb8), no merge asked. No remote branch changed since 13:42
 - 14:40: item 8: no inbox change since 3edb757; no pings. dispatcher still not live; item 40 still waiting. Item 10: no status says `waiting on <agent>`. Item 16: no status says `waiting on server job`. Live: real-calib only (diag-analysis no longer live)
 - 2026-10-26 13:42 (tick): item 1: wip/diag-analysis ready to merge 13:39 (55cede1; status, task c021, log entry; v4-candidate not in it). Merge test: 2 failed, 315 passed, 1 skipped (tests/test_board.py: `tasks/c021-v4-candidate.md` host 'VM (code, LLM runs), lab server (tracker sweeps)' parsed as unknown host). Merge aborted, not pushed. Others unmerged: wip/v4-candidate 13:39 (bdc1f94), no status file, waits on Andrew; wip/real-calib working 13:24 (fca270d); wip/lab-report-2 working 14:46 (0060c20); wip/freeze-v31 done 14:46 (d24feb8), no merge asked
