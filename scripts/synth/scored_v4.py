@@ -13,8 +13,8 @@ the freeze v4 candidate on (C1, C2, C3 option a; agents/candidate.py).
 Everything else is the freeze v3 driver (scripts/synth/scored_v3.py) pointed at v4: cache, output folder, rod
 set, tag. Rods: every v3 class at its v3 size (clean rods; development faults at the freeze v2 sizes; held-out
 faults at the v3 sizes in results/2026-10-23_freeze_v3/sizing.json). Labels: v3 repair criteria with C3 (a).
-Caps: the label sweep at most LABEL_CAP tracker runs (item 3 (2)); MAX_TRACKER_RUNS tracker runs and MAX_LLM_RUNS
-LLM runs in all (item 4 (3)). Free VM memory at least MIN_FREE_GB before each batch of LLM runs.
+Caps: the label sweep at most LABEL_CAP tracker runs; MAX_TRACKER_RUNS tracker runs and MAX_LLM_RUNS
+LLM runs in all (items 3-5). Host: the lab server (item 5). Free VM memory at least MIN_FREE_GB before each batch of LLM runs.
 Development check (item 3 (3)): the diagnostician on v3 scoring seed 20, whose traces C1 and C2 were written
 from, so it is a check, not a score. States from the v3 cache only (no tracker runs); a state not cached ends
 that run and is listed.
@@ -41,8 +41,8 @@ V3_CACHE, V3_OUT = v3.CACHE, v3.OUT
 TRACKS, SWEEP = "tracks_freeze_v4", "freeze_v4"
 SCORING_SEEDS = (26, 27, 28)                   # never used before (planning, 2026-10-25 00:40)
 DEV_SEED = 20
-LABEL_CAP = 150                                # item 3 (2)
-MAX_TRACKER_RUNS = 300                         # item 4 (3): stop and report above
+LABEL_CAP = 228                                # Andrew, 2026-10-25 17:10 (item 5; was 150, item 3 (2))
+MAX_TRACKER_RUNS = 420                         # Andrew, 2026-10-25 17:10 (item 5; was 300, item 4 (3))
 MAX_LLM_RUNS = 400                             # item 4 (3)
 MIN_FREE_GB = 4.0                              # items 3 (3), 4 (3)
 # expected classes as labelled in v3, and stage_log_missing under C3 (a); used only to list labels that differ
