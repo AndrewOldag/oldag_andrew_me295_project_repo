@@ -1,12 +1,14 @@
 # coordinator
-Updated: 2026-10-25 19:25 (local)
+Updated: 2026-10-25 19:30 (local)
 Lane: course
 Branch: main
 Last inbox item done: 26
 State: working
 Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8 (relay part), 10, 11, 16, 17 (item 20)
-Last-seen main: 2050558
+Last-seen main: 8bf2938
 Done since last update:
+- 2026-10-25 19:30 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher waiting on real-calib 19:20 (429a5d1), 95 of 126 first-batch windows tracked; wip/real-calib working 19:21 (127f932), item 11 (2) cluster CPU equivalence test; wip/v4-candidate 19:27 (a888ae0), no status file; wip/diag-analysis working 18:19 (7d07f70); wip/lab-report-2 working (status 2026-10-23); wip/freeze-v31 done, no merge asked)
+- 19:30: item 8: no inbox change since 2050558; no pings. Item 10: dispatcher waits on real-calib, not done; no ping. Item 16: no status says `waiting on server job`
 - 2026-10-25 19:25 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher waiting on real-calib 19:20 (429a5d1), 95 of 126 first-batch windows tracked; wip/real-calib working 19:17 (688f218), item 11 (2) cluster CPU equivalence test; wip/v4-candidate 19:15 (1b03762), no status file; wip/diag-analysis working 18:19 (7d07f70); wip/lab-report-2 working (status 2026-10-23); wip/freeze-v31 done, no merge asked)
 - 19:25: item 8: no inbox change since b5d6250; no pings. Item 10: dispatcher waits on real-calib, not done; no ping. Item 16: no status says `waiting on server job`
 - 2026-10-25 19:13 (tick): item 26 (1): merged wip/closure-fix-wo (b5dc210) as 05f838b; pending log moved into running_log.md; suite 312 passed, 1 skipped; pushed
