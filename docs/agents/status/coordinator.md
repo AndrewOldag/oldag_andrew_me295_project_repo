@@ -1,12 +1,14 @@
 # coordinator
-Updated: 2026-10-25 21:42 (local)
+Updated: 2026-10-25 21:52 (local)
 Lane: course
 Branch: main
 Last inbox item done: 26
 State: working
 Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8 (relay part), 10, 11, 16, 17 (item 20)
-Last-seen main: fa7702d
+Last-seen main: d2018a9
 Done since last update:
+- 2026-10-25 21:52 (tick): item 1: merged wip/dispatcher (62f11b4, ready to merge 21:45, c022 agent run over the first batch) as e68621a; pending log moved; suite 317 passed, 1 skipped. Unmerged: wip/real-calib working 21:18 (4560996), item 11 batch 2; wip/v4-candidate 20:33 (228d3b5), no status file; wip/diag-analysis working 18:19 (7d07f70); wip/lab-report-2 working 14:46 (0060c20); wip/freeze-v31 done 14:46 (d24feb8), no merge asked
+- 21:52: item 8: no inbox change since fa7702d; no pings. Item 10: no status says `waiting on <agent>`; no ping. Item 16: no status says `waiting on server job`
 - 2026-10-25 21:42 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working 21:37 (c227714), item 39 run 4, 119 of 126 windows collected; wip/real-calib working 21:18 (4560996), item 11 batch 2 running; wip/v4-candidate 20:33 (228d3b5), no status file; wip/diag-analysis working 18:19 (7d07f70); wip/lab-report-2 working 14:46 (0060c20); wip/freeze-v31 done 14:46 (d24feb8), no merge asked)
 - 21:42: item 8: no inbox change since 557c9ea; no pings. Item 10: no status says `waiting on <agent>`; no ping. Item 16: no status says `waiting on server job`
 - 2026-10-25 21:32 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working 21:21 (13c726e), item 39 run 4, 74 of 126 windows collected; wip/real-calib working 21:18 (4560996), item 11 batch 2 running; wip/v4-candidate 20:33 (228d3b5), no status file; wip/diag-analysis working 18:19 (7d07f70); wip/lab-report-2 working 14:46 (0060c20); wip/freeze-v31 done 14:46 (d24feb8), no merge asked)
@@ -181,7 +183,7 @@ Branches (last commit, state):
 - wip/coord-tick: 2026-10-24 13:09, ready to merge, merged 9aa97bf
 - wip/freeze-v3: 2026-10-24 04:16, ready to merge, merged 2ebd422
 - status/turn-long: 2026-10-24 02:42, done (research lane, not merged)
-- wip/dispatcher: 2026-10-25 21:37, working (item 39 run 4); last merged 2c99900 (earlier 5a4767f)
+- wip/dispatcher: 2026-10-25 21:45, ready to merge, merged e68621a (earlier 2c99900, 5a4767f)
 - wip/lab-report-2: 2026-10-25 14:46, working (status of 23 Oct; draft refreshed 0060c20 by freeze-v31)
 - wip/freeze-v31: 2026-10-25 14:46, done (item 9; status and log only since merge 2c373d1)
 - wip/closure-fix: 2026-10-24 17:03, ready to merge, merged 835b522
@@ -192,6 +194,8 @@ Branches (last commit, state):
 - status/gate2: deleted from the remote
 - wip/readme-check, wip/vm-setup, wip/auditor-v1b, wip/fq-real, wip/auditor-v1, wip/scored-v1, wip/freeze-v2, heldout/faults, wip/baselines, wip/diag-review, wip/lab-report-1, wip/gatekeeper: merged
 Needs Andrew:
+- dispatcher (c022, merged e68621a): a window with no computable gating check (closure not finite) is accepted by the current rule (4 of 126; auditor flagged all 4). Keep, or decline such windows?
+- dispatcher: `results/2026-10-25_real_subset/` on main has REGR, growth-zone and flank values in tables.md and README. Keep, or strip them?
 - closure-fix (merged): closure at 1000 px still 2.2-3.2 px/h against synthetic 1.0; rigid invariance at 1000 px untested (1000 px now in dispatcher and real-calib inboxes, ab50da7)
 - freeze-v3: review `results/2026-10-23_freeze_v3/README.md` (all 12 accept_repaired rods measure well unremedied; second_root 0 correct for every method)
 - lab-report-2 and spec-audit-r sessions no longer live; wip/lab-report-2 status still says working (13:29)
