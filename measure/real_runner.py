@@ -125,7 +125,9 @@ class RealRunner:
         return TrackSettings(stride=1)                 # every frame; uncoupled (the frozen mode)
 
     def _ssh(self, cmd, stdin=None):
-        p = subprocess.run(["ssh", "-o", "BatchMode=yes", self.host, cmd], input=stdin, capture_output=True)
+        # keepalive: a silently dropped connection fails in about 2 min instead of hanging (c022 run 2)
+        p = subprocess.run(["ssh", "-o", "BatchMode=yes", "-o", "ServerAliveInterval=30", "-o", "ServerAliveCountMax=4",
+                            self.host, cmd], input=stdin, capture_output=True)
         if p.returncode != 0:
             raise RuntimeError(f"host command failed ({p.returncode}): "
                                f"{p.stderr.decode(errors='replace').strip().splitlines()[-1:]}")
@@ -271,7 +273,12 @@ class RealRunner:
                    f"OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 NUMEXPR_NUM_THREADS=1 "
                    f"PYTHONPATH={q(self.tracker)}:{q(self.code)} nice -n 19 {q(self.python)} "
                    f"scripts/remote/qb_track.py " + " ".join(q(a) for a in args))
-            out = json.loads(self._ssh(cmd).decode().strip().splitlines()[-1])
+            try:
+                out = json.loads(self._ssh(cmd).decode().strip().splitlines()[-1])
+            except RuntimeError:            # connection lost: the host may have finished the track anyway
+                if self.fetch_host_track(name, local):
+                    return local
+                raise
             local.write_bytes(self._ssh(f"cat {q(self.work)}/tracks/{q(name)}"))
             after = self.host_state()
             self.log.append({"track": name, "run_s": out.get("run_s"), "frames": out.get("frames"),
