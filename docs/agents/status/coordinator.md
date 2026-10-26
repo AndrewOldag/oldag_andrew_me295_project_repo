@@ -1,12 +1,14 @@
 # coordinator
-Updated: 2026-10-25 17:12 (local)
+Updated: 2026-10-25 17:20 (local)
 Lane: course
 Branch: main
 Last inbox item done: 25
 State: working
 Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8 (relay part), 10, 11, 16, 17 (item 20)
-Last-seen main: 0ad7535
+Last-seen main: fa560a6
 Done since last update:
+- 2026-10-25 17:20 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working 17:16, item 38 repeat run 2; wip/real-calib working 17:17, items 9-10 first batch staging; wip/diag-analysis working 17:18, label sweep phase 1; wip/v4-candidate 17:17, no status file; wip/lab-report-2 working; wip/freeze-v31 done, no merge asked)
+- 17:20: item 8: real-calib inbox changed in fa560a6 (item 10: cluster folder cleared). real-calib restarted 17:16 (live, after fa560a6) and its 17:25 status already works items 9-10; not pinged. No other inbox change; no pings. Item 10: no status says `waiting on <agent>`. Item 16: no status says `waiting on server job`. Live: dispatcher, diag-analysis, real-calib
 - 2026-10-25 17:12 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher waiting on Andrew 16:05, repeat runs held by the 4 GB memory wait; wip/real-calib waiting on Andrew 15:20, cluster connection; wip/diag-analysis waiting on Andrew 15:11, label host and caps; wip/v4-candidate no status file; wip/lab-report-2 working; wip/freeze-v31 done, no merge asked)
 - 17:12: item 8: inboxes changed in 0ad7535 (dispatcher 38, diag-analysis 5, real-calib 9). Pinged dispatcher and diag-analysis 17:12 (`check github`). real-calib not live; not pinged (Needs Andrew). Item 10: no status says `waiting on <agent>`. Item 16: no status says `waiting on server job`
 - 2026-10-25 15:20 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working 15:14, item 36 (2) repeat run 2 waits for VM memory; wip/diag-analysis waiting on Andrew 15:11, label sweep host and run cap; wip/real-calib waiting on Andrew 15:06, cluster connection; wip/v4-candidate 15:11, no status file; wip/lab-report-2 working; wip/freeze-v31 done, no merge asked)
@@ -133,18 +135,17 @@ Branches (last commit, state):
 - wip/coord-tick: 2026-10-24 13:09, ready to merge, merged 9aa97bf
 - wip/freeze-v3: 2026-10-24 04:16, ready to merge, merged 2ebd422
 - status/turn-long: 2026-10-24 02:42, done (research lane, not merged)
-- wip/dispatcher: 2026-10-25 16:05, waiting on Andrew (item 36 (2) memory wait; answered by inbox item 38, 0ad7535) (15:37 merged 5a4767f)
+- wip/dispatcher: 2026-10-25 17:16, working (item 38 repeat run 2) (15:37 merged 5a4767f)
 - wip/lab-report-2: 2026-10-25 14:46, working (status of 23 Oct; draft refreshed 0060c20 by freeze-v31)
 - wip/freeze-v31: 2026-10-25 14:46, done (item 9; status and log only since merge 2c373d1)
 - wip/closure-fix: 2026-10-24 17:03, ready to merge, merged 835b522
-- wip/real-calib: 2026-10-25 15:20, waiting on Andrew (item 7 (2); answered by inbox item 9, 0ad7535; merged 1730bf3 and 7aab080 earlier)
-- wip/diag-analysis: 2026-10-25 15:11, waiting on Andrew (item 3 (2); answered by inbox item 5, 0ad7535; code on wip/v4-candidate)
-- wip/v4-candidate: 2026-10-25 15:08, code branch of diag-analysis, no status file; not merged
+- wip/real-calib: 2026-10-25 17:17, working (items 9-10; merged 1730bf3 and 7aab080 earlier)
+- wip/diag-analysis: 2026-10-25 17:18, working (label sweep phase 1; code on wip/v4-candidate)
+- wip/v4-candidate: 2026-10-25 17:17, code branch of diag-analysis, no status file; not merged
 - status/spec-audit-r: 2026-10-23 13:42, done (research lane, not merged)
 - status/gate2: deleted from the remote
 - wip/readme-check, wip/vm-setup, wip/auditor-v1b, wip/fq-real, wip/auditor-v1, wip/scored-v1, wip/freeze-v2, heldout/faults, wip/baselines, wip/diag-review, wip/lab-report-1, wip/gatekeeper: merged
 Needs Andrew:
-- Restart real-calib (not live; inbox item 9, 0ad7535: cluster master open until about 01:00, continue item 7 (2))
 - Restart closure-fix (not live; inbox item 3, real_moved.py write-once)
 - Lab report 2 draft (freeze-v31 item 9): review on wip/lab-report-2 (0060c20); real-subset line waits for a README in `results/2026-10-25_real_subset/`
 - dispatcher: its tracking run started a net-midline build on the lab-server CPU (0721_m10, 3 threads, nice 19), against inbox item 25; its kill was blocked. Pid in its status; stop it if wanted. real_track.py now skips windows without a host midline (85e20da)
