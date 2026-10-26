@@ -1,0 +1,134 @@
+{
+ "freeze_tag": "freeze-v4",
+ "commit": "db158f5",
+ "method": "diagnostician",
+ "rod": {
+  "case": "v3_growth_zone",
+  "fault": "partial_occlusion",
+  "size": "20",
+  "seed": 28,
+  "id": "v3_growth_zone_partial_occlusion_z20_s28"
+ },
+ "runner": "remote_job",
+ "truth": {
+  "peak_regr_pct_per_h": 54.0,
+  "peak_at_um": 421,
+  "largest_flank_difference_pct_per_h": 0.0
+ },
+ "error_before": {
+  "regr_rms_pct_per_h": 21.964,
+  "regr_max_pct_per_h": 75.755,
+  "regr_covered_um": 1137,
+  "flank_difference_rms_pct_per_h": 3.643,
+  "flank_difference_max_pct_per_h": 12.307,
+  "flank_difference_covered_um": 1137
+ },
+ "initial_checks": [
+  {
+   "check": "rigid_invariance",
+   "passed": false,
+   "value": 79.09453137123124,
+   "threshold": 2.0,
+   "unit": "%/h",
+   "where_s_px": 250.0,
+   "where_frame_pair": null,
+   "detail": "largest change in regr_mid"
+  },
+  {
+   "check": "closure",
+   "passed": true,
+   "value": 0.10443061843421723,
+   "threshold": 1.0,
+   "unit": "px/h",
+   "where_s_px": 569.8842329010126,
+   "where_frame_pair": 19,
+   "detail": "tip path 96.0 px/h; base at s = 570 px; largest single-pair residual at pair 19"
+  },
+  {
+   "check": "plane_sections",
+   "passed": false,
+   "value": 12.307444064114593,
+   "threshold": 3.25,
+   "unit": "%/h",
+   "where_s_px": 310.0,
+   "where_frame_pair": null,
+   "detail": "flank difference 12.31 %/h, predicted -0.00 %/h"
+  }
+ ],
+ "outcome": {
+  "task_id": "rod-1",
+  "agent": "diagnostician",
+  "status": "decline",
+  "args": {
+   "fault": "midline_jitter",
+   "reason": "Light midline smoothing lowered rigid invariance from 79.1 to 57.2 %/h, which is still far above the 2.0 threshold. Plane sections still fails at 12.18 %/h, and smooth_midline has no further setting, so the remedy has failed. Stride, low texture and a second root were already ruled out by the evidence."
+  },
+  "steps": 5,
+  "failed_steps": 0,
+  "calls": 5,
+  "input_tokens": 21843,
+  "output_tokens": 2559,
+  "call_ms": 29443
+ },
+ "error_after": {
+  "regr_rms_pct_per_h": 11.951,
+  "regr_max_pct_per_h": 42.401,
+  "regr_covered_um": 1137,
+  "flank_difference_rms_pct_per_h": 3.252,
+  "flank_difference_max_pct_per_h": 12.177,
+  "flank_difference_covered_um": 1137
+ },
+ "remedies": [
+  "midline source smoothed (light)"
+ ],
+ "roll_backs": 0,
+ "final_settings": {
+  "stride": 1,
+  "disk_radius": null,
+  "register": false,
+  "register_from_px": null,
+  "midline_smooth": "light",
+  "band_mask": null,
+  "width_free": false,
+  "couple": false
+ },
+ "final_checks": [
+  {
+   "check": "rigid_invariance",
+   "passed": false,
+   "value": 57.22086112578481,
+   "threshold": 2.0,
+   "unit": "%/h",
+   "where_s_px": 235.0,
+   "where_frame_pair": null,
+   "detail": "largest change in regr_mid"
+  },
+  {
+   "check": "closure",
+   "passed": true,
+   "value": 0.10870085217190305,
+   "threshold": 1.0,
+   "unit": "px/h",
+   "where_s_px": 556.2642067939353,
+   "where_frame_pair": 19,
+   "detail": "tip path 96.0 px/h; base at s = 556 px; largest single-pair residual at pair 19"
+  },
+  {
+   "check": "plane_sections",
+   "passed": false,
+   "value": 12.176623646678081,
+   "threshold": 3.25,
+   "unit": "%/h",
+   "where_s_px": 290.0,
+   "where_frame_pair": null,
+   "detail": "flank difference 12.18 %/h, predicted -0.00 %/h"
+  }
+ ],
+ "reported": false,
+ "repeat": 2,
+ "trace": "diagnostician_v3_growth_zone_partial_occlusion_z20_s28_r2_trace.jsonl",
+ "claude_code": "2.1.310",
+ "wall_s": 35.7,
+ "tracker_runs_new": 0,
+ "runner_log": []
+}
