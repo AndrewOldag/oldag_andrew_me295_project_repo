@@ -1,0 +1,15 @@
+{
+ "window": "0727_cc1__w0-2",
+ "root": "0727_cc1",
+ "window_h": [
+  0.0,
+  2.0
+ ],
+ "midline": "ft2 (net2_midline_ft2.pt, tile mode, low 0.1 %, high 99.5 %)",
+ "moved_copy": false,
+ "track_length_px": 1000.0,
+ "closure_definition": "2026-10-10 definition kept by section A (midline end against the most basal centre point tracked in every frame), 1000 px tracks",
+ "closure_threshold_px_per_h": 19.0,
+ "status": "failed",
+ "error": "ValueError: arange: cannot compute length"
+}
