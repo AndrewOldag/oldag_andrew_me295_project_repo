@@ -7,7 +7,7 @@ state: waiting on real-calib
 branch: wip/dispatcher
 host: VM (LLM runs), cluster (remedy retracks on CPU), lab server (light)
 created: 2026-10-25 19:05
-last_update: 2026-10-25 19:10
+last_update: 2026-10-25 19:30
 blocker: real-calib first-batch tracks and checker results not yet reported
 done_marker: results/2026-10-25_full_batch_1_agents/README.md
 ---
