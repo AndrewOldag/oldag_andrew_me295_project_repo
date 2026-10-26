@@ -102,6 +102,7 @@ def start_label_sweep(dry):
 # ------------------------------------------------------------------ development check
 
 _V3_SCORED = v3.scored_rods                    # the v3 set (seeds 20-22), kept before point_v3_at_v4
+_V3_FALSE_ALARM = set(v3.CLEAN_FALSE_ALARM)       # v3 checker false alarm (seed 20), for the dev check
 
 
 class _V3CacheRunner(v3.V3Runner):
@@ -166,8 +167,8 @@ def dev_check_report():
                    "| Row | Rod | Class | Status | Category | Named fault | Fault correct | Steps | Remedies | v3 diagnostician correct (seed 20, 3 repeats) |",
                    "| :-- | :-- | :-- | :-- | :-- | :-- | :-- | --: | :-- | :-- |"]
     candidate.use("v4")
-    cache, out, rods = v3.CACHE, v3.OUT, v3.scored_rods
-    v3.CACHE, v3.OUT, v3.scored_rods = V3_CACHE, V3_OUT, _V3_SCORED
+    cache, out, rods, fa = v3.CACHE, v3.OUT, v3.scored_rods, v3.CLEAN_FALSE_ALARM
+    v3.CACHE, v3.OUT, v3.scored_rods, v3.CLEAN_FALSE_ALARM = V3_CACHE, V3_OUT, _V3_SCORED, _V3_FALSE_ALARM
     try:
         _, lab = v3.labels_report()
         tol_cfg = v3.load_tolerance()
@@ -177,7 +178,7 @@ def dev_check_report():
             v3runs = [json.loads((V3_OUT / "runs" / f"{v3.stem('diagnostician', rod, k)}_summary.json").read_text())
                       for k in v3.REPEATS]
             tol = v3.rod_tolerance(v3.truth(rod), v3.PIXEL_UM, tol_cfg)
-            v3c = sum(metrics.correct({"category": metrics.category(
+            v3c = sum(metrics.correct({"cls": cls, "category": metrics.category(
                 s["outcome"]["status"], cls, v3.measurement_good(s["error_after"], tol,
                                                                  bool(s["final_settings"].get("width_free"))))})
                       for s in v3runs)
@@ -194,7 +195,7 @@ def dev_check_report():
                      f"{'-' if fc is None else ('yes' if fc else 'no')} | {s['outcome']['steps']} | "
                      f"{'; '.join(s['remedies']) or 'none'} | {v3c} / 3 |")
     finally:
-        v3.CACHE, v3.OUT, v3.scored_rods = cache, out, rods
+        v3.CACHE, v3.OUT, v3.scored_rods, v3.CLEAN_FALSE_ALARM = cache, out, rods, fa
     n_ok = sum(metrics.correct(r) for r in rows)
     L += ["", f"- Runs {len(rows)}; correct {n_ok}", "- Development check only: seed 20 is not unseen. Not a score"]
     miss = DEV_OUT / "missing_states.jsonl"
