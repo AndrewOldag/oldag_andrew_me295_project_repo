@@ -1,12 +1,14 @@
 # coordinator
-Updated: 2026-10-25 23:40 (local)
+Updated: 2026-10-26 00:50 (local)
 Lane: course
 Branch: main
 Last inbox item done: 26
 State: working
 Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8 (relay part), 10, 11, 16, 17 (item 20)
-Last-seen main: 3d157e8
+Last-seen main: 0d5236e
 Done since last update:
+- 2026-10-26 00:50 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/diag-analysis working 21:58 (ab97080); wip/real-calib working 21:20 (4560996); wip/v4-candidate 23:45 (fb717d5), no status file, single_agent repeat 2 at 51 of 51; wip/lab-report-2 working 14:46 (0060c20); wip/freeze-v31 done 14:46 (d24feb8), no merge asked)
+- 00:50: item 8: no inbox change since 3d157e8; no pings. Item 10: no status says `waiting on <agent>`; no ping. Item 16: no status says `waiting on server job`
 - 2026-10-25 23:40 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/diag-analysis working 21:58 (ab97080); wip/real-calib working 21:20 (4560996); wip/v4-candidate 23:36 (5bf48db), no status file, diagnostician repeat 2 at 51 of 51; wip/lab-report-2 working 14:46 (0060c20); wip/freeze-v31 done 14:46 (d24feb8), no merge asked)
 - 23:40: item 8: no inbox change since 002a331; no pings. Item 10: no status says `waiting on <agent>`; no ping. Item 16: no status says `waiting on server job`
 - 2026-10-25 23:30 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/diag-analysis working 21:58 (ab97080); wip/real-calib working 21:20 (4560996); wip/v4-candidate 23:22 (db158f5), no status file, diagnostician repeat 2 at 34 of 51; wip/lab-report-2 working 14:46 (0060c20); wip/freeze-v31 done 14:46 (d24feb8), no merge asked)
@@ -199,7 +201,7 @@ Branches (last commit, state):
 - wip/closure-fix: 2026-10-24 17:03, ready to merge, merged 835b522
 - wip/real-calib: 2026-10-25 21:18, working (item 11, batch 2; items 9-10 merged 1730bf3 and 7aab080 earlier)
 - wip/diag-analysis: 2026-10-25 18:19, working (development check waits for VM memory; code on wip/v4-candidate)
-- wip/v4-candidate: 2026-10-25 20:33, code branch of diag-analysis, no status file; not merged
+- wip/v4-candidate: 2026-10-25 23:45, code branch of diag-analysis, no status file; not merged
 - status/spec-audit-r: 2026-10-23 13:42, done (research lane, not merged)
 - status/gate2: deleted from the remote
 - wip/readme-check, wip/vm-setup, wip/auditor-v1b, wip/fq-real, wip/auditor-v1, wip/scored-v1, wip/freeze-v2, heldout/faults, wip/baselines, wip/diag-review, wip/lab-report-1, wip/gatekeeper: merged
