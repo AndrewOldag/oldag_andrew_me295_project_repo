@@ -213,7 +213,10 @@ class RealRunner:
         w = dict(self.windows[window.id()], midline=self.midline_path(window))
         q = shlex.quote
         need = [mv] if self.moved_mode == "rotate" else [mv, ref]
-        test = " && ".join(f"test -d {q(p['imgdir'])} && test -f {q(p['midline'])}" for p in need)
+        # complete copy: folder and midline present, and not a stopped write-once copy (.started without .ok)
+        test = " && ".join(f"test -d {q(p['imgdir'])} && test -f {q(p['midline'])} && "
+                           f"{{ test -f {q(p['imgdir'] + '.ok')} || ! test -f {q(p['imgdir'] + '.started')}; }}"
+                           for p in need)
         if self._ssh(f"{test} && echo yes || echo no").decode().strip() == "yes":
             return mv
         before = self.check_host()
