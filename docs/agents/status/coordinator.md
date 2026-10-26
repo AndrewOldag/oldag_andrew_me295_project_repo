@@ -1,12 +1,14 @@
 # coordinator
-Updated: 2026-10-25 18:31 (local)
+Updated: 2026-10-25 18:40 (local)
 Lane: course
 Branch: main
 Last inbox item done: 25
 State: working
 Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8 (relay part), 10, 11, 16, 17 (item 20)
-Last-seen main: f363c4d
+Last-seen main: 3b51bd5
 Done since last update:
+- 2026-10-25 18:40 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/real-calib working 17:50 (ed09959 18:15), items 9-10 first batch; wip/diag-analysis working 18:20 (7d07f70); wip/v4-candidate 18:38 (161615f, diagnostician repeat 0, 34 of 51 runs), no status file; wip/lab-report-2 working; wip/freeze-v31 done, no merge asked)
+- 18:40: item 8: no inbox change since f363c4d; no pings. Item 10: no status says `waiting on <agent>`. Item 16: no status says `waiting on server job`
 - 2026-10-25 18:31 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/real-calib working 17:50 (ed09959 18:15), items 9-10 first batch, GPU job 1 of 4; wip/diag-analysis working 18:20 (7d07f70), LLM runs on seeds 26-28; wip/v4-candidate 18:25 (8ca122c), no status file; wip/lab-report-2 working; wip/freeze-v31 done, no merge asked)
 - 18:31: item 8: no inbox change since 9283f3d; no pings. Item 10: no status says `waiting on <agent>`. Item 16: no status says `waiting on server job`
 - 2026-10-25 18:21 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/real-calib working 17:50 (ed09959 18:15, scripts/full_batch.py), items 9-10 first batch, GPU job 1 of 4; wip/diag-analysis working 18:20 (7d07f70), v4 rule runs done, LLM runs on seeds 26-28 started; wip/v4-candidate 18:18 (ed41bc0), no status file; wip/lab-report-2 working; wip/freeze-v31 done, no merge asked). wip/dispatcher ready to merge, already merged (2c99900)
@@ -153,7 +155,7 @@ Branches (last commit, state):
 - wip/closure-fix: 2026-10-24 17:03, ready to merge, merged 835b522
 - wip/real-calib: 2026-10-25 17:37, working (items 9-10; merged 1730bf3 and 7aab080 earlier)
 - wip/diag-analysis: 2026-10-25 17:38, working (development check waits for VM memory; code on wip/v4-candidate)
-- wip/v4-candidate: 2026-10-25 17:51, code branch of diag-analysis, no status file; not merged
+- wip/v4-candidate: 2026-10-25 18:38, code branch of diag-analysis, no status file; not merged
 - status/spec-audit-r: 2026-10-23 13:42, done (research lane, not merged)
 - status/gate2: deleted from the remote
 - wip/readme-check, wip/vm-setup, wip/auditor-v1b, wip/fq-real, wip/auditor-v1, wip/scored-v1, wip/freeze-v2, heldout/faults, wip/baselines, wip/diag-review, wip/lab-report-1, wip/gatekeeper: merged
