@@ -1,12 +1,14 @@
 # coordinator
-Updated: 2026-10-25 18:21 (local)
+Updated: 2026-10-25 18:31 (local)
 Lane: course
 Branch: main
 Last inbox item done: 25
 State: working
 Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8 (relay part), 10, 11, 16, 17 (item 20)
-Last-seen main: 9283f3d
+Last-seen main: f363c4d
 Done since last update:
+- 2026-10-25 18:31 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/real-calib working 17:50 (ed09959 18:15), items 9-10 first batch, GPU job 1 of 4; wip/diag-analysis working 18:20 (7d07f70), LLM runs on seeds 26-28; wip/v4-candidate 18:25 (8ca122c), no status file; wip/lab-report-2 working; wip/freeze-v31 done, no merge asked)
+- 18:31: item 8: no inbox change since 9283f3d; no pings. Item 10: no status says `waiting on <agent>`. Item 16: no status says `waiting on server job`
 - 2026-10-25 18:21 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/real-calib working 17:50 (ed09959 18:15, scripts/full_batch.py), items 9-10 first batch, GPU job 1 of 4; wip/diag-analysis working 18:20 (7d07f70), v4 rule runs done, LLM runs on seeds 26-28 started; wip/v4-candidate 18:18 (ed41bc0), no status file; wip/lab-report-2 working; wip/freeze-v31 done, no merge asked). wip/dispatcher ready to merge, already merged (2c99900)
 - 18:21: item 8: no inbox change since 3566a88; no pings. Item 10: no status says `waiting on <agent>`. Item 16: no status says `waiting on server job`
 - 2026-10-25 18:10 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/real-calib working 17:37, items 9-10 first batch, GPU job 1 of 4; wip/diag-analysis working 18:05 (38690e7), tag freeze-v4 pushed, method-state sweeps next; wip/v4-candidate 18:04 (b86abef), no status file; wip/lab-report-2 working; wip/freeze-v31 done, no merge asked)
