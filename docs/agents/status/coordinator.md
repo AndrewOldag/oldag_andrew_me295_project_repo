@@ -1,12 +1,14 @@
 # coordinator
-Updated: 2026-10-26 09:20 (local)
+Updated: 2026-10-26 10:10 (local)
 Lane: course
 Branch: main
 Last inbox item done: 26
 State: working
 Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8 (relay part), 10, 11, 16, 17 (item 20)
-Last-seen main: 9c87412
+Last-seen main: 7de598c
 Done since last update:
+- 2026-10-26 10:10 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/v4-candidate 10:05 (b4f35f7), single_agent repeat 0 at 41 of 51, no status file; wip/real-calib working 09:20 (594ae6a); wip/diag-analysis working 09:04 (92b0dee); wip/lab-report-2 working 14:46 (0060c20); wip/freeze-v31 done 15:05 (d24feb8), no merge asked)
+- 10:10: item 8: no inbox change since a70ca64; no pings. dispatcher still not live; item 40 still waiting (Needs Andrew). Item 10: no live status says `waiting on <agent>`. Item 16: no status says `waiting on server job`. Live: diag-analysis, real-calib
 - 2026-10-26 09:20 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/real-calib working 09:20 (594ae6a), item 11 batch 2 on the cluster; wip/diag-analysis working 09:04 (92b0dee), 95 usage-limit runs rerunning; wip/v4-candidate 09:04 (853da3b), no status file; wip/lab-report-2 working 14:46 (0060c20); wip/freeze-v31 done 15:05 (d24feb8), no merge asked)
 - 09:20: item 8: no inbox change since a70ca64; no pings (real-calib pushed 594ae6a after the 09:10 ping). dispatcher still not live; item 40 still waiting (Needs Andrew). Item 10: no status says `waiting on <agent>`. Item 16: no status says `waiting on server job`. Live: diag-analysis, real-calib
 - 2026-10-26 09:10 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/diag-analysis working 09:04 (92b0dee), 95 usage-limit runs rerunning; wip/v4-candidate 09:04 (853da3b), no status file, 95 usage-limit runs set aside for rerun; wip/real-calib working 02:15 (100eb18); wip/lab-report-2 working 14:46 (0060c20); wip/freeze-v31 done 15:05 (d24feb8), no merge asked)
