@@ -1,12 +1,14 @@
 # coordinator
-Updated: 2026-10-25 17:20 (local)
+Updated: 2026-10-25 17:35 (local)
 Lane: course
 Branch: main
 Last inbox item done: 25
 State: working
 Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8 (relay part), 10, 11, 16, 17 (item 20)
-Last-seen main: fa560a6
+Last-seen main: 2c99900
 Done since last update:
+- 2026-10-25 17:35 (tick): item 1: merged wip/dispatcher (2c99900; ready to merge 17:55 by its clock, last commit 17:22): c019 real subset, 48 windows, runs 1-3, agreement 48/48 unanimous; no conflicts; suite 310 passed, 1 skipped; log entry moved. Other unmerged: wip/real-calib working 17:17, items 9-10 first batch staging; wip/diag-analysis working 17:18, label sweep phase 1; wip/v4-candidate 17:21, no status file; wip/lab-report-2 working; wip/freeze-v31 done, no merge asked
+- 17:35: item 8: no inbox change since fa560a6; no pings. Item 10: no status says `waiting on <agent>`. Item 16: no status says `waiting on server job`. Live: dispatcher (idle), diag-analysis, real-calib
 - 2026-10-25 17:20 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher working 17:16, item 38 repeat run 2; wip/real-calib working 17:17, items 9-10 first batch staging; wip/diag-analysis working 17:18, label sweep phase 1; wip/v4-candidate 17:17, no status file; wip/lab-report-2 working; wip/freeze-v31 done, no merge asked)
 - 17:20: item 8: real-calib inbox changed in fa560a6 (item 10: cluster folder cleared). real-calib restarted 17:16 (live, after fa560a6) and its 17:25 status already works items 9-10; not pinged. No other inbox change; no pings. Item 10: no status says `waiting on <agent>`. Item 16: no status says `waiting on server job`. Live: dispatcher, diag-analysis, real-calib
 - 2026-10-25 17:12 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/dispatcher waiting on Andrew 16:05, repeat runs held by the 4 GB memory wait; wip/real-calib waiting on Andrew 15:20, cluster connection; wip/diag-analysis waiting on Andrew 15:11, label host and caps; wip/v4-candidate no status file; wip/lab-report-2 working; wip/freeze-v31 done, no merge asked)
@@ -135,7 +137,7 @@ Branches (last commit, state):
 - wip/coord-tick: 2026-10-24 13:09, ready to merge, merged 9aa97bf
 - wip/freeze-v3: 2026-10-24 04:16, ready to merge, merged 2ebd422
 - status/turn-long: 2026-10-24 02:42, done (research lane, not merged)
-- wip/dispatcher: 2026-10-25 17:16, working (item 38 repeat run 2) (15:37 merged 5a4767f)
+- wip/dispatcher: 2026-10-25 17:22, ready to merge, merged 2c99900 (earlier 5a4767f)
 - wip/lab-report-2: 2026-10-25 14:46, working (status of 23 Oct; draft refreshed 0060c20 by freeze-v31)
 - wip/freeze-v31: 2026-10-25 14:46, done (item 9; status and log only since merge 2c373d1)
 - wip/closure-fix: 2026-10-24 17:03, ready to merge, merged 835b522
@@ -146,8 +148,9 @@ Branches (last commit, state):
 - status/gate2: deleted from the remote
 - wip/readme-check, wip/vm-setup, wip/auditor-v1b, wip/fq-real, wip/auditor-v1, wip/scored-v1, wip/freeze-v2, heldout/faults, wip/baselines, wip/diag-review, wip/lab-report-1, wip/gatekeeper: merged
 Needs Andrew:
+- dispatcher log entry (now in running_log.md) gives 0727_mm6 growth-zone profile values; biology values are out of course scope. Keep or trim
 - Restart closure-fix (not live; inbox item 3, real_moved.py write-once)
-- Lab report 2 draft (freeze-v31 item 9): review on wip/lab-report-2 (0060c20); real-subset line waits for a README in `results/2026-10-25_real_subset/`
+- Lab report 2 draft (freeze-v31 item 9): review on wip/lab-report-2 (0060c20); `results/2026-10-25_real_subset/README.md` now on main (2c99900), so the real-subset line can be filled
 - dispatcher: its tracking run started a net-midline build on the lab-server CPU (0721_m10, 3 threads, nice 19), against inbox item 25; its kill was blocked. Pid in its status; stop it if wanted. real_track.py now skips windows without a host midline (85e20da)
 - closure-fix (merged): closure at 1000 px still 2.2-3.2 px/h against synthetic 1.0; rigid invariance at 1000 px untested (1000 px now in dispatcher and real-calib inboxes, ab50da7)
 - diag-analysis (merged): decide C1 (prompt fault-to-remedy map), C2 (stage_log_summary per-pair spread), C3 (roll-back vs label rule: option a or b) in `docs/proposals/2026-10-25_diagnostician-repair-misses.md`; C3 note `docs/proposals/2026-10-25_not-computable-check-rule.md`
