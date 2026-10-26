@@ -1,0 +1,38 @@
+{
+ "planned": 126,
+ "files": 126,
+ "measured": 123,
+ "failed": 3,
+ "moved_copies": 11,
+ "flag_base_may_be_in_growing_tissue": 5,
+ "closure_threshold_px_per_h": 19.0,
+ "by_condition": {
+  "control": {
+   "pass": 40,
+   "not computable": 2,
+   "fail": 5,
+   "failed": 1
+  },
+  "control then control": {
+   "failed": 1,
+   "pass": 5
+  },
+  "mannitol": {
+   "pass": 30,
+   "failed": 1,
+   "fail": 5
+  },
+  "mannitol then control": {
+   "pass": 22,
+   "not computable": 2
+  },
+  "mannitol then mannitol": {
+   "pass": 12
+  }
+ },
+ "errors": {
+  "0711_m1__w0-2": "ValueError: arange: cannot compute length",
+  "0721_c2__w6-8": "ValueError: arange: cannot compute length",
+  "0727_cc1__w0-2": "ValueError: arange: cannot compute length"
+ }
+}

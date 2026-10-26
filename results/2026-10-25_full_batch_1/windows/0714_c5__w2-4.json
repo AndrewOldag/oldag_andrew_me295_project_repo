@@ -1,0 +1,57 @@
+{
+ "window": "0714_c5__w2-4",
+ "root": "0714_c5",
+ "window_h": [
+  2.0,
+  4.0
+ ],
+ "midline": "ft2 (net2_midline_ft2.pt, tile mode, low 0.1 %, high 99.5 %)",
+ "moved_copy": false,
+ "track_length_px": 1000.0,
+ "closure_definition": "2026-10-10 definition kept by section A (midline end against the most basal centre point tracked in every frame), 1000 px tracks",
+ "closure_threshold_px_per_h": 19.0,
+ "outcome": "pass",
+ "values": {
+  "rigid_invariance": null,
+  "closure": 13.6414,
+  "plane_sections": 745.1434
+ },
+ "passed": {
+  "rigid_invariance": null,
+  "closure": true,
+  "plane_sections": null
+ },
+ "detail": {
+  "rigid_invariance": "no rigidly moved run supplied",
+  "closure": "tip path 5415.4 px/h; base at s = 772 px; largest single-pair residual at pair 9",
+  "plane_sections": "reported, not gating (real-movie profile; would fail): flank difference -3.78 %/h, predicted 741.36 %/h"
+ },
+ "base": {
+  "tracked_length_reached_px": 1077.4,
+  "base_s_px": 771.7,
+  "base_term_px_per_h": 12.415,
+  "tip_side_term_px_per_h": 17.432,
+  "basal_speed_px_per_h": [
+   [
+    492.0,
+    57.61
+   ],
+   [
+    573.0,
+    36.84
+   ],
+   [
+    647.0,
+    24.28
+   ],
+   [
+    720.0,
+    15.31
+   ]
+  ],
+  "frame0_midline_px": 959.4,
+  "flag": "base may be in growing tissue"
+ },
+ "n_frames": 72,
+ "status": "measured"
+}

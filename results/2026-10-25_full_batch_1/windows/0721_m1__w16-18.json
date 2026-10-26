@@ -1,0 +1,57 @@
+{
+ "window": "0721_m1__w16-18",
+ "root": "0721_m1",
+ "window_h": [
+  16.0,
+  18.0
+ ],
+ "midline": "ft2 (net2_midline_ft2.pt, tile mode, low 0.1 %, high 99.5 %)",
+ "moved_copy": false,
+ "track_length_px": 1000.0,
+ "closure_definition": "2026-10-10 definition kept by section A (midline end against the most basal centre point tracked in every frame), 1000 px tracks",
+ "closure_threshold_px_per_h": 19.0,
+ "outcome": "pass",
+ "values": {
+  "rigid_invariance": null,
+  "closure": 6.0834,
+  "plane_sections": 503.7162
+ },
+ "passed": {
+  "rigid_invariance": null,
+  "closure": true,
+  "plane_sections": null
+ },
+ "detail": {
+  "rigid_invariance": "no rigidly moved run supplied",
+  "closure": "tip path 138.8 px/h; base at s = 1102 px; largest single-pair residual at pair 22",
+  "plane_sections": "reported, not gating (real-movie profile; would fail): flank difference -13.64 %/h, predicted -517.36 %/h"
+ },
+ "base": {
+  "tracked_length_reached_px": 1102.3,
+  "base_s_px": 1102.3,
+  "base_term_px_per_h": 0.739,
+  "tip_side_term_px_per_h": 6.746,
+  "basal_speed_px_per_h": [
+   [
+    890.0,
+    1.04
+   ],
+   [
+    949.0,
+    2.19
+   ],
+   [
+    1011.0,
+    1.39
+   ],
+   [
+    1072.0,
+    0.91
+   ]
+  ],
+  "frame0_midline_px": 1295.9,
+  "flag": null
+ },
+ "n_frames": 67,
+ "status": "measured"
+}
