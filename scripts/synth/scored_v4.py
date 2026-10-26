@@ -275,6 +275,11 @@ def main():
         v3.run_agents(a.method, a.repeat, min(left, a.max_runs) if a.max_runs else left)
     else:
         v3.evaluate_all()
+        f = OUT / "table_metrics.md"
+        f.write_text(f.read_text().replace("# Freeze v3 scored runs: metrics", "# Freeze v4 scored runs: metrics", 1)
+                     .replace("Definitions: `docs/proposals/2026-10-23_freeze-v3.md`, section 3;",
+                              "Seeds 26-28, candidate v4 on. Definitions as freeze v3 "
+                              "(`docs/proposals/2026-10-23_freeze-v3.md`, section 3);", 1))
 
 
 if __name__ == "__main__":
