@@ -1,0 +1,131 @@
+{
+ "freeze_tag": "freeze-v4",
+ "commit": "e7d95be",
+ "method": "single_agent",
+ "rod": {
+  "case": "v3_bend24",
+  "fault": null,
+  "size": null,
+  "seed": 27,
+  "id": "v3_bend24_clean_s27"
+ },
+ "runner": "remote_job",
+ "truth": {
+  "peak_regr_pct_per_h": 54.0,
+  "peak_at_um": 421,
+  "largest_flank_difference_pct_per_h": -10.09
+ },
+ "error_before": {
+  "regr_rms_pct_per_h": 0.464,
+  "regr_max_pct_per_h": 1.142,
+  "regr_covered_um": 1137,
+  "flank_difference_rms_pct_per_h": 0.409,
+  "flank_difference_max_pct_per_h": 1.731,
+  "flank_difference_covered_um": 1137
+ },
+ "initial_checks": [
+  {
+   "check": "rigid_invariance",
+   "passed": true,
+   "value": 0.8112707641985416,
+   "threshold": 2.0,
+   "unit": "%/h",
+   "where_s_px": 10.0,
+   "where_frame_pair": null,
+   "detail": "largest change in regr_minus"
+  },
+  {
+   "check": "closure",
+   "passed": true,
+   "value": 0.16395292206916595,
+   "threshold": 1.0,
+   "unit": "px/h",
+   "where_s_px": 547.7646292478803,
+   "where_frame_pair": 17,
+   "detail": "tip path 158.4 px/h; base at s = 548 px; largest single-pair residual at pair 17"
+  },
+  {
+   "check": "plane_sections",
+   "passed": true,
+   "value": 1.7233236776238128,
+   "threshold": 3.25,
+   "unit": "%/h",
+   "where_s_px": 40.0,
+   "where_frame_pair": null,
+   "detail": "flank difference -1.79 %/h, predicted -0.07 %/h"
+  }
+ ],
+ "outcome": {
+  "task_id": "rod-1",
+  "agent": "single_agent",
+  "status": "accept",
+  "args": {
+   "confidence": 0.82
+  },
+  "steps": 5,
+  "failed_steps": 0,
+  "calls": 5,
+  "input_tokens": 20738,
+  "output_tokens": 3004,
+  "call_ms": 32619
+ },
+ "error_after": {
+  "regr_rms_pct_per_h": 0.464,
+  "regr_max_pct_per_h": 1.142,
+  "regr_covered_um": 1137,
+  "flank_difference_rms_pct_per_h": 0.409,
+  "flank_difference_max_pct_per_h": 1.731,
+  "flank_difference_covered_um": 1137
+ },
+ "remedies": [],
+ "roll_backs": 0,
+ "final_settings": {
+  "stride": 1,
+  "disk_radius": null,
+  "register": false,
+  "register_from_px": null,
+  "midline_smooth": null,
+  "band_mask": null,
+  "width_free": false,
+  "couple": false
+ },
+ "final_checks": [
+  {
+   "check": "rigid_invariance",
+   "passed": true,
+   "value": 0.8112707641985416,
+   "threshold": 2.0,
+   "unit": "%/h",
+   "where_s_px": 10.0,
+   "where_frame_pair": null,
+   "detail": "largest change in regr_minus"
+  },
+  {
+   "check": "closure",
+   "passed": true,
+   "value": 0.16395292206916595,
+   "threshold": 1.0,
+   "unit": "px/h",
+   "where_s_px": 547.7646292478803,
+   "where_frame_pair": 17,
+   "detail": "tip path 158.4 px/h; base at s = 548 px; largest single-pair residual at pair 17"
+  },
+  {
+   "check": "plane_sections",
+   "passed": true,
+   "value": 1.7233236776238128,
+   "threshold": 3.25,
+   "unit": "%/h",
+   "where_s_px": 40.0,
+   "where_frame_pair": null,
+   "detail": "flank difference -1.79 %/h, predicted -0.07 %/h"
+  }
+ ],
+ "reported": true,
+ "repeat": 1,
+ "trace": "single_agent_v3_bend24_clean_s27_r1_trace.jsonl",
+ "claude_code": "2.1.310",
+ "wall_s": 38.9,
+ "tracker_runs_new": 0,
+ "runner_log": []
+}
