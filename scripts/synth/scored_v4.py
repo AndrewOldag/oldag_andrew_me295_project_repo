@@ -43,7 +43,7 @@ SCORING_SEEDS = (26, 27, 28)                   # never used before (planning, 20
 DEV_SEED = 20
 LABEL_CAP = 228                                # Andrew, 2026-10-25 17:10 (item 5; was 150, item 3 (2))
 MAX_TRACKER_RUNS = 420                         # Andrew, 2026-10-25 17:10 (item 5; was 300, item 4 (3))
-MAX_LLM_RUNS = 400                             # item 4 (3)
+MAX_LLM_RUNS = 420                             # Andrew, 2026-10-26 (rerun of usage-limit runs; was 400, item 4 (3))
 MIN_FREE_GB = 3.85                             # Andrew, 2026-10-25 15:58 (was 4.0, items 3 (3), 4 (3))
 # expected classes as labelled in v3, and stage_log_missing under C3 (a); used only to list labels that differ
 EXPECTED = {**v3.EXPECTED, "displacement_exceeds_patch": "decline", "stage_log_missing": "decline"}
@@ -84,10 +84,32 @@ def memory_ok():
     print(f"free VM memory {f:.1f} GB", flush=True)
 
 
+LIMIT_OUT = OUT / "runs" / "usage_limit"         # runs ended by the account usage limit, kept for the record
+
+
 def llm_runs():
-    """LLM runs so far: scored runs and development-check runs (summaries written)."""
+    """LLM runs so far: scored, set-aside usage-limit and development-check runs (summaries written)."""
     n = sum(1 for m in v3.LLM for _ in (OUT / "runs").glob(f"{m}_*_summary.json")) if (OUT / "runs").exists() else 0
+    n += len(list(LIMIT_OUT.glob("*_summary.json"))) if LIMIT_OUT.exists() else 0
     return n + (len(list(DEV_OUT.glob("*_summary.json"))) if DEV_OUT.exists() else 0)
+
+
+def set_aside_limit_runs():
+    """Move runs that ended on the account usage limit (no model answer; Andrew, 2026-10-26) to LIMIT_OUT, so
+    they run again. Returns how many."""
+    n = 0
+    for f in (OUT / "runs").glob("*_summary.json"):
+        s = json.loads(f.read_text())
+        o = s["outcome"]
+        if o["status"] == "error" and "session limit" in o.get("args", {}).get("reason", ""):
+            LIMIT_OUT.mkdir(parents=True, exist_ok=True)
+            for g in (f, OUT / "runs" / s["trace"]):
+                dest = LIMIT_OUT / g.name
+                if dest.exists():
+                    dest = LIMIT_OUT / f"{g.stem}_{time.strftime('%H%M%S')}{g.suffix}"
+                g.rename(dest)
+            n += 1
+    return n
 
 
 def start_label_sweep(dry):
@@ -274,6 +296,9 @@ def main():
         if left <= 0:
             sys.exit(f"LLM-run cap {MAX_LLM_RUNS} reached; stop and report")
         v3.run_agents(a.method, a.repeat, min(left, a.max_runs) if a.max_runs else left)
+        n = set_aside_limit_runs()
+        if n:
+            sys.exit(f"usage limit: {n} runs ended on the account limit, set aside in {LIMIT_OUT.name}/; stop")
     else:
         v3.evaluate_all()
         f = OUT / "table_metrics.md"
