@@ -1,0 +1,5227 @@
+{
+ "windows": [
+  [
+   "0711_c2",
+   4.0,
+   6.0
+  ],
+  [
+   "0711_c2",
+   11.0,
+   13.0
+  ],
+  [
+   "0711_c2",
+   17.0,
+   19.0
+  ],
+  [
+   "0708_c5",
+   4.0,
+   6.0
+  ],
+  [
+   "0708_c5",
+   11.0,
+   13.0
+  ],
+  [
+   "0708_c5",
+   17.0,
+   19.0
+  ],
+  [
+   "0714_c10",
+   4.0,
+   6.0
+  ],
+  [
+   "0714_c10",
+   11.0,
+   13.0
+  ],
+  [
+   "0714_c10",
+   17.0,
+   19.0
+  ],
+  [
+   "0721_c1",
+   4.0,
+   6.0
+  ],
+  [
+   "0721_c1",
+   11.0,
+   13.0
+  ],
+  [
+   "0721_c1",
+   17.0,
+   19.0
+  ],
+  [
+   "0711_c4",
+   4.0,
+   6.0
+  ],
+  [
+   "0711_c4",
+   11.0,
+   13.0
+  ],
+  [
+   "0711_c4",
+   17.0,
+   19.0
+  ],
+  [
+   "0708_m12",
+   4.0,
+   6.0
+  ],
+  [
+   "0708_m12",
+   11.0,
+   13.0
+  ],
+  [
+   "0708_m12",
+   17.0,
+   19.0
+  ],
+  [
+   "0711_m6",
+   4.0,
+   6.0
+  ],
+  [
+   "0711_m6",
+   11.0,
+   13.0
+  ],
+  [
+   "0711_m6",
+   17.0,
+   19.0
+  ],
+  [
+   "0714_m10",
+   4.0,
+   6.0
+  ],
+  [
+   "0714_m10",
+   11.0,
+   13.0
+  ],
+  [
+   "0714_m10",
+   17.0,
+   19.0
+  ],
+  [
+   "0727_mm6",
+   4.0,
+   6.0
+  ],
+  [
+   "0727_mm6",
+   11.0,
+   13.0
+  ],
+  [
+   "0727_mm6",
+   17.0,
+   19.0
+  ],
+  [
+   "0708_m8",
+   4.0,
+   6.0
+  ],
+  [
+   "0708_m8",
+   11.0,
+   13.0
+  ],
+  [
+   "0708_m8",
+   17.0,
+   19.0
+  ],
+  [
+   "0721_m10",
+   4.0,
+   6.0
+  ],
+  [
+   "0721_m10",
+   11.0,
+   13.0
+  ],
+  [
+   "0721_m10",
+   17.0,
+   19.0
+  ],
+  [
+   "0721_m4",
+   4.0,
+   6.0
+  ],
+  [
+   "0721_m4",
+   11.0,
+   13.0
+  ],
+  [
+   "0721_m4",
+   17.0,
+   19.0
+  ],
+  [
+   "0721_m9",
+   4.0,
+   6.0
+  ],
+  [
+   "0721_m9",
+   11.0,
+   13.0
+  ],
+  [
+   "0721_m9",
+   17.0,
+   19.0
+  ],
+  [
+   "0727_mc1",
+   4.0,
+   6.0
+  ],
+  [
+   "0727_mc1",
+   11.0,
+   13.0
+  ],
+  [
+   "0727_mc1",
+   17.0,
+   19.0
+  ],
+  [
+   "0727_mc3",
+   4.0,
+   6.0
+  ],
+  [
+   "0727_mc3",
+   11.0,
+   13.0
+  ],
+  [
+   "0727_mc3",
+   17.0,
+   19.0
+  ],
+  [
+   "0727_mc5",
+   4.0,
+   6.0
+  ],
+  [
+   "0727_mc5",
+   11.0,
+   13.0
+  ],
+  [
+   "0727_mc5",
+   17.0,
+   19.0
+  ]
+ ],
+ "dispatcher_mode": "agent",
+ "dispatcher": {
+  "status": "finish",
+  "rounds": 2,
+  "minute": 30.0,
+  "windows": 48,
+  "states": {
+   "collected": 48
+  },
+  "lab_core_hours": 2.08,
+  "cluster_core_hours": 0,
+  "refused": 0,
+  "cluster_refused": 0,
+  "approvals": 0,
+  "retries": 0,
+  "retry_successes": 0,
+  "lab_peak_workers": 4
+ },
+ "tasks": {
+  "0711_c2~4-6__w4": {
+   "outcome": {
+    "status": "accept",
+    "args": {
+     "confidence": null
+    },
+    "steps": 0,
+    "failed_steps": 0,
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "call_ms": 0,
+    "note": "no failing check; diagnostician not called"
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 19.349802205433424,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 805.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_minus; profile window value 19.350 %/h (real-movie profile window s <= 996 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 3.1716865917742085,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1086.4883639307886,
+     "where_frame_pair": 17,
+     "detail": "tip path 188.7 px/h; base at s = 1086 px; largest single-pair residual at pair 17"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 234.18917359873234,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 1040.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 9.97 %/h, predicted -224.22 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 19.349802205433424,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 805.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_minus; profile window value 19.350 %/h (real-movie profile window s <= 996 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 3.1716865917742085,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1086.4883639307886,
+     "where_frame_pair": 17,
+     "detail": "tip path 188.7 px/h; base at s = 1086 px; largest single-pair residual at pair 17"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 234.18917359873234,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 1040.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 9.97 %/h, predicted -224.22 %/h"
+    }
+   ],
+   "condition": "control",
+   "root_id": "0711_c2",
+   "window_h": [
+    4.0,
+    6.0
+   ]
+  },
+  "0711_c2~11-13__w11": {
+   "outcome": {
+    "status": "accept",
+    "args": {
+     "confidence": null
+    },
+    "steps": 0,
+    "failed_steps": 0,
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "call_ms": 0,
+    "note": "no failing check; diagnostician not called"
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 11.593563543314357,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 670.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 11.594 %/h (real-movie profile window s <= 996 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 4.00757835819283,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1074.274147776557,
+     "where_frame_pair": 67,
+     "detail": "tip path 137.7 px/h; base at s = 1074 px; largest single-pair residual at pair 67"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 199.88436675526137,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 990.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 9.23 %/h, predicted -190.66 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 11.593563543314357,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 670.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 11.594 %/h (real-movie profile window s <= 996 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 4.00757835819283,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1074.274147776557,
+     "where_frame_pair": 67,
+     "detail": "tip path 137.7 px/h; base at s = 1074 px; largest single-pair residual at pair 67"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 199.88436675526137,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 990.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 9.23 %/h, predicted -190.66 %/h"
+    }
+   ],
+   "condition": "control",
+   "root_id": "0711_c2",
+   "window_h": [
+    11.0,
+    13.0
+   ]
+  },
+  "0711_c2~17-19__w17": {
+   "outcome": {
+    "status": "accept",
+    "args": {
+     "confidence": null
+    },
+    "steps": 0,
+    "failed_steps": 0,
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "call_ms": 0,
+    "note": "no failing check; diagnostician not called"
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 10.702216344025617,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 775.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 10.702 %/h (real-movie profile window s <= 997 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 0.5398230755796173,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1073.6610575185525,
+     "where_frame_pair": 23,
+     "detail": "tip path 186.7 px/h; base at s = 1074 px; largest single-pair residual at pair 23"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 344.12025813186835,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 15.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference -0.62 %/h, predicted -344.74 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 10.702216344025617,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 775.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 10.702 %/h (real-movie profile window s <= 997 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 0.5398230755796173,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1073.6610575185525,
+     "where_frame_pair": 23,
+     "detail": "tip path 186.7 px/h; base at s = 1074 px; largest single-pair residual at pair 23"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 344.12025813186835,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 15.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference -0.62 %/h, predicted -344.74 %/h"
+    }
+   ],
+   "condition": "control",
+   "root_id": "0711_c2",
+   "window_h": [
+    17.0,
+    19.0
+   ]
+  },
+  "0708_c5~4-6__w4": {
+   "outcome": {
+    "status": "accept",
+    "args": {
+     "confidence": null
+    },
+    "steps": 0,
+    "failed_steps": 0,
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "call_ms": 0,
+    "note": "no failing check; diagnostician not called"
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 81.49388868807756,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 180.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 81.494 %/h (real-movie profile window s <= 997 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 7.462793767433332,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1103.8830038331805,
+     "where_frame_pair": 64,
+     "detail": "tip path 145.9 px/h; base at s = 1104 px; largest single-pair residual at pair 64"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 313.3412335202697,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 650.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 4.07 %/h, predicted 317.41 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 81.49388868807756,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 180.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 81.494 %/h (real-movie profile window s <= 997 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 7.462793767433332,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1103.8830038331805,
+     "where_frame_pair": 64,
+     "detail": "tip path 145.9 px/h; base at s = 1104 px; largest single-pair residual at pair 64"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 313.3412335202697,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 650.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 4.07 %/h, predicted 317.41 %/h"
+    }
+   ],
+   "condition": "control",
+   "root_id": "0708_c5",
+   "window_h": [
+    4.0,
+    6.0
+   ]
+  },
+  "0708_c5~11-13__w11": {
+   "outcome": {
+    "status": "accept",
+    "args": {
+     "confidence": null
+    },
+    "steps": 0,
+    "failed_steps": 0,
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "call_ms": 0,
+    "note": "no failing check; diagnostician not called"
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 20.73313556514912,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 1025.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_minus; profile window value 14.030 %/h (real-movie profile window s <= 997 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 0.22738401059065436,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1068.336260479759,
+     "where_frame_pair": 65,
+     "detail": "tip path 156.1 px/h; base at s = 1068 px; largest single-pair residual at pair 65"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 171.77730914113775,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 600.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 4.05 %/h, predicted -167.73 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 20.73313556514912,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 1025.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_minus; profile window value 14.030 %/h (real-movie profile window s <= 997 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 0.22738401059065436,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1068.336260479759,
+     "where_frame_pair": 65,
+     "detail": "tip path 156.1 px/h; base at s = 1068 px; largest single-pair residual at pair 65"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 171.77730914113775,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 600.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 4.05 %/h, predicted -167.73 %/h"
+    }
+   ],
+   "condition": "control",
+   "root_id": "0708_c5",
+   "window_h": [
+    11.0,
+    13.0
+   ]
+  },
+  "0708_c5~17-19__w17": {
+   "outcome": {
+    "status": "accept",
+    "args": {
+     "confidence": null
+    },
+    "steps": 0,
+    "failed_steps": 0,
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "call_ms": 0,
+    "note": "no failing check; diagnostician not called"
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 119.21129821577908,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 255.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_minus; profile window value 119.211 %/h (real-movie profile window s <= 997 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 3.2197412309778195,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1061.4694992442917,
+     "where_frame_pair": 71,
+     "detail": "tip path 126.2 px/h; base at s = 1061 px; largest single-pair residual at pair 71"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 272.5898774345859,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 1045.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 11.19 %/h, predicted 283.78 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 119.21129821577908,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 255.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_minus; profile window value 119.211 %/h (real-movie profile window s <= 997 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 3.2197412309778195,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1061.4694992442917,
+     "where_frame_pair": 71,
+     "detail": "tip path 126.2 px/h; base at s = 1061 px; largest single-pair residual at pair 71"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 272.5898774345859,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 1045.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 11.19 %/h, predicted 283.78 %/h"
+    }
+   ],
+   "condition": "control",
+   "root_id": "0708_c5",
+   "window_h": [
+    17.0,
+    19.0
+   ]
+  },
+  "0714_c10~4-6__w4": {
+   "outcome": {
+    "status": "accept",
+    "args": {
+     "confidence": null
+    },
+    "steps": 0,
+    "failed_steps": 0,
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "call_ms": 0,
+    "note": "no failing check; diagnostician not called"
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 67.35415725439222,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 85.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_plus; profile window value 67.354 %/h (real-movie profile window s <= 951 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 2.7843512780976165,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1063.2707433000085,
+     "where_frame_pair": 20,
+     "detail": "tip path 127.4 px/h; base at s = 1063 px; largest single-pair residual at pair 20"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 212.99818263585712,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 885.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 6.98 %/h, predicted 219.98 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 67.35415725439222,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 85.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_plus; profile window value 67.354 %/h (real-movie profile window s <= 951 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 2.7843512780976165,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1063.2707433000085,
+     "where_frame_pair": 20,
+     "detail": "tip path 127.4 px/h; base at s = 1063 px; largest single-pair residual at pair 20"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 212.99818263585712,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 885.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 6.98 %/h, predicted 219.98 %/h"
+    }
+   ],
+   "condition": "control",
+   "root_id": "0714_c10",
+   "window_h": [
+    4.0,
+    6.0
+   ]
+  },
+  "0714_c10~11-13__w11": {
+   "outcome": {
+    "status": "accept",
+    "args": {
+     "confidence": null
+    },
+    "steps": 0,
+    "failed_steps": 0,
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "call_ms": 0,
+    "note": "no failing check; diagnostician not called"
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 16.68164227847218,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 785.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 16.682 %/h (real-movie profile window s <= 995 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 2.643150069314597,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1076.8137314192084,
+     "where_frame_pair": 48,
+     "detail": "tip path 120.5 px/h; base at s = 1077 px; largest single-pair residual at pair 48"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 226.72475697318635,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 875.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference -12.17 %/h, predicted 214.56 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 16.68164227847218,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 785.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 16.682 %/h (real-movie profile window s <= 995 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 2.643150069314597,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1076.8137314192084,
+     "where_frame_pair": 48,
+     "detail": "tip path 120.5 px/h; base at s = 1077 px; largest single-pair residual at pair 48"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 226.72475697318635,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 875.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference -12.17 %/h, predicted 214.56 %/h"
+    }
+   ],
+   "condition": "control",
+   "root_id": "0714_c10",
+   "window_h": [
+    11.0,
+    13.0
+   ]
+  },
+  "0714_c10~17-19__w17": {
+   "outcome": {
+    "status": "accept",
+    "args": {
+     "confidence": null
+    },
+    "steps": 0,
+    "failed_steps": 0,
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "call_ms": 0,
+    "note": "no failing check; diagnostician not called"
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 12.781986611039985,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 515.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 12.782 %/h (real-movie profile window s <= 996 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 1.71669329579521,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1058.7896829087872,
+     "where_frame_pair": 32,
+     "detail": "tip path 114.4 px/h; base at s = 1059 px; largest single-pair residual at pair 32"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 182.8908747797042,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 1030.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference -2.62 %/h, predicted 180.27 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 12.781986611039985,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 515.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 12.782 %/h (real-movie profile window s <= 996 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 1.71669329579521,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1058.7896829087872,
+     "where_frame_pair": 32,
+     "detail": "tip path 114.4 px/h; base at s = 1059 px; largest single-pair residual at pair 32"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 182.8908747797042,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 1030.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference -2.62 %/h, predicted 180.27 %/h"
+    }
+   ],
+   "condition": "control",
+   "root_id": "0714_c10",
+   "window_h": [
+    17.0,
+    19.0
+   ]
+  },
+  "0721_c1~4-6__w4": {
+   "outcome": {
+    "task_id": "0721_c1~4-6__w4",
+    "agent": "diagnostician",
+    "status": "decline",
+    "args": {
+     "fault": "bad_stage_correction",
+     "reason": "Closure fails (32.1 vs 19.0 px/h), and the whole residual sits at the stage moves (6.74 px), so the logged stage correction doesn't match the image motion. Registering the frames made closure worse (34.7 px/h) and was rolled back. It has no other setting, and no other fault has evidence."
+    },
+    "steps": 3,
+    "failed_steps": 0,
+    "calls": 3,
+    "input_tokens": 11585,
+    "output_tokens": 1876,
+    "call_ms": 21199
+   },
+   "remedies": [
+    "frames registered on the non-growing tissue (from 1120 px from the tip) before tracking",
+    "rolled back: frames registered on the non-growing tissue (from 1120 px from the tip) before tracking"
+   ],
+   "roll_backs": 1,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 23.525667556865585,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 130.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_plus; profile window value 23.526 %/h (real-movie profile window s <= 995 px)"
+    },
+    {
+     "check": "closure",
+     "passed": false,
+     "value": 32.10363913359814,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1121.8248788966112,
+     "where_frame_pair": 41,
+     "detail": "tip path 277.6 px/h; base at s = 1122 px; largest single-pair residual at pair 41"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 730.9072728358382,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 30.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 28.97 %/h, predicted 759.87 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 23.525667556865585,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 130.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_plus; profile window value 23.526 %/h (real-movie profile window s <= 995 px)"
+    },
+    {
+     "check": "closure",
+     "passed": false,
+     "value": 32.10363913359814,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1121.8248788966112,
+     "where_frame_pair": 41,
+     "detail": "tip path 277.6 px/h; base at s = 1122 px; largest single-pair residual at pair 41"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 730.9072728358382,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 30.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 28.97 %/h, predicted 759.87 %/h"
+    }
+   ],
+   "condition": "control",
+   "root_id": "0721_c1",
+   "window_h": [
+    4.0,
+    6.0
+   ]
+  },
+  "0721_c1~11-13__w11": {
+   "outcome": {
+    "status": "accept",
+    "args": {
+     "confidence": null
+    },
+    "steps": 0,
+    "failed_steps": 0,
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "call_ms": 0,
+    "note": "no failing check; diagnostician not called"
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 9.850246464684284,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 725.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 9.850 %/h (real-movie profile window s <= 997 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 1.0613685240233115,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1076.2204710036933,
+     "where_frame_pair": 16,
+     "detail": "tip path 138.4 px/h; base at s = 1076 px; largest single-pair residual at pair 16"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 208.16943446643128,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 680.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference -3.03 %/h, predicted 205.14 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 9.850246464684284,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 725.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 9.850 %/h (real-movie profile window s <= 997 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 1.0613685240233115,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1076.2204710036933,
+     "where_frame_pair": 16,
+     "detail": "tip path 138.4 px/h; base at s = 1076 px; largest single-pair residual at pair 16"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 208.16943446643128,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 680.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference -3.03 %/h, predicted 205.14 %/h"
+    }
+   ],
+   "condition": "control",
+   "root_id": "0721_c1",
+   "window_h": [
+    11.0,
+    13.0
+   ]
+  },
+  "0721_c1~17-19__w17": {
+   "outcome": {
+    "status": "accept",
+    "args": {
+     "confidence": null
+    },
+    "steps": 0,
+    "failed_steps": 0,
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "call_ms": 0,
+    "note": "no failing check; diagnostician not called"
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 12.491756561968058,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 1020.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 11.307 %/h (real-movie profile window s <= 998 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 3.816852611964759,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1071.1925808050562,
+     "where_frame_pair": 51,
+     "detail": "tip path 100.1 px/h; base at s = 1071 px; largest single-pair residual at pair 51"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 152.73630657090087,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 960.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference -3.24 %/h, predicted -155.98 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 12.491756561968058,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 1020.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 11.307 %/h (real-movie profile window s <= 998 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 3.816852611964759,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1071.1925808050562,
+     "where_frame_pair": 51,
+     "detail": "tip path 100.1 px/h; base at s = 1071 px; largest single-pair residual at pair 51"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 152.73630657090087,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 960.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference -3.24 %/h, predicted -155.98 %/h"
+    }
+   ],
+   "condition": "control",
+   "root_id": "0721_c1",
+   "window_h": [
+    17.0,
+    19.0
+   ]
+  },
+  "0711_c4~4-6__w4": {
+   "outcome": {
+    "status": "accept",
+    "args": {
+     "confidence": null
+    },
+    "steps": 0,
+    "failed_steps": 0,
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "call_ms": 0,
+    "note": "no failing check; diagnostician not called"
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 25.911922058723782,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 40.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_minus; profile window value 25.912 %/h (real-movie profile window s <= 921 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 9.032486501373786,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1066.1378928433794,
+     "where_frame_pair": 16,
+     "detail": "tip path 177.3 px/h; base at s = 1066 px; largest single-pair residual at pair 16"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 284.48086808097173,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 1085.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference -4.41 %/h, predicted -288.89 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 25.911922058723782,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 40.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_minus; profile window value 25.912 %/h (real-movie profile window s <= 921 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 9.032486501373786,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1066.1378928433794,
+     "where_frame_pair": 16,
+     "detail": "tip path 177.3 px/h; base at s = 1066 px; largest single-pair residual at pair 16"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 284.48086808097173,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 1085.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference -4.41 %/h, predicted -288.89 %/h"
+    }
+   ],
+   "condition": "control",
+   "root_id": "0711_c4",
+   "window_h": [
+    4.0,
+    6.0
+   ]
+  },
+  "0711_c4~11-13__w11": {
+   "outcome": {
+    "status": "accept",
+    "args": {
+     "confidence": null
+    },
+    "steps": 0,
+    "failed_steps": 0,
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "call_ms": 0,
+    "note": "no failing check; diagnostician not called"
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 8.112483462865008,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 890.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 8.112 %/h (real-movie profile window s <= 996 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 6.603685182784107,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1113.4116017004212,
+     "where_frame_pair": 10,
+     "detail": "tip path 190.0 px/h; base at s = 1113 px; largest single-pair residual at pair 10"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 315.10152935550457,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 710.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 4.73 %/h, predicted -310.37 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 8.112483462865008,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 890.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 8.112 %/h (real-movie profile window s <= 996 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 6.603685182784107,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1113.4116017004212,
+     "where_frame_pair": 10,
+     "detail": "tip path 190.0 px/h; base at s = 1113 px; largest single-pair residual at pair 10"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 315.10152935550457,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 710.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 4.73 %/h, predicted -310.37 %/h"
+    }
+   ],
+   "condition": "control",
+   "root_id": "0711_c4",
+   "window_h": [
+    11.0,
+    13.0
+   ]
+  },
+  "0711_c4~17-19__w17": {
+   "outcome": {
+    "status": "accept",
+    "args": {
+     "confidence": null
+    },
+    "steps": 0,
+    "failed_steps": 0,
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "call_ms": 0,
+    "note": "no failing check; diagnostician not called"
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 14.599569695875404,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 955.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_plus; profile window value 14.600 %/h (real-movie profile window s <= 997 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 0.7291075890645548,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1111.5816076298647,
+     "where_frame_pair": 78,
+     "detail": "tip path 142.4 px/h; base at s = 1112 px; largest single-pair residual at pair 78"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 227.71615302657543,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 1010.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 11.21 %/h, predicted -216.51 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 14.599569695875404,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 955.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_plus; profile window value 14.600 %/h (real-movie profile window s <= 997 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 0.7291075890645548,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1111.5816076298647,
+     "where_frame_pair": 78,
+     "detail": "tip path 142.4 px/h; base at s = 1112 px; largest single-pair residual at pair 78"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 227.71615302657543,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 1010.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 11.21 %/h, predicted -216.51 %/h"
+    }
+   ],
+   "condition": "control",
+   "root_id": "0711_c4",
+   "window_h": [
+    17.0,
+    19.0
+   ]
+  },
+  "0708_m12~4-6__w4": {
+   "outcome": {
+    "status": "accept",
+    "args": {
+     "confidence": null
+    },
+    "steps": 0,
+    "failed_steps": 0,
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "call_ms": 0,
+    "note": "no failing check; diagnostician not called"
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 13.774145485122267,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 1075.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_minus; profile window value 10.477 %/h (real-movie profile window s <= 982 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 3.342868361610902,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1074.513304009864,
+     "where_frame_pair": 6,
+     "detail": "tip path 129.0 px/h; base at s = 1075 px; largest single-pair residual at pair 6"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 189.03201979803325,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 810.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 26.77 %/h, predicted -162.26 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 13.774145485122267,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 1075.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_minus; profile window value 10.477 %/h (real-movie profile window s <= 982 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 3.342868361610902,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1074.513304009864,
+     "where_frame_pair": 6,
+     "detail": "tip path 129.0 px/h; base at s = 1075 px; largest single-pair residual at pair 6"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 189.03201979803325,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 810.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 26.77 %/h, predicted -162.26 %/h"
+    }
+   ],
+   "condition": "mannitol",
+   "root_id": "0708_m12",
+   "window_h": [
+    4.0,
+    6.0
+   ]
+  },
+  "0708_m12~11-13__w11": {
+   "outcome": {
+    "status": "accept",
+    "args": {
+     "confidence": null
+    },
+    "steps": 0,
+    "failed_steps": 0,
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "call_ms": 0,
+    "note": "no failing check; diagnostician not called"
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 24.291303056702564,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 470.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_minus; profile window value 24.291 %/h (real-movie profile window s <= 996 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 11.136112819751471,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1107.0224484275318,
+     "where_frame_pair": 12,
+     "detail": "tip path 144.0 px/h; base at s = 1107 px; largest single-pair residual at pair 12"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 223.03838516901308,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 830.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 6.34 %/h, predicted -216.70 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 24.291303056702564,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 470.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_minus; profile window value 24.291 %/h (real-movie profile window s <= 996 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 11.136112819751471,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1107.0224484275318,
+     "where_frame_pair": 12,
+     "detail": "tip path 144.0 px/h; base at s = 1107 px; largest single-pair residual at pair 12"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 223.03838516901308,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 830.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 6.34 %/h, predicted -216.70 %/h"
+    }
+   ],
+   "condition": "mannitol",
+   "root_id": "0708_m12",
+   "window_h": [
+    11.0,
+    13.0
+   ]
+  },
+  "0708_m12~17-19__w17": {
+   "outcome": {
+    "status": "accept",
+    "args": {
+     "confidence": null
+    },
+    "steps": 0,
+    "failed_steps": 0,
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "call_ms": 0,
+    "note": "no failing check; diagnostician not called"
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 43.924852467952675,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 900.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 43.925 %/h (real-movie profile window s <= 997 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 2.473611941497229,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1097.8168747987906,
+     "where_frame_pair": 13,
+     "detail": "tip path 160.4 px/h; base at s = 1098 px; largest single-pair residual at pair 13"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 190.2127594705242,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 720.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference -8.05 %/h, predicted 182.16 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 43.924852467952675,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 900.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 43.925 %/h (real-movie profile window s <= 997 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 2.473611941497229,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1097.8168747987906,
+     "where_frame_pair": 13,
+     "detail": "tip path 160.4 px/h; base at s = 1098 px; largest single-pair residual at pair 13"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 190.2127594705242,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 720.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference -8.05 %/h, predicted 182.16 %/h"
+    }
+   ],
+   "condition": "mannitol",
+   "root_id": "0708_m12",
+   "window_h": [
+    17.0,
+    19.0
+   ]
+  },
+  "0711_m6~4-6__w4": {
+   "outcome": {
+    "status": "accept",
+    "args": {
+     "confidence": null
+    },
+    "steps": 0,
+    "failed_steps": 0,
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "call_ms": 0,
+    "note": "no failing check; diagnostician not called"
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 92.3940348188725,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 830.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_minus; profile window value 92.394 %/h (real-movie profile window s <= 997 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 0.8072343240421032,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1050.7473242019532,
+     "where_frame_pair": 1,
+     "detail": "tip path 143.1 px/h; base at s = 1051 px; largest single-pair residual at pair 1"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 189.0401296902725,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 15.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 1.64 %/h, predicted -187.40 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 92.3940348188725,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 830.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_minus; profile window value 92.394 %/h (real-movie profile window s <= 997 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 0.8072343240421032,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1050.7473242019532,
+     "where_frame_pair": 1,
+     "detail": "tip path 143.1 px/h; base at s = 1051 px; largest single-pair residual at pair 1"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 189.0401296902725,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 15.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 1.64 %/h, predicted -187.40 %/h"
+    }
+   ],
+   "condition": "mannitol",
+   "root_id": "0711_m6",
+   "window_h": [
+    4.0,
+    6.0
+   ]
+  },
+  "0711_m6~11-13__w11": {
+   "outcome": {
+    "status": "accept",
+    "args": {
+     "confidence": null
+    },
+    "steps": 0,
+    "failed_steps": 0,
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "call_ms": 0,
+    "note": "no failing check; diagnostician not called"
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 9.510246126514925,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 490.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 9.510 %/h (real-movie profile window s <= 998 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 6.496389121386732,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1068.1873954771859,
+     "where_frame_pair": 29,
+     "detail": "tip path 154.5 px/h; base at s = 1068 px; largest single-pair residual at pair 29"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 200.44767349877904,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 620.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference -0.02 %/h, predicted 200.42 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 9.510246126514925,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 490.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 9.510 %/h (real-movie profile window s <= 998 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 6.496389121386732,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1068.1873954771859,
+     "where_frame_pair": 29,
+     "detail": "tip path 154.5 px/h; base at s = 1068 px; largest single-pair residual at pair 29"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 200.44767349877904,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 620.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference -0.02 %/h, predicted 200.42 %/h"
+    }
+   ],
+   "condition": "mannitol",
+   "root_id": "0711_m6",
+   "window_h": [
+    11.0,
+    13.0
+   ]
+  },
+  "0711_m6~17-19__w17": {
+   "outcome": {
+    "status": "accept",
+    "args": {
+     "confidence": null
+    },
+    "steps": 0,
+    "failed_steps": 0,
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "call_ms": 0,
+    "note": "no failing check; diagnostician not called"
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 10.37088342305943,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 995.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 10.371 %/h (real-movie profile window s <= 997 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 2.761522718218209,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1074.7714247759661,
+     "where_frame_pair": 7,
+     "detail": "tip path 137.0 px/h; base at s = 1075 px; largest single-pair residual at pair 7"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 409.2637426196285,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 615.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 4.53 %/h, predicted 413.80 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 10.37088342305943,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 995.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 10.371 %/h (real-movie profile window s <= 997 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 2.761522718218209,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1074.7714247759661,
+     "where_frame_pair": 7,
+     "detail": "tip path 137.0 px/h; base at s = 1075 px; largest single-pair residual at pair 7"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 409.2637426196285,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 615.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 4.53 %/h, predicted 413.80 %/h"
+    }
+   ],
+   "condition": "mannitol",
+   "root_id": "0711_m6",
+   "window_h": [
+    17.0,
+    19.0
+   ]
+  },
+  "0714_m10~4-6__w4": {
+   "outcome": {
+    "status": "accept",
+    "args": {
+     "confidence": null
+    },
+    "steps": 0,
+    "failed_steps": 0,
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "call_ms": 0,
+    "note": "no failing check; diagnostician not called"
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 41.580426805003675,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 645.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_minus; profile window value 41.580 %/h (real-movie profile window s <= 997 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 4.727699351043245,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1044.659738370303,
+     "where_frame_pair": 44,
+     "detail": "tip path 120.1 px/h; base at s = 1045 px; largest single-pair residual at pair 44"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 149.4737580597874,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 385.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference -9.19 %/h, predicted 140.28 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 41.580426805003675,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 645.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_minus; profile window value 41.580 %/h (real-movie profile window s <= 997 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 4.727699351043245,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1044.659738370303,
+     "where_frame_pair": 44,
+     "detail": "tip path 120.1 px/h; base at s = 1045 px; largest single-pair residual at pair 44"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 149.4737580597874,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 385.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference -9.19 %/h, predicted 140.28 %/h"
+    }
+   ],
+   "condition": "mannitol",
+   "root_id": "0714_m10",
+   "window_h": [
+    4.0,
+    6.0
+   ]
+  },
+  "0714_m10~11-13__w11": {
+   "outcome": {
+    "status": "accept",
+    "args": {
+     "confidence": null
+    },
+    "steps": 0,
+    "failed_steps": 0,
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "call_ms": 0,
+    "note": "no failing check; diagnostician not called"
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 13.99941226063958,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 1035.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_plus; profile window value 10.216 %/h (real-movie profile window s <= 996 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 1.4160346414421752,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1057.267360000013,
+     "where_frame_pair": 39,
+     "detail": "tip path 147.2 px/h; base at s = 1057 px; largest single-pair residual at pair 39"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 231.31245226200264,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 1045.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 0.21 %/h, predicted 231.52 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 13.99941226063958,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 1035.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_plus; profile window value 10.216 %/h (real-movie profile window s <= 996 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 1.4160346414421752,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1057.267360000013,
+     "where_frame_pair": 39,
+     "detail": "tip path 147.2 px/h; base at s = 1057 px; largest single-pair residual at pair 39"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 231.31245226200264,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 1045.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 0.21 %/h, predicted 231.52 %/h"
+    }
+   ],
+   "condition": "mannitol",
+   "root_id": "0714_m10",
+   "window_h": [
+    11.0,
+    13.0
+   ]
+  },
+  "0714_m10~17-19__w17": {
+   "outcome": {
+    "task_id": "0714_m10~17-19__w17",
+    "agent": "diagnostician",
+    "status": "decline",
+    "args": {
+     "fault": "midline_jitter",
+     "reason": "Closure still fails after light midline smoothing, which was rolled back. Closure rose from 34.4 to 39.8 px/h against a threshold of 19 px/h. Light is the only setting for smooth_midline, and no other fault has its own evidence, so the strain-rate measurement cannot be trusted."
+    },
+    "steps": 6,
+    "failed_steps": 0,
+    "calls": 6,
+    "input_tokens": 29545,
+    "output_tokens": 2557,
+    "call_ms": 29883
+   },
+   "remedies": [
+    "midline source smoothed (light)",
+    "rolled back: midline source smoothed (light)"
+   ],
+   "roll_backs": 1,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 23.993911337203556,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 245.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 23.994 %/h (real-movie profile window s <= 995 px)"
+    },
+    {
+     "check": "closure",
+     "passed": false,
+     "value": 34.36774823093088,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1055.5072921507513,
+     "where_frame_pair": 58,
+     "detail": "tip path 584.0 px/h; base at s = 1056 px; largest single-pair residual at pair 58"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 241.39200641490888,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 25.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference -7.47 %/h, predicted -248.87 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 23.993911337203556,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 245.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 23.994 %/h (real-movie profile window s <= 995 px)"
+    },
+    {
+     "check": "closure",
+     "passed": false,
+     "value": 34.36774823093088,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1055.5072921507513,
+     "where_frame_pair": 58,
+     "detail": "tip path 584.0 px/h; base at s = 1056 px; largest single-pair residual at pair 58"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 241.39200641490888,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 25.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference -7.47 %/h, predicted -248.87 %/h"
+    }
+   ],
+   "condition": "mannitol",
+   "root_id": "0714_m10",
+   "window_h": [
+    17.0,
+    19.0
+   ]
+  },
+  "0727_mm6~4-6__w4": {
+   "outcome": {
+    "status": "accept",
+    "args": {
+     "confidence": null
+    },
+    "steps": 0,
+    "failed_steps": 0,
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "call_ms": 0,
+    "note": "no failing check; diagnostician not called"
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 3.4290889011534094,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 265.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 3.429 %/h (real-movie profile window s <= 995 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 1.3416314567512522,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 996.886313070025,
+     "where_frame_pair": 62,
+     "detail": "tip path 99.0 px/h; base at s = 997 px; largest single-pair residual at pair 62"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 169.273135101143,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 150.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 5.19 %/h, predicted 174.46 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 3.4290889011534094,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 265.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 3.429 %/h (real-movie profile window s <= 995 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 1.3416314567512522,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 996.886313070025,
+     "where_frame_pair": 62,
+     "detail": "tip path 99.0 px/h; base at s = 997 px; largest single-pair residual at pair 62"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 169.273135101143,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 150.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 5.19 %/h, predicted 174.46 %/h"
+    }
+   ],
+   "condition": "mannitol then mannitol",
+   "root_id": "0727_mm6",
+   "window_h": [
+    4.0,
+    6.0
+   ]
+  },
+  "0727_mm6~11-13__w11": {
+   "outcome": {
+    "status": "accept",
+    "args": {
+     "confidence": null
+    },
+    "steps": 0,
+    "failed_steps": 0,
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "call_ms": 0,
+    "note": "no failing check; diagnostician not called"
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 4.821933441331046,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 220.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_plus; profile window value 4.822 %/h (real-movie profile window s <= 996 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 2.6462722989852128,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 997.6051471727557,
+     "where_frame_pair": 45,
+     "detail": "tip path 333.6 px/h; base at s = 998 px; largest single-pair residual at pair 45"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 136.61086727862153,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 650.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference -1.43 %/h, predicted 135.18 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 4.821933441331046,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 220.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_plus; profile window value 4.822 %/h (real-movie profile window s <= 996 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 2.6462722989852128,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 997.6051471727557,
+     "where_frame_pair": 45,
+     "detail": "tip path 333.6 px/h; base at s = 998 px; largest single-pair residual at pair 45"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 136.61086727862153,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 650.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference -1.43 %/h, predicted 135.18 %/h"
+    }
+   ],
+   "condition": "mannitol then mannitol",
+   "root_id": "0727_mm6",
+   "window_h": [
+    11.0,
+    13.0
+   ]
+  },
+  "0727_mm6~17-19__w17": {
+   "outcome": {
+    "status": "accept",
+    "args": {
+     "confidence": null
+    },
+    "steps": 0,
+    "failed_steps": 0,
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "call_ms": 0,
+    "note": "no failing check; diagnostician not called"
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 4.450026823966522,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 885.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 4.450 %/h (real-movie profile window s <= 996 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 0.715486807866958,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 997.0031564412033,
+     "where_frame_pair": 57,
+     "detail": "tip path 454.0 px/h; base at s = 997 px; largest single-pair residual at pair 57"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 223.16016283614078,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 105.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference -0.98 %/h, predicted 222.18 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 4.450026823966522,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 885.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 4.450 %/h (real-movie profile window s <= 996 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 0.715486807866958,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 997.0031564412033,
+     "where_frame_pair": 57,
+     "detail": "tip path 454.0 px/h; base at s = 997 px; largest single-pair residual at pair 57"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 223.16016283614078,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 105.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference -0.98 %/h, predicted 222.18 %/h"
+    }
+   ],
+   "condition": "mannitol then mannitol",
+   "root_id": "0727_mm6",
+   "window_h": [
+    17.0,
+    19.0
+   ]
+  },
+  "0708_m8~4-6__w4": {
+   "outcome": {
+    "task_id": "0708_m8~4-6__w4",
+    "agent": "diagnostician",
+    "status": "decline",
+    "args": {
+     "fault": "bad_stage_correction",
+     "reason": "All of the closure residual (48.42 px/h) occurs at the 79 logged stage moves, with 0.0 px/h elsewhere, and velocity jumps by 22.49 px/h at each move. This shows the logged moves were corrected wrongly, which no listed remedy fixes, so the kinematics cannot be trusted."
+    },
+    "steps": 2,
+    "failed_steps": 0,
+    "calls": 2,
+    "input_tokens": 7350,
+    "output_tokens": 1961,
+    "call_ms": 20965
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 63.102661047609686,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 835.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 63.103 %/h (real-movie profile window s <= 982 px)"
+    },
+    {
+     "check": "closure",
+     "passed": false,
+     "value": 48.42267174835327,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1053.9539356737653,
+     "where_frame_pair": 20,
+     "detail": "tip path 541.9 px/h; base at s = 1054 px; largest single-pair residual at pair 20"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 235.17232345605805,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 420.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 0.68 %/h, predicted -234.49 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 63.102661047609686,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 835.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 63.103 %/h (real-movie profile window s <= 982 px)"
+    },
+    {
+     "check": "closure",
+     "passed": false,
+     "value": 48.42267174835327,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1053.9539356737653,
+     "where_frame_pair": 20,
+     "detail": "tip path 541.9 px/h; base at s = 1054 px; largest single-pair residual at pair 20"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 235.17232345605805,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 420.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 0.68 %/h, predicted -234.49 %/h"
+    }
+   ],
+   "condition": "mannitol",
+   "root_id": "0708_m8",
+   "window_h": [
+    4.0,
+    6.0
+   ]
+  },
+  "0708_m8~11-13__w11": {
+   "outcome": {
+    "status": "accept",
+    "args": {
+     "confidence": null
+    },
+    "steps": 0,
+    "failed_steps": 0,
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "call_ms": 0,
+    "note": "no failing check; diagnostician not called"
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 34.20929411909753,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 500.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_plus; profile window value 34.209 %/h (real-movie profile window s <= 997 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 1.0759171513575705,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1091.5346967060823,
+     "where_frame_pair": 16,
+     "detail": "tip path 121.2 px/h; base at s = 1092 px; largest single-pair residual at pair 16"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 381.9586521331981,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 670.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 8.98 %/h, predicted 390.94 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 34.20929411909753,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 500.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_plus; profile window value 34.209 %/h (real-movie profile window s <= 997 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 1.0759171513575705,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1091.5346967060823,
+     "where_frame_pair": 16,
+     "detail": "tip path 121.2 px/h; base at s = 1092 px; largest single-pair residual at pair 16"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 381.9586521331981,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 670.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 8.98 %/h, predicted 390.94 %/h"
+    }
+   ],
+   "condition": "mannitol",
+   "root_id": "0708_m8",
+   "window_h": [
+    11.0,
+    13.0
+   ]
+  },
+  "0708_m8~17-19__w17": {
+   "outcome": {
+    "task_id": "0708_m8~17-19__w17",
+    "agent": "diagnostician",
+    "status": "decline",
+    "args": {
+     "fault": "bad_stage_correction",
+     "reason": "The closure residual occurs only at the 79 logged stage moves (23.32 px/h at moves, 0.0 elsewhere), with a matching 23.98 px/h velocity jump at each move. The logged stage correction is being applied wrongly, and no listed remedy corrects the stage log."
+    },
+    "steps": 2,
+    "failed_steps": 0,
+    "calls": 2,
+    "input_tokens": 7346,
+    "output_tokens": 1399,
+    "call_ms": 15345
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 66.49972644184477,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 985.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 66.500 %/h (real-movie profile window s <= 998 px)"
+    },
+    {
+     "check": "closure",
+     "passed": false,
+     "value": 23.317298986329043,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1050.2914012844205,
+     "where_frame_pair": 2,
+     "detail": "tip path 164.8 px/h; base at s = 1050 px; largest single-pair residual at pair 2"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 156.12291696248514,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 1040.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference -25.94 %/h, predicted 130.18 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 66.49972644184477,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 985.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 66.500 %/h (real-movie profile window s <= 998 px)"
+    },
+    {
+     "check": "closure",
+     "passed": false,
+     "value": 23.317298986329043,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1050.2914012844205,
+     "where_frame_pair": 2,
+     "detail": "tip path 164.8 px/h; base at s = 1050 px; largest single-pair residual at pair 2"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 156.12291696248514,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 1040.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference -25.94 %/h, predicted 130.18 %/h"
+    }
+   ],
+   "condition": "mannitol",
+   "root_id": "0708_m8",
+   "window_h": [
+    17.0,
+    19.0
+   ]
+  },
+  "0721_m10~4-6__w4": {
+   "outcome": {
+    "status": "accept",
+    "args": {
+     "confidence": null
+    },
+    "steps": 0,
+    "failed_steps": 0,
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "call_ms": 0,
+    "note": "no failing check; diagnostician not called"
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 6.138076253637713,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 435.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_minus; profile window value 6.138 %/h (real-movie profile window s <= 996 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 2.186566408215223,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1065.148069381046,
+     "where_frame_pair": 68,
+     "detail": "tip path 133.4 px/h; base at s = 1065 px; largest single-pair residual at pair 68"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 307.4713697411862,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 90.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 0.10 %/h, predicted -307.37 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 6.138076253637713,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 435.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_minus; profile window value 6.138 %/h (real-movie profile window s <= 996 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 2.186566408215223,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1065.148069381046,
+     "where_frame_pair": 68,
+     "detail": "tip path 133.4 px/h; base at s = 1065 px; largest single-pair residual at pair 68"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 307.4713697411862,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 90.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 0.10 %/h, predicted -307.37 %/h"
+    }
+   ],
+   "condition": "mannitol then control",
+   "root_id": "0721_m10",
+   "window_h": [
+    4.0,
+    6.0
+   ]
+  },
+  "0721_m10~11-13__w11": {
+   "outcome": {
+    "status": "accept",
+    "args": {
+     "confidence": null
+    },
+    "steps": 0,
+    "failed_steps": 0,
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "call_ms": 0,
+    "note": "no failing check; diagnostician not called"
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 4.255007533451834,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 285.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 4.255 %/h (real-movie profile window s <= 997 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 5.5295539022061355,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1071.251811134157,
+     "where_frame_pair": 51,
+     "detail": "tip path 131.4 px/h; base at s = 1071 px; largest single-pair residual at pair 51"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 296.57264089192955,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 700.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 3.67 %/h, predicted 300.24 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 4.255007533451834,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 285.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 4.255 %/h (real-movie profile window s <= 997 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 5.5295539022061355,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1071.251811134157,
+     "where_frame_pair": 51,
+     "detail": "tip path 131.4 px/h; base at s = 1071 px; largest single-pair residual at pair 51"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 296.57264089192955,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 700.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 3.67 %/h, predicted 300.24 %/h"
+    }
+   ],
+   "condition": "mannitol then control",
+   "root_id": "0721_m10",
+   "window_h": [
+    11.0,
+    13.0
+   ]
+  },
+  "0721_m10~17-19__w17": {
+   "outcome": {
+    "task_id": "0721_m10~17-19__w17",
+    "agent": "diagnostician",
+    "status": "decline",
+    "args": {
+     "fault": "midline_jitter",
+     "reason": "Closure fails (27.9 > 19 px/h) and points to tip/midline jitter (tip second-difference RMS 7.11 px; tip path 189.6 vs net 127.5 \u00b5m/h), with texture and focus normal. The fix, light midline smoothing, can't run because there is no saved tracking data for that setting, so the measurement can't be corrected and should not be reported."
+    },
+    "steps": 7,
+    "failed_steps": 0,
+    "calls": 7,
+    "input_tokens": 35555,
+    "output_tokens": 4219,
+    "call_ms": 48928
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 8.308361698344514,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 360.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 8.308 %/h (real-movie profile window s <= 996 px)"
+    },
+    {
+     "check": "closure",
+     "passed": false,
+     "value": 27.888105139949644,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1071.868307715621,
+     "where_frame_pair": 19,
+     "detail": "tip path 90.1 px/h; base at s = 1072 px; largest single-pair residual at pair 19"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 158.14986368526655,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 735.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 4.38 %/h, predicted 162.53 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 8.308361698344514,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 360.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 8.308 %/h (real-movie profile window s <= 996 px)"
+    },
+    {
+     "check": "closure",
+     "passed": false,
+     "value": 27.888105139949644,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1071.868307715621,
+     "where_frame_pair": 19,
+     "detail": "tip path 90.1 px/h; base at s = 1072 px; largest single-pair residual at pair 19"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 158.14986368526655,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 735.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 4.38 %/h, predicted 162.53 %/h"
+    }
+   ],
+   "condition": "mannitol then control",
+   "root_id": "0721_m10",
+   "window_h": [
+    17.0,
+    19.0
+   ]
+  },
+  "0721_m4~4-6__w4": {
+   "outcome": {
+    "status": "accept",
+    "args": {
+     "confidence": null
+    },
+    "steps": 0,
+    "failed_steps": 0,
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "call_ms": 0,
+    "note": "no failing check; diagnostician not called"
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 9.597510927285134,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 370.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 9.598 %/h (real-movie profile window s <= 997 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 0.5757078881187906,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1069.013432715735,
+     "where_frame_pair": 8,
+     "detail": "tip path 126.5 px/h; base at s = 1069 px; largest single-pair residual at pair 8"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 176.41255309971993,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 515.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference -4.54 %/h, predicted -180.95 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 9.597510927285134,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 370.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 9.598 %/h (real-movie profile window s <= 997 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 0.5757078881187906,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1069.013432715735,
+     "where_frame_pair": 8,
+     "detail": "tip path 126.5 px/h; base at s = 1069 px; largest single-pair residual at pair 8"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 176.41255309971993,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 515.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference -4.54 %/h, predicted -180.95 %/h"
+    }
+   ],
+   "condition": "mannitol then control",
+   "root_id": "0721_m4",
+   "window_h": [
+    4.0,
+    6.0
+   ]
+  },
+  "0721_m4~11-13__w11": {
+   "outcome": {
+    "status": "accept",
+    "args": {
+     "confidence": null
+    },
+    "steps": 0,
+    "failed_steps": 0,
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "call_ms": 0,
+    "note": "no failing check; diagnostician not called"
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 4.1127944873687525,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 1045.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_plus; profile window value 3.937 %/h (real-movie profile window s <= 996 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 1.240072385029786,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1069.819815119194,
+     "where_frame_pair": 45,
+     "detail": "tip path 116.3 px/h; base at s = 1070 px; largest single-pair residual at pair 45"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 243.73877026780445,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 780.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 5.49 %/h, predicted -238.25 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 4.1127944873687525,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 1045.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_plus; profile window value 3.937 %/h (real-movie profile window s <= 996 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 1.240072385029786,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1069.819815119194,
+     "where_frame_pair": 45,
+     "detail": "tip path 116.3 px/h; base at s = 1070 px; largest single-pair residual at pair 45"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 243.73877026780445,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 780.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 5.49 %/h, predicted -238.25 %/h"
+    }
+   ],
+   "condition": "mannitol then control",
+   "root_id": "0721_m4",
+   "window_h": [
+    11.0,
+    13.0
+   ]
+  },
+  "0721_m4~17-19__w17": {
+   "outcome": {
+    "status": "accept",
+    "args": {
+     "confidence": null
+    },
+    "steps": 0,
+    "failed_steps": 0,
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "call_ms": 0,
+    "note": "no failing check; diagnostician not called"
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 12.432444032722618,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 70.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_minus; profile window value 12.432 %/h (real-movie profile window s <= 995 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 2.2095877292760098,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1089.3889681052228,
+     "where_frame_pair": 13,
+     "detail": "tip path 136.8 px/h; base at s = 1089 px; largest single-pair residual at pair 13"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 214.55055419567285,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 930.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 2.20 %/h, predicted 216.75 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 12.432444032722618,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 70.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_minus; profile window value 12.432 %/h (real-movie profile window s <= 995 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 2.2095877292760098,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1089.3889681052228,
+     "where_frame_pair": 13,
+     "detail": "tip path 136.8 px/h; base at s = 1089 px; largest single-pair residual at pair 13"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 214.55055419567285,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 930.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 2.20 %/h, predicted 216.75 %/h"
+    }
+   ],
+   "condition": "mannitol then control",
+   "root_id": "0721_m4",
+   "window_h": [
+    17.0,
+    19.0
+   ]
+  },
+  "0721_m9~4-6__w4": {
+   "outcome": {
+    "status": "accept",
+    "args": {
+     "confidence": null
+    },
+    "steps": 0,
+    "failed_steps": 0,
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "call_ms": 0,
+    "note": "no failing check; diagnostician not called"
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 9.07507590985939,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 895.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_minus; profile window value 9.075 %/h (real-movie profile window s <= 997 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 1.0073088498726015,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1019.8825635794354,
+     "where_frame_pair": 3,
+     "detail": "tip path 95.3 px/h; base at s = 1020 px; largest single-pair residual at pair 3"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 117.07951241284984,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 1005.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 9.30 %/h, predicted 126.38 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 9.07507590985939,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 895.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_minus; profile window value 9.075 %/h (real-movie profile window s <= 997 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 1.0073088498726015,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1019.8825635794354,
+     "where_frame_pair": 3,
+     "detail": "tip path 95.3 px/h; base at s = 1020 px; largest single-pair residual at pair 3"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 117.07951241284984,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 1005.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 9.30 %/h, predicted 126.38 %/h"
+    }
+   ],
+   "condition": "mannitol then control",
+   "root_id": "0721_m9",
+   "window_h": [
+    4.0,
+    6.0
+   ]
+  },
+  "0721_m9~11-13__w11": {
+   "outcome": {
+    "status": "accept",
+    "args": {
+     "confidence": null
+    },
+    "steps": 0,
+    "failed_steps": 0,
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "call_ms": 0,
+    "note": "no failing check; diagnostician not called"
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 5.700105223404852,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 870.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 5.700 %/h (real-movie profile window s <= 997 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 1.7753436063602113,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1081.4538051777547,
+     "where_frame_pair": 23,
+     "detail": "tip path 139.5 px/h; base at s = 1081 px; largest single-pair residual at pair 23"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 226.69961412316223,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 750.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference -5.04 %/h, predicted -231.74 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 5.700105223404852,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 870.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 5.700 %/h (real-movie profile window s <= 997 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 1.7753436063602113,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1081.4538051777547,
+     "where_frame_pair": 23,
+     "detail": "tip path 139.5 px/h; base at s = 1081 px; largest single-pair residual at pair 23"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 226.69961412316223,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 750.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference -5.04 %/h, predicted -231.74 %/h"
+    }
+   ],
+   "condition": "mannitol then control",
+   "root_id": "0721_m9",
+   "window_h": [
+    11.0,
+    13.0
+   ]
+  },
+  "0721_m9~17-19__w17": {
+   "outcome": {
+    "status": "accept",
+    "args": {
+     "confidence": null
+    },
+    "steps": 0,
+    "failed_steps": 0,
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "call_ms": 0,
+    "note": "no failing check; diagnostician not called"
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 86.12919285904059,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 85.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 86.129 %/h (real-movie profile window s <= 997 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 1.0919098069219821,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1081.737401938048,
+     "where_frame_pair": 25,
+     "detail": "tip path 132.7 px/h; base at s = 1082 px; largest single-pair residual at pair 25"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 165.3124189229482,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 815.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 1.86 %/h, predicted 167.17 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 86.12919285904059,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 85.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 86.129 %/h (real-movie profile window s <= 997 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 1.0919098069219821,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1081.737401938048,
+     "where_frame_pair": 25,
+     "detail": "tip path 132.7 px/h; base at s = 1082 px; largest single-pair residual at pair 25"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 165.3124189229482,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 815.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 1.86 %/h, predicted 167.17 %/h"
+    }
+   ],
+   "condition": "mannitol then control",
+   "root_id": "0721_m9",
+   "window_h": [
+    17.0,
+    19.0
+   ]
+  },
+  "0727_mc1~4-6__w4": {
+   "outcome": {
+    "status": "accept",
+    "args": {
+     "confidence": null
+    },
+    "steps": 0,
+    "failed_steps": 0,
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "call_ms": 0,
+    "note": "no failing check; diagnostician not called"
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 13.20728865917399,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 100.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_minus; profile window value 13.207 %/h (real-movie profile window s <= 996 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 4.458941499364056,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1094.6877164823368,
+     "where_frame_pair": 63,
+     "detail": "tip path 148.7 px/h; base at s = 1095 px; largest single-pair residual at pair 63"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 296.5844031050852,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 680.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 1.06 %/h, predicted -295.53 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 13.20728865917399,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 100.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_minus; profile window value 13.207 %/h (real-movie profile window s <= 996 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 4.458941499364056,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1094.6877164823368,
+     "where_frame_pair": 63,
+     "detail": "tip path 148.7 px/h; base at s = 1095 px; largest single-pair residual at pair 63"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 296.5844031050852,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 680.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 1.06 %/h, predicted -295.53 %/h"
+    }
+   ],
+   "condition": "mannitol then control",
+   "root_id": "0727_mc1",
+   "window_h": [
+    4.0,
+    6.0
+   ]
+  },
+  "0727_mc1~11-13__w11": {
+   "outcome": {
+    "status": "accept",
+    "args": {
+     "confidence": null
+    },
+    "steps": 0,
+    "failed_steps": 0,
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "call_ms": 0,
+    "note": "no failing check; diagnostician not called"
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 11.641687299583156,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 625.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_plus; profile window value 11.642 %/h (real-movie profile window s <= 996 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 5.329645290142794,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1082.6192051437022,
+     "where_frame_pair": 23,
+     "detail": "tip path 135.4 px/h; base at s = 1083 px; largest single-pair residual at pair 23"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 253.6039248376172,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 1055.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference -3.12 %/h, predicted 250.49 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 11.641687299583156,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 625.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_plus; profile window value 11.642 %/h (real-movie profile window s <= 996 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 5.329645290142794,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1082.6192051437022,
+     "where_frame_pair": 23,
+     "detail": "tip path 135.4 px/h; base at s = 1083 px; largest single-pair residual at pair 23"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 253.6039248376172,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 1055.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference -3.12 %/h, predicted 250.49 %/h"
+    }
+   ],
+   "condition": "mannitol then control",
+   "root_id": "0727_mc1",
+   "window_h": [
+    11.0,
+    13.0
+   ]
+  },
+  "0727_mc1~17-19__w17": {
+   "outcome": {
+    "status": "accept",
+    "args": {
+     "confidence": null
+    },
+    "steps": 0,
+    "failed_steps": 0,
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "call_ms": 0,
+    "note": "no failing check; diagnostician not called"
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 14.524141311023085,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 320.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_minus; profile window value 14.524 %/h (real-movie profile window s <= 997 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 10.891143987546831,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1094.2734069297387,
+     "where_frame_pair": 2,
+     "detail": "tip path 180.2 px/h; base at s = 1094 px; largest single-pair residual at pair 2"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 233.67533210583554,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 730.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference -3.11 %/h, predicted 230.57 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 14.524141311023085,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 320.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_minus; profile window value 14.524 %/h (real-movie profile window s <= 997 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 10.891143987546831,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1094.2734069297387,
+     "where_frame_pair": 2,
+     "detail": "tip path 180.2 px/h; base at s = 1094 px; largest single-pair residual at pair 2"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 233.67533210583554,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 730.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference -3.11 %/h, predicted 230.57 %/h"
+    }
+   ],
+   "condition": "mannitol then control",
+   "root_id": "0727_mc1",
+   "window_h": [
+    17.0,
+    19.0
+   ]
+  },
+  "0727_mc3~4-6__w4": {
+   "outcome": {
+    "status": "accept",
+    "args": {
+     "confidence": null
+    },
+    "steps": 0,
+    "failed_steps": 0,
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "call_ms": 0,
+    "note": "no failing check; diagnostician not called"
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 60.789350337055346,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 60.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 60.789 %/h (real-movie profile window s <= 800 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 10.267684460910232,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 930.0486341823296,
+     "where_frame_pair": 17,
+     "detail": "tip path 284.3 px/h; base at s = 930 px; largest single-pair residual at pair 17"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 326.1845970668385,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 595.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 2.41 %/h, predicted 328.59 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 60.789350337055346,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 60.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 60.789 %/h (real-movie profile window s <= 800 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 10.267684460910232,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 930.0486341823296,
+     "where_frame_pair": 17,
+     "detail": "tip path 284.3 px/h; base at s = 930 px; largest single-pair residual at pair 17"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 326.1845970668385,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 595.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 2.41 %/h, predicted 328.59 %/h"
+    }
+   ],
+   "condition": "mannitol then control",
+   "root_id": "0727_mc3",
+   "window_h": [
+    4.0,
+    6.0
+   ]
+  },
+  "0727_mc3~11-13__w11": {
+   "outcome": {
+    "status": "accept",
+    "args": {
+     "confidence": null
+    },
+    "steps": 0,
+    "failed_steps": 0,
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "call_ms": 0,
+    "note": "no failing check; diagnostician not called"
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 5.2862963887820476,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 475.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 5.286 %/h (real-movie profile window s <= 997 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 2.9598234815321467,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1082.1924894974989,
+     "where_frame_pair": 67,
+     "detail": "tip path 151.2 px/h; base at s = 1082 px; largest single-pair residual at pair 67"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 250.9573273777992,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 645.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference -8.56 %/h, predicted 242.39 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 5.2862963887820476,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 475.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 5.286 %/h (real-movie profile window s <= 997 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 2.9598234815321467,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1082.1924894974989,
+     "where_frame_pair": 67,
+     "detail": "tip path 151.2 px/h; base at s = 1082 px; largest single-pair residual at pair 67"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 250.9573273777992,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 645.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference -8.56 %/h, predicted 242.39 %/h"
+    }
+   ],
+   "condition": "mannitol then control",
+   "root_id": "0727_mc3",
+   "window_h": [
+    11.0,
+    13.0
+   ]
+  },
+  "0727_mc3~17-19__w17": {
+   "outcome": {
+    "status": "accept",
+    "args": {
+     "confidence": null
+    },
+    "steps": 0,
+    "failed_steps": 0,
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "call_ms": 0,
+    "note": "no failing check; diagnostician not called"
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 36.6000628736054,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 115.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_minus; profile window value 36.600 %/h (real-movie profile window s <= 997 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 4.233706919955222,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1102.715112614615,
+     "where_frame_pair": 21,
+     "detail": "tip path 172.8 px/h; base at s = 1103 px; largest single-pair residual at pair 21"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 239.36759668823652,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 925.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference -7.31 %/h, predicted -246.68 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 36.6000628736054,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 115.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_minus; profile window value 36.600 %/h (real-movie profile window s <= 997 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 4.233706919955222,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1102.715112614615,
+     "where_frame_pair": 21,
+     "detail": "tip path 172.8 px/h; base at s = 1103 px; largest single-pair residual at pair 21"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 239.36759668823652,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 925.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference -7.31 %/h, predicted -246.68 %/h"
+    }
+   ],
+   "condition": "mannitol then control",
+   "root_id": "0727_mc3",
+   "window_h": [
+    17.0,
+    19.0
+   ]
+  },
+  "0727_mc5~4-6__w4": {
+   "outcome": {
+    "status": "accept",
+    "args": {
+     "confidence": null
+    },
+    "steps": 0,
+    "failed_steps": 0,
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "call_ms": 0,
+    "note": "no failing check; diagnostician not called"
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 19.969947915713597,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 125.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_plus; profile window value 19.970 %/h (real-movie profile window s <= 952 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 1.7457430909562617,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1067.5399876948838,
+     "where_frame_pair": 1,
+     "detail": "tip path 140.0 px/h; base at s = 1068 px; largest single-pair residual at pair 1"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 537.0483073016738,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 645.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 1.02 %/h, predicted 538.07 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 19.969947915713597,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 125.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_plus; profile window value 19.970 %/h (real-movie profile window s <= 952 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 1.7457430909562617,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1067.5399876948838,
+     "where_frame_pair": 1,
+     "detail": "tip path 140.0 px/h; base at s = 1068 px; largest single-pair residual at pair 1"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 537.0483073016738,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 645.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 1.02 %/h, predicted 538.07 %/h"
+    }
+   ],
+   "condition": "mannitol then control",
+   "root_id": "0727_mc5",
+   "window_h": [
+    4.0,
+    6.0
+   ]
+  },
+  "0727_mc5~11-13__w11": {
+   "outcome": {
+    "status": "accept",
+    "args": {
+     "confidence": null
+    },
+    "steps": 0,
+    "failed_steps": 0,
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "call_ms": 0,
+    "note": "no failing check; diagnostician not called"
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 32.08911389545736,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 1035.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 6.445 %/h (real-movie profile window s <= 996 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 1.0206978922657086,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1081.4245879533605,
+     "where_frame_pair": 37,
+     "detail": "tip path 140.9 px/h; base at s = 1081 px; largest single-pair residual at pair 37"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 157.5651108557836,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 715.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 9.56 %/h, predicted -148.01 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 32.08911389545736,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 1035.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_mid; profile window value 6.445 %/h (real-movie profile window s <= 996 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 1.0206978922657086,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1081.4245879533605,
+     "where_frame_pair": 37,
+     "detail": "tip path 140.9 px/h; base at s = 1081 px; largest single-pair residual at pair 37"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 157.5651108557836,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 715.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 9.56 %/h, predicted -148.01 %/h"
+    }
+   ],
+   "condition": "mannitol then control",
+   "root_id": "0727_mc5",
+   "window_h": [
+    11.0,
+    13.0
+   ]
+  },
+  "0727_mc5~17-19__w17": {
+   "outcome": {
+    "status": "accept",
+    "args": {
+     "confidence": null
+    },
+    "steps": 0,
+    "failed_steps": 0,
+    "calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "call_ms": 0,
+    "note": "no failing check; diagnostician not called"
+   },
+   "remedies": [],
+   "roll_backs": 0,
+   "initial_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 37.33565167102125,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 1030.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_plus; profile window value 7.369 %/h (real-movie profile window s <= 996 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 11.86635508376119,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1084.8577106922187,
+     "where_frame_pair": 62,
+     "detail": "tip path 459.1 px/h; base at s = 1085 px; largest single-pair residual at pair 62"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 451.74267329217184,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 15.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 8.94 %/h, predicted 460.68 %/h"
+    }
+   ],
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false,
+    "couple": false
+   },
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "passed": null,
+     "value": 37.33565167102125,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 1030.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): largest change in regr_plus; profile window value 7.369 %/h (real-movie profile window s <= 996 px)"
+    },
+    {
+     "check": "closure",
+     "passed": true,
+     "value": 11.86635508376119,
+     "threshold": 19.0,
+     "unit": "px/h",
+     "where_s_px": 1084.8577106922187,
+     "where_frame_pair": 62,
+     "detail": "tip path 459.1 px/h; base at s = 1085 px; largest single-pair residual at pair 62"
+    },
+    {
+     "check": "plane_sections",
+     "passed": null,
+     "value": 451.74267329217184,
+     "threshold": null,
+     "unit": "%/h",
+     "where_s_px": 15.0,
+     "where_frame_pair": null,
+     "detail": "reported, not gating (real-movie profile; no threshold): flank difference 8.94 %/h, predicted 460.68 %/h"
+    }
+   ],
+   "condition": "mannitol then control",
+   "root_id": "0727_mc5",
+   "window_h": [
+    17.0,
+    19.0
+   ]
+  }
+ },
+ "auditor": {
+  "status": "report",
+  "report": "Batch: 48 runs. 43 accepted, 5 declined (r12, r19, r23, r36, r45; all failed closure). No runs used a remedy, the width-free ratio or a roll-back.\nFlagged (2), reason summary_outlier: r31 (control) and r34 (mannitol then control). Their largest flank differences are -99.8 and -105.4 %/h, about 3 MAD from the batch median of 14.9 %/h and about three times the root's own centre REGR peak. r34's sits at 2042 \u00b5m, past its growth zone. Their centre peak, peak position and growth-zone length are normal. Closure passed on both.\nCleared (41): every other accepted run. Closure passed on all of them, and their profile shapes match the batch.\nWhat the flagged runs share: a normal centre profile, but a flank-difference (curvature-rate) signal much larger than the centre strain rate. Plane sections is not a gate for these real movies, so nothing else checks that signal.\nMedians by condition for accepted runs (REGR peak, peak position, growth-zone length):\n- Control (n=14): about 39 %/h, 579 \u00b5m, 757 \u00b5m\n- Mannitol (n=9): about 38 %/h, 705 \u00b5m, 653 \u00b5m\n- Mannitol then control (n=17): about 36 %/h, 663 \u00b5m, 874 \u00b5m\n- Mannitol then mannitol (n=3: r13, r14, r24): about 9\u201310 %/h, peak at 1610\u20131894 \u00b5m, growth zone 21\u201363 \u00b5m. This is a nearly arrested profile with passing closure, consistent across all three roots. It is reported as a result of the condition, not a measurement fault.\nFlank differences take both signs in every condition. Faster roots (r15, r20, r27, with REGR peaks of 54\u201355 %/h) have a normal profile shape.",
+  "decisions": {
+   "r01": {
+    "decision": "clear",
+    "order": 1
+   },
+   "r02": {
+    "decision": "clear",
+    "order": 1
+   },
+   "r03": {
+    "decision": "clear",
+    "order": 1
+   },
+   "r04": {
+    "decision": "clear",
+    "order": 1
+   },
+   "r05": {
+    "decision": "clear",
+    "order": 1
+   },
+   "r06": {
+    "decision": "clear",
+    "order": 1
+   },
+   "r07": {
+    "decision": "clear",
+    "order": 1
+   },
+   "r08": {
+    "decision": "clear",
+    "order": 1
+   },
+   "r09": {
+    "decision": "clear",
+    "order": 1
+   },
+   "r10": {
+    "decision": "clear",
+    "order": 1
+   },
+   "r11": {
+    "decision": "clear",
+    "order": 1
+   },
+   "r13": {
+    "decision": "clear",
+    "order": 1
+   },
+   "r14": {
+    "decision": "clear",
+    "order": 1
+   },
+   "r15": {
+    "decision": "clear",
+    "order": 1
+   },
+   "r16": {
+    "decision": "clear",
+    "order": 1
+   },
+   "r17": {
+    "decision": "clear",
+    "order": 1
+   },
+   "r18": {
+    "decision": "clear",
+    "order": 1
+   },
+   "r20": {
+    "decision": "clear",
+    "order": 1
+   },
+   "r21": {
+    "decision": "clear",
+    "order": 1
+   },
+   "r22": {
+    "decision": "clear",
+    "order": 1
+   },
+   "r24": {
+    "decision": "clear",
+    "order": 1
+   },
+   "r25": {
+    "decision": "clear",
+    "order": 1
+   },
+   "r26": {
+    "decision": "clear",
+    "order": 1
+   },
+   "r27": {
+    "decision": "clear",
+    "order": 1
+   },
+   "r28": {
+    "decision": "clear",
+    "order": 1
+   },
+   "r29": {
+    "decision": "clear",
+    "order": 1
+   },
+   "r30": {
+    "decision": "clear",
+    "order": 1
+   },
+   "r32": {
+    "decision": "clear",
+    "order": 1
+   },
+   "r33": {
+    "decision": "clear",
+    "order": 1
+   },
+   "r35": {
+    "decision": "clear",
+    "order": 1
+   },
+   "r37": {
+    "decision": "clear",
+    "order": 1
+   },
+   "r38": {
+    "decision": "clear",
+    "order": 1
+   },
+   "r39": {
+    "decision": "clear",
+    "order": 1
+   },
+   "r40": {
+    "decision": "clear",
+    "order": 1
+   },
+   "r41": {
+    "decision": "clear",
+    "order": 1
+   },
+   "r42": {
+    "decision": "clear",
+    "order": 1
+   },
+   "r43": {
+    "decision": "clear",
+    "order": 1
+   },
+   "r44": {
+    "decision": "clear",
+    "order": 1
+   },
+   "r46": {
+    "decision": "clear",
+    "order": 1
+   },
+   "r47": {
+    "decision": "clear",
+    "order": 1
+   },
+   "r48": {
+    "decision": "clear",
+    "order": 1
+   },
+   "r31": {
+    "decision": "flag",
+    "order": 2,
+    "reason": "summary_outlier",
+    "evidence": [
+     "flank_difference_max_pct_per_h",
+     "flank_difference_at_um"
+    ]
+   },
+   "r34": {
+    "decision": "flag",
+    "order": 2,
+    "reason": "summary_outlier",
+    "evidence": [
+     "flank_difference_max_pct_per_h",
+     "flank_difference_at_um"
+    ]
+   }
+  },
+  "accepted": [
+   "r01",
+   "r02",
+   "r03",
+   "r04",
+   "r05",
+   "r06",
+   "r07",
+   "r08",
+   "r09",
+   "r10",
+   "r11",
+   "r13",
+   "r14",
+   "r15",
+   "r16",
+   "r17",
+   "r18",
+   "r20",
+   "r21",
+   "r22",
+   "r24",
+   "r25",
+   "r26",
+   "r27",
+   "r28",
+   "r29",
+   "r30",
+   "r31",
+   "r32",
+   "r33",
+   "r34",
+   "r35",
+   "r37",
+   "r38",
+   "r39",
+   "r40",
+   "r41",
+   "r42",
+   "r43",
+   "r44",
+   "r46",
+   "r47",
+   "r48"
+  ],
+  "runs": {
+   "r01": "accept",
+   "r02": "accept",
+   "r03": "accept",
+   "r04": "accept",
+   "r05": "accept",
+   "r06": "accept",
+   "r07": "accept",
+   "r08": "accept",
+   "r09": "accept",
+   "r10": "accept",
+   "r11": "accept",
+   "r12": "decline",
+   "r13": "accept",
+   "r14": "accept",
+   "r15": "accept",
+   "r16": "accept",
+   "r17": "accept",
+   "r18": "accept",
+   "r19": "decline",
+   "r20": "accept",
+   "r21": "accept",
+   "r22": "accept",
+   "r23": "decline",
+   "r24": "accept",
+   "r25": "accept",
+   "r26": "accept",
+   "r27": "accept",
+   "r28": "accept",
+   "r29": "accept",
+   "r30": "accept",
+   "r31": "accept",
+   "r32": "accept",
+   "r33": "accept",
+   "r34": "accept",
+   "r35": "accept",
+   "r36": "decline",
+   "r37": "accept",
+   "r38": "accept",
+   "r39": "accept",
+   "r40": "accept",
+   "r41": "accept",
+   "r42": "accept",
+   "r43": "accept",
+   "r44": "accept",
+   "r45": "decline",
+   "r46": "accept",
+   "r47": "accept",
+   "r48": "accept"
+  },
+  "steps": 4,
+  "calls": 4,
+  "input_tokens": 95853,
+  "output_tokens": 6586
+ },
+ "runner_log": [],
+ "wall_s": 281.9,
+ "model": "claude-opus-5-5",
+ "claude_code": "2.1.310"
+}

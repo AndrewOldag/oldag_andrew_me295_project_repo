@@ -151,6 +151,59 @@ def test_parse_window():
     assert RS.parse_window("0721_m10:4.5-6.5") == ("0721_m10", 4.5, 6.5)
 
 
+def test_several_windows_of_one_root_get_one_task_each():
+    """Inbox item 37: a root with 3 windows gives 3 dispatcher rows and 3 tasks, each mapped back to its root."""
+    cfg = D.load_config()
+    m = {r["id"]: r for r in D.manifest_rows()}
+    rows = [dict(m["0711_c2"], id=f"0711_c2~{a:g}-{b:g}", usable_from_h=str(a), usable_to_h=str(b))
+            for a, b in [(4, 6), (11, 13), (17, 19)]]
+    tasks = [t for r in rows for t in D.make_tasks(r, cfg)]
+    assert [(t.from_h, t.to_h) for t in tasks] == [(4, 6), (11, 13), (17, 19)]
+    assert {RS.root_of(t.root_id) for t in tasks} == {"0711_c2"} and RS.root_of("0711_c2") == "0711_c2"
+    assert RealWindow(RS.root_of(tasks[1].root_id), tasks[1].from_h, tasks[1].to_h).id() == "0711_c2__w11-13"
+
+
+def test_cached_only_runner_makes_uncached_settings_not_available(tmp_path):
+    """Inbox item 36: repeat runs use cached tracks only; an uncached setting raises NotAvailable, no host step."""
+    from measure.remedies import NotAvailable
+    cfg = tmp_path / "r.yaml"
+    cfg.write_text("host: h\nwork_dir: /w\ncode_dir: /c\ntracker_code: /t\npython: /p\n"
+                   "windows:\n  r1__w4-6:\n    imgdir: /d.imgdir\n")
+    r = RealRunner(cfg, cache=tmp_path / "cache")
+    r.cached_only = True
+    cmds = []
+
+    def no_file(cmd, stdin=None):            # the host has no output of these settings; any other step is an error
+        cmds.append(cmd)
+        if cmd.startswith("test -s "):
+            raise RuntimeError("host command failed (1)")
+        pytest.fail(f"host step in a cached-only run: {cmd}")
+    r._ssh = no_file
+    w = RealWindow("r1", 4, 6)
+    with pytest.raises(NotAvailable):
+        r.measure(w, r.initial_settings(w))
+    assert all(c.startswith("test -s ") for c in cmds)
+
+
+def test_existing_host_track_is_fetched_not_rerun(tmp_path):
+    """A host output of an earlier run with no local copy is fetched (qb_track never overwrites its output)."""
+    cfg = tmp_path / "r.yaml"
+    cfg.write_text("host: h\nwork_dir: /w\ncode_dir: /c\ntracker_code: /t\npython: /p\n"
+                   "windows:\n  r1__w4-6:\n    imgdir: /d.imgdir\n")
+    r = RealRunner(cfg, cache=tmp_path / "cache")
+    cmds = []
+
+    def host(cmd, stdin=None):
+        cmds.append(cmd)
+        if cmd.startswith("test -s ") or cmd.startswith("cat "):
+            return b"npz bytes"
+        pytest.fail(f"tracker run instead of a fetch: {cmd}")
+    r._ssh = host
+    w = RealWindow("r1", 4, 6)
+    p = r.track(w, r.initial_settings(w), "ref")
+    assert p.read_bytes() == b"npz bytes" and len(cmds) == 2 and r.log[-1]["fetched"] == "existing host output"
+
+
 def test_midline_path_default_and_cached_run_needs_no_host(tmp_path, monkeypatch):
     cfg = tmp_path / "r.yaml"
     cfg.write_text("host: h\nwork_dir: /w\ncode_dir: /c\ntracker_code: /t\npython: /p\n"

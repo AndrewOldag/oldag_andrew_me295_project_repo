@@ -1,0 +1,12 @@
+# Checker thresholds for real movies (movie = real), real-movie profile only. Synthetic rods keep
+# config/checker_thresholds.yaml unchanged.
+# Rule approved by Andrew on 2026-10-24 (spec 2026-10-24b B): the 95th percentile over the calibration
+# windows, rounded up to 2 significant figures. Value from real-calib (task c018), docs/decisions.md and
+# results/2026-10-25_real_calibration/README.md: 41 control windows, 16 roots, 4 experiments, ft2 midline,
+# 1000 px tracks, closure definition of 2026-10-10 (kept by spec 2026-10-24b A).
+# rigid_invariance and plane_sections have no real threshold: computed and reported, not gating
+# (decisions 2026-10-23 and 2026-10-24).
+status: approved
+closure: 19.0           # px/h. 95th percentile 18.87 over the 41 calibration windows
+rigid_invariance: null  # reported only
+plane_sections: null    # reported only
