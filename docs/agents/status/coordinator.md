@@ -1,12 +1,14 @@
 # coordinator
-Updated: 2026-10-25 23:10 (local)
+Updated: 2026-10-25 23:30 (local)
 Lane: course
 Branch: main
 Last inbox item done: 26
 State: working
 Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8 (relay part), 10, 11, 16, 17 (item 20)
-Last-seen main: 7b01836
+Last-seen main: 002a331
 Done since last update:
+- 2026-10-25 23:30 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/diag-analysis working 21:58 (ab97080); wip/real-calib working 21:20 (4560996); wip/v4-candidate 23:22 (db158f5), no status file, diagnostician repeat 2 at 34 of 51; wip/lab-report-2 working 14:46 (0060c20); wip/freeze-v31 done 14:46 (d24feb8), no merge asked)
+- 23:30: item 8: no inbox change since 7b01836; no pings. Item 10: no status says `waiting on <agent>`; no ping. Item 16: no status says `waiting on server job`
 - 2026-10-25 23:10 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/diag-analysis working 21:58 (ab97080), item 4 LLM runs on seeds 26-28; wip/real-calib working 21:20 (4560996), item 11 batch 2; wip/v4-candidate 23:09 (6f8479a), no status file; wip/lab-report-2 working 14:46 (0060c20); wip/freeze-v31 done 14:46 (d24feb8), no merge asked)
 - 23:10: item 8: no inbox change since f521dab; no pings. Item 10: no status says `waiting on <agent>`; no ping. Item 16: no status says `waiting on server job`
 - 2026-10-25 23:00 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/diag-analysis working 21:58 (ab97080), item 4 LLM runs on seeds 26-28; wip/real-calib working 21:20 (4560996), item 11 batch 2; wip/v4-candidate 20:33 (228d3b5), no status file; wip/lab-report-2 working 14:46 (0060c20); wip/freeze-v31 done 14:46 (d24feb8), no merge asked)
