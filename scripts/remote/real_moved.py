@@ -16,6 +16,12 @@ Applied in image coordinates: window frame i is warped by T_i (bilinear; uncover
 median), and the window midline (and nothing else) is moved by the same T_i. Every other file of the
 movie folder is linked, not copied, so the tracker's loader sees the full frame count. Writes only the
 two outputs. Reads only.
+
+Write once (CLAUDE.md: no move, rename or overwrite on the lab server; spec audit rules-2; inbox closure-fix 3):
+each copy folder is written in place under its final name. `<dir>.started` is written before the first frame,
+`<dir>.ok` after the last. A folder with `.started` and no `.ok` is a stopped copy: it is refused, never reused
+or overwritten. A folder with neither marker is a complete copy from the earlier rename-based version (that
+version only created the final name after the last frame). Midline files are opened exclusively (`xb`).
 """
 import argparse
 import json
@@ -55,6 +61,41 @@ def warp(img, t, about):
                           borderMode=cv2.BORDER_CONSTANT, borderValue=fill)
 
 
+def copy_state(dst):
+    """'none', 'complete' or 'stopped' for a copy folder (see the module note on write once)."""
+    dst = Path(dst)
+    if not dst.exists():
+        return "none"
+    started, ok = dst.with_name(dst.name + ".started"), dst.with_name(dst.name + ".ok")
+    if ok.exists() or not started.exists():
+        return "complete"
+    return "stopped"
+
+
+def begin_copy(dst):
+    """Create the copy folder in place; refuse an existing one."""
+    dst = Path(dst)
+    if dst.exists():
+        raise SystemExit(f"copy exists, not overwritten: {dst.name} ({copy_state(dst)})")
+    with open(dst.with_name(dst.name + ".started"), "x") as fh:
+        fh.write(time.strftime("%Y-%m-%dT%H:%M:%S") + "\n")
+    dst.mkdir(parents=True, exist_ok=False)
+    return dst
+
+
+def end_copy(dst):
+    with open(Path(dst).with_name(Path(dst).name + ".ok"), "x") as fh:
+        fh.write(time.strftime("%Y-%m-%dT%H:%M:%S") + "\n")
+
+
+def save_midline(path, **arrays):
+    """Write once: refuse an existing midline file."""
+    if Path(path).exists():
+        raise SystemExit(f"midline exists, not overwritten: {Path(path).name}")
+    with open(path, "xb") as fh:
+        np.savez_compressed(fh, **arrays)
+
+
 def elapsed_s(imgdir):
     import re
     txt = (imgdir / "ElapsedTimes.yaml").read_text()
@@ -76,11 +117,13 @@ def whole_pixel(src, m, win, tw, a):
         dst = Path(a.out_ref_imgdir if name == "ref" else a.out_imgdir)
         # The copy's frames depend only on the window, not on the midline (inbox item 22): an existing copy
         # of the same window is reused and only the midline file is written
-        tmp = dst if dst.is_dir() else dst.with_name(dst.name + ".part")
-        if tmp is dst:
+        state = copy_state(dst)
+        if state == "stopped":
+            raise SystemExit(f"stopped copy found, not reused or overwritten: {dst.name}")
+        if state == "complete":
             reused.append(name)
         else:
-            tmp.mkdir(parents=True, exist_ok=False)
+            tmp = begin_copy(dst)
             names = {f"ImageData_Ch0_TP{int(f):07d}.npy": k for k, f in enumerate(win)}
             for p in sorted(src.iterdir()):
                 if p.name in names:
@@ -96,9 +139,9 @@ def whole_pixel(src, m, win, tw, a):
         out.update(midline_image=mid, seed=mid[0])
         if "mask0" in m.files:
             out["mask0"] = m["mask0"][D[0]:, D[1]:]
-        np.savez_compressed(a.out_ref_midline if name == "ref" else a.out_midline, **out)
-        if tmp is not dst:
-            os.rename(tmp, dst)
+        if state == "none":
+            end_copy(dst)
+        save_midline(a.out_ref_midline if name == "ref" else a.out_midline, **out)
     print(json.dumps({"mode": "whole_pixel", "frames": int(len(win)), "shift_px_end": d[-1].tolist(),
                       "crop_px": D.tolist(), "reused_imgdirs": reused, "run_s": round(time.time() - t0, 1)}))
 
@@ -107,8 +150,7 @@ def whole_pixel_padded(src, m, win, d, a, t0):
     """Control (inbox item 20): the same whole-pixel shift without cropping. Moved frame i = window frame i
     shifted by d_i, uncovered pixels set to the frame median (background). Its reference is the window as is."""
     dst = Path(a.out_imgdir)
-    tmp = dst.with_name(dst.name + ".part")
-    tmp.mkdir(parents=True, exist_ok=False)
+    tmp = begin_copy(dst)
     names = {f"ImageData_Ch0_TP{int(f):07d}.npy": k for k, f in enumerate(win)}
     for p in sorted(src.iterdir()):
         if p.name in names:
@@ -123,8 +165,8 @@ def whole_pixel_padded(src, m, win, d, a, t0):
     out = {k: m[k] for k in m.files}
     mid = m["midline_image"][:len(win)] + d[:, None, :]
     out.update(midline_image=mid, seed=mid[0])
-    np.savez_compressed(a.out_midline, **out)
-    os.rename(tmp, dst)
+    end_copy(dst)
+    save_midline(a.out_midline, **out)
     print(json.dumps({"mode": "whole_pixel_padded", "frames": int(len(win)), "shift_px_end": d[-1].tolist(),
                       "run_s": round(time.time() - t0, 1)}))
 
@@ -158,8 +200,7 @@ def main():
             ap.error("whole_pixel needs --out-ref-imgdir and --out-ref-midline")
         return whole_pixel(src, m, win, tw, a)
     about = np.asarray(m["midline_image"][0, 0], float)        # frame-0 tip, (row, col)
-    tmp = dst.with_name(dst.name + ".part")
-    tmp.mkdir(parents=True, exist_ok=False)
+    tmp = begin_copy(dst)
     names = {f"ImageData_Ch0_TP{int(f):07d}.npy": k for k, f in enumerate(win)}
     for p in sorted(src.iterdir()):
         if p.name in names:
@@ -172,8 +213,8 @@ def main():
     mid = np.stack([move_points(m["midline_image"][k], tw[k], about) for k in range(len(win))])
     out = {k: m[k] for k in m.files}
     out.update(midline_image=mid, seed=mid[0])
-    np.savez_compressed(a.out_midline, **out)
-    os.rename(tmp, dst)
+    end_copy(dst)
+    save_midline(a.out_midline, **out)
     print(json.dumps({"frames_moved": int(len(win)), "rotation_deg_end": round(float(np.rad2deg(ROT_RATE * tw[-1])), 2),
                       "shift_px_end": np.round(VELOCITY * tw[-1], 1).tolist(), "run_s": round(time.time() - t0, 1)}))
 
