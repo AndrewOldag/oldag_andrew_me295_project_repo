@@ -223,6 +223,27 @@ def test_midline_path_default_and_cached_run_needs_no_host(tmp_path, monkeypatch
     assert calls == [] and m.record == ("r1__w4-6_wp_ref__st1__L1000.npz", "r1__w4-6")
 
 
+def test_moved_span_limits_moved_copy_to_one_window(tmp_path, monkeypatch):
+    """c022: real-calib's first batch has a moved copy for the 10-12 h window of each root only; other windows
+    read the plain track and get no rigid invariance."""
+    cfg = tmp_path / "r.yaml"
+    cfg.write_text("host: h\nwork_dir: /w\ncode_dir: /c\ntracker_code: /t\npython: /p\n"
+                   "windows:\n  r1__w4-6:\n    imgdir: /d.imgdir\n  r1__w10-12:\n    imgdir: /d.imgdir\n")
+    r = RealRunner(cfg, cache=tmp_path / "cache")
+    r.moved_span = (10.0, 12.0)
+    monkeypatch.setattr(r, "_ssh", lambda cmd, stdin=None: pytest.fail(f"host step: {cmd}"))
+    monkeypatch.setattr("measure.real_runner.from_tracker_npz", lambda path, root_id: (path.name, root_id))
+    plain, span = RealWindow("r1", 4, 6), RealWindow("r1", 10, 12)
+    st = r.initial_settings(plain)
+    r.cache_path(plain, st, "window").write_bytes(b"")
+    for k in ("ref", "moved"):
+        r.cache_path(span, st, k).write_bytes(b"")
+    m = r.measure(plain, st)
+    assert m.record == ("r1__w4-6__st1__L1000.npz", "r1__w4-6") and m.moved is None
+    m = r.measure(span, st)
+    assert m.record[0] == "r1__w10-12_wp_ref__st1__L1000.npz" and m.moved is not None
+
+
 def test_job_count_pattern_does_not_match_its_own_command():
     import re
     from measure.real_runner import COUNT_PATTERN, JOB_PATTERN
@@ -360,3 +381,30 @@ def test_moved_copy_refuses_stopped_copy_and_reuses_legacy(tmp_path, monkeypatch
     RM2.whole_pixel(src2, m2, np.arange(3), tw2, a3)
     assert (tmp_path / "b" / "mv.imgdir" / "ImageData_Ch0_TP0000002.npy").stat().st_mtime_ns == stamp
     assert (tmp_path / "b" / "mv2.npz").exists()
+
+
+def test_lost_connection_during_tracking_fetches_finished_host_track(tmp_path, monkeypatch):
+    """c022 run 2: the ssh call of a remedy track hung after the host had written the track. With keepalive the
+    call fails; the runner then fetches the finished host track instead of failing the remedy."""
+    cfg = tmp_path / "r.yaml"
+    cfg.write_text("host: h\nwork_dir: /w\ncode_dir: /c\ntracker_code: /t\npython: /p\n"
+                   "windows:\n  r1__w4-6:\n    imgdir: /d.imgdir\n")
+    r = RealRunner(cfg, cache=tmp_path / "cache")
+    monkeypatch.setattr(r, "check_host", lambda: {"load1": 0.0, "free_gb": 2000.0})
+    tracked = []
+
+    def host(cmd, stdin=None):
+        if cmd.startswith("test -s "):
+            if not tracked:                     # no host output before the tracker ran
+                raise RuntimeError("host command failed (1)")
+            return b""
+        if cmd.startswith("cat "):
+            return b"npz bytes"
+        if "qb_track.py" in cmd:
+            tracked.append(cmd)
+            raise RuntimeError("host command failed (255): ['Connection to h closed by remote host.']")
+        pytest.fail(f"unexpected host step: {cmd}")
+    r._ssh = host
+    w = RealWindow("r1", 4, 6)
+    p = r.track(w, r.initial_settings(w))
+    assert len(tracked) == 1 and p.read_bytes() == b"npz bytes" and r.log[-1]["fetched"] == "existing host output"
