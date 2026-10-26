@@ -237,6 +237,7 @@ def main():
         s = dict(summarize(sl, o), condition=conditions[task.root_id], root_id=root_of(task.root_id),
                  window_h=[task.from_h, task.to_h])
         results[task.id] = (s, sl.current.record)
+        print(f"window {len(results)} of {len(rows)}: {task.id} {o.status}", flush=True)   # status every 20 (c022)
         return {"diagnostician": o.status}
 
     cfg = D.load_config()
