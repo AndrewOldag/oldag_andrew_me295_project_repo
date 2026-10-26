@@ -44,7 +44,7 @@ DEV_SEED = 20
 LABEL_CAP = 228                                # Andrew, 2026-10-25 17:10 (item 5; was 150, item 3 (2))
 MAX_TRACKER_RUNS = 420                         # Andrew, 2026-10-25 17:10 (item 5; was 300, item 4 (3))
 MAX_LLM_RUNS = 400                             # item 4 (3)
-MIN_FREE_GB = 4.0                              # items 3 (3), 4 (3)
+MIN_FREE_GB = 3.85                             # Andrew, 2026-10-25 15:58 (was 4.0, items 3 (3), 4 (3))
 # expected classes as labelled in v3, and stage_log_missing under C3 (a); used only to list labels that differ
 EXPECTED = {**v3.EXPECTED, "displacement_exceeds_patch": "decline", "stage_log_missing": "decline"}
 DEV_OUT = OUT / "dev_check"
