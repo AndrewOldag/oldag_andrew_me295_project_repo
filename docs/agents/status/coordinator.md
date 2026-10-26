@@ -1,12 +1,16 @@
 # coordinator
-Updated: 2026-10-25 19:00 (local)
+Updated: 2026-10-25 19:13 (local)
 Lane: course
 Branch: main
-Last inbox item done: 25
+Last inbox item done: 26
 State: working
 Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8 (relay part), 10, 11, 16, 17 (item 20)
-Last-seen main: e6d1cd9
+Last-seen main: b5d6250
 Done since last update:
+- 2026-10-25 19:13 (tick): item 26 (1): merged wip/closure-fix-wo (b5dc210) as 05f838b; pending log moved into running_log.md; suite 312 passed, 1 skipped; pushed
+- 19:13: item 26 (2)-(4): Needs Andrew trimmed (0727_mm6 values, lab report 2 draft, C1-C3, real_moved.py rename, stray lab-server midline build, closure-fix restart)
+- 19:13: item 1: no other branch ready to merge (unmerged: wip/real-calib working 18:50 (ed09959); wip/dispatcher waiting on real-calib 19:10 (d9bca95); wip/diag-analysis working 18:20 (7d07f70); wip/v4-candidate 18:56 (58228a9), no status file; wip/lab-report-2 working (status 2026-10-23); wip/freeze-v31 done, no merge asked)
+- 19:13: item 8: inboxes changed since e6d1cd9: dispatcher (39), real-calib (11). Pinged real-calib 19:13 (status at item 8). dispatcher not pinged: its status (19:10) already works item 39. Item 10: dispatcher waits on real-calib, not done; no ping. Item 16: no status says `waiting on server job`
 - 2026-10-25 19:00 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/real-calib working 17:50 (ed09959 18:15), items 9-10 first batch; wip/diag-analysis working 18:20 (7d07f70); wip/v4-candidate 18:56 (58228a9), no status file; wip/lab-report-2 working; wip/freeze-v31 done, no merge asked)
 - 19:00: item 8: no inbox change since 3b51bd5; no pings. Item 10: no status says `waiting on <agent>`. Item 16: no status says `waiting on server job`
 - 2026-10-25 18:40 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/real-calib working 17:50 (ed09959 18:15), items 9-10 first batch; wip/diag-analysis working 18:20 (7d07f70); wip/v4-candidate 18:38 (161615f, diagnostician repeat 0, 34 of 51 runs), no status file; wip/lab-report-2 working; wip/freeze-v31 done, no merge asked)
@@ -162,13 +166,7 @@ Branches (last commit, state):
 - status/gate2: deleted from the remote
 - wip/readme-check, wip/vm-setup, wip/auditor-v1b, wip/fq-real, wip/auditor-v1, wip/scored-v1, wip/freeze-v2, heldout/faults, wip/baselines, wip/diag-review, wip/lab-report-1, wip/gatekeeper: merged
 Needs Andrew:
-- dispatcher log entry (now in running_log.md) gives 0727_mm6 growth-zone profile values; biology values are out of course scope. Keep or trim
-- Restart closure-fix (not live; inbox item 3, real_moved.py write-once)
-- Lab report 2 draft (freeze-v31 item 9): review on wip/lab-report-2 (0060c20); `results/2026-10-25_real_subset/README.md` now on main (2c99900), so the real-subset line can be filled
-- dispatcher: its tracking run started a net-midline build on the lab-server CPU (0721_m10, 3 threads, nice 19), against inbox item 25; its kill was blocked. Pid in its status; stop it if wanted. real_track.py now skips windows without a host midline (85e20da)
 - closure-fix (merged): closure at 1000 px still 2.2-3.2 px/h against synthetic 1.0; rigid invariance at 1000 px untested (1000 px now in dispatcher and real-calib inboxes, ab50da7)
-- diag-analysis (merged): decide C1 (prompt fault-to-remedy map), C2 (stage_log_summary per-pair spread), C3 (roll-back vs label rule: option a or b) in `docs/proposals/2026-10-25_diagnostician-repair-misses.md`; C3 note `docs/proposals/2026-10-25_not-computable-check-rule.md`
-- `scripts/remote/real_moved.py` (merged with wip/dispatcher) writes `<name>.part` and then `os.rename`s it to the final name, on the compute host; the 3-root slice ran on the lab server. CLAUDE.md forbids renames there (only sweep locks excepted); `qb_track.py` was changed to write-once for the same reason (rules-2). Keep, or ask for a write-once fix
 - freeze-v3: review `results/2026-10-23_freeze_v3/README.md` (all 12 accept_repaired rods measure well unremedied; second_root 0 correct for every method)
 - lab-report-2 and spec-audit-r sessions no longer live; wip/lab-report-2 status still says working (13:29)
 - Old lab-report-2 session (started 00:37) stopped 13:45 on Andrew's go-ahead; the 13:27 one remains
