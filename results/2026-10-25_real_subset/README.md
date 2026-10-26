@@ -16,11 +16,11 @@ python scripts/real_slice.py --windows <48 windows ROOT:A-B> --config private/re
 python scripts/real_subset_report.py --run results/2026-10-25_real_subset
 ```
 - Wall time 1059 s (tracks cached by `scripts/real_track.py`; remedy runs tracked during the run). Dispatcher: 2 rounds, 48 windows collected, 0 retries
-- Files: `summary.json`, `dispatcher_trace.jsonl`, `diagnostician_trace.jsonl`, `auditor_trace.jsonl`, `windows.csv` (one row per window), `tables.md`
+- Files here: `windows.csv` (one row per window), `tables.md`, `agreement.md`, `agreement.json`. Traces and `summary.json` (run 1 and `run2/`, `run3/`) are kept off the public tree because the auditor's text quotes REGR values (Andrew, 2026-10-26); they stay in git history (2ea98bd, 97f2eb0, 035e8fc) and the dispatcher keeps a copy in its staging folder
 
 ## Outcome
 - 43 accepted, 5 declined (all at closure). No remedy was kept in any window
-- Auditor: 2 flagged (r31 0714_c10 4-6 h, r34 0727_mc3 4-6 h; summary outlier, largest flank difference about -100 %/h), 41 cleared
+- Auditor: 2 flagged (r31 0714_c10 4-6 h, r34 0727_mc3 4-6 h; summary outlier), 41 cleared
 
 | Group | Windows | Accepted | Declined |
 | :-- | :-- | :-- | :-- |
@@ -38,7 +38,7 @@ Declined windows:
 | 0708_m8 17-19 h | 23.3 | bad_stage_correction | register_frames failed to run (see Known faults) |
 | 0721_m10 17-19 h | 27.9 | bad_stage_correction | none |
 
-Per window (all 48): `tables.md` and `windows.csv`. Columns: outcome, auditor decision, fault, closure initial and final, rigid invariance, plane sections, tracked length reached, base arc length, basal world speed, frame-0 midline length and base flag, centre REGR peak, growth-zone length.
+Per window (all 48): `tables.md` and `windows.csv`. Columns: outcome, auditor decision, fault, closure initial and final, rigid invariance, plane sections, tracked length reached, base arc length, basal world speed, frame-0 midline length and base flag. REGR and growth-zone values removed (Andrew, 2026-10-26: biology values out of course scope).
 
 ## Base of the closure (inbox item 32)
 - Tracked length reached 997-1141 px; base arc length 930-1122 px; frame-0 midline 1072 px or longer
@@ -46,10 +46,9 @@ Per window (all 48): `tables.md` and `windows.csv`. Columns: outcome, auditor de
 - 0727_mm6 reaches 997 px in all three windows
 
 ## Auditor's comparison (its report, condensed)
-- Medians of accepted windows: control 14, REGR peak about 39 %/h at about 580 um, growth zone about 760 um; mannitol 9, about 38 %/h at about 705 um, about 650 um; mannitol then control 17, about 36 %/h at about 660 um, about 870 um
-- Mannitol then mannitol (0727_mm6, 3 windows): REGR peak about 9 %/h at 1610-1894 um, growth zone 21-63 um. Cleared as a condition result; the auditor asks for a manual look before the peak position is read
+- Condition comparison: REGR and growth-zone medians per condition removed from the public README (Andrew, 2026-10-26: biology values out of course scope). 0727_mm6 (mannitol then mannitol, 3 windows) cleared as a condition result; the auditor asks for a manual look before its profiles are read
 - Caveat in the report: rigid invariance is high in some accepted windows (up to 119 %/h) and does not gate real movies; the clears rest on closure and the summaries
-- Full text: `summary.json` (`auditor.report`)
+- Full text: `summary.json` (`auditor.report`), off the public tree (see Run)
 
 ## Known faults and limits
 - 0708_m8 17-19 h: the diagnostician's register_frames remedy could not run. The lab-server output of that setting existed from the stopped earlier run, its local copy did not, and the tracker never overwrites. Fixed after this run: the runner now fetches an existing host output (`measure/real_runner.py` `fetch_host_track`). This window's decline is not a measurement result

@@ -91,3 +91,6 @@
    - One run (no repeats). Memory: wait while free VM memory is below 3 GB before each window
    - Results `results/2026-10-25_full_batch_1_agents/`: per-window outcome, fault, remedies; counts per experiment and condition; auditor's control vs stressed comparison. Report outcome counts only in the README; no REGR or growth-zone values in the public repo (Andrew, 2026-10-25: biology values out of course scope)
    - Push status after every 20 windows; `ready to merge` at the end
+40. Andrew, 2026-10-26 09:00 (decisions entries on main):
+   - (1) Before you merge main: `results/2026-10-25_real_subset/` traces and `summary.json` (run 1, run2, run3) were removed from the public tree on main (biology values). Copy them from your worktree, or from git history (2ea98bd, 97f2eb0, 035e8fc), into your staging folder first, then merge main
+   - (2) Real-movie rule: a window whose gating check (closure) cannot be computed is declined. Implement in the orchestrator's accept rule for the real profile (as C3 (a)); test: closure not finite -> decline, auditor not asked to clear. Re-score the 4 first-batch windows from the c022 traces under the rule (no tracker or agent rerun needed if the outcome follows from the rule; else rerun only those 4). Update `results/2026-10-25_full_batch_1_agents/` counts and README. Decisions and log; status ready to merge
