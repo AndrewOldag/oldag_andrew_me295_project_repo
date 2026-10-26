@@ -1,12 +1,15 @@
 # coordinator
-Updated: 2026-10-26 08:30 (local)
+Updated: 2026-10-26 09:10 (local)
 Lane: course
 Branch: main
 Last inbox item done: 26
 State: working
 Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8 (relay part), 10, 11, 16, 17 (item 20)
-Last-seen main: d014985
+Last-seen main: a70ca64
 Done since last update:
+- 2026-10-26 09:10 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/diag-analysis working 09:04 (92b0dee), 95 usage-limit runs rerunning; wip/v4-candidate 09:04 (853da3b), no status file, 95 usage-limit runs set aside for rerun; wip/real-calib working 02:15 (100eb18); wip/lab-report-2 working 14:46 (0060c20); wip/freeze-v31 done 15:05 (d24feb8), no merge asked)
+- 09:10: item 8: inboxes changed since f5f888d (a70ca64, Andrew): dispatcher (item 40), real-calib (item 13). Pinged real-calib 09:10. dispatcher not live: under Needs Andrew. Item 10: no status says `waiting on <agent>`. Item 16: no status says `waiting on server job`
+- 09:10: Andrew answered the two dispatcher Needs Andrew lines (a70ca64: decline windows with no computable closure; biology values stripped); dropped
 - 2026-10-26 08:30 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/real-calib working 02:15 (100eb18); wip/diag-analysis working 21:58 (ab97080); wip/v4-candidate 23:45 (fb717d5), no status file, no new commit; wip/lab-report-2 working 14:46 (0060c20); wip/freeze-v31 done 15:05 (d24feb8), no merge asked). No remote branch changed since 07:30
 - 08:30: item 8: no inbox change since ec61e87; no pings. Item 10: no status says `waiting on <agent>`; no ping. Item 16: no status says `waiting on server job`
 - 2026-10-26 07:30 (tick): item 1: no branch ready to merge and unmerged (unmerged: wip/real-calib working 02:15 (100eb18); wip/diag-analysis working 21:58 (ab97080); wip/v4-candidate 23:45 (fb717d5), no status file, no new commit; wip/lab-report-2 working 14:46 (0060c20); wip/freeze-v31 done 15:05 (d24feb8), no merge asked). No remote branch changed since 06:30
@@ -224,8 +227,7 @@ Branches (last commit, state):
 - status/gate2: deleted from the remote
 - wip/readme-check, wip/vm-setup, wip/auditor-v1b, wip/fq-real, wip/auditor-v1, wip/scored-v1, wip/freeze-v2, heldout/faults, wip/baselines, wip/diag-review, wip/lab-report-1, wip/gatekeeper: merged
 Needs Andrew:
-- dispatcher (c022, merged e68621a): a window with no computable gating check (closure not finite) is accepted by the current rule (4 of 126; auditor flagged all 4). Keep, or decline such windows?
-- dispatcher: `results/2026-10-25_real_subset/` on main has REGR, growth-zone and flank values in tables.md and README. Keep, or strip them?
+- dispatcher not live; inbox item 40 (2026-10-26 09:00) waiting. Start or restart dispatcher
 - closure-fix (merged): closure at 1000 px still 2.2-3.2 px/h against synthetic 1.0; rigid invariance at 1000 px untested (1000 px now in dispatcher and real-calib inboxes, ab50da7)
 - freeze-v3: review `results/2026-10-23_freeze_v3/README.md` (all 12 accept_repaired rods measure well unremedied; second_root 0 correct for every method)
 - lab-report-2 and spec-audit-r sessions no longer live; wip/lab-report-2 status still says working (13:29)
