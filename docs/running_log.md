@@ -744,5 +744,5 @@ Required by the course. One entry per work session: done, remaining, bottlenecks
 - Failed (my error): the first tracking run built one net midline on the lab-server CPU (0721_m10 4-6 h, 58 min); kill blocked; `real_track.py` now skips windows without a host midline
 - Failed: two agent runs stopped for low VM memory (Claude Code reaper); the run now waits per window below 2 GB and repeats wait for 3 GB (item 38)
 - Demo: `python scripts/real_subset_agreement.py results/2026-10-25_real_subset results/2026-10-25_real_subset/run2 results/2026-10-25_real_subset/run3` prints the agreement table (48/48 unanimous)
-- Remaining: merge; 0727_mm6 profiles (peak about 9 %/h at 1.6-1.9 mm, growth zone 21-63 um) need a manual look before use
+- Remaining: merge; 0727_mm6 profiles need a manual look before use (values kept off the public repo)
 - Bottlenecks: none
