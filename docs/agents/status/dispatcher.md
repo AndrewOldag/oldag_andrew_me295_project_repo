@@ -1,12 +1,12 @@
 # dispatcher
-Updated: 2026-10-25 19:30 (local)
+Updated: 2026-10-25 19:58 (local)
 Lane: course
 Branch: wip/dispatcher
 Last inbox item done: 38
-State: waiting on real-calib
-Now: item 39 (task c022): 95 of 126 first-batch windows have tracks on the lab server; starting the single agent run when all 126 are there (one dispatcher plan and one auditor comparison over the whole batch)
+State: working
+Now: item 39 (task c022): agent run over the first batch running, 126 windows (cached tracks, moved copies on w10-12 only, closure 19 px/h gates); status every 20 windows
 Done since last update:
-- real_slice.py --moved-span: moved copy only for the 10-12 h window of each root, as real-calib's first batch; test added; suite 311 passed, 1 skipped (b94cfcc)
-- Private runner config for c022: real-calib's first-batch config with this task's own code folder on the lab server (real-calib's code copy is not touched)
+- real-calib first batch complete on the lab server: 126 of 126 windows tracked; main merged (9c0a63d)
+- real_slice.py prints progress per collected window
 Needs Andrew:
 - none
