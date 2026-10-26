@@ -114,6 +114,7 @@ class RealRunner:
         self.tag = f"_{cfg['midline_tag']}" if cfg.get("midline_tag") else ""
         self.track_length = float(track_length)
         self.with_moved = bool(moved)
+        self.moved_span = None                  # (from_h, to_h): moved copy for this span only (first batch, c022)
         self.cached_only = False                # repeat runs (item 36): cached tracks only, no tracker rerun
         self.moved_mode = moved_mode            # whole_pixel (inbox item 19) or rotate (first 2026-10-24 run)
         self.cache = Path(cache or ROOT / "staging" / "tracks_real")
@@ -279,17 +280,18 @@ class RealRunner:
         """Whole-pixel mode: the record is the cropped reference copy and `moved` its shifted twin, so rigid
         invariance compares two copies cropped to the same area (inbox item 19)."""
         main = "window" if self.moved_mode == "rotate" else "ref"
-        need = [main, "moved"] if self.with_moved else ["window"]
+        with_moved = self.with_moved and (self.moved_span is None or (window.from_h, window.to_h) == self.moved_span)
+        need = [main, "moved"] if with_moved else ["window"]
         if not all(self.cache_path(window, settings, k).exists() for k in need):   # cached runs need no host step
             if self.cached_only:       # host outputs of earlier runs count as cached; track() raises if one is missing
                 rec = from_tracker_npz(self.track(window, settings, need[0]), root_id=window.id())
                 moved = (from_tracker_npz(self.track(window, settings, "moved"), root_id=window.id() + "_moved")
-                         if self.with_moved else None)
+                         if with_moved else None)
                 return Measurement(rec, moved, settings, {})
             self.ensure_midline(window)
-            if self.with_moved:
+            if with_moved:
                 self.ensure_moved(window)
-        if not self.with_moved:
+        if not with_moved:
             return Measurement(from_tracker_npz(self.track(window, settings), root_id=window.id()), None, settings, {})
         rec = from_tracker_npz(self.track(window, settings, main), root_id=window.id())
         moved = from_tracker_npz(self.track(window, settings, "moved"), root_id=window.id() + "_moved")
