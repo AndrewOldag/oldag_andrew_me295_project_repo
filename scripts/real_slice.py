@@ -180,6 +180,8 @@ def main():
     ap.add_argument("--out", default=None)
     ap.add_argument("--cached-only", action="store_true",
                     help="repeat runs (inbox item 36): cached tracks only; an uncached remedy setting is not available")
+    ap.add_argument("--moved-span", default=None, metavar="FROM-TO",
+                    help="moved copy (rigid invariance) for windows of this span only, e.g. 10-12 (first batch, c022)")
     ap.add_argument("--min-free-gb", type=float, default=2.0,
                     help="wait before each window while free VM memory is below this (inbox item 37)")
     a = ap.parse_args()
@@ -210,6 +212,8 @@ def main():
     runner = make_runner(a.config)
     for r in getattr(runner, "runners", [runner]):
         r.cached_only = a.cached_only
+        if a.moved_span:
+            r.moved_span = tuple(float(x) for x in a.moved_span.split("-"))
     runner.sync_code()
     launcher = None
     if not a.no_agent:
