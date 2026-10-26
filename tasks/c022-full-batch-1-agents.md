@@ -7,7 +7,7 @@ state: working
 branch: wip/dispatcher
 host: VM (LLM runs), cluster (remedy retracks on CPU), lab server (light)
 created: 2026-10-25 19:05
-last_update: 2026-10-25 19:58
+last_update: 2026-10-25 20:20
 blocker: none
 done_marker: results/2026-10-25_full_batch_1_agents/README.md
 ---
