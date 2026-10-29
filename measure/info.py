@@ -182,6 +182,26 @@ def stage_log_summary(rec, checks=None):
     return out
 
 
+def stage_log_spread(rec):
+    """Freeze v4 candidate C2 (docs/proposals/2026-10-25_diagnostician-repair-misses.md): the closure residual
+    per frame pair over all pairs, as stage_log_summary forms it. One stage-log error gives one large pair over a
+    small median; steady drift gives a max close to the median. When the stage moves at every pair, the
+    at-moves and elsewhere split of stage_log_summary carries no information."""
+    ds = np.linalg.norm(np.diff(rec.stage_px, axis=0), axis=1)
+    every = bool(len(ds)) and bool(np.all(ds > 0.5))
+    out = {"moves_every_pair": every}
+    if every:
+        out["moves_every_pair_note"] = "at-moves and elsewhere cannot be compared"
+    ok = np.all(np.isfinite(rec.centre[..., 0]), axis=0)
+    b = int(np.flatnonzero(ok)[-1]) if ok.any() else None
+    if b:
+        rel = rec.centre[:, 0] - rec.centre[:, b]
+        r = np.linalg.norm(np.diff(rec.midline[:, 0], axis=0) - np.diff(rel, axis=0), axis=1)
+        out.update({"closure_residual_px_per_pair_median": _r(np.median(r)),
+                    "closure_residual_px_per_pair_max": _r(np.max(r)),
+                    "closure_residual_max_pair_index": int(np.argmax(r))})
+    return out
+
 def frame_quality(rec, checks=None):
     q = rec.settings.get("frame_quality")
     if not q:

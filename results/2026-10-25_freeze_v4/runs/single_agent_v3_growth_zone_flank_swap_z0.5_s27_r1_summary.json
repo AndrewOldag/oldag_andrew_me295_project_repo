@@ -1,0 +1,153 @@
+{
+ "freeze_tag": "freeze-v4",
+ "commit": "228d3b5",
+ "method": "single_agent",
+ "rod": {
+  "case": "v3_growth_zone",
+  "fault": "flank_swap",
+  "size": "0.5",
+  "seed": 27,
+  "id": "v3_growth_zone_flank_swap_z0.5_s27"
+ },
+ "runner": "remote_job",
+ "truth": {
+  "peak_regr_pct_per_h": 54.0,
+  "peak_at_um": 421,
+  "largest_flank_difference_pct_per_h": 0.0
+ },
+ "error_before": {
+  "regr_rms_pct_per_h": 8.173,
+  "regr_max_pct_per_h": 29.319,
+  "regr_covered_um": 1147,
+  "flank_difference_rms_pct_per_h": 25.607,
+  "flank_difference_max_pct_per_h": 64.348,
+  "flank_difference_covered_um": 1147
+ },
+ "initial_checks": [
+  {
+   "check": "rigid_invariance",
+   "passed": false,
+   "value": 30.150617313105048,
+   "threshold": 2.0,
+   "unit": "%/h",
+   "where_s_px": 205.0,
+   "where_frame_pair": null,
+   "detail": "largest change in regr_mid"
+  },
+  {
+   "check": "closure",
+   "passed": true,
+   "value": 0.7987420305481245,
+   "threshold": 1.0,
+   "unit": "px/h",
+   "where_s_px": 556.0401571688849,
+   "where_frame_pair": 20,
+   "detail": "tip path 96.0 px/h; base at s = 556 px; largest single-pair residual at pair 20"
+  },
+  {
+   "check": "plane_sections",
+   "passed": false,
+   "value": 64.34849196292028,
+   "threshold": 3.25,
+   "unit": "%/h",
+   "where_s_px": 530.0,
+   "where_frame_pair": null,
+   "detail": "flank difference 64.35 %/h, predicted 0.00 %/h"
+  }
+ ],
+ "outcome": {
+  "task_id": "rod-1",
+  "agent": "single_agent",
+  "status": "decline",
+  "args": {
+   "fault": "bad_stage_correction",
+   "reason": "register_frames, the only listed remedy for a bad stage correction, did not repair the measurement. Afterwards the tip path (2399 \u00b5m/h) disagrees badly with the basal velocity (251 \u00b5m/h), and the strain-rate profile is noisy with large negative values. The remedy cannot be applied again or at another setting."
+  },
+  "steps": 7,
+  "failed_steps": 0,
+  "calls": 7,
+  "input_tokens": 32113,
+  "output_tokens": 4826,
+  "call_ms": 53676
+ },
+ "error_after": {
+  "regr_rms_pct_per_h": 37.147,
+  "regr_max_pct_per_h": 109.311,
+  "regr_covered_um": 1042,
+  "flank_difference_rms_pct_per_h": 54.271,
+  "flank_difference_max_pct_per_h": 202.713,
+  "flank_difference_covered_um": 1042
+ },
+ "remedies": [
+  "frames registered on the non-growing tissue (from 550 px from the tip) before tracking"
+ ],
+ "roll_backs": 0,
+ "final_settings": {
+  "stride": 1,
+  "disk_radius": null,
+  "register": true,
+  "register_from_px": 550,
+  "midline_smooth": null,
+  "band_mask": null,
+  "width_free": false,
+  "couple": false
+ },
+ "final_checks": [
+  {
+   "check": "rigid_invariance",
+   "passed": false,
+   "value": 595.1976664842754,
+   "threshold": 2.0,
+   "unit": "%/h",
+   "where_s_px": 335.0,
+   "where_frame_pair": null,
+   "detail": "largest change in regr_minus"
+  },
+  {
+   "check": "closure",
+   "passed": null,
+   "value": NaN,
+   "threshold": 1.0,
+   "unit": "px/h",
+   "where_s_px": 525.6201709823234,
+   "where_frame_pair": 21,
+   "detail": "tip path 1139.8 px/h; base at s = 526 px; largest single-pair residual at pair 21"
+  },
+  {
+   "check": "plane_sections",
+   "passed": false,
+   "value": 202.71252581294416,
+   "threshold": 3.25,
+   "unit": "%/h",
+   "where_s_px": 125.0,
+   "where_frame_pair": null,
+   "detail": "flank difference 202.71 %/h, predicted 0.00 %/h"
+  }
+ ],
+ "reported": false,
+ "repeat": 1,
+ "trace": "single_agent_v3_growth_zone_flank_swap_z0.5_s27_r1_trace.jsonl",
+ "claude_code": "2.1.310",
+ "wall_s": 110.9,
+ "tracker_runs_new": 2,
+ "runner_log": [
+  {
+   "track": {
+    "out": "v3_growth_zone_flank_swap_z0.5_s27__st1_reg2p550.npz",
+    "run_s": 4.4,
+    "frames": 41,
+    "points": 33,
+    "disk_radius": 14
+   }
+  },
+  {
+   "track": {
+    "out": "v3_growth_zone_flank_swap_z0.5_s27_moved__st1_reg2p550.npz",
+    "run_s": 9.6,
+    "frames": 41,
+    "points": 33,
+    "disk_radius": 14
+   }
+  }
+ ]
+}

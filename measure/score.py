@@ -87,8 +87,17 @@ def measurement_good(error, tolerance, width_free=False):
     return bool(ok)
 
 
-def checks_pass(checks):
-    """Every check that was applied passed (a skipped check has passed None and does not count)."""
+NOT_COMPUTED_EXEMPT = ("skipped", "reported, not gating")     # passed None on purpose, not a failure to compute
+
+
+def checks_pass(checks, not_computable_fails=False):
+    """Every check that was applied passed (a skipped check has passed None and does not count).
+    not_computable_fails (freeze v4 candidate, C3 option a; Andrew 2026-10-25): a check with passed None that
+    could not be computed (not skipped on purpose, not a non-gating profile check) counts as failing. Labels use
+    it for states after a remedy, as the roll-back rule does (agents/executors.py, no_progress)."""
+    if not_computable_fails and any(c.passed is None and not c.detail.startswith(NOT_COMPUTED_EXEMPT)
+                                    for c in checks):
+        return False
     applied = [c for c in checks if c.passed is not None]
     return bool(applied) and all(c.passed for c in applied)
 
