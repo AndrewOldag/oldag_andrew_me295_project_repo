@@ -1,13 +1,15 @@
 # real-calib
-Updated: 2026-10-26 13:25 (local)
+Updated: 2026-10-29 10:20 (local)
 Lane: course
 Branch: wip/real-calib
 Last inbox item done: 13
-State: working
-Now: item 11: batch 2 running root by root on the cluster; driver and checker restarted at 13:17 after the previous session ended at about 11:33 (resumed from markers; the interrupted staging of 0711_m7 resumes)
+State: waiting on Andrew
+Now: batch 2 stopped at 50 of 91 roots. The driver last ran 2026-10-26 16:22 (two staging rsyncs failed when the lab-server connection dropped); Claude Code then stopped the driver, the checker loop and its wait for low VM memory. Not restarted (needs Andrew)
 Done since last update:
-- 0721_m5: 11 of 12 windows tracked; w0-2 tracker error (logistic fit); counted as a failed measurement, outputs md5-checked, frames cleared (decisions 2026-10-26)
-- Batch 2: 44 of 91 roots collected; 517 windows checked
-- Spend since 2026-10-23: about $4.7 of $15
+- Andrew 2026-10-26: deleting whole-root cluster copies this session made, after md5 check, approved (decisions)
+- Batch 2: 50 of 91 roots collected (md5 verified, frames cleared), 0 errors, no job lost (every submitted root collected); 570 windows checked on the lab server
+- 3 roots staged on the cluster, not submitted (0721_c6, 0721_m6, 0727_cc6; the last may be partial; the driver re-runs the copy and checks file counts)
 Needs Andrew:
-- Merging main into this branch is refused by the pre-push blocklist (main's `docs/agents/inbox/real-calib.md` lines 18, 19, 24 name the cluster). Not bypassed; the coordinator merges this branch into main as usual
+- The lab server does not answer from the VM (ssh timeout, 2026-10-29 10:17); the cluster is reached through it
+- Restart of the batch-2 driver and checker loop after the memory stop (resumes from markers): 41 roots, about 8 h of cluster time, about $2.9 more (projected total about $7.6 of $15)
+- Merge of main into this branch still refused by the pre-push blocklist (main's inbox file names the cluster); the coordinator merges this branch
