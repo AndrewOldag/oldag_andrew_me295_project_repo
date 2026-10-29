@@ -1,0 +1,65 @@
+{
+ "planned": 1063,
+ "files": 437,
+ "measured": 420,
+ "failed": 17,
+ "accept": 371,
+ "decline": 49,
+ "decline_not_computable": 9,
+ "moved_copies": 35,
+ "flag_base_may_be_in_growing_tissue": 16,
+ "closure_threshold_px_per_h": 19.0,
+ "by_condition": {
+  "control": {
+   "fail": 15,
+   "pass": 150,
+   "failed": 3,
+   "not run": 201
+  },
+  "control then control": {
+   "pass": 25,
+   "fail": 2,
+   "failed": 2,
+   "not run": 20
+  },
+  "mannitol": {
+   "pass": 107,
+   "fail": 9,
+   "failed": 9,
+   "not computable": 7,
+   "not run": 177
+  },
+  "mannitol then control": {
+   "pass": 61,
+   "fail": 10,
+   "failed": 1,
+   "not run": 204
+  },
+  "mannitol then mannitol": {
+   "not computable": 2,
+   "failed": 2,
+   "pass": 28,
+   "fail": 4,
+   "not run": 24
+  }
+ },
+ "errors": {
+  "0711_c2__w0-2": "ValueError: arange: cannot compute length",
+  "0711_c5__w2-4": "ValueError: arange: cannot compute length",
+  "0711_m2__w18-20": "ValueError: arange: cannot compute length",
+  "0711_m2__w20-22": "ValueError: arange: cannot compute length",
+  "0711_m2__w22-24": "ValueError: arange: cannot compute length",
+  "0711_m3__w6-8": "ValueError: arange: cannot compute length",
+  "0711_m6__w20-22": "ValueError: arange: cannot compute length",
+  "0714_c9__w0-2": "ValueError: arange: cannot compute length",
+  "0714_m4__w10-12": "ValueError: arange: cannot compute length",
+  "0714_m4__w16-18": "ValueError: arange: cannot compute length",
+  "0714_m4__w4-6": "ValueError: arange: cannot compute length",
+  "0714_m4__w8-10": "ValueError: arange: cannot compute length",
+  "0727_cc4__w12-14": "ValueError: arange: cannot compute length",
+  "0727_cc4__w18-20": "ValueError: arange: cannot compute length",
+  "0727_mc3__w2-4": "ValueError: arange: cannot compute length",
+  "0727_mm2__w2-4": "ValueError: arange: cannot compute length",
+  "0727_mm2__w6-8": "ValueError: arange: cannot compute length"
+ }
+}
