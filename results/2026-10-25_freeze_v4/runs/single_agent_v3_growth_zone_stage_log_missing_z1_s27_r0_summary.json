@@ -1,0 +1,132 @@
+{
+ "freeze_tag": "freeze-v4",
+ "commit": "853da3b",
+ "method": "single_agent",
+ "rod": {
+  "case": "v3_growth_zone",
+  "fault": "stage_log_missing",
+  "size": "1",
+  "seed": 27,
+  "id": "v3_growth_zone_stage_log_missing_z1_s27"
+ },
+ "runner": "remote_job",
+ "truth": {
+  "peak_regr_pct_per_h": 54.0,
+  "peak_at_um": 421,
+  "largest_flank_difference_pct_per_h": 0.0
+ },
+ "error_before": {
+  "regr_rms_pct_per_h": 0.318,
+  "regr_max_pct_per_h": 0.829,
+  "regr_covered_um": 1137,
+  "flank_difference_rms_pct_per_h": 0.181,
+  "flank_difference_max_pct_per_h": 0.426,
+  "flank_difference_covered_um": 1137
+ },
+ "initial_checks": [
+  {
+   "check": "rigid_invariance",
+   "passed": true,
+   "value": 0.9044042309259249,
+   "threshold": 2.0,
+   "unit": "%/h",
+   "where_s_px": 540.0,
+   "where_frame_pair": null,
+   "detail": "largest change in regr_plus"
+  },
+  {
+   "check": "closure",
+   "passed": false,
+   "value": 95.773271395913,
+   "threshold": 1.0,
+   "unit": "px/h",
+   "where_s_px": 547.8647675539304,
+   "where_frame_pair": 16,
+   "detail": "tip path 19.2 px/h; base at s = 548 px; largest single-pair residual at pair 16"
+  },
+  {
+   "check": "plane_sections",
+   "passed": true,
+   "value": 0.41285446362095674,
+   "threshold": 3.25,
+   "unit": "%/h",
+   "where_s_px": 40.0,
+   "where_frame_pair": null,
+   "detail": "flank difference -0.41 %/h, predicted 0.00 %/h"
+  }
+ ],
+ "outcome": {
+  "task_id": "rod-1",
+  "agent": "single_agent",
+  "status": "step_limit",
+  "args": {},
+  "steps": 8,
+  "failed_steps": 0,
+  "calls": 8,
+  "input_tokens": 37813,
+  "output_tokens": 3896,
+  "call_ms": 48699
+ },
+ "error_after": {
+  "regr_rms_pct_per_h": 0.347,
+  "regr_max_pct_per_h": 0.89,
+  "regr_covered_um": 1095,
+  "flank_difference_rms_pct_per_h": 0.199,
+  "flank_difference_max_pct_per_h": 0.503,
+  "flank_difference_covered_um": 1095
+ },
+ "remedies": [
+  "frames registered on the non-growing tissue (from 400 px from the tip) before tracking",
+  "report the centre strain rate and the width-free ratio; plane-sections check skipped"
+ ],
+ "roll_backs": 0,
+ "final_settings": {
+  "stride": 1,
+  "disk_radius": null,
+  "register": true,
+  "register_from_px": 400,
+  "midline_smooth": null,
+  "band_mask": null,
+  "width_free": true,
+  "couple": false
+ },
+ "final_checks": [
+  {
+   "check": "rigid_invariance",
+   "passed": true,
+   "value": 0.7469586352558004,
+   "threshold": 2.0,
+   "unit": "%/h",
+   "where_s_px": 75.0,
+   "where_frame_pair": null,
+   "detail": "largest change in regr_mid"
+  },
+  {
+   "check": "closure",
+   "passed": null,
+   "value": NaN,
+   "threshold": 1.0,
+   "unit": "px/h",
+   "where_s_px": 538.2992579709182,
+   "where_frame_pair": 32,
+   "detail": "tip path 95.7 px/h; base at s = 538 px; largest single-pair residual at pair 32"
+  },
+  {
+   "check": "plane_sections",
+   "passed": null,
+   "value": 0.5027102401084877,
+   "threshold": 3.25,
+   "unit": "%/h",
+   "where_s_px": 105.0,
+   "where_frame_pair": null,
+   "detail": "skipped: width-free ratio reported; flank difference -0.50 %/h, predicted 0.00 %/h"
+  }
+ ],
+ "reported": false,
+ "repeat": 0,
+ "trace": "single_agent_v3_growth_zone_stage_log_missing_z1_s27_r0_trace.jsonl",
+ "claude_code": "2.1.310",
+ "wall_s": 61.3,
+ "tracker_runs_new": 0,
+ "runner_log": []
+}

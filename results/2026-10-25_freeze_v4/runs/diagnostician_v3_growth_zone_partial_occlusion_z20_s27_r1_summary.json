@@ -1,0 +1,132 @@
+{
+ "freeze_tag": "freeze-v4",
+ "commit": "a719b9e",
+ "method": "diagnostician",
+ "rod": {
+  "case": "v3_growth_zone",
+  "fault": "partial_occlusion",
+  "size": "20",
+  "seed": 27,
+  "id": "v3_growth_zone_partial_occlusion_z20_s27"
+ },
+ "runner": "remote_job",
+ "truth": {
+  "peak_regr_pct_per_h": 54.0,
+  "peak_at_um": 421,
+  "largest_flank_difference_pct_per_h": 0.0
+ },
+ "error_before": {
+  "regr_rms_pct_per_h": 43.716,
+  "regr_max_pct_per_h": 238.775,
+  "regr_covered_um": 1137,
+  "flank_difference_rms_pct_per_h": 6.622,
+  "flank_difference_max_pct_per_h": 32.967,
+  "flank_difference_covered_um": 1137
+ },
+ "initial_checks": [
+  {
+   "check": "rigid_invariance",
+   "passed": false,
+   "value": 213.69989551622845,
+   "threshold": 2.0,
+   "unit": "%/h",
+   "where_s_px": 280.0,
+   "where_frame_pair": null,
+   "detail": "largest change in regr_mid"
+  },
+  {
+   "check": "closure",
+   "passed": true,
+   "value": 0.23117349727823355,
+   "threshold": 1.0,
+   "unit": "px/h",
+   "where_s_px": 549.5430757462121,
+   "where_frame_pair": 15,
+   "detail": "tip path 96.0 px/h; base at s = 550 px; largest single-pair residual at pair 15"
+  },
+  {
+   "check": "plane_sections",
+   "passed": false,
+   "value": 32.96739579314895,
+   "threshold": 3.25,
+   "unit": "%/h",
+   "where_s_px": 210.0,
+   "where_frame_pair": null,
+   "detail": "flank difference -32.97 %/h, predicted -0.00 %/h"
+  }
+ ],
+ "outcome": {
+  "task_id": "rod-1",
+  "agent": "diagnostician",
+  "status": "decline",
+  "args": {
+   "fault": "unknown",
+   "reason": "Rigid invariance fails badly (213.7 %/h vs 2.0) because strain rate swings between positive and negative around 500\u2013600 \u00b5m (-65.8, 231.0, -100.8 %/h), while every listed tracker fault is ruled out. Displacement is small (step/radius 0.17, no points lost), texture and focus are above the clean reference, there is one bright object, and midline jitter is small. The flank-spacing changes also swing up and down in the same place and are near zero at the plane-sections failure point (442 \u00b5m), so they look like a tracking artifact, not a physical width change. The width-free ratio would not fix the rigid-invariance failure, so the kinematics cannot be trusted."
+  },
+  "steps": 6,
+  "failed_steps": 0,
+  "calls": 6,
+  "input_tokens": 27838,
+  "output_tokens": 3224,
+  "call_ms": 37950
+ },
+ "error_after": {
+  "regr_rms_pct_per_h": 43.716,
+  "regr_max_pct_per_h": 238.775,
+  "regr_covered_um": 1137,
+  "flank_difference_rms_pct_per_h": 6.622,
+  "flank_difference_max_pct_per_h": 32.967,
+  "flank_difference_covered_um": 1137
+ },
+ "remedies": [],
+ "roll_backs": 0,
+ "final_settings": {
+  "stride": 1,
+  "disk_radius": null,
+  "register": false,
+  "register_from_px": null,
+  "midline_smooth": null,
+  "band_mask": null,
+  "width_free": false,
+  "couple": false
+ },
+ "final_checks": [
+  {
+   "check": "rigid_invariance",
+   "passed": false,
+   "value": 213.69989551622845,
+   "threshold": 2.0,
+   "unit": "%/h",
+   "where_s_px": 280.0,
+   "where_frame_pair": null,
+   "detail": "largest change in regr_mid"
+  },
+  {
+   "check": "closure",
+   "passed": true,
+   "value": 0.23117349727823355,
+   "threshold": 1.0,
+   "unit": "px/h",
+   "where_s_px": 549.5430757462121,
+   "where_frame_pair": 15,
+   "detail": "tip path 96.0 px/h; base at s = 550 px; largest single-pair residual at pair 15"
+  },
+  {
+   "check": "plane_sections",
+   "passed": false,
+   "value": 32.96739579314895,
+   "threshold": 3.25,
+   "unit": "%/h",
+   "where_s_px": 210.0,
+   "where_frame_pair": null,
+   "detail": "flank difference -32.97 %/h, predicted -0.00 %/h"
+  }
+ ],
+ "reported": false,
+ "repeat": 1,
+ "trace": "diagnostician_v3_growth_zone_partial_occlusion_z20_s27_r1_trace.jsonl",
+ "claude_code": "2.1.310",
+ "wall_s": 46.9,
+ "tracker_runs_new": 0,
+ "runner_log": []
+}
