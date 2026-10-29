@@ -14,12 +14,15 @@ import math
 
 import numpy as np
 
+from agents import candidate
 from agents.actions import REMEDIES
 from checker import run_checks, load_thresholds
+from checker.checks import THRESHOLDS_FILE
 from measure import info
 from measure.remedies import NotAvailable, apply_remedy
 
 
+REAL_THRESHOLDS_FILE = THRESHOLDS_FILE.with_name("checker_thresholds_real.yaml")   # movie = real only (spec 2026-10-24b B)
 ROLL_BACK_FRACTION = 0.75      # a failing check must fall to at most 3/4 of its value to count as lowered
 
 # Checker profiles (Andrew, 2026-10-23, dispatcher inbox item 18): which checks gate pass or fail. The
@@ -78,6 +81,8 @@ def apply_profile(checks, profile):
         if c.check not in gates and c.passed is not None:
             c.detail = f"{NOT_GATING} ({profile}-movie profile; would {'pass' if c.passed else 'fail'}): {c.detail}"
             c.passed = None
+        elif c.check not in gates and c.threshold is None and math.isfinite(c.value):
+            c.detail = f"{NOT_GATING} ({profile}-movie profile; no threshold): {c.detail}"    # real thresholds file
     return checks
 
 
@@ -121,6 +126,7 @@ class Slice:
     def __init__(self, runner, rod, label="rod-1", thresholds=None, profile=None):
         """profile: a CHECK_PROFILES key; None = from the record (movie real -> "real", else "synthetic")."""
         self.runner, self.rod, self.label = runner, rod, label
+        self.given_thresholds = thresholds
         self.thresholds = thresholds or load_thresholds()
         self.profile = profile
         self.runs = []                       # (settings, measurement, checks, change)
@@ -131,6 +137,8 @@ class Slice:
         m = self.runner.measure(self.rod, settings)
         skip = ("plane_sections",) if settings.width_free else ()
         profile = self.profile or profile_of(m.record)
+        if profile == "real" and self.given_thresholds is None:
+            self.thresholds = load_thresholds(REAL_THRESHOLDS_FILE)    # real-movie thresholds (spec 2026-10-24b B)
         checks = run_checks(m.record, m.moved, self.thresholds, skip)
         if profile == "real" and m.moved is not None:
             # full-range value is the reported one; the item-19 profile-window value is shown next to it
@@ -160,6 +168,8 @@ class Slice:
         out = info.request_info(args["kind"], self.current.record, self.checks)
         if args["kind"] == "velocity_profile" and self.runs[-1][0].width_free:
             out.update(info.width_free_ratio(self.current.record))
+        if args["kind"] == "stage_log_summary" and candidate.v4():
+            out.update(info.stage_log_spread(self.current.record))
         return out
 
     def apply_remedy(self, args, task):
@@ -169,7 +179,10 @@ class Slice:
                                        self.current.record)
         except NotAvailable as e:
             return {"rechecked": False, "error": f"remedy not available: {e}"}
-        self._measure(new, change)
+        try:
+            self._measure(new, change)
+        except NotAvailable as e:              # a cached-only runner has no track for these settings (item 36)
+            return {"rechecked": False, "error": f"remedy not available: {e}"}
         after = self.checks
         out = {"rechecked": True, "change": change, **_summary(after),
                "check_values": _before_after(before, after)}

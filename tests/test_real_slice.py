@@ -151,6 +151,59 @@ def test_parse_window():
     assert RS.parse_window("0721_m10:4.5-6.5") == ("0721_m10", 4.5, 6.5)
 
 
+def test_several_windows_of_one_root_get_one_task_each():
+    """Inbox item 37: a root with 3 windows gives 3 dispatcher rows and 3 tasks, each mapped back to its root."""
+    cfg = D.load_config()
+    m = {r["id"]: r for r in D.manifest_rows()}
+    rows = [dict(m["0711_c2"], id=f"0711_c2~{a:g}-{b:g}", usable_from_h=str(a), usable_to_h=str(b))
+            for a, b in [(4, 6), (11, 13), (17, 19)]]
+    tasks = [t for r in rows for t in D.make_tasks(r, cfg)]
+    assert [(t.from_h, t.to_h) for t in tasks] == [(4, 6), (11, 13), (17, 19)]
+    assert {RS.root_of(t.root_id) for t in tasks} == {"0711_c2"} and RS.root_of("0711_c2") == "0711_c2"
+    assert RealWindow(RS.root_of(tasks[1].root_id), tasks[1].from_h, tasks[1].to_h).id() == "0711_c2__w11-13"
+
+
+def test_cached_only_runner_makes_uncached_settings_not_available(tmp_path):
+    """Inbox item 36: repeat runs use cached tracks only; an uncached setting raises NotAvailable, no host step."""
+    from measure.remedies import NotAvailable
+    cfg = tmp_path / "r.yaml"
+    cfg.write_text("host: h\nwork_dir: /w\ncode_dir: /c\ntracker_code: /t\npython: /p\n"
+                   "windows:\n  r1__w4-6:\n    imgdir: /d.imgdir\n")
+    r = RealRunner(cfg, cache=tmp_path / "cache")
+    r.cached_only = True
+    cmds = []
+
+    def no_file(cmd, stdin=None):            # the host has no output of these settings; any other step is an error
+        cmds.append(cmd)
+        if cmd.startswith("test -s "):
+            raise RuntimeError("host command failed (1)")
+        pytest.fail(f"host step in a cached-only run: {cmd}")
+    r._ssh = no_file
+    w = RealWindow("r1", 4, 6)
+    with pytest.raises(NotAvailable):
+        r.measure(w, r.initial_settings(w))
+    assert all(c.startswith("test -s ") for c in cmds)
+
+
+def test_existing_host_track_is_fetched_not_rerun(tmp_path):
+    """A host output of an earlier run with no local copy is fetched (qb_track never overwrites its output)."""
+    cfg = tmp_path / "r.yaml"
+    cfg.write_text("host: h\nwork_dir: /w\ncode_dir: /c\ntracker_code: /t\npython: /p\n"
+                   "windows:\n  r1__w4-6:\n    imgdir: /d.imgdir\n")
+    r = RealRunner(cfg, cache=tmp_path / "cache")
+    cmds = []
+
+    def host(cmd, stdin=None):
+        cmds.append(cmd)
+        if cmd.startswith("test -s ") or cmd.startswith("cat "):
+            return b"npz bytes"
+        pytest.fail(f"tracker run instead of a fetch: {cmd}")
+    r._ssh = host
+    w = RealWindow("r1", 4, 6)
+    p = r.track(w, r.initial_settings(w), "ref")
+    assert p.read_bytes() == b"npz bytes" and len(cmds) == 2 and r.log[-1]["fetched"] == "existing host output"
+
+
 def test_midline_path_default_and_cached_run_needs_no_host(tmp_path, monkeypatch):
     cfg = tmp_path / "r.yaml"
     cfg.write_text("host: h\nwork_dir: /w\ncode_dir: /c\ntracker_code: /t\npython: /p\n"
@@ -168,6 +221,27 @@ def test_midline_path_default_and_cached_run_needs_no_host(tmp_path, monkeypatch
         r.cache_path(w, st, k).write_bytes(b"")
     m = r.measure(w, st)
     assert calls == [] and m.record == ("r1__w4-6_wp_ref__st1__L1000.npz", "r1__w4-6")
+
+
+def test_moved_span_limits_moved_copy_to_one_window(tmp_path, monkeypatch):
+    """c022: real-calib's first batch has a moved copy for the 10-12 h window of each root only; other windows
+    read the plain track and get no rigid invariance."""
+    cfg = tmp_path / "r.yaml"
+    cfg.write_text("host: h\nwork_dir: /w\ncode_dir: /c\ntracker_code: /t\npython: /p\n"
+                   "windows:\n  r1__w4-6:\n    imgdir: /d.imgdir\n  r1__w10-12:\n    imgdir: /d.imgdir\n")
+    r = RealRunner(cfg, cache=tmp_path / "cache")
+    r.moved_span = (10.0, 12.0)
+    monkeypatch.setattr(r, "_ssh", lambda cmd, stdin=None: pytest.fail(f"host step: {cmd}"))
+    monkeypatch.setattr("measure.real_runner.from_tracker_npz", lambda path, root_id: (path.name, root_id))
+    plain, span = RealWindow("r1", 4, 6), RealWindow("r1", 10, 12)
+    st = r.initial_settings(plain)
+    r.cache_path(plain, st, "window").write_bytes(b"")
+    for k in ("ref", "moved"):
+        r.cache_path(span, st, k).write_bytes(b"")
+    m = r.measure(plain, st)
+    assert m.record == ("r1__w4-6__st1__L1000.npz", "r1__w4-6") and m.moved is None
+    m = r.measure(span, st)
+    assert m.record[0] == "r1__w10-12_wp_ref__st1__L1000.npz" and m.moved is not None
 
 
 def test_job_count_pattern_does_not_match_its_own_command():
@@ -248,3 +322,89 @@ def test_wait_vm_memory(tmp_path, monkeypatch):
     monkeypatch.setattr(RR, "vm_free_gb", lambda: next(free))
     monkeypatch.setattr(RR.time, "sleep", lambda s: None)
     assert r.wait_vm_memory() == 2.0
+
+
+def _wp_setup(tmp_path, monkeypatch, name):
+    import shutil
+    import types
+    import numpy as np
+    spec = importlib.util.spec_from_file_location(name, ROOT / "scripts" / "remote" / "real_moved.py")
+    RM = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(RM)
+    monkeypatch.setattr(RM.os, "symlink", lambda s, d: shutil.copy(s, d))
+    src = tmp_path / "x.imgdir"
+    src.mkdir()
+    rng = np.random.default_rng(1)
+    for k in range(3):
+        np.save(src / f"ImageData_Ch0_TP{k:07d}.npy", rng.integers(0, 4000, (1, 60, 80)).astype(np.uint16))
+    (src / "ElapsedTimes.yaml").write_text("theElapsedTimes: [3, 0, 900000, 1800000]\n")
+    np.savez(tmp_path / "m.npz", midline_image=np.tile(np.array([[30.0, 50.0], [30.0, 20.0]]), (3, 1, 1)))
+    a = types.SimpleNamespace(out_imgdir=str(tmp_path / "mv.imgdir"), out_midline=str(tmp_path / "mv.npz"),
+                              out_ref_imgdir=str(tmp_path / "ref.imgdir"), out_ref_midline=str(tmp_path / "ref.npz"),
+                              shift_scale=1.0, pad=False)
+    return RM, src, np.load(tmp_path / "m.npz"), np.array([0.0, 900.0, 1800.0]), a
+
+
+def test_moved_copy_write_once_markers_and_no_rename(tmp_path, monkeypatch):
+    """Inbox closure-fix 3: copies are written in place with .started and .ok markers; no rename, no .part."""
+    import numpy as np
+    RM, src, m, tw, a = _wp_setup(tmp_path, monkeypatch, "real_moved_wo1")
+    monkeypatch.setattr(RM.os, "rename", lambda *x: (_ for _ in ()).throw(AssertionError("rename called")))
+    RM.whole_pixel(src, m, np.arange(3), tw, a)
+    for d in ("mv.imgdir", "ref.imgdir"):
+        assert (tmp_path / (d + ".started")).exists() and (tmp_path / (d + ".ok")).exists()
+        assert RM.copy_state(tmp_path / d) == "complete"
+    assert not list(tmp_path.glob("*.part"))
+    with pytest.raises(SystemExit):                   # same midline names again: never overwritten
+        RM.whole_pixel(src, m, np.arange(3), tw, a)
+
+
+def test_moved_copy_refuses_stopped_copy_and_reuses_legacy(tmp_path, monkeypatch):
+    import numpy as np
+    RM, src, m, tw, a = _wp_setup(tmp_path, monkeypatch, "real_moved_wo2")
+    (tmp_path / "mv.imgdir").mkdir()                  # stopped copy: .started, no .ok
+    (tmp_path / "mv.imgdir.started").write_text("t\n")
+    assert RM.copy_state(tmp_path / "mv.imgdir") == "stopped"
+    with pytest.raises(SystemExit):
+        RM.whole_pixel(src, m, np.arange(3), tw, a)
+    # legacy copy (rename-based version: final name only after the last frame, no markers) is complete and reused
+    (tmp_path / "b").mkdir()
+    RM2, src2, m2, tw2, a2 = _wp_setup(tmp_path / "b", monkeypatch, "real_moved_wo3")
+    RM2.whole_pixel(src2, m2, np.arange(3), tw2, a2)
+    for d in ("mv.imgdir", "ref.imgdir"):
+        for s in (".started", ".ok"):
+            (tmp_path / "b" / (d + s)).unlink()       # test folder only: make it look like a legacy copy
+    import types
+    a3 = types.SimpleNamespace(**dict(vars(a2), out_midline=str(tmp_path / "b" / "mv2.npz"),
+                                      out_ref_midline=str(tmp_path / "b" / "ref2.npz")))
+    stamp = (tmp_path / "b" / "mv.imgdir" / "ImageData_Ch0_TP0000002.npy").stat().st_mtime_ns
+    RM2.whole_pixel(src2, m2, np.arange(3), tw2, a3)
+    assert (tmp_path / "b" / "mv.imgdir" / "ImageData_Ch0_TP0000002.npy").stat().st_mtime_ns == stamp
+    assert (tmp_path / "b" / "mv2.npz").exists()
+
+
+def test_lost_connection_during_tracking_fetches_finished_host_track(tmp_path, monkeypatch):
+    """c022 run 2: the ssh call of a remedy track hung after the host had written the track. With keepalive the
+    call fails; the runner then fetches the finished host track instead of failing the remedy."""
+    cfg = tmp_path / "r.yaml"
+    cfg.write_text("host: h\nwork_dir: /w\ncode_dir: /c\ntracker_code: /t\npython: /p\n"
+                   "windows:\n  r1__w4-6:\n    imgdir: /d.imgdir\n")
+    r = RealRunner(cfg, cache=tmp_path / "cache")
+    monkeypatch.setattr(r, "check_host", lambda: {"load1": 0.0, "free_gb": 2000.0})
+    tracked = []
+
+    def host(cmd, stdin=None):
+        if cmd.startswith("test -s "):
+            if not tracked:                     # no host output before the tracker ran
+                raise RuntimeError("host command failed (1)")
+            return b""
+        if cmd.startswith("cat "):
+            return b"npz bytes"
+        if "qb_track.py" in cmd:
+            tracked.append(cmd)
+            raise RuntimeError("host command failed (255): ['Connection to h closed by remote host.']")
+        pytest.fail(f"unexpected host step: {cmd}")
+    r._ssh = host
+    w = RealWindow("r1", 4, 6)
+    p = r.track(w, r.initial_settings(w))
+    assert len(tracked) == 1 and p.read_bytes() == b"npz bytes" and r.log[-1]["fetched"] == "existing host output"

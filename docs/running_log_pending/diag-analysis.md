@@ -1,0 +1,12 @@
+## 2026-10-26 (build account, session diag-analysis, freeze v4)
+- Done: C1, C2, C3 (a) behind `candidate` in `config/models.yaml` (null = off), `agents/candidate.py`, `agents/prompts/*_v4.md`, `measure/info.py` `stage_log_spread`, `measure/score.py` `checks_pass` (6a19514, branch `wip/v4-candidate`)
+- Done: switch check from the v3 cache, `scripts/synth/v4_replay_check.py`: off, 51/51 labels, 102/102 rule runs, 306 LLM traces (1319 steps) equal v3; on, only the 3 stage_log_missing labels change (to decline). Tests 315 passed, 1 skipped
+- Done: labels of unseen seeds 26-28, `scripts/synth/scored_v4.py labels` (6b72d6a): 51 rods, accept_clean 18, accept_repaired 9, decline 24; 228 tracker runs on the lab server, 0 failed
+- Done: development check, not a score (d75717b): diagnostician, v3 seed 20, 17 runs, 14 correct
+- Done: proposal `docs/proposals/2026-10-25_freeze-v4-candidate.md` (b86abef); tag `freeze-v4` (e9f19f2)
+- Done: scored v4 run, `results/2026-10-25_freeze_v4/` (bdc1f94): balanced accuracy script 0.67, remedy tree 0.93, diagnostician 0.93 (0.92-0.94), single agent 0.63 (0.58-0.69), all-decline 0.33. False accepts per repeat: script 18, remedy tree 2, diagnostician 0, single agent 0.3. Fleiss kappa diagnostician 0.887, single agent 0.626
+- Done: tracker runs 404 of 420 (labels 228, method states 118, single jobs 58), 0 failed; LLM runs 418 of 420 (306 scored, 17 dev check, 95 set aside)
+- Failed: 95 LLM runs ended on the account usage limit (no model answer); set aside in `runs/usage_limit/` and rerun (Andrew, 2026-10-26). The batch loop also stopped once with its Claude Code session; one partial trace kept, run redone
+- Demo: `python scripts/synth/scored_v4.py eval` prints the v4 metrics table and writes `results/2026-10-25_freeze_v4/table_metrics.md`
+- Remaining: Andrew reviews `wip/v4-candidate` and decides on merge
+- Bottlenecks: merge of `wip/v4-candidate` waits on Andrew

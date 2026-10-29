@@ -17,6 +17,7 @@ Spec `docs/specs/2026-10-23b_freeze-v3.md`. Proposal `docs/proposals/2026-10-23_
 - `v3_bend30_clean_s20`: checker false alarm. The unremedied run fails closure (4.51 px/h, threshold 1.0) with a good measurement (centre 0.44 against 1.35 %/h, flank 0.35 against 1.00). Kept accept_clean (Andrew, option a)
 - `displacement_exceeds_patch` 2x6: not repairable at v3 speed (stride 1 still 4.8 px/frame; rigid_invariance 52-126 %/h). Labelled decline, not the expected accept_repaired
 - All 12 accept_repaired rods have a good unremedied measurement with a failing check. A method that accepts without a remedy is therefore scored correct on them (script and all-accept 12 of 12)
+- `stage_log_missing` 1: labelled accept_repaired because the label rule drops a check that cannot be computed (closure after `register_frames`). Under C3 option (a) (Andrew, 2026-10-25; applies from freeze v4) such a check counts as failing, and these 3 rods would label decline. v3 results stay as scored (`docs/proposals/2026-10-25_diagnostician-repair-misses.md`, group B)
 
 ## Metrics (mean over 3 repeats for the LLM methods; range in brackets)
 

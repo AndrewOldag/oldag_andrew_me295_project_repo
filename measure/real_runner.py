@@ -43,7 +43,7 @@ import time
 import yaml
 
 from measure.record import from_tracker_npz
-from measure.remedies import TrackSettings
+from measure.remedies import NotAvailable, TrackSettings
 from measure.runner import Measurement
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -114,6 +114,8 @@ class RealRunner:
         self.tag = f"_{cfg['midline_tag']}" if cfg.get("midline_tag") else ""
         self.track_length = float(track_length)
         self.with_moved = bool(moved)
+        self.moved_span = None                  # (from_h, to_h): moved copy for this span only (first batch, c022)
+        self.cached_only = False                # repeat runs (item 36): cached tracks only, no tracker rerun
         self.moved_mode = moved_mode            # whole_pixel (inbox item 19) or rotate (first 2026-10-24 run)
         self.cache = Path(cache or ROOT / "staging" / "tracks_real")
         self.cache.mkdir(parents=True, exist_ok=True)
@@ -123,7 +125,9 @@ class RealRunner:
         return TrackSettings(stride=1)                 # every frame; uncoupled (the frozen mode)
 
     def _ssh(self, cmd, stdin=None):
-        p = subprocess.run(["ssh", "-o", "BatchMode=yes", self.host, cmd], input=stdin, capture_output=True)
+        # keepalive: a silently dropped connection fails in about 2 min instead of hanging (c022 run 2)
+        p = subprocess.run(["ssh", "-o", "BatchMode=yes", "-o", "ServerAliveInterval=30", "-o", "ServerAliveCountMax=4",
+                            self.host, cmd], input=stdin, capture_output=True)
         if p.returncode != 0:
             raise RuntimeError(f"host command failed ({p.returncode}): "
                                f"{p.stderr.decode(errors='replace').strip().splitlines()[-1:]}")
@@ -211,7 +215,10 @@ class RealRunner:
         w = dict(self.windows[window.id()], midline=self.midline_path(window))
         q = shlex.quote
         need = [mv] if self.moved_mode == "rotate" else [mv, ref]
-        test = " && ".join(f"test -d {q(p['imgdir'])} && test -f {q(p['midline'])}" for p in need)
+        # complete copy: folder and midline present, and not a stopped write-once copy (.started without .ok)
+        test = " && ".join(f"test -d {q(p['imgdir'])} && test -f {q(p['midline'])} && "
+                           f"{{ test -f {q(p['imgdir'] + '.ok')} || ! test -f {q(p['imgdir'] + '.started')}; }}"
+                           for p in need)
         if self._ssh(f"{test} && echo yes || echo no").decode().strip() == "yes":
             return mv
         before = self.check_host()
@@ -233,6 +240,18 @@ class RealRunner:
         tag = {"window": "", "moved": "_moved" if self.moved_mode == "rotate" else "_wp_moved", "ref": "_wp_ref"}[which]
         return self.cache / f"{window.id()}{self.tag}{tag}__{settings.tag()}__L{self.track_length:g}.npz"
 
+    def fetch_host_track(self, name, local):
+        """A host track of the same name (same window, settings and length) written by an earlier run whose
+        local copy is missing: fetch it instead of tracking again. qb_track never overwrites its output."""
+        q = shlex.quote
+        try:
+            self._ssh(f"test -s {q(self.work)}/tracks/{q(name)}")
+        except RuntimeError:
+            return False
+        local.write_bytes(self._ssh(f"cat {q(self.work)}/tracks/{q(name)}"))
+        self.log.append({"track": name, "fetched": "existing host output"})
+        return True
+
     def track(self, window, settings, which="window"):
         """which: 'window' (the movie as is), 'moved' or 'ref' (copies made by ensure_moved)."""
         settings = replace(settings, width_free=False)
@@ -240,7 +259,11 @@ class RealRunner:
              else self.copy_paths(window, which))
         local = self.cache_path(window, settings, which)
         name = local.name
+        if not local.exists() and self.fetch_host_track(name, local):
+            return local
         if not local.exists():
+            if self.cached_only:
+                raise NotAvailable("no cached track for these settings (repeat run: cached tracks only)")
             before = self.check_host()
             q = shlex.quote
             args = (["--imgdir", w["imgdir"], "--midline", w["midline"], "--out", f"{self.work}/tracks/{name}",
@@ -250,7 +273,12 @@ class RealRunner:
                    f"OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 NUMEXPR_NUM_THREADS=1 "
                    f"PYTHONPATH={q(self.tracker)}:{q(self.code)} nice -n 19 {q(self.python)} "
                    f"scripts/remote/qb_track.py " + " ".join(q(a) for a in args))
-            out = json.loads(self._ssh(cmd).decode().strip().splitlines()[-1])
+            try:
+                out = json.loads(self._ssh(cmd).decode().strip().splitlines()[-1])
+            except RuntimeError:            # connection lost: the host may have finished the track anyway
+                if self.fetch_host_track(name, local):
+                    return local
+                raise
             local.write_bytes(self._ssh(f"cat {q(self.work)}/tracks/{q(name)}"))
             after = self.host_state()
             self.log.append({"track": name, "run_s": out.get("run_s"), "frames": out.get("frames"),
@@ -262,12 +290,18 @@ class RealRunner:
         """Whole-pixel mode: the record is the cropped reference copy and `moved` its shifted twin, so rigid
         invariance compares two copies cropped to the same area (inbox item 19)."""
         main = "window" if self.moved_mode == "rotate" else "ref"
-        need = [main, "moved"] if self.with_moved else ["window"]
+        with_moved = self.with_moved and (self.moved_span is None or (window.from_h, window.to_h) == self.moved_span)
+        need = [main, "moved"] if with_moved else ["window"]
         if not all(self.cache_path(window, settings, k).exists() for k in need):   # cached runs need no host step
+            if self.cached_only:       # host outputs of earlier runs count as cached; track() raises if one is missing
+                rec = from_tracker_npz(self.track(window, settings, need[0]), root_id=window.id())
+                moved = (from_tracker_npz(self.track(window, settings, "moved"), root_id=window.id() + "_moved")
+                         if with_moved else None)
+                return Measurement(rec, moved, settings, {})
             self.ensure_midline(window)
-            if self.with_moved:
+            if with_moved:
                 self.ensure_moved(window)
-        if not self.with_moved:
+        if not with_moved:
             return Measurement(from_tracker_npz(self.track(window, settings), root_id=window.id()), None, settings, {})
         rec = from_tracker_npz(self.track(window, settings, main), root_id=window.id())
         moved = from_tracker_npz(self.track(window, settings, "moved"), root_id=window.id() + "_moved")
