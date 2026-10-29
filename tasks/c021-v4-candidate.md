@@ -9,7 +9,7 @@ created: 2026-10-25 15:00
 last_update: 2026-10-26 13:39
 blocker: none
 done_marker: results/2026-10-25_freeze_v4/table_metrics.md
-host: VM (code, LLM runs), lab server (tracker sweeps)
+host: VM (code and LLM runs), lab server (tracker sweeps)
 ---
 
 Inbox diag-analysis items 3 and 4. Proposal `docs/proposals/2026-10-25_diagnostician-repair-misses.md`.
