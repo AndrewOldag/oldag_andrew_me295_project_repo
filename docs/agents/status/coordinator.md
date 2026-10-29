@@ -1,12 +1,14 @@
 # coordinator
-Updated: 2026-10-26 22:40 (local)
+Updated: 2026-10-29 10:21 (local)
 Lane: course
 Branch: main
 Last inbox item done: 26
 State: working
 Now: one check per coordinator tick (scripts/ops/coordinator_tick.ps1); no loop; standing items 1, 8 (relay part), 10, 11, 16, 17 (item 20)
-Last-seen main: 8c3c62f
+Last-seen main: 726e455
 Done since last update:
+- 2026-10-29 10:21 (tick): item 1: only wip/real-calib changed (5e84417, 10:18, status only): State waiting on Andrew, batch 2 stopped at 50 of 91 roots. wip/diag-analysis ready to merge 13:39 (55cede1), unchanged; merge not retried (same board-test failure expected). Others unmerged: wip/v4-candidate 10-26 13:39 (bdc1f94), no status file; wip/lab-report-2 working 10-25 14:46 (0060c20); wip/freeze-v31 done 10-25 14:46 (d24feb8), no merge asked
+- 10:21: item 8: no inbox change since 3edb757; no pings. dispatcher still not live; item 40 still waiting. Item 10: no status says `waiting on <agent>`. Item 16: no status says `waiting on server job`. Live: real-calib only (idle)
 - 2026-10-26 22:40 (tick): item 1: no remote branch changed since 13:39; main changed only in this status file (8c3c62f). wip/diag-analysis ready to merge 13:39 (55cede1), still unmerged (same board-test failure expected; not retried). Others unmerged: wip/v4-candidate 13:39 (bdc1f94), no status file; wip/real-calib working 13:24 (fca270d); wip/lab-report-2 working 10-25 14:46 (0060c20); wip/freeze-v31 done 10-25 14:46 (d24feb8), no merge asked
 - 22:40: item 8: no inbox change since 3edb757; no pings. dispatcher still not live; item 40 still waiting. Item 10: no status says `waiting on <agent>`. Item 16: no status says `waiting on server job`. Live: real-calib only
 - 2026-10-26 14:40 (tick): item 1: wip/diag-analysis ready to merge 13:39 (55cede1), unchanged since the 13:42 failed merge test; main changed only in this status file; merge not retried (same board-test failure expected). Others unmerged: wip/v4-candidate 13:39 (bdc1f94), no status file; wip/real-calib working 13:24 (fca270d); wip/lab-report-2 working 14:46 (0060c20); wip/freeze-v31 done 14:46 (d24feb8), no merge asked. No remote branch changed since 13:42
@@ -251,6 +253,7 @@ Branches (last commit, state):
 - status/gate2: deleted from the remote
 - wip/readme-check, wip/vm-setup, wip/auditor-v1b, wip/fq-real, wip/auditor-v1, wip/scored-v1, wip/freeze-v2, heldout/faults, wip/baselines, wip/diag-review, wip/lab-report-1, wip/gatekeeper: merged
 Needs Andrew:
+- real-calib (waiting on Andrew, 10-29 10:18): lab server does not answer from the VM (ssh timeout 10:17); batch-2 driver and checker loop stopped at 50 of 91 roots, restart needs Andrew (41 roots, about 8 h cluster time, about $2.9 more; projected about $7.6 of $15)
 - wip/diag-analysis not merged: merge fails tests/test_board.py (2 tests) on the host line of `tasks/c021-v4-candidate.md` (comma inside parentheses). Fix the host line on the branch (diag-analysis, session not live: restart it), then the next tick merges
 - dispatcher not live; inbox item 40 (2026-10-26 09:00) waiting. Start or restart dispatcher
 - closure-fix (merged): closure at 1000 px still 2.2-3.2 px/h against synthetic 1.0; rigid invariance at 1000 px untested (1000 px now in dispatcher and real-calib inboxes, ab50da7)
