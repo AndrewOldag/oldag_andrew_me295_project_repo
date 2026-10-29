@@ -1,0 +1,134 @@
+{
+ "freeze_tag": "freeze-v4",
+ "commit": "c48cb98",
+ "method": "diagnostician",
+ "rod": {
+  "case": "v3_growth_zone",
+  "fault": "flank_swap",
+  "size": "0.5",
+  "seed": 20,
+  "id": "v3_growth_zone_flank_swap_z0.5_s20"
+ },
+ "runner": "remote_job",
+ "truth": {
+  "peak_regr_pct_per_h": 54.0,
+  "peak_at_um": 421,
+  "largest_flank_difference_pct_per_h": 0.0
+ },
+ "error_before": {
+  "regr_rms_pct_per_h": 5.162,
+  "regr_max_pct_per_h": 24.327,
+  "regr_covered_um": 1137,
+  "flank_difference_rms_pct_per_h": 32.819,
+  "flank_difference_max_pct_per_h": 93.743,
+  "flank_difference_covered_um": 1137
+ },
+ "initial_checks": [
+  {
+   "check": "rigid_invariance",
+   "passed": false,
+   "value": 15.148832249935584,
+   "threshold": 2.0,
+   "unit": "%/h",
+   "where_s_px": 515.0,
+   "where_frame_pair": null,
+   "detail": "largest change in regr_plus"
+  },
+  {
+   "check": "closure",
+   "passed": false,
+   "value": 2.8807128663774133,
+   "threshold": 1.0,
+   "unit": "px/h",
+   "where_s_px": 551.1256732444373,
+   "where_frame_pair": 20,
+   "detail": "tip path 96.0 px/h; base at s = 551 px; largest single-pair residual at pair 20"
+  },
+  {
+   "check": "plane_sections",
+   "passed": false,
+   "value": 93.7430493266189,
+   "threshold": 3.25,
+   "unit": "%/h",
+   "where_s_px": 160.0,
+   "where_frame_pair": null,
+   "detail": "flank difference -93.74 %/h, predicted 0.00 %/h"
+  }
+ ],
+ "outcome": {
+  "task_id": "rod-1",
+  "agent": "diagnostician",
+  "status": "decline",
+  "args": {
+   "fault": "bad_stage_correction",
+   "reason": "The closure residual is concentrated at frame pair 20 (3.02 px, against a 0.02 px median), which points to a wrong stage correction. The only remedy for it, register_frames, made all three checks worse (rigid invariance 273.7 %/h, closure 32.8 px/h, plane sections 145.8 %/h) and was rolled back. That remedy has no other setting. No other fault has its own evidence: displacement, texture, focus, a second root and midline jitter were tested and ruled out or not clearly shown. The flank spacing rates go up and down with no trend, so they don't show a width change. The measurement cannot be trusted."
+  },
+  "steps": 8,
+  "failed_steps": 0,
+  "calls": 8,
+  "input_tokens": 41411,
+  "output_tokens": 5515,
+  "call_ms": 63658
+ },
+ "error_after": {
+  "regr_rms_pct_per_h": 5.162,
+  "regr_max_pct_per_h": 24.327,
+  "regr_covered_um": 1137,
+  "flank_difference_rms_pct_per_h": 32.819,
+  "flank_difference_max_pct_per_h": 93.743,
+  "flank_difference_covered_um": 1137
+ },
+ "remedies": [
+  "frames registered on the non-growing tissue (from 545 px from the tip) before tracking",
+  "rolled back: frames registered on the non-growing tissue (from 545 px from the tip) before tracking"
+ ],
+ "roll_backs": 1,
+ "final_settings": {
+  "stride": 1,
+  "disk_radius": null,
+  "register": false,
+  "register_from_px": null,
+  "midline_smooth": null,
+  "band_mask": null,
+  "width_free": false,
+  "couple": false
+ },
+ "final_checks": [
+  {
+   "check": "rigid_invariance",
+   "passed": false,
+   "value": 15.148832249935584,
+   "threshold": 2.0,
+   "unit": "%/h",
+   "where_s_px": 515.0,
+   "where_frame_pair": null,
+   "detail": "largest change in regr_plus"
+  },
+  {
+   "check": "closure",
+   "passed": false,
+   "value": 2.8807128663774133,
+   "threshold": 1.0,
+   "unit": "px/h",
+   "where_s_px": 551.1256732444373,
+   "where_frame_pair": 20,
+   "detail": "tip path 96.0 px/h; base at s = 551 px; largest single-pair residual at pair 20"
+  },
+  {
+   "check": "plane_sections",
+   "passed": false,
+   "value": 93.7430493266189,
+   "threshold": 3.25,
+   "unit": "%/h",
+   "where_s_px": 160.0,
+   "where_frame_pair": null,
+   "detail": "flank difference -93.74 %/h, predicted 0.00 %/h"
+  }
+ ],
+ "reported": false,
+ "dev_check": true,
+ "candidate": "v4",
+ "trace": "diagnostician_v3_growth_zone_flank_swap_z0.5_s20_trace.jsonl",
+ "claude_code": "2.1.310",
+ "wall_s": 74.6
+}

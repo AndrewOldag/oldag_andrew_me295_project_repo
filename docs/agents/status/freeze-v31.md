@@ -1,16 +1,16 @@
 # freeze-v31
-Updated: 2026-10-24 12:55 (local)
+Updated: 2026-10-25 15:05 (local)
 Lane: course
-Branch: wip/freeze-v31
-Last inbox item done: 8
-State: ready to merge
-Now: done. v3.1 ended at its stop rule (Andrew, option a); results in `results/2026-10-24_freeze_v3.1/README.md`; log entry in `docs/running_log_pending/freeze-v31.md`
+Branch: wip/freeze-v31 (status); report on wip/lab-report-2
+Last inbox item done: 9
+State: done
+Now: item 9 done: Lab report 2 draft refreshed on wip/lab-report-2 (0060c20); not merged (item 9)
 Done since last update:
-- Item 8: README with the sizing sweeps (faults, sizes, seeds, per-seed outcome against the three rule parts, run counts, storage), the second_root cause and the finding; README section for the driver
-- Storage: lab-server c014 folder, 464 files, count and sha256 equal to the workstation copies (incl. the 2 cache-match runs)
-- Delete exception used once: 3,660 render files (1.74 GB) of the 78 sweep rods in the workstation c014/renders, each after its rod's files matched the verified checksums; every path logged in c014/DELETED.log (3,738 lines), copy on the lab server. 2 cache-match rods' renders kept. Workstation after: work folder 14 GB, 32 GB free
-- Main merged (9310c35; decisions conflict: both entries kept). Full suite 256 passed
-- Task c014 done
+- Item 9: main merged into wip/lab-report-2 (no conflict); `docs/reports/2026-10-30_lab-report-2.md` rewritten from the log since 23 Oct with hashes: freeze v3 (e1e672a, 2ebd422), v3.1 stop rule (2c373d1), real closure threshold 19 px/h from 41 control windows (a3ea607, 1730bf3), ft2 midline (8c5bcff), 1000 px tracks (21fc8c9), dispatcher (5a4767f), repair-miss analysis (0d9ddf8)
+- Proposal section trimmed to one printed page (536 words with one table); moved text after it under "Proposal details" (changes since Lab report 1, v3, v3.1, real movies, full risks, v2 result, full plan)
+- [ANDREW] marks resolved: test count (306 passed, 1 skipped, 89 s, main 8de4d77 with the report); commit counts (502 on main, 360 since Lab report 1, 549 all branches; "Recount 30 Oct"); log entries merged; real-slice demo command. Left: 16-root real subset (`results/2026-10-25_real_subset/` has no README yet); spec-audit papers for the related-work note
+- Text is written to course staff; no lines addressed to Andrew
 Needs Andrew:
-- Main checkout `private/workstation.md` is the old copy; refreshed copy with the delete exception is in this worktree's `private/`
-- Decisions entry 2026-10-24 (v3.1 ended) says "no listed fault both degrades the measurement and is repaired by a listed remedy". As run it is narrower: no fault met the rule on 3 of 3 seeds; bad_stage_correction 5 px was repaired on 1 of 3 (seed 12 good but rigid_invariance 3.02 against 2.0); 6-8 px registration not run. Suggest wording it "fewer than 3 of 5 faults qualify on 3 of 3 seeds" in the entry and the paper. Not edited here (your entry). The README states the narrow form
+- Lab report 2 draft: review on wip/lab-report-2; fill the real-subset line when its README exists
+- Decisions entry 2026-10-24 (v3.1 ended): as run, no fault met the rule on 3 of 3 seeds; bad_stage_correction 5 px repaired on 1 of 3; 6-8 px registration not run. Suggested wording "fewer than 3 of 5 faults qualify on 3 of 3 seeds" (the report uses the narrow form)
+- Main checkout `private/workstation.md` is the old copy; refreshed copy in the freeze-v31 worktree's `private/`

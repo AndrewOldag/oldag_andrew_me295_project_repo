@@ -1,0 +1,153 @@
+{
+ "freeze_tag": "freeze-v4",
+ "commit": "161615f",
+ "method": "diagnostician",
+ "rod": {
+  "case": "v3_growth_zone",
+  "fault": "fast_rotation",
+  "size": "2",
+  "seed": 26,
+  "id": "v3_growth_zone_fast_rotation_z2_s26"
+ },
+ "runner": "remote_job",
+ "truth": {
+  "peak_regr_pct_per_h": 54.0,
+  "peak_at_um": 421,
+  "largest_flank_difference_pct_per_h": 0.0
+ },
+ "error_before": {
+  "regr_rms_pct_per_h": 35.121,
+  "regr_max_pct_per_h": 117.191,
+  "regr_covered_um": 1179,
+  "flank_difference_rms_pct_per_h": 26.163,
+  "flank_difference_max_pct_per_h": 96.294,
+  "flank_difference_covered_um": 1179
+ },
+ "initial_checks": [
+  {
+   "check": "rigid_invariance",
+   "passed": false,
+   "value": 64.1267281432543,
+   "threshold": 2.0,
+   "unit": "%/h",
+   "where_s_px": 20.0,
+   "where_frame_pair": null,
+   "detail": "largest change in regr_mid"
+  },
+  {
+   "check": "closure",
+   "passed": false,
+   "value": 25.886276871252306,
+   "threshold": 1.0,
+   "unit": "px/h",
+   "where_s_px": 595.5219282358435,
+   "where_frame_pair": 19,
+   "detail": "tip path 120.9 px/h; base at s = 596 px; largest single-pair residual at pair 19"
+  },
+  {
+   "check": "plane_sections",
+   "passed": false,
+   "value": 96.29393955504145,
+   "threshold": 3.25,
+   "unit": "%/h",
+   "where_s_px": 525.0,
+   "where_frame_pair": null,
+   "detail": "flank difference 96.29 %/h, predicted 0.00 %/h"
+  }
+ ],
+ "outcome": {
+  "task_id": "rod-1",
+  "agent": "diagnostician",
+  "status": "decline",
+  "args": {
+   "fault": "midline_jitter",
+   "reason": "Light midline smoothing, which cannot be applied again, left all three checks failing and made rigid invariance (64\u2192127 %/h) and plane sections (96\u2192145 %/h) worse. No other fault has its own evidence: steps are small next to the patch, frame quality is good and each frame has only one bright object."
+  },
+  "steps": 6,
+  "failed_steps": 0,
+  "calls": 6,
+  "input_tokens": 27914,
+  "output_tokens": 3087,
+  "call_ms": 34172
+ },
+ "error_after": {
+  "regr_rms_pct_per_h": 18.513,
+  "regr_max_pct_per_h": 102.652,
+  "regr_covered_um": 1168,
+  "flank_difference_rms_pct_per_h": 28.585,
+  "flank_difference_max_pct_per_h": 144.67,
+  "flank_difference_covered_um": 1168
+ },
+ "remedies": [
+  "midline source smoothed (light)"
+ ],
+ "roll_backs": 0,
+ "final_settings": {
+  "stride": 1,
+  "disk_radius": null,
+  "register": false,
+  "register_from_px": null,
+  "midline_smooth": "light",
+  "band_mask": null,
+  "width_free": false,
+  "couple": false
+ },
+ "final_checks": [
+  {
+   "check": "rigid_invariance",
+   "passed": false,
+   "value": 127.35730789349128,
+   "threshold": 2.0,
+   "unit": "%/h",
+   "where_s_px": 545.0,
+   "where_frame_pair": null,
+   "detail": "largest change in regr_mid"
+  },
+  {
+   "check": "closure",
+   "passed": false,
+   "value": 14.494167303462444,
+   "threshold": 1.0,
+   "unit": "px/h",
+   "where_s_px": 569.0047381626786,
+   "where_frame_pair": 19,
+   "detail": "tip path 116.9 px/h; base at s = 569 px; largest single-pair residual at pair 19"
+  },
+  {
+   "check": "plane_sections",
+   "passed": false,
+   "value": 144.67008803041603,
+   "threshold": 3.25,
+   "unit": "%/h",
+   "where_s_px": 555.0,
+   "where_frame_pair": null,
+   "detail": "flank difference 144.67 %/h, predicted -0.00 %/h"
+  }
+ ],
+ "reported": false,
+ "repeat": 0,
+ "trace": "diagnostician_v3_growth_zone_fast_rotation_z2_s26_r0_trace.jsonl",
+ "claude_code": "2.1.310",
+ "wall_s": 70.3,
+ "tracker_runs_new": 2,
+ "runner_log": [
+  {
+   "track": {
+    "out": "v3_growth_zone_fast_rotation_z2_s26__st1_mslight4.npz",
+    "run_s": 7.3,
+    "frames": 41,
+    "points": 33,
+    "disk_radius": 15
+   }
+  },
+  {
+   "track": {
+    "out": "v3_growth_zone_fast_rotation_z2_s26_moved__st1_mslight4.npz",
+    "run_s": 7.1,
+    "frames": 41,
+    "points": 33,
+    "disk_radius": 15
+   }
+  }
+ ]
+}

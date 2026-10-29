@@ -300,10 +300,19 @@ class Engine:
 
     def collect(self, args, _task=None):
         ts = self._eligible(args["root_ids"], ("done",))
+        failed = []
         for t in ts:
-            t.result = self.collector(t)
+            try:
+                t.result = self.collector(t)
+            except Exception as e:          # one window's error fails that window, not the batch (c022)
+                t.state, t.cause = "failed", f"collect: {type(e).__name__}: {str(e)[:120]}"
+                failed.append(t.id)
+                continue
             t.state = "collected"
-        return {"collected_windows": len(ts)}
+        out = {"collected_windows": len(ts) - len(failed)}
+        if failed:
+            out["failed_windows"] = failed
+        return out
 
     def retry(self, args, _task=None):
         ts = self._eligible(args["root_ids"], ("failed",))

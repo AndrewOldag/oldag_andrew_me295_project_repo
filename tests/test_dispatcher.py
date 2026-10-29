@@ -166,6 +166,23 @@ def test_finish_refused_while_jobs_live():
     assert acts.validate({"action": "finish", "summary": "s", "rationale": "r"})[0] == "finish"
 
 
+def test_collect_error_fails_one_window_not_the_batch():
+    """c022: a collector error (tracker 'arange' on one real window) fails that window; the others are collected."""
+    def collector(t):
+        if t.from_h == 0:
+            raise ValueError("arange: cannot compute length")
+        return {"collected": True}
+    e = engine(collector=collector)
+    e.split_root({"root_ids": ["r2"]})
+    e.submit({"root_ids": ["r2"], "backend": "lab_server"})
+    e.queue.advance(600); e.refresh()
+    out = e.collect({"root_ids": ["r2"]})
+    states = [t.state for t in e.tasks.values()]
+    assert out["collected_windows"] == states.count("collected") >= 1 and len(out["failed_windows"]) == 1
+    bad = e.tasks[out["failed_windows"][0]]
+    assert bad.state == "failed" and bad.cause.startswith("collect: ValueError")
+
+
 def test_unknown_root_and_bad_wait_invalid():
     acts = D.DispatcherActions(engine(), CFG)
     with pytest.raises(ValueError, match="unknown root"):

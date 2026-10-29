@@ -1,14 +1,15 @@
 # dispatcher
-Updated: 2026-10-24 15:41 (local)
+Updated: 2026-10-25 21:45 (local)
 Lane: course
 Branch: wip/dispatcher
-Last inbox item done: 30
+Last inbox item done: 39
 State: ready to merge
-Now: items 22-30 done; 3-root agent run with control 0711_c2 finished; all windows declined at closure (the reported result)
+Now: task c022 done: agent run over the 126 first-batch windows, results README; ready to merge
 Done since last update:
-- 0711_c2 ft2 net midline (`c2_chain.done`, 15:24): 80 window frames, 1829 s, tip confidence median 0.385; file copied to the lab-server task folder
-- 3-root agent run, wall 597 s, `results/2026-10-24_real_slice_3roots_c2/`: closure 0708_m12 4.52, 0711_c2 20.4, 0721_m10 4.66 px/h, all FAIL; rigid invariance 7.13, 3.51, 7.26; plane sections 214, 210, 168. Diagnostician: bad_stage_correction, remedies rolled back, decline x3. Auditor: 0 accepted; no condition conclusion. Results README lists both known limits
-- README run step points at the 0711_c2 run; log entry in `docs/running_log_pending/dispatcher.md`; task c010 in review
-- Workstation work folder 19.27 GiB of 20 (nothing more copied); lab-server folders left as they are
+- Item 39: run 4 (reported), wall 1892 s: 114 accepted, 9 declined at closure (bad stage correction 8, midline jitter 1), 3 not collected (tracker 'arange' error, real-calib's same 3); auditor 91 cleared, 23 flagged (summary outlier 20, other 3). results/2026-10-25_full_batch_1_agents/ (outcome counts only; traces and summary.json in staging, git-ignored, because the auditor's text quotes REGR values)
+- Runs 1-3 failed on run-code faults, each fixed with a test and a decisions entry: collect error now fails one window only; ssh keepalive and fetch of a finished host track; summary.json written before printing
+- Found: 4 windows with no computable closure were accepted with no gating check; the auditor flagged all 4
+- Suite 317 passed, 1 skipped
 Needs Andrew:
-- none
+- A window with no computable gating check (closure not finite) is accepted by the current rule. Keep, or decline such windows? (4 of 126 here; the auditor caught them)
+- results/2026-10-25_real_subset/ on main (c019, before the 2026-10-25 rule) has REGR, growth-zone and flank values in tables.md and its README. Keep, or strip them?

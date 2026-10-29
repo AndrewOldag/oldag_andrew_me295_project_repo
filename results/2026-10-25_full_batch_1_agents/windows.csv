@@ -1,0 +1,124 @@
+window,run_id,experiment,experiment_type,condition,group,outcome,fault,remedies_tried,rolled_back,closure,auditor,auditor_reason
+0708_c2 0-2 h,r58,20260708,drought,control,control,accept,,,,pass,flag,summary_outlier
+0708_c2 10-12 h,r67,20260708,drought,control,control,accept,,,,pass,clear,
+0708_c2 12-14 h,r27,20260708,drought,control,control,accept,,,,pass,clear,
+0708_c2 14-16 h,r18,20260708,drought,control,control,accept,,,,pass,clear,
+0708_c2 16-18 h,r60,20260708,drought,control,control,accept,,,,pass,clear,
+0708_c2 18-20 h,r25,20260708,drought,control,control,accept,,,,pass,clear,
+0708_c2 2-4 h,r89,20260708,drought,control,control,accept,,,,pass,clear,
+0708_c2 20-22 h,r43,20260708,drought,control,control,accept,,,,pass,clear,
+0708_c2 22-24 h,r75,20260708,drought,control,control,accept,,,,pass,flag,summary_outlier
+0708_c2 4-6 h,r04,20260708,drought,control,control,accept,,,,pass,clear,
+0708_c2 6-8 h,r17,20260708,drought,control,control,accept,,,,pass,clear,
+0708_c2 8-10 h,r32,20260708,drought,control,control,accept,,,,pass,clear,
+0708_m1 0-2 h,r73,20260708,drought,mannitol,drought,accept,,,,pass,flag,summary_outlier
+0708_m1 10-12 h,r71,20260708,drought,mannitol,drought,decline,bad_stage_correction,,,fail,,
+0708_m1 12-14 h,r105,20260708,drought,mannitol,drought,decline,bad_stage_correction,,,fail,,
+0708_m1 14-16 h,r21,20260708,drought,mannitol,drought,decline,bad_stage_correction,,,fail,,
+0708_m1 16-18 h,r78,20260708,drought,mannitol,drought,accept,,,,pass,flag,summary_outlier
+0708_m1 18-20 h,r59,20260708,drought,mannitol,drought,accept,,frames registered on the non-growing tissue,,pass,flag,summary_outlier
+0708_m1 2-4 h,r90,20260708,drought,mannitol,drought,accept,,,,pass,flag,summary_outlier
+0708_m1 20-22 h,r121,20260708,drought,mannitol,drought,accept,,,,pass,flag,summary_outlier
+0708_m1 22-24 h,r50,20260708,drought,mannitol,drought,accept,,,,pass,flag,summary_outlier
+0708_m1 4-6 h,r12,20260708,drought,mannitol,drought,accept,,,,pass,clear,
+0708_m1 6-8 h,r16,20260708,drought,mannitol,drought,accept,,,,pass,clear,
+0708_m1 8-10 h,r05,20260708,drought,mannitol,drought,decline,bad_stage_correction,frames registered on the non-growing tissue,frames registered on the non-growing tissue,fail,,
+0711_c3 0-2 h,r94,20260711,drought,control,control,accept,,,,not computable,flag,other
+0711_c3 10-12 h,r20,20260711,drought,control,control,accept,,,,pass,clear,
+0711_c3 12-14 h,r82,20260711,drought,control,control,accept,,,,pass,clear,
+0711_c3 14-16 h,r83,20260711,drought,control,control,accept,,,,pass,clear,
+0711_c3 16-18 h,r104,20260711,drought,control,control,accept,,,,pass,clear,
+0711_c3 18-20 h,r92,20260711,drought,control,control,accept,,,,pass,clear,
+0711_c3 2-4 h,r01,20260711,drought,control,control,accept,,,,pass,clear,
+0711_c3 20-22 h,r119,20260711,drought,control,control,accept,,,,pass,clear,
+0711_c3 22-24 h,r102,20260711,drought,control,control,accept,,,,pass,clear,
+0711_c3 4-6 h,r97,20260711,drought,control,control,accept,,,,pass,clear,
+0711_c3 6-8 h,r09,20260711,drought,control,control,accept,,,,pass,flag,summary_outlier
+0711_c3 8-10 h,r55,20260711,drought,control,control,accept,,,,pass,clear,
+0711_m1 10-12 h,r51,20260711,drought,mannitol,drought,accept,,,,pass,clear,
+0711_m1 12-14 h,r22,20260711,drought,mannitol,drought,accept,,,,pass,clear,
+0711_m1 14-16 h,r36,20260711,drought,mannitol,drought,accept,,,,pass,clear,
+0711_m1 16-18 h,r39,20260711,drought,mannitol,drought,accept,,,,pass,clear,
+0711_m1 18-20 h,r48,20260711,drought,mannitol,drought,accept,,,,pass,clear,
+0711_m1 2-4 h,r08,20260711,drought,mannitol,drought,accept,,,,pass,flag,summary_outlier
+0711_m1 20-22 h,r38,20260711,drought,mannitol,drought,accept,,,,pass,clear,
+0711_m1 22-24 h,r98,20260711,drought,mannitol,drought,accept,,,,pass,flag,summary_outlier
+0711_m1 4-6 h,r108,20260711,drought,mannitol,drought,accept,,,,pass,clear,
+0711_m1 6-8 h,r81,20260711,drought,mannitol,drought,accept,,,,pass,clear,
+0711_m1 8-10 h,r62,20260711,drought,mannitol,drought,accept,,,,pass,clear,
+0714_c5 0-2 h,r64,20260714,drought,control,control,decline,bad_stage_correction,,,fail,,
+0714_c5 10-12 h,r54,20260714,drought,control,control,accept,,,,pass,clear,
+0714_c5 12-14 h,r101,20260714,drought,control,control,accept,,,,pass,clear,
+0714_c5 14-16 h,r46,20260714,drought,control,control,accept,,,,pass,clear,
+0714_c5 16-18 h,r99,20260714,drought,control,control,accept,,,,pass,clear,
+0714_c5 18-20 h,r110,20260714,drought,control,control,accept,,,,pass,clear,
+0714_c5 2-4 h,r53,20260714,drought,control,control,accept,,,,pass,clear,
+0714_c5 20-22 h,r69,20260714,drought,control,control,accept,,,,pass,clear,
+0714_c5 22-23.88 h,r03,20260714,drought,control,control,accept,,,,pass,clear,
+0714_c5 4-6 h,r96,20260714,drought,control,control,accept,,,,pass,flag,summary_outlier
+0714_c5 6-8 h,r31,20260714,drought,control,control,decline,midline_jitter,frames registered on the non-growing tissue; midline source smoothed,frames registered on the non-growing tissue,fail,,
+0714_c5 8-10 h,r49,20260714,drought,control,control,accept,,,,pass,flag,summary_outlier
+0714_m1 0-2 h,r37,20260714,drought,mannitol,drought,accept,,,,pass,flag,summary_outlier
+0714_m1 10-12 h,r113,20260714,drought,mannitol,drought,accept,,,,pass,clear,
+0714_m1 12-14 h,r95,20260714,drought,mannitol,drought,accept,,,,pass,clear,
+0714_m1 14-16 h,r15,20260714,drought,mannitol,drought,accept,,,,pass,clear,
+0714_m1 16-18 h,r19,20260714,drought,mannitol,drought,accept,,,,pass,clear,
+0714_m1 18-20 h,r76,20260714,drought,mannitol,drought,accept,,,,pass,clear,
+0714_m1 2-4 h,r79,20260714,drought,mannitol,drought,accept,,,,pass,flag,summary_outlier
+0714_m1 20-22 h,r91,20260714,drought,mannitol,drought,accept,,,,pass,clear,
+0714_m1 22-23.89 h,r42,20260714,drought,mannitol,drought,accept,,,,pass,clear,
+0714_m1 4-6 h,r47,20260714,drought,mannitol,drought,accept,,,,pass,clear,
+0714_m1 6-8 h,r13,20260714,drought,mannitol,drought,accept,,,,pass,clear,
+0714_m1 8-10 h,r40,20260714,drought,mannitol,drought,accept,,,,pass,clear,
+0721_c2 0-2 h,r02,20260721,recovery,control,control,decline,bad_stage_correction,frames registered on the non-growing tissue,frames registered on the non-growing tissue,fail,,
+0721_c2 10-12 h,r61,20260721,recovery,control,control,accept,,,,pass,flag,summary_outlier
+0721_c2 12-14 h,r11,20260721,recovery,control,control,accept,,,,pass,flag,summary_outlier
+0721_c2 14-16 h,r86,20260721,recovery,control,control,accept,,,,pass,clear,
+0721_c2 16-18 h,r57,20260721,recovery,control,control,accept,,,,pass,clear,
+0721_c2 18-20 h,r23,20260721,recovery,control,control,accept,,,,pass,clear,
+0721_c2 2-4 h,r123,20260721,recovery,control,control,accept,,,,pass,clear,
+0721_c2 20-22 h,r14,20260721,recovery,control,control,accept,,,,pass,clear,
+0721_c2 22-24 h,r106,20260721,recovery,control,control,decline,bad_stage_correction,frames registered on the non-growing tissue,frames registered on the non-growing tissue,fail,,
+0721_c2 4-6 h,r56,20260721,recovery,control,control,accept,,,,not computable,flag,other
+0721_c2 8-10 h,r118,20260721,recovery,control,control,decline,bad_stage_correction,,,fail,,
+0721_m1 0-2 h,r10,20260721,recovery,mannitol then control,recovery,accept,,,,pass,clear,
+0721_m1 10-12 h,r74,20260721,recovery,mannitol then control,recovery,accept,,,,pass,clear,
+0721_m1 12-14 h,r30,20260721,recovery,mannitol then control,recovery,accept,,,,pass,clear,
+0721_m1 14-16 h,r44,20260721,recovery,mannitol then control,recovery,accept,,,,pass,clear,
+0721_m1 16-18 h,r112,20260721,recovery,mannitol then control,recovery,accept,,,,pass,clear,
+0721_m1 18-20 h,r24,20260721,recovery,mannitol then control,recovery,accept,,,,pass,clear,
+0721_m1 2-4 h,r103,20260721,recovery,mannitol then control,recovery,accept,,,,pass,clear,
+0721_m1 20-22 h,r111,20260721,recovery,mannitol then control,recovery,accept,,,,pass,clear,
+0721_m1 22-23.99 h,r77,20260721,recovery,mannitol then control,recovery,accept,,,,pass,clear,
+0721_m1 4-6 h,r66,20260721,recovery,mannitol then control,recovery,accept,,,,pass,clear,
+0721_m1 6-8 h,r116,20260721,recovery,mannitol then control,recovery,accept,,,,pass,clear,
+0721_m1 8-10 h,r80,20260721,recovery,mannitol then control,recovery,accept,,,,pass,clear,
+0727_cc1 10-12 h,r72,20260727,recovery,control then control,control,accept,,,,pass,clear,
+0727_cc1 2-4 h,r35,20260727,recovery,control then control,control,accept,,,,pass,flag,summary_outlier
+0727_cc1 4-6 h,r29,20260727,recovery,control then control,control,accept,,,,pass,clear,
+0727_cc1 6-8 h,r65,20260727,recovery,control then control,control,accept,,,,pass,clear,
+0727_cc1 8-10 h,r06,20260727,recovery,control then control,control,accept,,,,pass,clear,
+0727_mc2 0-2 h,r109,20260727,recovery,mannitol then control,recovery,accept,,,,not computable,flag,summary_outlier
+0727_mc2 10-12 h,r115,20260727,recovery,mannitol then control,recovery,accept,,,,pass,clear,
+0727_mc2 12-14 h,r26,20260727,recovery,mannitol then control,recovery,accept,,,,pass,clear,
+0727_mc2 14-16 h,r07,20260727,recovery,mannitol then control,recovery,accept,,,,pass,clear,
+0727_mc2 16-18 h,r68,20260727,recovery,mannitol then control,recovery,accept,,,,pass,clear,
+0727_mc2 18-20 h,r88,20260727,recovery,mannitol then control,recovery,accept,,,,pass,clear,
+0727_mc2 2-4 h,r70,20260727,recovery,mannitol then control,recovery,accept,,,,not computable,flag,other
+0727_mc2 20-22 h,r28,20260727,recovery,mannitol then control,recovery,accept,,,,pass,clear,
+0727_mc2 22-23.61 h,r63,20260727,recovery,mannitol then control,recovery,accept,,,,pass,clear,
+0727_mc2 4-6 h,r87,20260727,recovery,mannitol then control,recovery,accept,,,,pass,clear,
+0727_mc2 6-8 h,r100,20260727,recovery,mannitol then control,recovery,accept,,,,pass,clear,
+0727_mc2 8-10 h,r52,20260727,recovery,mannitol then control,recovery,accept,,,,pass,clear,
+0727_mm1 0-2 h,r114,20260727,recovery,mannitol then mannitol,drought,accept,,,,pass,clear,
+0727_mm1 10-12 h,r122,20260727,recovery,mannitol then mannitol,drought,accept,,,,pass,clear,
+0727_mm1 12-14 h,r117,20260727,recovery,mannitol then mannitol,drought,accept,,,,pass,clear,
+0727_mm1 14-16 h,r120,20260727,recovery,mannitol then mannitol,drought,accept,,,,pass,clear,
+0727_mm1 16-18 h,r34,20260727,recovery,mannitol then mannitol,drought,accept,,,,pass,clear,
+0727_mm1 18-20 h,r93,20260727,recovery,mannitol then mannitol,drought,accept,,,,pass,clear,
+0727_mm1 2-4 h,r84,20260727,recovery,mannitol then mannitol,drought,accept,,,,pass,flag,summary_outlier
+0727_mm1 20-22 h,r107,20260727,recovery,mannitol then mannitol,drought,accept,,,,pass,clear,
+0727_mm1 22-23.64 h,r45,20260727,recovery,mannitol then mannitol,drought,accept,,,,pass,clear,
+0727_mm1 4-6 h,r41,20260727,recovery,mannitol then mannitol,drought,accept,,,,pass,clear,
+0727_mm1 6-8 h,r33,20260727,recovery,mannitol then mannitol,drought,accept,,,,pass,clear,
+0727_mm1 8-10 h,r85,20260727,recovery,mannitol then mannitol,drought,accept,,,,pass,clear,

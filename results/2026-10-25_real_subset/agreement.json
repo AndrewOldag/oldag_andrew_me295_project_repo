@@ -1,0 +1,51 @@
+{
+ "runs": [
+  "results/2026-10-25_real_subset",
+  "results/2026-10-25_real_subset/run2",
+  "results/2026-10-25_real_subset/run3"
+ ],
+ "outcome": {
+  "windows": 48,
+  "unanimous": 48,
+  "unanimity_rate": 1.0,
+  "fleiss_kappa": 1.0,
+  "split": {}
+ },
+ "auditor": {
+  "windows": 48,
+  "unanimous": 48,
+  "unanimity_rate": 1.0,
+  "fleiss_kappa": 1.0,
+  "split": {}
+ },
+ "counts": [
+  {
+   "accept": 43,
+   "decline": 5
+  },
+  {
+   "accept": 43,
+   "decline": 5
+  },
+  {
+   "accept": 43,
+   "decline": 5
+  }
+ ],
+ "fault": {
+  "windows": 5,
+  "unanimous": 3,
+  "unanimity_rate": 0.6,
+  "fleiss_kappa": 0.4,
+  "split": {
+   "0721_c1__w4-6": {
+    "midline_jitter": 1,
+    "bad_stage_correction": 2
+   },
+   "0721_m10__w17-19": {
+    "bad_stage_correction": 2,
+    "midline_jitter": 1
+   }
+  }
+ }
+}

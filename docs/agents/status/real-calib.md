@@ -1,14 +1,15 @@
 # real-calib
-Updated: 2026-10-24 22:35 (local)
+Updated: 2026-10-29 10:20 (local)
 Lane: course
 Branch: wip/real-calib
-Last inbox item done: 6
-State: ready to merge
-Now: items 5-6 done: real closure threshold 19 px/h from 41 control windows (supersedes 18 px/h); decisions entry
+Last inbox item done: 13
+State: waiting on Andrew
+Now: batch 2 stopped at 50 of 91 roots. The driver last ran 2026-10-26 16:22 (two staging rsyncs failed when the lab-server connection dropped); Claude Code then stopped the driver, the checker loop and its wait for low VM memory. Not restarted (needs Andrew)
 Done since last update:
-- 48 windows, 16 control roots, 4 experiments; 41 measured (12 first, 23 planned extension, 6 fallback); 7 not measured (5 screen or probe, 2 measurement errors on 0714_c11)
-- Closure: p95 18.87 -> threshold 19 px/h; median 3.60, max 28.9; without the largest window 17.47. Rigid invariance (6.4-201 %/h, median 27.5) and plane sections reported only. `results/2026-10-25_real_calibration/README.md`
-- `python -m pytest -q tests`: 306 passed, 1 skipped. Log entry in `docs/running_log_pending/real-calib.md`
-- Dispatcher to be told when merged (it holds its subset checks until then)
+- Andrew 2026-10-26: deleting whole-root cluster copies this session made, after md5 check, approved (decisions)
+- Batch 2: 50 of 91 roots collected (md5 verified, frames cleared), 0 errors, no job lost (every submitted root collected); 570 windows checked on the lab server
+- 3 roots staged on the cluster, not submitted (0721_c6, 0721_m6, 0727_cc6; the last may be partial; the driver re-runs the copy and checks file counts)
 Needs Andrew:
-- none
+- The lab server does not answer from the VM (ssh timeout, 2026-10-29 10:17); the cluster is reached through it
+- Restart of the batch-2 driver and checker loop after the memory stop (resumes from markers): 41 roots, about 8 h of cluster time, about $2.9 more (projected total about $7.6 of $15)
+- Merge of main into this branch still refused by the pre-push blocklist (main's inbox file names the cluster); the coordinator merges this branch

@@ -40,3 +40,9 @@ Planning account, under Andrew's delegation at 00:21: make decisions that keep t
 - The VM did not go down. Claude Code stopped the dispatcher's subset run at 00:10 for low VM memory (7.7 GB total, several idle sessions open) after 1 window. The dispatcher set `waiting on Andrew` at 00:10 but pushed it only at 14:39. The coordinator tick also pushed nothing after 23:50; cause not yet known
 - The 01:00-05:00 notes that the VM was likely stopped were wrong. The planning account also sent no push notification to Andrew overnight
 - dispatcher item 37: restart now, with a memory check before each window
+
+## 14:50 cause, from the tick log
+- Last tick line 2026-10-25 07:00:04 (log in UTC then; 00:00 local). Next line 14:40:07 (local). No tick ran for 14.7 h, not even a skip line: the VM was suspended or timed out shortly after 00:10 (when Claude Code stopped the dispatcher run for low memory)
+- Both causes held: the subset run was killed at 00:10 for memory, and the VM then stopped. The 14:45 correction overstated it; the 01:00-05:00 notes were right that the VM had stopped
+- Tick log timestamps switch from UTC to local across the gap: the VM clock or time zone changes on resume
+- 14:42 pass pinged dispatcher and freeze-v31; real-calib, diag-analysis and closure-fix are not live
