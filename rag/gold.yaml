@@ -1,0 +1,166 @@
+# Gold set for the RAG run (spec 2026-11-02 B5; proposal docs/proposals/2026-11-02_rag.md).
+# Written from the PDFs' page text, before any retrieval or system run.
+# Answerable: key, page (PDF page index from 1), quote (at most 25 words, checked in code), short answer.
+# Out of corpus (expect: decline): the answer is only in an excluded paper. No key, quote or answer from it;
+# absent_terms are checked absent from the corpus text (`python scripts/rag.py gold`).
+questions:
+- id: a01
+  expect: answer
+  question: In vertically growing Arabidopsis primary roots (ecotype Columbia), how far from the tip of the root cap was the maximum elongation rate?
+  key: Mullen1998
+  page: 1
+  quote: When growing vertically, the maximum elongation rate occurred 481
+  answer: About 481 (plus or minus 50) micrometres from the tip of the root cap.
+- id: a02
+  expect: answer
+  question: What markers were applied to Arabidopsis roots to measure growth-rate profiles along the apex, and how were they followed?
+  key: Mullen1998
+  page: 1
+  quote: we applied small charcoal particles to the root surface and analyzed their displacement during growth using an automated video digitizer system
+  answer: Small charcoal particles on the root surface, tracked with an automated video digitizer system and custom software.
+- id: a03
+  expect: answer
+  question: When do the Eulerian (spatial) and Lagrangian (material) specifications of a plant growth variable coincide?
+  key: Silk1979
+  page: 1
+  quote: The two specifications coincide only when the spatial distribution of the variable is steady
+  answer: Only when the spatial distribution of the variable is steady.
+- id: a04
+  expect: answer
+  question: In the fluid-flow description of plant growth, which operation on the growth velocity gives the relative elemental growth rate?
+  key: Silk1979
+  page: 7
+  quote: The relative elemental growth rate, or the specific growth rate, L(x, t), is just the divergence of velocity
+  answer: The divergence of the growth velocity.
+- id: a05
+  expect: answer
+  question: How many fitting parameters does the sigmoid model of the spatial velocity field in one-dimensional growth of plant organs have?
+  key: Morris1992
+  page: 1
+  quote: A sigmoid curve with three fitting parameters is proposed as a descriptive model for the spatial velocity field
+  answer: Three.
+- id: a06
+  expect: answer
+  question: Where along the root does gravitropic curvature start, and is it driven by differential acceleration or by differential inhibition of elongation?
+  key: Wolverton2002
+  page: 1
+  quote: Initiation of curvature, for example, occurs outside the region of most rapid elongation and is driven by differential acceleration rather than differential inhibition of elongation
+  answer: Outside the region of most rapid elongation; driven by differential acceleration, not differential inhibition.
+- id: a07
+  expect: answer
+  question: How does applied auxin affect cell elongation in the distal elongation zone compared with the central elongation zone?
+  key: Wolverton2002
+  page: 3
+  quote: while applied auxin inhibits the elongation of cells in the CEZ, it promotes the elongation of cells within the DEZ
+  answer: It promotes elongation in the distal elongation zone and inhibits it in the central elongation zone.
+- id: a08
+  expect: answer
+  question: When individual Arabidopsis roots were imaged through a horizontal microscope, how often were velocity profiles obtained and over what period?
+  key: Baskin2020
+  page: 2
+  quote: velocity profiles obtained every 5 min over 3 h coincided closely
+  answer: Every 5 min over 3 h.
+- id: a09
+  expect: answer
+  question: After the shoot was excised, how did the position of the root elongation zone change over 24 h?
+  key: Baskin2020
+  page: 2
+  quote: the position of the elongation zone moved, on average, rootward, by several hundred microns in 24 h
+  answer: It moved rootward, on average by several hundred microns in 24 h.
+- id: a10
+  expect: answer
+  question: In the PatchTrack platform, what was fitted to patch velocities against position along the root axis to obtain the kinematic traits?
+  key: Henry2023
+  page: 1
+  quote: Fitting a flexible logistics equation to patch velocities plotted versus position along the root axis
+  answer: A flexible logistic equation.
+- id: a11
+  expect: answer
+  question: In fer mutants given long-term treatment with high brassinosteroid concentrations, what alleviated the defects?
+  key: Chaudhary2025
+  page: 1
+  quote: osmolytes, reducing turgor, alleviate the defects
+  answer: Osmolytes, which reduce turgor.
+- id: a12
+  expect: answer
+  question: What genetically encoded sensor was introduced to measure cell wall pH in Arabidopsis roots without invasive methods?
+  key: Krupar2026
+  page: 1
+  quote: We introduce WALLΦ, a genetically encoded fluorescent sensor for non-invasive cell wall pH measurements
+  answer: WALLΦ, a genetically encoded fluorescent cell wall pH sensor.
+- id: a13
+  expect: answer
+  question: Does the local growth rate of Arabidopsis root cells correlate clearly with cell wall acidity?
+  key: Krupar2026
+  page: 1
+  quote: found, contrary to the acid growth theory, a lack of a clear correlation of local growth rate with cell wall acidity
+  answer: No; there was no clear correlation, contrary to the acid growth theory.
+- id: a14
+  expect: answer
+  question: What did high-resolution kinematic analysis show about root cell expansion profiles in feronia mutants?
+  key: Shih2014
+  page: 1
+  quote: fer mutants show pronounced spatiotemporal fluctuations in root cell expansion profiles with a timescale of minutes
+  answer: Pronounced spatiotemporal fluctuations in the expansion profiles, on a timescale of minutes.
+- id: a15
+  expect: answer
+  question: How did epi-brassinolide and latrunculin B affect root straightening after the gravistimulus was withdrawn on a clinostat?
+  key: deBang2020
+  page: 1
+  quote: Both compounds inhibited autotropism, a process in which the root straightened after the initial gravistimulus was withdrawn by clinorotation
+  answer: Both inhibited autotropism (the straightening).
+- id: a16
+  expect: answer
+  question: Do simulations indicate that formation of a lateral PIN2 gradient is required for gravitropic root bending?
+  key: Retzer2019
+  page: 1
+  quote: simulations indicate that PIN2 gradient formation is no prerequisite for root bending but rather dampens asymmetric auxin flow and signaling
+  answer: No; the gradient is not required and instead dampens asymmetric auxin flow and signaling.
+- id: a17
+  expect: answer
+  question: How do brassinosteroid and auxin compare in their spatial patterns and effects on cell elongation in the root tip?
+  key: Chaiwanon2015
+  page: 1
+  quote: BR and auxin have opposite patterns and effects on cell elongation in root tip
+  answer: They have opposite patterns and opposite effects.
+- id: a18
+  expect: answer
+  question: How did brassinosteroid affect cell volume in the three-dimensional cellular analysis of the root meristem?
+  key: Fridman2021
+  page: 1
+  quote: the hormone effect on cell volume was minor, establishing cell volume as invariant to the effect of BR
+  answer: Only a minor effect; cell volume was invariant to brassinosteroid.
+- id: a19
+  expect: answer
+  question: When growth is included in a model of gravitropic movement, which rate of change of curvature has to be considered?
+  key: Bastien2014
+  page: 1
+  quote: it is necessary to consider the material derivative, i.e., the rate of change of curvature bound to expanding and convected organ elements
+  answer: The material derivative of curvature, following the expanding and convected organ elements.
+- id: a20
+  expect: answer
+  question: In the single-cell study of brassinosteroid responses in Arabidopsis roots, how was a sensitized system set up before brassinolide treatment?
+  key: Nolan2023
+  page: 3
+  quote: inhibiting brassinosteroid biosynthesis using Brassinazole (BRZ) (29), then reactivating signaling with Brassinolide (BL)
+  answer: Brassinosteroid biosynthesis was inhibited with brassinazole, then signaling was reactivated with brassinolide.
+- id: o01
+  expect: decline
+  question: In time-lapse kinematics of poplar adventitious roots analysed with KymoRod, below what strain rate was the growth zone taken to end?
+  absent_terms: [KymoRod, adventitious]
+- id: o02
+  expect: decline
+  question: In poplar adventitious roots analysed with KymoRod, which single kinematic parameter was the best proxy for root growth rate?
+  absent_terms: [KymoRod, adventitious, proxy for growth]
+- id: o03
+  expect: decline
+  question: In the Root Walker automated root-imaging system, what fraction of roots was lost in 12 h runs?
+  absent_terms: [Root Walker, RootWalker, 12 h runs]
+- id: o04
+  expect: decline
+  question: What are the units of the differential growth curvature rate (DGCR) used to map where gravitropic curvature is produced along Arabidopsis roots?
+  absent_terms: [DGCR, differential growth curvature rate]
+- id: o05
+  expect: decline
+  question: In kinematic analysis of bean basal roots over 6 h, how much more did the upper root edge grow than the lower edge?
+  absent_terms: [basal root, upper edge]
