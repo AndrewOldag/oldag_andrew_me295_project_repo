@@ -10,3 +10,10 @@
 - Demo: `python scripts/synth/scored_v4.py eval` prints the v4 metrics table and writes `results/2026-10-25_freeze_v4/table_metrics.md`
 - Remaining: Andrew reviews `wip/v4-candidate` and decides on merge
 - Bottlenecks: merge of `wip/v4-candidate` waits on Andrew
+
+## 2026-11-02 (build account, session diag-analysis, v3-to-v4 split)
+- Done: `python scripts/synth/scored_v4.py decompose` writes `results/2026-10-25_freeze_v4/decompose_v3_v4.md`; README section in `results/2026-10-25_freeze_v4/README.md`. Cached runs only; 0 tracker runs, 0 LLM calls (branch `wip/v4-decompose`)
+- Done: diagnostician balanced accuracy v3 0.69, v3 runs under C3 (a) labels 0.75, v4 0.93; on the 48 rods whose label is unchanged, v3 0.74, v4 0.92. Remedy tree 0.81, 0.90, 0.93 (unchanged method). Single agent unchanged rows 0.67 -> 0.64
+- Demo: `python scripts/synth/scored_v4.py decompose` prints five columns (v3 labels, C3 a labels, v4, unchanged rows v3 and v4) per method
+- Remaining: Andrew decides on merge of `wip/v4-decompose`
+- Bottlenecks: none
