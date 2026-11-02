@@ -15,3 +15,5 @@ dependencies:
   - pip
   - pip:
       - mcp==2.3.0   # only for scripts/cli_probe (MCP test record)
+      - pypdf==6.21.4   # rag: PDF text per page (spec 2026-11-02 B)
+      - fastembed==0.9.1   # rag: local CPU embeddings (ONNX, no torch)
