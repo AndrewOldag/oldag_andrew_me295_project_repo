@@ -1,10 +1,10 @@
 # dispatcher
-Updated: 2026-11-02 14:08 (local)
+Updated: 2026-11-02 14:10 (local)
 Lane: course
 Branch: wip/dispatcher
 Last inbox item done: 42
 State: working
-Now: task c023: item 43 (dispatcher vs fixed script on the fake queue): proposal first
+Now: task c023 item 43: proposal committed; building the scenario harness, then S0-S4 x 5 seeds, both methods
 Done since last update:
 - Item 42: README section "Run the real slice": one command, what it needs (private host config), expected wall time
 - Item 41: new wip/dispatcher from origin/main; item 40 (1) void
