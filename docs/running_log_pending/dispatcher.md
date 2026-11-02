@@ -1,0 +1,2 @@
+## 2026-11-02 (build account, dispatcher session, task c023)
+- Done: item 40 (2), spec 2026-11-02 A1: real-profile rule, closure not computable -> decline without an agent call (`scripts/real_slice.py` `rule_outcome`); test; suite 327 passed, 1 skipped. c022 first batch re-scored from run 4 records (`scripts/full_batch_agents_report.py --rescore`): 4 windows accept -> decline; 110 accepted, 13 declined, 3 not collected; auditor 91 cleared, 19 flagged. `results/2026-10-25_full_batch_1_agents/`
