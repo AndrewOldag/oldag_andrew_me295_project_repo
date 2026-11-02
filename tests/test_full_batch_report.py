@@ -26,3 +26,14 @@ def test_remedy_cells_split_tried_and_rolled_back():
            "rolled back: frames registered on the non-growing tissue (from 1015 px from the tip) before tracking"]
     assert FBR.remedy_cells(rem) == ("frames registered on the non-growing tissue",
                                      "frames registered on the non-growing tissue")
+
+
+def test_rescore_declines_accepted_window_with_closure_not_computable():
+    rows = [{"outcome": "accept", "closure": "not computable", "auditor": "flag", "auditor_reason": "other",
+             "fault": ""},
+            {"outcome": "accept", "closure": "pass", "auditor": "clear", "auditor_reason": "", "fault": ""},
+            {"outcome": "decline", "closure": "fail", "auditor": "", "auditor_reason": "", "fault": "x"}]
+    out = FBR.rescore(rows)
+    assert [r["outcome"] for r in out] == ["decline", "accept", "decline"]
+    assert out[0]["fault"] == "not_computable" and out[0]["auditor"] == "" and "was accept" in out[0]["rescored"]
+    assert out[1]["auditor"] == "clear" and out[1]["rescored"] == "" and out[2]["fault"] == "x"
