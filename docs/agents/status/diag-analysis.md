@@ -1,16 +1,15 @@
 # diag-analysis
-Updated: 2026-10-26 13:39 (local)
+Updated: 2026-11-02 14:22 (local)
 Lane: course
-Branch: wip/diag-analysis (status, task c021, log entry); code and results on wip/v4-candidate
+Branch: wip/v4-decompose (wip/diag-analysis and wip/v4-candidate merged and deleted)
 Last inbox item done: 5
 State: ready to merge
-Now: freeze v4 done; `wip/v4-candidate` not merged to main until Andrew approves (item 3 (4))
+Now: v3-to-v4 split into relabelling and agent change, on `wip/v4-decompose`
 Done since last update:
-- scored v4 run complete, `results/2026-10-25_freeze_v4/README.md`, bdc1f94 on wip/v4-candidate
-- balanced accuracy: script 0.67, remedy tree 0.93, diagnostician 0.93 (0.92-0.94), single agent 0.63 (0.58-0.69), all-decline 0.33; false accepts per repeat: 18, 2, 0, 0.3
-- agreement: diagnostician 46 of 51 rods unanimous (kappa 0.887); single agent 34 of 51 (0.626)
-- 95 usage-limit runs rerun as Andrew approved; 0 such runs in the final set; 0 harness errors
-- tracker runs 404 of 420, 0 failed; LLM runs 418 of 420
-- log entry `docs/running_log_pending/diag-analysis.md`; task c021 done
+- `results/2026-10-25_freeze_v4/decompose_v3_v4.md` and a README section; `python scripts/synth/scored_v4.py decompose`; from cached runs, no tracker or LLM runs
+- C3 (a) relabels stage_log_missing (3 rods per seed set) from accept_repaired to decline; every v3 method declined them, so those declines now score correct with no behaviour change; all-decline 21 -> 24 of 51
+- diagnostician balanced accuracy: v3 0.69; v3 runs under C3 (a) labels 0.75 (relabelling); v4 0.93. Unchanged rows (48 rods): v3 0.74, v4 0.92
+- remedy tree (unchanged method): 0.81 -> 0.90 by relabelling, 0.93 in v4 (seed draw)
+- single agent unchanged rows: v3 0.67, v4 0.64
 Needs Andrew:
-- merge of `wip/v4-candidate` (code switch, v4 driver, labels, results, proposal); `wip/diag-analysis` (status, task, log) can merge any time
+- merge of `wip/v4-decompose` (results note, driver command, status, log); no code path used by v3 or v4 runs changed
