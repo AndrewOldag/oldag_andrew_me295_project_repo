@@ -75,6 +75,22 @@ Inbox diag-analysis items 3-5 (Andrew, 2026-10-25). Proposal `docs/proposals/202
 | diagnostician | 0.69 | 0.93 | 0.44 | 1.00 | 0 | 0 |
 | single_agent | 0.60 | 0.63 | 0.61 | 0.96 | 0 | 0.3 |
 
+### Relabelling against agent change (`decompose_v3_v4.md`)
+- The v3 to v4 difference mixes two causes: the agent changes (C1, C2) and the label rule (C3 a). C3 (a) moves the 3 stage_log_missing rods per seed set from accept_repaired to decline. Every method declined them in v3, so the same declines score correct under C3 (a) with no change in behaviour. All-decline: 21 of 51 in v3, 24 of 51 in v4
+- Split: v3 runs rescored against the C3 (a) labels (relabelling only), and v3 against v4 on the 48 rods per set whose label rule is unchanged (every row except stage_log_missing)
+
+| Method | v3, v3 labels | v3, C3 (a) labels | v4 | v3, unchanged rows | v4, unchanged rows |
+| :-- | --: | --: | --: | --: | --: |
+| script | 0.67 | 0.67 | 0.67 | 0.67 | 0.67 |
+| remedy_tree | 0.81 | 0.90 | 0.93 | 0.89 | 0.92 |
+| diagnostician | 0.69 | 0.75 | 0.93 | 0.74 | 0.92 |
+| single_agent | 0.60 | 0.65 | 0.63 | 0.67 | 0.64 |
+
+- Balanced accuracy. Diagnostician: relabelling +0.06 (0.69 -> 0.75); agent change and new seeds +0.18 (0.75 -> 0.93); unchanged rows +0.18 (0.74 -> 0.92). Remedy tree, which did not change: relabelling +0.09, new seeds +0.03
+- Diagnostician accept_repaired on unchanged rows (rigid_drift, width_change, bad_stage_correction): 0.59 in v3, 1.00 in v4
+- Single agent on unchanged rows: 0.67 in v3, 0.64 in v4; decline accuracy 0.43 -> 0.11 (66 runs at the step limit)
+- Use the unchanged-row columns, or the v3 runs under C3 (a) labels, when v3 and v4 are compared. The seeds differ (20-22, 26-28): not paired runs
+
 ## Cost (all repeats)
 
 | Method | Runs | Steps | Tokens in | Tokens out | Call time (s) |

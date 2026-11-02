@@ -9,6 +9,7 @@ the freeze v4 candidate on (C1, C2, C3 option a; agents/candidate.py).
   python scripts/synth/scored_v4.py rules                          # script and remedy tree
   python scripts/synth/scored_v4.py agents --method diagnostician|single_agent --repeat 0|1|2 [--max-runs N]
   python scripts/synth/scored_v4.py eval                           # metrics and tables, v3 layout
+  python scripts/synth/scored_v4.py decompose                      # v3 to v4: relabelling against agent change
 
 Everything else is the freeze v3 driver (scripts/synth/scored_v3.py) pointed at v4: cache, output folder, rod
 set, tag. Rods: every v3 class at its v3 size (clean rods; development faults at the freeze v2 sizes; held-out
@@ -226,12 +227,86 @@ def dev_check_report():
     return "\n".join(L) + "\n"
 
 
+# ------------------------------------------------------------------ v3 to v4: relabelling against agent change
+
+RELABELLED = ("stage_log_missing",)            # the rows whose label C3 (a) changes (switch_check.md)
+
+
+def _score(which, labels, exclude=()):
+    """Metrics of the v3 runs (which='v3') or the v4 runs ('v4') against `labels`, rows in `exclude` left out."""
+    from measure import metrics
+    keep = (v3.CACHE, v3.OUT, v3.scored_rods, v3.CLEAN_FALSE_ALARM)
+    if which == "v3":
+        v3.CACHE, v3.OUT, v3.scored_rods, v3.CLEAN_FALSE_ALARM = V3_CACHE, V3_OUT, _V3_SCORED, _V3_FALSE_ALARM
+    try:
+        rows = [r for r in v3.score_runs(labels) if not r.get("missing") and r["kind"] not in exclude]
+        rods = [(rid, v["class"]) for rid, v in labels.items() if v["kind"] not in exclude]
+        good0 = {}
+        for rod in v3.scored_rods():
+            e = v3.evaluate(rod, v3.initial(rod))
+            good0[rod.id()] = e["good"] if e else False
+    finally:
+        v3.CACHE, v3.OUT, v3.scored_rods, v3.CLEAN_FALSE_ALARM = keep
+    res = {m: metrics.over_repeats([r for r in rows if r["method"] == m]) for m in v3.METHODS}
+    res["all_decline"] = metrics.over_repeats(metrics.reference_runs(rods, "all_decline"))
+    return res, rods
+
+
+def decompose_report():
+    """v3 runs scored three ways, v4 runs two ways, so the v3 to v4 change splits into relabelling (C3 a) and
+    agent change (C1, C2). Unchanged rows: every row except RELABELLED."""
+    v3_labels = json.loads((V3_OUT / "labels.json").read_text())["labels"]
+    keep = (v3.CACHE, v3.OUT, v3.scored_rods, v3.CLEAN_FALSE_ALARM)
+    v3.CACHE, v3.OUT, v3.scored_rods, v3.CLEAN_FALSE_ALARM = V3_CACHE, V3_OUT, _V3_SCORED, _V3_FALSE_ALARM
+    try:
+        _, info = v3.labels_report()                       # candidate v4 on: v3 rods under C3 (a)
+    finally:
+        v3.CACHE, v3.OUT, v3.scored_rods, v3.CLEAN_FALSE_ALARM = keep
+    v3_a = info["labels"]
+    v4_labels = json.loads((OUT / "labels.json").read_text())["labels"]
+    cols = [("v3 runs, v3 labels", "v3", v3_labels, ()),
+            ("v3 runs, C3 (a) labels", "v3", v3_a, ()),
+            ("v4 runs, v4 labels", "v4", v4_labels, ()),
+            ("v3 runs, unchanged rows", "v3", v3_labels, RELABELLED),
+            ("v4 runs, unchanged rows", "v4", v4_labels, RELABELLED)]
+    res = [(name, *_score(w, lab, ex)) for name, w, lab, ex in cols]
+    changed = sorted(r for r in v3_labels if v3_labels[r]["class"] != v3_a[r]["class"])
+    cnt = lambda rods: ", ".join(f"{c} {sum(v == c for _, v in rods)}" for c in ("accept_clean", "accept_repaired", "decline"))
+    L = ["# Freeze v3 to v4: relabelling against agent change", "",
+         "v4 changes the agents (C1 prompt map, C2 stage-log spread) and the label rule (C3 option a: a check that "
+         "cannot be computed after a remedy fails). C3 (a) moves the stage_log_missing rows from accept_repaired to "
+         f"decline ({len(changed)} v3 rods: {', '.join(changed)}). Every method declined those rods in v3, so part of "
+         "the v3 to v4 difference is relabelling, with no change in agent behaviour.", "",
+         "- Relabelling alone: v3 runs, v3 labels -> v3 runs, C3 (a) labels (same runs, same seeds)",
+         "- Agent change and new seeds: v3 runs, C3 (a) labels -> v4 runs, v4 labels (same label rule)",
+         f"- Unchanged rows: every row except {', '.join(RELABELLED)}; the label rule is the same there in v3 and v4",
+         "- v3 seeds 20-22, v4 seeds 26-28: the agent-change columns compare different rod draws, not paired runs",
+         "- LLM methods: mean over 3 repeats. `python scripts/synth/scored_v4.py decompose`", "",
+         "| Column | Rods |", "| :-- | :-- |"]
+    L += [f"| {name} | {len(rods)} ({cnt(rods)}) |" for name, _, rods in res]
+    for title, key in (("Balanced accuracy", "balanced_accuracy"), ("Overall accuracy", "overall_accuracy")):
+        L += ["", f"## {title}", "", "| Method | " + " | ".join(n for n, _, _ in res) + " |",
+              "| :-- | " + " | ".join("--:" for _ in res) + " |"]
+        for m in v3.METHODS + ("all_decline",):
+            L.append(f"| {m} | " + " | ".join(v3._f(r[m][key]) for _, r, _ in res) + " |")
+    for cls in ("accept_repaired", "decline"):
+        L += ["", f"## Accuracy, {cls}", "", "| Method | " + " | ".join(n for n, _, _ in res) + " |",
+              "| :-- | " + " | ".join("--:" for _ in res) + " |"]
+        for m in v3.METHODS + ("all_decline",):
+            L.append(f"| {m} | " + " | ".join(v3._f(r[m]["accuracy_per_class"][cls]) for _, r, _ in res) + " |")
+    L += ["", "## False accepts per repeat", "", "| Method | " + " | ".join(n for n, _, _ in res) + " |",
+          "| :-- | " + " | ".join("--:" for _ in res) + " |"]
+    for m in v3.METHODS:
+        L.append(f"| {m} | " + " | ".join(v3._f(r[m]["false_accepts"], 1) for _, r, _ in res) + " |")
+    return "\n".join(L) + "\n"
+
+
 # ------------------------------------------------------------------ main
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("cmd", choices=["plan", "status", "fetch", "labels", "dev-check", "dev-report", "rules",
-                                    "agents", "eval"])
+                                    "agents", "eval", "decompose"])
     ap.add_argument("--phase", choices=["labels", "methods"])
     ap.add_argument("--method", choices=v3.LLM)
     ap.add_argument("--repeat", type=int, choices=v3.REPEATS)
@@ -286,6 +361,10 @@ def main():
         print(text)
     elif a.cmd == "rules":
         v3.run_rules()
+    elif a.cmd == "decompose":
+        text = decompose_report()
+        (OUT / "decompose_v3_v4.md").write_text(text)
+        print(text)
     elif a.cmd == "agents":
         if a.method is None or a.repeat is None:
             ap.error("--method and --repeat are required")
