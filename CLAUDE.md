@@ -102,7 +102,7 @@ Lab reports go in `docs/reports/`, one file per report, started from `docs/repor
 - Lab report 1: Sun 18 Oct, 11:59 pm (Andrew checked; syllabus and lab guideline say Fri 16 Oct) (related-work note, repo and environment, running log, draft proposal)
 - Build stops: Wed 28 Oct
 - Lab report 2: Fri 30 Oct (1-page proposal; commitment point)
-- Lab report 3: Fri 13 Nov (smallest slice running end to end)
+- Lab report 3: Sun 15 Nov (as in Lab report 2; syllabus Fri 13 Nov) (all include-yes roots through the checker, dispatcher evaluation, real slice from one command, RAG index)
 - Lab report 4: Mon 23 Nov (integrated run; failure modes)
 - Presentation: Wed 2 Dec. Final report and repository: Wed 9 Dec (syllabus deliverables table)
 
