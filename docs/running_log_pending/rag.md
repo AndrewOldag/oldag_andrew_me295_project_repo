@@ -1,0 +1,12 @@
+## 2026-11-02 (build account, rag session, task c024)
+- Done: corpus zip checked: 17 of 17 sha256 match `rag_corpus.csv`, no extra file; Baskin2020 DOI filled; 3 papers print no DOI (d4fd350)
+- Done: proposal `docs/proposals/2026-11-02_rag.md` committed before any run (b69a95a); amended before any run for glyph-code decoding (Wolverton2002)
+- Done: `rag/` (corpus, retrieve, answer, score), `scripts/rag.py`, `tests/test_rag.py` (9597e89). 317 pages, 693 chunks; build 309 s
+- Done: gold set `rag/gold.yaml`: 20 answerable over 15 papers, 5 out of corpus, committed before any retrieval (ea43149)
+- Done: retrieval on the 20 answerable: BM25 gold page top 1 11, top 5 19; embeddings top 1 8, top 5 14, top 6 15
+- Done: RAG 3 repeats, 75 LLM calls (cap 150), 0 errors: correct 11 / 12 / 11 of 20; verified quotes 18 / 17 / 18 of 20; out-of-corpus declines 5 of 5 each (precision and recall 1.0); agreement 21 of 25
+- Found: misses are mostly another page of the right paper (5-7 per repeat; in 5 questions the gold page was not in the top 6); a01 unverified in all 3 repeats (control character from the plus-minus sign in the page text); length limits 2
+- Done: suite 352 passed, 1 skipped
+- Demo: `python scripts/rag.py report` prints the summary and writes `results/2026-11-02_rag/metrics.json` and `per_question.csv`
+- Remaining: merge `wip/rag`; Lab report 3 cites `results/2026-11-02_rag/README.md`
+- Bottlenecks: none

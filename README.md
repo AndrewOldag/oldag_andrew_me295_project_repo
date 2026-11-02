@@ -92,7 +92,7 @@ Course project for AM/ME/CE 295, Caltech, Fall 2026. Start with `CLAUDE.md` and 
 ## RAG over the papers (task c024)
 - Proposal `docs/proposals/2026-11-02_rag.md`. Corpus: the files with `included = yes` in `docs/context/literature/rag_corpus.csv` (no OUP or Wiley paper). PDFs are not in the repo: unzip the corpus zip into `staging/rag_corpus/` (git-ignored); `build` checks every sha256 against the csv and stops on a mismatch or an extra file
 - Agents env with `pypdf` and `fastembed` (in `environment.yml`). The first `build` downloads the embedding model (`BAAI/bge-small-en-v1.5`, about 65 MB) into `staging/rag/models/`
-- `python scripts/rag.py build` (page text, chunks, chunk embeddings in `staging/rag/`), `gold` (checks `rag/gold.yaml`: every gold quote on its page), `retrieval` (BM25 and embedding ranks, no LLM), `run --repeat 1|2|3` (one `claude -p` call per question; stops under 3 GB free VM memory or at 150 calls; restarts skip answered questions), `report` (writes `results/2026-11-02_rag/`). `retrieval` and `run` refuse until `rag/gold.yaml` is committed. Answer texts stay in `staging/rag/runs/`
+- `python scripts/rag.py build` (page text, chunks, chunk embeddings in `staging/rag/`; 309 s on the 2-core VM, 2026-11-02), `gold` (checks `rag/gold.yaml`: every gold quote on its page), `retrieval` (BM25 and embedding ranks, no LLM), `run --repeat 1|2|3` (one `claude -p` call per question; stops under 3 GB free VM memory or at 150 calls; restarts skip answered questions), `report` (writes `results/2026-11-02_rag/`). `retrieval` and `run` refuse until `rag/gold.yaml` is committed. Answer texts stay in `staging/rag/runs/`
 - Code `rag/` (prompt `rag/prompts/answerer.md`); test `tests/test_rag.py`
 
 ## Task board
