@@ -1,0 +1,28 @@
+key,file,included,publisher,journal,year,doi,sha256
+Baskin2020,Baskin2020.pdf,yes,Elsevier (Cell Press),iScience,2020,,0879dbffdfc4b0f748db785c4ae4f84bc84e7d0705a2ce6574eb25c2b93c21ef
+Bastien2014,Bastien2014.pdf,yes,Frontiers,Front Plant Sci,2014,10.3389/fpls.2014.00136,35313f579ae44e887a7ad690ca4efafe2ef10b5ed859ba7f2e23e0b540d1760a
+Chaiwanon2015,Chaiwanon2015.pdf,yes,Elsevier (Cell Press),Curr Biol,2015,10.1016/j.cub.2015.02.046,b985c62edadcefe9823a18e3fc9204e0676213bf32da168f570adc991e3e90ff
+Chaudhary2025,Chaudhary2025.pdf,yes,Elsevier (Cell Press),Mol Plant,2025,10.1016/j.molp.2025.02.001,1e87746fb6e3369ec69f39b6ee03c5eaaa5543f08c9ea0a863ec5fe1d8bc5f6c
+Fridman2021,Fridman2021.pdf,yes,Springer Nature,Nat Plants,2021,10.1038/s41477-021-01014-9,b816734b62706f36ecc70ed731057995f8bbbd2638d8b09c61c9561bd5b79d9c
+Henry2023,Henry2023.pdf,yes,MDPI,Int J Mol Sci,2023,10.3390/ijms242216475,b20be944b31ea8a81c719df88ceee09a1b60fb1a4f16745d3858054e749b4d73
+Krupar2026,Krupar2026.pdf,yes,Springer Nature,Nat Plants,2026,10.1038/s41477-026-02339-z,c115570db3979337ca5acd0949f0709e8d1c3c5c114ff5fae975245a113e080e
+Morris1992,Morris1992.pdf,yes,Pergamon (Springer),Bull Math Biol,1992,,89d98aa9b11fcd30b0b550f2df5bf7db960443b838209e646cd8524dcd0fc0d2
+Mullen1998,Mullen1998.pdf,yes,Springer,Planta,1998,,651e4704bd0b94fbb21d7cd680d75b3890e69b62bd8e5850870e2b47e3827417
+Nolan2023,Nolan2023.pdf,yes,AAAS,Science,2023,10.1126/science.adf4721,a686ad84b7c14b1f1841be141785df20f60b389781d3a7b292c5d61c86b2fbd7
+Nolan2023_supplement,Nolan2023_supplement.pdf,yes,AAAS,Science (supplement),2023,10.1126/science.adf4721,b24dc3288a751bf10abb9ff8d5c7dac3ee2f8b70dc3bb942ee09d9819df002c1
+NolanShahan2023_review,NolanShahan2023_review.pdf,yes,Elsevier,Curr Opin Plant Biol,2023,10.1016/j.pbi.2023.102444,12e77bd9a765f7f5a95ebc3d285c9dd87430b45910b313bd0abff82e4ad52894
+Retzer2019,Retzer2019.pdf,yes,Springer Nature,Nat Commun,2019,10.1038/s41467-019-13543-1,51b5694bda59ed5aea9aafe0e0c9e6dab9e3baeaf0d99c97a1c4a0d3b5adb484
+Shih2014,Shih2014.pdf,yes,Elsevier (Cell Press),Curr Biol,2014,10.1016/j.cub.2014.06.064,cba95f67e7fda5c2b854c7f3b7f99b6d20d1308d0eccaabfbabe2dee37b2e7bf
+Silk1979,Silk1979.pdf,yes,Elsevier (Academic Press),J Theor Biol,1979,,554ced310fb29e891479d4df97f236edb37738ec23d6766fdc786cc3c39f8b1e
+Wolverton2002,Wolverton2002.pdf,yes,Springer,J Plant Growth Regul,2002,10.1007/s003440010053,d99ec6159da71232be512eb407098d5e77fe7cd7995cd0d0e5823511766f77a4
+deBang2020,deBang2020.pdf,yes,Frontiers,Front Plant Sci,2020,10.3389/fpls.2020.00005,cb3b88af284b48556968f500ddeb346e9820dcd5b5a7e3ae25693c296d87efdf
+Bastien2016,,no,Wiley,Plant J,2016,10.1111/tpj.13255,
+Chavarria2006,,no,Wiley,New Phytol,2006,10.1111/j.1469-8137.2006.01770.x,
+Chavarria2008,,no,Wiley,New Phytol,2008,10.1111/j.1469-8137.2007.02299.x,
+Miller2007,,no,Wiley,Plant J,2007,10.1111/j.1365-313X.2007.03237.x,
+Platre2024,,no,Wiley,Plant J,2024,10.1111/tpj.16493,
+Silk1978,,no,Wiley,Am J Bot,1978,,
+Basu2007,,no,OUP,Plant Physiol,2007,10.1104/pp.107.103226,
+Beemster1998,,no,OUP,Plant Physiol,1998,,
+Mullen2000,,no,OUP,Plant Physiol,2000,,
+Youssef2018,,no,OUP,J Exp Bot,2018,10.1093/jxb/ery272,

@@ -72,3 +72,4 @@ Finished sessions can be closed. A new task gets a new name and a new inbox.
 | closure-fix | course | wip/closure-fix | spec 2026-10-24b A | to start (2026-10-24) |
 | real-calib | course | wip/real-calib | spec 2026-10-24b B | to start (2026-10-24) |
 | diag-analysis | course | wip/diag-analysis | spec 2026-10-24b D | to start (2026-10-24) |
+| rag | course | wip/rag | spec 2026-11-02 B | to start (2026-11-02) |
