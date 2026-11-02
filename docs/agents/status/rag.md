@@ -1,16 +1,14 @@
 # rag
-Updated: 2026-11-02 15:35 (local)
+Updated: 2026-11-02 16:20 (local)
 Lane: course
 Branch: wip/rag
-Last inbox item done: 2
-State: working
-Now: item 3, B6: retrieval (BM25, embeddings), then 3 RAG repeats once the embedding build ends and free memory is at least 3 GB
+Last inbox item done: 3
+State: ready to merge
+Now: task c024 done; results/2026-11-02_rag/README.md; decisions and pending log entry written
 Done since last update:
-- B2: zip unzipped to staging/rag_corpus/: 17 PDFs plus SHA256SUMS (the zip's own manifest, equal to the csv); 17 of 17 sha256 match the csv; no missing, no extra
-- B2: DOI filled for Baskin2020 (printed on page 1). Morris1992, Mullen1998, Silk1979 print no DOI on their first pages; left empty
-- pypdf 6.21.4 and fastembed 0.9.1 (ONNX CPU embeddings) installed in the agents env and added to environment.yml
-- B3: proposal docs/proposals/2026-11-02_rag.md committed (chunks in page, bge-small embeddings top 6, BM25 baseline, 75 LLM calls planned, cap 150)
-- B4: rag/ (corpus, retrieve, answer, score), scripts/rag.py, tests/test_rag.py 25 passed. 17 papers, 317 pages, 693 chunks (median 300 words, max 349). Proposal amended before any run: Wolverton2002 extracts as glyph codes; decoded
-- B5: rag/gold.yaml committed before any retrieval or run: 20 answerable over 15 papers (each gold quote passes the code check), 5 out of corpus (question only; terms checked absent). Test suite for rag 26 passed
+- B6: retrieval on 20 answerable: BM25 gold page top 1 11, top 5 19; embeddings top 1 8, top 5 14, top 6 15
+- B6: RAG 3 repeats, 75 LLM calls (cap 150), 0 errors: correct 11 / 12 / 11 of 20; verified quotes 18 / 17 / 18 of 20; out-of-corpus declines 5 of 5 each; agreement 21 of 25. Free memory 4.41-4.45 GB before each repeat
+- B7: results/2026-11-02_rag/ (README, per_question.csv, metrics.json); answer texts stay in staging
+- B8: 4 decisions entries; docs/running_log_pending/rag.md; README run steps. Suite 352 passed, 1 skipped
 Needs Andrew:
 - none
