@@ -3,11 +3,11 @@ id: c024
 title: RAG index over the non-OUP, non-Wiley papers, scored against keyword search
 lane: course
 owner: rag
-state: queued
+state: working
 branch: wip/rag
 host: VM
 created: 2026-11-02 14:10
-last_update: 2026-11-02 14:10
+last_update: 2026-11-02 14:05
 blocker: none
 done_marker: results/2026-11-02_rag/README.md
 ---
