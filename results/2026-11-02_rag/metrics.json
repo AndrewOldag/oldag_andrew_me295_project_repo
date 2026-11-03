@@ -1,0 +1,110 @@
+{
+ "gold_commit": "ea43149",
+ "repeats": [
+  1,
+  2,
+  3
+ ],
+ "per_repeat": {
+  "1": {
+   "correct": 11,
+   "n_answerable": 20,
+   "accuracy": 0.55,
+   "answers": 20,
+   "verified": 18,
+   "verified_quote_rate": 0.9,
+   "declines": 5,
+   "ooc_declines": 5,
+   "n_ooc": 5,
+   "decline_precision": 1.0,
+   "decline_recall": 1.0,
+   "errors": 0
+  },
+  "2": {
+   "correct": 12,
+   "n_answerable": 20,
+   "accuracy": 0.6,
+   "answers": 20,
+   "verified": 17,
+   "verified_quote_rate": 0.85,
+   "declines": 5,
+   "ooc_declines": 5,
+   "n_ooc": 5,
+   "decline_precision": 1.0,
+   "decline_recall": 1.0,
+   "errors": 0
+  },
+  "3": {
+   "correct": 11,
+   "n_answerable": 20,
+   "accuracy": 0.55,
+   "answers": 20,
+   "verified": 18,
+   "verified_quote_rate": 0.9,
+   "declines": 5,
+   "ooc_declines": 5,
+   "n_ooc": 5,
+   "decline_precision": 1.0,
+   "decline_recall": 1.0,
+   "errors": 0
+  }
+ },
+ "summary": {
+  "correct": {
+   "median": 11,
+   "min": 11,
+   "max": 12
+  },
+  "accuracy": {
+   "median": 0.55,
+   "min": 0.55,
+   "max": 0.6
+  },
+  "verified_quote_rate": {
+   "median": 0.9,
+   "min": 0.85,
+   "max": 0.9
+  },
+  "decline_precision": {
+   "median": 1.0,
+   "min": 1.0,
+   "max": 1.0
+  },
+  "decline_recall": {
+   "median": 1.0,
+   "min": 1.0,
+   "max": 1.0
+  },
+  "errors": {
+   "median": 0,
+   "min": 0,
+   "max": 0
+  }
+ },
+ "agreement": 0.84,
+ "retrieval": {
+  "bm25": {
+   "top1": 11,
+   "top5": 19,
+   "top6": 19
+  },
+  "embed": {
+   "top1": 8,
+   "top5": 14,
+   "top6": 15
+  }
+ },
+ "llm_calls": 75,
+ "set_aside_usage_limit": 0,
+ "models": [
+  "claude-opus-5-5"
+ ],
+ "claude_code": [
+  "2.1.310"
+ ],
+ "median_call_s": {
+  "median": 3.571,
+  "min": 1.56,
+  "max": 7.431
+ }
+}

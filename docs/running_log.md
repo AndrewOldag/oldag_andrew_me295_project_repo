@@ -759,3 +759,36 @@ Required by the course. One entry per work session: done, remaining, bottlenecks
 - Demo: `python scripts/full_batch_agents_report.py --run staging/c022/run4 --out results/2026-10-25_full_batch_1_agents` prints "123 windows" and writes windows.csv and tables.md
 - Remaining: Andrew to decide whether a window with no computable gating check should be declined instead of accepted; whether REGR and flank values already on main in `results/2026-10-25_real_subset/` (tables.md, README) stay
 - Bottlenecks: none
+
+## 2026-10-26 (build account, session diag-analysis, freeze v4)
+- Done: C1, C2, C3 (a) behind `candidate` in `config/models.yaml` (null = off), `agents/candidate.py`, `agents/prompts/*_v4.md`, `measure/info.py` `stage_log_spread`, `measure/score.py` `checks_pass` (6a19514, branch `wip/v4-candidate`)
+- Done: switch check from the v3 cache, `scripts/synth/v4_replay_check.py`: off, 51/51 labels, 102/102 rule runs, 306 LLM traces (1319 steps) equal v3; on, only the 3 stage_log_missing labels change (to decline). Tests 315 passed, 1 skipped
+- Done: labels of unseen seeds 26-28, `scripts/synth/scored_v4.py labels` (6b72d6a): 51 rods, accept_clean 18, accept_repaired 9, decline 24; 228 tracker runs on the lab server, 0 failed
+- Done: development check, not a score (d75717b): diagnostician, v3 seed 20, 17 runs, 14 correct
+- Done: proposal `docs/proposals/2026-10-25_freeze-v4-candidate.md` (b86abef); tag `freeze-v4` (e9f19f2)
+- Done: scored v4 run, `results/2026-10-25_freeze_v4/` (bdc1f94): balanced accuracy script 0.67, remedy tree 0.93, diagnostician 0.93 (0.92-0.94), single agent 0.63 (0.58-0.69), all-decline 0.33. False accepts per repeat: script 18, remedy tree 2, diagnostician 0, single agent 0.3. Fleiss kappa diagnostician 0.887, single agent 0.626
+- Done: tracker runs 404 of 420 (labels 228, method states 118, single jobs 58), 0 failed; LLM runs 418 of 420 (306 scored, 17 dev check, 95 set aside)
+- Failed: 95 LLM runs ended on the account usage limit (no model answer); set aside in `runs/usage_limit/` and rerun (Andrew, 2026-10-26). The batch loop also stopped once with its Claude Code session; one partial trace kept, run redone
+- Demo: `python scripts/synth/scored_v4.py eval` prints the v4 metrics table and writes `results/2026-10-25_freeze_v4/table_metrics.md`
+- Remaining: Andrew reviews `wip/v4-candidate` and decides on merge
+- Bottlenecks: merge of `wip/v4-candidate` waits on Andrew
+
+## 2026-11-02 (build account, session diag-analysis, v3-to-v4 split)
+- Done: `python scripts/synth/scored_v4.py decompose` writes `results/2026-10-25_freeze_v4/decompose_v3_v4.md`; README section in `results/2026-10-25_freeze_v4/README.md`. Cached runs only; 0 tracker runs, 0 LLM calls (branch `wip/v4-decompose`)
+- Done: diagnostician balanced accuracy v3 0.69, v3 runs under C3 (a) labels 0.75, v4 0.93; on the 48 rods whose label is unchanged, v3 0.74, v4 0.92. Remedy tree 0.81, 0.90, 0.93 (unchanged method). Single agent unchanged rows 0.67 -> 0.64
+- Demo: `python scripts/synth/scored_v4.py decompose` prints five columns (v3 labels, C3 a labels, v4, unchanged rows v3 and v4) per method
+- Remaining: Andrew decides on merge of `wip/v4-decompose`
+- Bottlenecks: none
+
+## 2026-11-02 (build account, rag session, task c024)
+- Done: corpus zip checked: 17 of 17 sha256 match `rag_corpus.csv`, no extra file; Baskin2020 DOI filled; 3 papers print no DOI (d4fd350)
+- Done: proposal `docs/proposals/2026-11-02_rag.md` committed before any run (b69a95a); amended before any run for glyph-code decoding (Wolverton2002)
+- Done: `rag/` (corpus, retrieve, answer, score), `scripts/rag.py`, `tests/test_rag.py` (9597e89). 317 pages, 693 chunks; build 309 s
+- Done: gold set `rag/gold.yaml`: 20 answerable over 15 papers, 5 out of corpus, committed before any retrieval (ea43149)
+- Done: retrieval on the 20 answerable: BM25 gold page top 1 11, top 5 19; embeddings top 1 8, top 5 14, top 6 15
+- Done: RAG 3 repeats, 75 LLM calls (cap 150), 0 errors: correct 11 / 12 / 11 of 20; verified quotes 18 / 17 / 18 of 20; out-of-corpus declines 5 of 5 each (precision and recall 1.0); agreement 21 of 25
+- Found: misses are mostly another page of the right paper (5-7 per repeat; in 5 questions the gold page was not in the top 6); a01 unverified in all 3 repeats (control character from the plus-minus sign in the page text); length limits 2
+- Done: suite 352 passed, 1 skipped
+- Demo: `python scripts/rag.py report` prints the summary and writes `results/2026-11-02_rag/metrics.json` and `per_question.csv`
+- Remaining: merge `wip/rag`; Lab report 3 cites `results/2026-11-02_rag/README.md`
+- Bottlenecks: none
