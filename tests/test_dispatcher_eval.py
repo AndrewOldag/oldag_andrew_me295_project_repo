@@ -82,3 +82,9 @@ def test_s3_script_gives_up_only_after_a_second_failed_start():
     EV.run_script_budget_batch(e)
     gave_up = [t.id for t in e.tasks.values() if t.state == "gave_up"]
     assert gave_up == ["r2__w0"] and e.tasks["r1__w2"].state == "collected"
+
+
+def test_session_limit_in_trace_is_detected(tmp_path):
+    t = tmp_path / "t.jsonl"
+    t.write_text('{"call": {"ok": false, "error": "result success: You\'ve hit your session limit"}}\n')
+    assert EV.hit_session_limit(t) and not EV.hit_session_limit(tmp_path / "none.jsonl")

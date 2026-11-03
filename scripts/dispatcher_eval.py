@@ -154,6 +154,14 @@ def run_one(name, seed, method, rows, cfg, launcher=None):
     return metrics(e, q, out, sc, method, name, seed, trace, time.time() - t0)
 
 
+LIMIT_TEXT = "hit your session limit"
+
+
+def hit_session_limit(trace):
+    """A CLI call refused for the seat's session limit: the batch measures the seat, not the agent."""
+    return Path(trace).exists() and LIMIT_TEXT in Path(trace).read_text(encoding="utf-8")
+
+
 def agent_batches_started():
     log = STAGE / "agent_batches.log"
     return len(log.read_text().splitlines()) if log.exists() else 0
@@ -182,6 +190,13 @@ def cmd_run(a):
                     with open(STAGE / "agent_batches.log", "a") as log:
                         log.write(f"{time.strftime('%Y-%m-%d %H:%M')} {name} s{seed}\n")
                 m = run_one(name, seed, method, rows, cfg, launcher)
+                trace = STAGE / "traces" / f"{name}_s{seed}.jsonl"
+                if method == "agent" and hit_session_limit(trace):      # not recorded; the run stops (c023)
+                    keep = STAGE / "limit_errors" / f"{name}_s{seed}_{time.strftime('%Y%m%d%H%M')}.jsonl"
+                    keep.parent.mkdir(parents=True, exist_ok=True)
+                    trace.replace(keep)
+                    sys.exit(f"{name} s{seed}: Claude session limit hit; batch not recorded, run stopped "
+                             f"(trace {keep.relative_to(ROOT)}). Rerun after the limit resets")
                 f.write_text(json.dumps(m, indent=1))
                 print(f"{name} s{seed} {method}: {m['status']}, {m['collected']}/{m['windows']} collected, "
                       f"{m['sim_h']} h, retries {m['retries']}, rounds {m['rounds']}, calls {m['llm_calls']}",
