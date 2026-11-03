@@ -73,3 +73,4 @@ Finished sessions can be closed. A new task gets a new name and a new inbox.
 | real-calib | course | wip/real-calib | spec 2026-10-24b B | to start (2026-10-24) |
 | diag-analysis | course | wip/diag-analysis | spec 2026-10-24b D | to start (2026-10-24) |
 | rag | course | wip/rag | spec 2026-11-02 B | to start (2026-11-02) |
+| argon-audit | course | audit/argon | spec 2026-11-03 | to start (2026-11-03); Antigravity, Gemini 4 Argon; rules in `AGENTS.md` |
