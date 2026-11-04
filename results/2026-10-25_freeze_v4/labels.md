@@ -1,6 +1,6 @@
 # Labels of the freeze v4 scored set
 
-Scoring seeds 20, 21, 22. Tracker only, no agent. Repair criteria (spec 2026-10-10, part C; measure.score.label_rod; C3 option a: a check that cannot be computed after a remedy fails): a state of at most two remedy steps with three passes and a good measurement. Clean rods: accept_clean if the unremedied run passes and is good.
+Scoring seeds 26, 27, 28. Tracker only, no agent. Repair criteria (spec 2026-10-10, part C; measure.score.label_rod; C3 option a: a check that cannot be computed after a remedy fails): a state of at most two remedy steps with three passes and a good measurement. Clean rods: accept_clean if the unremedied run passes and is good.
 
 | Rod | Expected class | Label class | Repairing remedy | Unremedied: checks pass, good |
 | :-- | :-- | :-- | :-- | :-- |
