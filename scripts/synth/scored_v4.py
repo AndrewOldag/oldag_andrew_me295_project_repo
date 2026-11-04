@@ -275,8 +275,11 @@ def decompose_report():
     L = ["# Freeze v3 to v4: relabelling against agent change", "",
          "v4 changes the agents (C1 prompt map, C2 stage-log spread) and the label rule (C3 option a: a check that "
          "cannot be computed after a remedy fails). C3 (a) moves the stage_log_missing rows from accept_repaired to "
-         f"decline ({len(changed)} v3 rods: {', '.join(changed)}). Every method declined those rods in v3, so part of "
-         "the v3 to v4 difference is relabelling, with no change in agent behaviour.", "",
+         f"decline ({len(changed)} v3 rods: {', '.join(changed)}). In v3 on those rods the remedy tree and the "
+         "diagnostician declined every run, the script accepted every run, and the single agent reached the step "
+         "limit in every run. So part of the v3 to v4 difference is relabelling, with no change in agent behaviour: "
+         "the declines become correct, the script's accepts become accept_on_decline, and the single agent's "
+         "unreported runs move from the accept_repaired to the decline denominator.", "",
          "- Relabelling alone: v3 runs, v3 labels -> v3 runs, C3 (a) labels (same runs, same seeds)",
          "- Agent change and new seeds: v3 runs, C3 (a) labels -> v4 runs, v4 labels (same label rule)",
          f"- Unchanged rows: every row except {', '.join(RELABELLED)}; the label rule is the same there in v3 and v4",
