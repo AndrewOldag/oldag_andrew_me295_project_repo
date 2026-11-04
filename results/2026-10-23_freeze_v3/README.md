@@ -32,6 +32,7 @@ Spec `docs/specs/2026-10-23b_freeze-v3.md`. Proposal `docs/proposals/2026-10-23_
 
 - False accepts are counts per repeat (script, remedy tree: one run). False-accept rate: script 0.35, remedy tree 0.12, diagnostician 0, single agent 0
 - Script equals all-accept: it reports the unremedied measurement on every rod
+- "Runs keeping a remedy, accept_clean" in `table_metrics.md` counts runs of any status (accept, decline, step limit) that end with a remedy kept on a clean rod. Accepted runs only: script 0, remedy tree 1 (of 1), diagnostician 0, single agent 9 (of 21). Audit A2-F3, 2026-11-03
 
 ## Agreement across repeats
 

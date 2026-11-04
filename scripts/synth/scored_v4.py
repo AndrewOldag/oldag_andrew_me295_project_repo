@@ -63,6 +63,7 @@ def point_v3_at_v4():
     v3.CACHE, v3.OUT, v3.TRACKS, v3.SWEEP = CACHE, OUT, TRACKS, SWEEP
     v3.FREEZE_TAG, v3.MAX_TRACKER_RUNS = FREEZE_TAG, MAX_TRACKER_RUNS
     v3.scored_rods, v3.EXPECTED, v3.CLEAN_FALSE_ALARM = scored_rods, EXPECTED, set()
+    v3.seeds = lambda kind: SCORING_SEEDS if kind == "scoring_seeds" else _V3_SEEDS(kind)   # report headers
 
 
 def free_gb():
@@ -124,7 +125,18 @@ def start_label_sweep(dry):
 
 # ------------------------------------------------------------------ development check
 
-_V3_SCORED = v3.scored_rods                    # the v3 set (seeds 20-22), kept before point_v3_at_v4
+_V3_SEEDS, _v3_scored_rods = v3.seeds, v3.scored_rods     # kept before point_v3_at_v4
+
+
+def _V3_SCORED():
+    """The v3 set (seeds 20-22), with the v3 seeds even after point_v3_at_v4."""
+    cur, v3.seeds = v3.seeds, _V3_SEEDS
+    try:
+        return _v3_scored_rods()
+    finally:
+        v3.seeds = cur
+
+
 _V3_FALSE_ALARM = set(v3.CLEAN_FALSE_ALARM)       # v3 checker false alarm (seed 20), for the dev check
 
 
@@ -275,8 +287,11 @@ def decompose_report():
     L = ["# Freeze v3 to v4: relabelling against agent change", "",
          "v4 changes the agents (C1 prompt map, C2 stage-log spread) and the label rule (C3 option a: a check that "
          "cannot be computed after a remedy fails). C3 (a) moves the stage_log_missing rows from accept_repaired to "
-         f"decline ({len(changed)} v3 rods: {', '.join(changed)}). Every method declined those rods in v3, so part of "
-         "the v3 to v4 difference is relabelling, with no change in agent behaviour.", "",
+         f"decline ({len(changed)} v3 rods: {', '.join(changed)}). In v3 on those rods the remedy tree and the "
+         "diagnostician declined every run, the script accepted every run, and the single agent reached the step "
+         "limit in every run. So part of the v3 to v4 difference is relabelling, with no change in agent behaviour: "
+         "the declines become correct, the script's accepts become accept_on_decline, and the single agent's "
+         "unreported runs move from the accept_repaired to the decline denominator.", "",
          "- Relabelling alone: v3 runs, v3 labels -> v3 runs, C3 (a) labels (same runs, same seeds)",
          "- Agent change and new seeds: v3 runs, C3 (a) labels -> v4 runs, v4 labels (same label rule)",
          f"- Unchanged rows: every row except {', '.join(RELABELLED)}; the label rule is the same there in v3 and v4",
