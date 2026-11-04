@@ -3,7 +3,7 @@ id: c024
 title: RAG index over the non-OUP, non-Wiley papers, scored against keyword search
 lane: course
 owner: rag
-state: review
+state: working
 branch: wip/rag
 host: VM
 created: 2026-11-02 14:10
