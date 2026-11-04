@@ -30,6 +30,14 @@ them with the same settings, as RemoteRunner does for synthetic rods. Default `m
 (Andrew, 2026-10-24): a cropped reference copy and its whole-pixel-shifted twin, no resampling; the
 reference is the measurement record. `"rotate"`: the synthetic rods' rotation and translation (bilinear)
 against the window as is. `moved=False` skips it (rigid invariance not run).
+
+Storage and compute (spec 2026-11-04, Andrew): with `compute: cluster` in the config, `storage_host` holds movies,
+midlines and tracks and only relays; every compute step (segmentation and net midline, moved copy, tracking) runs as
+a Slurm job on cluster nodes (measure/cluster_compute.py), reached through the storage host's connection master over
+one persistent connection held by this runner (measure/remote_link.py). The root imgdir is staged whole on the
+cluster; outputs are copied back to storage with md5 checks; this machine receives the track files only. The
+lab-server load and job-count checks do not apply there. Without `compute: cluster` the runner works as before on
+its `host` (the workstation), and refuses any compute on a storage-only host (measure/hosts.py).
 """
 from dataclasses import dataclass, replace
 import io
@@ -42,8 +50,11 @@ import time
 
 import yaml
 
+from measure.cluster_compute import ClusterCompute
+from measure.hosts import refuse_storage_host
 from measure.record import from_tracker_npz
 from measure.remedies import NotAvailable, TrackSettings
+from measure.remote_link import Link, Relay
 from measure.runner import Measurement
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -87,6 +98,22 @@ def vm_free_gb():
     return float("inf")
 
 
+def _ledger_from(cfg):
+    """The spend-ledger command from the private config (`ledger: [program, script]`): called as
+    `program script check|record|final ...`; returns (exit code, last output line)."""
+    import os
+    cmd = cfg.get("ledger")
+    if not cmd:
+        raise ValueError("cluster compute needs a `ledger` command in the config (spend check before every submit)")
+
+    def ledger(action, *args):
+        p = subprocess.run([*cmd, action, *args], capture_output=True, text=True,
+                           env={**os.environ, "MSYS_NO_PATHCONV": "1"})
+        lines = [l for l in p.stdout.splitlines() if l.strip()]
+        return p.returncode, (lines[-1] if lines else p.stderr.strip()[-300:])
+    return ledger
+
+
 @dataclass(frozen=True)
 class RealWindow:
     root_id: str
@@ -104,10 +131,24 @@ class HostBusy(RuntimeError):
 class RealRunner:
     form = "real_window"
 
-    def __init__(self, config=REAL_CONFIG, cache=None, track_length=TRACK_LENGTH, moved=True, moved_mode="whole_pixel"):
-        cfg = yaml.safe_load(Path(config).read_text())
-        self.host, self.work, self.code, self.tracker, self.python = (
-            cfg["host"], cfg["work_dir"], cfg["code_dir"], cfg["tracker_code"], cfg["python"])
+    def __init__(self, config=REAL_CONFIG, cache=None, track_length=TRACK_LENGTH, moved=True, moved_mode="whole_pixel",
+                 link=None, ledger=None, sleep=time.sleep):
+        cfg = yaml.safe_load(Path(config).read_text()) if not isinstance(config, dict) else config
+        self.cluster_mode = cfg.get("compute") == "cluster"
+        if cfg.get("compute") not in (None, "cluster"):
+            raise ValueError(f"compute: {cfg['compute']!r}; only 'cluster' is allowed (spec 2026-11-04)")
+        if self.cluster_mode:
+            c = cfg["cluster"]
+            self.host = cfg["storage_host"]
+            self.link = link or Link(self.host)
+            self.relay = Relay(self.link, c["alias"])
+            self.cc = ClusterCompute(self.relay, c, ledger or _ledger_from(cfg), sleep=sleep)
+            self.ccfg = c
+            self.work, self.code, self.tracker, self.python = (
+                cfg["work_dir"], c["code_dir"], c["tracker_code"], "python")
+        else:
+            self.host, self.work, self.code, self.tracker, self.python = (
+                cfg["host"], cfg["work_dir"], cfg["code_dir"], cfg["tracker_code"], cfg["python"])
         self.min_free_gb = float(cfg.get("min_free_gb", 21))
         self.windows = cfg["windows"]                 # window id -> {imgdir, midline (optional)}
         self.weights = cfg.get("midline_weights", MIDLINE_WEIGHTS)
@@ -125,6 +166,13 @@ class RealRunner:
         return TrackSettings(stride=1)                 # every frame; uncoupled (the frozen mode)
 
     def _ssh(self, cmd, stdin=None):
+        if self.cluster_mode:                  # a channel on the one held storage-host connection
+            try:
+                return self.link.run(cmd, stdin)
+            except Exception as e:             # same failure type as the subprocess path for callers
+                if type(e).__name__ == "LinkDown":
+                    raise
+                raise RuntimeError(str(e)) from e
         # keepalive: a silently dropped connection fails in about 2 min instead of hanging (c022 run 2)
         p = subprocess.run(["ssh", "-o", "BatchMode=yes", "-o", "ServerAliveInterval=30", "-o", "ServerAliveCountMax=4",
                             self.host, cmd], input=stdin, capture_output=True)
@@ -135,14 +183,24 @@ class RealRunner:
 
     def sync_code(self):
         buf = io.BytesIO()
+        # cluster jobs also run the checker (spec 2026-11-04): it needs checker/, agents/, config/ and scripts/
+        dirs = ("measure", "scripts", "checker", "agents", "config", "manifest") if self.cluster_mode \
+            else ("measure", "scripts/remote")
         with tarfile.open(fileobj=buf, mode="w") as tar:
-            for d in ("measure", "scripts/remote"):
+            for d in dirs:
                 tar.add(ROOT / d, arcname=d, filter=lambda ti: None if "__pycache__" in ti.name else ti)
         q = shlex.quote
+        if self.cluster_mode:                  # streamed through the storage host; nothing is written there
+            self.relay.run(f"mkdir -p {q(self.code)} && cd {q(self.code)} && tar xf -", stdin=buf.getvalue())
+            return
         self._ssh(f"mkdir -p {q(self.code)} && cd {q(self.code)} && tar xf -", stdin=buf.getvalue())
 
     def host_state(self):
         q = shlex.quote
+        if self.cluster_mode:                  # no jobs on the storage host: report the cluster queue instead
+            n = self.cc.own_jobs()
+            return {"cores": int(self.ccfg.get("max_jobs", 2)), "load1": float(n), "own_jobs": n,
+                    "free_gb": float("inf")}
         out = self._ssh(f"nproc --all; cut -d' ' -f1 /proc/loadavg; {COUNT_CMD}; "
                         f"df -BG --output=avail {q(self.work)} | tail -1").decode().split()
         return {"cores": int(out[0]), "load1": float(out[1]), "own_jobs": int(out[2]),
@@ -157,6 +215,9 @@ class RealRunner:
 
     def check_host(self):
         self.wait_vm_memory()
+        if self.cluster_mode:                  # the queue and the ledger limit cluster jobs; nothing runs on storage
+            return {"load1": None, "free_gb": None}
+        refuse_storage_host(self.host, "a tracker or midline run")
         s = self.host_state()
         if s["load1"] > 0.5 * s["cores"]:
             raise HostBusy(f"load {s['load1']} above half of {s['cores']} cores")
@@ -169,11 +230,90 @@ class RealRunner:
     def midline_path(self, window):
         return self.windows[window.id()].get("midline") or f"{self.work}/midline/{window.id()}{self.tag}_netmid.npz"
 
+    # ---- cluster mode (spec 2026-11-04): every compute step is a Slurm job; storage keeps the outputs
+    def _cpath(self, kind, name):
+        return f"{self.ccfg['work_dir']}/{kind}/{name}"
+
+    def _ctest(self, path):
+        return self.relay.run(f"test -e {shlex.quote(path)} && echo yes || echo no").decode().strip() == "yes"
+
+    def _staged(self, window):
+        return self.cc.stage_root(window.root_id, self.windows[window.id()]["imgdir"])
+
+    def _cluster_midline(self, window):
+        """The window's tracking midline on the cluster: pushed from storage, or built there (segmentation on the
+        GPU job's CPUs, net midline on its GPU) and copied back to storage."""
+        q = shlex.quote
+        sm, wid = self.midline_path(window), window.id()
+        cm = self._cpath("midline", f"{wid}{self.tag}_netmid.npz")
+        if self._ctest(cm):
+            return cm
+        if self._ssh(f"test -f {q(sm)} && echo yes || echo no").decode().strip() == "yes":
+            self.cc.push_file(sm, cm)
+            return cm
+        img = self._staged(window)
+        seg, bm = self._cpath("midline", f"{wid}_seg.npz"), self._cpath("midline", f"{wid}{self.tag}_bm")
+        body = (f"mkdir -p {q(self._cpath('midline', ''))} && cd {q(self.code)}\n"
+                f"export PYTHONPATH={q(self.tracker)}:{q(self.code)}\n"
+                f"test -f {q(seg)} || python scripts/remote/real_midline.py --imgdir {q(img)} --from-h {window.from_h:g} "
+                f"--to-h {window.to_h:g} --out {q(seg)} || exit 1\n"
+                f"se=$(python -c \"import sys,numpy as np; f=np.load(sys.argv[1])['frames']; print(int(f[0]), int(f[-1])+1)\" {q(seg)})\n"
+                f"set -- $se\n"
+                f"test -n \"$(ls {q(bm)}/*_htpmid.npz 2>/dev/null)\" || python {q(self.tracker)}/midline_ml/batch_midlines.py "
+                f"{q(img)} --out {q(bm)} --mode tile --lo 0.1 --hi 99.5 --workers 3 "
+                f"--midline-weights {q(self.ccfg['midline_weights'])} --start $1 --end $2 || exit 1\n"
+                f"PYTHONPATH={q(self.tracker)}:{q(self.code)}:{q(self.code)}/scripts/remote python scripts/remote/net_to_midline.py "
+                f"{q(self.tracker)} {q(bm)}/*_htpmid.npz {q(seg)} {q(cm)}")
+        self.cc.run(f"mid_{wid}", body, cpus=4, gpu=True, time_limit="01:00:00", mem="32G")
+        self.cc.pull(cm, sm.rsplit("/", 1)[0])
+        self.log.append({"midline": wid, "where": "cluster"})
+        return cm
+
+    def _cluster_moved(self, window):
+        q = shlex.quote
+        wid = window.id()
+        mv = {k: self._cpath("moved", f"{wid}_wp_{k}.imgdir") for k in ("moved", "ref")}
+        mm = {k: self._cpath("moved", f"{wid}{self.tag}_wp_{k}_midline.npz") for k in ("moved", "ref")}
+        if all(self._ctest(mv[k] + ".ok") and self._ctest(mm[k]) for k in mv):
+            return mv["moved"]
+        cm, img = self._cluster_midline(window), self._staged(window)
+        args = ["--imgdir", img, "--midline", cm, "--from-h", f"{window.from_h:g}", "--to-h", f"{window.to_h:g}",
+                "--out-imgdir", mv["moved"], "--out-midline", mm["moved"], "--mode", self.moved_mode,
+                "--out-ref-imgdir", mv["ref"], "--out-ref-midline", mm["ref"]]
+        body = (f"mkdir -p {q(self._cpath('moved', ''))} && cd {q(self.code)} && PYTHONPATH={q(self.tracker)}:{q(self.code)} "
+                f"python scripts/remote/real_moved.py " + " ".join(q(a) for a in args))
+        self.cc.run(f"moved_{wid}", body, cpus=1, time_limit="00:30:00")
+        self.log.append({"moved_copy": wid, "where": "cluster"})
+        return mv["moved"]
+
+    def _cluster_track(self, window, settings, which, local):
+        q = shlex.quote
+        wid, name = window.id(), local.name
+        if which == "window":
+            img, mid = self._staged(window), self._cluster_midline(window)
+        else:
+            img = self._cpath("moved", f"{wid}_wp_{which}.imgdir")
+            mid = self._cpath("moved", f"{wid}{self.tag}_wp_{which}_midline.npz")
+        ct = self._cpath("tracks", name)
+        if not self._ctest(ct):
+            args = (["--imgdir", img, "--midline", mid, "--out", ct, "--movie", "real", "--from-h", f"{window.from_h:g}",
+                     "--to-h", f"{window.to_h:g}", "--track-length", f"{self.track_length:g}"] + settings.args())
+            body = (f"mkdir -p {q(self._cpath('tracks', ''))} && cd {q(self.code)} && PYTHONPATH={q(self.tracker)}:{q(self.code)} "
+                    f"python scripts/remote/qb_track.py " + " ".join(q(a) for a in args))
+            self.cc.run(f"track_{name[:-4]}", body, cpus=1, time_limit="01:00:00")
+        stored = self.cc.pull(ct, f"{self.work}/tracks")
+        local.write_bytes(self._ssh(f"cat {q(stored)}"))
+        self.log.append({"track": name, "where": "cluster"})
+        return local
+
     def ensure_midline(self, window):
         """Build the window's net midline on the host unless the file exists. Each step skips an output that
         exists, so an interrupted build resumes."""
         q = shlex.quote
         out = self.midline_path(window)
+        if self.cluster_mode:
+            self._cluster_midline(window)
+            return out
         if self._ssh(f"test -f {q(out)} && echo yes || echo no").decode().strip() == "yes":
             return out
         wid, img = window.id(), self.windows[window.id()]["imgdir"]
@@ -211,6 +351,10 @@ class RealRunner:
 
     def ensure_moved(self, window):
         """Make the rigidly moved copy (and, whole-pixel mode, the cropped reference) on the host unless they exist."""
+        if self.cluster_mode:
+            if self.moved_mode != "whole_pixel":
+                raise ValueError("cluster compute makes whole-pixel copies only")
+            return self._cluster_moved(window)
         mv, ref = self.copy_paths(window, "moved"), self.copy_paths(window, "ref")
         w = dict(self.windows[window.id()], midline=self.midline_path(window))
         q = shlex.quote
@@ -264,6 +408,9 @@ class RealRunner:
         if not local.exists():
             if self.cached_only:
                 raise NotAvailable("no cached track for these settings (repeat run: cached tracks only)")
+            if self.cluster_mode:
+                self.wait_vm_memory()
+                return self._cluster_track(window, settings, which, local)
             before = self.check_host()
             q = shlex.quote
             args = (["--imgdir", w["imgdir"], "--midline", w["midline"], "--out", f"{self.work}/tracks/{name}",
