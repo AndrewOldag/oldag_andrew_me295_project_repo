@@ -63,6 +63,7 @@ def point_v3_at_v4():
     v3.CACHE, v3.OUT, v3.TRACKS, v3.SWEEP = CACHE, OUT, TRACKS, SWEEP
     v3.FREEZE_TAG, v3.MAX_TRACKER_RUNS = FREEZE_TAG, MAX_TRACKER_RUNS
     v3.scored_rods, v3.EXPECTED, v3.CLEAN_FALSE_ALARM = scored_rods, EXPECTED, set()
+    v3.seeds = lambda kind: SCORING_SEEDS if kind == "scoring_seeds" else _V3_SEEDS(kind)   # report headers
 
 
 def free_gb():
@@ -124,7 +125,18 @@ def start_label_sweep(dry):
 
 # ------------------------------------------------------------------ development check
 
-_V3_SCORED = v3.scored_rods                    # the v3 set (seeds 20-22), kept before point_v3_at_v4
+_V3_SEEDS, _v3_scored_rods = v3.seeds, v3.scored_rods     # kept before point_v3_at_v4
+
+
+def _V3_SCORED():
+    """The v3 set (seeds 20-22), with the v3 seeds even after point_v3_at_v4."""
+    cur, v3.seeds = v3.seeds, _V3_SEEDS
+    try:
+        return _v3_scored_rods()
+    finally:
+        v3.seeds = cur
+
+
 _V3_FALSE_ALARM = set(v3.CLEAN_FALSE_ALARM)       # v3 checker false alarm (seed 20), for the dev check
 
 
