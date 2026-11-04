@@ -1,0 +1,46 @@
+qid,key,page,quote,agrees_with_gold
+a01,Mullen1998,3,"By this analysis, the location of the peak REGR is 481",yes
+a01,Mullen1998,4,Position of maximum REGR 481,yes
+a02,Mullen1998,2,we used a computer-based video digitizer system that automatically tracks the location of marker beads on the root and stores their coordinates every 30 s.,yes
+a03,Silk1979,5,"The two specifications coincide only when the distribution of p is steady, i.e. when p at any spatial position is independent of time",yes
+a03,Morris1992,3,"If growth is ""steady"", then the velocity field is time invariant; and the Lagrangian and Eulerian descriptions of growth coincide.",yes
+a05,Morris1992,4,an arbitrarily chosen x 0 to find fitted values for the parameters n and k and a fitted v o,yes
+a05,Henry2023,6,"find the values for vf, k, x0, and n that gave the best fit for each point cloud",no
+a06,Wolverton2002,2,gravitropic curvature is initiated in a group of cells between the meristern and the region of most rapid elongation,yes
+a08,Baskin2020,4,we imaged a root for 3 h so that a velocity profile could be obtained every 5 min. Roots were imaged through a horizontal microscope,yes
+a08,Baskin2020,5,"37 velocity profiles, one every 5 min over 3 h.",yes
+a08,Baskin2020,19,"Each panel shows data from a single root, imaged to yield a velocity profile every 5 min for 3 hours (37 profiles in total).",yes
+a08,Baskin2020,29,"Each panel shows data from a single root, imaged to yield a velocity profile every 5 min for 3 hours (37 profiles in total).",yes
+a08,Baskin2020,33,"Each panel shows data from a single root, imaged to yield a velocity profile every 5 min for 3 hours (37 profiles in total).",yes
+a08,Baskin2020,36,"Each panel shows data from a single root, imaged to yield a velocity profile every 5 min for 3 hours (37 profiles in total).",yes
+a08,Baskin2020,46,"Because we imaged the root for 3 h and obtained a velocity profile every 5 min, there are 37 velocity profiles per root.",yes
+a09,Baskin2020,4,"the position where rapid elongation rate is attained moves steadily rootward, halving the length of the meristem in 24 h.",yes
+a09,Baskin2020,7,"although its progress was noisy and diminished, the x-intercept continued a net rootward movement.",yes
+a09,Baskin2020,8,"with the shoot removed, balanced saltation of the elongation zone continued, but the balance point moved slowly (10- 30 mm/h) rootward.",yes
+a10,Henry2023,2,Morris and Silk [10] showed that a flexible logistic function effectively fits the particle velocities when plotted versus the distance from the root apex.,yes
+a10,Henry2023,6,The sigmoidal red line in Figure 2F is the best fit of the flexible logistic function (Equation (5)) that Morris and Silk [ 10] derived,yes
+a10,Henry2023,9,creates a dataset large enough to support the accurate fitting of a suitable model (the flexible logistics equation) to the consistently sigmoidal velocity profile,yes
+a11,Chaudhary2025,5,alleviating turgor pressure during BL-induced cell elongation may reduce cell damage in the fer-4 mutant and rescue its growth,yes
+a12,Krupar2026,2,"A schematic view and AlphaFold3 model of the WALLΦ CW pH sensor consisting of a CBM and two fluorescent proteins, mNeonGreen and mCherry.",yes
+a12,Krupar2026,3,"we developed the wall-anchored pH indicator (WALLΦ), a genetically encoded ratiometric pH sensor targeted to cellulose microfibrils.",yes
+a13,Krupar2026,2,Root strain rate does not correlate with root surface pH profile.,yes
+a13,Krupar2026,3,do not align with the paradigm that the local level of acidity of the wall can predict its elongation rate.,yes
+a13,Krupar2026,4,"while the manipulation of CW pH alters overall cell elongation, the correlation of CW acidity with elongation rate is not apparent",yes
+a14,Shih2014,4,"Root growth in fer mutants was also much less steady, displaying aberrant peaks and valleys in the strain rate",yes
+a14,Shih2014,5,diminished growth control could lead to the observed pronounced fluctuations in cell expansion.,yes
+a15,deBang2020,5,We found that eBL-treated roots mirrored the persistent curvature responses of LatB-treated roots,yes
+a15,deBang2020,6,untreated r oots (solvent controls) straightened after reaching an angle of about 45° while roots treated with eBL or LatB did not.,yes
+a16,Retzer2019,9,"unlike suggested in current models, formation of a PIN2 gradient is not categorically required for differential auxin signaling in gravistimulated roots.",yes
+a16,Retzer2019,12,our observations demonstrate that formation of a lateral PIN2 expression gradient is not categorically required for gravitropic root bending.,yes
+a17,Chaiwanon2015,2,oppositely patterned and antagonistic actions of BR and auxin maintain the stem cell balance and optimal root growth.,yes
+a17,Chaiwanon2015,3,"BZR1 is activated by endogenous BR in a graded pattern along developmental zones, which is overall opposite to the auxin gradient in root tips",yes
+a17,Chaiwanon2015,6,suggesting that BR and auxin have opposite effects on cell elongation in root.,yes
+a17,Chaiwanon2015,8,"BR and auxin distribute with opposite gradient and interact antagonistically in controlling gene expression, stem cell maintenance, and cell elongation in root tips.",yes
+a17,Chaiwanon2015,11,BR and auxin are distributed with opposite patterns and have antagonistic effects on stem cell maintenance and cell elongation in root tip,yes
+a18,Fridman2021,2,"However, in almost all pairwise comparisons, differences in volume remained non-significant between treatments (Fig. 2h).",yes
+a18,Fridman2021,7,"This analysis revealed that BR signalling increases cell anisotropy by controlling growth rates in different directions, with a relatively minor effect on cell volume.",yes
+a18,Fridman2021,8,as also observed upon tissue-specific perturbations of BR signal - ling and as supported by our finding that cell volume is relatively unchanged.,yes
+a19,Bastien2014,2,So the material derivative comoving with each element of the organ has to be taken into account,yes
+a19,Bastien2014,8,This equation directly relates the rate of curvature variation attached to a material element (an infinitesimal segment of the organ) DCDt to the mean elongation,yes
+a20,Nolan2023_supplement,5,"we first grew plants on 1 μM BRZ to deplete endogenous brassinosteroids, then transferred plants to either a fresh BRZ plate or 100nM BL.",yes
+a20,Nolan2023_supplement,10,"grown for 7 days on 1 μM BRZ to deplete endogenous brassinosteroids, then transferred to either a fresh BRZ plate or 100 nM Brassinolide (BL)",yes
