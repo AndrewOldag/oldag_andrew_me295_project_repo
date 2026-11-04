@@ -1,3 +1,8 @@
 ## 2026-11-02 (build account, dispatcher session, task c023)
 - Done: item 40 (2), spec 2026-11-02 A1: real-profile rule, closure not computable -> decline without an agent call (`scripts/real_slice.py` `rule_outcome`); test; suite 327 passed, 1 skipped. c022 first batch re-scored from run 4 records (`scripts/full_batch_agents_report.py --rescore`): 4 windows accept -> decline; 110 accepted, 13 declined, 3 not collected; auditor 91 cleared, 19 flagged. `results/2026-10-25_full_batch_1_agents/`
 - Done: item 42, spec A2: README "Run the real slice" (one command, needs, expected wall time)
+- Done: item 43, spec A3: proposal `docs/proposals/2026-11-02_dispatcher-eval.md` (10d74c1) before any run; harness `scripts/dispatcher_eval.py` with tests; 25 script and 25 agent batches (S0-S4 x 5 seeds). All finished, budget overrun 0, 0 budget requests. Collected, median of 1189: S1 script 1177 / agent 1187; S2 1111 / 1168; S3 1175 / 1188; S4 1177 / 1177 (retry rule differs: agent 2, script 1). S4 jobs on the persistent-fault root: script 24, agent 36. Agent 37-78 LLM calls per batch. `results/2026-11-02_dispatcher_eval/`
+- Failed: 18 agent batches ended on the Claude seat's session limit (2026-11-02 and 2026-11-03), not recorded, rerun; harness now stops on it (98cdb03). 43 of the 60-batch cap used
+- Demo: `python scripts/dispatcher_eval.py report` prints one table per scenario from the cached batches
+- Remaining: none for c023. Optional: script baseline with 2 retries, as a labelled post-hoc row (new inbox item)
+- Bottlenecks: the Claude seat's session limit (about 15-20 agent batches per window)
