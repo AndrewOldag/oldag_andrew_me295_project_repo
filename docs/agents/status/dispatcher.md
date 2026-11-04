@@ -1,15 +1,13 @@
 # dispatcher
-Updated: 2026-10-25 21:45 (local)
+Updated: 2026-11-03 22:07 (local)
 Lane: course
 Branch: wip/dispatcher
-Last inbox item done: 39
+Last inbox item done: 43
 State: ready to merge
-Now: task c022 done: agent run over the 126 first-batch windows, results README; ready to merge
+Now: task c023 done: not-computable rule (item 40 (2)), README real-slice command (item 42), dispatcher vs fixed script on the fake queue (item 43); ready to merge
 Done since last update:
-- Item 39: run 4 (reported), wall 1892 s: 114 accepted, 9 declined at closure (bad stage correction 8, midline jitter 1), 3 not collected (tracker 'arange' error, real-calib's same 3); auditor 91 cleared, 23 flagged (summary outlier 20, other 3). results/2026-10-25_full_batch_1_agents/ (outcome counts only; traces and summary.json in staging, git-ignored, because the auditor's text quotes REGR values)
-- Runs 1-3 failed on run-code faults, each fixed with a test and a decisions entry: collect error now fails one window only; ssh keepalive and fetch of a finished host track; summary.json written before printing
-- Found: 4 windows with no computable closure were accepted with no gating check; the auditor flagged all 4
-- Suite 317 passed, 1 skipped
+- Item 43: 25 script and 25 agent batches, S0-S4 x seeds 0-4; all finished, budget overrun 0, 0 budget requests. Agent collects more in S1-S3 mainly from its 2 retries vs the script's 1 (proposal; reported as a known difference). S4: agent 36 jobs on the persistent-fault root vs script 24; it did not name a persistent fault. results/2026-11-02_dispatcher_eval/ (README, tables.md, batches.csv); decisions and log entries
+- 18 agent batches lost to the Claude seat's session limit were not recorded and were rerun; harness stops on that message (98cdb03). 43 of the 60-batch cap used
+- Item 42: README "Run the real slice" (7e043a9). Item 40 (2): closure not computable -> decline; first batch re-scored (51486cf)
 Needs Andrew:
-- A window with no computable gating check (closure not finite) is accepted by the current rule. Keep, or decline such windows? (4 of 126 here; the auditor caught them)
-- results/2026-10-25_real_subset/ on main (c019, before the 2026-10-25 rule) has REGR, growth-zone and flank values in tables.md and its README. Keep, or strip them?
+- none

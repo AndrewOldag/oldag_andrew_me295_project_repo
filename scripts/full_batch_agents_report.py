@@ -74,6 +74,19 @@ def auditor_public(report):
     return [l for i, l in enumerate(out) if l or (i and out[i - 1])]
 
 
+def rescore(rows):
+    """Andrew, 2026-10-26: a window whose closure cannot be computed is declined. An accepted window with closure
+    not computable becomes decline (fault not_computable); the auditor would not have been asked about it, so its
+    decision is dropped. Uses the recorded checks only; no tracker or agent rerun."""
+    for r in rows:
+        if r["outcome"] == "accept" and r["closure"] == "not computable":
+            r.update(outcome="decline", fault="not_computable", auditor="", auditor_reason="",
+                     rescored="2026-10-26 rule: was accept, auditor " + (r["auditor"] or "none"))
+        else:
+            r.setdefault("rescored", "")
+    return rows
+
+
 def window_rows(summ):
     man = {r["id"]: r for r in manifest_rows()}
     decisions = (summ.get("auditor") or {}).get("decisions") or {}
@@ -118,11 +131,13 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--run", required=True)
     ap.add_argument("--out", required=True)
+    ap.add_argument("--rescore", action="store_true",
+                    help="apply the 2026-10-26 rule (closure not computable -> decline) to the recorded outcomes")
     a = ap.parse_args()
     summ = json.loads((Path(a.run) / "summary.json").read_text())
     out = Path(a.out)
     out.mkdir(parents=True, exist_ok=True)
-    rows = window_rows(summ)
+    rows = rescore(window_rows(summ)) if a.rescore else window_rows(summ)
     with open(out / "windows.csv", "w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=list(rows[0]))
         w.writeheader()
@@ -146,9 +161,15 @@ def main():
            f"{len(nc)} windows: " + (", ".join(r["window"] for r in nc) or "none") + ". Outcomes: "
            + ", ".join(f"{k} {v}" for k, v in Counter(r["outcome"] for r in nc).items()) + "; auditor: "
            + ", ".join(f"{k or 'no decision'} {v}" for k, v in Counter(r["auditor"] for r in nc).items()), ""]
+    if a.rescore:
+        md += [f"Re-scored under the 2026-10-26 rule: {r['window']} ({r['rescored']})" for r in nc if r["rescored"]]
+        md += [""]
     aud = summ.get("auditor") or {}
     md += ["## Auditor report, agent behaviour only (numbers masked as x)", "",
-           f"Auditor status: {aud.get('status')}; decisions on {len(aud.get('decisions') or {})} accepted runs.", ""]
+           f"Auditor status: {aud.get('status')}; decisions on {len(aud.get('decisions') or {})} accepted runs"
+           + (" in the run; after the re-score, decisions count on the "
+              f"{sum(r['outcome'] == 'accept' for r in rows)} windows still accepted (tables above). The report below "
+              "was written before the re-score." if a.rescore else "."), ""]
     md += auditor_public(aud.get("report") or "") + [""]
     (out / "tables.md").write_text("\n".join(md))
     print(f"wrote {out / 'windows.csv'} and {out / 'tables.md'}: {len(rows)} windows")

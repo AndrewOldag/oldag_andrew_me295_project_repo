@@ -408,3 +408,21 @@ def test_lost_connection_during_tracking_fetches_finished_host_track(tmp_path, m
     w = RealWindow("r1", 4, 6)
     p = r.track(w, r.initial_settings(w))
     assert len(tracked) == 1 and p.read_bytes() == b"npz bytes" and r.log[-1]["fetched"] == "existing host output"
+
+
+def test_closure_not_computable_declines_without_agent():
+    """Andrew, 2026-10-26: a real window whose gating check (closure) cannot be computed is declined; no
+    diagnostician call, so the auditor (accepted runs only) is not asked to clear it."""
+    from checker import CheckResult
+    nan = float("nan")
+    def chk(name, passed, value):
+        return CheckResult(check=name, passed=passed, value=value, threshold=None, unit="", detail="")
+    closure_nan = [chk("rigid_invariance", None, nan), chk("closure", None, nan), chk("plane_sections", None, 1.0)]
+    o = RS.rule_outcome(closure_nan)
+    assert o.status == "decline" and o.args["fault"] == "not_computable" and o.calls == 0
+    assert "closure" in o.args["reason"]
+    ok = [chk("rigid_invariance", None, nan), chk("closure", True, 3.0), chk("plane_sections", None, 1.0)]
+    assert RS.rule_outcome(ok).status == "accept"
+    assert RS.rule_outcome([chk("closure", False, 30.0)]) is None
+    # rigid invariance and plane sections do not gate on real windows: not computable there still accepts
+    assert RS.rule_outcome([chk("rigid_invariance", None, nan), chk("closure", True, 3.0)]).status == "accept"
