@@ -1,6 +1,13 @@
-## 2026-10-25 (build account, real-calib)
-- Done: full-batch proposal `docs/proposals/2026-10-25_full-batch.md` (935cfe7): 102 include-yes roots, 2368.1 usable h, 1189 windows, 88 413 frames, recomputed with `agents/dispatcher.py` windows; agrees with planning's count
-- Done: first batch picked: 11 roots, one per experiment and condition, 126 windows; segmentation midlines started on the lab server 15:03, about 45 s per window
-- Demo: `python -c "import sys; sys.path.insert(0,'.'); from agents.dispatcher import *; print(sum(len(make_tasks(r, load_config())) for r in manifest_rows()))"` prints 1189
-- Remaining: GPU midlines (cluster), md5-checked pull, rolling staging, 1000 px tracking, checker, `results/2026-10-25_full_batch_1/`
-- Bottlenecks: cluster connection master down (Andrew)
+## 2026-10-25 to 2026-11-02 (build account, real-calib)
+- Done: full-batch proposal `docs/proposals/2026-10-25_full-batch.md` (935cfe7): 102 include-yes roots, 2368.1 usable h, 1189 windows, recomputed with `agents/dispatcher.py` windows
+- Done: first batch, 11 roots (one per experiment and condition), 126 windows: lab-server segmentation, ft2 GPU midlines on the cluster (4 jobs, $0.391 actual), rolling staging with md5 checks (126 window-frame copies cleared), 1000 px tracking on the lab server, checker with the real profile. Accept 109, decline 14 (4 not computable), failed 3 (`arange` tracker error). `results/2026-10-25_full_batch_1/`
+- Done: cluster CPU tracking equal to the lab server (0708_c2 w0-2: 2.6e-7 px, checker values equal); whole per-root cluster chain equal on all 12 windows of 0708_c2. `scripts/track_equivalence.py`; decisions 2026-10-25
+- Done: batch 2 (91 roots, 1063 windows), one GPU job per root (segmentation, midline, tracks), about 25 min and $0.07 per root: 50 of 91 roots collected (md5 verified, staged frames cleared), 570 windows checked; interim tables `results/2026-10-25_full_batch_2/`
+- Done: item 13: not computable counts as decline; public batch outputs carry outcome and check values only (98711a2); full records in git-ignored `staging/full_batch_<N>/`
+- Done: decisions: moved copies one window per root (Andrew); cluster CPU tracking approved (Andrew); whole-root staging; tracker exception counts as a failed window; whole-root cluster copies may be cleared after md5 check (Andrew, 2026-10-26)
+- Spend since 2026-10-23: about $4.3 of $15
+- Failed: batch 2 stopped 2026-10-26 16:22 (lab-server connection dropped during two staging copies); Claude Code then stopped the driver and checker loop for low VM memory. Lab server down since (Andrew, 2026-11-02: restart later)
+- Rule slip: 2026-10-25 15:03, one `mv` of this session's own upload on the lab server (noted by Andrew, item 9); no move since
+- Demo: `python scripts/full_batch.py summary --batch 1` prints the batch-1 table (126 windows: accept 109, decline 14, failed 3)
+- Remaining: when the lab server is back: restart the batch-2 driver and checker loop (resume from markers; 41 roots, about 8 h, about $2.9); then batch-2 README, final tables, ready to merge
+- Bottlenecks: lab server down (Andrew); merge of main into this branch refused by the pre-push blocklist (main's inbox file names the cluster; coordinator merges)
