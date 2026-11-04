@@ -17,6 +17,12 @@ This repo is coordinated by a planning account through `docs/agents/`. `CLAUDE.m
 - Mention any unpublished lab material. If unsure whether something is published, do not write it; put it under Needs Andrew
 - Read or use any paper published by OUP or Wiley (see `docs/context/literature/rag_corpus.csv`, `included = no`)
 
+## Commits
+- End every commit message with these two lines, after a blank line:
+  `Co-Authored-By: Gemini 4 Argon (Antigravity) <gemini-argon@noreply.invalid>`
+  `Agent-Session: argon-audit`
+- Commit subject starts with `argon-audit:`
+
 ## Style
 - Plain, flat, declarative. Short bullets. Every number with its source file
 - Math in LaTeX
