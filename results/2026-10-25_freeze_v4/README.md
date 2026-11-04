@@ -33,6 +33,7 @@ Inbox diag-analysis items 3-5 (Andrew, 2026-10-25). Proposal `docs/proposals/202
 - False accepts are counts per repeat (script, remedy tree: one run). False-accept rate: script 0.35, remedy tree 0.06, diagnostician 0, single agent 0.01
 - not_reported: diagnostician 7 runs at the step limit; single agent 66 runs at the step limit
 - Script equals all-accept: it reports the unremedied measurement on every rod
+- "Runs keeping a remedy, accept_clean" in `table_metrics.md` counts runs of any status (accept, decline, step limit) that end with a remedy kept on a clean rod. Accepted runs only: script 0, remedy tree 0, diagnostician 2 (of 2), single agent 14 (of 23). Audit A2-F3, 2026-11-03
 
 ## Agreement across repeats
 
