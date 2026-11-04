@@ -156,6 +156,7 @@ class Engine:
         self.lab_paused = False
         self.stats = {"refused": 0, "cluster_refused": 0, "approvals": 0, "retries": 0,
                       "retry_successes": 0, "lab_peak_workers": 0}
+        self.approval_answers = []    # evaluation only (on_approval="deny"): answers shown in the view
 
     # views ------------------------------------------------------------------
     def root_tasks(self, rid):
@@ -190,7 +191,8 @@ class Engine:
                 "cluster": {"budget_core_hours": self.budget["core_hours"], "budget_usd": self.budget["usd"],
                             "approved": self.budget["approved"],
                             "spent_core_hours": round(self.cluster_spent_h, 2),
-                            "left_core_hours": round(self.cluster_left_h(), 2)}}
+                            "left_core_hours": round(self.cluster_left_h(), 2)},
+                **({"approval_requests": self.approval_answers} if self.approval_answers else {})}
 
     # bookkeeping ------------------------------------------------------------
     def refresh(self):
@@ -407,8 +409,10 @@ class DispatcherActions(ActionSet):
 
 # ── batch loops ───────────────────────────────────────────────────────────────
 
-def run_agent_batch(engine, launcher, trace_path, round_limit=None):
-    """The dispatcher agent drives the engine round by round. Returns the engine summary plus status."""
+def run_agent_batch(engine, launcher, trace_path, round_limit=None, on_approval="stop"):
+    """The dispatcher agent drives the engine round by round. Returns the engine summary plus status.
+    on_approval: "stop" (the batch waits for Andrew) or "deny" (evaluation, proposal 2026-11-02: the request is
+    answered "no change", shown in the next view, and the batch goes on)."""
     cfg = engine.cfg
     ACTION_SETS["dispatcher"] = DispatcherActions(engine, cfg)
     orch = Orchestrator(launcher, trace_path)
@@ -423,8 +427,11 @@ def run_agent_batch(engine, launcher, trace_path, round_limit=None):
         if out.status == "finish":
             status = "finish"; break
         if out.status == "request_approval":
-            engine.request_approval(out.args)
-            status = "waiting_for_approval"; break
+            req = engine.request_approval(out.args)
+            if on_approval != "deny":
+                status = "waiting_for_approval"; break
+            engine.approval_answers.append({"minute": req["minute"], "core_hours": req["core_hours"],
+                                            "answer": "no change: the approved budget stays as shown"})
         if errors_in_row >= 2:
             status = "error"; break
         engine.advance(out.args.get("minutes", min(cfg["wait_minutes"])) if out.status == "wait"

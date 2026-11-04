@@ -30,7 +30,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from agents import dispatcher as D  # noqa: E402
-from agents.executors import Slice  # noqa: E402
+from agents.executors import CHECK_PROFILES, Slice  # noqa: E402
 from agents.actions import ACTION_SETS, ActionSet  # noqa: E402
 from agents.orchestrator import Orchestrator  # noqa: E402
 from audit.llm import AuditBatch  # noqa: E402
@@ -89,6 +89,25 @@ class Accepted:
         self.status, self.args, self.steps, self.failed_steps, self.calls = "accept", {"confidence": None}, 0, 0, 0
         self.input_tokens = self.output_tokens = self.call_ms = 0
         self.note = "no failing check; diagnostician not called"
+
+
+class NotComputable(Accepted):
+    """A gating check could not be computed: the window is declined without an agent call (Andrew, 2026-10-26;
+    the same rule as C3 (a) for freeze v4). The auditor flags and clears accepted runs only."""
+    def __init__(self, checks):
+        super().__init__()
+        self.status = "decline"
+        self.args = {"fault": "not_computable", "reason": f"gating check not computable: {', '.join(checks)}"}
+        self.note = "gating check not computable; declined by rule, diagnostician not called"
+
+
+def rule_outcome(checks, profile="real"):
+    """Outcome without the diagnostician, or None when a check fails (the diagnostician is called). A gating check
+    that cannot be computed declines the window; with every gating check computed and none failing, accept."""
+    if any(c.passed is False for c in checks):
+        return None
+    missing = [c.check for c in checks if c.check in CHECK_PROFILES[profile] and c.passed is None]
+    return NotComputable(missing) if missing else Accepted()
 
 
 class NotCalled(Accepted):
@@ -230,11 +249,9 @@ def main():
         sl = Slice(runner, w, label=f"{w.id()} window")
         if a.no_agent:
             o = NotCalled()
-        elif any(c.passed is False for c in sl.checks):
+        elif (o := rule_outcome(sl.checks)) is None:
             o = Orchestrator(launcher, out / "diagnostician_trace.jsonl").run(
                 "diagnostician", task.id, sl.task(), sl.executors())
-        else:
-            o = Accepted()
         s = dict(summarize(sl, o), condition=conditions[task.root_id], root_id=root_of(task.root_id),
                  window_h=[task.from_h, task.to_h])
         results[task.id] = (s, sl.current.record)
