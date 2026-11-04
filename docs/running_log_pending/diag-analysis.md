@@ -1,0 +1,9 @@
+## 2026-11-03 (build account, session diag-analysis, Argon audit fixes on freeze v4)
+- Done: A2-F1, the decompose text and the v4 README now state each method's v3 outcome on stage_log_missing (remedy tree 3/3 and diagnostician 9/9 declined, script 3/3 accepted, single agent 9/9 step limit); `scored_v4.py decompose` regenerated, tables unchanged (9cfa8c0)
+- Done: A2-F2, `results/2026-10-25_freeze_v4/labels.md` header reads seeds 26, 27, 28 (`point_v3_at_v4` sets the scoring seeds; v3 rod set pinned for dev check and decompose); `labels.json` byte-identical; dev_check.md and decompose_v3_v4.md unchanged (d9d006c)
+- Done: A2-F3, "runs keeping a remedy, accept_clean" counts any status; accepted-only counts in the v3 README (single agent 9 of 21, remedy tree 1 of 1) and the v4 README (single agent 14 of 23, diagnostician 2 of 2) (97b2700)
+- Done: Known limits section in the v4 README with counts from the traces: second_root (`use_width_free_ratio` 9/9 per agent, `crop_to_main_root` 0; diagnostician 8 accept_on_decline); single agent `check_report` refused at step 1 in 153/153 runs, 0 of 171 remedy results with check values, 38.1 % of the 528 steps in its 66 step-limit runs; single agent bad_stage_correction 7/9 accepts with closure failing scored good_report; 7 diagnostician runs applied a remedy with no failing check, 0 rolled back (2 accept_clean, 3 accept_repaired, 2 second_root) (e959700)
+- Done: decisions entries for the triage and the frozen single-agent limit. No scored result, label, prompt, threshold or remedy changed. Tests 351 passed, 2 skipped
+- Demo: `python scripts/synth/scored_v4.py decompose` prints the five-column split; the first paragraph states the per-method v3 outcomes on stage_log_missing
+- Remaining: Andrew or the planning account merges `wip/v4-audit-fixes`
+- Bottlenecks: none

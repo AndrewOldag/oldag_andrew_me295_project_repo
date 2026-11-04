@@ -1,15 +1,16 @@
 # diag-analysis
-Updated: 2026-11-02 14:22 (local)
+Updated: 2026-11-03 21:18 (local)
 Lane: course
-Branch: wip/v4-decompose (wip/diag-analysis and wip/v4-candidate merged and deleted)
-Last inbox item done: 5
+Branch: wip/v4-audit-fixes
+Last inbox item done: 6
 State: ready to merge
-Now: v3-to-v4 split into relabelling and agent change, on `wip/v4-decompose`
+Now: item 6 done; Argon audit fixes on freeze v4, no scored result changed
 Done since last update:
-- `results/2026-10-25_freeze_v4/decompose_v3_v4.md` and a README section; `python scripts/synth/scored_v4.py decompose`; from cached runs, no tracker or LLM runs
-- C3 (a) relabels stage_log_missing (3 rods per seed set) from accept_repaired to decline; every v3 method declined them, so those declines now score correct with no behaviour change; all-decline 21 -> 24 of 51
-- diagnostician balanced accuracy: v3 0.69; v3 runs under C3 (a) labels 0.75 (relabelling); v4 0.93. Unchanged rows (48 rods): v3 0.74, v4 0.92
-- remedy tree (unchanged method): 0.81 -> 0.90 by relabelling, 0.93 in v4 (seed draw)
-- single agent unchanged rows: v3 0.67, v4 0.64
+- A2-F1: per-method v3 outcomes on stage_log_missing in decompose text and v4 README; tables unchanged (9cfa8c0)
+- A2-F2: labels.md header seeds 26, 27, 28; labels.json byte-identical (d9d006c)
+- A2-F3: remedy-kept metric counts any status; accepted-only counts single agent v3 9, v4 14 (match Argon) (97b2700)
+- Known limits in the v4 README, counts verified from traces: (a) second_root 8/9 accept_on_decline (diagnostician); (b) single agent check_report 153/153, 0/171 remedy results with numbers; (c) single agent bad_stage_correction 7/9 accepts with closure failing; (d) 7 diagnostician runs with a remedy and no failing check (inbox said 2: those are the accept_clean ones; 3 accept_repaired and 2 second_root also) (e959700)
+- decisions: triage entry and frozen single-agent limit; A2-F4 not acted on (scoring already falls back to the file name)
+- tests 351 passed, 2 skipped
 Needs Andrew:
-- merge of `wip/v4-decompose` (results note, driver command, status, log); no code path used by v3 or v4 runs changed
+- merge of `wip/v4-audit-fixes`
