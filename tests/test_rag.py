@@ -4,7 +4,7 @@ Offline. The gold-set test needs the staged page text (staging/rag/pages.json) a
 """
 import pytest
 
-from rag import corpus, score
+from rag import corpus, posthoc, score
 from rag.answer import SCHEMA, build_prompt, check
 from rag.corpus import Chunk, chunk_page, match_key, norm
 from rag.retrieve import BM25
@@ -146,8 +146,43 @@ def test_check_gold_flags_bad_entries():
     bad_quote = dict(good, id="q5", quote="peaks 2 mm")
     leak = dict(Q_OOC, id="q6", key="A2000")
     probs = score.check_gold([bad_quote, leak], PAGES, DOIS)
-    assert any("q5 p2: quote not on that page" in p for p in probs)
+    assert any("q5 A2000 p2: quote not on that page" in p for p in probs)
     assert any("q6: out-of-corpus entry" in p for p in probs)
+
+
+def test_alt_page_may_be_in_another_file():
+    q = dict(Q_ANS, alt=[{"key": "B2001", "page": 1, "quote": "imaged every 5 min"}], question="x")
+    assert score.gold_pages(q) == {("A2000", 2), ("B2001", 1)}
+    assert score.check_gold([q], PAGES, DOIS) == []
+    assert score.outcome(q, True, answer(key="B2001", page=1, doi="", quote="imaged every 5 min"), PAGES, DOIS) == "correct"
+
+
+ART_PAGES = {"Mullen1998": ["peak at 481 \x8b 50 lm (mean \x8b SD) from the tip; 3-lm sections; 120 lmh"]}
+
+
+def test_artefact_map_exact_and_applied_in_check_only_when_asked():
+    exact, counts, misfits = posthoc.artefact_map_exact(ART_PAGES["Mullen1998"])
+    assert exact and counts == {"plus_minus": 2, "micrometre": 2} and misfits == []
+    assert not posthoc.artefact_map_exact(["the film lm here \x8b x"])[0]
+    a = {"action": "answer", "text": "t", "quote": "481 ± 50 µm", "key": "Mullen1998", "page": 1, "doi": ""}
+    dois = {"Mullen1998": ""}
+    assert check(a, ART_PAGES, dois)[1] == ["quote not on that page"]
+    assert check(a, ART_PAGES, dois, artefacts=posthoc.ARTEFACTS) == ("answer", [])
+    dropped = dict(a, quote="481  50 lm")                 # the character left out: no match either way
+    assert check(dropped, ART_PAGES, dois, artefacts=posthoc.ARTEFACTS)[1] == ["quote not on that page"]
+
+
+def test_posthoc_outcome_accepts_agreeing_alt_pages_only():
+    rec = {"outcome": "wrong_source", "action": answer(key="B2001", page=1, doi="", quote="imaged every 5 min")}
+    assert posthoc.outcome(Q_ANS, rec, PAGES, DOIS, {}) == "wrong_source"
+    assert posthoc.outcome(Q_ANS, rec, PAGES, DOIS, {"q1": {("B2001", 1)}}) == "correct"
+    assert posthoc.outcome(Q_OOC, {"outcome": "declined", "action": None}, PAGES, DOIS, {}) == "declined"
+
+
+def test_load_alt_keeps_agreeing_rows(tmp_path):
+    f = tmp_path / "alt.csv"
+    f.write_text('qid,key,page,quote,agrees_with_gold\na05,M,4,"x, y",yes\na05,H,6,z,no\n', encoding="utf-8")
+    assert posthoc.load_alt(f) == {"a05": {("M", 4)}}
 
 
 def test_bm25_ranks_the_matching_chunk_first():

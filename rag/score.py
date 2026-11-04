@@ -19,8 +19,9 @@ def load_gold(path=GOLD):
 
 
 def gold_pages(q):
-    """Accepted (key, page) pairs: the gold page and its alt pages."""
-    return {(q["key"], q["page"])} | {(q["key"], a["page"]) for a in q.get("alt", [])}
+    """Accepted (key, page) pairs: the gold page and its alt pages. An alt page may be in another included
+    file (its own `key`; default the question's key)."""
+    return {(q["key"], q["page"])} | {(a.get("key", q["key"]), a["page"]) for a in q.get("alt", [])}
 
 
 def check_gold(gold, pages, doi_by_key):
@@ -33,11 +34,12 @@ def check_gold(gold, pages, doi_by_key):
             if any(f in q for f in ("key", "page", "quote", "answer")):
                 problems.append(f"{q['id']}: out-of-corpus entry holds a key, page, quote or answer")
             continue
-        for p, quote in [(q["page"], q["quote"])] + [(a["page"], a["quote"]) for a in q.get("alt", [])]:
-            act = {"action": "answer", "text": q["answer"], "quote": quote, "key": q["key"], "page": p,
-                   "doi": doi_by_key.get(q["key"], "")}
+        for k, p, quote in [(q["key"], q["page"], q["quote"])] + [(a.get("key", q["key"]), a["page"], a["quote"])
+                                                                   for a in q.get("alt", [])]:
+            act = {"action": "answer", "text": q["answer"], "quote": quote, "key": k, "page": p,
+                   "doi": doi_by_key.get(k, "")}
             _, errs = check(act, pages, doi_by_key, quote_words=GOLD_QUOTE_WORDS)
-            problems += [f"{q['id']} p{p}: {e}" for e in errs]
+            problems += [f"{q['id']} {k} p{p}: {e}" for e in errs]
         if q["quote"].lower() in q["question"].lower():
             problems.append(f"{q['id']}: question contains its gold quote")
     return problems

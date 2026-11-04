@@ -5,6 +5,7 @@
   lowercased) occurs on that page of that paper's extracted text
 - A failed check is an unverified answer. It is never repaired
 """
+import re
 from pathlib import Path
 
 from rag.corpus import match_key
@@ -39,8 +40,11 @@ def build_prompt(question, chunks):
     return "\n".join(parts)
 
 
-def check(action, pages, doi_by_key, quote_words=QUOTE_WORDS):
-    """Return (kind, problems). kind: answer, decline or invalid. problems empty = verified."""
+def check(action, pages, doi_by_key, quote_words=QUOTE_WORDS, artefacts=None):
+    """Return (kind, problems). kind: answer, decline or invalid. problems empty = verified.
+
+    artefacts: optional {key: [(regex, replacement), ...]} applied to that paper's page text and to the
+    quote before matching (post-hoc only, rag/posthoc.py; the scored check uses none)."""
     if not isinstance(action, dict) or action.get("action") not in ("answer", "decline"):
         return "invalid", ["no valid action"]
     if action["action"] == "decline":
@@ -65,7 +69,10 @@ def check(action, pages, doi_by_key, quote_words=QUOTE_WORDS):
         problems.append("doi differs from the csv")
     if not 1 <= page <= len(pages[key]):
         return "answer", problems + [f"page {page} outside 1-{len(pages[key])}"]
-    if quote.strip() and match_key(quote) not in match_key(pages[key][page - 1]):
+    page_text = pages[key][page - 1]
+    for pat, rep in (artefacts or {}).get(key, []):
+        page_text, quote = re.sub(pat, rep, page_text), re.sub(pat, rep, quote)
+    if quote.strip() and match_key(quote) not in match_key(page_text):
         problems.append("quote not on that page")
     return "answer", problems
 
