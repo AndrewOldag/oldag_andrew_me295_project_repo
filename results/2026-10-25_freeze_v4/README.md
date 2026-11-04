@@ -76,7 +76,7 @@ Inbox diag-analysis items 3-5 (Andrew, 2026-10-25). Proposal `docs/proposals/202
 | single_agent | 0.60 | 0.63 | 0.61 | 0.96 | 0 | 0.3 |
 
 ### Relabelling against agent change (`decompose_v3_v4.md`)
-- The v3 to v4 difference mixes two causes: the agent changes (C1, C2) and the label rule (C3 a). C3 (a) moves the 3 stage_log_missing rods per seed set from accept_repaired to decline. Every method declined them in v3, so the same declines score correct under C3 (a) with no change in behaviour. All-decline: 21 of 51 in v3, 24 of 51 in v4
+- The v3 to v4 difference mixes two causes: the agent changes (C1, C2) and the label rule (C3 a). C3 (a) moves the 3 stage_log_missing rods per seed set from accept_repaired to decline. In v3 on those rods the remedy tree (3 of 3) and the diagnostician (9 of 9) declined, the script accepted (3 of 3) and the single agent reached the step limit (9 of 9). Under C3 (a) the same declines score correct, the script's accepts become accept_on_decline, and the single agent's unreported runs move from the accept_repaired to the decline denominator, with no change in behaviour. All-decline: 21 of 51 in v3, 24 of 51 in v4
 - Split: v3 runs rescored against the C3 (a) labels (relabelling only), and v3 against v4 on the 48 rods per set whose label rule is unchanged (every row except stage_log_missing)
 
 | Method | v3, v3 labels | v3, C3 (a) labels | v4 | v3, unchanged rows | v4, unchanged rows |
