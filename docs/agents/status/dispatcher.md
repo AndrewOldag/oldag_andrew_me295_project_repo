@@ -1,10 +1,10 @@
 # dispatcher
-Updated: 2026-11-03 21:12 (local)
+Updated: 2026-11-03 21:43 (local)
 Lane: course
 Branch: wip/dispatcher
 Last inbox item done: 42
 State: working
-Now: task c023 item 43: S0-S2 done (15 agent batches); session limit stopped the run at S3 s0 (15:33, not recorded); restarted 21:12 for S3 and S4 (10 batches; 45 of the 60-batch cap)
+Now: task c023 item 43: S0-S3 done; S4 running (5 batches left)
 Done since last update:
 - 2026-11-02: 17 agent batches ended in error from the seat's session limit (CLI "hit your session limit"), not agent behaviour; set aside in staging/c023/limit_errors/; harness now stops the run on that message instead of recording a batch (98cdb03)
 - Item 43: proposal docs/proposals/2026-11-02_dispatcher-eval.md committed before any run (10d74c1)
