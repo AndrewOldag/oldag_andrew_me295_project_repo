@@ -33,6 +33,7 @@ Inbox diag-analysis items 3-5 (Andrew, 2026-10-25). Proposal `docs/proposals/202
 - False accepts are counts per repeat (script, remedy tree: one run). False-accept rate: script 0.35, remedy tree 0.06, diagnostician 0, single agent 0.01
 - not_reported: diagnostician 7 runs at the step limit; single agent 66 runs at the step limit
 - Script equals all-accept: it reports the unremedied measurement on every rod
+- "Runs keeping a remedy, accept_clean" in `table_metrics.md` counts runs of any status (accept, decline, step limit) that end with a remedy kept on a clean rod. Accepted runs only: script 0, remedy tree 0, diagnostician 2 (of 2), single agent 14 (of 23). Audit A2-F3, 2026-11-03
 
 ## Agreement across repeats
 
@@ -76,7 +77,7 @@ Inbox diag-analysis items 3-5 (Andrew, 2026-10-25). Proposal `docs/proposals/202
 | single_agent | 0.60 | 0.63 | 0.61 | 0.96 | 0 | 0.3 |
 
 ### Relabelling against agent change (`decompose_v3_v4.md`)
-- The v3 to v4 difference mixes two causes: the agent changes (C1, C2) and the label rule (C3 a). C3 (a) moves the 3 stage_log_missing rods per seed set from accept_repaired to decline. Every method declined them in v3, so the same declines score correct under C3 (a) with no change in behaviour. All-decline: 21 of 51 in v3, 24 of 51 in v4
+- The v3 to v4 difference mixes two causes: the agent changes (C1, C2) and the label rule (C3 a). C3 (a) moves the 3 stage_log_missing rods per seed set from accept_repaired to decline. In v3 on those rods the remedy tree (3 of 3) and the diagnostician (9 of 9) declined, the script accepted (3 of 3) and the single agent reached the step limit (9 of 9). Under C3 (a) the same declines score correct, the script's accepts become accept_on_decline, and the single agent's unreported runs move from the accept_repaired to the decline denominator, with no change in behaviour. All-decline: 21 of 51 in v3, 24 of 51 in v4
 - Split: v3 runs rescored against the C3 (a) labels (relabelling only), and v3 against v4 on the 48 rods per set whose label rule is unchanged (every row except stage_log_missing)
 
 | Method | v3, v3 labels | v3, C3 (a) labels | v4 | v3, unchanged rows | v4, unchanged rows |
@@ -110,3 +111,9 @@ Inbox diag-analysis items 3-5 (Andrew, 2026-10-25). Proposal `docs/proposals/202
 - One run (single agent, stage_log_missing s27, repeat 2) was cut off when its batch loop stopped with the Claude Code session; its partial trace is kept under the run name and the rerun trace has a `_trace_<time>` name
 - Free VM memory at least 3.85 GB before each batch (Andrew, 2026-10-25); batches of 17; status pushed after each batch, so run summaries record several commits. Between the tag and the last run only harness code changed (853da3b, `scripts/synth/scored_v4.py`: usage-limit set-aside, LLM cap); no prompt, threshold, remedy, checker or config change
 - 0 harness errors
+
+## Known limits (audit A3, 2026-11-03; counts from the v4 traces)
+- (a) second_root, a failure mode for Lab report 4. On all 9 rods only plane_sections fails unremedied. `use_width_free_ratio` skips plane_sections, so after it no applied check fails. Both agents applied it in 9 of 9 runs and never tried `crop_to_main_root`. Diagnostician: 8 accept_on_decline, 1 correct_decline. Single agent: 1 accept_on_decline, 8 at the step limit. The remedy is allowed on any rod by design (decisions, 2026-10-10)
+- (b) Single-agent baseline as frozen. Its action list includes `check_report`, which its executor refuses: 153 of 153 runs spend step 1 on it. Its remedy results carry no check values (0 of 171), so it requests evidence again after a remedy (after 171 remedies: 0 info calls 53 times, 1 call 66, 2 calls 46, 3 calls 6). A remedy with its follow-up takes 2-3 of the 8 steps. 66 of 153 runs end at the step limit. Not changed in v4 (decisions, 2026-11-03)
+- (c) Single agent on bad_stage_correction: 7 of 9 runs accept after `use_width_free_ratio` with closure still failing (no `register_frames`), and score good_report, because the unremedied field is within tolerance (all accept_repaired rods measure well without their remedy; Lab report 2, risk 1). The score counts them correct; the check does not support the report
+- (d) Remedies applied when no check fails are not rolled back (`no_progress` needs a failing check before the remedy). Diagnostician: 7 runs applied one with no failing check, 0 rolled back: 2 accept_clean (`register_frames` on v3_bend20 s28 r0, v3_bend30 s28 r0; both accept, both counted in "runs keeping a remedy"), 3 accept_repaired (`use_width_free_ratio` after `register_frames` had made every check pass), 2 second_root (`crop_or_mask` after `use_width_free_ratio`)
