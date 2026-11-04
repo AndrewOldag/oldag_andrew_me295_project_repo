@@ -19,7 +19,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from rag import corpus, retrieve, score  # noqa: E402
+from rag import corpus, posthoc, retrieve, score  # noqa: E402
 from rag.answer import ask, check  # noqa: E402
 
 WORK = corpus.WORK
@@ -131,6 +131,41 @@ def cmd_run(a):
     print(f"repeat {a.repeat} done; LLM calls so far {calls_so_far()}")
 
 
+def posthoc_metrics(gold, reps, outcomes):
+    """Post-hoc re-score of the saved traces (inbox rag item 4). No LLM call. The primary metrics stay as scored.
+
+    Variants: alt pages accepted; Mullen1998 artefact map in the quote check (only if exact on all its pages);
+    both; each with all 20 answerable questions and without the ambiguous ones (a05)."""
+    pages, _ = corpus.load()
+    dois = doi_by_key()
+    alt = posthoc.load_alt()
+    exact, counts, misfits = posthoc.artefact_map_exact(pages["Mullen1998"])
+    art = posthoc.ARTEFACTS if exact else None
+    variants = {"scored": None, "alt_pages": (alt, None), "artefact_map": ({}, art), "alt_pages_and_artefact_map": (alt, art)}
+    out_by_variant = {}
+    for name, v in variants.items():
+        if v is None:
+            out_by_variant[name] = outcomes
+        else:
+            out_by_variant[name] = {r: {i: posthoc.outcome(next(q for q in gold if q["id"] == i), rec, pages, dois, v[0], v[1])
+                                        for i, rec in recs.items()} for r, recs in reps.items()}
+    sets = {"all": gold, "without_ambiguous": [q for q in gold if q["id"] not in posthoc.AMBIGUOUS]}
+    table = {}
+    for name, out in out_by_variant.items():
+        for sname, g in sets.items():
+            ans = [q for q in g if q["expect"] == "answer"]
+            table[f"{name}/{sname}"] = {
+                "n_answerable": len(ans),
+                "correct_per_repeat": {r: sum(out[r][q["id"]] == "correct" for q in ans) for r in sorted(out)},
+                "agreement": score.agreement(g, [out[r] for r in sorted(out)]) if len(out) > 1 else None,
+            }
+    a01 = {r: out_by_variant["artefact_map"][r]["a01"] for r in sorted(reps)}
+    return {"label": "post hoc; the scored result stays primary", "alt_rows_agreeing": sum(map(len, alt.values())),
+            "ambiguous": sorted(posthoc.AMBIGUOUS),
+            "artefact_map": {"exact": exact, "counts": counts, "misfits": misfits, "a01_recheck": a01},
+            "variants": table}, out_by_variant["alt_pages_and_artefact_map"]
+
+
 def cmd_report(_):
     _pages, chunks = corpus.load()
     gold = score.load_gold()
@@ -157,17 +192,20 @@ def cmd_report(_):
         "claude_code": sorted({c["claude_version"] for c in calls}),
         "median_call_s": score.summary([c["duration_ms"] / 1000 for c in calls]),
     }
+    post, post_out = posthoc_metrics(gold, reps, outcomes)
+    metrics["posthoc"] = post
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "metrics.json").write_text(json.dumps(metrics, indent=1), encoding="utf-8")
     rows = ["id,expect,key,bm25_top1,bm25_top5,embed_top1,embed_top5,embed_top6,"
-            + ",".join(f"rag_r{r}" for r in sorted(reps))]
+            + ",".join(f"rag_r{r}" for r in sorted(reps)) + "," + ",".join(f"posthoc_r{r}" for r in sorted(reps))]
     for q in gold:
         h = [hits[m][0].get(q["id"]) for m in ("bm25", "embed")]
         cells = ["" if x is None else str(int(x[k])) for x, ks in zip(h, ((1, 5), (1, 5, 6))) for k in ks]
         rows.append(",".join([q["id"], q["expect"], q.get("key", "")] + cells
-                             + [outcomes[r][q["id"]] for r in sorted(reps)]))
+                             + [outcomes[r][q["id"]] for r in sorted(reps)]
+                             + [post_out[r][q["id"]] for r in sorted(reps)]))
     (OUT / "per_question.csv").write_text("\n".join(rows) + "\n", encoding="utf-8")
-    print(json.dumps({k: metrics[k] for k in ("summary", "agreement", "retrieval", "llm_calls")}, indent=1))
+    print(json.dumps({k: metrics[k] for k in ("summary", "agreement", "retrieval", "llm_calls", "posthoc")}, indent=1))
 
 
 def main():
