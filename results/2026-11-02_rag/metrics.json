@@ -106,5 +106,99 @@
   "median": 3.571,
   "min": 1.56,
   "max": 7.431
+ },
+ "posthoc": {
+  "label": "post hoc; the scored result stays primary",
+  "alt_rows_agreeing": 44,
+  "ambiguous": [
+   "a05"
+  ],
+  "artefact_map": {
+   "exact": true,
+   "counts": {
+    "plus_minus": 21,
+    "micrometre": 27
+   },
+   "misfits": [],
+   "a01_recheck": {
+    "1": "unverified",
+    "2": "unverified",
+    "3": "unverified"
+   }
+  },
+  "variants": {
+   "scored/all": {
+    "n_answerable": 20,
+    "correct_per_repeat": {
+     "1": 11,
+     "2": 12,
+     "3": 11
+    },
+    "agreement": 0.84
+   },
+   "scored/without_ambiguous": {
+    "n_answerable": 19,
+    "correct_per_repeat": {
+     "1": 10,
+     "2": 11,
+     "3": 10
+    },
+    "agreement": 0.8333333333333334
+   },
+   "alt_pages/all": {
+    "n_answerable": 20,
+    "correct_per_repeat": {
+     "1": 18,
+     "2": 17,
+     "3": 18
+    },
+    "agreement": 0.88
+   },
+   "alt_pages/without_ambiguous": {
+    "n_answerable": 19,
+    "correct_per_repeat": {
+     "1": 17,
+     "2": 16,
+     "3": 17
+    },
+    "agreement": 0.875
+   },
+   "artefact_map/all": {
+    "n_answerable": 20,
+    "correct_per_repeat": {
+     "1": 11,
+     "2": 12,
+     "3": 11
+    },
+    "agreement": 0.84
+   },
+   "artefact_map/without_ambiguous": {
+    "n_answerable": 19,
+    "correct_per_repeat": {
+     "1": 10,
+     "2": 11,
+     "3": 10
+    },
+    "agreement": 0.8333333333333334
+   },
+   "alt_pages_and_artefact_map/all": {
+    "n_answerable": 20,
+    "correct_per_repeat": {
+     "1": 18,
+     "2": 17,
+     "3": 18
+    },
+    "agreement": 0.88
+   },
+   "alt_pages_and_artefact_map/without_ambiguous": {
+    "n_answerable": 19,
+    "correct_per_repeat": {
+     "1": 17,
+     "2": 16,
+     "3": 17
+    },
+    "agreement": 0.875
+   }
+  }
  }
 }

@@ -36,8 +36,24 @@ Spec 2026-11-02 section B. Proposal `docs/proposals/2026-11-02_rag.md` (b69a95a,
   - a04 (repeats 1, 3): quote over 40 words
   - a07, a16 (repeat 2): answer text over 60 words
 
+## Post hoc (2026-11-03; the scored result above stays primary)
+- Source: a second reader's review of the gold set, written without seeing these results (`docs/reviews/2026-11-03_argon-rag-gold/`). Inbox rag item 4 (Andrew, 2026-11-03). Re-scored from the saved answers in `staging/rag/runs/`; no new LLM call
+- Alt pages: a cited page also counts when it is a row of `alt_pages.csv` with `agrees_with_gold` yes for that question (44 rows; may be in another included file, e.g. a20 and `Nolan2023_supplement`). Fix in `rag/score.py`: `gold_pages` takes an alt page's own key
+- a05 is ambiguous: Morris1992 gives 3 fitting parameters, Henry2023 fits 4 parameters of the same function. All 3 repeats cited Morris1992 p1 (correct as scored)
+
+| Correct of answerable | Repeat 1 | Repeat 2 | Repeat 3 | Agreement (all questions) |
+| :-- | :-- | :-- | :-- | :-- |
+| Scored, 20 questions | 11 / 20 | 12 / 20 | 11 / 20 | 21 / 25 |
+| Scored, without a05 | 10 / 19 | 11 / 19 | 10 / 19 | 20 / 24 |
+| Post hoc, alt pages, 20 questions | 18 / 20 | 17 / 20 | 18 / 20 | 22 / 25 |
+| Post hoc, alt pages, without a05 | 17 / 19 | 16 / 19 | 17 / 19 | 21 / 24 |
+
+- With alt pages every `wrong_source` answer becomes correct (a06, a08, a10, a12, a15, a16, a20). The misses left are the `unverified` answers: a01 in 3 repeats, a04 in 2, a07 and a16 in 1
+- a01, Mullen1998 artefacts: the map (`\x8b` to plus-minus, standalone `lm` to micrometre) is exact on all 6 pages: 21 of 21 `\x8b` sit between numbers or in "mean `\x8b` SD"; 27 of 27 standalone `lm` follow a number. Embedded forms (`lmh`, `lmol`, `lma`, `lmb`) are left as they are. Applied in the quote check only (`rag/posthoc.py`). Re-check: a01 stays unverified in 3 of 3 repeats. The saved quotes leave the character out ("481  50 lm"), so they do not match "481 ± 50 µm" either
+- a17: the gold page (Chaiwanon2015 p1) is the journal's Highlights and graphical-abstract page, not the article body. The same finding is on p2, p3, p6, p8 and p11 (alt pages)
+
 ## Per question
-`per_question.csv`: BM25 and embedding hits (1 = gold page in top k) and the RAG outcome per repeat. Metrics: `metrics.json`. Answer texts and traces stay in `staging/rag/runs/` (git-ignored).
+`per_question.csv`: BM25 and embedding hits (1 = gold page in top k), the RAG outcome per repeat, and the post-hoc outcome per repeat (`posthoc_r*`: alt pages and artefact map). Metrics: `metrics.json`. Answer texts and traces stay in `staging/rag/runs/` (git-ignored).
 
 ## Limits
 - One gold page per question. A fact stated on several pages is scored on one
