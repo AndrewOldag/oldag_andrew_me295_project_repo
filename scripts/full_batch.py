@@ -170,6 +170,12 @@ PUBLIC_COLUMNS = ["window", "root", "condition", "from_h", "to_h", "status", "ou
                   "tracked_length_reached_px", "frame0_midline_px", "flag", "error"]
 
 
+def public_error(text):
+    """Error text without file paths (a record made inside a cluster job names its folders)."""
+    import re
+    return re.sub(r"(?:[A-Za-z]:)?(?:[/\\][^\s'\"/\\]+)+[/\\]?", "<path>", text or "")
+
+
 def public_row(r, condition):
     """Outcome and check values only (Andrew, 2026-10-26, inbox item 13): no detail strings (tip path, flank
     difference), no basal speeds, no profile values."""
@@ -179,7 +185,7 @@ def public_row(r, condition):
             "closure_px_per_h": v.get("closure"), "rigid_invariance_pct_per_h": v.get("rigid_invariance"),
             "plane_sections_pct_per_h": v.get("plane_sections"), "moved_copy": r.get("moved_copy"),
             "n_frames": r.get("n_frames"), "tracked_length_reached_px": b.get("tracked_length_reached_px"),
-            "frame0_midline_px": b.get("frame0_midline_px"), "flag": b.get("flag") or "", "error": r.get("error", "")}
+            "frame0_midline_px": b.get("frame0_midline_px"), "flag": b.get("flag") or "", "error": public_error(r.get("error", ""))}
 
 
 def summary(a):
@@ -215,7 +221,7 @@ def summary(a):
          "moved_copies": sum(bool(r.get("moved_copy")) and r["status"] == "measured" for r in done.values()),
          "flag_base_may_be_in_growing_tissue": sum(1 for r in done.values() if r.get("base", {}).get("flag")),
          "closure_threshold_px_per_h": REAL_CLOSURE_PX_H, "by_condition": {k: dict(v) for k, v in sorted(by.items())},
-         "errors": {k: r["error"] for k, r in done.items() if r["status"] == "failed"}}
+         "errors": {k: public_error(r["error"]) for k, r in done.items() if r["status"] == "failed"}}
     (out / "summary.json").write_text(json.dumps(s, indent=1))
     (out / "table.md").write_text("\n".join(lines) + "\n")
     with open(out / "windows.csv", "w", newline="") as fh:
