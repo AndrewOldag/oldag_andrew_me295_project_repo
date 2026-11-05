@@ -1,13 +1,14 @@
-## 2026-10-25 to 2026-11-02 (build account, real-calib)
-- Done: full-batch proposal `docs/proposals/2026-10-25_full-batch.md` (935cfe7): 102 include-yes roots, 2368.1 usable h, 1189 windows, recomputed with `agents/dispatcher.py` windows
-- Done: first batch, 11 roots (one per experiment and condition), 126 windows: lab-server segmentation, ft2 GPU midlines on the cluster (4 jobs, $0.391 actual), rolling staging with md5 checks (126 window-frame copies cleared), 1000 px tracking on the lab server, checker with the real profile. Accept 109, decline 14 (4 not computable), failed 3 (`arange` tracker error). `results/2026-10-25_full_batch_1/`
-- Done: cluster CPU tracking equal to the lab server (0708_c2 w0-2: 2.6e-7 px, checker values equal); whole per-root cluster chain equal on all 12 windows of 0708_c2. `scripts/track_equivalence.py`; decisions 2026-10-25
-- Done: batch 2 (91 roots, 1063 windows), one GPU job per root (segmentation, midline, tracks), about 25 min and $0.07 per root: 50 of 91 roots collected (md5 verified, staged frames cleared), 570 windows checked; interim tables `results/2026-10-25_full_batch_2/`
-- Done: item 13: not computable counts as decline; public batch outputs carry outcome and check values only (98711a2); full records in git-ignored `staging/full_batch_<N>/`
-- Done: decisions: moved copies one window per root (Andrew); cluster CPU tracking approved (Andrew); whole-root staging; tracker exception counts as a failed window; whole-root cluster copies may be cleared after md5 check (Andrew, 2026-10-26)
-- Spend since 2026-10-23: about $4.3 of $15
-- Failed: batch 2 stopped 2026-10-26 16:22 (lab-server connection dropped during two staging copies); Claude Code then stopped the driver and checker loop for low VM memory. Lab server down since (Andrew, 2026-11-02: restart later)
-- Rule slip: 2026-10-25 15:03, one `mv` of this session's own upload on the lab server (noted by Andrew, item 9); no move since
-- Demo: `python scripts/full_batch.py summary --batch 1` prints the batch-1 table (126 windows: accept 109, decline 14, failed 3)
-- Remaining: when the lab server is back: restart the batch-2 driver and checker loop (resume from markers; 41 roots, about 8 h, about $2.9); then batch-2 README, final tables, ready to merge
-- Bottlenecks: lab server down (Andrew); merge of main into this branch refused by the pre-push blocklist (main's inbox file names the cluster; coordinator merges)
+## 2026-10-25 to 2026-11-05 (build account, real-calib)
+- Done: full-batch proposal `docs/proposals/2026-10-25_full-batch.md` (935cfe7): 102 include-yes roots, 2368.1 usable h, 1189 windows
+- Done: batch 1, 11 roots, 126 windows: accept 109, decline 14 (4 not computable), failed 3. `results/2026-10-25_full_batch_1/`
+- Done: cluster tracking and the whole per-root cluster chain equal to the lab server (2.6e-7 px; checker values equal); decisions 2026-10-25
+- Done: storage-only lab server (spec 2026-11-04): `measure/remote_link.py` (one persistent connection, relay through the cluster master), `measure/cluster_compute.py` (Slurm jobs, ledger check before each submit), `RealRunner` `compute: cluster`, `measure/hosts.py` (no compute or Python on a storage-only host), `scripts/remote/check_window.py` (checker in the cluster job); fake-ssh tests. `python -m pytest -q tests`: 376 passed, 2 skipped
+- Done: Work 2: the 50 roots collected before the server stop intact after the re-upload (md5); Work 4: cluster checker equal on 5 windows (difference 0.0)
+- Done: batch 2, 91 roots, 1063 windows: 90 roots finished; accept 925, decline 102 (18 not computable), failed 34 (33 tracker `arange` errors, 1 logistic-fit error), not run 2 (0727_cc7, stage-table mismatch). Every check from the cluster; the 590 windows checked earlier on this machine re-checked on the cluster (570 identical, 20 new). `results/2026-10-25_full_batch_2/` with `audit/` (170 deletes; fresh md5 pass 1060/1060 tracks, 1063/1063 check JSONs)
+- Done: job cap 2 -> 4 (Andrew, 2026-11-04 23:10): about 3 -> 5-6 roots per hour
+- Spend since 2026-10-23: $7.24 of $15
+- Failed or stopped: lab server down 2026-10-26 to 2026-11-04; VM memory stops 2026-10-26 and 2026-11-04 (resumed from markers, no job lost); dropped lab-server connection 2026-11-05 (reconnected); audit helper bug 2026-11-04 (deletes done and logged, audit rebuilt from `DELETED.log`)
+- Rule slip: 2026-10-25 15:03, one `mv` of this session's own upload on the lab server (noted by Andrew, item 9); none since. Whole-root cluster copies were cleared before Andrew confirmed that item 8 covered them (confirmed 2026-10-26)
+- Demo: `python scripts/full_batch.py summary --batch 2 --records staging/full_batch_2_cluster` prints the batch-2 table (1063 windows: accept 925, decline 102, failed 34, not run 2)
+- Remaining: Andrew: 0727_cc7 (2 windows; staged frames kept on the cluster); merge `wip/real-calib`
+- Bottlenecks: none open on this branch

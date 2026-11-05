@@ -3,12 +3,12 @@ id: c018
 title: Real-image noise floor and real-movie thresholds
 lane: course
 owner: real-calib
-state: working
+state: review
 branch: wip/real-calib
 host: cluster, lab server (light)
 created: 2026-10-24 16:45
-last_update: 2026-11-02
-blocker: lab server down (Andrew; restart later)
+last_update: 2026-11-05
+blocker: none
 done_marker: proposal committed first; thresholds in decisions
 ---
 
@@ -25,3 +25,4 @@ Spec: `docs/specs/2026-10-24b_real-movie-push.md`, section B.
 - [todo] Item 7 (3): `results/2026-10-25_full_batch_1/`
 - [working] Item 11: cluster CPU tracking: equivalence test, then the next batch
 - [paused] Batch 2: 50 of 91 roots; resume from markers when the lab server is back
+- [done] Spec 2026-11-04 Work 1-7: batch 2 finished (90 of 91 roots, 1061 windows checked on the cluster); audit (item 17)
