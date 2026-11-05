@@ -104,6 +104,21 @@ def check_window(m, th):
     return outcome, vals, passed, detail
 
 
+def window_record(w, m, moved_copy, track_length, th, error=None):
+    """The per-window record: the same on this machine and inside a cluster job (scripts/remote/check_window.py)."""
+    res = {"window": w.id(), "root": w.root_id, "window_h": [w.from_h, w.to_h], "midline": MIDLINE,
+           "moved_copy": moved_copy, "track_length_px": track_length,
+           "closure_definition": CLOSURE_DEFINITION, "closure_threshold_px_per_h": REAL_CLOSURE_PX_H}
+    if error is not None:
+        res["status"], res["error"] = "failed", f"{type(error).__name__}: {str(error)[:300]}"
+        return res
+    res["outcome"], res["values"], res["passed"], res["detail"] = check_window(m, th)
+    res["base"] = base_info(m.record)
+    res["n_frames"] = int(m.record.n_frames)
+    res["status"] = "measured"
+    return res
+
+
 def run(a):
     plain = RealRunner(a.config, cache=a.cache, moved=False)
     moved = RealRunner(a.config, cache=a.cache, moved=True)
@@ -135,20 +150,14 @@ def run(a):
                 print(f"{w.id()}: track not on the host yet", flush=True)
                 continue
             cached.write_bytes(plain._ssh(f"cat {q(t)}"))
-        res = {"window": w.id(), "root": w.root_id, "window_h": [w.from_h, w.to_h], "midline": MIDLINE,
-               "moved_copy": runner is moved, "track_length_px": runner.track_length,
-               "closure_definition": CLOSURE_DEFINITION, "closure_threshold_px_per_h": REAL_CLOSURE_PX_H}
         try:
             m = runner.measure(w, runner.initial_settings(w))
-            res["outcome"], res["values"], res["passed"], res["detail"] = check_window(m, th)
-            res["base"] = base_info(m.record)
-            res["n_frames"] = int(m.record.n_frames)
-            res["status"] = "measured"
+            res = window_record(w, m, runner is moved, runner.track_length, th)
         except Exception as e:
             if type(e).__name__ == "HostBusy":
                 print(f"{w.id()}: host busy ({e}); stopping, rerun later", flush=True)
                 break
-            res["status"], res["error"] = "failed", f"{type(e).__name__}: {str(e)[:300]}"
+            res = window_record(w, None, runner is moved, runner.track_length, th, error=e)
         f.write_text(json.dumps(res, indent=1, default=str))
         print(f"{w.id()}: {res['status']} {res.get('outcome', '')}", flush=True)
     log = Path(a.out) / "runner_log.json"           # appended per run
