@@ -1,9 +1,9 @@
 # real-calib
-Updated: 2026-11-04 23:00 (local)
+Updated: 2026-11-05 08:20 (local)
 Lane: course
 Branch: wip/real-calib
 Last inbox item done: 17
-State: working
+State: waiting on Andrew
 Now: spec 2026-11-04 Work 5: batch 2 resumed with the v2 driver (one persistent connection, cluster relay only, checker and w10-12 moved copy inside each root's cluster job, audit records for item 17); first v2 job submitted 18:20
 Done since last update:
 - Work 1: branch rebuilt on `origin/main` with the old tip merged into it; fast-forward push, no force
@@ -15,5 +15,8 @@ Done since last update:
 - Bug fixed 19:22: the audit helper's argument name clashed with the delete rows (TypeError after each delete); the deletes completed and are logged in `DELETED.log`, and the collect retried until done. `deletes.csv` will be built from `DELETED.log`; duplicate output rows removed
 - Spend since 2026-10-23: $4.70 of $15
 - Batch 2 at 22:56: 62 of 91 roots collected, 0 errors, no stop; 141 windows checked on the cluster (v2 roots); 0721_m7 and 0727_cc7 running; spend $5.38 actual ($5.88 with the 2 running jobs at worst case)
+- Batch 2 stopped: 70 of 91 roots collected, 1 error (0727_cc7: the tracker's loader rejects its stage-tracking table, 155 steps for 857 positions; frames kept). The driver lost the lab-server connection after 00:27 (socket closed by the remote end; no output until 08:17, the VM likely paused), then Claude Code stopped it for low VM memory. 4 jobs finished on the cluster but are not collected (0721_c8, 0721_m8, 0727_mc8, 0708_m11); cluster folder 34.5 GB of 35 GB. Spend $6.68 actual
 Needs Andrew:
+- Restart the batch-2 driver (`python private/fb2_driver_v2.py` in the real-calib worktree; resumes from markers, collects the 4 finished roots first): 17 roots left, about $1.2 more
+- 0727_cc7: 2 windows, stage-tracking table mismatch; count as failed windows, or look at the data?
 - Free VM memory is about 2.5 GB of 7.75 GB; the spec needs 3 GB before each staging step, so staging of new roots waits (the 3 staged roots run). Closing idle sessions on the VM would let it go on
