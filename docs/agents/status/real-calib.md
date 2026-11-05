@@ -1,15 +1,15 @@
 # real-calib
-Updated: 2026-10-29 10:20 (local)
+Updated: 2026-11-05 (local)
 Lane: course
 Branch: wip/real-calib
-Last inbox item done: 13
-State: waiting on Andrew
-Now: batch 2 stopped at 50 of 91 roots. The driver last ran 2026-10-26 16:22 (two staging rsyncs failed when the lab-server connection dropped); Claude Code then stopped the driver, the checker loop and its wait for low VM memory. Not restarted (needs Andrew)
+Last inbox item done: 17
+State: ready to merge
+Now: spec 2026-11-04 Work 1-7 done; batch 2 finished
 Done since last update:
-- Andrew 2026-10-26: deleting whole-root cluster copies this session made, after md5 check, approved (decisions)
-- Batch 2: 50 of 91 roots collected (md5 verified, frames cleared), 0 errors, no job lost (every submitted root collected); 570 windows checked on the lab server
-- 3 roots staged on the cluster, not submitted (0721_c6, 0721_m6, 0727_cc6; the last may be partial; the driver re-runs the copy and checks file counts)
+- Work 5: batch 2 finished: 90 of 91 roots (driver end 10:52), 0 jobs lost; job cap 4 (Andrew)
+- Work 6: every batch-2 window checked on the cluster: 1061 of 1063; accept 925, decline 102 (18 not computable), failed 34, not run 2 (0727_cc7). `results/2026-10-25_full_batch_2/`
+- Item 17: `results/2026-10-25_full_batch_2/audit/` (deletes, outputs, ledger, connection, reverify: 1060/1060 tracks, 1063/1063 check JSONs match)
+- Work 7: decisions, log entry `docs/running_log_pending/real-calib.md`; tests 376 passed, 2 skipped
+- Spend since 2026-10-23: $7.24 of $15
 Needs Andrew:
-- The lab server does not answer from the VM (ssh timeout, 2026-10-29 10:17); the cluster is reached through it
-- Restart of the batch-2 driver and checker loop after the memory stop (resumes from markers): 41 roots, about 8 h of cluster time, about $2.9 more (projected total about $7.6 of $15)
-- Merge of main into this branch still refused by the pre-push blocklist (main's inbox file names the cluster); the coordinator merges this branch
+- 0727_cc7 (2 windows): the tracker's loader rejects its stage-tracking table (155 steps for 857 positions). Count as not measured as now, or look at the data? Its staged root copy (4.8 GB) stays on the cluster until then

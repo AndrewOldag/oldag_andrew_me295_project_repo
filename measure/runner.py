@@ -36,6 +36,7 @@ import yaml
 from measure.record import MeasurementRecord, from_tracker_npz, rigid_moved
 from measure.remedies import TrackSettings
 from measure import preprocess
+from measure.hosts import refuse_storage_host
 
 ROOT = Path(__file__).resolve().parents[1]
 RUNNER_CONFIG = ROOT / "private" / "runner.yaml"
@@ -192,6 +193,7 @@ class RemoteRunner:
         return not self._git("status", "--porcelain", "--", *SYNCED).strip()
 
     def _py(self, script, args):
+        refuse_storage_host(self.host, f"{script}")          # no Python of any kind on a storage-only host
         if self.code is None:
             self.sync_code()
         return " ".join([self.python, shlex.quote(f"{self.code}/{script}")] + [shlex.quote(a) for a in args])
