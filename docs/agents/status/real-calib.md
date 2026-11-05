@@ -1,5 +1,5 @@
 # real-calib
-Updated: 2026-11-04 18:25 (local)
+Updated: 2026-11-04 19:30 (local)
 Lane: course
 Branch: wip/real-calib
 Last inbox item done: 17
@@ -11,6 +11,8 @@ Done since last update:
 - Work 3: `measure/remote_link.py` (one persistent connection, reconnect backoff, relay through the master), `measure/cluster_compute.py` (Slurm jobs, ledger check before each submit), `RealRunner` `compute: cluster` (storage and compute hosts separate; lab-server load and job-count checks gone), `measure/hosts.py` refuses any compute or Python on a storage-only host (RealRunner, RemoteRunner incl. sweeps), `scripts/remote/check_window.py` (checker inside the cluster job); fake-ssh tests; 376 passed, 2 skipped
 - Work 4: cluster checker equal to the local checker on 5 windows (every difference 0.0); decisions
 - Item 17: moved copies deleted on the cluster right after the md5 check of their tracks on the lab server (done per root by the batch driver as soon as the job's outputs are verified; logged in `DELETED.log`); audit records collected for `results/2026-10-25_full_batch_2/audit/`
-- Spend since 2026-10-23: $4.57 of $15 before the first v2 job
+- Batch 2 at 19:24: 52 of 91 roots collected (0721_c6 and 0721_m6 through v2: 12 tracks and 12 cluster checks each); 0727_cc6 running; 0727_mm7 and 0708_c10 staged
+- Bug fixed 19:22: the audit helper's argument name clashed with the delete rows (TypeError after each delete); the deletes completed and are logged in `DELETED.log`, and the collect retried until done. `deletes.csv` will be built from `DELETED.log`; duplicate output rows removed
+- Spend since 2026-10-23: $4.70 of $15
 Needs Andrew:
 - Free VM memory is about 2.5 GB of 7.75 GB; the spec needs 3 GB before each staging step, so staging of new roots waits (the 3 staged roots run). Closing idle sessions on the VM would let it go on
