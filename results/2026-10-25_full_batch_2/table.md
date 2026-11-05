@@ -1,8 +1,8 @@
 | Condition | Windows | Accept | Decline | of which not computable | Failed | Not run |
 | :-- | --: | --: | --: | --: | --: | --: |
-| control | 369 | 150 | 15 | 0 | 3 | 201 |
-| control then control | 49 | 25 | 2 | 0 | 2 | 20 |
-| mannitol | 309 | 107 | 16 | 7 | 9 | 177 |
-| mannitol then control | 276 | 61 | 10 | 0 | 1 | 204 |
-| mannitol then mannitol | 60 | 28 | 6 | 2 | 2 | 24 |
-| all | 1063 | 371 | 49 | 9 | 17 | 626 |
+| control | 369 | 328 | 28 | 3 | 13 | 0 |
+| control then control | 49 | 37 | 6 | 0 | 4 | 2 |
+| mannitol | 309 | 261 | 37 | 11 | 11 | 0 |
+| mannitol then control | 276 | 250 | 22 | 2 | 4 | 0 |
+| mannitol then mannitol | 60 | 49 | 9 | 2 | 2 | 0 |
+| all | 1063 | 925 | 102 | 18 | 34 | 2 |

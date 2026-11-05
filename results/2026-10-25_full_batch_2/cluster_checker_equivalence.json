@@ -1,0 +1,57 @@
+{
+ "windows": {
+  "0708_c4__w0-2": {
+   "record_equal": true,
+   "value_diffs": {
+    "rigid_invariance": null,
+    "closure": 0.0,
+    "plane_sections": 0.0
+   },
+   "outcome_lab": "fail",
+   "outcome_cluster": "fail"
+  },
+  "0708_m8__w2-4": {
+   "record_equal": true,
+   "value_diffs": {
+    "rigid_invariance": null,
+    "closure": null,
+    "plane_sections": null
+   },
+   "outcome_lab": "not computable",
+   "outcome_cluster": "not computable"
+  },
+  "0708_c5__w12-14": {
+   "record_equal": true,
+   "value_diffs": {
+    "rigid_invariance": null,
+    "closure": 0.0,
+    "plane_sections": 0.0
+   },
+   "outcome_lab": "pass",
+   "outcome_cluster": "pass"
+  },
+  "0714_c4__w16-18": {
+   "record_equal": true,
+   "value_diffs": {
+    "rigid_invariance": null,
+    "closure": 0.0,
+    "plane_sections": 0.0
+   },
+   "outcome_lab": "pass",
+   "outcome_cluster": "pass"
+  },
+  "0708_c4__w10-12": {
+   "record_equal": true,
+   "value_diffs": {
+    "closure": 0.0,
+    "plane_sections": 0.0,
+    "rigid_invariance": 0.0,
+    "rigid_invariance_profile_window": 0.0
+   },
+   "outcome_lab": "pass",
+   "outcome_cluster": "pass"
+  }
+ },
+ "limit": 1e-09,
+ "note": "cluster CPU job (shared tracker env, python 3.10.12, numpy 2.2.6) vs lab-server records; outcome and check values only"
+}
