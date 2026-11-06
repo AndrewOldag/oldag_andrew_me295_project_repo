@@ -1,7 +1,7 @@
 """Link and Relay (measure/remote_link.py) with a fake ssh transport; no real host is contacted."""
 import pytest
 
-from measure.remote_link import CommandFailed, Link, LinkDown, Relay
+from measure.remote_link import CommandFailed, Link, LinkDown, MasterDown, Relay
 
 
 class FakeChannel:
@@ -77,6 +77,7 @@ class FakeServer:
     def __init__(self, refuse=0, drop_next=0):
         self.refuse, self.drop_next = refuse, drop_next
         self.connects, self.commands = 0, []
+        self.master_down = False
 
     def connect(self, host):
         self.connects += 1
@@ -88,7 +89,11 @@ class FakeServer:
     def reply(self, cmd, stdin):
         if cmd.startswith("false"):
             return b"", b"boom\n", 1
-        if "ssh -O check" in cmd:
+        if cmd.startswith("ssh -G "):
+            return b"user u\ncontrolpath /s/sock-cluster-22\ncontrolmaster auto\n", b"", 0
+        if "ssh -O check" in cmd and self.master_down:      # the check alone, or the guard in front of a command
+            return b"", b"Control socket connect(/s/sock-cluster-22): No such file or directory\r\n", 255
+        if cmd.startswith("ssh -O check") and "&&" not in cmd:
             return b"Master running (pid=1)\r\n", b"", 0
         if "md5sum" in cmd:
             return b"aa  ./x.npz\r\nbb  ./y.npz\r\n", b"", 0
@@ -154,10 +159,29 @@ def test_relay_goes_through_storage_host_only():
     r.push("/data/root.imgdir/", "/work/data/root.imgdir/")
     r.pull("/work/out/root/", "/data/out/root/")
     assert s.connects == 1
-    sent = s.commands[1:]
-    assert sent[0] == "ssh -o BatchMode=yes clusteralias 'squeue -u me'"
-    assert sent[1].startswith("rsync -a -s --bwlimit=50000 -e 'ssh -o BatchMode=yes' /data/root.imgdir/ clusteralias:")
-    assert sent[2].startswith("mkdir -p /data/out/root/ && rsync -a -s -e 'ssh -o BatchMode=yes' clusteralias:")
+    sent = [c for c in s.commands if not c.startswith(("ssh -O check clusteralias 2>&1", "ssh -G "))]
+    guard = "ssh -O check -o ControlPath=/s/sock-cluster-22 clusteralias >/dev/null 2>&1 && "
+    opts = "-o BatchMode=yes -o ControlMaster=no -o ControlPath=/s/sock-cluster-22"
+    assert sent[0] == f"{guard}ssh {opts} clusteralias 'squeue -u me'"
+    assert sent[1].startswith(f"{guard}rsync -a -s --bwlimit=50000 -e 'ssh {opts}' /data/root.imgdir/ clusteralias:")
+    assert sent[2].startswith(f"mkdir -p /data/out/root/ && {guard}rsync -a -s -e 'ssh {opts}' clusteralias:")
+
+
+def test_relay_never_opens_a_cluster_login_and_stops_when_master_down():
+    """Argon A5-F5: every relayed ssh is ControlMaster=no behind the master check; master down raises MasterDown."""
+    s = FakeServer()
+    r = Relay(link(s), "c")
+    r.run("true")
+    s.master_down = True
+    assert not r.master_ok()
+    with pytest.raises(MasterDown):
+        r.require_master()
+    with pytest.raises(MasterDown):
+        r.run("sbatch job.sbatch")
+    with pytest.raises(MasterDown):
+        r.push("/a/", "/b/")
+    relayed = [c for c in s.commands if " c " in c and not c.startswith(("ssh -O check c 2>&1", "ssh -G "))]
+    assert relayed and all(c.startswith("ssh -O check -o ControlPath=") and "ControlMaster=no" in c for c in relayed)
 
 
 def test_md5_tree_normalizes_line_ends():

@@ -10,8 +10,10 @@ from measure.remedies import TrackSettings
 from measure.runner import RemoteRunner
 
 ALIAS = "clusteralias"
-RELAY = f"ssh -o BatchMode=yes {ALIAS} "
-STORAGE_ALLOWED = re.compile(r"^(test |ls |du |cat |mkdir -p |rsync |ssh -O check |if \[ -d |cd \S+ && find )")
+CP = "/s/sock-cluster-22"
+RELAY = (f"ssh -O check -o ControlPath={CP} {ALIAS} >/dev/null 2>&1 && "
+         f"ssh -o BatchMode=yes -o ControlMaster=no -o ControlPath={CP} {ALIAS} ")
+STORAGE_ALLOWED = re.compile(r"^(test |ls |du |cat |mkdir -p |rsync |ssh -O check |ssh -G |if \[ -d |cd \S+ && find )")
 
 
 class FakeLink:
@@ -28,7 +30,9 @@ class FakeLink:
             self.cluster_cmds.append(inner)
             return self.on_cluster(inner, stdin)
         self.storage_cmds.append(cmd)
-        if cmd.startswith("rsync ") and f"{ALIAS}:" in cmd.split()[-1]:
+        if cmd.startswith("ssh -G "):
+            return f"controlpath {CP}\n".encode()
+        if "rsync " in cmd and f"{ALIAS}:" in cmd.split()[-1]:
             self.staged = True
         if cmd.startswith("ssh -O check"):
             return b"Master running\n"
@@ -85,7 +89,8 @@ def test_cluster_track_runs_as_slurm_job_and_nothing_on_storage(tmp_path):
     for c in link.storage_cmds:                                    # storage host: storage and relay commands only
         assert STORAGE_ALLOWED.match(c), c
         assert "python" not in c and "nice" not in c and "sbatch" not in c
-    assert any(c.startswith("rsync ") and f"{ALIAS}:/cl/work/data/r1.imgdir/" in c for c in link.storage_cmds)
+    assert any(c.startswith(RELAY.split("&&")[0]) and " rsync " in c and f"{ALIAS}:/cl/work/data/r1.imgdir/" in c
+               for c in link.storage_cmds)
 
 
 def test_cluster_submit_refused_by_ledger(tmp_path):
@@ -123,6 +128,20 @@ def test_storage_host_refused_for_sweeps_and_synthetic_runs(tmp_path, monkeypatc
     rr = RemoteRunner(p, cache=tmp_path)
     with pytest.raises(hosts.StorageOnlyHost):
         rr._py("scripts/synth/sweep.py", ["status", "--work", "/w"])
+
+
+def test_sweep_start_refused_before_code_sync(tmp_path, monkeypatch):
+    """Argon A5-F6: no ssh command (mkdir, tar) reaches a storage-only host before the refusal."""
+    monkeypatch.setattr(hosts, "storage_only_hosts", lambda paths=None: {"lab"})
+    p = tmp_path / "runner.yaml"
+    p.write_text("host: lab\nwork_dir: /w\ncode_dir: /c\npython: py\n")
+    rr = RemoteRunner(p, cache=tmp_path)
+    sent = []
+    monkeypatch.setattr(rr, "_ssh", lambda cmd, stdin=None: sent.append(cmd) or b"")
+    monkeypatch.setattr(rr, "sync_code", lambda: sent.append("sync_code"))
+    with pytest.raises(hosts.StorageOnlyHost):
+        rr.sweep_start([], "plan")
+    assert sent == []
 
 
 def test_storage_list_file(tmp_path):

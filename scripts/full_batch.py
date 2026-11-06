@@ -3,10 +3,10 @@
   python scripts/full_batch.py run [--batch 1|2] [--config private/real_runner_fb<N>.yaml] [--windows W ...]
   python scripts/full_batch.py summary [--batch 1|2]
 
-Batch 1: 11 roots; tracks made on the lab server. Batch 2: every other include-yes root; each root's segmentation,
-midlines and tracks are made on the cluster (one job per root, decisions 2026-10-25) and copied to the host with md5
-checks; `run` reads those tracks from the host and only checks them. The moved copy (w10-12) is made and tracked on
-the host in both batches.
+Batch 1: 11 roots; tracks made on the lab server; the moved copy (w10-12) made and tracked there. Batch 2: every
+other include-yes root; every step, the moved copy and the checker run inside one cluster job per root
+(spec 2026-11-04). Batch 2 runs with `scripts/full_batch_2_driver.py`, the code that ran it; `run --batch 2` stops and
+says so (Argon A5-F7). `summary --batch 2` reads the check JSONs the driver copies to staging/full_batch_2_cluster/.
 
 `run`, per window whose ft2 net midline is on the host: RealRunner at the initial settings (every frame, uncoupled,
 1000 px), then the checker with the real profile: closure gates at the real threshold (19 px/h, decisions
@@ -36,7 +36,7 @@ from real_calib import CLOSURE_DEFINITION, MIDLINE, base_info  # noqa: E402
 
 OUTS = {1: ROOT / "results" / "2026-10-25_full_batch_1", 2: ROOT / "results" / "2026-10-25_full_batch_2"}
 # Full per-window records (detail strings, closure terms, basal speeds) stay git-ignored (inbox item 13)
-RECORDS = {1: ROOT / "staging" / "full_batch_1", 2: ROOT / "staging" / "full_batch_2"}
+RECORDS = {1: ROOT / "staging" / "full_batch_1", 2: ROOT / "staging" / "full_batch_2_cluster"}   # 2: the driver
 # Proposal, first batch: in each experiment-condition group the first include-yes root in position order that is in
 # neither the calibration set nor the section C subset; every dispatcher window of each
 ROOTS = ["0708_c2", "0708_m1", "0711_c3", "0711_m1", "0714_c5", "0714_m1", "0721_c2", "0721_m1",
@@ -120,8 +120,11 @@ def window_record(w, m, moved_copy, track_length, th, error=None):
 
 
 def run(a):
+    if a.batch == 2:
+        sys.exit("batch 2 runs with scripts/full_batch_2_driver.py: every step and the checker inside one cluster job "
+                 "per root (spec 2026-11-04)")
     plain = RealRunner(a.config, cache=a.cache, moved=False)
-    moved = RealRunner(a.config, cache=a.cache, moved=True)
+    moved = RealRunner(a.config, cache=a.cache, moved=True, link=getattr(plain, "link", None))   # one connection
     if plain.track_length != TRACK_LENGTH:
         sys.exit(f"tracked length {plain.track_length:g} px; real windows need {TRACK_LENGTH:g} px")
     plain.sync_code()
