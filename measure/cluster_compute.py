@@ -46,6 +46,7 @@ class ClusterCompute:
 
     def submit(self, name, body, **kw):
         job_dir = f"{self.work}/jobs/{name}"
+        self.relay.require_master()           # before each batch step (Argon A5-F5): down raises MasterDown
         self.relay.run(f"mkdir -p {q(job_dir)} {q(self.work)}/logs && cat > {q(job_dir)}/job.sbatch",
                        stdin=self.script(name, body, **kw))
         rc, msg = self.ledger("check", job_dir)
