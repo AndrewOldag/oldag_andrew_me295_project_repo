@@ -141,27 +141,68 @@ class Link:
             self._client = None
 
 
-class Relay:
-    """Commands and copies to the cluster, run from the storage host through its existing connection master only."""
+class MasterDown(RuntimeError):
+    """The cluster connection master on the storage host is not running: stop; Needs Andrew."""
 
-    def __init__(self, link, alias):
+
+class Relay:
+    """Commands and copies to the cluster, run from the storage host through its existing connection master only.
+
+    Every relayed ssh (commands and rsync) carries `-o ControlMaster=no` with the master's ControlPath (read once with
+    `ssh -G`, which opens no connection) and runs behind `ssh -O check ... &&`, so a missing master makes the command
+    fail; no relayed command can open a new cluster login or become a new master (Argon A5-F5). `require_master()`
+    is called before each batch step and raises MasterDown.
+    """
+
+    def __init__(self, link, alias, control_path=None):
         self.link, self.alias = link, alias
+        self._control_path = control_path
+
+    def control_path(self):
+        if self._control_path is None:
+            out = self.link.run(f"ssh -G {shlex.quote(self.alias)}", check=False).decode(errors="replace")
+            cp = next((l.split(None, 1)[1].strip() for l in out.splitlines()
+                       if l.lower().startswith("controlpath ")), "")
+            if not cp or cp == "none":
+                raise MasterDown(f"no ControlPath for '{self.alias}' on the storage host; the relay needs its master")
+            self._control_path = cp
+        return self._control_path
+
+    def ssh_opts(self):
+        return f"-o BatchMode=yes -o ControlMaster=no -o ControlPath={shlex.quote(self.control_path())}"
+
+    def _guard(self):
+        return (f"ssh -O check -o ControlPath={shlex.quote(self.control_path())} {shlex.quote(self.alias)} "
+                f">/dev/null 2>&1 && ")
 
     def master_ok(self):
         out = self.link.run(f"ssh -O check {shlex.quote(self.alias)} 2>&1", check=False).decode(errors="replace")
         return "Master running" in out
 
+    def require_master(self):
+        if not self.master_ok():
+            raise MasterDown(f"cluster connection master for '{self.alias}' is down on the storage host")
+
+    def _relayed(self, cmd, stdin=None, check=True):
+        try:
+            return self.link.run(cmd, stdin, check)
+        except CommandFailed:
+            self.require_master()
+            raise
+
     def run(self, cmd, stdin=None, check=True):
-        return self.link.run(f"ssh -o BatchMode=yes {shlex.quote(self.alias)} {shlex.quote(cmd)}", stdin, check)
+        return self._relayed(f"{self._guard()}ssh {self.ssh_opts()} {shlex.quote(self.alias)} {shlex.quote(cmd)}",
+                             stdin, check)
 
     def push(self, src, dest, bwlimit_kbs=50000):
         """Copy a folder or file on the storage host to the cluster (rsync over the master)."""
-        return self.link.run(f"rsync -a -s --bwlimit={bwlimit_kbs} -e 'ssh -o BatchMode=yes' "
+        return self._relayed(f"{self._guard()}rsync -a -s --bwlimit={bwlimit_kbs} -e {shlex.quote('ssh ' + self.ssh_opts())} "
                              f"{shlex.quote(src)} {shlex.quote(self.alias)}:{shlex.quote(dest)}")
 
     def pull(self, src, dest):
         """Copy a folder or file on the cluster to the storage host (rsync over the master)."""
-        return self.link.run(f"mkdir -p {shlex.quote(dest)} && rsync -a -s -e 'ssh -o BatchMode=yes' "
+        return self._relayed(f"mkdir -p {shlex.quote(dest)} && {self._guard()}rsync -a -s -e "
+                             f"{shlex.quote('ssh ' + self.ssh_opts())} "
                              f"{shlex.quote(self.alias)}:{shlex.quote(src)} {shlex.quote(dest)}")
 
     def md5_tree(self, where, path):
