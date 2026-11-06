@@ -32,3 +32,12 @@
    - `ledger.csv`: per job: resources, time limit, worst case, actual from `sacct`, running total
    - `connection.csv`: each reconnect of the persistent connection and each master check that failed (time, outcome)
    - At the end: a fresh md5 pass over every batch-2 output on the lab server, compared with `outputs.csv` (`reverify.md`, counts only)
+18. Planning, 2026-11-05 (Andrew): Argon audit of batch 2, `docs/reviews/2026-11-05_argon-batch2/review.md` (A5-F1 to F7). No rerun of any track or check. New `wip/real-calib` from `origin/main`. In this order:
+   - A5-F2 first: for the 120 v2 delete rows, `outputs_verified` is later than `deleted`. From the driver code and the cluster `DELETED.log`, show whether the lab-server md5 check ran before each `rm`. Write the answer in `results/2026-10-25_full_batch_2/audit/README.md` (per row class, with the code lines). If any delete ran before its check, say so plainly and Needs Andrew. Fix the stamp so `outputs_verified` records the time of the pre-delete check
+   - A5-F1: the 80 moved-copy tracks (`_wp_ref`, `_wp_moved`) are not in `outputs.csv` or `reverify.md`. Check them on the lab server by md5 against `deletes.csv`; add them to `outputs.csv` (kind column) and to `reverify.md`. Missing or different: list, Needs Andrew. Explain the empty-file md5 (`.npz.ok` markers) in the audit README
+   - A5-F7: the driver that ran batch 2 is not in the repo. Commit it (no paths or host names; settings from `private/`), or update `scripts/full_batch.py` to the code that ran, so batch 2 is reproducible from the repo. Tests with the fake ssh
+   - A5-F5: call `Relay.master_ok()` before each batch step and stop with Needs Andrew when it fails; pass `-o ControlMaster=no` with the ControlPath so a relay command can never open a new cluster login. Test
+   - A5-F6: `RemoteRunner.sweep_start()` refuses a storage host before `sync_code()`. Test
+   - A5-F3: 0727_cc7 rows in `outputs.csv`: say what the two check JSONs are (not run) or drop their md5s; match `summary.json`
+   - A5-F4: add the 2 missing 2026-10-25 equivalence jobs to `ledger.csv`; all times with offsets
+   - Decisions, log, `ready to merge`
