@@ -1,0 +1,13 @@
+# Template for private/full_batch_2.yaml (git-ignored), read by scripts/full_batch_2_driver.py.
+storage_host: <ssh alias of the storage host, from ~/.ssh/config of this machine>
+cluster_alias: <ssh alias of the cluster on the storage host; its connection master is opened by hand>
+cluster_dir: <work folder on the cluster>
+storage_dir: <batch-2 output folder on the storage host>
+roots: <file on this machine: root id TAB root imgdir on the storage host, one line per root>
+ledger: [<python of the agents env>, <spend ledger script>]
+code_dir: <this repo at the synced commit, on the cluster>
+tracker_dir: <tracker checkout on the cluster>
+env_activate: <file that activates the tracker env on the cluster>
+ft2_code: <midline net code on the cluster>
+ft2_weights: <net2_midline_ft2.pt on the cluster>
+state_dir: <optional; markers and audit records; default private/fb2_state>
