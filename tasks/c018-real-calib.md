@@ -3,7 +3,7 @@ id: c018
 title: Real-image noise floor and real-movie thresholds
 lane: course
 owner: real-calib
-state: working
+state: review
 branch: wip/real-calib
 host: cluster, lab server (light)
 created: 2026-10-24 16:45
@@ -26,4 +26,4 @@ Spec: `docs/specs/2026-10-24b_real-movie-push.md`, section B.
 - [working] Item 11: cluster CPU tracking: equivalence test, then the next batch
 - [paused] Batch 2: 50 of 91 roots; resume from markers when the lab server is back
 - [done] Spec 2026-11-04 Work 1-7: batch 2 finished (90 of 91 roots, 1061 windows checked on the cluster); audit (item 17)
-- [working] Item 18: Argon A5 findings F1-F7 (no rerun of tracks or checks)
+- [done] Item 18: Argon A5 findings F1-F7: audit record fixed, relay and sweep guards, driver committed
