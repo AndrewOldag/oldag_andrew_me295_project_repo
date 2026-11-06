@@ -1,7 +1,7 @@
 time,event,outcome
-2026-11-04T18:07:08,persistent connection,connected
-2026-11-04T18:17:42,persistent connection,connected
-2026-11-04T19:22:01,persistent connection,connected
-2026-11-04T22:59:14,persistent connection,connected
-2026-11-05T08:17:04,driver,error: CommandFailed: remote command failed (-1)
-2026-11-05T08:20:09,persistent connection,connected
+2026-11-04T18:07:08-08:00,persistent connection,connected
+2026-11-04T18:17:42-08:00,persistent connection,connected
+2026-11-04T19:22:01-08:00,persistent connection,connected
+2026-11-04T22:59:14-08:00,persistent connection,connected
+2026-11-05T08:17:04-08:00,driver,error: CommandFailed: remote command failed (-1)
+2026-11-05T08:20:09-08:00,persistent connection,connected
