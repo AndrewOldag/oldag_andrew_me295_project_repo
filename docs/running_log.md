@@ -836,3 +836,16 @@ Required by the course. One entry per work session: done, remaining, bottlenecks
 - Demo: `python scripts/full_batch.py summary --batch 2 --records staging/full_batch_2_cluster` prints the batch-2 table (1063 windows: accept 925, decline 102, failed 34, not run 2)
 - Remaining: Andrew: 0727_cc7 (2 windows; staged frames kept on the cluster); merge `wip/real-calib`
 - Bottlenecks: none open on this branch
+
+## 2026-11-05 (build account, real-calib, inbox item 18: Argon A5 findings)
+- Done: A5-F2: all 170 batch-2 cluster deletes followed a lab-server md5 check (4-26 s before the `rm`); none before. `deletes.csv` `outputs_verified` now holds the pre-delete check time, `verified_from` its source (delete record 113, collection record 7, md5.txt mtime 50); code lines in `results/2026-10-25_full_batch_2/audit/README.md` (69bf6a6, 43ca938)
+- Done: A5-F1: 80 moved-copy tracks added to `outputs.csv` (1143 rows, `kind` column); fresh md5 pass: window tracks 1060/1060, moved-copy tracks 80/80, check JSONs 1063/1063 match; `.npz.ok` empty-marker md5 explained (69bf6a6)
+- Done: A5-F3: 0727_cc7 check JSONs are failure records (missing track), noted in `outputs.csv`, counted as not run as in `summary.json`
+- Done: A5-F4: `ledger.csv` 98 jobs, by job id (adds 5468233, 5468687, 5469410; 5469410 actual $0.067 from sacct); all times with offsets; spend since 2026-10-23 $7.24 of $15 unchanged
+- Done: A5-F5: Relay ssh/rsync behind `ssh -O check` with `ControlMaster=no` and the master's ControlPath; `require_master()` before each driver step and cluster submit; tests (0e8e36e)
+- Done: A5-F6: `RemoteRunner.sweep_start` refuses a storage-only host before code sync; test fails without the fix (236711b)
+- Done: A5-F7: `scripts/full_batch_2_driver.py` + `scripts/remote/full_batch_2_root_job.sh` committed path-free (settings `private/full_batch_2.yaml`); fake-ssh tests `tests/test_full_batch_2_driver.py` (4); `full_batch.py run --batch 2` points to it; batch-2 summary regenerates unchanged (b9976cf)
+- Done: tests 382 passed, 2 skipped. No track, check or cluster job run; read-only lab-server and login-node commands only (stat, md5sum, cat, sacct)
+- Demo: `python -m pytest -q tests/test_full_batch_2_driver.py tests/test_remote_link.py` (driver order: md5 check before every delete; master down stops before any step); `cat results/2026-10-25_full_batch_2/audit/reverify.md`
+- Remaining: merge `wip/real-calib`; Andrew: 0727_cc7 (2 windows; staged frames kept on the cluster)
+- Bottlenecks: none on this branch
