@@ -199,9 +199,10 @@ class Relay:
         return self._relayed(f"{self._guard()}rsync -a -s --bwlimit={bwlimit_kbs} -e {shlex.quote('ssh ' + self.ssh_opts())} "
                              f"{shlex.quote(src)} {shlex.quote(self.alias)}:{shlex.quote(dest)}")
 
-    def pull(self, src, dest):
+    def pull(self, src, dest, exclude=()):
         """Copy a folder or file on the cluster to the storage host (rsync over the master)."""
-        return self._relayed(f"mkdir -p {shlex.quote(dest)} && {self._guard()}rsync -a -s -e "
+        ex = "".join(f"--exclude {shlex.quote(x)} " for x in exclude)
+        return self._relayed(f"mkdir -p {shlex.quote(dest)} && {self._guard()}rsync -a -s {ex}-e "
                              f"{shlex.quote('ssh ' + self.ssh_opts())} "
                              f"{shlex.quote(self.alias)}:{shlex.quote(src)} {shlex.quote(dest)}")
 
