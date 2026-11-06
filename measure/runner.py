@@ -234,6 +234,7 @@ class RemoteRunner:
 
     def sweep_start(self, plan, name, tracks="tracks", max_hours=2.0):
         """Write the plan and start sweep.py detached at lowest priority. Refuses while a sweep runs."""
+        refuse_storage_host(self.host, "a sweep")            # before sync_code writes anything there (Argon A5-F6)
         self.sync_code()
         st = self.sweep_status()
         if st.get("running"):

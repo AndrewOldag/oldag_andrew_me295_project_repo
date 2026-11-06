@@ -125,6 +125,20 @@ def test_storage_host_refused_for_sweeps_and_synthetic_runs(tmp_path, monkeypatc
         rr._py("scripts/synth/sweep.py", ["status", "--work", "/w"])
 
 
+def test_sweep_start_refused_before_code_sync(tmp_path, monkeypatch):
+    """Argon A5-F6: no ssh command (mkdir, tar) reaches a storage-only host before the refusal."""
+    monkeypatch.setattr(hosts, "storage_only_hosts", lambda paths=None: {"lab"})
+    p = tmp_path / "runner.yaml"
+    p.write_text("host: lab\nwork_dir: /w\ncode_dir: /c\npython: py\n")
+    rr = RemoteRunner(p, cache=tmp_path)
+    sent = []
+    monkeypatch.setattr(rr, "_ssh", lambda cmd, stdin=None: sent.append(cmd) or b"")
+    monkeypatch.setattr(rr, "sync_code", lambda: sent.append("sync_code"))
+    with pytest.raises(hosts.StorageOnlyHost):
+        rr.sweep_start([], "plan")
+    assert sent == []
+
+
 def test_storage_list_file(tmp_path):
     (tmp_path / hosts.LIST_NAME).write_text("# comment\nlab\n\n")
     assert hosts.storage_only_hosts([tmp_path]) == {"lab"}
