@@ -153,7 +153,7 @@ def run_agent_groups(config, out, windows, slice_cmd=None, cap=LLM_CAP, per_wind
         if (g / "summary.json").exists() and not trace_calls(g)[1]:
             continue
         used = sum(trace_calls(d)[0] for d in out.glob("g*") if (d / "summary.json").exists())
-        if used + per_window * len(ids) > cap:
+        if used + per_window * len(ids) + 30 > cap:          # 30: auditor (20) and dispatcher calls
             return f"stopped: {used} LLM calls; group {i} could pass the cap of {cap}"
         if g.exists():                       # unfinished or session-limited: set aside, run again (c023)
             shutil.move(str(g), str(out / f"set_aside_g{i:02d}_{int(time.time())}"))
