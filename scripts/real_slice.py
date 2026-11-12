@@ -201,6 +201,8 @@ def main():
                     help="repeat runs (inbox item 36): cached tracks only; an uncached remedy setting is not available")
     ap.add_argument("--moved-span", default=None, metavar="FROM-TO",
                     help="moved copy (rigid invariance) for windows of this span only, e.g. 10-12 (first batch, c022)")
+    ap.add_argument("--no-auditor", action="store_true",
+                    help="skip the auditor; a later --audit-only run reviews the batch (c026: windows run in groups)")
     ap.add_argument("--min-free-gb", type=float, default=2.0,
                     help="wait before each window while free VM memory is below this (inbox item 37)")
     a = ap.parse_args()
@@ -277,7 +279,7 @@ def main():
         print(f"  diagnostician: {s['outcome']['status']} {s['outcome']['args']}; remedies {s['remedies'] or 'none'}")
 
     audit = None
-    if summaries:
+    if summaries and not a.no_auditor:
         audit = {"status": "not_called", "note": "--no-agent"} if a.no_agent else             run_auditor(summaries, records, launcher, out)
 
     summary = {"windows": [[r, f, t] for r, f, t in windows], "dispatcher_mode": a.dispatcher,
