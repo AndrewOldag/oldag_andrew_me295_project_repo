@@ -215,3 +215,14 @@ def test_clear_root_compares_track_files_only():
     r = FakeRelay("aa  ./r0__w0-2_ft2__st1_r22__L1000.npz\n", "aa  ./r0__w0-2_ft2__st1_r22__L1000.npz\n")
     cc(r).clear_root("r0", "/storage/c026", "test")
     assert all("'r0__w*.npz'" in c for c in r.cmds if "md5sum" in c)
+
+
+def test_stop_at_starts_no_window_after_the_time(tmp_path):
+    import datetime as dt
+    t = iter([dt.datetime(2026, 11, 14, 7, 0), dt.datetime(2026, 11, 14, 8, 1)])
+    cleared = []
+    status = B.run_tree_windows(RealStyleRunner(fixes=("stride", 1)), windows(3), tmp_path, free_gb=lambda: 99.0,
+                                clear=lambda r: cleared.append(r) or [], stop_at=dt.datetime(2026, 11, 14, 8, 0),
+                                now=lambda: next(t))
+    assert status.startswith("stopped: --stop-at") and len(list((tmp_path / "windows").glob("*.json"))) == 1
+    assert cleared == ["r1"] and not (tmp_path / "tree.done").exists()

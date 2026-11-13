@@ -91,8 +91,9 @@ def tree_record(sl, out, batch2_closure, wall_s):
 
 
 def run_tree_windows(runner, windows, out, step_limit=STEP_LIMIT, free_gb=vm_free_gb, sleep=time.sleep,
-                     clear=None, tree=run_tree):
-    """windows: [(RealWindow, batch-2 closure)]. Returns 'done' or 'stopped: ...'."""
+                     clear=None, tree=run_tree, stop_at=None, now=datetime.datetime.now):
+    """windows: [(RealWindow, batch-2 closure)]. Returns 'done' or 'stopped: ...'. stop_at: no window starts after
+    this time (the README deadline, c026); the window running then finishes."""
     out = Path(out)
     (out / "windows").mkdir(parents=True, exist_ok=True)
     closure_b2 = {w.id(): c for w, c in windows}
@@ -101,6 +102,10 @@ def run_tree_windows(runner, windows, out, step_limit=STEP_LIMIT, free_gb=vm_fre
             rec_path = out / "windows" / f"{w.id()}.json"
             if rec_path.exists():
                 continue
+            if stop_at is not None and now() >= stop_at:
+                if clear:
+                    clear(root)
+                return f"stopped: --stop-at {stop_at:%Y-%m-%d %H:%M} reached before {w.id()}"
             wait_memory(free_gb, sleep)
             t0 = time.time()
             try:
@@ -216,6 +221,7 @@ def main():
     ap.add_argument("--args", action="store_true", help="windows: print ROOT:A-B arguments for real_slice.py")
     ap.add_argument("--tree")
     ap.add_argument("--agents")
+    ap.add_argument("--stop-at", help="tree: start no window after this local time, e.g. 2026-11-14T08:00")
     ap.add_argument("--storage-dir", help="fetch: the batch-2 output folder on storage (default: config batch2_dir)")
     a = ap.parse_args()
     windows = failing_windows()
@@ -259,7 +265,8 @@ def main():
     out = Path(a.out)
     out.mkdir(parents=True, exist_ok=True)
     spend_note(runner, out, "start")
-    status = run_tree_windows(runner, windows, out, clear=lambda root: clear_staged(runner, root))
+    status = run_tree_windows(runner, windows, out, clear=lambda root: clear_staged(runner, root),
+                              stop_at=datetime.datetime.fromisoformat(a.stop_at) if a.stop_at else None)
     spend_note(runner, out, "end")
     with open(out / "runner_log.jsonl", "a") as f:                  # appended per start (resumed runs)
         for e in runner.log + runner.cc.log:
