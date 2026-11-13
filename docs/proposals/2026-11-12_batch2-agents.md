@@ -22,6 +22,7 @@ Same windows, same tracks, same remedy executors (`agents/executors.py` `Slice.a
 - Remedy retracks: one Slurm CPU job each (1 core, 1 h limit, worst case $0.012) on cluster nodes, through the storage host's connection master (`compute: cluster`). Outputs copied to storage, md5 on both ends; the VM receives the track file
 - A 10-12 h window needs the moved copy again for a retrack (one CPU job, 30 min limit) and two tracks per remedy
 - Upper bound for the tree: 81 x 4 + 3 x 9 = 351 jobs, worst case $4.21; expected actual well under $1 (tracks of 20-33 s on the lab server in c022)
+- Checker: runs on the VM inside the agent loop, on md5-checked track copies (Andrew, 2026-11-12, decisions; exception to the 2026-11-04 rule for these runs; added after the first two tree windows, no effect on any result)
 - Ledger check before every submit; `spend_stop_usd: 12` refuses a submit once the projected total since 2026-10-23 reaches $12 (now $7.24 of $15): stop, Needs Andrew
 - Staging: one root at a time in the cluster folder (35 GB cap). Before staging a root, any other staged root is cleared; the tree clears each root after its last window. A clear needs every cluster track of that root md5-equal on storage; each delete goes to DELETED.log in the task folder
 - No compute on the lab server; no delete there
