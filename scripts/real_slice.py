@@ -153,9 +153,11 @@ def audit_only(out, config):
     runner, launcher = make_runner(config), Launcher()
     summaries, records = [], []
     for tid, s in summ["tasks"].items():
-        root, frm = tid.rsplit("__w", 1)
-        to_h = s["window_h"][1] if "window_h" in s else summ["window_h"][1]      # older summaries: one window
-        w = RealWindow(root, float(frm), float(to_h))
+        if "window_h" in s:        # task ids of a root with several windows read 'root~A-B__wA' (c026)
+            w = RealWindow(s["root_id"], float(s["window_h"][0]), float(s["window_h"][1]))
+        else:                      # older summaries: one window
+            root, frm = tid.rsplit("__w", 1)
+            w = RealWindow(root, float(frm), float(summ["window_h"][1]))
         records.append(runner.measure(w, TrackSettings(**s["final_settings"])).record)
         summaries.append(s)
     summ["auditor"] = run_auditor(summaries, records, launcher, out)

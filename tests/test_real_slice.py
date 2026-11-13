@@ -426,3 +426,18 @@ def test_closure_not_computable_declines_without_agent():
     assert RS.rule_outcome([chk("closure", False, 30.0)]) is None
     # rigid invariance and plane sections do not gate on real windows: not computable there still accepts
     assert RS.rule_outcome([chk("rigid_invariance", None, nan), chk("closure", True, 3.0)]).status == "accept"
+
+
+def test_audit_only_rebuilds_window_of_multi_window_root(tmp_path, monkeypatch):
+    """Task ids of a root with several windows read 'root~A-B__wA'; the batch is rebuilt from root_id and window_h."""
+    import json as _json
+    import agents.launcher as L
+    summ = {"tasks": {"r1~4-6__w4": {"root_id": "r1", "window_h": [4.0, 6.0], "final_settings": {"stride": 1},
+                                     "condition": "control"}}}
+    (tmp_path / "summary.json").write_text(_json.dumps(summ))
+    runner = FakeRunner()
+    monkeypatch.setattr(RS, "make_runner", lambda c: runner)
+    monkeypatch.setattr(L, "Launcher", lambda: None)
+    monkeypatch.setattr(RS, "run_auditor", lambda s, r, l, o: {"status": "report"})
+    RS.audit_only(tmp_path, ["cfg"])
+    assert runner.calls[0][0] == "r1__w4-6"
