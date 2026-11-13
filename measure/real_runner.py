@@ -166,7 +166,8 @@ class RealRunner:
         self.moved_span = None                  # (from_h, to_h): moved copy for this span only (first batch, c022)
         self.cached_only = False                # repeat runs (item 36): cached tracks only, no tracker rerun
         self.moved_mode = moved_mode            # whole_pixel (inbox item 19) or rotate (first 2026-10-24 run)
-        self.cache = Path(cache or ROOT / "staging" / "tracks_real")
+        # `cache` in the config: a repo-relative cache folder of its own (c026: the batch-2 tracks, not older ones)
+        self.cache = Path(cache or (ROOT / cfg["cache"] if cfg.get("cache") else ROOT / "staging" / "tracks_real"))
         self.cache.mkdir(parents=True, exist_ok=True)
         self.log = []
 

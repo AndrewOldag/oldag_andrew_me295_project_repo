@@ -184,3 +184,12 @@ def test_groups_and_session_limit_detection(tmp_path):
         json.dumps({"call": {"ok": True}}) + "\n" + json.dumps({"call": {"error": "You've hit your session limit"}})
         + "\n" + json.dumps({"status": "task_end"}) + "\n")
     assert B.trace_calls(g) == (2, True)
+
+
+def test_runner_cache_from_config(tmp_path):
+    from measure.real_runner import RealRunner
+    cfg = {"host": "h", "work_dir": "/w", "code_dir": "/c", "tracker_code": "/t", "python": "py", "windows": {},
+           "cache": "staging/test_c026_cache"}
+    r = RealRunner(cfg)
+    assert r.cache == ROOT / "staging" / "test_c026_cache" and r.cache.is_dir()
+    r.cache.rmdir()
