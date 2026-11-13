@@ -94,7 +94,7 @@ class ClusterCompute:
         `tracks/` folder is md5-equal in `storage_work`/tracks (standing rule: clear a staged root only after its
         outputs are md5-checked on storage). Each delete is appended to DELETED.log in the work folder. Returns
         the delete records; raises JobFailed, deleting nothing, if a track is missing or differs on storage."""
-        names = f"find . -maxdepth 1 -type f -name {q(root + '__w*')} | sort | xargs -r md5sum"
+        names = f"find . -maxdepth 1 -type f -name {q(root + '__w*.npz')} | sort | xargs -r md5sum"   # tracks; not the .ok markers
         a = self.relay.run(f"mkdir -p {q(self.work)}/tracks && cd {q(self.work)}/tracks && {names}").decode()
         b = self.relay.link.run(f"cd {q(storage_work)}/tracks 2>/dev/null && {names}", check=False).decode()
         on_storage = {l.split(None, 1)[1].strip(): l.split()[0] for l in b.splitlines() if l.strip()}

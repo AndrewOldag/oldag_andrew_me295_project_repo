@@ -209,3 +209,9 @@ def test_report_masks_biology_and_runs_on_tree_records(tmp_path):
     rows = (tmp_path / "out" / "windows.csv").read_text().splitlines()
     assert len(rows) == 3 and ",accept," in rows[1] and "enlarge_patch 1.5x" in rows[1]
     assert "| remedy tree | 2 | 2 | 2 |" in (tmp_path / "out" / "tables.md").read_text()
+
+
+def test_clear_root_compares_track_files_only():
+    r = FakeRelay("aa  ./r0__w0-2_ft2__st1_r22__L1000.npz\n", "aa  ./r0__w0-2_ft2__st1_r22__L1000.npz\n")
+    cc(r).clear_root("r0", "/storage/c026", "test")
+    assert all("'r0__w*.npz'" in c for c in r.cmds if "md5sum" in c)
