@@ -120,6 +120,12 @@ class Link:
                         break
                     else:
                         self._sleep(0.01)
+                # the exit status can come in while output is still arriving: read both streams to EOF (a 606 kB
+                # `cat` came back as 213 kB without this, c026)
+                while b := chan.recv(65536):
+                    out += b
+                while b := chan.recv_stderr(65536):
+                    err += b
                 code = chan.recv_exit_status()
                 chan.close()
             except (EOFError, OSError, ConnectionError) as e:

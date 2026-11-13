@@ -188,3 +188,21 @@ def test_md5_tree_normalizes_line_ends():
     r = Relay(link(FakeServer()), "c")
     assert r.md5_tree("storage", "/d") == "aa  ./x.npz\nbb  ./y.npz\n"
     assert r.md5_tree("cluster", "/d") == r.md5_tree("storage", "/d")
+
+
+class LateChannel(FakeChannel):
+    """Exit status in before any output is ready to read: output only through blocking recv (c026 truncation)."""
+
+    def recv_ready(self):
+        return False
+
+    def recv_stderr_ready(self):
+        return False
+
+
+def test_output_read_to_eof_after_exit_status():
+    s = FakeServer()
+    lk = link(s)
+    lk.connect()
+    lk._client.t.open_session = lambda: LateChannel(s)
+    assert lk.run("cat big") == b"out:cat big"
