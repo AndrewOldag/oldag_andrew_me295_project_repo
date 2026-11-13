@@ -196,7 +196,9 @@ def fetch(runner, windows, storage_dir, moved_span=(10.0, 12.0)):
             local = runner.cache_path(w, TrackSettings(stride=1), k)
             if local.exists():
                 continue
-            src = f"{storage_dir}/{w.root_id}/tracks/{local.name}"
+            # per-root folder (batch-2 roots 51-90, and every window track); flat tracks/ (moved copies, roots 1-50)
+            src = next(p for p in (f"{storage_dir}/{w.root_id}/tracks/{local.name}", f"{storage_dir}/tracks/{local.name}")
+                       if runner.link.run(f"test -s '{p}' && echo yes || echo no").decode().strip() == "yes")
             data = runner.link.run(f"cat '{src}'")
             md5 = runner.link.run(f"md5sum < '{src}'").decode().split()[0]
             if hashlib.md5(data).hexdigest() != md5:

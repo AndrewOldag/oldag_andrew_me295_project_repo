@@ -18,6 +18,7 @@ windows:                        # window id <root>__w<from_h>-<to_h> -> movie fo
 # compute: cluster
 # storage_host: <ssh host alias of the storage host; relays to the cluster>
 # ledger: [<python>, <spend-ledger script>]       # check before every submit
+# cache: staging/c026/tracks                     # local track cache of its own (repo-relative; optional)
 # spend_stop_usd: 12                               # refuse a submit once the projected total reaches this (c026)
 # cluster:
 #   alias: <cluster alias in the storage host's ssh config (connection master)>
