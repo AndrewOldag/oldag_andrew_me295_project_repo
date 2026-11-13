@@ -226,14 +226,29 @@ def main():
     if a.step == "report":
         import batch2_agents_report as R
         return R.main(Path(a.tree), Path(a.agents), Path(a.out), windows)
-    if a.step == "agents":
-        print(run_agent_groups(a.config, Path(a.out), windows))
-        return
     import yaml
     from measure.real_runner import RealRunner
     cfg = yaml.safe_load(Path(a.config[0]).read_text())
     runner = RealRunner(cfg)
     runner.moved_span = (10.0, 12.0)
+    if a.step == "agents":
+        out = Path(a.out)
+        out.mkdir(parents=True, exist_ok=True)
+        spend_note(runner, out, "start")
+        status = "audit done" if (out / "audit.done").exists() else run_agent_groups(a.config, out, windows)
+        print(status)
+        if status.startswith("groups done"):                   # one auditor run over every window
+            p = subprocess.run([sys.executable, str(ROOT / "scripts" / "real_slice.py"), "--audit-only", "--out",
+                                str(out), "--config", *a.config])
+            if p.returncode == 0:
+                (out / "audit.done").write_text(datetime.datetime.now().isoformat(timespec="seconds"))
+        if (out / "audit.done").exists():
+            for root in runner.cc.staged_roots():               # the last staged root of the run
+                with open(out / "deletes.jsonl", "a") as f:
+                    for r in clear_staged(runner, root):
+                        f.write(json.dumps(r) + "\n")
+        spend_note(runner, out, "end")
+        return
     if a.step == "fetch":
         print(f"fetched {fetch(runner, [w for w, _ in windows], a.storage_dir or cfg['batch2_dir'])} tracks")
         return
@@ -241,12 +256,29 @@ def main():
     runner.relay.link.run(f"mkdir -p '{runner.work}/tracks'")
     runner.sync_code()
 
-    def clear(root):
-        return runner.cc.clear_root(root, runner.work, f"root {root}: c026 remedy-tree retracks md5-verified on "
-                                    "storage; one staged root at a time (spec 2026-11-12)")
-    status = run_tree_windows(runner, windows, Path(a.out), clear=clear)
-    (Path(a.out) / "runner_log.json").write_text(json.dumps(runner.log + runner.cc.log, indent=1, default=str))
+    out = Path(a.out)
+    out.mkdir(parents=True, exist_ok=True)
+    spend_note(runner, out, "start")
+    status = run_tree_windows(runner, windows, out, clear=lambda root: clear_staged(runner, root))
+    spend_note(runner, out, "end")
+    with open(out / "runner_log.jsonl", "a") as f:                  # appended per start (resumed runs)
+        for e in runner.log + runner.cc.log:
+            f.write(json.dumps(e, default=str) + "\n")
     print(status)
+
+
+def clear_staged(runner, root):
+    return runner.cc.clear_root(root, runner.work, f"root {root}: c026 retracks md5-verified on storage; one staged "
+                                "root at a time (spec 2026-11-12)")
+
+
+def spend_note(runner, out, when):
+    """Spend since 2026-10-23 from the ledger ('spent X'), appended to OUT/spend.jsonl."""
+    rc, msg = runner.cc.ledger("spent")
+    m = re.search(r"spent ([\d.]+)", msg)
+    with open(Path(out) / "spend.jsonl", "a") as f:
+        f.write(json.dumps({"when": when, "time": datetime.datetime.now().isoformat(timespec="seconds"),
+                            "spent_usd": float(m.group(1)) if m else None, "ledger": msg[-200:]}) + "\n")
 
 
 if __name__ == "__main__":

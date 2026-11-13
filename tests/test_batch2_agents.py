@@ -193,3 +193,19 @@ def test_runner_cache_from_config(tmp_path):
     r = RealRunner(cfg)
     assert r.cache == ROOT / "staging" / "test_c026_cache" and r.cache.is_dir()
     r.cache.rmdir()
+
+
+def test_report_masks_biology_and_runs_on_tree_records(tmp_path):
+    import sys
+    sys.path.insert(0, str(ROOT / "scripts"))
+    import batch2_agents_report as R
+    m = R.mask({"closure": 30.1, "centre_peak_regr_pct_per_h": 41.0,
+                "text": "REGR peak 41.2 %/h at 350 um; growth zone length 900 um; closure 30.1 px/h"})
+    assert m["centre_peak_regr_pct_per_h"] == "[masked]" and m["closure"] == 30.1
+    assert "41.2" not in m["text"] and "900" not in m["text"] and "30.1" in m["text"]
+    ws = windows(2)
+    B.run_tree_windows(RealStyleRunner(fixes=("disk_radius", 22)), ws, tmp_path / "tree", free_gb=lambda: 99.0)
+    R.main(tmp_path / "tree", tmp_path / "agents", tmp_path / "out", ws)
+    rows = (tmp_path / "out" / "windows.csv").read_text().splitlines()
+    assert len(rows) == 3 and ",accept," in rows[1] and "enlarge_patch 1.5x" in rows[1]
+    assert "| remedy tree | 2 | 2 | 2 |" in (tmp_path / "out" / "tables.md").read_text()
