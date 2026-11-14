@@ -149,7 +149,7 @@ def trace_calls(run_dir):
     return n, limit
 
 
-def run_agent_groups(config, out, windows, slice_cmd=None, cap=LLM_CAP, per_window=8):
+def run_agent_groups(config, out, windows, slice_cmd=None, cap=LLM_CAP, per_window=8, cached_only=False):
     """One real_slice.py run per group (g01, g02, ...); done when summary.json is written and no session limit."""
     out = Path(out)
     gs = groups(windows)
@@ -164,7 +164,7 @@ def run_agent_groups(config, out, windows, slice_cmd=None, cap=LLM_CAP, per_wind
             shutil.move(str(g), str(out / f"set_aside_g{i:02d}_{int(time.time())}"))
         cmd = (slice_cmd or [sys.executable, str(ROOT / "scripts" / "real_slice.py")]) + [
             "--windows", *ids, "--config", *config, "--moved-span", "10-12", "--min-free-gb", f"{VM_MIN_GB:g}",
-            "--no-auditor", "--out", str(g)]
+            "--no-auditor", "--out", str(g)] + (["--cached-only"] if cached_only else [])
         print(f"group {i} of {len(gs)}: {len(ids)} windows", flush=True)
         p = subprocess.run(cmd)
         if p.returncode != 0 or not (g / "summary.json").exists():
@@ -221,10 +221,17 @@ def main():
     ap.add_argument("--args", action="store_true", help="windows: print ROOT:A-B arguments for real_slice.py")
     ap.add_argument("--tree")
     ap.add_argument("--agents")
+    ap.add_argument("--tree-windows", help="agents: only the windows with a record in this tree run folder (c026: "
+                    "the tree stopped at its cut-off)")
+    ap.add_argument("--cached-only", action="store_true",
+                    help="agents: cached tracks only; a remedy setting not tracked before is not available")
     ap.add_argument("--stop-at", help="tree: start no window after this local time, e.g. 2026-11-14T08:00")
     ap.add_argument("--storage-dir", help="fetch: the batch-2 output folder on storage (default: config batch2_dir)")
     a = ap.parse_args()
     windows = failing_windows()
+    if a.tree_windows:
+        done = {p.stem for p in (Path(a.tree_windows) / "windows").glob("*.json")}
+        windows = [(w, c) for w, c in windows if w.id() in done]
     if a.step == "windows":
         for w, c in windows:
             print(f"{w.root_id}:{w.from_h:g}-{w.to_h:g}" if a.args else f"{w.id()}\t{c:.1f}")
@@ -241,14 +248,14 @@ def main():
         out = Path(a.out)
         out.mkdir(parents=True, exist_ok=True)
         spend_note(runner, out, "start")
-        status = "audit done" if (out / "audit.done").exists() else run_agent_groups(a.config, out, windows)
+        status = "audit done" if (out / "audit.done").exists() else run_agent_groups(a.config, out, windows, cached_only=a.cached_only)
         print(status)
         if status.startswith("groups done"):                   # one auditor run over every window
             p = subprocess.run([sys.executable, str(ROOT / "scripts" / "real_slice.py"), "--audit-only", "--out",
                                 str(out), "--config", *a.config])
             if p.returncode == 0:
                 (out / "audit.done").write_text(datetime.datetime.now().isoformat(timespec="seconds"))
-        if (out / "audit.done").exists():
+        if (out / "audit.done").exists() and not a.cached_only:     # cached-only: no cluster connection
             for root in runner.cc.staged_roots():               # the last staged root of the run
                 with open(out / "deletes.jsonl", "a") as f:
                     for r in clear_staged(runner, root):

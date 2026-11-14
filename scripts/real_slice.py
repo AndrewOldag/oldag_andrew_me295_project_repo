@@ -238,7 +238,8 @@ def main():
         r.cached_only = a.cached_only
         if a.moved_span:
             r.moved_span = tuple(float(x) for x in a.moved_span.split("-"))
-    runner.sync_code()
+    if not a.cached_only:                  # cached tracks only: no compute host step, no connection needed (c026)
+        runner.sync_code()
     launcher = None
     if not a.no_agent:
         from agents.launcher import Launcher
@@ -263,7 +264,7 @@ def main():
         return {"diagnostician": o.status}
 
     cfg = D.load_config()
-    engine = D.Engine(InlineQueue(runner), cfg, rows=rows, budget={"core_hours": 0.0, "usd": 0.0, "approved": False},
+    engine = D.Engine(InlineQueue(runner, host_load=not a.cached_only), cfg, rows=rows, budget={"core_hours": 0.0, "usd": 0.0, "approved": False},
                       collector=collect)
     t0 = time.time()
     if a.dispatcher == "agent":
