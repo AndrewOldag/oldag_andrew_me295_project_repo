@@ -1,0 +1,34 @@
+digraph G {
+  rankdir=TB; nodesep=0.35; ranksep=0.32;
+  node [fontname="Helvetica", fontsize=10, shape=box, style="rounded,filled", fillcolor="#ffffff", color="#555555"];
+  edge [fontname="Helvetica", fontsize=8.5, color="#555555", arrowsize=0.7];
+
+  subgraph cluster_data { label="Data"; fontname="Helvetica-Bold"; fontsize=10; color="#bbbbbb"; style=rounded;
+    movies [label="Real movies\n102 include-yes roots\n+ stage log", shape=cylinder, fillcolor="#f2f2f2"];
+    synth  [label="Synthetic rods\nknown field + injected fault", shape=cylinder, fillcolor="#f2f2f2"];
+  }
+
+  human [label="Human gate (Andrew)\ncompute budget · freeze / thresholds · deletes", shape=box, style="filled", fillcolor="#fff3c4", color="#b08900"];
+
+  disp  [label="Dispatcher (LLM agent)\nsplit root → windows, estimate cost,\nrequest approval, submit, retry", fillcolor="#dbe8ff", color="#2f5fb3"];
+  orch  [label="Orchestrator (plain Python)\nvalidates each typed JSON action;\nenforces budget, machine limits, step limit", fillcolor="#eeeeee"];
+  track [label="Tracker + midline net (tools)\nQuantum Borland, ft2 net\n→ measurement record", fillcolor="#e6f4e6", color="#3d8b3d"];
+  check [label="Checker (deterministic, no LLM)\nrigid-body invariance · tip closure\nvs stage log · plane sections", fillcolor="#e6f4e6", color="#3d8b3d"];
+  diag  [label="Diagnostician (LLM agent)\nask info → name fault →\nremedy from fixed list, or decline", fillcolor="#dbe8ff", color="#2f5fb3"];
+  rem   [label="Info requests + 6 remedies (tools)\nretrack, roll back if checks worsen", fillcolor="#e6f4e6", color="#3d8b3d"];
+  out   [label="accept · accept_repaired · decline\n(with reason)", shape=box, style="filled", fillcolor="#f2f2f2"];
+  aud   [label="Auditor (LLM agent)\nbatch review, outliers,\ncontrol vs stressed, provenance", fillcolor="#dbe8ff", color="#2f5fb3"];
+  score [label="Scoring (synthetic only)\noutcome vs label from truth", shape=note, fillcolor="#ffffff"];
+
+  movies -> disp; human -> orch [style=dashed, label="approves"];
+  disp -> orch [label="typed actions"]; orch -> track [label="jobs"];
+  synth -> track;
+  track -> check [label="record"];
+  check -> out [label="all pass"];
+  check -> diag [label="any fail"];
+  diag -> orch [label="typed actions"];
+  orch -> rem; rem -> check [label="re-check"];
+  diag -> out [label="final"];
+  out -> aud; out -> score [style=dashed];
+  aud -> human [style=dashed, label="report"];
+}
