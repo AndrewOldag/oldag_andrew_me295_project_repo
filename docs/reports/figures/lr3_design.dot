@@ -1,0 +1,37 @@
+digraph G {
+  rankdir=TB; nodesep=0.35; ranksep=0.30;
+  node [fontname="Helvetica", fontsize=10, shape=box, style="rounded,filled", fillcolor="#ffffff", color="#555555"];
+  edge [fontname="Helvetica", fontsize=8.5, color="#555555", arrowsize=0.7];
+
+  subgraph cluster_data { label="Data"; fontname="Helvetica-Bold"; fontsize=10; color="#bbbbbb"; style=rounded;
+    movies [label="Real movies\n102 include-yes roots + stage log", shape=cylinder, fillcolor="#f2f2f2"];
+    synth  [label="Synthetic rods\nknown field + injected fault", shape=cylinder, fillcolor="#f2f2f2"];
+    papers [label="17 full-text papers\n(no OUP / Wiley)", shape=cylinder, fillcolor="#f2f2f2"];
+  }
+
+  human [label="Human gate (Andrew)\nbudget · freeze / thresholds · deletes", style="filled", fillcolor="#fff3c4", color="#b08900"];
+
+  disp  [label="Dispatcher (LLM agent)\nwindows, submit, retry under budget\nFINISHED · evaluated vs script: no gain", fillcolor="#dbe8ff", color="#2f5fb3"];
+  orch  [label="Orchestrator (plain Python)\nvalidates typed JSON actions;\nbudget, machine and step limits\nFINISHED", fillcolor="#eeeeee"];
+  track [label="Tracker + midline net (tools)\nFINISHED · 101 of 102 roots", fillcolor="#e6f4e6", color="#3d8b3d"];
+  check [label="Checker (deterministic, no LLM)\nclosure · rigid invariance · plane sections\nFINISHED · 1,189 real windows, 101 roots", fillcolor="#e6f4e6", color="#3d8b3d", penwidth=2];
+  diag  [label="Diagnostician (LLM agent)\nask info → name fault →\nremedy from fixed list, or decline\nFINISHED · synthetic scored, real batch 1\nreal batch 2 running", fillcolor="#dbe8ff", color="#2f5fb3", penwidth=2];
+  rem   [label="6 info requests + 6 remedies (tools)\nretrack; roll back if checks worsen\nFINISHED", fillcolor="#e6f4e6", color="#3d8b3d"];
+  out   [label="accept · accept_repaired · decline\n(with reason)", style="filled", fillcolor="#f2f2f2"];
+  aud   [label="Auditor (LLM agent)\nbatch review, outliers\nBUILT · not yet evaluated", fillcolor="#dbe8ff", color="#2f5fb3", style="rounded,filled,dashed"];
+  score [label="Scoring (synthetic, no LLM)\noutcome vs label from truth\nFINISHED", shape=note, fillcolor="#ffffff"];
+  rag   [label="Paper RAG (retriever tool + 1 LLM call)\nquote, page, DOI checked in code\nFINISHED · not yet wired in", fillcolor="#e6f4e6", color="#3d8b3d", style="rounded,filled,dashed"];
+
+  movies -> disp; human -> orch [style=dashed, label="approves"];
+  disp -> orch [label="typed actions"]; orch -> track [label="jobs"];
+  synth -> track;
+  track -> check [label="record"];
+  check -> out [label="all pass"];
+  check -> diag [label="any fail"];
+  diag -> orch [label="typed actions"];
+  orch -> rem; rem -> check [label="re-check"];
+  diag -> out [label="final"];
+  out -> aud; out -> score [style=dashed];
+  aud -> human [style=dashed, label="report"];
+  papers -> rag; rag -> diag [style=dotted, label="planned"];
+}
