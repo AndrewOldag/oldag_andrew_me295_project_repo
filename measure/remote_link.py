@@ -20,6 +20,9 @@ from pathlib import Path
 BACKOFF_S = (10, 30, 60)      # then every REPEAT_S
 REPEAT_S = 300
 MAX_FAILED_RECONNECTS = 3
+# no byte on a channel for this long: the connection is taken as dead and the command run again on a new one. A
+# silently dead connection held a c026 tree window for 3 h 50 min (2026-11-13) until Windows reset the socket
+CHANNEL_TIMEOUT_S = 1800
 KEEPALIVE_S = 30
 
 
@@ -106,11 +109,13 @@ class Link:
                 self.connect()
             try:
                 chan = self._client.get_transport().open_session()
+                if hasattr(chan, "settimeout"):
+                    chan.settimeout(CHANNEL_TIMEOUT_S)
                 chan.exec_command(cmd)
                 if stdin is not None:
                     chan.sendall(stdin if isinstance(stdin, bytes) else stdin.encode())
                 chan.shutdown_write()
-                out, err = bytearray(), bytearray()
+                out, err, last = bytearray(), bytearray(), time.monotonic()
                 while True:
                     if chan.recv_ready():
                         out += chan.recv(65536)
@@ -119,7 +124,11 @@ class Link:
                     elif chan.exit_status_ready() and not chan.recv_ready() and not chan.recv_stderr_ready():
                         break
                     else:
+                        if time.monotonic() - last > CHANNEL_TIMEOUT_S:
+                            raise TimeoutError(f"no output for {CHANNEL_TIMEOUT_S} s")
                         self._sleep(0.01)
+                        continue
+                    last = time.monotonic()
                 # the exit status can come in while output is still arriving: read both streams to EOF (a 606 kB
                 # `cat` came back as 213 kB without this, c026)
                 while b := chan.recv(65536):
