@@ -1,12 +1,14 @@
 # dispatcher
-Updated: 2026-11-13 19:45 (local)
+Updated: 2026-11-14 14:00 (local)
 Lane: course
 Branch: wip/dispatcher
-Last inbox item done: 44
-State: working
-Now: item 45 (task c026): tree 31 of 84 (accept 8, decline 22, error 1), running in Andrew's terminal to the Sat 08:00 cut-off; expect about 55 windows by then
+Last inbox item done: 45
+State: ready to merge
+Now: task c026 done with what ran: remedy tree on 38 of 84 batch-2 failing windows; diagnostician not run (Andrew, 2026-11-14). Results `results/2026-11-12_batch2_agents/`
 Done since last update:
-- Tree restarted from Andrew's terminal 10:52 with --stop-at 2026-11-14T08:00 (8bbbf35)
-- A silently dead lab-server connection held window 0714_c9 16-18 h from 15:37 to 19:28 (job done on the cluster at 15:37). Fix: 30 min channel timeout, then reconnect (commit on this branch); takes effect at the next start of the tree
+- Tree stopped at 38 when the cluster master went down about 23:10 on 2026-11-13: accepted after repair 9, declined 28, error 1; fixed script declines all 84
+- README, tables.md, windows.csv (outcome and check values only), example_traces.md (plane-sections values masked); decisions; log in docs/running_log_pending/dispatcher.md
+- Fixes this task: Link.run read to EOF (ca66ae6), Link.run 30 min channel timeout, clear_root .npz only, audit-only multi-window roots, tree real-profile gates (37d108b)
+- Suite: 400 passed, 2 skipped
 Needs Andrew:
-- none (plan: tree until Sat 08:00, then the diagnostician on the same windows; the rest reported as not run)
+- A staged root copy may remain on the cluster from the stop (master down); check and clear after an md5 check, or let the next c026 run clear it

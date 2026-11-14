@@ -13,7 +13,7 @@ from pathlib import Path
 
 from audit.view import opaque_ids
 
-MASK_KEYS = re.compile(r"regr|growth|zone|flank|peak|velocity|width|curvature|kappa|profile", re.I)
+MASK_KEYS = re.compile(r"regr|growth|zone|flank|plane|peak|velocity|width|curvature|kappa|profile", re.I)
 MASK_TEXT = re.compile(r"((?:REGR|growth[- ]zone|growth|flank|peak|zone length)[^.;\d]{0,40}?)(-?\d[\d.,]*\s*(?:%/h|um|µm|px)?)",
                        re.I)
 
@@ -69,14 +69,18 @@ def load_tree(tree_dir):
         by_task[d.get("task_id", "")].append(d)
     out = {}
     for wid, r in recs.items():
-        steps = remedy_steps(by_task.get(f"{wid} window", []))
+        lines = by_task.get(f"{wid} window", [])
+        starts = [i for i, d in enumerate(lines) if d.get("step") == 1]
+        lines = lines[starts[-1]:] if starts else lines      # an interrupted, restarted window: its last attempt
+        steps = remedy_steps(lines)
         st = r["outcome"]["status"]
         final = (r.get("final_closure") or {}).get("passed")
         out[wid] = {"status": st, "accepted_repaired": st == "accept" and final is True,
                     "fault": (r["outcome"].get("args") or {}).get("fault", ""), "steps": steps,
                     "kept": [s["remedy"] for s in steps if s["result"] == "kept"],
                     "final_closure": (r.get("final_closure") or {}).get("value"), "error": r.get("error", ""),
-                    "initial_closure": (r.get("initial_closure") or {}).get("value", r.get("batch2_closure"))}
+                    "initial_closure": (r.get("initial_closure") or {}).get("value", r.get("batch2_closure")),
+                    "task_id": f"{wid} window", "lines": lines}
     return out
 
 
@@ -140,17 +144,27 @@ def main(tree_dir, agents_dir, out, windows):
           "Remedies tried | Kept | Rolled back | Not available |",
           "| :-- | --: | --: | --: | --: | --: | --: | --: | --: | --: | --: | --: |",
           f"| fixed script | {n} | {n} | 0 | 0 | {n} | 0 | 0 | 0 | 0 | 0 | 0 |",
-          method_row("remedy tree", tree, n), method_row("diagnostician", agents, n), ""]
+          method_row("remedy tree", tree, n)] + ([method_row("diagnostician", agents, n)] if agents else []) + [""]
+    cond = condition_of()
+    if tree:
+        per = defaultdict(Counter)
+        for w, _ in windows:
+            per[cond.get(w.id(), "")][outcome_class(tree.get(w.id())) if w.id() in tree else "not run"] += 1
+        md += ["## Remedy tree per condition", "", "| Condition | Windows | Accepted after repair | Declined | Error | "
+               "Not run |", "| :-- | --: | --: | --: | --: | --: |"]
+        md += [f"| {c} | {sum(k.values())} | {k['accept']} | {k['decline']} | {k['error']} | {k['not run']} |"
+               for c, k in sorted(per.items())] + [""]
     # agreement
     both = [w.id() for w, _ in windows if w.id() in tree and w.id() in agents]
     same_out = sum(outcome_class(tree[w]) == outcome_class(agents[w]) for w in both)
     same_kept = sum(sorted(tree[w]["kept"]) == sorted(agents[w]["kept"]) for w in both)
-    md += ["## Agreement, diagnostician vs tree", "",
+    agree = ["## Agreement, diagnostician vs tree", "",
            f"- Windows run by both: {len(both)}", f"- Same outcome: {same_out} of {len(both)}",
            f"- Same remedies kept (none counts as the same when both kept none): {same_kept} of {len(both)}",
            "- Outcome pairs (tree, diagnostician): " + ", ".join(
                f"{a} / {b} {k}" for (a, b), k in sorted(Counter((outcome_class(tree[w]), outcome_class(agents[w]))
                                                                  for w in both).items())), ""]
+    md += agree if agents else []
     # LLM use
     if agents:
         ins = sum(r["input_tokens"] for r in agents.values())
@@ -175,10 +189,10 @@ def main(tree_dir, agents_dir, out, windows):
                ""]
     # auditor on repaired windows
     rep = {w: r for w, r in agents.items() if r["accepted_repaired"]}
-    md += ["## Auditor on windows the diagnostician accepted after repair", ""]
-    md += [f"- {w}: {r['auditor'] or 'no decision'}{' (' + r['auditor_reason'] + ')' if r['auditor_reason'] else ''}"
+    md += ["## Auditor on windows the diagnostician accepted after repair", ""] if agents else []
+    md += [] if not agents else [f"- {w}: {r['auditor'] or 'no decision'}{' (' + r['auditor_reason'] + ')' if r['auditor_reason'] else ''}"
            for w, r in sorted(rep.items())] or ["- none accepted after repair"]
-    md += ["", "## Disagreement list", "",
+    md += [] if not agents else ["", "## Disagreement list", "",
            "Closure in px/h before -> after each remedy tried (kept, rolled back or not available).", ""]
 
     def fmt(steps):
@@ -187,11 +201,16 @@ def main(tree_dir, agents_dir, out, windows):
             and isinstance(s["closure_after"], (int, float)) else "") for s in steps) or "no remedy"
     dis = [w for w in both if outcome_class(tree[w]) != outcome_class(agents[w])
            or sorted(tree[w]["kept"]) != sorted(agents[w]["kept"])]
-    md += ["| Window | Closure | Tree | Tree remedies | Diagnostician | Fault named | Diagnostician remedies |",
-           "| :-- | --: | :-- | :-- | :-- | :-- | :-- |"]
+    md += [] if not agents else ["| Window | Closure | Tree | Tree remedies | Diagnostician | Fault named | "
+                                 "Diagnostician remedies |", "| :-- | --: | :-- | :-- | :-- | :-- | :-- |"]
     md += [f"| {w} | {tree[w]['initial_closure']:.1f} | {outcome_class(tree[w])} | {fmt(tree[w]['steps'])} | "
            f"{outcome_class(agents[w])} | {agents[w]['fault']} | {fmt(agents[w]['steps'])} |" for w in dis]
-    md += ["", f"{len(dis)} windows differ."]
+    md += ["", f"{len(dis)} windows differ."] if agents else []
+    if tree:
+        md += ["## Remedy tree, per window", "", "Closure in px/h before -> after each remedy (kept, rolled back or not "
+               "available).", "", "| Window | Closure | Outcome | Fault named | Remedies |", "| :-- | --: | :-- | :-- | :-- |"]
+        md += [f"| {w} | {r['initial_closure']:.1f} | {outcome_class(r)} | {r['fault']} | {fmt(r['steps'])} |"
+               for w, r in sorted(tree.items())]
     (out / "tables.md").write_text("\n".join(md) + "\n", encoding="utf-8")
 
     with open(out / "windows.csv", "w", newline="") as f:
@@ -202,7 +221,7 @@ def main(tree_dir, agents_dir, out, windows):
         wr.writeheader()
         for w, c in windows:
             t, a = tree.get(w.id()), agents.get(w.id())
-            wr.writerow({"window": w.id(), "root": w.root_id, "condition": (a or {}).get("condition", ""),
+            wr.writerow({"window": w.id(), "root": w.root_id, "condition": cond.get(w.id(), ""),
                          "from_h": w.from_h, "to_h": w.to_h, "batch2_closure_px_per_h": round(c, 3),
                          "tree_outcome": outcome_class(t), "tree_fault": (t or {}).get("fault", ""),
                          "tree_kept": ";".join((t or {}).get("kept", [])),
@@ -215,7 +234,10 @@ def main(tree_dir, agents_dir, out, windows):
                          "diag_calls": (a or {}).get("calls", ""), "auditor": (a or {}).get("auditor", ""),
                          "same_outcome": "" if not (t and a) else outcome_class(t) == outcome_class(a),
                          "same_kept": "" if not (t and a) else sorted(t["kept"]) == sorted(a["kept"])})
-    write_examples(out, agents, traces)
+    if agents:
+        write_examples(out, agents, traces, "Diagnostician")
+    else:
+        write_examples(out, tree, [d for r in tree.values() for d in r["lines"]], "Remedy tree")
     print(f"wrote {out}: tree {len(tree)}, diagnostician {len(agents)} windows; {len(dis)} differ")
 
 
@@ -223,13 +245,18 @@ def _r(v):
     return "" if v is None else round(v, 3)
 
 
-def write_examples(out, agents, traces):
+def condition_of(path=Path(__file__).resolve().parents[1] / "results" / "2026-10-25_full_batch_2" / "windows.csv"):
+    with open(path, newline="") as f:
+        return {r["window"]: r["condition"] for r in csv.DictReader(f)}
+
+
+def write_examples(out, agents, traces, who):
     """Two windows: one accepted after a kept remedy (else one with a kept remedy), one declined."""
     kept = [w for w, r in agents.items() if r["accepted_repaired"]] or [w for w, r in agents.items() if r["kept"]]
     declined = [w for w, r in agents.items() if r["status"] == "decline" and r["steps"]] or \
         [w for w, r in agents.items() if r["status"] == "decline"]
-    md = ["# Example traces (c026)", "", "Diagnostician on two batch-2 windows that fail closure. For each step: the "
-          "action the agent sent (name, arguments, rationale), the tool result, and the final outcome. REGR, "
+    md = ["# Example traces (c026)", "", f"{who} on two batch-2 windows that fail closure. For each step: the "
+          "action sent (name, arguments, rationale), the tool result, and the final outcome. REGR, "
           "growth-zone and flank values are `[masked]`.", ""]
     for title, ws in (("Remedy kept", kept), ("Declined", declined)):
         if not ws:
