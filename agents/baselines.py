@@ -10,6 +10,7 @@ import json
 from dataclasses import asdict
 from pathlib import Path
 
+from .executors import CHECK_PROFILES, profile_of
 from .orchestrator import Outcome
 
 ORDER = ("closure", "rigid_invariance", "plane_sections")      # rule 1: first failing check picks the list
@@ -30,11 +31,19 @@ TREE = {
 }
 
 
-def failing(checks):
+def failing(checks, gates=None):
     """Failing checks; a check that cannot be computed counts as failing, one skipped on purpose or reported
-    without gating (real-movie profile, agents/executors.py) does not."""
-    return [c.check for c in checks
-            if c.passed is False or (c.passed is None and not c.detail.startswith(("skipped", "reported, not gating")))]
+    without gating (real-movie profile, agents/executors.py) does not. gates: the profile's gating checks; a check
+    outside them never fails (on real windows rigid invariance without a moved copy is not computed, c026)."""
+    return [c.check for c in checks if (gates is None or c.check in gates) and
+            (c.passed is False or (c.passed is None and not c.detail.startswith(("skipped", "reported, not gating"))))]
+
+
+def gates_of(sl):
+    """Gating checks of a Slice's profile (all three on synthetic rods); None for a stand-in without a record."""
+    if not hasattr(sl, "current"):
+        return None
+    return CHECK_PROFILES[getattr(sl, "profile", None) or profile_of(sl.current.record)]
 
 
 def next_remedy(fail, tried, stride):
@@ -89,10 +98,10 @@ def run_tree(sl, step_limit=8, trace_path=None):
     """Rule-based remedy tree (docs/proposals/2026-10-12_remedy-tree.md)."""
     trace = _Trace(trace_path, "remedy_tree", sl.label)
     out = Outcome(sl.label, "remedy_tree", "step_limit")
-    tried = []
+    tried, gates = [], gates_of(sl)
     for step in range(1, step_limit + 1):
         out.steps = step
-        fail = failing(sl.checks)
+        fail = failing(sl.checks, gates)
         if not fail:
             return _terminal(trace, out, step, "accept", {"confidence": None}, "rule 0: no check fails")
         pick = next_remedy(fail, tried, sl.runs[-1][0].stride)

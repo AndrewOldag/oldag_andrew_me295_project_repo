@@ -100,9 +100,12 @@ def vm_free_gb():
 
 def _ledger_from(cfg):
     """The spend-ledger command from the private config (`ledger: [program, script]`): called as
-    `program script check|record|final ...`; returns (exit code, last output line)."""
+    `program script check|record|final ...`; returns (exit code, last output line). With `spend_stop_usd` in the
+    config, a check whose projected total ('spent + worst case = X (cap') reaches it is refused (spec 2026-11-12)."""
     import os
+    import re
     cmd = cfg.get("ledger")
+    stop = cfg.get("spend_stop_usd")
     if not cmd:
         raise ValueError("cluster compute needs a `ledger` command in the config (spend check before every submit)")
 
@@ -110,7 +113,12 @@ def _ledger_from(cfg):
         p = subprocess.run([*cmd, action, *args], capture_output=True, text=True,
                            env={**os.environ, "MSYS_NO_PATHCONV": "1"})
         lines = [l for l in p.stdout.splitlines() if l.strip()]
-        return p.returncode, (lines[-1] if lines else p.stderr.strip()[-300:])
+        rc, msg = p.returncode, (lines[-1] if lines else p.stderr.strip()[-300:])
+        if action == "check" and rc == 0 and stop is not None:
+            m = re.search(r"= ([\d.]+) \(cap", msg)
+            if not m or float(m.group(1)) >= float(stop):
+                return 1, f"projected total reaches the ${float(stop):g} stop: {msg}"
+        return rc, msg
     return ledger
 
 
@@ -158,7 +166,8 @@ class RealRunner:
         self.moved_span = None                  # (from_h, to_h): moved copy for this span only (first batch, c022)
         self.cached_only = False                # repeat runs (item 36): cached tracks only, no tracker rerun
         self.moved_mode = moved_mode            # whole_pixel (inbox item 19) or rotate (first 2026-10-24 run)
-        self.cache = Path(cache or ROOT / "staging" / "tracks_real")
+        # `cache` in the config: a repo-relative cache folder of its own (c026: the batch-2 tracks, not older ones)
+        self.cache = Path(cache or (ROOT / cfg["cache"] if cfg.get("cache") else ROOT / "staging" / "tracks_real"))
         self.cache.mkdir(parents=True, exist_ok=True)
         self.log = []
 
