@@ -7,7 +7,8 @@ storage host only: `stage_root` copies a whole root imgdir from storage to the c
 file of a root, decisions 2026-10-25), `pull` copies outputs back to storage and checks md5 on both ends.
 
 Config keys (private runner yaml, `cluster:` section): work_dir, stage_dir, env (file to source), cpu_partition,
-gpu_partition, gpu_gres, cap_mb (work folder cap), max_jobs. No machine name or path is in this file.
+gpu_partition, gpu_gres, cap_mb (work folder cap), max_jobs; optional cap_dir (folder the cap applies to),
+one_staged_root and storage_work (clear the other staged roots before staging one, spec 2026-11-12). No machine name or path is in this file.
 """
 import shlex
 import time
@@ -81,15 +82,58 @@ class ClusterCompute:
 
     # ---- data
     def folder_mb(self):
-        return int(self.relay.run(f"du -sm {q(self.work)} | cut -f1").decode().split()[0])
+        """Size of the capped folder: `cap_dir` (the whole cluster folder) if set, else the work folder."""
+        return int(self.relay.run(f"du -sm {q(self.cfg.get('cap_dir', self.work))} | cut -f1").decode().split()[0])
+
+    def staged_roots(self):
+        out = self.relay.run(f"ls {q(self.stage)} 2>/dev/null", check=False).decode().split()
+        return [n[:-len(".imgdir")] for n in out if n.endswith(".imgdir")]
+
+    def clear_root(self, root, storage_work, why):
+        """Delete the staged copy of `root` and its moved-copy frames, once every track of the root in the cluster
+        `tracks/` folder is md5-equal in `storage_work`/tracks (standing rule: clear a staged root only after its
+        outputs are md5-checked on storage). Each delete is appended to DELETED.log in the work folder. Returns
+        the delete records; raises JobFailed, deleting nothing, if a track is missing or differs on storage."""
+        names = f"find . -maxdepth 1 -type f -name {q(root + '__w*.npz')} | sort | xargs -r md5sum"   # tracks; not the .ok markers
+        a = self.relay.run(f"mkdir -p {q(self.work)}/tracks && cd {q(self.work)}/tracks && {names}").decode()
+        b = self.relay.link.run(f"cd {q(storage_work)}/tracks 2>/dev/null && {names}", check=False).decode()
+        on_storage = {l.split(None, 1)[1].strip(): l.split()[0] for l in b.splitlines() if l.strip()}
+        md5s = []
+        for line in a.splitlines():
+            if line.strip():
+                md5, name = line.split()[0], line.split(None, 1)[1].strip()
+                if on_storage.get(name) != md5:
+                    raise JobFailed(f"{root}: {name} not md5-equal on storage; staged copy kept")
+                md5s.append(md5)
+        verified = time.strftime("%Y-%m-%dT%H:%M:%S%z")
+        moved = self.relay.run(f"ls -d {q(self.work)}/moved/{q(root + '__w')}*_wp_*.imgdir 2>/dev/null",
+                               check=False).decode().split()
+        out = []
+        for path in [f"{self.stage}/{root}.imgdir"] + moved:
+            r = self.relay.run(f"if [ -e {q(path)} ]; then s=$(du -sh {q(path)} | cut -f1); t=$(date -Is); "
+                               f"rm -r {q(path)} && echo \"$t deleted {path} $s; {why}\" >> {q(self.work)}/DELETED.log "
+                               f"&& echo \"$t $s\"; fi").decode().strip()
+            if r:
+                t, size = r.split()[:2]
+                out.append({"root": root, "path_kind": "staged_root" if path.endswith(f"/{root}.imgdir") else
+                            "moved_copy", "size": size, "time": t, "verified": verified, "tracks_checked": len(md5s),
+                            "checked_md5": ";".join(md5s)})
+        self.log.extend({"cleared": r["root"], "kind": r["path_kind"]} for r in out)
+        return out
 
     def stage_root(self, root, storage_imgdir):
-        """Copy a whole root imgdir from storage to the cluster unless a complete copy is there (same file count)."""
+        """Copy a whole root imgdir from storage to the cluster unless a complete copy is there (same file count).
+        With `one_staged_root` in the config, every other staged root is cleared first (clear_root, `storage_work`)."""
         dest = f"{self.stage}/{root}.imgdir"
         n_s = self.relay.link.run(f"ls {q(storage_imgdir)} | wc -l").decode().strip()
         n_c = self.relay.run(f"ls {q(dest)} 2>/dev/null | wc -l", check=False).decode().strip()
         if n_s == n_c:
             return dest
+        if self.cfg.get("one_staged_root"):
+            for other in self.staged_roots():
+                if other != root:
+                    self.clear_root(other, self.cfg["storage_work"], f"root {other}: retrack outputs md5-verified "
+                                    "on storage; one staged root at a time (spec 2026-11-12)")
         need = int(self.relay.link.run(f"du -sm {q(storage_imgdir)} | cut -f1").decode().split()[0])
         cap = int(self.cfg.get("cap_mb", 35840))
         if self.folder_mb() + need > cap:

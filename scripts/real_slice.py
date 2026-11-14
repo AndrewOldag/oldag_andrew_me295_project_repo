@@ -153,9 +153,11 @@ def audit_only(out, config):
     runner, launcher = make_runner(config), Launcher()
     summaries, records = [], []
     for tid, s in summ["tasks"].items():
-        root, frm = tid.rsplit("__w", 1)
-        to_h = s["window_h"][1] if "window_h" in s else summ["window_h"][1]      # older summaries: one window
-        w = RealWindow(root, float(frm), float(to_h))
+        if "window_h" in s:        # task ids of a root with several windows read 'root~A-B__wA' (c026)
+            w = RealWindow(s["root_id"], float(s["window_h"][0]), float(s["window_h"][1]))
+        else:                      # older summaries: one window
+            root, frm = tid.rsplit("__w", 1)
+            w = RealWindow(root, float(frm), float(summ["window_h"][1]))
         records.append(runner.measure(w, TrackSettings(**s["final_settings"])).record)
         summaries.append(s)
     summ["auditor"] = run_auditor(summaries, records, launcher, out)
@@ -201,6 +203,8 @@ def main():
                     help="repeat runs (inbox item 36): cached tracks only; an uncached remedy setting is not available")
     ap.add_argument("--moved-span", default=None, metavar="FROM-TO",
                     help="moved copy (rigid invariance) for windows of this span only, e.g. 10-12 (first batch, c022)")
+    ap.add_argument("--no-auditor", action="store_true",
+                    help="skip the auditor; a later --audit-only run reviews the batch (c026: windows run in groups)")
     ap.add_argument("--min-free-gb", type=float, default=2.0,
                     help="wait before each window while free VM memory is below this (inbox item 37)")
     a = ap.parse_args()
@@ -234,7 +238,8 @@ def main():
         r.cached_only = a.cached_only
         if a.moved_span:
             r.moved_span = tuple(float(x) for x in a.moved_span.split("-"))
-    runner.sync_code()
+    if not a.cached_only:                  # cached tracks only: no compute host step, no connection needed (c026)
+        runner.sync_code()
     launcher = None
     if not a.no_agent:
         from agents.launcher import Launcher
@@ -259,7 +264,7 @@ def main():
         return {"diagnostician": o.status}
 
     cfg = D.load_config()
-    engine = D.Engine(InlineQueue(runner), cfg, rows=rows, budget={"core_hours": 0.0, "usd": 0.0, "approved": False},
+    engine = D.Engine(InlineQueue(runner, host_load=not a.cached_only), cfg, rows=rows, budget={"core_hours": 0.0, "usd": 0.0, "approved": False},
                       collector=collect)
     t0 = time.time()
     if a.dispatcher == "agent":
@@ -277,7 +282,7 @@ def main():
         print(f"  diagnostician: {s['outcome']['status']} {s['outcome']['args']}; remedies {s['remedies'] or 'none'}")
 
     audit = None
-    if summaries:
+    if summaries and not a.no_auditor:
         audit = {"status": "not_called", "note": "--no-agent"} if a.no_agent else             run_auditor(summaries, records, launcher, out)
 
     summary = {"windows": [[r, f, t] for r, f, t in windows], "dispatcher_mode": a.dispatcher,

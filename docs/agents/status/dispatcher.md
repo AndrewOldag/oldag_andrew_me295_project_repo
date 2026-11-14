@@ -1,13 +1,14 @@
 # dispatcher
-Updated: 2026-11-03 22:07 (local)
+Updated: 2026-11-14 14:00 (local)
 Lane: course
 Branch: wip/dispatcher
-Last inbox item done: 43
+Last inbox item done: 45
 State: ready to merge
-Now: task c023 done: not-computable rule (item 40 (2)), README real-slice command (item 42), dispatcher vs fixed script on the fake queue (item 43); ready to merge
+Now: task c026 done with what ran: remedy tree on 38 of 84 batch-2 failing windows; diagnostician not run (Andrew, 2026-11-14). Results `results/2026-11-12_batch2_agents/`
 Done since last update:
-- Item 43: 25 script and 25 agent batches, S0-S4 x seeds 0-4; all finished, budget overrun 0, 0 budget requests. Agent collects more in S1-S3 mainly from its 2 retries vs the script's 1 (proposal; reported as a known difference). S4: agent 36 jobs on the persistent-fault root vs script 24; it did not name a persistent fault. results/2026-11-02_dispatcher_eval/ (README, tables.md, batches.csv); decisions and log entries
-- 18 agent batches lost to the Claude seat's session limit were not recorded and were rerun; harness stops on that message (98cdb03). 43 of the 60-batch cap used
-- Item 42: README "Run the real slice" (7e043a9). Item 40 (2): closure not computable -> decline; first batch re-scored (51486cf)
+- Tree stopped at 38 when the cluster master went down about 23:10 on 2026-11-13: accepted after repair 9, declined 28, error 1; fixed script declines all 84
+- README, tables.md, windows.csv (outcome and check values only), example_traces.md (plane-sections values masked); decisions; log in docs/running_log_pending/dispatcher.md
+- Fixes this task: Link.run read to EOF (ca66ae6), Link.run 30 min channel timeout, clear_root .npz only, audit-only multi-window roots, tree real-profile gates (37d108b)
+- Suite: 400 passed, 2 skipped
 Needs Andrew:
-- none
+- A staged root copy may remain on the cluster from the stop (master down); check and clear after an md5 check, or let the next c026 run clear it
