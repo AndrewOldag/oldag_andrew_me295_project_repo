@@ -206,3 +206,39 @@ def test_output_read_to_eof_after_exit_status():
     lk.connect()
     lk._client.t.open_session = lambda: LateChannel(s)
     assert lk.run("cat big") == b"out:cat big"
+
+
+class SilentChannel(FakeChannel):
+    """A dead connection that never reports: no output, no exit status."""
+
+    def recv_ready(self):
+        return False
+
+    def recv_stderr_ready(self):
+        return False
+
+    def exit_status_ready(self):
+        return False
+
+
+def test_silent_channel_times_out_and_reconnects(monkeypatch):
+    import measure.remote_link as RL
+    monkeypatch.setattr(RL, "CHANNEL_TIMEOUT_S", 0)
+    s = FakeServer()
+    lk = link(s)
+    lk.connect()
+    opened = []
+
+    def session():
+        opened.append(1)
+        return SilentChannel(s) if len(opened) == 1 else FakeChannel(s)
+    lk._client.t.open_session = session
+    real_connect = s.connect
+
+    def connect(host):
+        c = real_connect(host)
+        c.t.open_session = session
+        return c
+    lk._connect = connect
+    assert lk.run("squeue") == b"out:squeue" and len(opened) == 2
+    assert any("channel lost (TimeoutError)" in e[1] for e in lk.events)
