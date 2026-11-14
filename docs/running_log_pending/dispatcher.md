@@ -1,0 +1,11 @@
+## 2026-11-12 to 2026-11-14 (build account, dispatcher, task c026)
+- Done: proposal `docs/proposals/2026-11-12_batch2-agents.md` before any run (f2ec5be); adapter: remedy tree reads the real profile's gating checks (37d108b); `scripts/batch2_agents.py` (fetch, tree, agents, report) and `scripts/batch2_agents_report.py`; tests `tests/test_batch2_agents.py` (15)
+- Done: fixes found in the run: `Link.run` cut large outputs (606 520-byte track returned as 212 992 bytes; ca66ae6); `Link.run` 30 min channel timeout (a dead connection held a window 3 h 50 min); `clear_root` compares `.npz` tracks only; `real_slice.py --audit-only` rebuilds multi-window roots
+- Done: 87 batch-2 tracks of the 84 failing windows fetched (md5); VM checker equals batch-2 closure on all 84 (max 4.9e-5 px/h)
+- Done: remedy tree on 38 of 84 windows: accepted after repair 9 (smoothing 5, registration 2, disk 1.5x 1, disk 2x 1), declined 28, error 1 (tracker `arange`); 142 remedies tried, 14 kept, 127 rolled back, 1 not available; 148 retracks on cluster CPU; 24 staged-root deletes after md5 checks. Fixed script: 84 declined. `results/2026-11-12_batch2_agents/`
+- Not done: diagnostician run (Andrew, 2026-11-14: report what ran); 46 windows not reached by the tree
+- Failed or stopped: cluster master down 2026-11-12 16:00 to evening and from 2026-11-13 23:10; Claude Code stopped the background tree for low VM memory 2026-11-13 00:10 (restarted from Andrew's terminal 10:52)
+- Spend since 2026-10-23: $7.24 at start, $7.37 at 2026-11-13 20:34; final not read (ledger connection down)
+- Demo: `python scripts/batch2_agents.py report --tree staging/c026/tree --agents staging/c026/agents --out results/2026-11-12_batch2_agents` prints `tree 38, diagnostician 0 windows` and writes tables.md, windows.csv, example_traces.md
+- Remaining: diagnostician run on the 38 tree windows (cached retracks; `batch2_agents.py agents --tree-windows staging/c026/tree`); tree on the other 46; check the cluster for a staged root left by the stop
+- Bottlenecks: cluster connection master (Andrew)
