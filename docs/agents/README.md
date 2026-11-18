@@ -61,7 +61,7 @@ Needs Andrew:
 | spec-audit | course | wip/spec-audit | spec 2026-10-23_spec-audit | to start (2026-10-23) |
 | spec-audit-check | course | wip/spec-audit-check | spec 2026-10-23_spec-audit | after spec-audit |
 | lab-report-2 | course | wip/lab-report-2 | spec 2026-10-23_next-steps | to start (2026-10-23) |
-| dispatcher | course | wip/dispatcher | spec 2026-10-23_next-steps | to start (2026-10-23) |
+| dispatcher | course | wip/dispatcher | spec 2026-11-18 A, B | to start (2026-11-18) |
 | spec-audit-r | research | status/spec-audit-r | research spec, tracker repo | done (2026-10-23) |
 | freeze-v3 | course | wip/freeze-v3 | spec 2026-10-23b_freeze-v3 | working (2026-10-23) |
 | turn-long | research | status/turn-long | research spec, tracker repo | done (2026-10-24) |
@@ -70,7 +70,8 @@ Needs Andrew:
 
 Finished sessions can be closed. A new task gets a new name and a new inbox.
 | closure-fix | course | wip/closure-fix | spec 2026-10-24b A | to start (2026-10-24) |
-| real-calib | course | wip/real-calib | spec 2026-10-24b B | to start (2026-10-24) |
+| real-calib | course | wip/real-calib | spec 2026-11-18 C | to start (2026-11-18) |
 | diag-analysis | course | wip/diag-analysis | spec 2026-10-24b D | to start (2026-10-24) |
 | rag | course | wip/rag | spec 2026-11-02 B | to start (2026-11-02) |
+| compound | course | wip/compound | spec 2026-11-18 D, E | to start (2026-11-18) |
 | argon-audit | course | audit/argon | spec 2026-11-03 | to start (2026-11-03); Antigravity, Gemini 4 Argon; rules in `AGENTS.md` |
