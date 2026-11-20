@@ -7,7 +7,7 @@ state: waiting on Andrew
 branch: wip/dispatcher
 host: VM (LLM runs), cluster (retrack arrays on CPU; one GPU midline job), lab server (storage and relay)
 created: 2026-11-18 14:20
-last_update: 2026-11-20 15:30
+last_update: 2026-11-20 14:08
 blocker: cluster master to submit wave 1
 done_marker: results/2026-11-18_integrated_run/README.md
 ---
@@ -19,7 +19,7 @@ Spec `docs/specs/2026-11-18_lab-report-4.md`, section A and B.
 - [x] scripts/retrack_queue.py submit and fetch, with tests (A1)
 - [x] Ledger: final c026 figure; wave 1 job list and worst-case cost (A2, A3)
 - [x] Proposal docs/proposals/2026-11-18_integrated-run.md committed before any run (B1)
-- [ ] scripts/run_all.py, README command; start on cached windows (B2, B3)
+- [x] scripts/run_all.py, README command; start on cached windows (B2, B3)
 - [ ] Status ready to submit; wave 1 submitted when the master is up; fetch
 - [ ] Remedy tree on every failing window (B4)
 - [ ] Fresh one-root end-to-end demo (B5)
