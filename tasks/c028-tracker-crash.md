@@ -3,7 +3,7 @@ id: c028
 title: fix the batch-2 tracker crash (arange) and track the 36 untracked windows
 lane: course
 owner: real-calib
-state: open
+state: queued
 branch: wip/real-calib
 host: VM, cluster (through retrack_queue.py), lab server (storage)
 created: 2026-11-18 14:20
