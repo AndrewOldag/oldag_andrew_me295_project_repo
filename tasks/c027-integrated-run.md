@@ -3,7 +3,7 @@ id: c027
 title: submit-and-forget cluster path; integrated run over all 101 roots with tree baseline and fresh one-root demo
 lane: course
 owner: dispatcher
-state: open
+state: queued
 branch: wip/dispatcher
 host: VM (LLM runs), cluster (retrack arrays, CPU; one GPU midline job), lab server (storage, relay)
 created: 2026-11-18 14:20
