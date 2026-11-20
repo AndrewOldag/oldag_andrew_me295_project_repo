@@ -50,7 +50,8 @@ SIZING_SEEDS = (50, 51)
 NOVEL_CANDIDATES = {"focus_drift": ("3", "6"), "illumination_flicker": ("0.1", "0.3")}
 MAX_LLM_RUNS = 450                            # spec D3
 MAX_TRACKER_RUNS = 3000                       # local runs; label sweep about 1,400 (proposal, section 4)
-MIN_FREE_GB = 3.0                             # spec 2026-11-18, Sessions
+MIN_FREE_GB = 3.0                             # before each batch: one rod's runs, or one LLM run (spec 2026-11-18)
+RUN_FLOOR_GB = 2.0                            # before each tracker run inside a batch (decisions, 2026-11-20)
 WORKERS = 2
 # fault names counted correct (reported, not a main metric): any component's name; unknown for the novel faults
 NAMES = {"drift_low_texture": {"rigid_drift", "low_texture"},
@@ -158,9 +159,9 @@ def free_gb():
     return m.ullAvailPhys / 2 ** 30
 
 
-def wait_memory():
-    while (f := free_gb()) < MIN_FREE_GB:
-        print(f"free VM memory {f:.2f} GB, under {MIN_FREE_GB} GB; waiting 60 s", flush=True)
+def wait_memory(floor=MIN_FREE_GB):
+    while (f := free_gb()) < floor:
+        print(f"free VM memory {f:.2f} GB, under {floor} GB; waiting 60 s", flush=True)
         time.sleep(60)
 
 
@@ -175,9 +176,11 @@ class LocalRunner(v3.V3Runner):
     def __init__(self, remote=False):
         self.remote, self.log, self.cache, self.couple = remote, [], CACHE, False
         self.python = private_config()["python"] if remote else None
+        if remote:
+            wait_memory()                      # one per rule or agent run: MIN_FREE_GB before each run
 
     def _run(self, script, args):
-        wait_memory()
+        wait_memory(RUN_FLOOR_GB)
         p = subprocess.run([self.python, str(ROOT / "scripts" / "synth" / "local_qb.py"), str(ROOT / script)] + args,
                            capture_output=True, text=True, cwd=ROOT)
         if p.returncode != 0:
@@ -188,8 +191,11 @@ class LocalRunner(v3.V3Runner):
         rid = rod.id(moved)
         if (RODS / f"{rid}.ok").exists():
             return rid
-        if (RODS / f"{rid}.imgdir").exists():
-            raise RuntimeError(f"partial render: {rid}")
+        if (RODS / f"{rid}.imgdir").exists():          # a stopped render (VM staging, this task's own files)
+            import shutil
+            shutil.rmtree(RODS / f"{rid}.imgdir")
+            for f in (RODS / f"{rid}_midline.npz", RODS / f"{rid}_truth.npz"):
+                f.unlink(missing_ok=True)
         RODS.mkdir(parents=True, exist_ok=True)
         out = self._run("scripts/synth/make_rod.py", ["--out", str(RODS)] + rod.options() + (["--moved"] if moved else []))
         self.log.append({"render": out})
@@ -245,22 +251,23 @@ def sweep(jobs, dry, label):
         return
     runner = LocalRunner(remote=True)
     t0 = time.time()
-    with ThreadPoolExecutor(WORKERS) as ex:
-        list(ex.map(lambda a: runner.render(*a), [(r, m) for r in rods for m in (False, True)]))
-    print(f"renders done {time.time() - t0:.0f} s", flush=True)
     done, failed = 0, []
-    with ThreadPoolExecutor(WORKERS) as ex:
-        fut = {ex.submit(runner.track, r.id(m), st): (r, st, m) for r, st in todo for m in (False, True)}
-        for f in as_completed(fut):
-            r, st, m = fut[f]
-            try:
-                f.result()
-                done += 1
-            except Exception as e:
-                failed.append({"rod": r.id(m), "tag": st.tag(), "error": f"{type(e).__name__}: {e}"})
-                print(f"FAILED {r.id(m)} {st.tag()}: {e}", flush=True)
-            if done % 50 == 0:
-                print(f"{done} runs done, {len(failed)} failed, {time.time() - t0:.0f} s", flush=True)
+    for rod in rods:                                   # one batch per rod: MIN_FREE_GB before it
+        wait_memory()
+        with ThreadPoolExecutor(WORKERS) as ex:
+            list(ex.map(lambda m: runner.render(rod, m), (False, True)))
+            fut = {ex.submit(runner.track, rod.id(m), st): (st, m) for r, st in todo if r.id() == rod.id()
+                   for m in (False, True)}
+            for f in as_completed(fut):
+                st, m = fut[f]
+                try:
+                    f.result()
+                    done += 1
+                except Exception as e:
+                    failed.append({"rod": rod.id(m), "tag": st.tag(), "error": f"{type(e).__name__}: {e}"})
+                    print(f"FAILED {rod.id(m)} {st.tag()}: {e}", flush=True)
+        print(f"{rod.id()}: {done} runs done, {len(failed)} failed, {time.time() - t0:.0f} s; "
+              f"free {free_gb():.2f} GB", flush=True)
     with (CACHE / "sweeps.jsonl").open("a") as f:
         f.write(json.dumps({"sweep": label, "runs": done, "failed": failed, "wall_s": round(time.time() - t0),
                             "workers": WORKERS, "end": time.strftime("%F %T")}) + "\n")
