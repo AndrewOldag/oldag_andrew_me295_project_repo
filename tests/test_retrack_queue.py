@@ -58,6 +58,12 @@ class FakeRemote:
     def stage(self, root, imgdir):
         self.calls.append(("stage", root))
 
+    def staged(self):
+        return [c[1] for c in self.calls if c[0] == "stage" and c[1] not in self.deleted_roots()]
+
+    def deleted_roots(self):
+        return [p.rsplit("/", 1)[1][:-len(".imgdir")] for p in self.deleted if "/data/" in p]
+
     def push_midline(self, src, dst):
         self.calls.append(("midline", dst))
 
@@ -108,6 +114,11 @@ def rows_for(runner, windows, settings=(TrackSettings(stride=2), TrackSettings(s
         for s in settings:
             out += RQ.job_rows(runner, RQ._window(wid), s)
     return out
+
+
+@pytest.fixture(autouse=True)
+def no_register_hold(monkeypatch):
+    monkeypatch.setattr(RQ, "REGISTER_HOLD", False)               # the hold has its own test
 
 
 @pytest.fixture
@@ -161,7 +172,7 @@ def test_submit_groups_by_room_and_arrays(setup):
     assert "#SBATCH --array=0-1%16" in script and "#SBATCH --time=00:45:00" in script and "%x_%A_%a.err" in script
     assert "--time=00:15:00" in rem.cluster_files[f"{WORK}/jobs/c027_g001_short/job.sbatch"].decode()
     tasks = rem.cluster_files[f"{WORK}/jobs/c027_g001_long/tasks.txt"].decode().splitlines()
-    assert len(tasks) == 2 and all("--register-from-px 900" in t and t.startswith("test -s ") for t in tasks)
+    assert len(tasks) == 2 and all("--register-from-px 900" in t and t.startswith(f"mkdir -p {WORK}/tracks && {{ test -s ") for t in tasks)
     # rerun: queued jobs are not submitted again; r3 goes into the next group
     rem._folder = 0
     assert RQ.submit(runner, rem, rows, state=state) == "submitted g002"
@@ -273,3 +284,30 @@ def test_paused_rows(setup, tmp_path):
     rows = RQ.paused_rows(runner, d)
     assert [(r["window"], r["which"]) for r in rows] == [("r1__w0-2", "window"), ("r2__w10-12", "ref"),
                                                          ("r2__w10-12", "moved")]
+
+
+def test_resubmit_after_failure_reuses_staged_roots(setup):
+    runner, state = setup
+    rem = FakeRemote(folder_mb=25000, root_mb=5000)                # room for 1 root
+    rows = rows_for(runner, ["r1__w0-2", "r2__w0-2"])
+    RQ.submit(runner, rem, rows, state=state)
+    q = RQ.read_csv(state / "queue.csv")
+    assert {r["root"] for r in q} == {"r1"}
+    rem._folder = 31000                                            # over the cap; r1 still staged
+    for r in q[:-1]:
+        rem.states[(r["array"], int(r["task"]))] = "FAILED"
+    RQ.fetch(runner, rem, state=state)                             # one task still live: r1 kept
+    assert rem.deleted == []
+    assert RQ.submit(runner, rem, rows, state=state) == "submitted g002"
+    q2 = RQ.read_csv(state / "queue.csv")
+    assert {r["root"] for r in q2 if r["group"] == "g002"} == {"r1"}   # failed r1 jobs again; r2 waits for room
+
+
+def test_register_hold_submits_no_register_job(setup, monkeypatch):
+    runner, state = setup
+    monkeypatch.setattr(RQ, "REGISTER_HOLD", True)
+    rem = FakeRemote()
+    RQ.submit(runner, rem, rows_for(runner, ["r1__w0-2"]), state=state)
+    q = RQ.read_csv(state / "queue.csv")
+    assert {r["kind"] for r in q} == {"short"}
+    assert not [p for p in rem.cluster_files if "_long/" in p]

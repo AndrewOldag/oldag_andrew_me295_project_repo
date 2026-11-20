@@ -51,6 +51,8 @@ BATCH1 = ROOT / "results" / "2026-10-25_full_batch_1" / "windows.csv"
 CAP_MB = 30 * 1024
 LIMITS = {"prep": "00:15:00", "long": "00:45:00", "short": "00:15:00"}   # spec A1: register_frames 45 min
 ARRAY_THROTTLE = 16
+# Inbox item 49 (2026-11-20): no register_frames retrack is submitted until `register_v2` is on main
+REGISTER_HOLD = True
 JOB_FIELDS = ["job", "window", "root", "from_h", "to_h", "which", "kind", "settings"]
 QUEUE_FIELDS = JOB_FIELDS + ["group", "array", "task", "state", "error", "md5", "fetched"]
 FINAL = ("fetched", "failed", "done")
@@ -191,6 +193,9 @@ class Remote:
     def stage(self, root, imgdir):
         return self.cc.stage_root(root, imgdir)
 
+    def staged(self):
+        return self.cc.staged_roots()
+
     def push_midline(self, storage_path, cluster_path):
         if self.relay.run(f"test -s {q(cluster_path)} && echo yes || echo no").decode().strip() != "yes":
             self.cc.push_file(storage_path, cluster_path)
@@ -269,13 +274,15 @@ def task_command(runner, row):
                 "--from-h", row["from_h"], "--to-h", row["to_h"], "--out-imgdir", mv["moved"], "--out-midline",
                 mm["moved"], "--mode", "whole_pixel", "--out-ref-imgdir", mv["ref"], "--out-ref-midline", mm["ref"]]
         done = " && ".join(f"test -f {q(mv[k] + '.ok')} && test -f {q(mm[k])}" for k in mv)
-        return f"{{ {done}; }} || python scripts/remote/real_moved.py " + " ".join(q(a) for a in args)
+        return (f"mkdir -p {q(work + '/moved')} && {{ {{ {done}; }} || python scripts/remote/real_moved.py "
+                + " ".join(q(a) for a in args) + "; }")
     img, mid, out = cluster_paths(work, tag, row)
     args = (["--imgdir", img, "--midline", mid, "--out", out, "--movie", "real", "--from-h", row["from_h"],
              "--to-h", row["to_h"], "--track-length", f"{runner.track_length:g}"] + settings_of(row).args())
     need = f"test -f {q(img + '.ok')} || {{ echo 'moved copy missing: {row['window']} {row['which']}' >&2; exit 3; }}; " \
         if row["which"] != "window" else ""
-    return f"{need}test -s {q(out)} || python scripts/remote/qb_track.py " + " ".join(q(a) for a in args)
+    return (f"{need}mkdir -p {q(out.rsplit('/', 1)[0])} && {{ test -s {q(out)} || python scripts/remote/qb_track.py "
+            + " ".join(q(a) for a in args) + "; }")
 
 
 def array_script(runner, name, tasks_path, n, kind, after=None):
@@ -313,7 +320,11 @@ def submit(runner, remote, job_rows_, state=STATE, cap_mb=CAP_MB, log=print):
         return "connection down"
     queue = read_csv(state / "queue.csv")
     queued = {r["job"] for r in queue if r["state"] != "failed"}
-    todo = [r for r in job_rows_ if r["job"] not in queued and not runner.cache_path_from_name(r["job"]).exists()]
+    held = [r for r in job_rows_ if REGISTER_HOLD and r["kind"] == "long"]
+    if held:
+        log(f"{len(held)} register_frames jobs held (inbox item 49; register_v2 pending)")
+    todo = [r for r in job_rows_ if r["job"] not in queued and not runner.cache_path_from_name(r["job"]).exists()
+            and not (REGISTER_HOLD and r["kind"] == "long")]
     if not todo:
         log("nothing to submit")
         return "nothing to submit"
@@ -322,8 +333,10 @@ def submit(runner, remote, job_rows_, state=STATE, cap_mb=CAP_MB, log=print):
         by_root.setdefault(r["root"], []).append(r)
     live_groups = {r["group"] for r in queue if r["state"] not in FINAL}
     try:
-        room = cap_mb - remote.folder_mb()
-        sizes = [(root, remote.root_mb(runner.windows[rows[0]["window"]]["imgdir"])) for root, rows in by_root.items()]
+        room = max(0, cap_mb - remote.folder_mb())
+        staged = set(remote.staged())               # already on the cluster: no new space (a resubmit after a failure)
+        sizes = [(root, 0 if root in staged else remote.root_mb(runner.windows[rows[0]["window"]]["imgdir"]))
+                 for root, rows in by_root.items()]
         groups = pack_groups(sizes, room)
         if not groups:
             log(f"no room: {room} MB free under the {cap_mb} MB cap; {len(todo)} jobs wait ({len(live_groups)} "
@@ -558,6 +571,11 @@ def main(argv=None):
     remote = Remote(runner)
     if a.step == "submit":
         rows = [r for p in a.jobs for r in read_csv(p)]
+        try:
+            remote.require()
+            runner.sync_code()                   # the array tasks run this commit's scripts/remote from the code folder
+        except Exception as e:                   # noqa: BLE001 - down link or master: submit reports it, no change
+            print(f"code sync skipped: {type(e).__name__}: {e}")
         status = submit(runner, remote, rows)
     else:
         status = fetch(runner, remote)
