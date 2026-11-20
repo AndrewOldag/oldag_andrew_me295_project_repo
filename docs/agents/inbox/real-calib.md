@@ -42,3 +42,4 @@
    - A5-F4: add the 2 missing 2026-10-25 equivalence jobs to `ledger.csv`; all times with offsets
    - Decisions, log, `ready to merge`
 19. Andrew, 2026-11-18: new spec `docs/specs/2026-11-18_lab-report-4.md`, section C; task `tasks/c028-tracker-crash.md`. `git fetch origin`; new `wip/real-calib` from `origin/main`. Fix the `arange: cannot compute length` crash with a reproducing test, equivalence on 5 windows, then `ready to merge`. The 36 retracks wait until dispatcher's `scripts/retrack_queue.py` is on main; submit them through it, not through a held-open link. No LLM runs
+20. Andrew, 2026-11-20: Lab report 4 is due Sun 29 Nov, not Mon 23 Nov. Spec 2026-11-18 deadlines updated: results READMEs by Thu 26 Nov 20:00 local (replaces Sat 21 Nov). Nothing else changes
