@@ -1,15 +1,16 @@
 # compound
-Updated: 2026-11-20 15:35 (local)
+Updated: 2026-11-20 14:57 (local)
 Lane: course
 Branch: wip/compound
-Last inbox item done: 0
-State: working
-Now: item 1. c029 novel-fault sizing sweep (16 tracker runs, VM); then label sweep (about 1,350 runs). c030 auditor repeat 0 running beside it (one LLM run at a time)
+Last inbox item done: 3
+State: waiting on dispatcher
+Now: item 4. c030 auditor repeats 1-2 running detached on the VM (one LLM run at a time, 3 GB floor). c029 waits for `retrack_queue.py` on main; VM tracking stopped
 Done since last update:
-- Local VM tracking: tracker d5f1829 in the VM tracker env; equivalence on v4 rod s26: tracks within 4.2e-13 px, truth within 6.9e-18 (decisions)
-- c029 proposal, injectors (6 faults, 13 tests pass), driver committed before any run (fa459b7); memory rule per rod batch (decisions)
-- c030 proposal, 30 batches, 15 plants, views and rule decisions committed before any LLM run (6150856)
-- Edge Crashpad reports folder: 0 bytes
+- Items 2-3 noted: READMEs due Thu 26 Nov 20:00; caps count agent runs, calls and tokens reported beside
+- c029 VM label sweep stopped (session ended; no process left). Cached: 16 sizing runs and 42 of 48 unremedied label runs, 0 failed. Left: unremedied runs of illumination_flicker s41-s43 (6 runs), then the remedied states
+- c029 sizes from the sizing rule: focus_drift 3 px, illumination_flicker 0.1 (510d287)
+- c029 all 24 scored rods and moved copies rendered on the VM (64 rods with sizing); driver refuses VM tracker runs; `render` command
+- c030 repeat 0: 30 of 30 runs ended with a report (510d287). Repeat 1: 8 of 30 before the restart, rest running
 Needs Andrew:
-- Free VM memory sits at 2.9-3.2 GB with three Claude sessions; runs wait for 3 GB before each batch. I check 3 GB before each rod batch and each LLM run, 2 GB before each tracker run inside a batch (decisions 2026-11-20). Reverse if you want 3 GB per tracker run
-- LLM caps of D3 and E2 counted as agent runs (one run = one rod or batch), as freeze v4 and auditor v1; steps reported beside. Say if they mean `claude -p` calls
+- c029 register_frames label states: use `register_v2` once on main (tracks with the old tag never reused, spec 2026-11-20 R2), or the old remedy as frozen in v4? I plan `register_v2` for the labels and the methods if it is on main before I submit; else the old remedy, stated in the README
+- c029 cluster runs: `retrack_queue.py` takes real windows (root imgdir, window midline). I will add a synthetic-rod job kind (rendered rod folder pushed whole, about 20 MB per rod, 48 rods about 1 GB) unless dispatcher or planning prefers otherwise
