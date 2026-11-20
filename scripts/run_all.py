@@ -48,6 +48,9 @@ BATCHES = {1: ROOT / "results" / "2026-10-25_full_batch_1" / "windows.csv",
 C026_TREE = ROOT / "staging" / "c026" / "tree" / "windows"
 LLM_CAP, STEP_LIMIT, AUDIT_RESERVE, VM_MIN_GB = 900, 8, 5, 3.0
 LIMIT_TEXT = "hit your session limit"
+# Inbox item 49 (2026-11-20): register_frames tracks can pass closure with points out of order. Until `register_v2`
+# is on main, every registered track counts as not cached: a window whose step needs one pauses
+REGISTER_HOLD = True
 
 
 class Paused(BaseException):
@@ -127,6 +130,8 @@ class RunRunner(RealRunner):
         return ["ref", "moved"] if window.id() in self.moved_windows else ["window"]
 
     def missing(self, window, settings):
+        if REGISTER_HOLD and settings.register:
+            return self.kinds(window)
         return [k for k in self.kinds(window) if not self.cache_path(window, settings, k).exists()]
 
     def measure(self, window, settings):

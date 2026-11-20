@@ -118,3 +118,16 @@ def test_pre_pause_only_when_no_single_remedy_cached(tmp_path, monkeypatch):
     assert [l["settings"]["midline_smooth"] for l in lines] == ["light"]
     r.cache_path(w, singles[1], "window").write_bytes(b"x")        # one cached: the agent runs
     run.pre_pause(w, sl)
+
+
+def test_register_hold_counts_registered_tracks_as_missing(tmp_path, monkeypatch):
+    r = runner(tmp_path)
+    w = RealWindow("a", 0, 2)
+    s = TrackSettings(register=True, register_from_px=900)
+    r.cache_path(w, s, "window").write_bytes(b"x")
+    monkeypatch.setattr(RA, "REGISTER_HOLD", True)
+    assert r.missing(w, s) == ["window"]
+    with pytest.raises(RA.Paused):
+        r.measure(w, s)
+    monkeypatch.setattr(RA, "REGISTER_HOLD", False)
+    assert r.missing(w, s) == []
