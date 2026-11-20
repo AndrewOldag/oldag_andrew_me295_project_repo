@@ -124,6 +124,68 @@ def register_frames(frames, stage_px, midline, s_from, s_to, band_px=20.0, edge_
     return out_f, out_m, C, report
 
 
+def _rigid_motion(C, point):
+    """Rotation (deg) of a 3x3 (row, col) map and the displacement (px) it gives `point`."""
+    moved = C[:2, :2] @ point + C[:2, 2]
+    return float(np.degrees(np.arctan2(C[1, 0], C[0, 0]))), float(np.linalg.norm(moved - point))
+
+
+def register_frames_v2(frames, stage_px, midline, s_from, s_to, max_shift_px=None, max_rot_deg=2.0,
+                       band_px=20.0, edge_px=25.0):
+    """register_frames without chaining (spec 2026-11-20 R2). Returns (frames, midline, per-frame 3x3 maps, report).
+
+    Each world-aligned frame g_t is registered directly to g_0 on the basal band of the frame-0 midline
+    (arc length s_from .. s_to px, within band_px; pixels at least edge_px inside frames 0 and t):
+    g_t(C_t x) = g_0(x), ECC started from C_{t-1}. Plausibility bound on the last frame: displacement of the band
+    centre over max_shift_px (the caller's 2 x drift implied by the closure miss) or rotation over max_rot_deg
+    -> report plausible False. The frames are corrected either way; the integrity gate rolls the remedy back.
+    """
+    import cv2
+    T = len(frames)
+    f = np.asarray(frames, np.float32)
+    world = []
+    for t in range(T):
+        M = _affine_cv(_shift(-stage_px[t]))
+        world.append(cv2.warpAffine(f[t], M, f[t].shape[::-1], flags=cv2.INTER_CUBIC | cv2.WARP_INVERSE_MAP))
+    line_w = midline[0] + stage_px[0]
+    s = _arclength(line_w)
+    part = line_w[(s >= s_from) & (s <= s_to)]
+    centre = np.nanmean(part, axis=0) if len(part) else np.nanmean(line_w, axis=0)
+    band = _band(f[0].shape, part, band_px) & _inside(f[0].shape, stage_px[0], edge_px)
+    C, ecc = [np.eye(3)], []
+    crit = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 200, 1e-6)
+    for t in range(1, T):
+        mask = (band & _inside(f[t].shape, stage_px[t], edge_px)).astype(np.uint8)
+        W = _affine_cv(C[-1]).astype(np.float32)
+        try:
+            cc, W = cv2.findTransformECC(world[0], world[t], W, cv2.MOTION_EUCLIDEAN, crit, mask, 5)
+            C.append(_from_cv(W))
+        except cv2.error:
+            cc = float("nan")
+            C.append(C[-1].copy())
+        ecc.append(float(cc))
+    out_f, out_m = np.empty_like(np.asarray(frames)), np.empty_like(midline)
+    for t in range(T):
+        A = _shift(-stage_px[t]) @ C[t] @ _shift(stage_px[t])
+        out = cv2.warpAffine(f[t], _affine_cv(A), f[t].shape[::-1],
+                             flags=cv2.INTER_CUBIC | cv2.WARP_INVERSE_MAP, borderMode=cv2.BORDER_REPLICATE)
+        out_f[t] = np.clip(out, 0, np.iinfo(out_f.dtype).max if out_f.dtype.kind == "u" else None)
+        pts = np.column_stack([midline[t], np.ones(len(midline[t]))])
+        out_m[t] = (pts @ np.linalg.inv(A).T)[:, :2]
+    motion = [_rigid_motion(c, centre) for c in C]
+    rot, disp = motion[-1]
+    plausible = abs(rot) <= max_rot_deg and (max_shift_px is None or disp <= max_shift_px)
+    report = {"version": 2, "ecc_min": float(np.nanmin(ecc)) if ecc else None,
+              "band_px": [round(s_from), round(s_to) if np.isfinite(s_to) else "end"],
+              "final_rotation_deg": round(rot, 3), "final_shift_px": round(float(np.hypot(*C[-1][:2, 2])), 2),
+              "final_band_motion_px": round(disp, 2),
+              "bound": {"max_shift_px": max_shift_px, "max_rot_deg": max_rot_deg}, "plausible": bool(plausible),
+              "per_frame": {"rotation_deg": [round(m[0], 4) for m in motion],
+                            "band_motion_px": [round(m[1], 3) for m in motion],
+                            "ecc": [None if not np.isfinite(e) else round(e, 5) for e in ecc]}}
+    return out_f, out_m, C, report
+
+
 def _smooth_linear_ends(a, sigma, axis):
     """Gaussian smoothing with the ends padded by linear extrapolation (odd reflection about the end
     value), so a quantity that changes linearly along the axis comes out unchanged. Padding with the
