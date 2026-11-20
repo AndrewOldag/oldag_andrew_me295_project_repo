@@ -7,7 +7,7 @@ state: open
 branch: wip/compound
 host: VM only
 created: 2026-11-18 14:20
-last_update: 2026-11-18 14:20
+last_update: 2026-11-20 13:16
 blocker: none
 done_marker: results/2026-11-18_auditor_check/README.md
 ---
