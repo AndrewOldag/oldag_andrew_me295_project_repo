@@ -156,3 +156,76 @@ def run_checks(rec, rec_moved=None, thresholds=None, skip=()):
             r.passed = None
             r.detail = "skipped: width-free ratio reported; " + r.detail
     return out
+
+
+# ---------------------------------------------------------------- track integrity (spec 2026-11-20 R3)
+
+INTEGRITY_FILE = Path(__file__).resolve().parents[1] / "config" / "integrity_thresholds.yaml"
+
+
+def _project(points, line):
+    """Arc length along `line` (K, 2) of the nearest point to each of `points` (M, 2), and the distance."""
+    line = line[np.isfinite(line[:, 0])]
+    a, b = line[:-1], line[1:]
+    ab = b - a
+    seg = np.linalg.norm(ab, axis=1)
+    s0 = np.concatenate([[0.0], np.cumsum(seg)])[:-1]
+    d = points[:, None, :] - a[None]
+    u = np.clip(np.sum(d * ab[None], axis=2) / np.maximum(seg ** 2, 1e-12)[None], 0.0, 1.0)
+    dist = np.linalg.norm(d - u[..., None] * ab[None], axis=2)
+    k = np.argmin(dist, axis=1)
+    i = np.arange(len(points))
+    return s0[k] + u[i, k] * seg[k], dist[i, k]
+
+
+def track_integrity(rec, thresholds=None):
+    """Point order, neighbour gaps and lateral scatter of the centre chain against the midline, per frame.
+
+    inversions: neighbour pairs (both tracked) whose arc length along the frame's midline does not increase from
+    tip to base, summed over frames. gap_ratio: largest centre-neighbour distance over the median, largest over
+    frames. lateral_px: RMS distance of centre points from the frame's midline. registration_plausible: the
+    register_v2 report of a registered track (1 plausible, 0 not); unknown for v1 and unregistered tracks.
+    Reported on every track; a gate only for tracks made by a remedy (integrity_gate).
+    """
+    th = thresholds or {}
+    inv, ratio, lat, worst = 0, 0.0, [], (0, 0)
+    for t in range(rec.n_frames):
+        c = rec.centre[t]
+        ok = np.isfinite(c[:, 0])
+        line = rec.midline[t]
+        if ok.sum() < 3 or np.isfinite(line[:, 0]).sum() < 2:
+            continue
+        s, dist = _project(c[ok], line)
+        pair_ok = ok[:-1] & ok[1:]
+        s_full = np.full(len(c), np.nan)
+        s_full[ok] = s
+        n_inv = int(np.sum(pair_ok & ~(np.diff(s_full) > 0)))
+        inv += n_inv
+        if n_inv > worst[1]:
+            worst = (t, n_inv)
+        g = np.linalg.norm(np.diff(c, axis=0), axis=1)[pair_ok]
+        if len(g) and np.median(g) > 0:
+            ratio = max(ratio, float(np.max(g) / np.median(g)))
+        lat.append(dist)
+    lateral = float(np.sqrt(np.mean(np.concatenate(lat) ** 2))) if lat else float("nan")
+    out = [CheckResult("integrity_inversions", _decide(float(inv), th.get("inversions")), float(inv),
+                       th.get("inversions"), "pairs", where_frame_pair=worst[0] if inv else None,
+                       detail=f"most in frame {worst[0]} ({worst[1]})" if inv else "point order kept in every frame"),
+           CheckResult("integrity_gap_ratio", _decide(ratio, th.get("gap_ratio")), ratio, th.get("gap_ratio"), "ratio"),
+           CheckResult("integrity_lateral", _decide(lateral, th.get("lateral_px")), lateral, th.get("lateral_px"), "px")]
+    reg = ((rec.settings or {}).get("preprocess") or {}).get("register")
+    if reg is None:
+        out.append(CheckResult("registration_plausible", None, float("nan"), None, "", detail="not registered"))
+    elif "plausible" not in reg:
+        out.append(CheckResult("registration_plausible", None, float("nan"), None, "",
+                               detail="registered without a plausibility bound (register_frames v1)"))
+    else:
+        out.append(CheckResult("registration_plausible", bool(reg["plausible"]), float(bool(reg["plausible"])), None,
+                               "", detail=f"final rotation {reg.get('final_rotation_deg')} deg, "
+                                          f"shift {reg.get('final_shift_px')} px, bound {reg.get('bound')}"))
+    return out
+
+
+def integrity_gate(results):
+    """False when any integrity value fails or the registration is not plausible; True otherwise."""
+    return not any(r.passed is False for r in results)
