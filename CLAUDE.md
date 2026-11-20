@@ -103,7 +103,7 @@ Lab reports go in `docs/reports/`, one file per report, started from `docs/repor
 - Build stops: Wed 28 Oct
 - Lab report 2: Fri 30 Oct (1-page proposal; commitment point)
 - Lab report 3: Sun 15 Nov (as in Lab report 2; syllabus Fri 13 Nov) (all include-yes roots through the checker, dispatcher evaluation, real slice from one command, RAG index)
-- Lab report 4: Mon 23 Nov (integrated run; failure modes)
+- Lab report 4: Sun 29 Nov (Andrew, 2026-11-20; lab guideline says Mon 23 Nov) (integrated run; failure modes)
 - Presentation: Wed 2 Dec. Final report and repository: Wed 9 Dec (syllabus deliverables table)
 
 ## Context files
