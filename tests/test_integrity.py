@@ -55,3 +55,10 @@ def test_registration_report():
                            ({"plausible": True, "final_rotation_deg": 0.1}, True)):
         s = dict(rec.settings, preprocess={"register": report})
         assert values(replace(rec, settings=s))["registration_plausible"].passed is expect
+
+
+def test_threshold_rounding():
+    import sys
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
+    from integrity_thresholds import round_up_2sf
+    assert [round_up_2sf(x) for x in (2.3295, 0.0537, 123.4, 0.0)] == [2.4, 0.054, 130, 0.0]
