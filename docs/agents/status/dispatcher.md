@@ -1,17 +1,18 @@
 # dispatcher
-Updated: 2026-11-20 14:21 (local)
+Updated: 2026-11-20 15:10 (local)
 Lane: course
 Branch: wip/dispatcher
-Last inbox item done: 45
-State: waiting on Andrew
-Now: item 46 (c027): integrated run started on cached windows (staging/c027/run); wave 1 ready to submit
+Last inbox item done: 50 (item 46, task c027, still working)
+State: working
+Now: c027 integrated run and wave-1 fetch/submit cycle running as detached hidden processes; registration held
 Done since last update:
-- Run at 312 window records: accepted 270, accepted after repair 1, decline by diagnostician 12, decline by rule 3, paused 26; 13 roots audited; 104 LLM calls
-- B1 proposal docs/proposals/2026-11-18_integrated-run.md committed before any run
-- B2 scripts/run_all.py (windows, fetch, run, tree, audit, report) with tests; 1,189 windows in dispatcher order (126 batch 1, 1,061 batch 2, 2 of 0727_cc7)
-- Base tracks: 1,159 fetched from storage to the VM cache, md5 checked, 0 missing. One fetch stopped on a paramiko rekey timeout; Link.run now treats it as a lost channel (decisions)
-- Run started 14:01 with a 17:00 Sat cut-off for new windows. A failing window with no remedy track cached pauses before any LLM call (decisions)
-- Wave 1b: batch-1 failing windows, 69 jobs, worst case $0.234 (c022 retracks seeded: 11)
-- Correction: the times 14:45 and 15:30 in my previous status and task file were wrong; the VM clock read 13:2x then
+- Item 50: `scripts/retrack_queue.py` and tests alone on `wip/retrack-queue` from origin/main (13 passed), README section. Ready to merge
+- Item 49: no register_frames retrack submitted (none ever was: arrays 7371854, 7372590, 7374329 are short tasks only; nothing to scancel). `submit` holds them (51 held); `run_all.py` counts every registered track as not cached, so such a step pauses. 8 run records whose decision used a registered track (2 accepted, 6 declined) and their 6 roots' auditor runs set aside in staging/c027/run/voided_register/, kept, not used
+- Item 48: run cut-off for new windows Thu 26 Nov 12:00 (was Sat 17:00); main merged, c027 task file kept; groups staged only within 30 GB
+- Item 47 and spend stop $15 in the c027 config
+- Wave 1: groups g001-g003 submitted; 24 tracks fetched md5 checked (g001's 12 failed on a missing output folder and were rerun as g002; fixed with a test); 458 short jobs wait, about 3 roots per group
+- Run at 450 window records: 388 accepted by rule (no failing check), 8 declined by rule, 10 declined by the diagnostician, 1 step limit, 1 error (arange: cannot compute length), 42 paused; 166 LLM calls of 900
+- Cluster folder 27.6 GB of 30 GB (c027 13.6, c026 leftover staged root 5.2, c019 0727_cc7 4.7). Ledger spent $7.429
 Needs Andrew:
-- Open the cluster master to submit wave 1 (461 jobs, $1.674) and 1b (69 jobs, $0.234). Projected spend $7.42 + $1.91 = $9.33 of the $12 stop. Several submit/fetch rounds while the master is up (groups of whole roots under 30 GB)
+- Keep the cluster master up for the wave-1 cycle (about 15 more groups, roughly 3 h); if it drops, the cycle exits and restarts from disk
+- The c026 leftover staged root (5.2 GB) blocks one root per group; clear it after an md5 check, or say so and I will run clear_root on it
