@@ -15,6 +15,7 @@ Public outputs: `table.md`, `summary.json`, `windows.csv` (outcome and check val
 | all | 1063 | 925 | 102 | 18 | 34 | 2 |
 
 - Failed 34: 33 with the tracker's `arange: cannot compute length` (the error seen in calibration and batch 1); 0721_m5 w0-2 (tracker: not enough valid data points for the logistic fit; no track)
+- After the fix (2026-11-20, `results/2026-11-20_arange_fix/`): the 33 arange windows were checked again on their tracks: 33 not computable (decline by rule); rows appended to `windows.csv` with `checked_after_fix` yes. The table above is the batch-2 run and is not changed
 - Not run 2: 0727_cc7 (both windows). The tracker's loader rejects its stage-tracking table (155 steps for 857 stage positions); its manifest notes a gap. Its staged frames are kept on the cluster; open for Andrew
 - Rigid invariance (reported, not gating): w10-12 moved copies on 85 roots. 0714_c11 and 0714_m8 have none (their copies had not been made when the lab server stopped); 0727_cc roots with fewer than 6 windows have no w10-12 window
 - Flag 'base may be in growing tissue' (reported): 33 windows

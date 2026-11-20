@@ -21,11 +21,13 @@
 
 ## Failed batch-2 windows after the fix
 - 34 failed windows: 33 with the arange error, 1 with no track (0721_m5__w0-2, logistic fit; a tracker error, not this one)
-- 21 of the 33 have their track on this machine: all 21 now `measured`, outcome not computable (decline by rule)
-- 12 of the 33 have their track only on storage; not checked yet
-- 0727_cc7 (2 windows) stays not measured (C4)
-- Per window: `check_after_fix.json` (outcome and closure only)
+- C3 (inbox item 21): the 12 tracks that were only on storage copied to this machine, read only, md5 equal on storage, here and in the audit (12 of 12)
+- All 33 checked on this machine with the fix (`scripts/check_after_fix.py`; 0714_m4__w10-12 with its moved-copy tracks, as in batch 2): 33 `measured`, outcome not computable (decline by rule)
+- `results/2026-10-25_full_batch_2/windows.csv`: new column `checked_after_fix`; the 1061 batch-2 rows unchanged with the column empty; 33 rows appended with `yes`. A reader keyed by window that keeps the last row gets the row after the fix
+- Not measured, listed as failure modes: 0721_m5__w0-2 (no track, tracker logistic-fit error); 0727_cc7, 2 windows (stage table 155 steps for 857 positions; C4)
+- Per window: `check_after_fix.json` (2026-11-20 first pass on the 21 VM tracks; outcome and closure only)
 
 ## Commands
+- C3: `QB_TRACKER=<tracker> python scripts/check_after_fix.py --tracks <folder with the batch-2 tracks>` -> `{"checked": 33, "outcomes": {"not computable": 33}}`; a rerun writes the same file
 - Test: `python -m pytest tests/test_record_tracker.py`
 - One window: `PYTHONPATH=<tracker>:. python scripts/remote/check_window.py --window 0711_c2__w0-2 --track <track npz> --out <json>`
