@@ -1,0 +1,59 @@
+{
+ "batch": "b07",
+ "repeat": 1,
+ "commit": "510d287",
+ "claude_code": "2.1.310",
+ "model": "claude-opus-5-5",
+ "wall_s": 84.5,
+ "trace": "b07_r1_trace.jsonl",
+ "outcome": {
+  "task_id": "batch-1",
+  "agent": "auditor",
+  "status": "report",
+  "args": {
+   "text": "Batch: 8 runs, 8 accepted. Flagged: none. Cleared: r01\u2013r08.\nAll three final checks passed in every run: rigid-body invariance, closure and plane sections. None used the width-free ratio.\nThe centre REGR peak sits at 421 \u00b5m in every run. Peak REGR ranges from 52.84 to 52.92 %/h. Growth-zone length ranges from 674 to 695 \u00b5m. The largest flank difference ranges from -9.88 to -9.54 %/h, at 410\u2013421 \u00b5m.\nThe large |z| for r03 and r06 comes from a very small batch spread, not from a profile of another shape. r06 kept one remedy, and its checks pass.\nNo flagged runs, so there is nothing common to report.\nNote: r01, r04, r05 and r08 have identical checks and summaries, and so do r02 and r07. This could mean duplicated inputs and may be worth checking."
+  },
+  "steps": 2,
+  "failed_steps": 0,
+  "calls": 2,
+  "input_tokens": 14406,
+  "output_tokens": 1415,
+  "call_ms": 27683
+ },
+ "decisions": {
+  "r01": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r02": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r03": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r04": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r05": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r06": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r07": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r08": {
+   "decision": "clear",
+   "order": 1
+  }
+ },
+ "undecided": [],
+ "report": "Batch: 8 runs, 8 accepted. Flagged: none. Cleared: r01\u2013r08.\nAll three final checks passed in every run: rigid-body invariance, closure and plane sections. None used the width-free ratio.\nThe centre REGR peak sits at 421 \u00b5m in every run. Peak REGR ranges from 52.84 to 52.92 %/h. Growth-zone length ranges from 674 to 695 \u00b5m. The largest flank difference ranges from -9.88 to -9.54 %/h, at 410\u2013421 \u00b5m.\nThe large |z| for r03 and r06 comes from a very small batch spread, not from a profile of another shape. r06 kept one remedy, and its checks pass.\nNo flagged runs, so there is nothing common to report.\nNote: r01, r04, r05 and r08 have identical checks and summaries, and so do r02 and r07. This could mean duplicated inputs and may be worth checking."
+}

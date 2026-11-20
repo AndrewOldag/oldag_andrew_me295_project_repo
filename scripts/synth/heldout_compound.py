@@ -50,7 +50,7 @@ SIZING_SEEDS = (50, 51)
 NOVEL_CANDIDATES = {"focus_drift": ("3", "6"), "illumination_flicker": ("0.1", "0.3")}
 MAX_LLM_RUNS = 450                            # spec D3
 MAX_TRACKER_RUNS = 3000                       # local runs; label sweep about 1,400 (proposal, section 4)
-MIN_FREE_GB = 2.5                             # before each batch: one rod's runs, or one LLM run (Andrew, 2026-11-20)
+MIN_FREE_GB = 3.0                             # before each LLM run (Andrew, 2026-11-20, inbox item 4; 2.5 for VM tracker batches before that)
 RUN_FLOOR_GB = 2.0                            # before each tracker run inside a batch (decisions, 2026-11-20)
 WORKERS = 2
 # fault names counted correct (reported, not a main metric): any component's name; unknown for the novel faults
@@ -209,6 +209,7 @@ class LocalRunner(v3.V3Runner):
         out = CACHE / f"{rid}__{settings.tag()}.npz"
         if Path(f"{out}.ok").exists():
             return out
+        raise v3.Missing(Rod(), settings)      # no tracker runs on the VM since spec 2026-11-20 (cluster only)
         if out.exists():
             out.unlink()                       # local output of a stopped run (VM staging, this task's own file)
         CACHE.mkdir(parents=True, exist_ok=True)
@@ -402,7 +403,7 @@ def labels_committed():
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", choices=["sizing-sweep", "sizing", "label-sweep", "labels", "rules", "agents", "eval"])
+    ap.add_argument("cmd", choices=["sizing-sweep", "sizing", "label-sweep", "render", "labels", "rules", "agents", "eval"])
     ap.add_argument("--method", choices=v3.LLM)
     ap.add_argument("--repeat", type=int, choices=v3.REPEATS)
     ap.add_argument("--max-runs", type=int, default=None)
@@ -410,6 +411,9 @@ def main():
     a = ap.parse_args()
     OUT.mkdir(parents=True, exist_ok=True)
     point_v3_here()
+    if a.cmd in ("sizing-sweep", "label-sweep") and not a.dry_run:
+        sys.exit("no tracker runs on the VM since spec 2026-11-20: the remaining runs go to the cluster "
+                 "(retrack_queue.py); --dry-run lists them")
     if a.cmd == "sizing-sweep":
         sweep([(r, initial(r)) for r in sizing_rods()], a.dry_run, "sizing")
     elif a.cmd == "sizing":
@@ -418,6 +422,12 @@ def main():
         if info["complete"]:
             (OUT / "sizing.json").write_text(json.dumps({"sizes": info["sizes"]}, indent=1))
         print(text)
+    elif a.cmd == "render":                          # renders only, no tracker run (spec 2026-11-20)
+        runner = LocalRunner(remote=True)
+        for r in scored_rods():
+            for m in (False, True):
+                runner.render(r, m)
+        print(f"rendered: {len(list(RODS.glob('*.ok')))} rods in {RODS.name}")
     elif a.cmd == "label-sweep":
         rods = scored_rods()
         sweep([(r, initial(r)) for r in rods], a.dry_run, "labels, unremedied")

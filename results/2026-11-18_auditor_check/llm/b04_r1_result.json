@@ -1,0 +1,77 @@
+{
+ "batch": "b04",
+ "repeat": 1,
+ "commit": "510d287",
+ "claude_code": "2.1.310",
+ "model": "claude-opus-5-5",
+ "wall_s": 128.4,
+ "trace": "b04_r1_trace.jsonl",
+ "outcome": {
+  "task_id": "batch-1",
+  "agent": "auditor",
+  "status": "report",
+  "args": {
+   "text": "Batch: 8 runs, all 8 accepted.\nFlagged (3), all for summary_outlier:\n- r07: centre REGR peak 53.09 %/h against a batch median of 0.37. Growth zone 695 \u00b5m against 52.5. Largest flank difference -8.36 %/h against 0.55. The profile has a different shape, so this isn't just a faster root.\n- r01, r08: the largest flank difference is at 84 \u00b5m against a median of 331.5 \u00b5m (z -10.77), and its sign is reversed (-0.47 vs 0.55 %/h). The REGR peak is about twice the batch value (0.72 %/h).\nCleared (5): r02, r03, r04, r05, r06. All checks pass with wide margin, and every summary has |z| \u2264 1.32. r05 took 4 steps but ended on default settings with no remedies kept and no roll-backs.\nWhat the flagged runs share: every final check passed, and none kept a remedy, rolled back or used the width-free ratio. Each was flagged only for a strain-rate or curvature profile shaped unlike the rest of the batch. The kinematic checks did not catch this.\nNote: some runs have identical checks and summaries: r01 = r08, r03 = r04, and r02 = r05 = r06. Confirm that these are separate roots or time windows and not duplicate entries."
+  },
+  "steps": 5,
+  "failed_steps": 0,
+  "calls": 5,
+  "input_tokens": 38793,
+  "output_tokens": 3953,
+  "call_ms": 51262
+ },
+ "decisions": {
+  "r07": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "summary_outlier",
+   "evidence": [
+    "centre_peak_regr_pct_per_h",
+    "growth_zone_length_um",
+    "flank_difference_max_pct_per_h"
+   ]
+  },
+  "r01": {
+   "decision": "flag",
+   "order": 2,
+   "reason": "summary_outlier",
+   "evidence": [
+    "flank_difference_at_um",
+    "flank_difference_max_pct_per_h",
+    "centre_peak_regr_pct_per_h"
+   ]
+  },
+  "r08": {
+   "decision": "flag",
+   "order": 2,
+   "reason": "summary_outlier",
+   "evidence": [
+    "flank_difference_at_um",
+    "flank_difference_max_pct_per_h",
+    "centre_peak_regr_pct_per_h"
+   ]
+  },
+  "r02": {
+   "decision": "clear",
+   "order": 3
+  },
+  "r03": {
+   "decision": "clear",
+   "order": 3
+  },
+  "r04": {
+   "decision": "clear",
+   "order": 3
+  },
+  "r05": {
+   "decision": "clear",
+   "order": 3
+  },
+  "r06": {
+   "decision": "clear",
+   "order": 3
+  }
+ },
+ "undecided": [],
+ "report": "Batch: 8 runs, all 8 accepted.\nFlagged (3), all for summary_outlier:\n- r07: centre REGR peak 53.09 %/h against a batch median of 0.37. Growth zone 695 \u00b5m against 52.5. Largest flank difference -8.36 %/h against 0.55. The profile has a different shape, so this isn't just a faster root.\n- r01, r08: the largest flank difference is at 84 \u00b5m against a median of 331.5 \u00b5m (z -10.77), and its sign is reversed (-0.47 vs 0.55 %/h). The REGR peak is about twice the batch value (0.72 %/h).\nCleared (5): r02, r03, r04, r05, r06. All checks pass with wide margin, and every summary has |z| \u2264 1.32. r05 took 4 steps but ended on default settings with no remedies kept and no roll-backs.\nWhat the flagged runs share: every final check passed, and none kept a remedy, rolled back or used the width-free ratio. Each was flagged only for a strain-rate or curvature profile shaped unlike the rest of the batch. The kinematic checks did not catch this.\nNote: some runs have identical checks and summaries: r01 = r08, r03 = r04, and r02 = r05 = r06. Confirm that these are separate roots or time windows and not duplicate entries."
+}
