@@ -1,15 +1,16 @@
 # dispatcher
-Updated: 2026-11-20 14:45 (local)
+Updated: 2026-11-20 14:08 (local)
 Lane: course
 Branch: wip/dispatcher
 Last inbox item done: 45
 State: waiting on Andrew
-Now: item 46 (c027): ready to submit wave 1; meanwhile proposal B1, then run_all.py on cached windows
+Now: item 46 (c027): integrated run started on cached windows (staging/c027/run); wave 1 ready to submit
 Done since last update:
-- A1 scripts/retrack_queue.py (seed, jobs, submit, fetch) with fake-relay tests, 11 passed (a6b0e13). Coordinator: merge so real-calib can use it (spec C3)
-- Wave 1 (A2): 84 windows (46 not reached by the c026 tree), 461 jobs not cached: stride double, smooth light, crop, mask, patch 1.5x and 2x, register (47 long); 3 moved-copy windows. Worst case $1.674
-- Ledger (A3): last c026 figure in the ledger file $7.405 (one job after it, worst case $0.012, not finalized: master was down). Projected $7.42 + $1.67 = $9.09, under the $12 stop. The live `spent` figure needs the master; submit checks it per array
-- Wave 1 stages whole root imgdirs in groups under 30 GB, not window frames: the tracker loader needs every frame file (decisions 2026-10-23, 2026-10-25; new entry 2026-11-20)
-- Suite: 409 passed, 2 skipped, 2 failed; both failures are `tasks/c028-tracker-crash.md` front matter `state: open` (on main, not this session's file; board accepts queued, working, ...)
+- B1 proposal docs/proposals/2026-11-18_integrated-run.md committed before any run
+- B2 scripts/run_all.py (windows, fetch, run, tree, audit, report) with tests; 1,189 windows in dispatcher order (126 batch 1, 1,061 batch 2, 2 of 0727_cc7)
+- Base tracks: 1,159 fetched from storage to the VM cache, md5 checked, 0 missing. One fetch stopped on a paramiko rekey timeout; Link.run now treats it as a lost channel (decisions)
+- Run started 14:01 with a 17:00 Sat cut-off for new windows. A failing window with no remedy track cached pauses before any LLM call (decisions)
+- Wave 1b: batch-1 failing windows, 69 jobs, worst case $0.234 (c022 retracks seeded: 11)
+- Correction: the times 14:45 and 15:30 in my previous status and task file were wrong; the VM clock read 13:2x then
 Needs Andrew:
-- Open the cluster master to submit wave 1. Groups of about 5 roots fit under 30 GB, so wave 1 takes several submit/fetch rounds while the master is up
+- Open the cluster master to submit wave 1 (461 jobs, $1.674) and 1b (69 jobs, $0.234). Projected spend $7.42 + $1.91 = $9.33 of the $12 stop. Several submit/fetch rounds while the master is up (groups of whole roots under 30 GB)
