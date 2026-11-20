@@ -154,7 +154,9 @@ def fetch(runner, rows, log=print):
     """Base tracks of every measured window from the batch outputs on storage to the VM cache, md5 checked.
     Batch 1: <batch1_dir>/tracks. Batch 2: <batch2_dir>/<root>/tracks, then <batch2_dir>/tracks (moved copies)."""
     import hashlib
+    from measure import remote_link
     from measure.remedies import TrackSettings
+    remote_link.CHANNEL_TIMEOUT_S = 120      # a track is under 1 MB: a silent channel this long is a dead connection
     cfg = runner.cfg_dict
     need = OrderedDict()
     for wid, r in rows.items():
@@ -311,6 +313,7 @@ class Run:
             o = rule_outcome(sl.checks)
             decided = "rule"
             if o is None:
+                self.pre_pause(w, sl)
                 if self.calls + STEP_LIMIT + AUDIT_RESERVE * self.roots_to_audit() > self.cap:
                     raise StopRun(f"LLM calls {self.calls}: the next diagnostician window could pass the cap of "
                                   f"{self.cap}")
@@ -341,6 +344,19 @@ class Run:
                     final_settings=s["final_settings"], final_tag=sl.runs[-1][0].tag(),
                     llm={k: getattr(o, k, 0) for k in ("calls", "input_tokens", "output_tokens", "call_ms")},
                     wall_s=round(time.time() - t0, 1))
+
+    def pre_pause(self, w, sl):
+        """A failing window with no single-remedy track cached is paused before any LLM call: the first remedy would
+        pause it, and the calls spent would be spent again on the rerun. Every missing single remedy is queued."""
+        from retrack_queue import single_remedies
+        singles = [s for _, _, s in single_remedies(sl.runs[0][0], sl.base_disk_radius, sl.runs[0][1].record)]
+        missing = [s for s in singles if self.runner.missing(w, s)]
+        if missing and len(missing) == len(singles):
+            with open(self.out / "paused.jsonl", "a") as f:
+                for s in missing[1:]:
+                    f.write(json.dumps({"window": w.id(), "settings": s.to_dict(),
+                                        "kinds": self.runner.missing(w, s), "time": now()}) + "\n")
+            raise Paused(w, missing[0], self.runner.missing(w, missing[0]))
 
     def orchestrate(self, trace, wid, sl):
         if self._orch:

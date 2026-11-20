@@ -101,3 +101,20 @@ def test_auditor_skips_root_without_accepted(tmp_path):
     assert run.audit() == 2 and seen == []
     rec = json.loads((tmp_path / "out" / "audit" / "a" / "audit.json").read_text())
     assert rec["status"] == "not_called" and rec["windows"] == ["a__w0-2", "a__w2-4"]
+
+
+def test_pre_pause_only_when_no_single_remedy_cached(tmp_path, monkeypatch):
+    import retrack_queue as RQ
+    r = runner(tmp_path)
+    run = RA.Run(r, tmp_path / "out", rows={}, free_gb=lambda: 99, log=lambda *x: None)
+    w = RealWindow("a", 0, 2)
+    singles = [TrackSettings(stride=2), TrackSettings(midline_smooth="light")]
+    monkeypatch.setattr(RQ, "single_remedies", lambda *a: [("x", None, s) for s in singles])
+    sl = SimpleNamespace(runs=[(TrackSettings(), SimpleNamespace(record=None), [], "")], base_disk_radius=15)
+    with pytest.raises(RA.Paused) as e:
+        run.pre_pause(w, sl)
+    assert e.value.settings == singles[0]
+    lines = [json.loads(l) for l in (tmp_path / "out" / "paused.jsonl").read_text().splitlines()]
+    assert [l["settings"]["midline_smooth"] for l in lines] == ["light"]
+    r.cache_path(w, singles[1], "window").write_bytes(b"x")        # one cached: the agent runs
+    run.pre_pause(w, sl)
