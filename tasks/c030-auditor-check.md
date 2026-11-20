@@ -3,7 +3,7 @@ id: c030
 title: auditor check with planted errors
 lane: course
 owner: compound
-state: open
+state: queued
 branch: wip/compound
 host: VM only
 created: 2026-11-18 14:20
