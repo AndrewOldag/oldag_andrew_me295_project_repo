@@ -50,7 +50,7 @@ SIZING_SEEDS = (50, 51)
 NOVEL_CANDIDATES = {"focus_drift": ("3", "6"), "illumination_flicker": ("0.1", "0.3")}
 MAX_LLM_RUNS = 450                            # spec D3
 MAX_TRACKER_RUNS = 3000                       # local runs; label sweep about 1,400 (proposal, section 4)
-MIN_FREE_GB = 3.0                             # before each batch: one rod's runs, or one LLM run (spec 2026-11-18)
+MIN_FREE_GB = 2.5                             # before each batch: one rod's runs, or one LLM run (Andrew, 2026-11-20)
 RUN_FLOOR_GB = 2.0                            # before each tracker run inside a batch (decisions, 2026-11-20)
 WORKERS = 2
 # fault names counted correct (reported, not a main metric): any component's name; unknown for the novel faults
