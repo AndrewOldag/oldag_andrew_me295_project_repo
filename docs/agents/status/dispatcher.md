@@ -1,12 +1,12 @@
 # dispatcher
-Updated: 2026-11-20 14:16 (local)
+Updated: 2026-11-20 14:21 (local)
 Lane: course
 Branch: wip/dispatcher
 Last inbox item done: 45
 State: waiting on Andrew
 Now: item 46 (c027): integrated run started on cached windows (staging/c027/run); wave 1 ready to submit
 Done since last update:
-- Run at 216 window records: accepted 184, decline by diagnostician 10, decline by rule 2, paused 20; 9 roots audited; 72 LLM calls
+- Run at 312 window records: accepted 270, accepted after repair 1, decline by diagnostician 12, decline by rule 3, paused 26; 13 roots audited; 104 LLM calls
 - B1 proposal docs/proposals/2026-11-18_integrated-run.md committed before any run
 - B2 scripts/run_all.py (windows, fetch, run, tree, audit, report) with tests; 1,189 windows in dispatcher order (126 batch 1, 1,061 batch 2, 2 of 0727_cc7)
 - Base tracks: 1,159 fetched from storage to the VM cache, md5 checked, 0 missing. One fetch stopped on a paramiko rekey timeout; Link.run now treats it as a lost channel (decisions)
