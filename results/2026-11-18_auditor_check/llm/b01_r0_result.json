@@ -1,0 +1,59 @@
+{
+ "batch": "b01",
+ "repeat": 0,
+ "commit": "3b1415a",
+ "claude_code": "2.1.310",
+ "model": "claude-opus-5-5",
+ "wall_s": 78.3,
+ "trace": "b01_r0_trace.jsonl",
+ "outcome": {
+  "task_id": "batch-1",
+  "agent": "auditor",
+  "status": "report",
+  "args": {
+   "text": "Batch: 8 runs, all 8 accepted.\nFlagged: none.\nCleared: all 8 (r01\u2013r08). All three final kinematic checks passed in every run: rigid invariance, closure and plane sections.\n- r03: REGR peak is 51.66 %/h, against a batch median of 53.04. That is 1.38 %/h (about 2.6 %) lower. Its z of -46.5 is large only because the MAD is 0.02 %/h. The peak position (421 \u00b5m), growth-zone length and flank difference all match the batch, so this is a slower root.\n- r04: the one remedy kept was registration on non-growing tissue, and the checks then passed. This is the normal path.\n- r06: largest flank difference is -8.36 %/h (z -3.27). That is only 0.3 %/h from the median, at 410 \u00b5m, with plane sections passing. This is ordinary variation in curvature rate.\n- r03 and r08 took 5 steps each but ended on default settings, with no remedies and no roll-backs.\nCommon to flagged runs: nothing; none were flagged.\nNote for follow-up: r01 and r05 have exactly the same check values and summaries, and so do r02, r07 and r08. It is worth confirming that these are different roots or time windows and not the same movie processed more than once."
+  },
+  "steps": 8,
+  "failed_steps": 0,
+  "calls": 8,
+  "input_tokens": 68770,
+  "output_tokens": 5805,
+  "call_ms": 65428
+ },
+ "decisions": {
+  "r03": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r01": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r02": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r04": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r05": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r07": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r08": {
+   "decision": "clear",
+   "order": 3
+  },
+  "r06": {
+   "decision": "clear",
+   "order": 4
+  }
+ },
+ "undecided": [],
+ "report": "Batch: 8 runs, all 8 accepted.\nFlagged: none.\nCleared: all 8 (r01\u2013r08). All three final kinematic checks passed in every run: rigid invariance, closure and plane sections.\n- r03: REGR peak is 51.66 %/h, against a batch median of 53.04. That is 1.38 %/h (about 2.6 %) lower. Its z of -46.5 is large only because the MAD is 0.02 %/h. The peak position (421 \u00b5m), growth-zone length and flank difference all match the batch, so this is a slower root.\n- r04: the one remedy kept was registration on non-growing tissue, and the checks then passed. This is the normal path.\n- r06: largest flank difference is -8.36 %/h (z -3.27). That is only 0.3 %/h from the median, at 410 \u00b5m, with plane sections passing. This is ordinary variation in curvature rate.\n- r03 and r08 took 5 steps each but ended on default settings, with no remedies and no roll-backs.\nCommon to flagged runs: nothing; none were flagged.\nNote for follow-up: r01 and r05 have exactly the same check values and summaries, and so do r02, r07 and r08. It is worth confirming that these are different roots or time windows and not the same movie processed more than once."
+}

@@ -1,0 +1,63 @@
+{
+ "batch": "b09",
+ "repeat": 0,
+ "commit": "3b1415a",
+ "claude_code": "2.1.310",
+ "model": "claude-opus-5-5",
+ "wall_s": 28.8,
+ "trace": "b09_r0_trace.jsonl",
+ "outcome": {
+  "task_id": "batch-1",
+  "agent": "auditor",
+  "status": "report",
+  "args": {
+   "text": "Batch: 8 runs, 8 accepted. 1 flagged, 7 cleared.\nFlagged: r05, for a check that failed but the run was still accepted. Its closure value is 2.899 px/h, above the 1.0 px/h threshold, yet it is marked passed. The run took 1 step and kept no remedies. Its REGR-peak z of -6.38 comes from a batch MAD of 0, so the real difference is only 0.01 %/h. That is not an outlier.\nCleared: r01, r02, r03, r04, r06, r07, r08. All three checks pass well inside their thresholds and every summary has |z| \u2264 1.06. Peak REGR is 53.1 %/h at 421 \u00b5m from the tip, the growth zone is 674\u2013684 \u00b5m long, and the largest flank difference is at 84 \u00b5m. Each of these runs kept one remedy and had no roll-backs.\nWhat the flagged run shows: only r05 has a tip-motion closure mismatch, meaning the midline and stage log disagree with the tracked velocity. Its strain-rate and curvature profile still matches the batch.\nNote: r02, r03 and r04 have identical checks and summaries. So do r01, r06, r07 and r08. It's worth confirming that these are separate roots or time windows and not repeated measurements."
+  },
+  "steps": 4,
+  "failed_steps": 0,
+  "calls": 4,
+  "input_tokens": 30746,
+  "output_tokens": 1982,
+  "call_ms": 22990
+ },
+ "decisions": {
+  "r05": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "closure"
+   ]
+  },
+  "r01": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r02": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r03": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r04": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r06": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r07": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r08": {
+   "decision": "clear",
+   "order": 2
+  }
+ },
+ "undecided": [],
+ "report": "Batch: 8 runs, 8 accepted. 1 flagged, 7 cleared.\nFlagged: r05, for a check that failed but the run was still accepted. Its closure value is 2.899 px/h, above the 1.0 px/h threshold, yet it is marked passed. The run took 1 step and kept no remedies. Its REGR-peak z of -6.38 comes from a batch MAD of 0, so the real difference is only 0.01 %/h. That is not an outlier.\nCleared: r01, r02, r03, r04, r06, r07, r08. All three checks pass well inside their thresholds and every summary has |z| \u2264 1.06. Peak REGR is 53.1 %/h at 421 \u00b5m from the tip, the growth zone is 674\u2013684 \u00b5m long, and the largest flank difference is at 84 \u00b5m. Each of these runs kept one remedy and had no roll-backs.\nWhat the flagged run shows: only r05 has a tip-motion closure mismatch, meaning the midline and stage log disagree with the tracked velocity. Its strain-rate and curvature profile still matches the batch.\nNote: r02, r03 and r04 have identical checks and summaries. So do r01, r06, r07 and r08. It's worth confirming that these are separate roots or time windows and not repeated measurements."
+}

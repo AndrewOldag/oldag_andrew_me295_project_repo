@@ -1,0 +1,64 @@
+{
+ "batch": "b28",
+ "repeat": 0,
+ "commit": "3b1415a",
+ "claude_code": "2.1.310",
+ "model": "claude-opus-5-5",
+ "wall_s": 23.9,
+ "trace": "b28_r0_trace.jsonl",
+ "outcome": {
+  "task_id": "batch-1",
+  "agent": "auditor",
+  "status": "report",
+  "args": {
+   "text": "Batch: 8 runs, all 8 accepted.\nFlagged (1): r07, check_failed_but_accepted. Its closure value is 2.776 against a 1.0 threshold but is recorded as passed. Its profile also has another shape: the largest flank difference is at 347 \u00b5m, against 84 \u00b5m in every other run (z 6.38). It is the only run made with no remedy kept and a single step.\nCleared (7): r01, r02, r03, r04, r05, r06, r08. All three checks pass well within threshold, and peak position, growth-zone length and flank-difference position all match the batch. r01's REGR peak has a z of 2.88 only because the batch MAD is 0. The actual gap is 53.24 vs 53.1 %/h, about 0.3 %.\nWhat the flagged run shows: the closure mismatch means the tip motion from the midline and stage log does not agree with the tip motion from the tracked kinematics. The shifted flank difference points to a different curvature-rate profile. The closure check's pass flag should be looked at, because it recorded a value over threshold as passed."
+  },
+  "steps": 3,
+  "failed_steps": 0,
+  "calls": 3,
+  "input_tokens": 21927,
+  "output_tokens": 1544,
+  "call_ms": 19250
+ },
+ "decisions": {
+  "r07": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "closure",
+    "flank_difference_at_um"
+   ]
+  },
+  "r01": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r02": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r03": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r04": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r05": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r06": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r08": {
+   "decision": "clear",
+   "order": 2
+  }
+ },
+ "undecided": [],
+ "report": "Batch: 8 runs, all 8 accepted.\nFlagged (1): r07, check_failed_but_accepted. Its closure value is 2.776 against a 1.0 threshold but is recorded as passed. Its profile also has another shape: the largest flank difference is at 347 \u00b5m, against 84 \u00b5m in every other run (z 6.38). It is the only run made with no remedy kept and a single step.\nCleared (7): r01, r02, r03, r04, r05, r06, r08. All three checks pass well within threshold, and peak position, growth-zone length and flank-difference position all match the batch. r01's REGR peak has a z of 2.88 only because the batch MAD is 0. The actual gap is 53.24 vs 53.1 %/h, about 0.3 %.\nWhat the flagged run shows: the closure mismatch means the tip motion from the midline and stage log does not agree with the tip motion from the tracked kinematics. The shifted flank difference points to a different curvature-rate profile. The closure check's pass flag should be looked at, because it recorded a value over threshold as passed."
+}
