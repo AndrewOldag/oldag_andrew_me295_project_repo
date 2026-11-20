@@ -47,7 +47,7 @@ A growing plant root is a slender rod whose material generates its own strain: t
 - Every session has a name. Its instructions are in `docs/agents/inbox/<name>.md` on `main`; it reports in `docs/agents/status/<name>.md`. Protocol in `docs/agents/README.md`
 - When Andrew says `check github`, follow that protocol
 - The coordinator is a scheduled tick, not a live session: every 10 min `scripts/ops/coordinator_tick.ps1` skips if no remote ref changed (and the last full pass is under 60 min old), else runs one headless coordinator pass. It replaces the `/loop` of coordinator inbox item 8 (Andrew, 2026-10-24)
-- Live sessions run in Claude Code Agent View (`claude agents`). Worktrees live under `.claude/worktrees/` (git-ignored); branch names stay `wip/<name>`, `heldout/<name>`
+- Live sessions run as hidden headless processes started by `scripts/ops/agents.ps1` (Andrew, 2026-11-20; previously Claude Code Agent View windows, which ran the VM out of memory). Worktrees live under `.claude/worktrees/` (git-ignored); branch names stay `wip/<name>`, `heldout/<name>`
 - The task board (`tasks/`, format in `tasks/README.md`) is the source of truth for who is doing what. Each session updates only its own task file, on its own branch: at start, at each commit, at stop. `python scripts/board.py` prints the board
 
 ## Resume after interruption
