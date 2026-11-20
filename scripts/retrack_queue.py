@@ -46,6 +46,8 @@ STATE = ROOT / "staging" / "c027"
 CONFIG = ROOT / "private" / "real_runner_c027.yaml"
 C026_CACHE = ROOT / "staging" / "c026" / "tracks"
 C026_TREE = ROOT / "staging" / "c026" / "tree" / "windows"
+C022_CACHE = ROOT / "staging" / "tracks_real"
+BATCH1 = ROOT / "results" / "2026-10-25_full_batch_1" / "windows.csv"
 CAP_MB = 30 * 1024
 LIMITS = {"prep": "00:15:00", "long": "00:45:00", "short": "00:15:00"}   # spec A1: register_frames 45 min
 ARRAY_THROTTLE = 16
@@ -122,14 +124,17 @@ def wave1(runner, windows):
     rows = []
     for w in windows:
         base = runner.initial_settings(w)
-        main = "ref" if runner.with_moved and (w.from_h, w.to_h) == runner.moved_span else "window"
+        mw = getattr(runner, "moved_windows", None)
+        moved = w.id() in mw if mw is not None else runner.with_moved and (w.from_h, w.to_h) == runner.moved_span
+        kinds = ["ref", "moved"] if moved else ["window"]
+        main = kinds[0]
         p = runner.cache_path(w, base, main)
         if not p.exists():
             raise FileNotFoundError(f"{w.id()}: base track {p.name} not in the cache (run `seed` first)")
         rec = from_tracker_npz(p, root_id=w.id())
         r0 = int(rec.settings.get("disk_radius") or 15)            # as agents/executors.Slice
         for _, _, s in single_remedies(base, r0, rec):
-            rows += job_rows(runner, w, s)
+            rows += job_rows(runner, w, s, kinds=kinds)
     return rows
 
 
@@ -496,9 +501,13 @@ def make_runner(config=CONFIG):
     return runner
 
 
-def seed(runner, src=C026_CACHE):
+def seed(runner, src=C026_CACHE, windows=None):
+    """Copy cached tracks of an earlier run into the c027 cache; existing files are kept. windows: only tracks of
+    these window ids (by file name)."""
     n = 0
     for p in sorted(Path(src).glob("*.npz")):
+        if windows is not None and p.name.split("_ft2")[0] not in windows:
+            continue
         dst = runner.cache / p.name
         if not dst.exists():
             dst.write_bytes(p.read_bytes())
@@ -514,19 +523,29 @@ def main(argv=None):
     ap.add_argument("--paused", help="jobs: a run folder with paused.jsonl")
     ap.add_argument("--jobs", nargs="+", help="submit: job list CSV files")
     ap.add_argument("--out")
+    ap.add_argument("--batch1", action="store_true", help="seed: c022 tracks of batch-1 windows; jobs --wave 1: the "
+                    "batch-1 failing windows")
     a = ap.parse_args(argv)
     runner = make_runner(a.config)
     if a.step == "seed":
-        print(f"seeded {seed(runner)} tracks from the c026 cache")
+        if a.batch1:          # c022 retracks of the batch-1 windows (lab server, same tracker and names)
+            ws = {r["window"] for r in read_csv(BATCH1)}
+            print(f"seeded {seed(runner, C022_CACHE, ws)} batch-1 tracks from the c022 cache")
+        else:
+            print(f"seeded {seed(runner)} tracks from the c026 cache")
         return 0
     if a.step == "jobs":
         if a.wave == 1:
             from batch2_agents import failing_windows
             ws = [w for w, _ in failing_windows()]
+            if a.batch1:      # the batch-1 windows that fail closure, the same single remedies
+                ws = [w for w, _ in failing_windows(BATCH1)]
+                runner.moved_span, runner.with_moved = None, False
+                runner.moved_windows = {r["window"] for r in read_csv(BATCH1) if r["moved_copy"] == "True"}
             reached = {p.stem for p in C026_TREE.glob("*.json")}
             rows = wave1(runner, ws)
             n_new = sum(r["window"] not in reached for r in rows)
-            print(f"windows: {len(ws)} ({len(ws) - len(reached)} not reached by the c026 tree)")
+            print(f"windows: {len(ws)} ({sum(w.id() not in reached for w in ws)} not reached by the c026 tree)")
             print(f"jobs: {len(rows)} ({n_new} for unreached windows, {len(rows) - n_new} for reached windows); "
                   f"long {sum(r['kind'] == 'long' for r in rows)}, moved-copy windows "
                   f"{len({r['window'] for r in rows if r['which'] != 'window'})}")
