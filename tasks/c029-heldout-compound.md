@@ -3,7 +3,7 @@ id: c029
 title: held-out novel and compound faults: labels, then fixed script, tree, diagnostician, single agent
 lane: course
 owner: compound
-state: open
+state: queued
 branch: wip/compound
 host: VM only
 created: 2026-11-18 14:20
