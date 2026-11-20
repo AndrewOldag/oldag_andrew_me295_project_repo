@@ -7,3 +7,11 @@
 - Demo: `python -m pytest tests/test_record_tracker.py` -> 5 passed; `results/2026-11-20_arange_fix/README.md`
 - Remaining: C3 replanned (no retracks): checker on the 12 storage tracks, rows in batch 2 `windows.csv`; 0721_m5__w0-2 has no track (logistic fit error)
 - Bottlenecks: planning (C3 plan); dispatcher (c027 board state)
+
+## 2026-11-20 (build account, session real-calib, inbox items 20-21)
+- Done: merged origin/main (a67866f); C3 as replanned: 12 batch-2 tracks copied from storage, read only, 12 of 12 md5 equal to the audit
+- Done: `scripts/check_after_fix.py`: checker on the 33 arange windows on this machine, 33 not computable; 33 rows appended to `results/2026-10-25_full_batch_2/windows.csv` with `checked_after_fix` yes, 1061 batch-2 rows unchanged; rerun writes the same file
+- Done: test `tests/test_check_after_fix.py` (rows kept, appended, rerun same); c028 done; c031 host field fixed for the board
+- Demo: `QB_TRACKER=<tracker> python scripts/check_after_fix.py --tracks staging/tracks_real_fb2` -> 33 checked, 33 not computable
+- Remaining: item 22 (c031, register_frames fix): proposal, diagnosis on the flagged c027 window, register_v2, integrity check; cluster runs after retrack_queue.py is on main
+- Bottlenecks: `tests/test_board.py` fails on c027's host field (dispatcher); retrack_queue.py on main (dispatcher)

@@ -5,7 +5,7 @@ lane: course
 owner: real-calib
 state: queued
 branch: wip/real-calib
-host: VM (code, checker), cluster (all tracker runs)
+host: VM (code and checker), cluster (all tracker runs)
 created: 2026-11-20 14:50
 last_update: 2026-11-20 14:50
 blocker: needs scripts/retrack_queue.py on main for cluster runs
