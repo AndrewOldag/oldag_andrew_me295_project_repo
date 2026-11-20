@@ -1,0 +1,49 @@
+{
+ "z_cutoff": 3.0,
+ "decisions": {
+  "r01": {
+   "decision": "flag",
+   "reasons": [
+    "summary_outlier:growth_zone_length_um",
+    "summary_outlier:flank_difference_at_um"
+   ]
+  },
+  "r02": {
+   "decision": "clear",
+   "reasons": []
+  },
+  "r03": {
+   "decision": "clear",
+   "reasons": []
+  },
+  "r04": {
+   "decision": "flag",
+   "reasons": [
+    "summary_outlier:width_free_ratio_max"
+   ]
+  },
+  "r05": {
+   "decision": "flag",
+   "reasons": [
+    "summary_outlier:width_free_ratio_max"
+   ]
+  },
+  "r06": {
+   "decision": "flag",
+   "reasons": [
+    "summary_outlier:growth_zone_length_um",
+    "summary_outlier:flank_difference_at_um"
+   ]
+  },
+  "r07": {
+   "decision": "clear",
+   "reasons": []
+  },
+  "r08": {
+   "decision": "flag",
+   "reasons": [
+    "summary_outlier:width_free_ratio_max"
+   ]
+  }
+ }
+}

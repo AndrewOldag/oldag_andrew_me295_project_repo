@@ -1,0 +1,426 @@
+{
+ "seed": 1118,
+ "batch_size": 8,
+ "batches": [
+  {
+   "row": "v3_bend20",
+   "runs": [
+    "diagnostician_v3_bend20_clean_s28_r1",
+    "remedy_tree_v3_bend20_clean_s27",
+    "script_v3_bend20_clean_s26",
+    "script_v3_bend20_clean_s27",
+    "script_v3_bend20_clean_s28",
+    "single_agent_v3_bend20_clean_s27_r0",
+    "single_agent_v3_bend20_clean_s28_r1",
+    "single_agent_v3_bend20_clean_s28_r2"
+   ],
+   "batch": "b01"
+  },
+  {
+   "row": "v3_bend24",
+   "runs": [
+    "diagnostician_v3_bend24_clean_s27_r1",
+    "remedy_tree_v3_bend24_clean_s28",
+    "script_v3_bend24_clean_s28",
+    "single_agent_v3_bend24_clean_s26_r0",
+    "single_agent_v3_bend24_clean_s26_r1",
+    "single_agent_v3_bend24_clean_s27_r2",
+    "single_agent_v3_bend24_clean_s28_r0",
+    "single_agent_v3_bend24_clean_s28_r1"
+   ],
+   "batch": "b02"
+  },
+  {
+   "row": "width_change",
+   "runs": [
+    "diagnostician_v3_growth_zone_width_change_s26_r1",
+    "diagnostician_v3_growth_zone_width_change_s28_r1",
+    "remedy_tree_v3_growth_zone_width_change_s27",
+    "remedy_tree_v3_growth_zone_width_change_s28",
+    "single_agent_v3_growth_zone_width_change_s26_r1",
+    "single_agent_v3_growth_zone_width_change_s27_r0",
+    "single_agent_v3_growth_zone_width_change_s27_r1",
+    "single_agent_v3_growth_zone_width_change_s28_r0"
+   ],
+   "batch": "b03"
+  },
+  {
+   "row": "v3_still",
+   "runs": [
+    "diagnostician_v3_still_clean_s27_r0",
+    "diagnostician_v3_still_clean_s27_r1",
+    "diagnostician_v3_still_clean_s27_r2",
+    "diagnostician_v3_still_clean_s28_r0",
+    "remedy_tree_v3_still_clean_s26",
+    "script_v3_still_clean_s26",
+    "script_v3_still_clean_s28",
+    "single_agent_v3_still_clean_s27_r2"
+   ],
+   "batch": "b04"
+  },
+  {
+   "row": "v3_growth_zone",
+   "runs": [
+    "diagnostician_v3_growth_zone_clean_s26_r0",
+    "diagnostician_v3_growth_zone_clean_s26_r2",
+    "diagnostician_v3_growth_zone_clean_s27_r0",
+    "diagnostician_v3_growth_zone_clean_s27_r2",
+    "remedy_tree_v3_growth_zone_clean_s26",
+    "single_agent_v3_growth_zone_clean_s26_r1",
+    "single_agent_v3_growth_zone_clean_s26_r2",
+    "single_agent_v3_growth_zone_clean_s28_r1"
+   ],
+   "batch": "b05"
+  },
+  {
+   "row": "v3_still",
+   "runs": [
+    "diagnostician_v3_still_clean_s26_r0",
+    "diagnostician_v3_still_clean_s26_r1",
+    "diagnostician_v3_still_clean_s26_r2",
+    "diagnostician_v3_still_clean_s27_r0",
+    "diagnostician_v3_still_clean_s28_r2",
+    "script_v3_still_clean_s27",
+    "single_agent_v3_still_clean_s26_r0",
+    "single_agent_v3_still_clean_s28_r1"
+   ],
+   "batch": "b06"
+  },
+  {
+   "row": "v3_bend24",
+   "runs": [
+    "diagnostician_v3_bend24_clean_s26_r0",
+    "diagnostician_v3_bend24_clean_s26_r1",
+    "diagnostician_v3_bend24_clean_s26_r2",
+    "diagnostician_v3_bend24_clean_s28_r0",
+    "remedy_tree_v3_bend24_clean_s26",
+    "remedy_tree_v3_bend24_clean_s28",
+    "single_agent_v3_bend24_clean_s27_r1",
+    "single_agent_v3_bend24_clean_s28_r1"
+   ],
+   "batch": "b07"
+  },
+  {
+   "row": "v3_bend20",
+   "runs": [
+    "diagnostician_v3_bend20_clean_s27_r2",
+    "diagnostician_v3_bend20_clean_s28_r1",
+    "remedy_tree_v3_bend20_clean_s28",
+    "script_v3_bend20_clean_s26",
+    "single_agent_v3_bend20_clean_s27_r0",
+    "single_agent_v3_bend20_clean_s27_r2",
+    "single_agent_v3_bend20_clean_s28_r1",
+    "single_agent_v3_bend20_clean_s28_r2"
+   ],
+   "batch": "b08"
+  },
+  {
+   "row": "bad_stage_correction",
+   "runs": [
+    "diagnostician_v3_growth_zone_bad_stage_correction_z3_s26_r1",
+    "diagnostician_v3_growth_zone_bad_stage_correction_z3_s27_r0",
+    "diagnostician_v3_growth_zone_bad_stage_correction_z3_s27_r1",
+    "diagnostician_v3_growth_zone_bad_stage_correction_z3_s27_r2",
+    "diagnostician_v3_growth_zone_bad_stage_correction_z3_s28_r0",
+    "diagnostician_v3_growth_zone_bad_stage_correction_z3_s28_r2",
+    "remedy_tree_v3_growth_zone_bad_stage_correction_z3_s27",
+    "remedy_tree_v3_growth_zone_bad_stage_correction_z3_s28"
+   ],
+   "batch": "b09"
+  },
+  {
+   "row": "v3_growth_zone",
+   "runs": [
+    "diagnostician_v3_growth_zone_clean_s26_r2",
+    "diagnostician_v3_growth_zone_clean_s27_r2",
+    "diagnostician_v3_growth_zone_clean_s28_r2",
+    "remedy_tree_v3_growth_zone_clean_s27",
+    "script_v3_growth_zone_clean_s26",
+    "script_v3_growth_zone_clean_s27",
+    "single_agent_v3_growth_zone_clean_s26_r1",
+    "single_agent_v3_growth_zone_clean_s28_r2"
+   ],
+   "batch": "b10"
+  },
+  {
+   "row": "v3_bend16",
+   "runs": [
+    "diagnostician_v3_bend16_clean_s26_r0",
+    "diagnostician_v3_bend16_clean_s27_r1",
+    "diagnostician_v3_bend16_clean_s27_r2",
+    "diagnostician_v3_bend16_clean_s28_r0",
+    "diagnostician_v3_bend16_clean_s28_r2",
+    "remedy_tree_v3_bend16_clean_s28",
+    "script_v3_bend16_clean_s26",
+    "single_agent_v3_bend16_clean_s26_r1"
+   ],
+   "batch": "b11"
+  },
+  {
+   "row": "v3_bend30",
+   "runs": [
+    "diagnostician_v3_bend30_clean_s27_r0",
+    "diagnostician_v3_bend30_clean_s27_r2",
+    "diagnostician_v3_bend30_clean_s28_r0",
+    "remedy_tree_v3_bend30_clean_s26",
+    "script_v3_bend30_clean_s27",
+    "single_agent_v3_bend30_clean_s27_r1",
+    "single_agent_v3_bend30_clean_s28_r0",
+    "single_agent_v3_bend30_clean_s28_r1"
+   ],
+   "batch": "b12"
+  },
+  {
+   "row": "v3_bend16",
+   "runs": [
+    "diagnostician_v3_bend16_clean_s26_r2",
+    "diagnostician_v3_bend16_clean_s28_r2",
+    "remedy_tree_v3_bend16_clean_s26",
+    "script_v3_bend16_clean_s27",
+    "script_v3_bend16_clean_s28",
+    "single_agent_v3_bend16_clean_s27_r0",
+    "single_agent_v3_bend16_clean_s27_r1",
+    "single_agent_v3_bend16_clean_s28_r0"
+   ],
+   "batch": "b13"
+  },
+  {
+   "row": "v3_bend20",
+   "runs": [
+    "diagnostician_v3_bend20_clean_s27_r0",
+    "diagnostician_v3_bend20_clean_s28_r1",
+    "remedy_tree_v3_bend20_clean_s26",
+    "remedy_tree_v3_bend20_clean_s28",
+    "script_v3_bend20_clean_s27",
+    "single_agent_v3_bend20_clean_s26_r1",
+    "single_agent_v3_bend20_clean_s27_r0",
+    "single_agent_v3_bend20_clean_s28_r1"
+   ],
+   "batch": "b14"
+  },
+  {
+   "row": "v3_bend16",
+   "runs": [
+    "diagnostician_v3_bend16_clean_s27_r0",
+    "diagnostician_v3_bend16_clean_s27_r1",
+    "diagnostician_v3_bend16_clean_s28_r0",
+    "diagnostician_v3_bend16_clean_s28_r1",
+    "script_v3_bend16_clean_s27",
+    "single_agent_v3_bend16_clean_s27_r0",
+    "single_agent_v3_bend16_clean_s27_r1",
+    "single_agent_v3_bend16_clean_s27_r2"
+   ],
+   "batch": "b15"
+  },
+  {
+   "row": "v3_still",
+   "runs": [
+    "diagnostician_v3_still_clean_s26_r0",
+    "diagnostician_v3_still_clean_s27_r1",
+    "diagnostician_v3_still_clean_s28_r1",
+    "script_v3_still_clean_s26",
+    "single_agent_v3_still_clean_s26_r2",
+    "single_agent_v3_still_clean_s27_r0",
+    "single_agent_v3_still_clean_s27_r1",
+    "single_agent_v3_still_clean_s28_r1"
+   ],
+   "batch": "b16"
+  },
+  {
+   "row": "width_change",
+   "runs": [
+    "diagnostician_v3_growth_zone_width_change_s26_r1",
+    "diagnostician_v3_growth_zone_width_change_s27_r0",
+    "diagnostician_v3_growth_zone_width_change_s28_r0",
+    "diagnostician_v3_growth_zone_width_change_s28_r2",
+    "remedy_tree_v3_growth_zone_width_change_s27",
+    "remedy_tree_v3_growth_zone_width_change_s28",
+    "single_agent_v3_growth_zone_width_change_s26_r2",
+    "single_agent_v3_growth_zone_width_change_s28_r2"
+   ],
+   "batch": "b17"
+  },
+  {
+   "row": "v3_growth_zone",
+   "runs": [
+    "diagnostician_v3_growth_zone_clean_s26_r0",
+    "remedy_tree_v3_growth_zone_clean_s26",
+    "script_v3_growth_zone_clean_s27",
+    "single_agent_v3_growth_zone_clean_s26_r0",
+    "single_agent_v3_growth_zone_clean_s26_r1",
+    "single_agent_v3_growth_zone_clean_s27_r1",
+    "single_agent_v3_growth_zone_clean_s27_r2",
+    "single_agent_v3_growth_zone_clean_s28_r0"
+   ],
+   "batch": "b18"
+  },
+  {
+   "row": "rigid_drift",
+   "runs": [
+    "diagnostician_v3_growth_zone_rigid_drift_z0.5_s28_r1",
+    "diagnostician_v3_growth_zone_rigid_drift_z0.5_s28_r2",
+    "remedy_tree_v3_growth_zone_rigid_drift_z0.5_s27",
+    "single_agent_v3_growth_zone_rigid_drift_z0.5_s26_r0",
+    "single_agent_v3_growth_zone_rigid_drift_z0.5_s26_r1",
+    "single_agent_v3_growth_zone_rigid_drift_z0.5_s27_r2",
+    "single_agent_v3_growth_zone_rigid_drift_z0.5_s28_r0",
+    "single_agent_v3_growth_zone_rigid_drift_z0.5_s28_r2"
+   ],
+   "batch": "b19"
+  },
+  {
+   "row": "width_change",
+   "runs": [
+    "diagnostician_v3_growth_zone_width_change_s26_r2",
+    "diagnostician_v3_growth_zone_width_change_s28_r0",
+    "remedy_tree_v3_growth_zone_width_change_s26",
+    "remedy_tree_v3_growth_zone_width_change_s28",
+    "single_agent_v3_growth_zone_width_change_s26_r0",
+    "single_agent_v3_growth_zone_width_change_s28_r0",
+    "single_agent_v3_growth_zone_width_change_s28_r1",
+    "single_agent_v3_growth_zone_width_change_s28_r2"
+   ],
+   "batch": "b20"
+  },
+  {
+   "row": "v3_bend30",
+   "runs": [
+    "diagnostician_v3_bend30_clean_s27_r1",
+    "diagnostician_v3_bend30_clean_s28_r0",
+    "diagnostician_v3_bend30_clean_s28_r1",
+    "remedy_tree_v3_bend30_clean_s26",
+    "script_v3_bend30_clean_s26",
+    "script_v3_bend30_clean_s28",
+    "single_agent_v3_bend30_clean_s27_r0",
+    "single_agent_v3_bend30_clean_s28_r1"
+   ],
+   "batch": "b21"
+  },
+  {
+   "row": "v3_bend24",
+   "runs": [
+    "diagnostician_v3_bend24_clean_s26_r2",
+    "diagnostician_v3_bend24_clean_s28_r2",
+    "script_v3_bend24_clean_s27",
+    "single_agent_v3_bend24_clean_s26_r1",
+    "single_agent_v3_bend24_clean_s26_r2",
+    "single_agent_v3_bend24_clean_s28_r0",
+    "single_agent_v3_bend24_clean_s28_r1",
+    "single_agent_v3_bend24_clean_s28_r2"
+   ],
+   "batch": "b22"
+  },
+  {
+   "row": "bad_stage_correction",
+   "runs": [
+    "diagnostician_v3_growth_zone_bad_stage_correction_z3_s26_r0",
+    "diagnostician_v3_growth_zone_bad_stage_correction_z3_s26_r1",
+    "diagnostician_v3_growth_zone_bad_stage_correction_z3_s26_r2",
+    "diagnostician_v3_growth_zone_bad_stage_correction_z3_s27_r0",
+    "diagnostician_v3_growth_zone_bad_stage_correction_z3_s28_r0",
+    "diagnostician_v3_growth_zone_bad_stage_correction_z3_s28_r2",
+    "remedy_tree_v3_growth_zone_bad_stage_correction_z3_s26",
+    "remedy_tree_v3_growth_zone_bad_stage_correction_z3_s28"
+   ],
+   "batch": "b23"
+  },
+  {
+   "row": "v3_growth_zone",
+   "runs": [
+    "diagnostician_v3_growth_zone_clean_s26_r0",
+    "diagnostician_v3_growth_zone_clean_s26_r1",
+    "diagnostician_v3_growth_zone_clean_s27_r0",
+    "diagnostician_v3_growth_zone_clean_s28_r1",
+    "diagnostician_v3_growth_zone_clean_s28_r2",
+    "script_v3_growth_zone_clean_s26",
+    "single_agent_v3_growth_zone_clean_s26_r2",
+    "single_agent_v3_growth_zone_clean_s27_r2"
+   ],
+   "batch": "b24"
+  },
+  {
+   "row": "rigid_drift",
+   "runs": [
+    "diagnostician_v3_growth_zone_rigid_drift_z0.5_s26_r2",
+    "diagnostician_v3_growth_zone_rigid_drift_z0.5_s28_r0",
+    "diagnostician_v3_growth_zone_rigid_drift_z0.5_s28_r2",
+    "remedy_tree_v3_growth_zone_rigid_drift_z0.5_s27",
+    "single_agent_v3_growth_zone_rigid_drift_z0.5_s26_r0",
+    "single_agent_v3_growth_zone_rigid_drift_z0.5_s27_r0",
+    "single_agent_v3_growth_zone_rigid_drift_z0.5_s27_r2",
+    "single_agent_v3_growth_zone_rigid_drift_z0.5_s28_r1"
+   ],
+   "batch": "b25"
+  },
+  {
+   "row": "bad_stage_correction",
+   "runs": [
+    "diagnostician_v3_growth_zone_bad_stage_correction_z3_s26_r0",
+    "diagnostician_v3_growth_zone_bad_stage_correction_z3_s26_r2",
+    "diagnostician_v3_growth_zone_bad_stage_correction_z3_s27_r0",
+    "diagnostician_v3_growth_zone_bad_stage_correction_z3_s27_r1",
+    "diagnostician_v3_growth_zone_bad_stage_correction_z3_s27_r2",
+    "diagnostician_v3_growth_zone_bad_stage_correction_z3_s28_r2",
+    "remedy_tree_v3_growth_zone_bad_stage_correction_z3_s26",
+    "remedy_tree_v3_growth_zone_bad_stage_correction_z3_s28"
+   ],
+   "batch": "b26"
+  },
+  {
+   "row": "rigid_drift",
+   "runs": [
+    "diagnostician_v3_growth_zone_rigid_drift_z0.5_s26_r1",
+    "diagnostician_v3_growth_zone_rigid_drift_z0.5_s27_r0",
+    "remedy_tree_v3_growth_zone_rigid_drift_z0.5_s26",
+    "remedy_tree_v3_growth_zone_rigid_drift_z0.5_s27",
+    "single_agent_v3_growth_zone_rigid_drift_z0.5_s27_r0",
+    "single_agent_v3_growth_zone_rigid_drift_z0.5_s27_r1",
+    "single_agent_v3_growth_zone_rigid_drift_z0.5_s28_r0",
+    "single_agent_v3_growth_zone_rigid_drift_z0.5_s28_r2"
+   ],
+   "batch": "b27"
+  },
+  {
+   "row": "bad_stage_correction",
+   "runs": [
+    "diagnostician_v3_growth_zone_bad_stage_correction_z3_s26_r2",
+    "diagnostician_v3_growth_zone_bad_stage_correction_z3_s27_r0",
+    "diagnostician_v3_growth_zone_bad_stage_correction_z3_s27_r1",
+    "diagnostician_v3_growth_zone_bad_stage_correction_z3_s27_r2",
+    "diagnostician_v3_growth_zone_bad_stage_correction_z3_s28_r0",
+    "diagnostician_v3_growth_zone_bad_stage_correction_z3_s28_r1",
+    "remedy_tree_v3_growth_zone_bad_stage_correction_z3_s27",
+    "remedy_tree_v3_growth_zone_bad_stage_correction_z3_s28"
+   ],
+   "batch": "b28"
+  },
+  {
+   "row": "v3_bend30",
+   "runs": [
+    "diagnostician_v3_bend30_clean_s26_r0",
+    "diagnostician_v3_bend30_clean_s26_r1",
+    "diagnostician_v3_bend30_clean_s27_r0",
+    "remedy_tree_v3_bend30_clean_s26",
+    "script_v3_bend30_clean_s26",
+    "single_agent_v3_bend30_clean_s26_r1",
+    "single_agent_v3_bend30_clean_s27_r0",
+    "single_agent_v3_bend30_clean_s28_r0"
+   ],
+   "batch": "b29"
+  },
+  {
+   "row": "rigid_drift",
+   "runs": [
+    "diagnostician_v3_growth_zone_rigid_drift_z0.5_s26_r0",
+    "diagnostician_v3_growth_zone_rigid_drift_z0.5_s26_r1",
+    "diagnostician_v3_growth_zone_rigid_drift_z0.5_s26_r2",
+    "diagnostician_v3_growth_zone_rigid_drift_z0.5_s28_r0",
+    "diagnostician_v3_growth_zone_rigid_drift_z0.5_s28_r1",
+    "single_agent_v3_growth_zone_rigid_drift_z0.5_s26_r0",
+    "single_agent_v3_growth_zone_rigid_drift_z0.5_s26_r1",
+    "single_agent_v3_growth_zone_rigid_drift_z0.5_s28_r2"
+   ],
+   "batch": "b30"
+  }
+ ]
+}

@@ -201,7 +201,7 @@ def views_cmd():
             {"batch": b["batch"], "table": batch_table(views, stats), "runs": views}, indent=1))
         id_map[b["batch"]] = dict(zip(ids, stems))
         print(f"{b['batch']} {b['row']}: {len(views)} runs" + (f", plant {p['kind']}" if p else ""))
-    (OUT / "id_map.json").write_text(json.dumps(id_map, indent=1))
+    (OUT / "run_map.json").write_text(json.dumps(id_map, indent=1))
 
 
 def load_view(b):
@@ -291,7 +291,7 @@ def decisions_of(source, b, k):
 
 
 def eval_cmd():
-    id_map = json.loads((OUT / "id_map.json").read_text())
+    id_map = json.loads((OUT / "run_map.json").read_text())
     batches = {b["batch"]: b for b in json.loads((OUT / "batches.json").read_text())["batches"]}
     plants = {p["batch"]: p for p in json.loads((OUT / "plants.json").read_text())["plants"]}
     rows, per_run = [], defaultdict(list)
