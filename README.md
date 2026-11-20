@@ -117,6 +117,17 @@ python scripts/retrack_queue.py fetch
 - `submit` stages whole root imgdirs in groups under 30 GB, writes Slurm arrays (1 core; 45 min for register_frames, 15 min otherwise), checks the spend ledger per array and records array ids in `staging/c027/queue.csv`. `fetch` pulls finished tracks to storage and the VM cache with md5 checks, marks failed tasks and clears a group's staged roots once all its tasks are final (`DELETED.log`). Both can be rerun at any time; a down link or master prints `connection down` and exits 0
 - Tests: `python -m pytest tests/test_retrack_queue.py` (fake relay; no host contacted)
 
+## Integrated run over every include-yes root (task c027)
+```
+python scripts/run_all.py windows                                  # 1,189 windows in dispatcher order
+python scripts/run_all.py fetch                                    # base tracks storage -> VM cache, md5 checked
+python scripts/run_all.py run --out staging/c027/run               # dispatcher -> checker -> diagnostician -> auditor
+python scripts/run_all.py tree --run staging/c027/run --out staging/c027/tree
+python scripts/run_all.py report --run staging/c027/run --tree staging/c027/tree --out results/2026-11-18_integrated_run
+```
+- Needs: Setup steps 1-4 and `private/real_runner_c027.yaml`. `run` and `tree` read cached tracks only and need no cluster connection; a window whose track is not cached is paused and its settings go to `paused.jsonl` for `retrack_queue.py jobs --paused`. Rerun `run` after a `fetch` of the queue: finished windows are skipped
+- Proposal and caps: `docs/proposals/2026-11-18_integrated-run.md`. Tests: `python -m pytest tests/test_run_all.py`
+
 ## Task board
 - One file per task in `tasks/` (format in `tasks/README.md`). Research-lane tasks use the same format in a folder outside every git repo
 - Optional: copy `config/board.example.conf` to `private/board.conf` and set the research folder and the page path

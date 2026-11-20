@@ -100,11 +100,11 @@ def single_remedies(base, base_disk_radius, record):
     return out
 
 
-def job_rows(runner, window, settings, cache_dirs=()):
+def job_rows(runner, window, settings, cache_dirs=(), kinds=None):
     """Rows for one window and settings: the window track, or (moved-copy span) the reference and moved copy.
     A row whose track is in the cache (or one of `cache_dirs`) is left out."""
     span = runner.moved_span is None or (window.from_h, window.to_h) == runner.moved_span
-    kinds = ["ref", "moved"] if runner.with_moved and span else ["window"]
+    kinds = kinds or (["ref", "moved"] if runner.with_moved and span else ["window"])
     rows = []
     for which in kinds:
         local = runner.cache_path(window, settings, which)
@@ -134,7 +134,8 @@ def wave1(runner, windows):
 
 
 def paused_rows(runner, run_dir):
-    """Rows for the settings paused windows of a run need (RUN_DIR/paused.jsonl: window, settings dict)."""
+    """Rows for the settings paused windows of a run need (RUN_DIR/paused.jsonl: window, settings dict, and the
+    track kinds it lacks)."""
     from measure.real_runner import RealWindow
     rows, seen = [], set()
     p = Path(run_dir) / "paused.jsonl"
@@ -143,7 +144,7 @@ def paused_rows(runner, run_dir):
         root, span = d["window"].split("__w")
         a, b = span.split("-")
         w = RealWindow(root, float(a), float(b))
-        for r in job_rows(runner, w, TrackSettings(**d["settings"])):
+        for r in job_rows(runner, w, TrackSettings(**d["settings"]), kinds=d.get("kinds")):
             if r["job"] not in seen:
                 seen.add(r["job"])
                 rows.append(r)
