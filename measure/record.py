@@ -142,8 +142,9 @@ def derive(rec):
     gap = np.linalg.norm(rec.plus - rec.minus, axis=2)             # (T, M)
 
     grid_px = float(rec.setting("grid_px"))
-    s_max = np.nanmax(s_c)
-    s_grid = np.arange(0.0, s_max + 1e-9, grid_px)
+    # No finite arc length (tip point edge-frozen in every frame): empty grid, so the checks read not computable
+    finite = np.isfinite(s_c)
+    s_grid = np.arange(0.0, np.max(s_c[finite]) + 1e-9, grid_px) if finite.any() else np.zeros(0)
     n = len(dt)
     out = {k: np.full((n, len(s_grid)), np.nan) for k in GRID_FIELDS}
 
