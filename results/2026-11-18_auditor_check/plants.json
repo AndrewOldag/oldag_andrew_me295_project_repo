@@ -1,0 +1,104 @@
+{
+ "seed": 1118,
+ "unit_factor": 2.105,
+ "closure_sources": [
+  "script_v3_growth_zone_bad_stage_correction_z3_s26",
+  "script_v3_growth_zone_bad_stage_correction_z3_s27",
+  "script_v3_growth_zone_bad_stage_correction_z3_s28",
+  "single_agent_v3_growth_zone_bad_stage_correction_z3_s26_r0",
+  "single_agent_v3_growth_zone_bad_stage_correction_z3_s26_r1",
+  "single_agent_v3_growth_zone_bad_stage_correction_z3_s26_r2",
+  "single_agent_v3_growth_zone_bad_stage_correction_z3_s27_r0",
+  "single_agent_v3_growth_zone_bad_stage_correction_z3_s27_r1",
+  "single_agent_v3_growth_zone_bad_stage_correction_z3_s28_r0",
+  "single_agent_v3_growth_zone_bad_stage_correction_z3_s28_r1"
+ ],
+ "plants": [
+  {
+   "batch": "b01",
+   "kind": "doubled_frame",
+   "frame": 21,
+   "target": "single_agent_v3_bend20_clean_s28_r2"
+  },
+  {
+   "batch": "b04",
+   "kind": "other_rod_track",
+   "source": "single_agent_v3_bend20_clean_s26_r1",
+   "target": "diagnostician_v3_still_clean_s27_r0"
+  },
+  {
+   "batch": "b05",
+   "kind": "other_rod_track",
+   "source": "diagnostician_v3_bend20_clean_s27_r2",
+   "target": "single_agent_v3_growth_zone_clean_s26_r2"
+  },
+  {
+   "batch": "b06",
+   "kind": "other_rod_track",
+   "source": "single_agent_v3_bend24_clean_s26_r1",
+   "target": "diagnostician_v3_still_clean_s26_r0"
+  },
+  {
+   "batch": "b09",
+   "kind": "closure_relabelled",
+   "source": "script_v3_growth_zone_bad_stage_correction_z3_s28",
+   "target": "diagnostician_v3_growth_zone_bad_stage_correction_z3_s26_r1"
+  },
+  {
+   "batch": "b11",
+   "kind": "doubled_frame",
+   "frame": 16,
+   "target": "single_agent_v3_bend16_clean_s26_r1"
+  },
+  {
+   "batch": "b13",
+   "kind": "wrong_unit",
+   "target": "diagnostician_v3_bend16_clean_s28_r2"
+  },
+  {
+   "batch": "b14",
+   "kind": "other_rod_track",
+   "source": "single_agent_v3_bend30_clean_s27_r1",
+   "target": "single_agent_v3_bend20_clean_s28_r1"
+  },
+  {
+   "batch": "b17",
+   "kind": "wrong_unit",
+   "target": "single_agent_v3_growth_zone_width_change_s26_r2"
+  },
+  {
+   "batch": "b23",
+   "kind": "closure_relabelled",
+   "source": "single_agent_v3_growth_zone_bad_stage_correction_z3_s27_r0",
+   "target": "diagnostician_v3_growth_zone_bad_stage_correction_z3_s28_r2"
+  },
+  {
+   "batch": "b24",
+   "kind": "wrong_unit",
+   "target": "single_agent_v3_growth_zone_clean_s27_r2"
+  },
+  {
+   "batch": "b25",
+   "kind": "doubled_frame",
+   "frame": 26,
+   "target": "remedy_tree_v3_growth_zone_rigid_drift_z0.5_s27"
+  },
+  {
+   "batch": "b26",
+   "kind": "closure_relabelled",
+   "source": "single_agent_v3_growth_zone_bad_stage_correction_z3_s28_r1",
+   "target": "diagnostician_v3_growth_zone_bad_stage_correction_z3_s28_r2"
+  },
+  {
+   "batch": "b28",
+   "kind": "closure_relabelled",
+   "source": "script_v3_growth_zone_bad_stage_correction_z3_s26",
+   "target": "remedy_tree_v3_growth_zone_bad_stage_correction_z3_s27"
+  },
+  {
+   "batch": "b30",
+   "kind": "wrong_unit",
+   "target": "single_agent_v3_growth_zone_rigid_drift_z0.5_s26_r1"
+  }
+ ]
+}

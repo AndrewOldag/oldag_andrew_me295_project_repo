@@ -1,0 +1,899 @@
+{
+ "batch": "b10",
+ "table": {
+  "columns": {
+   "checks": "check: [value, threshold, passed]; passed null = not run",
+   "summaries": "summary: [value, robust z in this batch]"
+  },
+  "batch_median_mad": {
+   "centre_peak_regr_pct_per_h": {
+    "median": 53.15,
+    "mad": 0.06
+   },
+   "centre_peak_at_um": {
+    "median": 421.0,
+    "mad": 0.0
+   },
+   "growth_zone_length_um": {
+    "median": 695.0,
+    "mad": 0.0
+   },
+   "flank_difference_max_pct_per_h": {
+    "median": 0.44,
+    "mad": 0.11
+   },
+   "flank_difference_at_um": {
+    "median": 84.0,
+    "mad": 63.0
+   },
+   "width_free_ratio_max": {
+    "median": null,
+    "mad": null
+   }
+  },
+  "runs": [
+   {
+    "run_id": "r01",
+    "status": "accept",
+    "checks": {
+     "rigid_invariance": [
+      0.891,
+      2.0,
+      true
+     ],
+     "closure": [
+      0.231,
+      1.0,
+      true
+     ],
+     "plane_sections": [
+      0.424,
+      3.25,
+      true
+     ]
+    },
+    "steps": 1,
+    "remedies_kept": 0,
+    "roll_backs": 0,
+    "width_free": false,
+    "summaries": {
+     "centre_peak_regr_pct_per_h": [
+      53.15,
+      0.0
+     ],
+     "centre_peak_at_um": [
+      421.0,
+      0.0
+     ],
+     "growth_zone_length_um": [
+      695.0,
+      0.0
+     ],
+     "flank_difference_max_pct_per_h": [
+      0.44,
+      0.0
+     ],
+     "flank_difference_at_um": [
+      21.0,
+      -0.67
+     ],
+     "width_free_ratio_max": [
+      null,
+      null
+     ]
+    }
+   },
+   {
+    "run_id": "r02",
+    "status": "accept",
+    "checks": {
+     "rigid_invariance": [
+      0.837,
+      2.0,
+      true
+     ],
+     "closure": [
+      0.104,
+      1.0,
+      true
+     ],
+     "plane_sections": [
+      0.813,
+      3.25,
+      true
+     ]
+    },
+    "steps": 1,
+    "remedies_kept": 0,
+    "roll_backs": 0,
+    "width_free": false,
+    "summaries": {
+     "centre_peak_regr_pct_per_h": [
+      53.09,
+      -0.67
+     ],
+     "centre_peak_at_um": [
+      421.0,
+      0.0
+     ],
+     "growth_zone_length_um": [
+      674.0,
+      -3.19
+     ],
+     "flank_difference_max_pct_per_h": [
+      -0.81,
+      -7.66
+     ],
+     "flank_difference_at_um": [
+      84.0,
+      0.0
+     ],
+     "width_free_ratio_max": [
+      null,
+      null
+     ]
+    }
+   },
+   {
+    "run_id": "r03",
+    "status": "accept",
+    "checks": {
+     "rigid_invariance": [
+      0.891,
+      2.0,
+      true
+     ],
+     "closure": [
+      0.231,
+      1.0,
+      true
+     ],
+     "plane_sections": [
+      0.424,
+      3.25,
+      true
+     ]
+    },
+    "steps": 1,
+    "remedies_kept": 0,
+    "roll_backs": 0,
+    "width_free": false,
+    "summaries": {
+     "centre_peak_regr_pct_per_h": [
+      53.15,
+      0.0
+     ],
+     "centre_peak_at_um": [
+      421.0,
+      0.0
+     ],
+     "growth_zone_length_um": [
+      695.0,
+      0.0
+     ],
+     "flank_difference_max_pct_per_h": [
+      0.44,
+      0.0
+     ],
+     "flank_difference_at_um": [
+      21.0,
+      -0.67
+     ],
+     "width_free_ratio_max": [
+      null,
+      null
+     ]
+    }
+   },
+   {
+    "run_id": "r04",
+    "status": "accept",
+    "checks": {
+     "rigid_invariance": [
+      0.891,
+      2.0,
+      true
+     ],
+     "closure": [
+      0.231,
+      1.0,
+      true
+     ],
+     "plane_sections": [
+      0.424,
+      3.25,
+      true
+     ]
+    },
+    "steps": 1,
+    "remedies_kept": 0,
+    "roll_backs": 0,
+    "width_free": false,
+    "summaries": {
+     "centre_peak_regr_pct_per_h": [
+      53.15,
+      0.0
+     ],
+     "centre_peak_at_um": [
+      421.0,
+      0.0
+     ],
+     "growth_zone_length_um": [
+      695.0,
+      0.0
+     ],
+     "flank_difference_max_pct_per_h": [
+      0.44,
+      0.0
+     ],
+     "flank_difference_at_um": [
+      21.0,
+      -0.67
+     ],
+     "width_free_ratio_max": [
+      null,
+      null
+     ]
+    }
+   },
+   {
+    "run_id": "r05",
+    "status": "accept",
+    "checks": {
+     "rigid_invariance": [
+      0.915,
+      2.0,
+      true
+     ],
+     "closure": [
+      0.227,
+      1.0,
+      true
+     ],
+     "plane_sections": [
+      0.554,
+      3.25,
+      true
+     ]
+    },
+    "steps": 1,
+    "remedies_kept": 0,
+    "roll_backs": 0,
+    "width_free": false,
+    "summaries": {
+     "centre_peak_regr_pct_per_h": [
+      53.27,
+      1.35
+     ],
+     "centre_peak_at_um": [
+      421.0,
+      0.0
+     ],
+     "growth_zone_length_um": [
+      695.0,
+      0.0
+     ],
+     "flank_difference_max_pct_per_h": [
+      0.55,
+      0.67
+     ],
+     "flank_difference_at_um": [
+      347.0,
+      2.82
+     ],
+     "width_free_ratio_max": [
+      null,
+      null
+     ]
+    }
+   },
+   {
+    "run_id": "r06",
+    "status": "accept",
+    "checks": {
+     "rigid_invariance": [
+      0.837,
+      2.0,
+      true
+     ],
+     "closure": [
+      0.104,
+      1.0,
+      true
+     ],
+     "plane_sections": [
+      0.813,
+      3.25,
+      null
+     ]
+    },
+    "steps": 5,
+    "remedies_kept": 1,
+    "roll_backs": 0,
+    "width_free": true,
+    "summaries": {
+     "centre_peak_regr_pct_per_h": [
+      53.09,
+      -0.67
+     ],
+     "centre_peak_at_um": [
+      421.0,
+      0.0
+     ],
+     "growth_zone_length_um": [
+      674.0,
+      -3.19
+     ],
+     "flank_difference_max_pct_per_h": [
+      -0.81,
+      -7.66
+     ],
+     "flank_difference_at_um": [
+      84.0,
+      0.0
+     ],
+     "width_free_ratio_max": [
+      0.04,
+      null
+     ]
+    }
+   },
+   {
+    "run_id": "r07",
+    "status": "accept",
+    "checks": {
+     "rigid_invariance": [
+      0.915,
+      2.0,
+      true
+     ],
+     "closure": [
+      0.227,
+      1.0,
+      true
+     ],
+     "plane_sections": [
+      0.554,
+      3.25,
+      true
+     ]
+    },
+    "steps": 1,
+    "remedies_kept": 0,
+    "roll_backs": 0,
+    "width_free": false,
+    "summaries": {
+     "centre_peak_regr_pct_per_h": [
+      53.27,
+      1.35
+     ],
+     "centre_peak_at_um": [
+      421.0,
+      0.0
+     ],
+     "growth_zone_length_um": [
+      695.0,
+      0.0
+     ],
+     "flank_difference_max_pct_per_h": [
+      0.55,
+      0.67
+     ],
+     "flank_difference_at_um": [
+      347.0,
+      2.82
+     ],
+     "width_free_ratio_max": [
+      null,
+      null
+     ]
+    }
+   },
+   {
+    "run_id": "r08",
+    "status": "accept",
+    "checks": {
+     "rigid_invariance": [
+      0.915,
+      2.0,
+      true
+     ],
+     "closure": [
+      0.227,
+      1.0,
+      true
+     ],
+     "plane_sections": [
+      0.554,
+      3.25,
+      null
+     ]
+    },
+    "steps": 4,
+    "remedies_kept": 1,
+    "roll_backs": 0,
+    "width_free": true,
+    "summaries": {
+     "centre_peak_regr_pct_per_h": [
+      53.27,
+      1.35
+     ],
+     "centre_peak_at_um": [
+      421.0,
+      0.0
+     ],
+     "growth_zone_length_um": [
+      695.0,
+      0.0
+     ],
+     "flank_difference_max_pct_per_h": [
+      0.55,
+      0.67
+     ],
+     "flank_difference_at_um": [
+      347.0,
+      2.82
+     ],
+     "width_free_ratio_max": [
+      -0.04,
+      null
+     ]
+    }
+   }
+  ]
+ },
+ "runs": [
+  {
+   "run_id": "r01",
+   "status": "accept",
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "value": 0.891,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "passed": true
+    },
+    {
+     "check": "closure",
+     "value": 0.231,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "passed": true
+    },
+    {
+     "check": "plane_sections",
+     "value": 0.424,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "passed": true
+    }
+   ],
+   "remedies_kept": [],
+   "roll_backs": 0,
+   "steps": 1,
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false
+   },
+   "summaries": {
+    "centre_peak_regr_pct_per_h": 53.15,
+    "centre_peak_at_um": 421.0,
+    "growth_zone_length_um": 695.0,
+    "flank_difference_max_pct_per_h": 0.44,
+    "flank_difference_at_um": 21.0,
+    "width_free_ratio_max": null,
+    "width_free_ratio_at_um": null
+   },
+   "z": {
+    "centre_peak_regr_pct_per_h": 0.0,
+    "centre_peak_at_um": 0.0,
+    "growth_zone_length_um": 0.0,
+    "flank_difference_max_pct_per_h": 0.0,
+    "flank_difference_at_um": -0.67,
+    "width_free_ratio_max": null
+   }
+  },
+  {
+   "run_id": "r02",
+   "status": "accept",
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "value": 0.837,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "passed": true
+    },
+    {
+     "check": "closure",
+     "value": 0.104,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "passed": true
+    },
+    {
+     "check": "plane_sections",
+     "value": 0.813,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "passed": true
+    }
+   ],
+   "remedies_kept": [],
+   "roll_backs": 0,
+   "steps": 1,
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false
+   },
+   "summaries": {
+    "centre_peak_regr_pct_per_h": 53.09,
+    "centre_peak_at_um": 421.0,
+    "growth_zone_length_um": 674.0,
+    "flank_difference_max_pct_per_h": -0.81,
+    "flank_difference_at_um": 84.0,
+    "width_free_ratio_max": null,
+    "width_free_ratio_at_um": null
+   },
+   "z": {
+    "centre_peak_regr_pct_per_h": -0.67,
+    "centre_peak_at_um": 0.0,
+    "growth_zone_length_um": -3.19,
+    "flank_difference_max_pct_per_h": -7.66,
+    "flank_difference_at_um": 0.0,
+    "width_free_ratio_max": null
+   }
+  },
+  {
+   "run_id": "r03",
+   "status": "accept",
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "value": 0.891,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "passed": true
+    },
+    {
+     "check": "closure",
+     "value": 0.231,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "passed": true
+    },
+    {
+     "check": "plane_sections",
+     "value": 0.424,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "passed": true
+    }
+   ],
+   "remedies_kept": [],
+   "roll_backs": 0,
+   "steps": 1,
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false
+   },
+   "summaries": {
+    "centre_peak_regr_pct_per_h": 53.15,
+    "centre_peak_at_um": 421.0,
+    "growth_zone_length_um": 695.0,
+    "flank_difference_max_pct_per_h": 0.44,
+    "flank_difference_at_um": 21.0,
+    "width_free_ratio_max": null,
+    "width_free_ratio_at_um": null
+   },
+   "z": {
+    "centre_peak_regr_pct_per_h": 0.0,
+    "centre_peak_at_um": 0.0,
+    "growth_zone_length_um": 0.0,
+    "flank_difference_max_pct_per_h": 0.0,
+    "flank_difference_at_um": -0.67,
+    "width_free_ratio_max": null
+   }
+  },
+  {
+   "run_id": "r04",
+   "status": "accept",
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "value": 0.891,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "passed": true
+    },
+    {
+     "check": "closure",
+     "value": 0.231,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "passed": true
+    },
+    {
+     "check": "plane_sections",
+     "value": 0.424,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "passed": true
+    }
+   ],
+   "remedies_kept": [],
+   "roll_backs": 0,
+   "steps": 1,
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false
+   },
+   "summaries": {
+    "centre_peak_regr_pct_per_h": 53.15,
+    "centre_peak_at_um": 421.0,
+    "growth_zone_length_um": 695.0,
+    "flank_difference_max_pct_per_h": 0.44,
+    "flank_difference_at_um": 21.0,
+    "width_free_ratio_max": null,
+    "width_free_ratio_at_um": null
+   },
+   "z": {
+    "centre_peak_regr_pct_per_h": 0.0,
+    "centre_peak_at_um": 0.0,
+    "growth_zone_length_um": 0.0,
+    "flank_difference_max_pct_per_h": 0.0,
+    "flank_difference_at_um": -0.67,
+    "width_free_ratio_max": null
+   }
+  },
+  {
+   "run_id": "r05",
+   "status": "accept",
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "value": 0.915,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "passed": true
+    },
+    {
+     "check": "closure",
+     "value": 0.227,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "passed": true
+    },
+    {
+     "check": "plane_sections",
+     "value": 0.554,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "passed": true
+    }
+   ],
+   "remedies_kept": [],
+   "roll_backs": 0,
+   "steps": 1,
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false
+   },
+   "summaries": {
+    "centre_peak_regr_pct_per_h": 53.27,
+    "centre_peak_at_um": 421.0,
+    "growth_zone_length_um": 695.0,
+    "flank_difference_max_pct_per_h": 0.55,
+    "flank_difference_at_um": 347.0,
+    "width_free_ratio_max": null,
+    "width_free_ratio_at_um": null
+   },
+   "z": {
+    "centre_peak_regr_pct_per_h": 1.35,
+    "centre_peak_at_um": 0.0,
+    "growth_zone_length_um": 0.0,
+    "flank_difference_max_pct_per_h": 0.67,
+    "flank_difference_at_um": 2.82,
+    "width_free_ratio_max": null
+   }
+  },
+  {
+   "run_id": "r06",
+   "status": "accept",
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "value": 0.837,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "passed": true
+    },
+    {
+     "check": "closure",
+     "value": 0.104,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "passed": true
+    },
+    {
+     "check": "plane_sections",
+     "value": 0.813,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "passed": null
+    }
+   ],
+   "remedies_kept": [
+    "report the centre strain rate and the width-free ratio; plane-sections check skipped"
+   ],
+   "roll_backs": 0,
+   "steps": 5,
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": true
+   },
+   "summaries": {
+    "centre_peak_regr_pct_per_h": 53.09,
+    "centre_peak_at_um": 421.0,
+    "growth_zone_length_um": 674.0,
+    "flank_difference_max_pct_per_h": -0.81,
+    "flank_difference_at_um": 84.0,
+    "width_free_ratio_max": 0.04,
+    "width_free_ratio_at_um": 50
+   },
+   "z": {
+    "centre_peak_regr_pct_per_h": -0.67,
+    "centre_peak_at_um": 0.0,
+    "growth_zone_length_um": -3.19,
+    "flank_difference_max_pct_per_h": -7.66,
+    "flank_difference_at_um": 0.0,
+    "width_free_ratio_max": null
+   }
+  },
+  {
+   "run_id": "r07",
+   "status": "accept",
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "value": 0.915,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "passed": true
+    },
+    {
+     "check": "closure",
+     "value": 0.227,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "passed": true
+    },
+    {
+     "check": "plane_sections",
+     "value": 0.554,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "passed": true
+    }
+   ],
+   "remedies_kept": [],
+   "roll_backs": 0,
+   "steps": 1,
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false
+   },
+   "summaries": {
+    "centre_peak_regr_pct_per_h": 53.27,
+    "centre_peak_at_um": 421.0,
+    "growth_zone_length_um": 695.0,
+    "flank_difference_max_pct_per_h": 0.55,
+    "flank_difference_at_um": 347.0,
+    "width_free_ratio_max": null,
+    "width_free_ratio_at_um": null
+   },
+   "z": {
+    "centre_peak_regr_pct_per_h": 1.35,
+    "centre_peak_at_um": 0.0,
+    "growth_zone_length_um": 0.0,
+    "flank_difference_max_pct_per_h": 0.67,
+    "flank_difference_at_um": 2.82,
+    "width_free_ratio_max": null
+   }
+  },
+  {
+   "run_id": "r08",
+   "status": "accept",
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "value": 0.915,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "passed": true
+    },
+    {
+     "check": "closure",
+     "value": 0.227,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "passed": true
+    },
+    {
+     "check": "plane_sections",
+     "value": 0.554,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "passed": null
+    }
+   ],
+   "remedies_kept": [
+    "report the centre strain rate and the width-free ratio; plane-sections check skipped"
+   ],
+   "roll_backs": 0,
+   "steps": 4,
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": true
+   },
+   "summaries": {
+    "centre_peak_regr_pct_per_h": 53.27,
+    "centre_peak_at_um": 421.0,
+    "growth_zone_length_um": 695.0,
+    "flank_difference_max_pct_per_h": 0.55,
+    "flank_difference_at_um": 347.0,
+    "width_free_ratio_max": -0.04,
+    "width_free_ratio_at_um": 50
+   },
+   "z": {
+    "centre_peak_regr_pct_per_h": 1.35,
+    "centre_peak_at_um": 0.0,
+    "growth_zone_length_um": 0.0,
+    "flank_difference_max_pct_per_h": 0.67,
+    "flank_difference_at_um": 2.82,
+    "width_free_ratio_max": null
+   }
+  }
+ ]
+}
