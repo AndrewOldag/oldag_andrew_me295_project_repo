@@ -1,0 +1,65 @@
+{
+ "batch": "b09",
+ "repeat": 1,
+ "commit": "5cbc54e",
+ "claude_code": "2.1.310",
+ "model": "claude-opus-5-5",
+ "wall_s": 37.4,
+ "trace": "b09_r1_trace_145702.jsonl",
+ "outcome": {
+  "task_id": "batch-1",
+  "agent": "auditor",
+  "status": "report",
+  "args": {
+   "text": "Batch: 8 runs, all 8 accepted.\nFlagged (1): r05, reason check_failed_but_accepted. Its closure value is 2.899 px/h against a 1.0 px/h threshold, but the check is marked passed. The run took 1 step with no remedy kept and default settings, so the tip motion from the midline and stage log was never matched to the tip motion from the tracked kinematics. Its REGR peak z of -6.38 comes from a 0.01 %/h difference and a batch MAD of 0, so it is not a real outlier.\nCleared (7): r01, r02, r03, r04, r06, r07, r08. All three checks pass well under their thresholds, there are no roll backs, and each run kept one remedy. Every summary has |z| \u2264 1.06. The REGR peak is 53.1 %/h at 421 \u00b5m, the growth zone is 674\u2013684 \u00b5m long, and the largest flank difference is at 84 \u00b5m.\nWhat the flagged run shows: its velocity and strain-rate profile looks like the rest of the batch, but its tip motion fails closure and is marked passed. It is also the only run with no remedy kept."
+  },
+  "steps": 4,
+  "failed_steps": 0,
+  "calls": 4,
+  "input_tokens": 31100,
+  "output_tokens": 1882,
+  "call_ms": 24050
+ },
+ "decisions": {
+  "r05": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "check_failed_but_accepted",
+   "evidence": [
+    "closure",
+    "remedies_kept",
+    "final_settings"
+   ]
+  },
+  "r01": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r02": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r03": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r04": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r06": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r07": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r08": {
+   "decision": "clear",
+   "order": 2
+  }
+ },
+ "undecided": [],
+ "report": "Batch: 8 runs, all 8 accepted.\nFlagged (1): r05, reason check_failed_but_accepted. Its closure value is 2.899 px/h against a 1.0 px/h threshold, but the check is marked passed. The run took 1 step with no remedy kept and default settings, so the tip motion from the midline and stage log was never matched to the tip motion from the tracked kinematics. Its REGR peak z of -6.38 comes from a 0.01 %/h difference and a batch MAD of 0, so it is not a real outlier.\nCleared (7): r01, r02, r03, r04, r06, r07, r08. All three checks pass well under their thresholds, there are no roll backs, and each run kept one remedy. Every summary has |z| \u2264 1.06. The REGR peak is 53.1 %/h at 421 \u00b5m, the growth zone is 674\u2013684 \u00b5m long, and the largest flank difference is at 84 \u00b5m.\nWhat the flagged run shows: its velocity and strain-rate profile looks like the rest of the batch, but its tip motion fails closure and is marked passed. It is also the only run with no remedy kept."
+}

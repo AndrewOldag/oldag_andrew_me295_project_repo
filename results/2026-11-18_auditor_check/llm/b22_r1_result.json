@@ -1,0 +1,59 @@
+{
+ "batch": "b22",
+ "repeat": 1,
+ "commit": "39da216",
+ "claude_code": "2.1.310",
+ "model": "claude-opus-5-5",
+ "wall_s": 19.0,
+ "trace": "b22_r1_trace.jsonl",
+ "outcome": {
+  "task_id": "batch-1",
+  "agent": "auditor",
+  "status": "report",
+  "args": {
+   "text": "Batch: 8 runs (r01\u2013r08). All 8 were accepted. 0 flagged, 8 cleared.\n- Checks: rigid-body invariance, closure and plane sections passed on every run. None of the runs used the width-free ratio.\n- Summaries: The large |z| values come from a near-zero batch MAD, not from real outliers. r07's REGR peak is 0.05 %/h below the median (about 0.1 %, z \u22123.4). r04 and r08 peak 0.03 %/h higher and have a growth zone 15 \u00b5m shorter. The flank-difference position in r01, r05 and r06 is 11 \u00b5m closer to the tip. Every root has its REGR peak at 421 \u00b5m and a growth zone of 674\u2013695 \u00b5m.\n- Remedies: r04 and r08 each kept one remedy. With it, every check passed and the profiles match the batch, which is the normal path. No run was rolled back.\n- No runs were flagged, so there is no shared pattern to report."
+  },
+  "steps": 2,
+  "failed_steps": 0,
+  "calls": 2,
+  "input_tokens": 14467,
+  "output_tokens": 1339,
+  "call_ms": 16029
+ },
+ "decisions": {
+  "r01": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r02": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r03": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r04": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r05": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r06": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r07": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r08": {
+   "decision": "clear",
+   "order": 1
+  }
+ },
+ "undecided": [],
+ "report": "Batch: 8 runs (r01\u2013r08). All 8 were accepted. 0 flagged, 8 cleared.\n- Checks: rigid-body invariance, closure and plane sections passed on every run. None of the runs used the width-free ratio.\n- Summaries: The large |z| values come from a near-zero batch MAD, not from real outliers. r07's REGR peak is 0.05 %/h below the median (about 0.1 %, z \u22123.4). r04 and r08 peak 0.03 %/h higher and have a growth zone 15 \u00b5m shorter. The flank-difference position in r01, r05 and r06 is 11 \u00b5m closer to the tip. Every root has its REGR peak at 421 \u00b5m and a growth zone of 674\u2013695 \u00b5m.\n- Remedies: r04 and r08 each kept one remedy. With it, every check passed and the profiles match the batch, which is the normal path. No run was rolled back.\n- No runs were flagged, so there is no shared pattern to report."
+}
