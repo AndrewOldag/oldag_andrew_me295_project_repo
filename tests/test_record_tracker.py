@@ -55,3 +55,19 @@ def test_round_trip_and_checks(tmp_path):
     np.testing.assert_allclose(back.fields["regr_plus"], rec.fields["regr_plus"], equal_nan=True)
     res = {r.check: r for r in run_checks(back)}
     assert res["closure"].value < 2.0                 # px/h, tip path about 60 px/h
+
+
+def test_tip_frozen_in_every_frame_is_not_computable(tmp_path):
+    # Batch-2 crash (spec 2026-11-18 C1): the tip point lies on the image border in every frame, so the
+    # edge-frozen mask sets it to NaN, every arc length is NaN and derive() raised
+    # "arange: cannot compute length". The record now has an empty grid and closure is not computable.
+    with np.load(DATA / "growth_zone_clean_s0.npz") as z:
+        arrays = {k: z[k] for k in z.files}
+    arrays["centre_frozen"] = arrays["centre_frozen"].copy()
+    arrays["centre_frozen"][0, :] = True
+    np.savez(tmp_path / "tip_frozen.npz", **arrays)
+    rec = from_tracker_npz(tmp_path / "tip_frozen.npz")
+    f = rec.fields
+    assert f["s_grid"].shape == (0,) and f["regr_mid"].shape == (rec.n_frames - 1, 0)
+    res = {r.check: r for r in run_checks(rec)}
+    assert res["closure"].passed is None and np.isnan(res["closure"].value)

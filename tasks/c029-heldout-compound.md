@@ -3,12 +3,12 @@ id: c029
 title: held-out novel and compound faults: labels, then fixed script, tree, diagnostician, single agent
 lane: course
 owner: compound
-state: waiting on dispatcher
+state: working
 branch: wip/compound
 host: VM (renders, LLM runs), cluster (tracker runs)
 created: 2026-11-18 14:20
-last_update: 2026-11-20 15:00
-blocker: retrack_queue.py on main (spec 2026-11-20); VM tracking stopped
+last_update: 2026-11-20 23:10
+blocker: none
 done_marker: results/2026-11-18_heldout_compound/README.md
 ---
 

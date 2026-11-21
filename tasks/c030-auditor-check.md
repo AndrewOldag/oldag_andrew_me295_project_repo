@@ -5,9 +5,9 @@ lane: course
 owner: compound
 state: working
 branch: wip/compound
-host: VM only
+host: VM
 created: 2026-11-18 14:20
-last_update: 2026-11-20 15:00
+last_update: 2026-11-20 23:10
 blocker: none
 done_marker: results/2026-11-18_auditor_check/README.md
 ---
