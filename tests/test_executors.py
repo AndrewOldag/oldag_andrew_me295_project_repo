@@ -42,10 +42,20 @@ def test_remedy_settings():
         apply_remedy(TrackSettings(), "change_frame_stride", "half", 15)
     rec = from_tracker_npz(FIXTURES / "growth_zone_clean_s0.npz")
     new = apply_remedy(s, "register_frames", None, 15, rec)[0]
-    assert new.args()[-3:] == ["--register", "--register-from-px", str(new.register_from_px)]
+    assert new.register_version == 2 and new.register_max_shift_px >= 1      # register_v2 (spec 2026-11-20 R2)
+    assert new.args()[-7:] == ["--register", "--register-from-px", str(new.register_from_px), "--register-version",
+                               "2", "--register-max-shift-px", str(new.register_max_shift_px)]
+    assert new.tag() == f"st12_regv2p{new.register_from_px}b{new.register_max_shift_px}"
     assert 250 <= new.register_from_px <= 350          # growth zone of the clean rod ends near 300 px
     with pytest.raises(NotAvailable):
         apply_remedy(s, "register_frames", None, 15)    # no record, no band
+
+
+def test_register_v1_settings_unchanged():
+    v1 = TrackSettings(register=True, register_from_px=400)
+    assert v1.tag() == "st1_reg2p400" and "register_version" not in v1.to_dict()
+    assert v1.args() == ["--stride", "1", "--register", "--register-from-px", "400"]
+    assert TrackSettings(**v1.to_dict()) == v1
 
 
 def test_task_hides_the_rod(sl):
