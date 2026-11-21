@@ -1,0 +1,59 @@
+{
+ "batch": "b08",
+ "repeat": 2,
+ "commit": "47e8eef",
+ "claude_code": "2.1.310",
+ "model": "claude-opus-5-5",
+ "wall_s": 27.9,
+ "trace": "b08_r2_trace.jsonl",
+ "outcome": {
+  "task_id": "batch-1",
+  "agent": "auditor",
+  "status": "report",
+  "args": {
+   "text": "Batch: 8 runs, 8 accepted, 0 flagged, 8 cleared (r01\u2013r08).\nChecks: rigid-body invariance, closure and plane sections passed on every run. No run used the width-free ratio.\nSummaries: every centre REGR peak sits at 421 \u00b5m, and peak values fall between 53.02 and 53.09 %/h. Growth-zone lengths are 674\u2013695 \u00b5m. The largest |z| values come from very small batch MADs, so they stand for small real differences. r05's flank difference is \u22128.36 against a median of \u22128.075 %/h. r02, r06 and r08 place the largest flank difference at 432 \u00b5m against a median of 415.5 \u00b5m.\nRemedies: only r01 kept one, frame registration on non-growing tissue from 400 px from the tip. Its checks pass after it, and no run rolled back a remedy.\nNote: r03, r04 and r07 have identical checks and summaries, and so do r02, r06 and r08. Their kinematics are fine, but it's worth confirming that these are separate roots or windows and not the same movie entered more than once.\nFlagged runs share nothing because none were flagged."
+  },
+  "steps": 3,
+  "failed_steps": 0,
+  "calls": 3,
+  "input_tokens": 22918,
+  "output_tokens": 1611,
+  "call_ms": 23247
+ },
+ "decisions": {
+  "r01": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r02": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r03": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r04": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r05": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r06": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r07": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r08": {
+   "decision": "clear",
+   "order": 1
+  }
+ },
+ "undecided": [],
+ "report": "Batch: 8 runs, 8 accepted, 0 flagged, 8 cleared (r01\u2013r08).\nChecks: rigid-body invariance, closure and plane sections passed on every run. No run used the width-free ratio.\nSummaries: every centre REGR peak sits at 421 \u00b5m, and peak values fall between 53.02 and 53.09 %/h. Growth-zone lengths are 674\u2013695 \u00b5m. The largest |z| values come from very small batch MADs, so they stand for small real differences. r05's flank difference is \u22128.36 against a median of \u22128.075 %/h. r02, r06 and r08 place the largest flank difference at 432 \u00b5m against a median of 415.5 \u00b5m.\nRemedies: only r01 kept one, frame registration on non-growing tissue from 400 px from the tip. Its checks pass after it, and no run rolled back a remedy.\nNote: r03, r04 and r07 have identical checks and summaries, and so do r02, r06 and r08. Their kinematics are fine, but it's worth confirming that these are separate roots or windows and not the same movie entered more than once.\nFlagged runs share nothing because none were flagged."
+}

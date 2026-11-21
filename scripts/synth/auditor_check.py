@@ -359,7 +359,7 @@ def eval_cmd():
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", choices=["plan", "views", "rule", "llm", "eval"])
+    ap.add_argument("cmd", choices=["plan", "views", "rule", "llm", "eval", "score"])   # score = eval
     ap.add_argument("--repeat", type=int, choices=REPEATS)
     ap.add_argument("--max-runs", type=int, default=None)
     a = ap.parse_args()
