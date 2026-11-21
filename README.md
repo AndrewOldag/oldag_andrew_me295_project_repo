@@ -115,6 +115,18 @@ python scripts/real_slice.py --out results/<date>_real_slice
 - Expected wall time: about 1-2 min when the window's net midline and track are already on the host (71 s on 2026-10-23); a few minutes more when they are not, since the net midline is built and the window tracked on the host first (about 100 s of tracking per 2 h window on one core). Three roots with tracking: 597 s (`results/2026-10-24_real_slice_3roots_c2/`)
 - More windows: `--windows ROOT:A-B ...`; more hosts: `--config FILE ...` (each window runs on the first config that lists it). Other real-slice runs are listed under Dispatcher above
 
+## Retracks on the cluster, submit and forget (task c027)
+```
+python scripts/retrack_queue.py seed                                         # earlier cached tracks -> c027 cache
+python scripts/retrack_queue.py jobs --wave 1 --out staging/c027/wave1.csv  # job list; prints count and worst case
+python scripts/retrack_queue.py submit --jobs staging/c027/wave1.csv
+python scripts/retrack_queue.py fetch
+```
+- Needs: `private/real_runner_c027.yaml` (storage host, cluster folders, ledger command, windows); the cluster connection master open on the storage host for `submit` and `fetch` only
+- `submit` stages whole root imgdirs in groups under 30 GB, writes Slurm arrays (1 core; 45 min for register_frames, 15 min otherwise), checks the spend ledger per array and records array ids in `staging/c027/queue.csv`. `fetch` pulls finished tracks to storage and the VM cache with md5 checks, marks failed tasks and clears a group's staged roots once all its tasks are final (`DELETED.log`). Both can be rerun at any time; a down link or master prints `connection down` and exits 0
+- Registration hold (dispatcher inbox item 49): `submit` sends no register_frames job until `register_v2` is on main (`REGISTER_HOLD`)
+- Tests: `python -m pytest tests/test_retrack_queue.py` (fake relay; no host contacted)
+
 ## Task board
 - One file per task in `tasks/` (format in `tasks/README.md`). Research-lane tasks use the same format in a folder outside every git repo
 - Optional: copy `config/board.example.conf` to `private/board.conf` and set the research folder and the page path
