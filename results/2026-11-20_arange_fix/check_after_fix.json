@@ -1,0 +1,245 @@
+{
+ "equivalence": [
+  {
+   "window": "0708_c4__w0-2",
+   "track_md5_match": true,
+   "identical": true,
+   "outcome": "fail",
+   "closure": 103.549
+  },
+  {
+   "window": "0708_m2__w0-2",
+   "track_md5_match": true,
+   "identical": true,
+   "outcome": "pass",
+   "closure": 10.1982
+  },
+  {
+   "window": "0721_m2__w0-2",
+   "track_md5_match": true,
+   "identical": true,
+   "outcome": "pass",
+   "closure": 0.4604
+  },
+  {
+   "window": "0727_cc2__w0-2",
+   "track_md5_match": true,
+   "identical": true,
+   "outcome": "pass",
+   "closure": 7.2266
+  },
+  {
+   "window": "0727_mm2__w0-2",
+   "track_md5_match": true,
+   "identical": true,
+   "outcome": "not computable",
+   "closure": null
+  }
+ ],
+ "failed_windows": [
+  {
+   "window": "0711_m2__w18-20",
+   "track_on_vm": true,
+   "track_md5_match": true,
+   "outcome_after_fix": "not computable"
+  },
+  {
+   "window": "0711_m2__w20-22",
+   "track_on_vm": true,
+   "track_md5_match": true,
+   "outcome_after_fix": "not computable"
+  },
+  {
+   "window": "0711_m2__w22-24",
+   "track_on_vm": true,
+   "track_md5_match": true,
+   "outcome_after_fix": "not computable"
+  },
+  {
+   "window": "0727_mm2__w2-4",
+   "track_on_vm": true,
+   "track_md5_match": true,
+   "outcome_after_fix": "not computable"
+  },
+  {
+   "window": "0727_mm2__w6-8",
+   "track_on_vm": true,
+   "track_md5_match": true,
+   "outcome_after_fix": "not computable"
+  },
+  {
+   "window": "0711_c2__w0-2",
+   "track_on_vm": true,
+   "track_md5_match": true,
+   "outcome_after_fix": "not computable"
+  },
+  {
+   "window": "0711_m3__w6-8",
+   "track_on_vm": true,
+   "track_md5_match": true,
+   "outcome_after_fix": "not computable"
+  },
+  {
+   "window": "0714_m4__w4-6",
+   "track_on_vm": true,
+   "track_md5_match": true,
+   "outcome_after_fix": "not computable"
+  },
+  {
+   "window": "0714_m4__w8-10",
+   "track_on_vm": true,
+   "track_md5_match": true,
+   "outcome_after_fix": "not computable"
+  },
+  {
+   "window": "0714_m4__w10-12",
+   "track_on_vm": false,
+   "track_md5_match": null,
+   "outcome_after_fix": null
+  },
+  {
+   "window": "0714_m4__w16-18",
+   "track_on_vm": true,
+   "track_md5_match": true,
+   "outcome_after_fix": "not computable"
+  },
+  {
+   "window": "0727_mc3__w2-4",
+   "track_on_vm": true,
+   "track_md5_match": true,
+   "outcome_after_fix": "not computable"
+  },
+  {
+   "window": "0714_c9__w0-2",
+   "track_on_vm": true,
+   "track_md5_match": true,
+   "outcome_after_fix": "not computable"
+  },
+  {
+   "window": "0727_cc4__w12-14",
+   "track_on_vm": true,
+   "track_md5_match": true,
+   "outcome_after_fix": "not computable"
+  },
+  {
+   "window": "0727_cc4__w18-20",
+   "track_on_vm": true,
+   "track_md5_match": true,
+   "outcome_after_fix": "not computable"
+  },
+  {
+   "window": "0711_c5__w2-4",
+   "track_on_vm": true,
+   "track_md5_match": true,
+   "outcome_after_fix": "not computable"
+  },
+  {
+   "window": "0711_m6__w20-22",
+   "track_on_vm": true,
+   "track_md5_match": true,
+   "outcome_after_fix": "not computable"
+  },
+  {
+   "window": "0714_m7__w2-4",
+   "track_on_vm": true,
+   "track_md5_match": true,
+   "outcome_after_fix": "not computable"
+  },
+  {
+   "window": "0721_m5__w0-2",
+   "track_on_vm": false,
+   "track_md5_match": null,
+   "outcome_after_fix": null
+  },
+  {
+   "window": "0711_c6__w0-2",
+   "track_on_vm": true,
+   "track_md5_match": true,
+   "outcome_after_fix": "not computable"
+  },
+  {
+   "window": "0711_c6__w2-4",
+   "track_on_vm": true,
+   "track_md5_match": true,
+   "outcome_after_fix": "not computable"
+  },
+  {
+   "window": "0711_c6__w4-6",
+   "track_on_vm": true,
+   "track_md5_match": true,
+   "outcome_after_fix": "not computable"
+  },
+  {
+   "window": "0711_c6__w6-8",
+   "track_on_vm": true,
+   "track_md5_match": true,
+   "outcome_after_fix": "not computable"
+  },
+  {
+   "window": "0714_c11__w12-14",
+   "track_on_vm": false,
+   "track_md5_match": null,
+   "outcome_after_fix": null
+  },
+  {
+   "window": "0727_cc6__w12-14",
+   "track_on_vm": false,
+   "track_md5_match": null,
+   "outcome_after_fix": null
+  },
+  {
+   "window": "0727_cc6__w14-16",
+   "track_on_vm": false,
+   "track_md5_match": null,
+   "outcome_after_fix": null
+  },
+  {
+   "window": "0727_mc6__w0-2",
+   "track_on_vm": false,
+   "track_md5_match": null,
+   "outcome_after_fix": null
+  },
+  {
+   "window": "0708_c10__w22-24",
+   "track_on_vm": false,
+   "track_md5_match": null,
+   "outcome_after_fix": null
+  },
+  {
+   "window": "0708_c11__w18-20",
+   "track_on_vm": false,
+   "track_md5_match": null,
+   "outcome_after_fix": null
+  },
+  {
+   "window": "0708_c11__w20-22",
+   "track_on_vm": false,
+   "track_md5_match": null,
+   "outcome_after_fix": null
+  },
+  {
+   "window": "0708_m10__w14-16",
+   "track_on_vm": false,
+   "track_md5_match": null,
+   "outcome_after_fix": null
+  },
+  {
+   "window": "0714_c14__w0-2",
+   "track_on_vm": false,
+   "track_md5_match": null,
+   "outcome_after_fix": null
+  },
+  {
+   "window": "0714_c14__w2-4",
+   "track_on_vm": false,
+   "track_md5_match": null,
+   "outcome_after_fix": null
+  },
+  {
+   "window": "0721_m12__w10-12",
+   "track_on_vm": false,
+   "track_md5_match": null,
+   "outcome_after_fix": null
+  }
+ ]
+}
