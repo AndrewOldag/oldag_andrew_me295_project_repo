@@ -1,0 +1,70 @@
+{
+ "batch": "b30",
+ "repeat": 1,
+ "commit": "a8f58b7",
+ "claude_code": "2.1.310",
+ "model": "claude-opus-5-5",
+ "wall_s": 135.0,
+ "trace": "b30_r1_trace.jsonl",
+ "outcome": {
+  "task_id": "batch-1",
+  "agent": "auditor",
+  "status": "report",
+  "args": {
+   "text": "Batch: 8 runs, all 8 accepted. Every check that was run passed in all 8.\nCleared (6): r01, r02, r03, r04, r05, r06.\n- r01, r03, r04 and r05 sit at the batch median on every summary.\n- r02 is a faster root. Its REGR peak is 112.16 %/h, against a batch median of 53.28. Its peak position (421 \u00b5m) and growth-zone length (684 \u00b5m) match the batch. It used stride 1, so the time base is not the cause.\n- r06's largest flank difference sits at 84 \u00b5m. Plane sections passed (1.64 vs 3.25), so that difference matches the curvature rate. Its growth zone is 10 \u00b5m shorter (674 \u00b5m), a small difference.\nFlagged (2): r07 and r08, reason width_free_ratio_used.\n- Their largest width-free ratio is +0.093 at 50 \u00b5m from the tip. The batch median is \u22120.035, so the sign is flipped.\n- Their plane-sections value (1.64 vs 3.25) would have passed, which shows width was close to constant and the width-free ratio was not needed.\nWhat the flagged runs share: the same centre and flank profile as r06 (flank difference largest at 84 \u00b5m, growth zone 674 \u00b5m). On these runs the width-free ratio does not fit the strain-rate and curvature-rate measurement."
+  },
+  "steps": 8,
+  "failed_steps": 0,
+  "calls": 8,
+  "input_tokens": 70641,
+  "output_tokens": 10451,
+  "call_ms": 117937
+ },
+ "decisions": {
+  "r01": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r02": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r03": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r04": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r05": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r06": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r07": {
+   "decision": "flag",
+   "order": 3,
+   "reason": "width_free_ratio_used",
+   "evidence": [
+    "width_free_ratio_max",
+    "plane_sections",
+    "final_settings"
+   ]
+  },
+  "r08": {
+   "decision": "flag",
+   "order": 4,
+   "reason": "width_free_ratio_used",
+   "evidence": [
+    "width_free_ratio_max",
+    "plane_sections"
+   ]
+  }
+ },
+ "undecided": [],
+ "report": "Batch: 8 runs, all 8 accepted. Every check that was run passed in all 8.\nCleared (6): r01, r02, r03, r04, r05, r06.\n- r01, r03, r04 and r05 sit at the batch median on every summary.\n- r02 is a faster root. Its REGR peak is 112.16 %/h, against a batch median of 53.28. Its peak position (421 \u00b5m) and growth-zone length (684 \u00b5m) match the batch. It used stride 1, so the time base is not the cause.\n- r06's largest flank difference sits at 84 \u00b5m. Plane sections passed (1.64 vs 3.25), so that difference matches the curvature rate. Its growth zone is 10 \u00b5m shorter (674 \u00b5m), a small difference.\nFlagged (2): r07 and r08, reason width_free_ratio_used.\n- Their largest width-free ratio is +0.093 at 50 \u00b5m from the tip. The batch median is \u22120.035, so the sign is flipped.\n- Their plane-sections value (1.64 vs 3.25) would have passed, which shows width was close to constant and the width-free ratio was not needed.\nWhat the flagged runs share: the same centre and flank profile as r06 (flank difference largest at 84 \u00b5m, growth zone 674 \u00b5m). On these runs the width-free ratio does not fit the strain-rate and curvature-rate measurement."
+}
