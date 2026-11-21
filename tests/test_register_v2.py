@@ -78,6 +78,23 @@ def test_bound_trips_on_9_degrees():
     assert abs(rep["final_rotation_deg"] - 9.0) < 0.2 and rep["plausible"] is False
 
 
+def test_diag_chain_equals_register_frames():
+    pytest.importorskip("root_kinematics")
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts" / "remote"))
+    from register_diag import chained_pairs
+    rng = np.random.default_rng(7)
+    fr = frames_for([rigid(0.1 * t, np.array([0.2, 0.1]) * t) for t in range(8)], rng)
+    mid = midline()[:8]
+    E, ecc = chained_pairs(fr, np.zeros((8, 2)), mid, 0, np.inf, band_px=BAND)
+    C = np.eye(3)
+    for e in E:
+        C = e @ C
+    *_, C1, _ = register_frames(fr, np.zeros((8, 2)), mid, 0, np.inf, band_px=BAND)
+    assert np.allclose(C, C1[-1], atol=1e-9) and len(ecc) == 7
+
+
 def test_bound_trips_on_shift():
     rng = np.random.default_rng(6)
     truth = [rigid(0.0, np.array([0.0, 1.0]) * t) for t in range(T)]
