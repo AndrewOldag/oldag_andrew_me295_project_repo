@@ -48,17 +48,20 @@ BATCHES = {1: ROOT / "results" / "2026-10-25_full_batch_1" / "windows.csv",
 C026_TREE = ROOT / "staging" / "c026" / "tree" / "windows"
 LLM_CAP, STEP_LIMIT, AUDIT_RESERVE, VM_MIN_GB = 900, 8, 5, 3.0
 LIMIT_TEXT = "hit your session limit"
-# Inbox item 49 (2026-11-20): register_frames tracks can pass closure with points out of order. Until `register_v2`
-# is on main, every registered track counts as not cached: a window whose step needs one pauses
+# Inbox items 49 and 53: register_frames v1 tracks can pass closure with points out of order. They count as not
+# cached, so they are never used; register_v2 tracks are used like any other
 REGISTER_HOLD = True
+# Inbox items 53 and 54: decisions on a remedied track wait for the integrity gate (option A, real-calib). Until it is
+# on main, a failing window is paused before any LLM call; its missing single remedies still go to paused.jsonl
+REMEDY_HOLD = True
 
 
 class Paused(BaseException):
     """A track the window needs is not cached. BaseException: it passes the orchestrator's executor guard, so the
     window stops at once instead of the agent seeing an error (spec A4)."""
 
-    def __init__(self, window, settings, kinds):
-        super().__init__(f"paused: needs {settings.tag()} ({', '.join(kinds)})")
+    def __init__(self, window, settings, kinds, reason=None):
+        super().__init__(reason or f"paused: needs {settings.tag()} ({', '.join(kinds)})")
         self.window, self.settings, self.kinds = window, settings, kinds
 
 
@@ -130,7 +133,7 @@ class RunRunner(RealRunner):
         return ["ref", "moved"] if window.id() in self.moved_windows else ["window"]
 
     def missing(self, window, settings):
-        if REGISTER_HOLD and settings.register:
+        if REGISTER_HOLD and settings.register and settings.register_version != 2:
             return self.kinds(window)
         return [k for k in self.kinds(window) if not self.cache_path(window, settings, k).exists()]
 
@@ -356,6 +359,13 @@ class Run:
         from retrack_queue import single_remedies
         singles = [s for _, _, s in single_remedies(sl.runs[0][0], sl.base_disk_radius, sl.runs[0][1].record)]
         missing = [s for s in singles if self.runner.missing(w, s)]
+        if REMEDY_HOLD:
+            with open(self.out / "paused.jsonl", "a") as f:
+                for s in missing:
+                    f.write(json.dumps({"window": w.id(), "settings": s.to_dict(),
+                                        "kinds": self.runner.missing(w, s), "time": now()}) + "\n")
+            raise Paused(w, singles[0] if singles else sl.runs[0][0], [],
+                         reason="paused: remedy hold (inbox item 54; integrity gate not on main)")
         if missing and len(missing) == len(singles):
             with open(self.out / "paused.jsonl", "a") as f:
                 for s in missing[1:]:
