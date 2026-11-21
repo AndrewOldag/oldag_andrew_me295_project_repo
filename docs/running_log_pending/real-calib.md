@@ -15,3 +15,13 @@
 - Demo: `QB_TRACKER=<tracker> python scripts/check_after_fix.py --tracks staging/tracks_real_fb2` -> 33 checked, 33 not computable
 - Remaining: item 22 (c031, register_frames fix): proposal, diagnosis on the flagged c027 window, register_v2, integrity check; cluster runs after retrack_queue.py is on main
 - Bottlenecks: `tests/test_board.py` fails on c027's host field (dispatcher); retrack_queue.py on main (dispatcher)
+
+## 2026-11-20 (build account, session real-calib, inbox items 22-23)
+- Done: proposal `docs/proposals/2026-11-20_registration-fix.md` before any run; flagged window found: 0711_c5__w6-8, c027, `st1_reg2p1075`
+- Done: integrity check `checker/checks.py` `track_integrity` (336be10); flagged window: registered track 798 inversions, gap ratio 6.43, lateral 15.26 px; base track 3, 1.76, 1.03 px
+- Done: thresholds by rule from 27 freeze v4 tracks: inversions 0, gap ratio 2.4, lateral 0.081 px (4ec36af); batch-1 base tracks: 0 of 115 pass all (lateral 0 of 115)
+- Done: `register_frames_v2` and wiring (ea255ed and next); synthetic test: direct 0.03 deg error vs chained 1.2 deg; `scripts/remote/register_diag.py` written and tested, not run
+- Tests: agents env 421 passed, 3 skipped after merging main (08de5b4); register tests 5 passed in the tracker env
+- Demo: `python scripts/integrity_thresholds.py report --tracks staging/tracks_real_fb1 --out x.json` -> 115 tracks, 0 pass all
+- Remaining: register_v2 and integrity check merged to main; R1 per-pair cluster job; R5 synthetic regression on the cluster
+- Bottlenecks: Andrew (lateral threshold); planning (merge; job kind for register_diag); compound (synthetic-rod job kind)

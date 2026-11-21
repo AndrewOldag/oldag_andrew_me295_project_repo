@@ -1,0 +1,5 @@
+# Track-integrity thresholds, rule of docs/proposals/2026-11-20_registration-fix.md (R4),
+# from scripts/integrity_thresholds.py thresholds. Gate only for tracks made by a remedy.
+inversions: 0
+gap_ratio: 2.4
+lateral_px: 0.081
