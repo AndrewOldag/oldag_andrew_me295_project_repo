@@ -43,12 +43,28 @@
 - With these thresholds 0 of 115 batch-1 base tracks pass all three. Applied as a gate, every remedied real track would be rolled back on lateral scatter alone. Synthetic midlines are the render's own; real midlines come from the net, so lateral scatter on real tracks includes midline error
 - 40 of 115 base tracks have inversions; some have hundreds (point order already lost without any remedy)
 
+## Integrity gate, option A (Andrew, 2026-11-21)
+- The absolute thresholds above stay reported, not gating. The gate compares a remedied track with the window's own base track: ratios (inversions + 1), gap ratio, lateral; rolled back if any ratio exceeds its k, or the v2 registration is not plausible
+- `checker/checks.py` `relative_integrity` (with `integrity_gate`); `config/integrity_relative_k.yaml`
+- k by the same rule from the 9 freeze v4 accept_repaired tracks against their own base tracks (`relative_k.json`): inversions 1.5, gap ratio 1.5, lateral 3.0. Synthetic ratios: inversions 1.0 on all 9; gap ratio 0.995-1.0; lateral 1.0-1.95 (6 register_frames rods 1.24-1.95; 3 width-free rods 1.0, same track). Committed before any real remedied track was scored
+- Check on register_frames v1 tracks of the c027 cache against their base tracks (`relative_check_v1.json`; no decision changed):
+
+| Set | Pairs | Pass | Fail on inversions | on gap ratio | on lateral |
+| :-- | --: | --: | --: | --: | --: |
+| batch 1 | 7 | 1 | 6 | 2 | 3 |
+| batch 2 | 37 | 16 | 20 | 18 | 19 |
+
+- Flagged window, v1: inversions ratio 199.8, gap ratio 3.65, lateral 14.9: fails. Its v2 track is not back yet (dispatcher's register_v2 retracks)
+- Over the 44 pairs: median ratio inversions 4.8, gap ratio 1.45, lateral 2.4
+
 ## Open
-- R1 per-pair run: one CPU job of `register_diag.py` on 0711_c5__w6-8. `retrack_queue.py` has no job kind for it
-- R5: needs `register_v2` on main (register hold, cluster code folder synced from main) and a synthetic-rod job kind in `retrack_queue.py` (compound is adding one)
-- The lateral threshold (see R4): a decision for Andrew; the rule is not changed here
+- R1 per-pair run: one sbatch of `register_diag.py` through the relay (planning, inbox 24)
+- Flagged window v2 through the gate, once its register_v2 track is fetched
+- R5: compound's synthetic-rod job kind on main
 
 ## Commands
 - `python -m pytest tests/test_integrity.py tests/test_executors.py` (agents env); `tests/test_register_v2.py` in the tracker env with the tracker on PYTHONPATH
 - `python scripts/integrity_thresholds.py thresholds --cache <freeze v4 track cache>` -> gap ratio 2.4, lateral 0.081, inversions 0
 - `python scripts/integrity_thresholds.py report --tracks <batch-1 tracks> --out <json>` -> 115 tracks, 0 pass all
+- `python scripts/integrity_thresholds.py relative --cache <freeze v4 track cache>` -> k inversions 1.5, gap ratio 1.5, lateral 3.0
+- `python scripts/integrity_thresholds.py pairs --pairs <csv: window, base, remedied, label> --out <json>` -> per pair ratios and gate
