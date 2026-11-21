@@ -1,0 +1,71 @@
+{
+ "batch": "b16",
+ "repeat": 1,
+ "commit": "39da216",
+ "claude_code": "2.1.310",
+ "model": "claude-opus-5-5",
+ "wall_s": 24.5,
+ "trace": "b16_r1_trace.jsonl",
+ "outcome": {
+  "task_id": "batch-1",
+  "agent": "auditor",
+  "status": "report",
+  "args": {
+   "text": "Batch: 8 runs, all 8 accepted.\nFlagged (summary_outlier): r01, r08. Their profiles have a different shape from the batch: REGR peak 0.72 %/h vs median 0.37 (z 7.87), flank difference of opposite sign (-0.47 vs 0.55 %/h) and its maximum at 84 \u00b5m vs 316 \u00b5m (z -5.05).\nCleared: r02, r03, r04, r05, r06, r07. All checks pass, every |z| is 1.42 or less, and no remedies or roll-backs.\nWhat the flagged runs share: all checks pass and no remedies were kept, yet the strain-rate and curvature-rate profile has a different shape. The peak is higher and the flank difference has the opposite sign and sits close to the tip. Their checks and summaries are also identical to each other, which suggests the same root or window may have been reported twice."
+  },
+  "steps": 3,
+  "failed_steps": 0,
+  "calls": 3,
+  "input_tokens": 22120,
+  "output_tokens": 1253,
+  "call_ms": 16134
+ },
+ "decisions": {
+  "r01": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "summary_outlier",
+   "evidence": [
+    "centre_peak_regr_pct_per_h",
+    "flank_difference_max_pct_per_h",
+    "flank_difference_at_um"
+   ]
+  },
+  "r08": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "summary_outlier",
+   "evidence": [
+    "centre_peak_regr_pct_per_h",
+    "flank_difference_max_pct_per_h",
+    "flank_difference_at_um"
+   ]
+  },
+  "r02": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r03": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r04": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r05": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r06": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r07": {
+   "decision": "clear",
+   "order": 2
+  }
+ },
+ "undecided": [],
+ "report": "Batch: 8 runs, all 8 accepted.\nFlagged (summary_outlier): r01, r08. Their profiles have a different shape from the batch: REGR peak 0.72 %/h vs median 0.37 (z 7.87), flank difference of opposite sign (-0.47 vs 0.55 %/h) and its maximum at 84 \u00b5m vs 316 \u00b5m (z -5.05).\nCleared: r02, r03, r04, r05, r06, r07. All checks pass, every |z| is 1.42 or less, and no remedies or roll-backs.\nWhat the flagged runs share: all checks pass and no remedies were kept, yet the strain-rate and curvature-rate profile has a different shape. The peak is higher and the flank difference has the opposite sign and sits close to the tip. Their checks and summaries are also identical to each other, which suggests the same root or window may have been reported twice."
+}

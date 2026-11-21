@@ -1,0 +1,125 @@
+{
+ "batch": "b21",
+ "repeat": 1,
+ "commit": "39da216",
+ "claude_code": "2.1.310",
+ "model": "claude-opus-5-5",
+ "wall_s": 59.0,
+ "trace": "b21_r1_trace.jsonl",
+ "outcome": {
+  "task_id": "batch-1",
+  "agent": "auditor",
+  "status": "report",
+  "args": {
+   "text": "Batch: 8 runs, all 8 accepted. All final checks passed (rigid-body invariance, closure, plane sections). No run used the width-free ratio.\nFlagged (6), reason other (suspected duplicate measurements): r01/r07, r02/r08, r05/r06. Each pair matches on every check value and every kinematic summary to the reported precision: centre REGR peak, peak position, growth-zone length, and flank difference (curvature rate). r02 and r08 match even though their step counts differ (5 vs 7). Separate roots or windows should not give identical velocity and strain-rate fields, so these can't be reported as independent measurements until we confirm which root and movie each one came from.\nCleared (2): r03 and r04. Checks pass and every summary is near the batch median (|z| < 2). The largest gap is r03's flank difference, about 0.4 %/h from the median.\nWhat the flagged runs have in common: they come in pairs of identical results, which points to the same measurement being reported under two run ids, not to a kinematic fault. Note that the batch spread is very narrow (REGR peak MAD 0.035 %/h, peak position MAD 0), so the duplicates also make the batch statistics look tighter than they are."
+  },
+  "steps": 7,
+  "failed_steps": 0,
+  "calls": 7,
+  "input_tokens": 61831,
+  "output_tokens": 3227,
+  "call_ms": 42511
+ },
+ "decisions": {
+  "r01": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "other",
+   "evidence": [
+    "rigid_invariance",
+    "closure",
+    "plane_sections",
+    "centre_peak_regr_pct_per_h",
+    "growth_zone_length_um",
+    "flank_difference_max_pct_per_h",
+    "steps",
+    "final_settings"
+   ]
+  },
+  "r07": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "other",
+   "evidence": [
+    "rigid_invariance",
+    "closure",
+    "plane_sections",
+    "centre_peak_regr_pct_per_h",
+    "growth_zone_length_um",
+    "flank_difference_max_pct_per_h",
+    "steps",
+    "final_settings"
+   ]
+  },
+  "r02": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "other",
+   "evidence": [
+    "rigid_invariance",
+    "closure",
+    "plane_sections",
+    "centre_peak_regr_pct_per_h",
+    "growth_zone_length_um",
+    "flank_difference_max_pct_per_h",
+    "steps",
+    "final_settings"
+   ]
+  },
+  "r08": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "other",
+   "evidence": [
+    "rigid_invariance",
+    "closure",
+    "plane_sections",
+    "centre_peak_regr_pct_per_h",
+    "growth_zone_length_um",
+    "flank_difference_max_pct_per_h",
+    "steps",
+    "final_settings"
+   ]
+  },
+  "r05": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "other",
+   "evidence": [
+    "rigid_invariance",
+    "closure",
+    "plane_sections",
+    "centre_peak_regr_pct_per_h",
+    "growth_zone_length_um",
+    "flank_difference_max_pct_per_h",
+    "steps",
+    "final_settings"
+   ]
+  },
+  "r06": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "other",
+   "evidence": [
+    "rigid_invariance",
+    "closure",
+    "plane_sections",
+    "centre_peak_regr_pct_per_h",
+    "growth_zone_length_um",
+    "flank_difference_max_pct_per_h",
+    "steps",
+    "final_settings"
+   ]
+  },
+  "r03": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r04": {
+   "decision": "clear",
+   "order": 2
+  }
+ },
+ "undecided": [],
+ "report": "Batch: 8 runs, all 8 accepted. All final checks passed (rigid-body invariance, closure, plane sections). No run used the width-free ratio.\nFlagged (6), reason other (suspected duplicate measurements): r01/r07, r02/r08, r05/r06. Each pair matches on every check value and every kinematic summary to the reported precision: centre REGR peak, peak position, growth-zone length, and flank difference (curvature rate). r02 and r08 match even though their step counts differ (5 vs 7). Separate roots or windows should not give identical velocity and strain-rate fields, so these can't be reported as independent measurements until we confirm which root and movie each one came from.\nCleared (2): r03 and r04. Checks pass and every summary is near the batch median (|z| < 2). The largest gap is r03's flank difference, about 0.4 %/h from the median.\nWhat the flagged runs have in common: they come in pairs of identical results, which points to the same measurement being reported under two run ids, not to a kinematic fault. Note that the batch spread is very narrow (REGR peak MAD 0.035 %/h, peak position MAD 0), so the duplicates also make the batch statistics look tighter than they are."
+}
