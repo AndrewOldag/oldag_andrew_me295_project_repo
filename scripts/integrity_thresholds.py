@@ -6,9 +6,15 @@ thresholds  Freeze v4 rods (seeds 26-28): the accept_clean base tracks (<rod>__s
             percentile x 1.5, rounded up to 2 significant figures; inversions 0. Writes
             config/integrity_thresholds.yaml and results/2026-11-20_registration_fix/thresholds.json
 report      The values and the pass count with those thresholds on a folder of real base tracks (information only)
+relative    The gate of option A (Andrew, 2026-11-21): k per ratio remedied/base (inversions + 1, gap ratio, lateral)
+            by the same rule, from the 9 freeze v4 accept_repaired tracks against their own base tracks. Writes
+            config/integrity_relative_k.yaml and results/2026-11-20_registration_fix/relative_k.json
+pairs       The gate on (base, remedied) track pairs listed in a CSV (window, base, remedied, label), as a check
 
   python scripts/integrity_thresholds.py thresholds --cache <freeze v4 track cache>
   python scripts/integrity_thresholds.py report --tracks staging/tracks_real_fb1 --out <json>
+  python scripts/integrity_thresholds.py relative --cache <freeze v4 track cache>
+  python scripts/integrity_thresholds.py pairs --pairs <csv> --out <json>
 """
 import argparse
 import json
@@ -21,8 +27,8 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from checker import track_integrity  # noqa: E402
-from checker.checks import INTEGRITY_FILE  # noqa: E402
+from checker import integrity_gate, integrity_ratios, load_relative_k, relative_integrity, track_integrity  # noqa: E402
+from checker.checks import INTEGRITY_FILE, RELATIVE_FILE  # noqa: E402
 from measure.record import from_tracker_npz  # noqa: E402
 
 LABELS = ROOT / "results" / "2026-10-25_freeze_v4" / "labels.json"
@@ -98,6 +104,40 @@ def report(a):
     print(json.dumps(summ))
 
 
+def relative(a):
+    cache = Path(a.cache)
+    labels = json.loads(LABELS.read_text())["labels"]
+    rows = []
+    for rod, p in track_set(cache):
+        if labels[rod]["class"] != "accept_repaired":
+            continue
+        base = cache / f"{rod}__st1.npz"
+        r = integrity_ratios(track_integrity(from_tracker_npz(p)), track_integrity(from_tracker_npz(base)))
+        rows.append({"rod": rod, "repaired": p.name, "base": base.name} | r)
+    k = {name: float(round_up_2sf(1.5 * np.percentile([r[name] for r in rows], 99.5)))
+         for name in ("inversions", "gap_ratio", "lateral")}
+    RELATIVE_FILE.write_text("# Integrity gate, option A (Andrew, 2026-11-21): a remedied track is rolled back if a ratio\n"
+                             "# remedied/base exceeds k. From scripts/integrity_thresholds.py relative.\n"
+                             + yaml.safe_dump(k, sort_keys=False))
+    OUT.mkdir(parents=True, exist_ok=True)
+    (OUT / "relative_k.json").write_text(json.dumps({"rule": "99.5th percentile x 1.5 of remedied/base ratios, rounded "
+                                                     "up to 2 significant figures; inversions as (n + 1) ratio",
+                                                     "n_pairs": len(rows), "k": k, "pairs": rows}, indent=1))
+    print(json.dumps({"n_pairs": len(rows), "k": k}))
+
+
+def pairs(a):
+    import csv
+    k = load_relative_k()
+    out = []
+    for row in csv.DictReader(open(a.pairs, newline="")):
+        res = relative_integrity(from_tracker_npz(row["remedied"]), from_tracker_npz(row["base"]), k)
+        out.append({"window": row["window"], "label": row["label"], "remedied": Path(row["remedied"]).name,
+                    "passed": integrity_gate(res)} | {x.check: x.value for x in res})
+        print(json.dumps(out[-1]))
+    Path(a.out).write_text(json.dumps({"k": k, "pairs": out}, indent=1))
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -106,8 +146,13 @@ def main():
     r = sub.add_parser("report")
     r.add_argument("--tracks", required=True)
     r.add_argument("--out", required=True)
+    r = sub.add_parser("relative")
+    r.add_argument("--cache", required=True)
+    r = sub.add_parser("pairs")
+    r.add_argument("--pairs", required=True)
+    r.add_argument("--out", required=True)
     a = p.parse_args()
-    {"thresholds": thresholds, "report": report}[a.cmd](a)
+    {"thresholds": thresholds, "report": report, "relative": relative, "pairs": pairs}[a.cmd](a)
 
 
 if __name__ == "__main__":

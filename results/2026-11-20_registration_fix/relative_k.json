@@ -1,0 +1,83 @@
+{
+ "rule": "99.5th percentile x 1.5 of remedied/base ratios, rounded up to 2 significant figures; inversions as (n + 1) ratio",
+ "n_pairs": 9,
+ "k": {
+  "inversions": 1.5,
+  "gap_ratio": 1.5,
+  "lateral": 3.0
+ },
+ "pairs": [
+  {
+   "rod": "v3_growth_zone_bad_stage_correction_z3_s26",
+   "repaired": "v3_growth_zone_bad_stage_correction_z3_s26__st1_reg2p400.npz",
+   "base": "v3_growth_zone_bad_stage_correction_z3_s26__st1.npz",
+   "inversions": 1.0,
+   "gap_ratio": 0.9997792026814166,
+   "lateral": 1.2409715807926955
+  },
+  {
+   "rod": "v3_growth_zone_bad_stage_correction_z3_s27",
+   "repaired": "v3_growth_zone_bad_stage_correction_z3_s27__st1_reg2p400.npz",
+   "base": "v3_growth_zone_bad_stage_correction_z3_s27__st1.npz",
+   "inversions": 1.0,
+   "gap_ratio": 0.9978047698299976,
+   "lateral": 1.4538956759522803
+  },
+  {
+   "rod": "v3_growth_zone_bad_stage_correction_z3_s28",
+   "repaired": "v3_growth_zone_bad_stage_correction_z3_s28__st1_reg2p400.npz",
+   "base": "v3_growth_zone_bad_stage_correction_z3_s28__st1.npz",
+   "inversions": 1.0,
+   "gap_ratio": 0.9992060904359903,
+   "lateral": 1.4249499480525896
+  },
+  {
+   "rod": "v3_growth_zone_rigid_drift_z0.5_s26",
+   "repaired": "v3_growth_zone_rigid_drift_z0.5_s26__st1_reg2p400.npz",
+   "base": "v3_growth_zone_rigid_drift_z0.5_s26__st1.npz",
+   "inversions": 1.0,
+   "gap_ratio": 0.9988045805465654,
+   "lateral": 1.9500133567181088
+  },
+  {
+   "rod": "v3_growth_zone_rigid_drift_z0.5_s27",
+   "repaired": "v3_growth_zone_rigid_drift_z0.5_s27__st1_reg2p400.npz",
+   "base": "v3_growth_zone_rigid_drift_z0.5_s27__st1.npz",
+   "inversions": 1.0,
+   "gap_ratio": 0.9954416949518604,
+   "lateral": 1.826748039176381
+  },
+  {
+   "rod": "v3_growth_zone_rigid_drift_z0.5_s28",
+   "repaired": "v3_growth_zone_rigid_drift_z0.5_s28__st1_reg2p400.npz",
+   "base": "v3_growth_zone_rigid_drift_z0.5_s28__st1.npz",
+   "inversions": 1.0,
+   "gap_ratio": 0.9996893744836773,
+   "lateral": 1.680977117516155
+  },
+  {
+   "rod": "v3_growth_zone_width_change_s26",
+   "repaired": "v3_growth_zone_width_change_s26__st1.npz",
+   "base": "v3_growth_zone_width_change_s26__st1.npz",
+   "inversions": 1.0,
+   "gap_ratio": 1.0,
+   "lateral": 1.0
+  },
+  {
+   "rod": "v3_growth_zone_width_change_s27",
+   "repaired": "v3_growth_zone_width_change_s27__st1.npz",
+   "base": "v3_growth_zone_width_change_s27__st1.npz",
+   "inversions": 1.0,
+   "gap_ratio": 1.0,
+   "lateral": 1.0
+  },
+  {
+   "rod": "v3_growth_zone_width_change_s28",
+   "repaired": "v3_growth_zone_width_change_s28__st1.npz",
+   "base": "v3_growth_zone_width_change_s28__st1.npz",
+   "inversions": 1.0,
+   "gap_ratio": 1.0,
+   "lateral": 1.0
+  }
+ ]
+}
