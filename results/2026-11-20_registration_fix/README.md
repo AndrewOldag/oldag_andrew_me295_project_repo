@@ -1,0 +1,54 @@
+# register_frames fix and track-integrity check (spec 2026-11-20 R, task c031)
+
+2026-11-20. Proposal `docs/proposals/2026-11-20_registration-fix.md` (committed before any run). No tracker run, no cluster job, no LLM run so far.
+
+## Flagged window
+- 0711_c5__w6-8 (batch 2, control), c027: closure 22.83 px/h -> `register_frames` v1 (`st1_reg2p1075`) -> 14.03 px/h, accepted by the diagnostician; record voided by dispatcher (inbox 49)
+- v1 report saved with the track: final rotation 9.23 deg, shift 100.6 px, smallest pair ECC 0.967. No per-pair values were saved
+
+## R1 diagnosis (part done)
+- Integrity of the window's tracks on this machine (`flagged_window_integrity.json`):
+
+| Track | Inversions | Gap ratio | Lateral, px |
+| :-- | --: | --: | --: |
+| base `st1` | 3 | 1.76 | 1.03 |
+| `register_frames` v1 `st1_reg2p1075` | 798 | 6.43 | 15.26 |
+
+- The registered track lost point order in most frames; closure did not see it
+- Per-pair and direct fits: `scripts/remote/register_diag.py`, written and tested (its chain equals `register_frames`), not run. Needs one cluster CPU job (see Open)
+- Synthetic evidence for the chaining cause (`tests/test_register_v2.py`, 24 frames, rotation 0.05 deg per frame plus shift, noise): direct fit error 0.03 deg, 0.04 px; chained v1 error 1.2 deg. Per-pair errors add up along the chain
+
+## R2 register_v2
+- `measure/preprocess.py` `register_frames_v2`: each frame fitted directly to frame 0 on the frame-0 basal band, started from the previous frame's fit. Report per frame: rotation, band motion, ECC
+- Plausibility bound on the last frame: band motion over `register_max_shift_px` or rotation over 2 deg -> `plausible: false`. Band motion is the displacement of the band centre, not the translation term (a rotation about the image origin inflates that)
+- `register_frames` remedy now gives v2 with bound ceil(2 x closure px/h x window h). Tag `regv2p<from>b<bound>`; v1 tags, args and settings dicts unchanged. Remedy description text unchanged
+- `qb_track.py --register-version 2 --register-max-shift-px N`
+- Tests: drift recovered (direct beats chained), pure growth near identity (under 0.05 deg, 0.3 px), 9 deg trips the bound, shift trips the bound. Run in the tracker env (OpenCV); 240 x 240 synthetic arrays, no tracking
+
+## R3 integrity check
+- `checker/checks.py` `track_integrity`, `integrity_gate`; no LLM. Separate from `run_checks`, so base records and prompts do not change
+- inversions (neighbour pairs whose arc length along the frame's midline does not increase, summed over frames); gap ratio (largest over median neighbour distance, largest over frames); lateral (RMS distance from the midline); registration plausible (v2 report; unknown for v1)
+
+## R4 thresholds (rule fixed in the proposal)
+- Set: 27 freeze v4 tracks (18 accept_clean base, 9 accept_repaired at their repair), cached, no tracker run
+- 99.5th percentile x 1.5, rounded up to 2 significant figures: gap ratio 2.4, lateral 0.081 px; inversions 0. `config/integrity_thresholds.yaml`, `thresholds.json`. Committed (4ec36af) before the batch-1 report
+- Sanity check, batch-1 base tracks (115), information only (`batch1_base_integrity.json`):
+
+| Value | Synthetic median / max | Batch-1 median | p95 | max | Batch-1 pass |
+| :-- | :-- | --: | --: | --: | --: |
+| inversions | 0 / 0 | 0 | 417 | 720 | 75 of 115 |
+| gap ratio | 1.55 / 1.55 | 1.94 | 3.83 | 8.68 | 93 of 115 |
+| lateral, px | 0.036 / 0.054 | 1.37 | 5.26 | 94.1 | 0 of 115 |
+
+- With these thresholds 0 of 115 batch-1 base tracks pass all three. Applied as a gate, every remedied real track would be rolled back on lateral scatter alone. Synthetic midlines are the render's own; real midlines come from the net, so lateral scatter on real tracks includes midline error
+- 40 of 115 base tracks have inversions; some have hundreds (point order already lost without any remedy)
+
+## Open
+- R1 per-pair run: one CPU job of `register_diag.py` on 0711_c5__w6-8. `retrack_queue.py` has no job kind for it
+- R5: needs `register_v2` on main (register hold, cluster code folder synced from main) and a synthetic-rod job kind in `retrack_queue.py` (compound is adding one)
+- The lateral threshold (see R4): a decision for Andrew; the rule is not changed here
+
+## Commands
+- `python -m pytest tests/test_integrity.py tests/test_executors.py` (agents env); `tests/test_register_v2.py` in the tracker env with the tracker on PYTHONPATH
+- `python scripts/integrity_thresholds.py thresholds --cache <freeze v4 track cache>` -> gap ratio 2.4, lateral 0.081, inversions 0
+- `python scripts/integrity_thresholds.py report --tracks <batch-1 tracks> --out <json>` -> 115 tracks, 0 pass all

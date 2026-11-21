@@ -1,0 +1,73 @@
+{
+ "window": "0711_c5__w6-8",
+ "thresholds": {
+  "inversions": 0,
+  "gap_ratio": 2.4,
+  "lateral_px": 0.081
+ },
+ "tracks": {
+  "base": {
+   "tag": "st1",
+   "checks": [
+    {
+     "check": "integrity_inversions",
+     "passed": false,
+     "value": 3.0,
+     "detail": "most in frame 75 (1)"
+    },
+    {
+     "check": "integrity_gap_ratio",
+     "passed": true,
+     "value": 1.7636300876019169,
+     "detail": ""
+    },
+    {
+     "check": "integrity_lateral",
+     "passed": false,
+     "value": 1.0263297990831275,
+     "detail": ""
+    },
+    {
+     "check": "registration_plausible",
+     "passed": null,
+     "value": NaN,
+     "detail": "not registered"
+    }
+   ]
+  },
+  "register_frames v1": {
+   "tag": "st1_reg2p1075",
+   "checks": [
+    {
+     "check": "integrity_inversions",
+     "passed": false,
+     "value": 798.0,
+     "detail": "most in frame 79 (15)"
+    },
+    {
+     "check": "integrity_gap_ratio",
+     "passed": false,
+     "value": 6.430992827826915,
+     "detail": ""
+    },
+    {
+     "check": "integrity_lateral",
+     "passed": false,
+     "value": 15.260049619232403,
+     "detail": ""
+    },
+    {
+     "check": "registration_plausible",
+     "passed": null,
+     "value": NaN,
+     "detail": "registered without a plausibility bound (register_frames v1)"
+    }
+   ]
+  }
+ },
+ "registration_report_v1": {
+  "final_rotation_deg": 9.23,
+  "final_shift_px": 100.6,
+  "ecc_min": 0.9666
+ }
+}
