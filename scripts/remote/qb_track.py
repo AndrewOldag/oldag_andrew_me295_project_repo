@@ -75,6 +75,10 @@ def main():
                     help="registration band start, px from the tip (preprocess.registration_band_start)")
     ap.add_argument("--register-to-px", type=float, default=None,
                     help="registration band end, px from the tip (default: the basal end of the midline)")
+    ap.add_argument("--register-version", type=int, choices=(1, 2), default=1,
+                    help="1: chained pairwise fits (2026-10-10); 2: each frame to frame 0 with a bound (2026-11-20)")
+    ap.add_argument("--register-max-shift-px", type=float, default=None,
+                    help="v2 bound: largest band motion of the last frame, px (2 x drift implied by the closure miss)")
     ap.add_argument("--midline-smooth", choices=sorted(preprocess.MIDLINE_SMOOTH), default=None)
     ap.add_argument("--band-mask", choices=["mask_second_root", "crop_to_main_root"], default=None)
     ap.add_argument("--band-radius", type=float, default=45.0, help="px, for --band-mask and frame quality")
@@ -119,9 +123,13 @@ def main():
     if a.register:
         if a.register_from_px is None:
             ap.error("--register needs --register-from-px")
-        frames, mid_img, _, pre["register"] = preprocess.register_frames(
-            np.asarray(rec.images), corr0, mid_img, a.register_from_px,
-            np.inf if a.register_to_px is None else a.register_to_px)
+        to_px = np.inf if a.register_to_px is None else a.register_to_px
+        if a.register_version == 2:
+            frames, mid_img, _, pre["register"] = preprocess.register_frames_v2(
+                np.asarray(rec.images), corr0, mid_img, a.register_from_px, to_px, a.register_max_shift_px)
+        else:
+            frames, mid_img, _, pre["register"] = preprocess.register_frames(
+                np.asarray(rec.images), corr0, mid_img, a.register_from_px, to_px)
         rec = replace(rec, images=frames)
     if a.band_mask:
         rec = replace(rec, images=preprocess.band_mask(np.asarray(rec.images), mid_img,

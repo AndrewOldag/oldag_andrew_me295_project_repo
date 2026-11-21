@@ -7,6 +7,8 @@ is never imitated.
 from dataclasses import dataclass, asdict, replace
 from typing import Optional
 
+import numpy as np
+
 
 class NotAvailable(Exception):
     pass
@@ -26,6 +28,8 @@ class TrackSettings:
     width_free: bool = False               # report centre strain rate and width-free ratio; skip plane sections
     couple: bool = False                   # coupled two-side tracking (qb_track --couple). A run setting, not a
                                            # remedy: no remedy changes it and no agent list holds it (2026-10-11)
+    register_version: int = 1              # 1: chained pairwise fits; 2: each frame to frame 0 with a bound (2026-11-20)
+    register_max_shift_px: Optional[int] = None   # v2 bound on the last frame's band motion, px
 
     def args(self):
         """Command-line arguments for scripts/remote/qb_track.py."""
@@ -36,6 +40,10 @@ class TrackSettings:
             if self.register_from_px is None:
                 raise ValueError("register needs register_from_px (the 0.6-1.0 band of 2026-10-10 is retired)")
             a += ["--register", "--register-from-px", str(self.register_from_px)]
+            if self.register_version == 2:
+                a += ["--register-version", "2"]
+                if self.register_max_shift_px is not None:
+                    a += ["--register-max-shift-px", str(self.register_max_shift_px)]
         if self.midline_smooth:
             a += ["--midline-smooth", self.midline_smooth]
         if self.band_mask:
@@ -50,7 +58,10 @@ class TrackSettings:
         if self.disk_radius is not None:
             parts.append(f"r{self.disk_radius}")
         if self.register:                                  # reg: the retired 0.6-1.0 band (2026-10-10 runs)
-            parts.append("reg" if self.register_from_px is None else f"reg2p{self.register_from_px}")
+            if self.register_version == 2:                 # v1 tags never reused for a decision (2026-11-20)
+                parts.append(f"regv2p{self.register_from_px}b{self.register_max_shift_px}")
+            else:
+                parts.append("reg" if self.register_from_px is None else f"reg2p{self.register_from_px}")
         if self.midline_smooth:
             parts.append(f"ms{self.midline_smooth}4")     # 4: world-coordinate time smoothing (2026-10-11c); no reuse of older runs
         if self.band_mask:
@@ -60,7 +71,11 @@ class TrackSettings:
         return "_".join(parts)
 
     def to_dict(self):
-        return asdict(self)
+        """The v2 registration fields only when set, so v1 settings read as before."""
+        d = asdict(self)
+        if self.register_version == 1 and self.register_max_shift_px is None:
+            del d["register_version"], d["register_max_shift_px"]
+        return d
 
 
 def apply_remedy(settings, remedy, setting, base_disk_radius, record=None):
@@ -89,7 +104,14 @@ def apply_remedy(settings, remedy, setting, base_disk_radius, record=None):
         start = registration_band_start(record) if record is not None else None
         if start is None:
             raise NotAvailable("no strain-rate profile to find the non-growing tissue in")
-        return (replace(s, register=True, register_from_px=int(round(start))),
+        from checker.checks import closure
+        miss = closure(record).value
+        hours = (record.frame_times_s[-1] - record.frame_times_s[0]) / 3600.0
+        if not np.isfinite(miss):
+            raise NotAvailable("closure not computable, so no bound for the registration")
+        bound = int(np.ceil(2.0 * miss * hours))           # 2 x the tip drift the closure miss implies, px
+        return (replace(s, register=True, register_from_px=int(round(start)), register_version=2,
+                        register_max_shift_px=bound),
                 f"frames registered on the non-growing tissue (from {start:.0f} px from the tip) before tracking")
     if remedy == "smooth_midline":
         if setting not in SMOOTH_SETTINGS:
