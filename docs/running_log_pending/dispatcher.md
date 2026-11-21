@@ -1,0 +1,12 @@
+## 2026-11-20 (build account, dispatcher session, task c027)
+- Done: `scripts/retrack_queue.py` (seed, jobs, submit, fetch) with fake-relay tests (a6b0e13); alone on `wip/retrack-queue`, merged to main (2f7725a)
+- Done: wave 1 job list, 84 batch-2 failing windows, 461 jobs, worst case $1.674; wave 1b, 10 batch-1 failing windows, 69 jobs, $0.234
+- Done: proposal `docs/proposals/2026-11-18_integrated-run.md` committed before any run; `scripts/run_all.py` and tests; 1,189 windows in dispatcher order
+- Done: 1,193 base tracks fetched storage -> VM cache, md5 checked, 0 missing (1,159, then 34 after the c028 fix)
+- Done: integrated run started 14:01 on cached windows; at 464 records: 403 accepted by rule, 11 declined by rule, 10 declined by the diagnostician, 1 step limit, 39 paused; 175 LLM calls
+- Done: wave 1 on the cluster from 14:30: 10 groups, 180 tracks fetched md5 checked, 12 failed (missing output folder; fixed, rerun); registration held (inbox 49), 51 jobs not submitted
+- Done: 8 records that used a registered track and 6 roots' auditor runs set aside (`staging/c027/run/voided_register/`); c026 leftover staged root cleared after its md5 check, one missing c026 retrack copied to storage first
+- Failed: one base-track fetch stopped on an SSH rekey timeout (Link.run fixed); one fetch hung after 17:06 until 22:56 (link); the run stopped once on the seat's session limit (auditor trace set aside)
+- Demo: `python scripts/run_all.py windows` prints `1189 windows, 102 roots; batch {2: 1061, 1: 126, 'none': 2}`
+- Remaining: wave-1 groups until nothing waits; rerun paused windows; register_v2 retracks after the fix; tree baseline (B4); fresh demo 0708_c4 (B5); report (B7-B9) by Thu 26 Nov 20:00
+- Bottlenecks: cluster master up for the cycle (Andrew); register_v2 (real-calib, c031)
