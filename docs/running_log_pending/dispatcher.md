@@ -10,3 +10,12 @@
 - Demo: `python scripts/run_all.py windows` prints `1189 windows, 102 roots; batch {2: 1061, 1: 126, 'none': 2}`
 - Remaining: wave-1 groups until nothing waits; rerun paused windows; register_v2 retracks after the fix; tree baseline (B4); fresh demo 0708_c4 (B5); report (B7-B9) by Thu 26 Nov 20:00
 - Bottlenecks: cluster master up for the cycle (Andrew); register_v2 (real-calib, c031)
+
+## 2026-11-21 (build account, dispatcher session, task c027)
+- Done: run pass over all 1,189 windows: 1,034 accepted by rule, 58 declined by rule, 23 declined by the diagnostician (no remedy tried), 74 paused; 55 roots audited; 491 LLM calls
+- Done: wave 1 to 16 groups, 378 tracks fetched md5 checked; cycle stopped 10:18 on master down (from about 01:00)
+- Done: register_v2 job lists (97 register_v2 jobs, worst case $1.19 with the rest); v1 held; remedy hold until the integrity gate (12 records set aside); stuck-task and requeue-once rules with tests (15 passed)
+- Failed: 2-hourly status pusher never pushed (`sleep 7200` hung in a hidden process); replaced by a push inside the cycle
+- Demo: `python staging/c027/tools/counts.py` is local; `python scripts/run_all.py windows` prints the window count
+- Remaining: master up -> cycle (cc7 clear, register_v2 and remaining retracks); integrity gate on main -> rerun paused windows with the diagnostician; tree baseline; fresh demo; report by Thu 26 Nov 20:00
+- Bottlenecks: cluster master (Andrew); integrity gate option A (real-calib)
