@@ -5,7 +5,7 @@ lane: course
 owner: dispatcher
 state: queued
 branch: wip/dispatcher
-host: VM (LLM runs), cluster (retrack arrays, CPU; one GPU midline job), lab server (storage, relay)
+host: VM (LLM runs), cluster (retrack arrays on CPU; one GPU midline job), lab server (storage and relay)
 created: 2026-11-18 14:20
 last_update: 2026-11-18 14:20
 blocker: none
