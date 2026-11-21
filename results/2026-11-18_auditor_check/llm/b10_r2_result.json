@@ -1,0 +1,59 @@
+{
+ "batch": "b10",
+ "repeat": 2,
+ "commit": "47e8eef",
+ "claude_code": "2.1.310",
+ "model": "claude-opus-5-5",
+ "wall_s": 83.9,
+ "trace": "b10_r2_trace.jsonl",
+ "outcome": {
+  "task_id": "batch-1",
+  "agent": "auditor",
+  "status": "report",
+  "args": {
+   "text": "Batch: 8 runs, all 8 accepted. 0 flagged, 8 cleared (r01\u2013r08).\nChecks: every final check passed, apart from plane sections on r06 and r08, which wasn't run. Both runs kept only the usual width-free remedy and had no roll-backs.\nProfiles: the centre strain-rate (REGR) peak is about 53.1\u201353.3 %/h, always 421 \u00b5m from the tip. The growth zone is 674\u2013695 \u00b5m long.\nLarge z-scores: these come from a batch MAD near zero, so they mark small differences. r02 and r06 have a growth zone 21 \u00b5m (about 3%) shorter and a largest flank difference of -0.81 %/h, about 1.5% of the peak. r05, r07 and r08 have their largest flank difference, which is small, at 347 \u00b5m.\nFlagged runs: none, so they have nothing in common."
+  },
+  "steps": 4,
+  "failed_steps": 0,
+  "calls": 4,
+  "input_tokens": 32032,
+  "output_tokens": 3663,
+  "call_ms": 49041
+ },
+ "decisions": {
+  "r01": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r02": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r03": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r04": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r05": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r06": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r07": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r08": {
+   "decision": "clear",
+   "order": 1
+  }
+ },
+ "undecided": [],
+ "report": "Batch: 8 runs, all 8 accepted. 0 flagged, 8 cleared (r01\u2013r08).\nChecks: every final check passed, apart from plane sections on r06 and r08, which wasn't run. Both runs kept only the usual width-free remedy and had no roll-backs.\nProfiles: the centre strain-rate (REGR) peak is about 53.1\u201353.3 %/h, always 421 \u00b5m from the tip. The growth zone is 674\u2013695 \u00b5m long.\nLarge z-scores: these come from a batch MAD near zero, so they mark small differences. r02 and r06 have a growth zone 21 \u00b5m (about 3%) shorter and a largest flank difference of -0.81 %/h, about 1.5% of the peak. r05, r07 and r08 have their largest flank difference, which is small, at 347 \u00b5m.\nFlagged runs: none, so they have nothing in common."
+}
