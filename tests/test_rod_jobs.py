@@ -1,4 +1,4 @@
-"""c029 cluster queue (scripts/synth/compound_queue.py) with a fake cluster: no host, no link."""
+"""Synthetic-rod job kind (scripts/rod_jobs.py) with a fake cluster: no host, no link."""
 import hashlib
 import json
 import sys
@@ -7,9 +7,9 @@ from pathlib import Path
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "scripts" / "synth"))
+
 sys.path.insert(0, str(ROOT / "scripts"))
-import compound_queue as cq  # noqa: E402
+import rod_jobs as cq  # noqa: E402
 import retrack_queue as rq  # noqa: E402
 
 WORK = "/cluster/c029"
@@ -107,7 +107,7 @@ class FakeMover:
 
 def row(rid, tag, eq=""):
     st = {"stride": 1} if tag == "st1" else {"stride": 2}
-    return {"job": f"{rid}__{tag}.npz", "rid": rid, "settings": json.dumps(st), "eq": eq}
+    return {"job": f"{rid}__{tag}.npz", "rid": rid, "settings": json.dumps(st), "sub": "tracks_eq" if eq else "tracks"}
 
 
 @pytest.fixture
@@ -133,9 +133,9 @@ def test_submit_one_task_per_rendered_rod(tmp_path, rows):
     r = cq.submit(runner, remote, mover, rows, state=tmp_path, log=lambda m: None)
     assert r == "submitted g001" and runner.synced == 1
     assert mover.uploaded == ["rodA", "rodA_moved"] and mover.pushed == ["rodA", "rodA_moved"]
-    tasks = remote.written[f"{WORK}/jobs/c029_g001/tasks.txt"].splitlines()
+    tasks = remote.written[f"{WORK}/jobs/rods_g001/tasks.txt"].splitlines()
     assert len(tasks) == 2 and tasks[0].count("qb_track.py") == 2
-    assert "--time=01:00:00" in remote.written[f"{WORK}/jobs/c029_g001/job.sbatch"]
+    assert "--time=01:00:00" in remote.written[f"{WORK}/jobs/rods_g001/job.sbatch"]
     assert [c[0] for c in remote.ledger_calls] == ["check", "record"]
     q = rq.read_csv(tmp_path / "queue.csv")
     assert [(x["job"], x["task"]) for x in q] == [("rodA__st1.npz", "0"), ("rodA__st2.npz", "0"),
@@ -148,13 +148,12 @@ def _queued(tmp_path, rows):
     cq.submit(FakeRunner(), FakeRemote(), FakeMover(), rows, state=tmp_path, log=lambda m: None)
 
 
-def test_fetch_partial_array_pulls_finished_only(tmp_path, rows, monkeypatch):
-    monkeypatch.setattr(cq.hc, "CACHE", tmp_path / "cache")
+def test_fetch_partial_array_pulls_finished_only(tmp_path, rows):
     _queued(tmp_path, rows)
     outs = {"rodA__st1.npz": b"a", "rodA__st2.npz": b"b"}
     remote = FakeRemote(sacct={0: ("COMPLETED", ""), 1: ("RUNNING", "")}, outputs=outs,
                         ok=("rodA__st1.npz.ok", "rodA__st2.npz.ok"))
-    msg = cq.fetch(FakeRunner(), remote, state=tmp_path, storage_dir="/storage/c029", log=lambda m: None)
+    msg = cq.fetch(FakeRunner(), remote, state=tmp_path, storage_dir="/storage/c029", local_dir=lambda r: tmp_path / "cache", log=lambda m: None)
     assert msg.startswith("fetched 2, failed 0")
     assert (tmp_path / "cache" / "rodA__st1.npz").read_bytes() == b"a"
     assert (tmp_path / "cache" / "rodA__st1.npz.ok").exists()
@@ -163,29 +162,27 @@ def test_fetch_partial_array_pulls_finished_only(tmp_path, rows, monkeypatch):
     assert q == {"rodA__st1.npz": "fetched", "rodA__st2.npz": "fetched", "rodA_moved__st1.npz": "running"}
 
 
-def test_fetch_md5_mismatch_not_cached(tmp_path, rows, monkeypatch):
-    monkeypatch.setattr(cq.hc, "CACHE", tmp_path / "cache")
+def test_fetch_md5_mismatch_not_cached(tmp_path, rows):
     _queued(tmp_path, rows)
     remote = FakeRemote(sacct={0: ("COMPLETED", ""), 1: ("COMPLETED", "")},
                         outputs={r["job"]: b"z" for r in rows}, storage_bad=True,
                         ok=tuple(r["job"] + ".ok" for r in rows))
-    cq.fetch(FakeRunner(), remote, state=tmp_path, storage_dir="/storage/c029", log=lambda m: None)
+    cq.fetch(FakeRunner(), remote, state=tmp_path, storage_dir="/storage/c029", local_dir=lambda r: tmp_path / "cache", log=lambda m: None)
     assert not (tmp_path / "cache").exists() or not list((tmp_path / "cache").glob("*.npz"))
     assert all(x["state"] != "fetched" for x in rq.read_csv(tmp_path / "queue.csv"))
 
 
-def test_fetch_missing_output_marked_failed(tmp_path, rows, monkeypatch):
-    monkeypatch.setattr(cq.hc, "CACHE", tmp_path / "cache")
+def test_fetch_missing_output_marked_failed(tmp_path, rows):
     _queued(tmp_path, rows)
     remote = FakeRemote(sacct={0: ("FAILED", ""), 1: ("TIMEOUT", "")}, outputs={})
-    msg = cq.fetch(FakeRunner(), remote, state=tmp_path, storage_dir="/storage/c029", log=lambda m: None)
+    msg = cq.fetch(FakeRunner(), remote, state=tmp_path, storage_dir="/storage/c029", local_dir=lambda r: tmp_path / "cache", log=lambda m: None)
     assert msg.startswith("fetched 0, failed 3")
 
 
 def test_fetch_connection_down(tmp_path, rows):
     _queued(tmp_path, rows)
     before = (tmp_path / "queue.csv").read_text()
-    assert cq.fetch(FakeRunner(), FakeRemote(down=True), state=tmp_path, storage_dir="/s",
+    assert cq.fetch(FakeRunner(), FakeRemote(down=True), state=tmp_path, storage_dir="/s", local_dir=lambda r: tmp_path,
                     log=lambda m: None) == "connection down"
     assert (tmp_path / "queue.csv").read_text() == before
 
