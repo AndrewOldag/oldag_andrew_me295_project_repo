@@ -5,7 +5,7 @@ lane: course
 owner: compound
 state: queued
 branch: wip/compound
-host: VM only
+host: VM (LLM runs), cluster (tracker runs)
 created: 2026-11-18 14:20
 last_update: 2026-11-18 14:20
 blocker: none
