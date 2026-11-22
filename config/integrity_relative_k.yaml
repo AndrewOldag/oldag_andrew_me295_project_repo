@@ -1,0 +1,5 @@
+# Integrity gate, option A (Andrew, 2026-11-21): a remedied track is rolled back if a ratio
+# remedied/base exceeds k. From scripts/integrity_thresholds.py relative.
+inversions: 1.5
+gap_ratio: 1.5
+lateral: 3.0

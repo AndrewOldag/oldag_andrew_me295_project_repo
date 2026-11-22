@@ -229,3 +229,35 @@ def track_integrity(rec, thresholds=None):
 def integrity_gate(results):
     """False when any integrity value fails or the registration is not plausible; True otherwise."""
     return not any(r.passed is False for r in results)
+
+
+RELATIVE_FILE = Path(__file__).resolve().parents[1] / "config" / "integrity_relative_k.yaml"
+
+
+def load_relative_k(path=RELATIVE_FILE):
+    with open(path) as fh:
+        return {k: v for k, v in yaml.safe_load(fh).items() if k in ("inversions", "gap_ratio", "lateral")}
+
+
+def integrity_ratios(remedied, base):
+    """Remedied over base (Andrew, 2026-11-21, option A): (inversions + 1) ratio, gap ratio, lateral.
+    `remedied`, `base`: track_integrity results of the two tracks of one window."""
+    r = {x.check: x.value for x in remedied}
+    b = {x.check: x.value for x in base}
+    with np.errstate(divide="ignore", invalid="ignore"):
+        return {"inversions": float((r["integrity_inversions"] + 1) / (b["integrity_inversions"] + 1)),
+                "gap_ratio": float(np.divide(r["integrity_gap_ratio"], b["integrity_gap_ratio"])),
+                "lateral": float(np.divide(r["integrity_lateral"], b["integrity_lateral"]))}
+
+
+def relative_integrity(rec_remedied, rec_base, k=None):
+    """The integrity gate for a remedied track: each ratio to the window's own base track against its k, and the
+    registration plausibility of the remedied track. Absolute values stay reported (track_integrity), not gating.
+    Use integrity_gate on the result."""
+    k = k or {}
+    rem = track_integrity(rec_remedied)
+    ratios = integrity_ratios(rem, track_integrity(rec_base))
+    out = [CheckResult(f"integrity_rel_{name}",
+                       False if np.isposinf(v) and k.get(name) is not None else _decide(v, k.get(name)),
+                       v, k.get(name), "ratio", detail="remedied over base") for name, v in ratios.items()]
+    return out + [x for x in rem if x.check == "registration_plausible"]

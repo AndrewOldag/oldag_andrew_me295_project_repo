@@ -25,3 +25,11 @@
 - Demo: `python scripts/integrity_thresholds.py report --tracks staging/tracks_real_fb1 --out x.json` -> 115 tracks, 0 pass all
 - Remaining: register_v2 and integrity check merged to main; R1 per-pair cluster job; R5 synthetic regression on the cluster
 - Bottlenecks: Andrew (lateral threshold); planning (merge; job kind for register_diag); compound (synthetic-rod job kind)
+
+## 2026-11-21 (build account, session real-calib, inbox items 24-25)
+- Done: option A integrity gate: `checker/checks.py` `relative_integrity`; k from 9 freeze v4 repaired/base pairs: inversions 1.5, gap ratio 1.5, lateral 3.0 (`config/integrity_relative_k.yaml`); 8 integrity tests pass; committed before any real remedied track was scored
+- Done: check on 44 c027 register_frames v1 tracks vs their base: batch 1 1 of 7 pass, batch 2 16 of 37; flagged 0711_c5__w6-8 fails (inversions ratio 200)
+- Failed: R1 job not submitted; cluster master check failed 10:23
+- Demo: `python scripts/integrity_thresholds.py relative --cache <freeze v4 cache>` -> k 1.5, 1.5, 3.0
+- Remaining: R1 sbatch when the master is open; flagged window v2 through the gate; R5 with compound's rod job kind
+- Bottlenecks: Andrew (cluster master); compound (rod job kind on main)
