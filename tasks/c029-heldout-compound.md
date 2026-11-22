@@ -3,12 +3,12 @@ id: c029
 title: held-out novel and compound faults: labels, then fixed script, tree, diagnostician, single agent
 lane: course
 owner: compound
-state: waiting on Andrew
+state: working
 branch: wip/compound
 host: VM (renders, LLM runs), cluster (tracker runs)
 created: 2026-11-18 14:20
-last_update: 2026-11-21 10:55
-blocker: cluster master down (10:20); 523 label runs queued, register_v2 states to submit
+last_update: 2026-11-22 15:40
+blocker: none
 done_marker: results/2026-11-18_heldout_compound/README.md
 ---
 
