@@ -1,12 +1,12 @@
 # dispatcher
-Updated: 2026-11-22 14:47 (local)
+Updated: 2026-11-22 14:50 (local)
 Lane: course
 Branch: wip/dispatcher
 Last inbox item done: 54 (item 46, task c027, still working)
 State: waiting on Andrew
 Now: c027 retracks wait for the cluster master (down since about 01:00); run pass done with failing windows held (item 54)
 Done since last update:
-- Auto 11-22 14:47 (from logs): run 1189 records, accept by rule 1034, decline by diagnostician 23, decline by rule 58, paused 74; LLM calls 491; run ended: done; windows this start 74; LLM calls 491. Queue 417 tasks: done 3, failed 12, fetched 402; cycle last:  
+- Auto 11-22 14:50 (from logs): run 1189 records, accept by rule 1034, decline by diagnostician 23, decline by rule 58, paused 74; LLM calls 491; run ended: done; windows this start 74; LLM calls 491. Queue 421 tasks: done 3, failed 12, fetched 402, submitted 4; cycle last:  
 - Item 52 (1), cycle log, last lines: `2026-11-21 00:41 fetch: fetched 21 ... groups cleared g015`; `00:50 submit: g016, array 7425391, 24 tasks; 77 jobs wait`; `10:18 fetch: connection down (cluster master down)`; `10:18 exit: connection down`. Earlier stop: one fetch hung on the link 17:06-22:56. Reasons: link hang, then master down. Not the cap: groups of 3-4 roots kept fitting after each clear
 - Status gap 00:35-10:00: the detached 2-hourly status pusher hung in `sleep 7200` and never pushed; stopped. The cycle now pushes a status line after every cleared group and every submit (52 (4))
 - Item 52 (2): c026 leftover root cleared 2026-11-20 23:05 (item 51). 0727_cc7 leftover in c019: clear script ready (md5 check of its batch-2 outputs first, c019/DELETED.log); runs first thing when the cycle starts, needs the master
