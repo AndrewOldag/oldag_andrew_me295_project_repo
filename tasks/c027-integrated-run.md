@@ -3,12 +3,12 @@ id: c027
 title: submit-and-forget cluster path; integrated run over all 101 roots with tree baseline and fresh one-root demo
 lane: course
 owner: dispatcher
-state: waiting on Andrew
+state: working
 branch: wip/dispatcher
 host: VM (LLM runs), cluster (retrack arrays on CPU; one GPU midline job), lab server (storage and relay)
 created: 2026-11-18 14:20
-last_update: 2026-11-21 10:25
-blocker: cluster master down; integrity gate (item 54) not on main
+last_update: 2026-11-22 15:00
+blocker: none (master needed until wave 1 is done)
 done_marker: results/2026-11-18_integrated_run/README.md
 ---
 
