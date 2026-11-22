@@ -1,15 +1,15 @@
 # real-calib
-Updated: 2026-11-21 10:25 (local)
+Updated: 2026-11-22 14:50 (local)
 Lane: course
 Branch: wip/real-calib
 Last inbox item done: 25
-State: waiting on Andrew
-Now: items 24-25 code and check ready to merge; R1 sbatch blocked: cluster connection master down; R5 waits for compound's rod job kind on main
+State: waiting on server job
+Now: item 26. R5 done; R1 job 7841039 running (fetch on next ping); flagged window v2 track not fetched by dispatcher yet
 Done since last update:
-- Merged origin/main (74e6d15)
-- Item 25, option A gate: checker `relative_integrity` (with `integrity_gate`), `config/integrity_relative_k.yaml`; k from the 9 freeze v4 repaired/base pairs: inversions 1.5, gap ratio 1.5, lateral 3.0; tests; committed before any real remedied track was scored
-- Check on 44 c027 register_frames v1 tracks against their base tracks: batch 1 1 of 7 pass, batch 2 16 of 37; flagged 0711_c5__w6-8 fails (inversions ratio 200, lateral 14.9). Its v2 track is not back yet. results/2026-11-20_registration_fix/
-- Dispatcher: the option A gate is ready to merge on wip/real-calib. At each remedy step: `integrity_gate(relative_integrity(rec_remedied, rec_base, load_relative_k()))`; False -> roll the remedy back. Absolute values (`track_integrity`) stay reported, not gating
-- R1: one-job driver ready (git-ignored; probe, submit without waiting, fetch with md5). Probe at 10:23: master check failed, nothing submitted
+- Merged origin/main (f12675c). c031 cluster work in its own work, code and stage folders (not dispatcher's)
+- R5: 6 freeze v4 register rods + moved copies re-rendered here (truth equal within 1e-12), 12 runs in one cluster array (7840638), 12 fetched, 0 failed, worst case $0.144
+- R5 result: v1 repairs 6 of 6, register_v2 3 of 6. v2 closure lower on all 6; v2 rigid invariance higher on all 6, over the synthetic 2.0 %/h on 3. All 12 measurements good against truth; option A gate passes all 12. results/2026-11-20_registration_fix/regression.md
+- R1: root 0711_c5 staged (10.7 GB, c031 stage folder), job 7841039 submitted 14:3x, RUNNING at 14:45
 Needs Andrew:
-- open the cluster connection on the lab server (master check failed 2026-11-21 10:23); then ping real-calib to submit the R1 job
+- R5: register_v2 repairs fewer synthetic rods than v1 (3 vs 6) because rigid invariance rises; closure and truth error are fine. On real windows rigid invariance is reported, not gating. Keep register_v2 as the remedy, or something else? No change made (fixed remedy list)
+- Cluster folder: the staged root holds 10.7 GB of the 30 GB cap until R1 is fetched and the root cleared (next ping)

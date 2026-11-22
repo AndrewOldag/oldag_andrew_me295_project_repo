@@ -33,3 +33,12 @@
 - Demo: `python scripts/integrity_thresholds.py relative --cache <freeze v4 cache>` -> k 1.5, 1.5, 3.0
 - Remaining: R1 sbatch when the master is open; flagged window v2 through the gate; R5 with compound's rod job kind
 - Bottlenecks: Andrew (cluster master); compound (rod job kind on main)
+
+## 2026-11-22 (build account, session real-calib, inbox item 26)
+- Done: merged origin/main (f12675c); own cluster work, code and stage folders for c031 (config git-ignored)
+- Done: R5 `scripts/synth/register_v2_regression.py`: 6 freeze v4 register rods and moved copies re-rendered (truth equal within 1e-12), 12 tracker runs in one cluster array (7840638) through `scripts/rod_jobs.py`, 12 fetched, 0 failed, worst case $0.144
+- Result: v1 repairs 6 of 6, register_v2 3 of 6; v2 closure lower on all 6 (0.04-0.22 px/h), v2 rigid invariance higher on all 6 and over 2.0 %/h on 3 (2.72, 2.75, 3.88); all 12 good against truth; all v2 plausible; option A gate passes all 12
+- Done: R1 job submitted (7841039, root 0711_c5 staged in the c031 stage folder, 10.7 GB); running at 14:45
+- Demo: `python scripts/synth/register_v2_regression.py report` -> the table in `results/2026-11-20_registration_fix/regression.md`
+- Remaining: fetch R1; clear the staged root after the output is md5-checked on storage; flagged window v2 through the gate; decisions; ready to merge
+- Bottlenecks: Andrew (R5 result: v2 vs v1 on rigid invariance); dispatcher (flagged window v2 track)
