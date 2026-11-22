@@ -55,6 +55,7 @@ ARRAY_THROTTLE = 16
 REGISTER_HOLD = True
 STUCK_S = 2 * 3600        # inbox item 52: a task live this long after its group's submit is cancelled and failed
 MAX_FAILS = 1             # inbox item 52: a failed task is requeued once
+STAGE_MARGIN = 1.1        # cluster size of a staged root over its storage `du`, upper bound used for packing
 JOB_FIELDS = ["job", "window", "root", "from_h", "to_h", "which", "kind", "settings"]
 QUEUE_FIELDS = JOB_FIELDS + ["group", "array", "task", "state", "error", "md5", "fetched"]
 FINAL = ("fetched", "failed", "done")
@@ -349,7 +350,9 @@ def submit(runner, remote, job_rows_, state=STATE, cap_mb=CAP_MB, log=print):
     try:
         room = max(0, cap_mb - remote.folder_mb())
         staged = set(remote.staged())               # already on the cluster: no new space (a resubmit after a failure)
-        sizes = [(root, 0 if root in staged else remote.root_mb(runner.windows[rows[0]["window"]]["imgdir"]))
+        # storage `du` is under the size on the cluster file system (0714_c4, 2026-11-22): pack with a 10 % margin
+        sizes = [(root, 0 if root in staged else
+                  int(STAGE_MARGIN * remote.root_mb(runner.windows[rows[0]["window"]]["imgdir"])))
                  for root, rows in by_root.items()]
         groups = pack_groups(sizes, room)
         if not groups:
@@ -358,9 +361,18 @@ def submit(runner, remote, job_rows_, state=STATE, cap_mb=CAP_MB, log=print):
             return "no room"
         work, tag = runner.ccfg["work_dir"], runner.tag
         gid = f"g{1 + max([int(r['group'][1:]) for r in queue] or [0]):03d}"
-        rows = [r for root in groups[0] for r in by_root[root]]
+        done_roots = []
         for root in groups[0]:
-            remote.stage(root, runner.windows[by_root[root][0]["window"]]["imgdir"])
+            try:
+                remote.stage(root, runner.windows[by_root[root][0]["window"]]["imgdir"])
+            except Exception as e:                   # noqa: BLE001 - the cap check of stage_root: stage no more
+                if "cluster folder cap" not in str(e) or not done_roots:
+                    raise
+                log(f"{root}: {str(e)[-80:]}; group submitted with {len(done_roots)} roots")
+                break
+            done_roots.append(root)
+        groups[0] = done_roots
+        rows = [r for root in groups[0] for r in by_root[root]]
         for wid in sorted({r["window"] for r in rows}):
             remote.push_midline(runner.midline_path(_window(wid)), f"{work}/midline/{wid}{tag}_netmid.npz")
         prep = [{**{k: r[k] for k in ("window", "root", "from_h", "to_h")}, "job": f"prep_{r['window']}",

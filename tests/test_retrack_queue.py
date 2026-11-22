@@ -56,6 +56,8 @@ class FakeRemote:
         return self._root
 
     def stage(self, root, imgdir):
+        if root in getattr(self, "cap_refuses", ()):
+            raise JobFailed(f"{root}: staging 4650 MB would pass the 30720 MB cluster folder cap")
         self.calls.append(("stage", root))
 
     def staged(self):
@@ -164,7 +166,7 @@ def test_down_link_exit_0_no_state_change(setup, capsys):
 
 def test_submit_groups_by_room_and_arrays(setup):
     runner, state = setup
-    rem = FakeRemote(folder_mb=20000, root_mb=5000)                # room for 2 roots under 30 GB
+    rem = FakeRemote(folder_mb=19000, root_mb=5000)                # room for 2 roots under 30 GB (5500 MB packed)
     rows = rows_for(runner, ["r1__w0-2", "r2__w0-2", "r3__w10-12"])
     assert RQ.submit(runner, rem, rows, state=state) == "submitted g001"
     q = RQ.read_csv(state / "queue.csv")
@@ -344,3 +346,12 @@ def test_stuck_task_cancelled_and_requeued_once(setup):
     rem.states[(a2, 0)] = "FAILED"
     RQ.fetch(runner, rem, state=state)
     assert RQ.submit(runner, rem, rows, state=state) == "nothing to submit"       # failed twice: not again
+
+
+def test_stage_cap_refusal_submits_the_staged_roots(setup):
+    runner, state = setup
+    rem = FakeRemote(folder_mb=0, root_mb=5000)
+    rem.cap_refuses = {"r2"}                                        # cluster copy larger than storage du
+    rows = rows_for(runner, ["r1__w0-2", "r2__w0-2", "r3__w0-2"])
+    assert RQ.submit(runner, rem, rows, state=state) == "submitted g001"
+    assert {r["root"] for r in RQ.read_csv(state / "queue.csv")} == {"r1"}
