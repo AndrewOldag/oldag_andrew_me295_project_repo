@@ -57,10 +57,30 @@
 - Flagged window, v1: inversions ratio 199.8, gap ratio 3.65, lateral 14.9: fails. Its v2 track is not back yet (dispatcher's register_v2 retracks)
 - Over the 44 pairs: median ratio inversions 4.8, gap ratio 1.45, lateral 2.4
 
+## R5 synthetic regression (2026-11-22)
+- Rods: the 6 freeze v4 rods labelled accept_repaired with `register_frames` (rigid_drift z0.5, bad_stage_correction z3; seeds 26-28), each with its moved copy. Re-rendered on this machine; truth equal to the freeze v4 truth within 1e-12 (the re-render differs by about 1e-18)
+- `register_v2` settings from `apply_remedy` on the cached unremedied run: band from 400 px; bound 17 px (rigid drift), 6 px (bad stage correction)
+- 12 tracker runs on the cluster CPU, one array through `scripts/rod_jobs.py` (`scripts/synth/register_v2_regression.py`): 12 fetched, 0 failed, md5 checked; worst case $0.144
+- Outcome by the freeze v4 rule; v1 tracks are the cached freeze v4 ones (`regression.md`, `regression.json`):
+
+| Rod | v1 | v2 | v2 closure, px/h | v2 rigid invariance, %/h | v1 rigid invariance, %/h |
+| :-- | :-- | :-- | --: | --: | --: |
+| rigid_drift s26 | accept_repaired correct | not accepted | 0.20 | 2.75 (fail) | 1.69 |
+| rigid_drift s27 | accept_repaired correct | accept_repaired correct | 0.22 | 1.53 | 0.80 |
+| rigid_drift s28 | accept_repaired correct | accept_repaired correct | 0.13 | 1.98 | 1.08 |
+| bad_stage s26 | accept_repaired correct | not accepted | 0.07 | 3.88 (fail) | 1.67 |
+| bad_stage s27 | accept_repaired correct | accept_repaired correct | 0.04 | 1.71 | 0.80 |
+| bad_stage s28 | accept_repaired correct | not accepted | 0.11 | 2.72 (fail) | 1.12 |
+
+- v1 repairs 6 of 6; v2 repairs 3 of 6. v2 closure is lower than v1 on all 6; v2 rigid invariance (rod against its moved copy) is higher on all 6 and over the synthetic gate (2.0 %/h) on 3. All 12 measurements (v1 and v2) are good against truth; the 3 v2 rods are declined by the check, not by error
+- All 6 v2 registrations plausible (rotation 0.002-0.41 deg, band motion 2.8-8.2 px, under the bounds); the option A gate passes all 12
+- v2 fits a rotation of 0.36-0.41 deg on the rigid-drift rods. Not explained yet
+- On real windows rigid invariance is reported, not gating (real profile), so this check does not decline real windows. No change to v2 or to any threshold here (fixed remedy list); for Andrew
+
 ## Open
-- R1 per-pair run: one sbatch of `register_diag.py` through the relay (planning, inbox 24)
-- Flagged window v2 through the gate, once its register_v2 track is fetched
-- R5: compound's synthetic-rod job kind on main
+- R1 per-pair run: submitted 2026-11-22 (one CPU job, 45 min limit); result to fetch
+- Flagged window v2 through the gate, once dispatcher's register_v2 track of it is fetched
+- R5 result above: v2 repairs 3 of 6 synthetic rods against 6 of 6 for v1
 
 ## Commands
 - `python -m pytest tests/test_integrity.py tests/test_executors.py` (agents env); `tests/test_register_v2.py` in the tracker env with the tracker on PYTHONPATH
