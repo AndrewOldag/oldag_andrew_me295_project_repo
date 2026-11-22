@@ -129,7 +129,7 @@ def test_register_v2_not_held(tmp_path, monkeypatch):
     assert r.missing(w, v2) == []
 
 
-def test_pre_pause_only_when_no_single_remedy_cached(tmp_path, monkeypatch):
+def test_pre_pause_until_every_single_remedy_cached(tmp_path, monkeypatch):
     import retrack_queue as RQ
     monkeypatch.setattr(RA, "REMEDY_HOLD", False)
     r = runner(tmp_path)
@@ -143,7 +143,11 @@ def test_pre_pause_only_when_no_single_remedy_cached(tmp_path, monkeypatch):
     assert e.value.settings == singles[0]
     lines = [json.loads(l) for l in (tmp_path / "out" / "paused.jsonl").read_text().splitlines()]
     assert [l["settings"]["midline_smooth"] for l in lines] == ["light"]
-    r.cache_path(w, singles[1], "window").write_bytes(b"x")        # one cached: the agent runs
+    r.cache_path(w, singles[1], "window").write_bytes(b"x")        # one of two cached: still paused
+    with pytest.raises(RA.Paused) as e:
+        run.pre_pause(w, sl)
+    assert e.value.settings == singles[0]
+    r.cache_path(w, singles[0], "window").write_bytes(b"x")        # every single cached: the agent runs
     run.pre_pause(w, sl)
 
 

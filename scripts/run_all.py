@@ -51,9 +51,9 @@ LIMIT_TEXT = "hit your session limit"
 # Inbox items 49 and 53: register_frames v1 tracks can pass closure with points out of order. They count as not
 # cached, so they are never used; register_v2 tracks are used like any other
 REGISTER_HOLD = True
-# Inbox items 53 and 54: decisions on a remedied track wait for the integrity gate (option A, real-calib). Until it is
-# on main, a failing window is paused before any LLM call; its missing single remedies still go to paused.jsonl
-REMEDY_HOLD = True
+# Inbox items 53-55: decisions on a remedied track waited for the integrity gate (option A). It is on main and wired
+# into every remedy step (agents/executors.py), so the hold is lifted (2026-11-22). True pauses every failing window
+REMEDY_HOLD = False
 
 
 class Paused(BaseException):
@@ -354,8 +354,9 @@ class Run:
                     wall_s=round(time.time() - t0, 1))
 
     def pre_pause(self, w, sl):
-        """A failing window with no single-remedy track cached is paused before any LLM call: the first remedy would
-        pause it, and the calls spent would be spent again on the rerun. Every missing single remedy is queued."""
+        """A failing window with any single-remedy track not cached is paused before any LLM call (2026-11-22; was: none
+        cached): a remedy it picks may pause it, and the calls spent would be spent again on the rerun. Every missing
+        single remedy is queued."""
         from retrack_queue import single_remedies
         singles = [s for _, _, s in single_remedies(sl.runs[0][0], sl.base_disk_radius, sl.runs[0][1].record)]
         missing = [s for s in singles if self.runner.missing(w, s)]
@@ -366,7 +367,7 @@ class Run:
                                         "kinds": self.runner.missing(w, s), "time": now()}) + "\n")
             raise Paused(w, singles[0] if singles else sl.runs[0][0], [],
                          reason="paused: remedy hold (inbox item 54; integrity gate not on main)")
-        if missing and len(missing) == len(singles):
+        if missing:
             with open(self.out / "paused.jsonl", "a") as f:
                 for s in missing[1:]:
                     f.write(json.dumps({"window": w.id(), "settings": s.to_dict(),
