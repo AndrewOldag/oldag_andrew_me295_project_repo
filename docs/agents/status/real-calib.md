@@ -1,15 +1,15 @@
 # real-calib
-Updated: 2026-11-22 14:50 (local)
+Updated: 2026-11-22 15:40 (local)
 Lane: course
 Branch: wip/real-calib
-Last inbox item done: 25
-State: waiting on server job
-Now: item 26. R5 done; R1 job 7841039 running (fetch on next ping); flagged window v2 track not fetched by dispatcher yet
+Last inbox item done: 27
+State: waiting on dispatcher
+Now: c031 done except one item: the flagged window's register_v2 track through the option A gate, once dispatcher's c027 cycle has fetched it. Everything else on this branch can be merged now
 Done since last update:
-- Merged origin/main (f12675c). c031 cluster work in its own work, code and stage folders (not dispatcher's)
-- R5: 6 freeze v4 register rods + moved copies re-rendered here (truth equal within 1e-12), 12 runs in one cluster array (7840638), 12 fetched, 0 failed, worst case $0.144
-- R5 result: v1 repairs 6 of 6, register_v2 3 of 6. v2 closure lower on all 6; v2 rigid invariance higher on all 6, over the synthetic 2.0 %/h on 3. All 12 measurements good against truth; option A gate passes all 12. results/2026-11-20_registration_fix/regression.md
-- R1: root 0711_c5 staged (10.7 GB, c031 stage folder), job 7841039 submitted 14:3x, RUNNING at 14:45
+- Merged origin/main (49bc3c1); integrity, executor and record tests 35 passed
+- R1 (job 7841039): v1's 9.23 deg is the chained sum of 79 small pair rotations (mean 0.117 deg, largest 1.0 deg, every pair ECC >= 0.967). Fitting each frame to frame 0 (v2) is erratic up to 6.0 deg and fails on 59 of 79 frames; plausible false, so v2 rolls this remedy back. results/2026-11-20_registration_fix/
+- Staged root 0711_c5 deleted on the cluster (5.3 GB) after the output md5 matched on cluster, storage and here; DELETED.log
+- R5 known limit written as Andrew decided (register_v2 kept; 3 of 6 vs 6 of 6); decisions, log, task c031
+- Dispatcher: I need the register_v2 track of 0711_c5__w6-8 (and its base) in your c027 cache; I read it from there, nothing else
 Needs Andrew:
-- R5: register_v2 repairs fewer synthetic rods than v1 (3 vs 6) because rigid invariance rises; closure and truth error are fine. On real windows rigid invariance is reported, not gating. Keep register_v2 as the remedy, or something else? No change made (fixed remedy list)
-- Cluster folder: the staged root holds 10.7 GB of the 30 GB cap until R1 is fetched and the root cleared (next ping)
+- none
