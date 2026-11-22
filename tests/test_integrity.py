@@ -62,3 +62,36 @@ def test_threshold_rounding():
     sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
     from integrity_thresholds import round_up_2sf
     assert [round_up_2sf(x) for x in (2.3295, 0.0537, 123.4, 0.0)] == [2.4, 0.054, 130, 0.0]
+
+
+K = {"inversions": 1.5, "gap_ratio": 1.5, "lateral": 3.0}
+
+
+def test_relative_gate_same_track_passes():
+    from checker import load_relative_k, relative_integrity
+    assert set(load_relative_k()) == set(K)
+    res = {r.check: r for r in relative_integrity(clean(), clean(), load_relative_k())}
+    assert res["integrity_rel_inversions"].value == 1.0 and res["integrity_rel_lateral"].value == 1.0
+    assert integrity_gate(list(res.values()))
+
+
+def test_relative_gate_fails_on_lost_order_and_scatter():
+    from checker import relative_integrity
+    rec = clean()
+    c = rec.centre.copy()
+    c[10, [5, 6]] = c[10, [6, 5]]
+    c[20, [8, 9]] = c[20, [9, 8]]
+    res = {r.check: r for r in relative_integrity(replace(rec, centre=c), rec, K)}
+    assert res["integrity_rel_inversions"].value >= 3 and res["integrity_rel_inversions"].passed is False
+    rng = np.random.default_rng(1)
+    scattered = rec.centre + rng.normal(0, 2.0, rec.centre.shape) * np.array([0, 1])
+    res = {r.check: r for r in relative_integrity(replace(rec, centre=scattered), rec, K)}
+    assert res["integrity_rel_lateral"].passed is False and not integrity_gate(list(res.values()))
+
+
+def test_relative_gate_keeps_registration_plausibility():
+    from checker import relative_integrity
+    rec = clean()
+    rem = replace(rec, settings=dict(rec.settings, preprocess={"register": {"plausible": False}}))
+    res = relative_integrity(rem, rec, K)
+    assert [r.passed for r in res if r.check == "registration_plausible"] == [False] and not integrity_gate(res)

@@ -1,0 +1,450 @@
+{
+ "k": {
+  "inversions": 1.5,
+  "gap_ratio": 1.5,
+  "lateral": 3.0
+ },
+ "note": "register_frames v1 tracks in the c027 cache against their own base tracks; check only, no decision changed",
+ "pairs": [
+  {
+   "window": "0708_c4__w0-2",
+   "label": "batch 2, register_frames v1",
+   "passed": false,
+   "integrity_rel_inversions": 0.9792325056433409,
+   "integrity_rel_gap_ratio": 2.7956638815032324,
+   "integrity_rel_lateral": 0.9851435406446132,
+   "registration_plausible": NaN,
+   "tag": "st1_reg2p470"
+  },
+  {
+   "window": "0708_c4__w2-4",
+   "label": "batch 2, register_frames v1",
+   "passed": true,
+   "integrity_rel_inversions": 1.0082417582417582,
+   "integrity_rel_gap_ratio": 1.499659641503119,
+   "integrity_rel_lateral": 1.0412129755965145,
+   "registration_plausible": NaN,
+   "tag": "st1_reg2p960"
+  },
+  {
+   "window": "0708_c6__w0-2",
+   "label": "batch 2, register_frames v1",
+   "passed": false,
+   "integrity_rel_inversions": 2936.0,
+   "integrity_rel_gap_ratio": 2.9322121364165867,
+   "integrity_rel_lateral": 23671.9734128466,
+   "registration_plausible": NaN,
+   "tag": "st1_reg2p1035"
+  },
+  {
+   "window": "0708_c6__w2-4",
+   "label": "batch 2, register_frames v1",
+   "passed": false,
+   "integrity_rel_inversions": 10.94392523364486,
+   "integrity_rel_gap_ratio": 8.668798588919495,
+   "integrity_rel_lateral": 153.18180783349658,
+   "registration_plausible": NaN,
+   "tag": "st1_reg2p1075"
+  },
+  {
+   "window": "0708_m1__w12-14",
+   "label": "batch 1, register_frames v1",
+   "passed": false,
+   "integrity_rel_inversions": 23.0,
+   "integrity_rel_gap_ratio": 1.4349304387722952,
+   "integrity_rel_lateral": 1.802777774304729,
+   "registration_plausible": NaN,
+   "tag": "st1_reg2p1080"
+  },
+  {
+   "window": "0708_m1__w18-20",
+   "label": "batch 1, register_frames v1",
+   "passed": false,
+   "integrity_rel_inversions": 1.9664429530201342,
+   "integrity_rel_gap_ratio": 0.8185147710563306,
+   "integrity_rel_lateral": 1.213785225799682,
+   "registration_plausible": NaN,
+   "tag": "st1_reg2p1070"
+  },
+  {
+   "window": "0708_m1__w8-10",
+   "label": "batch 1, register_frames v1",
+   "passed": false,
+   "integrity_rel_inversions": 5.1875,
+   "integrity_rel_gap_ratio": 1.1361453354768973,
+   "integrity_rel_lateral": 1.6685172822078311,
+   "registration_plausible": NaN,
+   "tag": "st1_reg2p1070"
+  },
+  {
+   "window": "0708_m6__w14-16",
+   "label": "batch 2, register_frames v1",
+   "passed": true,
+   "integrity_rel_inversions": 1.1666666666666667,
+   "integrity_rel_gap_ratio": 1.0440415219055355,
+   "integrity_rel_lateral": 1.0108489898807136,
+   "registration_plausible": NaN,
+   "tag": "st1_reg2p970"
+  },
+  {
+   "window": "0708_m7__w12-14",
+   "label": "batch 2, register_frames v1",
+   "passed": false,
+   "integrity_rel_inversions": 5.981481481481482,
+   "integrity_rel_gap_ratio": 5.965490816410923,
+   "integrity_rel_lateral": 6.7836767530153255,
+   "registration_plausible": NaN,
+   "tag": "st1_reg2p1100"
+  },
+  {
+   "window": "0711_c1__w0-2",
+   "label": "batch 2, register_frames v1",
+   "passed": false,
+   "integrity_rel_inversions": 25.483606557377048,
+   "integrity_rel_gap_ratio": 2.7003924651348115,
+   "integrity_rel_lateral": 4438.168518720451,
+   "registration_plausible": NaN,
+   "tag": "st1_reg2p1125"
+  },
+  {
+   "window": "0711_c5__w12-14",
+   "label": "batch 2, register_frames v1",
+   "passed": true,
+   "integrity_rel_inversions": 0.993006993006993,
+   "integrity_rel_gap_ratio": 0.9543281972876995,
+   "integrity_rel_lateral": 1.0413838130634478,
+   "registration_plausible": NaN,
+   "tag": "st1_reg2p1100"
+  },
+  {
+   "window": "0711_c5__w6-8",
+   "label": "flagged batch 2, register_frames v1",
+   "passed": false,
+   "integrity_rel_inversions": 199.75,
+   "integrity_rel_gap_ratio": 3.646452208451156,
+   "integrity_rel_lateral": 14.868563333993595,
+   "registration_plausible": NaN,
+   "tag": "st1_reg2p1075"
+  },
+  {
+   "window": "0711_m2__w6-8",
+   "label": "batch 2, register_frames v1",
+   "passed": false,
+   "integrity_rel_inversions": 12.46376811594203,
+   "integrity_rel_gap_ratio": 3.892227065127,
+   "integrity_rel_lateral": 6.740955890675002,
+   "registration_plausible": NaN,
+   "tag": "st1_reg2p1020"
+  },
+  {
+   "window": "0711_m3__w12-14",
+   "label": "batch 2, register_frames v1",
+   "passed": false,
+   "integrity_rel_inversions": 46.44827586206897,
+   "integrity_rel_gap_ratio": 2.822894999842781,
+   "integrity_rel_lateral": 5.132338611193958,
+   "registration_plausible": NaN,
+   "tag": "st1_reg2p1030"
+  },
+  {
+   "window": "0711_m3__w14-16",
+   "label": "batch 2, register_frames v1",
+   "passed": false,
+   "integrity_rel_inversions": 6.48,
+   "integrity_rel_gap_ratio": 3.498652148135988,
+   "integrity_rel_lateral": 4.173541997759293,
+   "registration_plausible": NaN,
+   "tag": "st1_reg2p1030"
+  },
+  {
+   "window": "0711_m4__w2-4",
+   "label": "batch 2, register_frames v1",
+   "passed": false,
+   "integrity_rel_inversions": 2.8596491228070176,
+   "integrity_rel_gap_ratio": 2.0388164259894306,
+   "integrity_rel_lateral": 3.5133110441807327,
+   "registration_plausible": NaN,
+   "tag": "st1_reg2p785"
+  },
+  {
+   "window": "0711_m6__w0-2",
+   "label": "batch 2, register_frames v1",
+   "passed": false,
+   "integrity_rel_inversions": 110.8,
+   "integrity_rel_gap_ratio": 2.005030351446522,
+   "integrity_rel_lateral": 5.735098038107717,
+   "registration_plausible": NaN,
+   "tag": "st1_reg2p1015"
+  },
+  {
+   "window": "0714_c4__w0-2",
+   "label": "batch 2, register_frames v1",
+   "passed": true,
+   "integrity_rel_inversions": 1.0603448275862069,
+   "integrity_rel_gap_ratio": 1.0000495377126717,
+   "integrity_rel_lateral": 0.9884178104292873,
+   "registration_plausible": NaN,
+   "tag": "st1_reg2p1285"
+  },
+  {
+   "window": "0714_c5__w6-8",
+   "label": "batch 1, register_frames v1",
+   "passed": false,
+   "integrity_rel_inversions": 13.632352941176471,
+   "integrity_rel_gap_ratio": 0.913436108452953,
+   "integrity_rel_lateral": 432.0315686929796,
+   "registration_plausible": NaN,
+   "tag": "st1_reg2p1020"
+  },
+  {
+   "window": "0714_c6__w0-2",
+   "label": "batch 2, register_frames v1",
+   "passed": true,
+   "integrity_rel_inversions": 1.0,
+   "integrity_rel_gap_ratio": 0.9999999971779034,
+   "integrity_rel_lateral": 0.9997885758701976,
+   "registration_plausible": NaN,
+   "tag": "st1_reg2p1190"
+  },
+  {
+   "window": "0714_c9__w12-14",
+   "label": "batch 2, register_frames v1",
+   "passed": false,
+   "integrity_rel_inversions": 52.94915254237288,
+   "integrity_rel_gap_ratio": 5.850988511065437,
+   "integrity_rel_lateral": 3589.5809220267024,
+   "registration_plausible": NaN,
+   "tag": "st1_reg2p1090"
+  },
+  {
+   "window": "0714_c9__w16-18",
+   "label": "batch 2, register_frames v1",
+   "passed": false,
+   "integrity_rel_inversions": 9.871287128712872,
+   "integrity_rel_gap_ratio": 1.8954320438107268,
+   "integrity_rel_lateral": 11.952320655809746,
+   "registration_plausible": NaN,
+   "tag": "st1_reg2p1075"
+  },
+  {
+   "window": "0714_c9__w2-4",
+   "label": "batch 2, register_frames v1",
+   "passed": false,
+   "integrity_rel_inversions": 21.1328125,
+   "integrity_rel_gap_ratio": 3.494822710046845,
+   "integrity_rel_lateral": 1545.5132850749023,
+   "registration_plausible": NaN,
+   "tag": "st1_reg2p1095"
+  },
+  {
+   "window": "0714_m4__w12-14",
+   "label": "batch 2, register_frames v1",
+   "passed": false,
+   "integrity_rel_inversions": 28.743119266055047,
+   "integrity_rel_gap_ratio": 3.2239105348862194,
+   "integrity_rel_lateral": 659.0797841724882,
+   "registration_plausible": NaN,
+   "tag": "st1_reg2p1065"
+  },
+  {
+   "window": "0721_c1__w4-6",
+   "label": "batch 2, register_frames v1",
+   "passed": true,
+   "integrity_rel_inversions": 1.0,
+   "integrity_rel_gap_ratio": 1.1954883430838452,
+   "integrity_rel_lateral": 1.0902972476963009,
+   "registration_plausible": NaN,
+   "tag": "st1_reg2p1120"
+  },
+  {
+   "window": "0721_c2__w0-2",
+   "label": "batch 1, register_frames v1",
+   "passed": false,
+   "integrity_rel_inversions": 9.507042253521126,
+   "integrity_rel_gap_ratio": 9.897474657419833,
+   "integrity_rel_lateral": 511.6287622410712,
+   "registration_plausible": NaN,
+   "tag": "st1_reg2p1015"
+  },
+  {
+   "window": "0721_c2__w22-24",
+   "label": "batch 1, register_frames v1",
+   "passed": true,
+   "integrity_rel_inversions": 0.9507829977628636,
+   "integrity_rel_gap_ratio": 1.0001948455152658,
+   "integrity_rel_lateral": 1.0117903905337147,
+   "registration_plausible": NaN,
+   "tag": "st1_reg2p1320"
+  },
+  {
+   "window": "0721_c2__w8-10",
+   "label": "batch 1, register_frames v1",
+   "passed": false,
+   "integrity_rel_inversions": 51.24285714285714,
+   "integrity_rel_gap_ratio": 4.4348470772870945,
+   "integrity_rel_lateral": 2106.603344079264,
+   "registration_plausible": NaN,
+   "tag": "st1_reg2p1130"
+  },
+  {
+   "window": "0721_m2__w20-22",
+   "label": "batch 2, register_frames v1",
+   "passed": true,
+   "integrity_rel_inversions": 1.0,
+   "integrity_rel_gap_ratio": 0.9872274010057918,
+   "integrity_rel_lateral": 1.0292023739538412,
+   "registration_plausible": NaN,
+   "tag": "st1_reg2p1055"
+  },
+  {
+   "window": "0721_m3__w16-18",
+   "label": "batch 2, register_frames v1",
+   "passed": true,
+   "integrity_rel_inversions": 1.0169491525423728,
+   "integrity_rel_gap_ratio": 1.0069942994955743,
+   "integrity_rel_lateral": 1.0054678032328555,
+   "registration_plausible": NaN,
+   "tag": "st1_reg2p1015"
+  },
+  {
+   "window": "0721_m3__w18-20",
+   "label": "batch 2, register_frames v1",
+   "passed": true,
+   "integrity_rel_inversions": 1.0,
+   "integrity_rel_gap_ratio": 0.9811389460139114,
+   "integrity_rel_lateral": 1.0394544463293545,
+   "registration_plausible": NaN,
+   "tag": "st1_reg2p1085"
+  },
+  {
+   "window": "0721_m3__w20-22",
+   "label": "batch 2, register_frames v1",
+   "passed": true,
+   "integrity_rel_inversions": 1.0,
+   "integrity_rel_gap_ratio": 1.0274566208089302,
+   "integrity_rel_lateral": 1.0953709558896367,
+   "registration_plausible": NaN,
+   "tag": "st1_reg2p1085"
+  },
+  {
+   "window": "0721_m3__w22-23.99",
+   "label": "batch 2, register_frames v1",
+   "passed": true,
+   "integrity_rel_inversions": 0.6071428571428571,
+   "integrity_rel_gap_ratio": 1.0968372152226762,
+   "integrity_rel_lateral": 1.1932519100750176,
+   "registration_plausible": NaN,
+   "tag": "st1_reg2p1060"
+  },
+  {
+   "window": "0721_m3__w4-6",
+   "label": "batch 2, register_frames v1",
+   "passed": false,
+   "integrity_rel_inversions": 7.523809523809524,
+   "integrity_rel_gap_ratio": 1.9237981034380807,
+   "integrity_rel_lateral": 3.325803421279476,
+   "registration_plausible": NaN,
+   "tag": "st1_reg2p1020"
+  },
+  {
+   "window": "0721_m3__w6-8",
+   "label": "batch 2, register_frames v1",
+   "passed": false,
+   "integrity_rel_inversions": 3.3047619047619046,
+   "integrity_rel_gap_ratio": 1.4635816693715047,
+   "integrity_rel_lateral": 3.641159391938303,
+   "registration_plausible": NaN,
+   "tag": "st1_reg2p1050"
+  },
+  {
+   "window": "0721_m4__w0-2",
+   "label": "batch 2, register_frames v1",
+   "passed": false,
+   "integrity_rel_inversions": 34.84615384615385,
+   "integrity_rel_gap_ratio": 3.990918221095567,
+   "integrity_rel_lateral": 6.246993627213758,
+   "registration_plausible": NaN,
+   "tag": "st1_reg2p730"
+  },
+  {
+   "window": "0721_m4__w14-16",
+   "label": "batch 2, register_frames v1",
+   "passed": true,
+   "integrity_rel_inversions": 0.7142857142857143,
+   "integrity_rel_gap_ratio": 1.0127670307417713,
+   "integrity_rel_lateral": 1.0020853451505634,
+   "registration_plausible": NaN,
+   "tag": "st1_reg2p1065"
+  },
+  {
+   "window": "0727_cc3__w20-22",
+   "label": "batch 2, register_frames v1",
+   "passed": true,
+   "integrity_rel_inversions": 0.7591240875912408,
+   "integrity_rel_gap_ratio": 0.9609733051918391,
+   "integrity_rel_lateral": 1.134837533185102,
+   "registration_plausible": NaN,
+   "tag": "st1_reg2p1075"
+  },
+  {
+   "window": "0727_cc3__w22-23.63",
+   "label": "batch 2, register_frames v1",
+   "passed": false,
+   "integrity_rel_inversions": 10.0,
+   "integrity_rel_gap_ratio": 1.2623803667643103,
+   "integrity_rel_lateral": 3.0690928851556,
+   "registration_plausible": NaN,
+   "tag": "st1_reg2p1045"
+  },
+  {
+   "window": "0727_mc4__w0-2",
+   "label": "batch 2, register_frames v1",
+   "passed": false,
+   "integrity_rel_inversions": 12.321428571428571,
+   "integrity_rel_gap_ratio": 10.235770427294963,
+   "integrity_rel_lateral": 4.563870122014047,
+   "registration_plausible": NaN,
+   "tag": "st1_reg2p1005"
+  },
+  {
+   "window": "0727_mm2__w12-14",
+   "label": "batch 2, register_frames v1",
+   "passed": false,
+   "integrity_rel_inversions": 4.5,
+   "integrity_rel_gap_ratio": 1.0984733135261744,
+   "integrity_rel_lateral": 1.3905236903427913,
+   "registration_plausible": NaN,
+   "tag": "st1_reg2p1060"
+  },
+  {
+   "window": "0727_mm2__w14-16",
+   "label": "batch 2, register_frames v1",
+   "passed": true,
+   "integrity_rel_inversions": 1.0253164556962024,
+   "integrity_rel_gap_ratio": 0.7031139398111856,
+   "integrity_rel_lateral": 1.3132601889031255,
+   "registration_plausible": NaN,
+   "tag": "st1_reg2p1055"
+  },
+  {
+   "window": "0727_mm3__w20-22",
+   "label": "batch 2, register_frames v1",
+   "passed": true,
+   "integrity_rel_inversions": 1.0,
+   "integrity_rel_gap_ratio": 0.9531695484116295,
+   "integrity_rel_lateral": 1.092865036418908,
+   "registration_plausible": NaN,
+   "tag": "st1_reg2p1030"
+  },
+  {
+   "window": "0727_mm3__w22-23.64",
+   "label": "batch 2, register_frames v1",
+   "passed": true,
+   "integrity_rel_inversions": 1.04,
+   "integrity_rel_gap_ratio": 0.9902763504241567,
+   "integrity_rel_lateral": 1.0012473996866404,
+   "registration_plausible": NaN,
+   "tag": "st1_reg2p1055"
+  }
+ ]
+}
