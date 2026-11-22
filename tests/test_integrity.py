@@ -95,3 +95,15 @@ def test_relative_gate_keeps_registration_plausibility():
     rem = replace(rec, settings=dict(rec.settings, preprocess={"register": {"plausible": False}}))
     res = relative_integrity(rem, rec, K)
     assert [r.passed for r in res if r.check == "registration_plausible"] == [False] and not integrity_gate(res)
+
+
+def test_zero_base_lateral_uses_clean_floor():
+    """Field-level synthetic rod: base lateral exactly 0 -> ratio against lateral_px, finite; zero over zero -> 0."""
+    from checker.checks import integrity_ratios, CheckResult
+    def res(lat):
+        return [CheckResult("integrity_inversions", True, 0, 0, ""), CheckResult("integrity_gap_ratio", True, 1.2, 2.4, ""),
+                CheckResult("integrity_lateral", True, lat, 0.081, "px")]
+    assert integrity_ratios(res(0.0), res(0.0))["lateral"] == 0.0
+    r = integrity_ratios(res(0.1), res(0.0))["lateral"]
+    assert np.isfinite(r) and abs(r - 0.1 / 0.081) < 1e-9
+    assert integrity_ratios(res(0.3), res(0.1))["lateral"] == 0.3 / 0.1
