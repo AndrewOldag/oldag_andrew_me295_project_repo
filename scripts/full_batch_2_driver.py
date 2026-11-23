@@ -290,7 +290,8 @@ def main():
     holder = {}
     link = Link(s["storage_host"], log=lambda m: holder["d"].link_log(m))
     relay = Relay(link, s["cluster_alias"])
-    d = holder["d"] = Driver(s, link, relay, _ledger_from(s), state)
+    checks = Path(s["checks_dir"]) if s.get("checks_dir") else CHECKS    # c027 demo: never over the batch-2 records
+    d = holder["d"] = Driver(s, link, relay, _ledger_from(s), state, checks=checks)
     d.install_job()
     print(d.loop(roots))
     link.close()

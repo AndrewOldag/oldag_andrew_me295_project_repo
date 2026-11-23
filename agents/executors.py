@@ -16,7 +16,7 @@ import numpy as np
 
 from agents import candidate
 from agents.actions import REMEDIES
-from checker import run_checks, load_thresholds
+from checker import integrity_gate, load_relative_k, relative_integrity, run_checks, load_thresholds
 from checker.checks import THRESHOLDS_FILE
 from measure import info
 from measure.remedies import NotAvailable, apply_remedy
@@ -186,7 +186,20 @@ class Slice:
         after = self.checks
         out = {"rechecked": True, "change": change, **_summary(after),
                "check_values": _before_after(before, after)}
-        if no_progress(before, after):
+        # option A integrity gate (Andrew, 2026-11-21; dispatcher item 55): the remedied track against the window's own
+        # base track. A failure rolls the remedy back whatever the checks say. Tracker tracks only: a field-level rod
+        # (in-process runner) has no tracked points and a base lateral scatter of exactly 0, so the ratio is undefined
+        gate = (relative_integrity(self.current.record, self.runs[0][1].record, load_relative_k())
+                if getattr(self.runner, "form", None) != "in_process" else [])
+        if not integrity_gate(gate):
+            self.runs.append((settings, before_m, before, f"rolled back: integrity: {change}"))
+            out.update({k: v for k, v in _summary(before).items() if k != "check_values"}, rolled_back=True,
+                       integrity={g.check: {"value": round(g.value, 3), "limit": g.threshold, "passed": g.passed}
+                                  for g in gate},
+                       note="the remedied track failed the integrity check against the base track (points out of "
+                            "order, a large gap or lateral scatter); the settings and measurement from before it are "
+                            "restored. The step counts")
+        elif no_progress(before, after):
             self.runs.append((settings, before_m, before, f"rolled back: {change}"))
             out.update({k: v for k, v in _summary(before).items() if k != "check_values"}, rolled_back=True,
                        note="the remedy made no failing check pass and lowered none by a quarter; "

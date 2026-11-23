@@ -26,6 +26,16 @@ CHANNEL_TIMEOUT_S = 1800
 KEEPALIVE_S = 30
 
 
+def _ssh_errors():
+    """paramiko's SSHException (e.g. 'Key-exchange timed out' on a rekey during a long copy, c027) is a lost channel
+    too; empty when paramiko is not installed (tests use fakes)."""
+    try:
+        from paramiko.ssh_exception import SSHException
+        return (SSHException,)
+    except ImportError:
+        return ()
+
+
 class LinkDown(RuntimeError):
     """The storage-host connection could not be re-established: stop and ask Andrew."""
 
@@ -137,7 +147,7 @@ class Link:
                     err += b
                 code = chan.recv_exit_status()
                 chan.close()
-            except (EOFError, OSError, ConnectionError) as e:
+            except (EOFError, OSError, ConnectionError, *_ssh_errors()) as e:
                 lost += 1
                 self._note(f"channel lost ({type(e).__name__})")
                 try:
