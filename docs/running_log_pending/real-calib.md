@@ -58,3 +58,9 @@
 - Demo: `python scripts/integrity_thresholds.py pairs --pairs <csv> --out <json>` -> per-pair ratios and gate; README section "Integrity gate, option A"
 - Remaining: none for c031; ready to merge
 - Bottlenecks: none
+
+## 2026-11-22 (build account, session real-calib, inbox item 29)
+- Done: c032 VM supervisor, build and test only: `scripts/ops/supervisor.ps1`, `scripts/ops/register_detached.ps1`, `scripts/ops/install_supervisor.ps1` (not run); `tests/test_supervisor.py` 12 passed in 86 s (fake clock, fake process table, fake memory, stub agents.ps1, temporary bare origin); `tests/test_ops.py`, `tests/test_board.py` 18 passed
+- Demo: `powershell -File scripts/ops/supervisor.ps1 -Once` -> one heartbeat line on `ops/heartbeat`, e.g. `2026-11-22 22:00 free=8.0GB dispatcher=exited real-calib=exited,pending:inbox compound=exited start=real-calib dead=none`
+- Remaining: switch-over after the c027 cut-off (Thu 26 Nov 12:00) on a planning inbox item
+- Bottlenecks: none
