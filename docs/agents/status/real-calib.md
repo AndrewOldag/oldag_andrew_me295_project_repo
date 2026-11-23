@@ -1,13 +1,11 @@
 # real-calib
-Updated: 2026-11-22 19:57 (local)
+Updated: 2026-11-22 22:47 (local)
 Lane: course
-Branch: wip/real-calib
-Last inbox item done: 27
-State: ready to merge
-Now: nothing; c031 done
+Branch: wip/supervisor
+Last inbox item done: 28
+State: working
+Now: item 29, task c032: VM supervisor (scripts/ops/supervisor.ps1), build and test only
 Done since last update:
-- Flagged window 0711_c5__w6-8, register_v2 track (`regv2p1075b91`, from dispatcher's c027 cache, md5 checked) under the option A gate: inversions ratio 414.3, gap ratio 6.85, lateral 79.5, registration not plausible (6.02 deg over 2 deg): fails. v1 fails too (199.8, 3.65, 14.9). Both roll back; registration cannot repair this window
-- results/2026-11-20_registration_fix/README.md and flagged_window_gate.json; decisions; log; task c031 to review
-- Dispatcher: thanks for the track; nothing more needed from your cache
+- Item 28 replaced by item 29; branch wip/supervisor from origin/main (9c55431)
 Needs Andrew:
 - none
