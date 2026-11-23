@@ -1,16 +1,14 @@
 # audit
-Updated: 2026-11-23 14:13 (local)
+Updated: 2026-11-23 14:22 (local)
 Lane: course
 Branch: wip/audit
-Last inbox item done: 0
-State: working
-Now: inbox 1, spec section 7 (reproducibility of results READMEs)
+Last inbox item done: 1
+State: ready to merge
+Now: idle; audit written, waiting on Andrew's review of findings
 Done since last update:
-- section 6 lab reports 1-3 and README: 4 blocker, 0 major, 8 minor (`results/2026-11-23_audit/s6_reports.md`)
-- section 5 decisions: 0 blocker, 1 major, 9 minor
-- section 4 results recompute: 0 blocker, 0 major, 9 minor
-- section 3 freezes: 0 blocker, 1 major, 5 minor
-- section 2 equations: 0 blocker, 2 major, 4 minor
-- section 1 rules over history: 0 blocker, 6 major, 2 minor
+- c033 done: `results/2026-11-23_audit/README.md`, `findings.csv`: 62 findings, 5 blocker, 12 major, 45 minor
+- section 7 reproducibility: 0 blocker, 2 major, 9 minor
+- blockers are lab-report wording and counts (LR2, LR3); no recomputable table disagrees with its README
 Needs Andrew:
-- none yet; findings go to Andrew at the end
+- review findings in `results/2026-11-23_audit/README.md`; planning turns accepted ones into fixes
+- S1-1, S1-2, S1-4, S1-5: identifying or biology content in pushed history or at tip; decide before the repo goes public
