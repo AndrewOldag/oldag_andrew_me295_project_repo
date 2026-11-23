@@ -191,5 +191,5 @@ def test_integrity_gate_rolls_back_a_scrambled_remedied_track():
     out = s.apply_remedy({"remedy": "smooth_midline", "setting": "light"}, {})
     assert out["rolled_back"] and out["integrity"]["integrity_rel_inversions"]["passed"] is False
     assert s.runs[-1][3].startswith("rolled back: integrity:") and s.runs[-1][0] == s.runs[0][0]
-    clean = Slice(FieldRunner(), Rod("growth_zone"))    # field-level rod: no tracker track, the gate does not apply
+    clean = Slice(FieldRunner(), Rod("growth_zone"))    # field-level rod: zero base lateral has a floor (item 56)
     assert "integrity" not in clean.apply_remedy({"remedy": "smooth_midline", "setting": "light"}, {})
