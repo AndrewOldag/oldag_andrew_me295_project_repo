@@ -16,6 +16,6 @@ From: planning account. Date: 2026-11-23. Approved by Andrew 2026-11-23 (answer 
 
 ## Limits
 - No zone positions, REGR, growth-zone or flank values in the public repo: pass/fail, residuals and counts only; anything else `[masked]`
-- No cluster jobs unless rendering the shifted rods needs it (CPU, ledger check, $15 stop)
+- Shifted rods: rendered on the VM, tracked on the cluster CPU through `rod_jobs.py` (no tracking on the VM; ledger check before submit, $15 stop). No other cluster jobs
 - No change to prompts, thresholds, remedies, the real profile or any scored result
 - Branch `wip/zone-checks` from `origin/main`; proposal committed before any run; results in `results/2026-11-23_zone_checks/`; ready to merge by Fri 27 Nov 12:00
