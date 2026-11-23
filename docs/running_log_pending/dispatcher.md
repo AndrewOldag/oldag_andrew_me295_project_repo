@@ -19,3 +19,13 @@
 - Demo: `python staging/c027/tools/counts.py` is local; `python scripts/run_all.py windows` prints the window count
 - Remaining: master up -> cycle (cc7 clear, register_v2 and remaining retracks); integrity gate on main -> rerun paused windows with the diagnostician; tree baseline; fresh demo; report by Thu 26 Nov 20:00
 - Bottlenecks: cluster master (Andrew); integrity gate option A (real-calib)
+
+## 2026-11-23 (build account, dispatcher session, task c027)
+- Done: tree rounds (B4) ended 05:48 after 8 rounds; the 2 jobs of 0708_m1__w10-12 failed twice and were not requeued
+- Done: `run_all.py --roots` for the B5 demo, with a test (57044f4)
+- Done: B5 demo of 0708_c4 started 06:47: root staged (5,347 MB) to a new cluster folder; GPU job 7918920 (worst case $0.252; ledger $8.50 of $15)
+- Done: tree reruns the 38 c026-reached windows with register_v2 and the integrity gate (3c43f44); first pass 7 accept, 27 decline, 3 paused
+- Done: report drops host folders from cluster error lines; draft tables, windows.csv, failure modes, example traces in `results/2026-11-18_integrated_run/`
+- Demo: `python scripts/run_all.py report --run staging/c027/run --tree staging/c027/tree --out results/2026-11-18_integrated_run` writes tables.md: integrated 1034 accepted, 2 accepted after repair, 85 declined by agent; tree 12 accepted after repair, 78 declined
+- Remaining: demo collect, agents and auditor on 0708_c4, compare with the c027 run; tree rescore rounds; results README (B9) by Thu 26 Nov 20:00
+- Bottlenecks: none
