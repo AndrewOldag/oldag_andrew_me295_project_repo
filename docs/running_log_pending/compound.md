@@ -52,3 +52,11 @@
 - Demo: `python scripts/synth/heldout_supplement.py eval` writes `supplement/table_metrics.md` (19 of 20 remedy-tree runs so far; not committed)
 - Remaining: fetch 7925321, last remedy-tree run, eval, supplement README by Thu 26 Nov 20:00
 - Bottlenecks: cluster queue for array 7925321; connection master (Andrew)
+
+## 2026-11-23 (build account, session compound, late morning)
+- Done: array 7925321 fetched 09:53; remedy tree low_texture_fast_mild s60 written, second run identical; remedy tree 20 of 20 (rule second runs identical 40 of 40)
+- Done: c029b eval, 20 rods (clean 4, repaired 10, decline 6): overall accuracy remedy tree 0.75, diagnostician 0.48 (0.45-0.50), single agent 0.35 (0.30-0.40), script 0.30, all-decline 0.30; balanced 0.77 / 0.60 / 0.43 / 0.40 / 0.33
+- Done: `results/2026-11-18_heldout_compound/supplement/README.md`; 120 scored agent runs plus 4 set aside, 124 of 150; `claude -p` calls 285 and 394; task c029b done
+- Demo: `python scripts/synth/heldout_supplement.py eval` prints the c029b metrics table above
+- Remaining: none on c029/c029b/c030; wait for inbox
+- Bottlenecks: none
