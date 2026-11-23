@@ -1,11 +1,13 @@
 # compound
-Updated: 2026-11-23 09:48 (local)
+Updated: 2026-11-23 11:06 (local)
 Lane: course
 Branch: wip/compound
 Last inbox item done: 12
-State: waiting on Andrew
-Now: item 10 step 4: c029b remedy tree, last run (low_texture_fast_mild s60) waits on array 7925321 (submitted 07:49, 2 runs not finished at 09:43). Detached loop staging/c029b_tail.ps1 (started 08:10, still running) fetches every 5 min, reruns the tree and submits a further paused state if needed (max 3). Then eval and supplement README
+State: ready to merge
+Now: idle. c029, c029b and c030 done; nothing running (tail loop ended 09:53)
 Done since last update:
-- Restart check 09:47: tail loop (started 08:10) still running; no second loop started. No new inbox items
+- Array 7925321 fetched 09:53; remedy tree 20 of 20 (d1d857e)
+- c029b metrics and `results/2026-11-18_heldout_compound/supplement/README.md` (8f40c6d): overall accuracy remedy tree 0.75, diagnostician 0.48, single agent 0.35, script 0.30, all-decline 0.30. 124 of 150 agent runs (4 set aside)
+- Task c029b done; log entry in docs/running_log_pending/compound.md (0abb68e)
 Needs Andrew:
-- Keep the cluster connection master open until array 7925321 is fetched. Start me again after the tail log shows "end" for eval and the README
+- None. The cluster connection master is no longer needed by compound
