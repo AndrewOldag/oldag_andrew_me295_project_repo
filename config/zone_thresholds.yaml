@@ -1,0 +1,6 @@
+# Growth-zone placement thresholds, rule of docs/proposals/2026-11-23_zone-checks.md,
+# from scripts/zone_checks.py thresholds (18 freeze v4 accept_clean base tracks). Report-only.
+plateau_regr: 8.5
+plateau_speed: 0.018
+pp_rms_rel: 0.0044
+pp_max_rel: 0.0063
