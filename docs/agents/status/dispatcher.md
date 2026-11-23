@@ -1,12 +1,12 @@
 # dispatcher
-Updated: 2026-11-22 16:43 (local)
+Updated: 2026-11-22 17:09 (local)
 Lane: course
 Branch: wip/dispatcher
 Last inbox item done: 55 (item 46, task c027, still working)
 State: working
 Now: c027 cycle running detached (register_v2 and remaining retracks, status line after every group); the run restarts by itself when the wave is done
 Done since last update:
-- Auto 11-22 16:43 (from logs): run 1189 records, accept by rule 1034, decline by diagnostician 23, decline by rule 58, paused 74; LLM calls 491; run ended: done; windows this start 74; LLM calls 491. Queue 442 tasks: done 3, failed 12, fetched 415, submitted 12; cycle last:  
+- Auto 11-22 17:09 (from logs): run 1189 records, accept by rule 1034, decline by diagnostician 23, decline by rule 58, paused 74; LLM calls 491; run ended: done; windows this start 74; LLM calls 491. Queue 442 tasks: done 3, failed 12, fetched 427; cycle last: 2026-11-22 17:09 fetch: fetched 2, failed 0, not finished 0; groups cleared g020
 - Item 55: main merged (option A gate, rod-jobs). `integrity_gate(relative_integrity(remedied, base, load_relative_k()))` wired into `Slice.apply_remedy`, which the diagnostician and the remedy tree both use; a failure rolls back as `rolled back: integrity: <change>`; test added. Suite 445 passed, 3 skipped
 - Gate applies to tracker tracks only: on a field-level synthetic rod (in-process runner) the base lateral scatter is exactly 0, the ratio is infinite and every midline remedy fails (`test_info_p1_p5` failed that way). Real-calib may want to handle a zero base in `relative_integrity`
 - Remedy hold lifted. A failing window now waits, before any LLM call, until every one of its single-remedy tracks is cached (register_v2 is not yet), so no calls are spent twice
