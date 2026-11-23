@@ -34,3 +34,13 @@
 - Demo: `python scripts/synth/heldout_compound.py eval` writes `table_metrics.md` for c029
 - Remaining: c029b remedied array, labels and selection committed; c029b methods (cap 150); supplement README by Thu 26 Nov 20:00
 - Bottlenecks: cluster connection master (Andrew) for the c029b label arrays
+
+## 2026-11-23 (build account, session compound)
+- Done: c029b labels and selected 20 committed (701442d): 48 labelled clean 7, repaired 19, decline 22; selected 4/10/6
+- Done: c029b rule methods: script 20 of 20, remedy tree 19 of 20 (1 paused, third state st1_r28 in array 7919315)
+- Done: c029b LLM runner stopped 04:57 on the account usage limit (2 runs set aside), restarted 06:53
+- Done: inbox 12: c029b missing-state runs set aside in `runs/missing_state/`, redone once cached (ba032f6; test_heldout_supplement 22 passed with render tests); c029 README gives metrics with and without its 3 such runs (679a3e9)
+- Done: arrays 7908864, 7908996 fetched (4 of 4); array 7919315 submitted (2 runs, worst case $0.024)
+- Demo: `python scripts/synth/heldout_supplement.py eval` writes `supplement/table_metrics.md` once all runs exist
+- Remaining: finish c029b LLM runs (about 24 left); fetch 7919315, rerun remedy tree; eval; supplement README by Thu 26 Nov 20:00
+- Bottlenecks: cluster connection master (Andrew) for array 7919315
