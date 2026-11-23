@@ -1,0 +1,133 @@
+{
+ "freeze_tag": "freeze-v4",
+ "commit": "6cee1e7",
+ "method": "single_agent",
+ "rod": {
+  "case": "v3_growth_zone",
+  "fault": "illumination_flicker",
+  "size": "0.03",
+  "seed": 60,
+  "id": "v3_growth_zone_illumination_flicker_z0.03_s60"
+ },
+ "runner": "remote_job",
+ "truth": {
+  "peak_regr_pct_per_h": 54.0,
+  "peak_at_um": 421,
+  "largest_flank_difference_pct_per_h": 0.0
+ },
+ "error_before": {
+  "regr_rms_pct_per_h": 0.935,
+  "regr_max_pct_per_h": 2.952,
+  "regr_covered_um": 1137,
+  "flank_difference_rms_pct_per_h": 1.453,
+  "flank_difference_max_pct_per_h": 5.944,
+  "flank_difference_covered_um": 1137
+ },
+ "initial_checks": [
+  {
+   "check": "rigid_invariance",
+   "passed": false,
+   "value": 2.5589323313372265,
+   "threshold": 2.0,
+   "unit": "%/h",
+   "where_s_px": 55.0,
+   "where_frame_pair": null,
+   "detail": "largest change in regr_plus"
+  },
+  {
+   "check": "closure",
+   "passed": true,
+   "value": 0.049198133964000974,
+   "threshold": 1.0,
+   "unit": "px/h",
+   "where_s_px": 547.9674807688087,
+   "where_frame_pair": 17,
+   "detail": "tip path 96.0 px/h; base at s = 548 px; largest single-pair residual at pair 17"
+  },
+  {
+   "check": "plane_sections",
+   "passed": false,
+   "value": 5.944300425084664,
+   "threshold": 3.25,
+   "unit": "%/h",
+   "where_s_px": 55.0,
+   "where_frame_pair": null,
+   "detail": "flank difference -5.94 %/h, predicted 0.00 %/h"
+  }
+ ],
+ "outcome": {
+  "task_id": "rod-1",
+  "agent": "single_agent",
+  "status": "accept",
+  "args": {
+   "confidence": 0.8
+  },
+  "steps": 5,
+  "failed_steps": 0,
+  "calls": 5,
+  "input_tokens": 21208,
+  "output_tokens": 2899,
+  "call_ms": 29352
+ },
+ "error_after": {
+  "regr_rms_pct_per_h": 0.935,
+  "regr_max_pct_per_h": 2.952,
+  "regr_covered_um": 1137,
+  "flank_difference_rms_pct_per_h": 1.453,
+  "flank_difference_max_pct_per_h": 5.944,
+  "flank_difference_covered_um": 1137
+ },
+ "remedies": [
+  "report the centre strain rate and the width-free ratio; plane-sections check skipped"
+ ],
+ "roll_backs": 0,
+ "final_settings": {
+  "stride": 1,
+  "disk_radius": null,
+  "register": false,
+  "register_from_px": null,
+  "midline_smooth": null,
+  "band_mask": null,
+  "width_free": true,
+  "couple": false
+ },
+ "final_checks": [
+  {
+   "check": "rigid_invariance",
+   "passed": false,
+   "value": 2.5589323313372265,
+   "threshold": 2.0,
+   "unit": "%/h",
+   "where_s_px": 55.0,
+   "where_frame_pair": null,
+   "detail": "largest change in regr_plus"
+  },
+  {
+   "check": "closure",
+   "passed": true,
+   "value": 0.049198133964000974,
+   "threshold": 1.0,
+   "unit": "px/h",
+   "where_s_px": 547.9674807688087,
+   "where_frame_pair": 17,
+   "detail": "tip path 96.0 px/h; base at s = 548 px; largest single-pair residual at pair 17"
+  },
+  {
+   "check": "plane_sections",
+   "passed": null,
+   "value": 5.944300425084664,
+   "threshold": 3.25,
+   "unit": "%/h",
+   "where_s_px": 55.0,
+   "where_frame_pair": null,
+   "detail": "skipped: width-free ratio reported; flank difference -5.94 %/h, predicted 0.00 %/h"
+  }
+ ],
+ "reported": true,
+ "repeat": 0,
+ "trace": "single_agent_v3_growth_zone_illumination_flicker_z0.03_s60_r0_trace.jsonl",
+ "claude_code": "2.1.310",
+ "wall_s": 36.9,
+ "tracker_runs_new": 0,
+ "runner_log": []
+}

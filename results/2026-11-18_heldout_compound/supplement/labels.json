@@ -1,0 +1,847 @@
+{
+ "labels": {
+  "v3_growth_zone_drift_low_texture_mild_s60": {
+   "class": "decline",
+   "expected": "accept_repaired",
+   "sequence": null,
+   "kind": "drift_low_texture_mild",
+   "seed": 60,
+   "size": null,
+   "repairing_states": [],
+   "states": 35
+  },
+  "v3_growth_zone_second_root_occlusion_mild_s60": {
+   "class": "decline",
+   "expected": "accept_repaired",
+   "sequence": null,
+   "kind": "second_root_occlusion_mild",
+   "seed": 60,
+   "size": null,
+   "repairing_states": [],
+   "states": 35
+  },
+  "v3_growth_zone_drift_jitter_mild_s60": {
+   "class": "decline",
+   "expected": "accept_repaired",
+   "sequence": null,
+   "kind": "drift_jitter_mild",
+   "seed": 60,
+   "size": null,
+   "repairing_states": [],
+   "states": 35
+  },
+  "v3_growth_zone_low_texture_fast_mild_s60": {
+   "class": "decline",
+   "expected": "accept_repaired",
+   "sequence": null,
+   "kind": "low_texture_fast_mild",
+   "seed": 60,
+   "size": null,
+   "repairing_states": [],
+   "states": 43
+  },
+  "v3_growth_zone_focus_drift_z1.5_s60": {
+   "class": "accept_repaired",
+   "expected": "accept_clean",
+   "sequence": [
+    "enlarge_patch/1.5x"
+   ],
+   "kind": "focus_drift",
+   "seed": 60,
+   "size": "1.5",
+   "repairing_states": [
+    "enlarge_patch/1.5x",
+    "enlarge_patch/2x",
+    "use_width_free_ratio",
+    "change_frame_stride/double + enlarge_patch/2x",
+    "smooth_midline/light + enlarge_patch/1.5x",
+    "smooth_midline/light + enlarge_patch/2x",
+    "smooth_midline/light + use_width_free_ratio",
+    "crop_or_mask/crop_to_main_root + enlarge_patch/1.5x",
+    "crop_or_mask/crop_to_main_root + enlarge_patch/2x",
+    "crop_or_mask/crop_to_main_root + use_width_free_ratio",
+    "crop_or_mask/mask_second_root + enlarge_patch/1.5x",
+    "crop_or_mask/mask_second_root + enlarge_patch/2x",
+    "crop_or_mask/mask_second_root + use_width_free_ratio",
+    "enlarge_patch/1.5x + use_width_free_ratio",
+    "enlarge_patch/2x + use_width_free_ratio"
+   ],
+   "states": 35
+  },
+  "v3_growth_zone_illumination_flicker_z0.03_s60": {
+   "class": "accept_repaired",
+   "expected": "accept_clean",
+   "sequence": [
+    "enlarge_patch/1.5x"
+   ],
+   "kind": "illumination_flicker",
+   "seed": 60,
+   "size": "0.03",
+   "repairing_states": [
+    "enlarge_patch/1.5x",
+    "enlarge_patch/2x",
+    "register_frames + enlarge_patch/1.5x",
+    "register_frames + enlarge_patch/2x",
+    "register_frames + use_width_free_ratio",
+    "change_frame_stride/double + enlarge_patch/2x",
+    "crop_or_mask/crop_to_main_root + enlarge_patch/1.5x",
+    "crop_or_mask/crop_to_main_root + enlarge_patch/2x",
+    "crop_or_mask/mask_second_root + enlarge_patch/1.5x",
+    "crop_or_mask/mask_second_root + enlarge_patch/2x",
+    "enlarge_patch/1.5x + use_width_free_ratio",
+    "enlarge_patch/2x + use_width_free_ratio"
+   ],
+   "states": 35
+  },
+  "v3_growth_zone_drift_low_texture_mild_s61": {
+   "class": "accept_repaired",
+   "expected": "accept_repaired",
+   "sequence": [
+    "register_frames",
+    "enlarge_patch/1.5x"
+   ],
+   "kind": "drift_low_texture_mild",
+   "seed": 61,
+   "size": null,
+   "repairing_states": [
+    "register_frames + enlarge_patch/1.5x",
+    "register_frames + enlarge_patch/2x"
+   ],
+   "states": 35
+  },
+  "v3_growth_zone_second_root_occlusion_mild_s61": {
+   "class": "decline",
+   "expected": "accept_repaired",
+   "sequence": null,
+   "kind": "second_root_occlusion_mild",
+   "seed": 61,
+   "size": null,
+   "repairing_states": [],
+   "states": 35
+  },
+  "v3_growth_zone_drift_jitter_mild_s61": {
+   "class": "decline",
+   "expected": "accept_repaired",
+   "sequence": null,
+   "kind": "drift_jitter_mild",
+   "seed": 61,
+   "size": null,
+   "repairing_states": [],
+   "states": 35
+  },
+  "v3_growth_zone_low_texture_fast_mild_s61": {
+   "class": "decline",
+   "expected": "accept_repaired",
+   "sequence": null,
+   "kind": "low_texture_fast_mild",
+   "seed": 61,
+   "size": null,
+   "repairing_states": [],
+   "states": 43
+  },
+  "v3_growth_zone_focus_drift_z1.5_s61": {
+   "class": "accept_clean",
+   "expected": "accept_clean",
+   "sequence": [],
+   "kind": "focus_drift",
+   "seed": 61,
+   "size": "1.5",
+   "repairing_states": [
+    "register_frames",
+    "smooth_midline/light",
+    "crop_or_mask/crop_to_main_root",
+    "crop_or_mask/mask_second_root",
+    "enlarge_patch/1.5x",
+    "enlarge_patch/2x",
+    "use_width_free_ratio",
+    "register_frames + change_frame_stride/double",
+    "register_frames + smooth_midline/light",
+    "register_frames + crop_or_mask/crop_to_main_root",
+    "register_frames + crop_or_mask/mask_second_root",
+    "register_frames + enlarge_patch/1.5x",
+    "register_frames + enlarge_patch/2x",
+    "register_frames + use_width_free_ratio",
+    "change_frame_stride/double + enlarge_patch/2x",
+    "smooth_midline/light + crop_or_mask/crop_to_main_root",
+    "smooth_midline/light + crop_or_mask/mask_second_root",
+    "smooth_midline/light + enlarge_patch/1.5x",
+    "smooth_midline/light + enlarge_patch/2x",
+    "smooth_midline/light + use_width_free_ratio",
+    "crop_or_mask/crop_to_main_root + enlarge_patch/1.5x",
+    "crop_or_mask/crop_to_main_root + enlarge_patch/2x",
+    "crop_or_mask/crop_to_main_root + use_width_free_ratio",
+    "crop_or_mask/mask_second_root + enlarge_patch/1.5x",
+    "crop_or_mask/mask_second_root + enlarge_patch/2x",
+    "crop_or_mask/mask_second_root + use_width_free_ratio",
+    "enlarge_patch/1.5x + use_width_free_ratio",
+    "enlarge_patch/2x + use_width_free_ratio"
+   ],
+   "states": 35
+  },
+  "v3_growth_zone_illumination_flicker_z0.03_s61": {
+   "class": "accept_repaired",
+   "expected": "accept_clean",
+   "sequence": [
+    "enlarge_patch/1.5x"
+   ],
+   "kind": "illumination_flicker",
+   "seed": 61,
+   "size": "0.03",
+   "repairing_states": [
+    "enlarge_patch/1.5x",
+    "enlarge_patch/2x",
+    "use_width_free_ratio",
+    "register_frames + enlarge_patch/1.5x",
+    "register_frames + enlarge_patch/2x",
+    "register_frames + use_width_free_ratio",
+    "change_frame_stride/double + enlarge_patch/2x",
+    "smooth_midline/light + enlarge_patch/2x",
+    "crop_or_mask/crop_to_main_root + enlarge_patch/1.5x",
+    "crop_or_mask/crop_to_main_root + enlarge_patch/2x",
+    "crop_or_mask/crop_to_main_root + use_width_free_ratio",
+    "crop_or_mask/mask_second_root + enlarge_patch/1.5x",
+    "crop_or_mask/mask_second_root + enlarge_patch/2x",
+    "crop_or_mask/mask_second_root + use_width_free_ratio",
+    "enlarge_patch/1.5x + use_width_free_ratio",
+    "enlarge_patch/2x + use_width_free_ratio"
+   ],
+   "states": 35
+  },
+  "v3_growth_zone_drift_low_texture_mild_s62": {
+   "class": "decline",
+   "expected": "accept_repaired",
+   "sequence": null,
+   "kind": "drift_low_texture_mild",
+   "seed": 62,
+   "size": null,
+   "repairing_states": [],
+   "states": 35
+  },
+  "v3_growth_zone_second_root_occlusion_mild_s62": {
+   "class": "accept_repaired",
+   "expected": "accept_repaired",
+   "sequence": [
+    "enlarge_patch/1.5x",
+    "use_width_free_ratio"
+   ],
+   "kind": "second_root_occlusion_mild",
+   "seed": 62,
+   "size": null,
+   "repairing_states": [
+    "enlarge_patch/1.5x + use_width_free_ratio",
+    "enlarge_patch/2x + use_width_free_ratio"
+   ],
+   "states": 35
+  },
+  "v3_growth_zone_drift_jitter_mild_s62": {
+   "class": "decline",
+   "expected": "accept_repaired",
+   "sequence": null,
+   "kind": "drift_jitter_mild",
+   "seed": 62,
+   "size": null,
+   "repairing_states": [],
+   "states": 35
+  },
+  "v3_growth_zone_low_texture_fast_mild_s62": {
+   "class": "decline",
+   "expected": "accept_repaired",
+   "sequence": null,
+   "kind": "low_texture_fast_mild",
+   "seed": 62,
+   "size": null,
+   "repairing_states": [],
+   "states": 43
+  },
+  "v3_growth_zone_focus_drift_z1.5_s62": {
+   "class": "accept_clean",
+   "expected": "accept_clean",
+   "sequence": [],
+   "kind": "focus_drift",
+   "seed": 62,
+   "size": "1.5",
+   "repairing_states": [
+    "smooth_midline/light",
+    "crop_or_mask/crop_to_main_root",
+    "crop_or_mask/mask_second_root",
+    "enlarge_patch/1.5x",
+    "enlarge_patch/2x",
+    "use_width_free_ratio",
+    "smooth_midline/light + crop_or_mask/crop_to_main_root",
+    "smooth_midline/light + crop_or_mask/mask_second_root",
+    "smooth_midline/light + enlarge_patch/1.5x",
+    "smooth_midline/light + enlarge_patch/2x",
+    "smooth_midline/light + use_width_free_ratio",
+    "crop_or_mask/crop_to_main_root + enlarge_patch/1.5x",
+    "crop_or_mask/crop_to_main_root + enlarge_patch/2x",
+    "crop_or_mask/crop_to_main_root + use_width_free_ratio",
+    "crop_or_mask/mask_second_root + enlarge_patch/1.5x",
+    "crop_or_mask/mask_second_root + enlarge_patch/2x",
+    "crop_or_mask/mask_second_root + use_width_free_ratio",
+    "enlarge_patch/1.5x + use_width_free_ratio",
+    "enlarge_patch/2x + use_width_free_ratio"
+   ],
+   "states": 35
+  },
+  "v3_growth_zone_illumination_flicker_z0.03_s62": {
+   "class": "accept_repaired",
+   "expected": "accept_clean",
+   "sequence": [
+    "use_width_free_ratio"
+   ],
+   "kind": "illumination_flicker",
+   "seed": 62,
+   "size": "0.03",
+   "repairing_states": [
+    "use_width_free_ratio",
+    "crop_or_mask/crop_to_main_root + use_width_free_ratio",
+    "crop_or_mask/mask_second_root + use_width_free_ratio",
+    "enlarge_patch/1.5x + use_width_free_ratio",
+    "enlarge_patch/2x + use_width_free_ratio"
+   ],
+   "states": 35
+  },
+  "v3_growth_zone_drift_low_texture_mild_s63": {
+   "class": "decline",
+   "expected": "accept_repaired",
+   "sequence": null,
+   "kind": "drift_low_texture_mild",
+   "seed": 63,
+   "size": null,
+   "repairing_states": [],
+   "states": 35
+  },
+  "v3_growth_zone_second_root_occlusion_mild_s63": {
+   "class": "decline",
+   "expected": "accept_repaired",
+   "sequence": null,
+   "kind": "second_root_occlusion_mild",
+   "seed": 63,
+   "size": null,
+   "repairing_states": [],
+   "states": 35
+  },
+  "v3_growth_zone_drift_jitter_mild_s63": {
+   "class": "decline",
+   "expected": "accept_repaired",
+   "sequence": null,
+   "kind": "drift_jitter_mild",
+   "seed": 63,
+   "size": null,
+   "repairing_states": [],
+   "states": 35
+  },
+  "v3_growth_zone_low_texture_fast_mild_s63": {
+   "class": "decline",
+   "expected": "accept_repaired",
+   "sequence": null,
+   "kind": "low_texture_fast_mild",
+   "seed": 63,
+   "size": null,
+   "repairing_states": [],
+   "states": 43
+  },
+  "v3_growth_zone_focus_drift_z1.5_s63": {
+   "class": "accept_clean",
+   "expected": "accept_clean",
+   "sequence": [],
+   "kind": "focus_drift",
+   "seed": 63,
+   "size": "1.5",
+   "repairing_states": [
+    "smooth_midline/light",
+    "crop_or_mask/crop_to_main_root",
+    "crop_or_mask/mask_second_root",
+    "enlarge_patch/1.5x",
+    "enlarge_patch/2x",
+    "use_width_free_ratio",
+    "register_frames + enlarge_patch/1.5x",
+    "register_frames + enlarge_patch/2x",
+    "smooth_midline/light + crop_or_mask/crop_to_main_root",
+    "smooth_midline/light + crop_or_mask/mask_second_root",
+    "smooth_midline/light + enlarge_patch/1.5x",
+    "smooth_midline/light + enlarge_patch/2x",
+    "smooth_midline/light + use_width_free_ratio",
+    "crop_or_mask/crop_to_main_root + enlarge_patch/1.5x",
+    "crop_or_mask/crop_to_main_root + enlarge_patch/2x",
+    "crop_or_mask/crop_to_main_root + use_width_free_ratio",
+    "crop_or_mask/mask_second_root + enlarge_patch/1.5x",
+    "crop_or_mask/mask_second_root + enlarge_patch/2x",
+    "crop_or_mask/mask_second_root + use_width_free_ratio",
+    "enlarge_patch/1.5x + use_width_free_ratio",
+    "enlarge_patch/2x + use_width_free_ratio"
+   ],
+   "states": 35
+  },
+  "v3_growth_zone_illumination_flicker_z0.03_s63": {
+   "class": "accept_repaired",
+   "expected": "accept_clean",
+   "sequence": [
+    "enlarge_patch/2x"
+   ],
+   "kind": "illumination_flicker",
+   "seed": 63,
+   "size": "0.03",
+   "repairing_states": [
+    "enlarge_patch/2x",
+    "use_width_free_ratio",
+    "register_frames + enlarge_patch/2x",
+    "smooth_midline/light + enlarge_patch/2x",
+    "crop_or_mask/crop_to_main_root + enlarge_patch/2x",
+    "crop_or_mask/crop_to_main_root + use_width_free_ratio",
+    "crop_or_mask/mask_second_root + enlarge_patch/2x",
+    "crop_or_mask/mask_second_root + use_width_free_ratio",
+    "enlarge_patch/1.5x + use_width_free_ratio",
+    "enlarge_patch/2x + use_width_free_ratio"
+   ],
+   "states": 35
+  },
+  "v3_growth_zone_drift_low_texture_mild_s64": {
+   "class": "accept_repaired",
+   "expected": "accept_repaired",
+   "sequence": [
+    "register_frames",
+    "enlarge_patch/2x"
+   ],
+   "kind": "drift_low_texture_mild",
+   "seed": 64,
+   "size": null,
+   "repairing_states": [
+    "register_frames + enlarge_patch/2x"
+   ],
+   "states": 35
+  },
+  "v3_growth_zone_second_root_occlusion_mild_s64": {
+   "class": "accept_repaired",
+   "expected": "accept_repaired",
+   "sequence": [
+    "enlarge_patch/1.5x",
+    "use_width_free_ratio"
+   ],
+   "kind": "second_root_occlusion_mild",
+   "seed": 64,
+   "size": null,
+   "repairing_states": [
+    "enlarge_patch/1.5x + use_width_free_ratio",
+    "enlarge_patch/2x + use_width_free_ratio"
+   ],
+   "states": 35
+  },
+  "v3_growth_zone_drift_jitter_mild_s64": {
+   "class": "accept_repaired",
+   "expected": "accept_repaired",
+   "sequence": [
+    "register_frames",
+    "use_width_free_ratio"
+   ],
+   "kind": "drift_jitter_mild",
+   "seed": 64,
+   "size": null,
+   "repairing_states": [
+    "register_frames + use_width_free_ratio"
+   ],
+   "states": 35
+  },
+  "v3_growth_zone_low_texture_fast_mild_s64": {
+   "class": "decline",
+   "expected": "accept_repaired",
+   "sequence": null,
+   "kind": "low_texture_fast_mild",
+   "seed": 64,
+   "size": null,
+   "repairing_states": [],
+   "states": 43
+  },
+  "v3_growth_zone_focus_drift_z1.5_s64": {
+   "class": "accept_clean",
+   "expected": "accept_clean",
+   "sequence": [],
+   "kind": "focus_drift",
+   "seed": 64,
+   "size": "1.5",
+   "repairing_states": [
+    "register_frames",
+    "smooth_midline/light",
+    "crop_or_mask/crop_to_main_root",
+    "crop_or_mask/mask_second_root",
+    "enlarge_patch/1.5x",
+    "enlarge_patch/2x",
+    "use_width_free_ratio",
+    "register_frames + smooth_midline/light",
+    "register_frames + crop_or_mask/crop_to_main_root",
+    "register_frames + crop_or_mask/mask_second_root",
+    "register_frames + enlarge_patch/1.5x",
+    "register_frames + enlarge_patch/2x",
+    "register_frames + use_width_free_ratio",
+    "smooth_midline/light + crop_or_mask/crop_to_main_root",
+    "smooth_midline/light + crop_or_mask/mask_second_root",
+    "smooth_midline/light + enlarge_patch/1.5x",
+    "smooth_midline/light + enlarge_patch/2x",
+    "smooth_midline/light + use_width_free_ratio",
+    "crop_or_mask/crop_to_main_root + enlarge_patch/1.5x",
+    "crop_or_mask/crop_to_main_root + enlarge_patch/2x",
+    "crop_or_mask/crop_to_main_root + use_width_free_ratio",
+    "crop_or_mask/mask_second_root + enlarge_patch/1.5x",
+    "crop_or_mask/mask_second_root + enlarge_patch/2x",
+    "crop_or_mask/mask_second_root + use_width_free_ratio",
+    "enlarge_patch/1.5x + use_width_free_ratio",
+    "enlarge_patch/2x + use_width_free_ratio"
+   ],
+   "states": 35
+  },
+  "v3_growth_zone_illumination_flicker_z0.03_s64": {
+   "class": "accept_repaired",
+   "expected": "accept_clean",
+   "sequence": [
+    "use_width_free_ratio"
+   ],
+   "kind": "illumination_flicker",
+   "seed": 64,
+   "size": "0.03",
+   "repairing_states": [
+    "use_width_free_ratio",
+    "register_frames + use_width_free_ratio",
+    "crop_or_mask/crop_to_main_root + use_width_free_ratio",
+    "crop_or_mask/mask_second_root + use_width_free_ratio",
+    "enlarge_patch/1.5x + use_width_free_ratio",
+    "enlarge_patch/2x + use_width_free_ratio"
+   ],
+   "states": 35
+  },
+  "v3_growth_zone_drift_low_texture_mild_s65": {
+   "class": "accept_repaired",
+   "expected": "accept_repaired",
+   "sequence": [
+    "register_frames",
+    "enlarge_patch/2x"
+   ],
+   "kind": "drift_low_texture_mild",
+   "seed": 65,
+   "size": null,
+   "repairing_states": [
+    "register_frames + enlarge_patch/2x"
+   ],
+   "states": 35
+  },
+  "v3_growth_zone_second_root_occlusion_mild_s65": {
+   "class": "accept_repaired",
+   "expected": "accept_repaired",
+   "sequence": [
+    "enlarge_patch/2x",
+    "use_width_free_ratio"
+   ],
+   "kind": "second_root_occlusion_mild",
+   "seed": 65,
+   "size": null,
+   "repairing_states": [
+    "enlarge_patch/2x + use_width_free_ratio"
+   ],
+   "states": 35
+  },
+  "v3_growth_zone_drift_jitter_mild_s65": {
+   "class": "decline",
+   "expected": "accept_repaired",
+   "sequence": null,
+   "kind": "drift_jitter_mild",
+   "seed": 65,
+   "size": null,
+   "repairing_states": [],
+   "states": 35
+  },
+  "v3_growth_zone_low_texture_fast_mild_s65": {
+   "class": "decline",
+   "expected": "accept_repaired",
+   "sequence": null,
+   "kind": "low_texture_fast_mild",
+   "seed": 65,
+   "size": null,
+   "repairing_states": [],
+   "states": 43
+  },
+  "v3_growth_zone_focus_drift_z1.5_s65": {
+   "class": "accept_repaired",
+   "expected": "accept_clean",
+   "sequence": [
+    "enlarge_patch/1.5x"
+   ],
+   "kind": "focus_drift",
+   "seed": 65,
+   "size": "1.5",
+   "repairing_states": [
+    "enlarge_patch/1.5x",
+    "enlarge_patch/2x",
+    "use_width_free_ratio",
+    "smooth_midline/light + enlarge_patch/1.5x",
+    "smooth_midline/light + enlarge_patch/2x",
+    "smooth_midline/light + use_width_free_ratio",
+    "crop_or_mask/crop_to_main_root + enlarge_patch/1.5x",
+    "crop_or_mask/crop_to_main_root + enlarge_patch/2x",
+    "crop_or_mask/crop_to_main_root + use_width_free_ratio",
+    "crop_or_mask/mask_second_root + enlarge_patch/1.5x",
+    "crop_or_mask/mask_second_root + enlarge_patch/2x",
+    "crop_or_mask/mask_second_root + use_width_free_ratio",
+    "enlarge_patch/1.5x + use_width_free_ratio",
+    "enlarge_patch/2x + use_width_free_ratio"
+   ],
+   "states": 35
+  },
+  "v3_growth_zone_illumination_flicker_z0.03_s65": {
+   "class": "accept_repaired",
+   "expected": "accept_clean",
+   "sequence": [
+    "smooth_midline/light"
+   ],
+   "kind": "illumination_flicker",
+   "seed": 65,
+   "size": "0.03",
+   "repairing_states": [
+    "smooth_midline/light",
+    "enlarge_patch/1.5x",
+    "enlarge_patch/2x",
+    "use_width_free_ratio",
+    "register_frames + enlarge_patch/2x",
+    "smooth_midline/light + crop_or_mask/crop_to_main_root",
+    "smooth_midline/light + crop_or_mask/mask_second_root",
+    "smooth_midline/light + enlarge_patch/1.5x",
+    "smooth_midline/light + enlarge_patch/2x",
+    "smooth_midline/light + use_width_free_ratio",
+    "crop_or_mask/crop_to_main_root + enlarge_patch/1.5x",
+    "crop_or_mask/crop_to_main_root + enlarge_patch/2x",
+    "crop_or_mask/crop_to_main_root + use_width_free_ratio",
+    "crop_or_mask/mask_second_root + enlarge_patch/1.5x",
+    "crop_or_mask/mask_second_root + enlarge_patch/2x",
+    "crop_or_mask/mask_second_root + use_width_free_ratio",
+    "enlarge_patch/1.5x + use_width_free_ratio",
+    "enlarge_patch/2x + use_width_free_ratio"
+   ],
+   "states": 35
+  },
+  "v3_growth_zone_drift_low_texture_mild_s66": {
+   "class": "decline",
+   "expected": "accept_repaired",
+   "sequence": null,
+   "kind": "drift_low_texture_mild",
+   "seed": 66,
+   "size": null,
+   "repairing_states": [],
+   "states": 35
+  },
+  "v3_growth_zone_second_root_occlusion_mild_s66": {
+   "class": "decline",
+   "expected": "accept_repaired",
+   "sequence": null,
+   "kind": "second_root_occlusion_mild",
+   "seed": 66,
+   "size": null,
+   "repairing_states": [],
+   "states": 35
+  },
+  "v3_growth_zone_drift_jitter_mild_s66": {
+   "class": "decline",
+   "expected": "accept_repaired",
+   "sequence": null,
+   "kind": "drift_jitter_mild",
+   "seed": 66,
+   "size": null,
+   "repairing_states": [],
+   "states": 35
+  },
+  "v3_growth_zone_low_texture_fast_mild_s66": {
+   "class": "decline",
+   "expected": "accept_repaired",
+   "sequence": null,
+   "kind": "low_texture_fast_mild",
+   "seed": 66,
+   "size": null,
+   "repairing_states": [],
+   "states": 43
+  },
+  "v3_growth_zone_focus_drift_z1.5_s66": {
+   "class": "accept_clean",
+   "expected": "accept_clean",
+   "sequence": [],
+   "kind": "focus_drift",
+   "seed": 66,
+   "size": "1.5",
+   "repairing_states": [
+    "smooth_midline/light",
+    "crop_or_mask/crop_to_main_root",
+    "crop_or_mask/mask_second_root",
+    "enlarge_patch/1.5x",
+    "enlarge_patch/2x",
+    "use_width_free_ratio",
+    "register_frames + enlarge_patch/1.5x",
+    "register_frames + enlarge_patch/2x",
+    "smooth_midline/light + crop_or_mask/crop_to_main_root",
+    "smooth_midline/light + crop_or_mask/mask_second_root",
+    "smooth_midline/light + enlarge_patch/1.5x",
+    "smooth_midline/light + enlarge_patch/2x",
+    "smooth_midline/light + use_width_free_ratio",
+    "crop_or_mask/crop_to_main_root + enlarge_patch/1.5x",
+    "crop_or_mask/crop_to_main_root + enlarge_patch/2x",
+    "crop_or_mask/crop_to_main_root + use_width_free_ratio",
+    "crop_or_mask/mask_second_root + enlarge_patch/1.5x",
+    "crop_or_mask/mask_second_root + enlarge_patch/2x",
+    "crop_or_mask/mask_second_root + use_width_free_ratio",
+    "enlarge_patch/1.5x + use_width_free_ratio",
+    "enlarge_patch/2x + use_width_free_ratio"
+   ],
+   "states": 35
+  },
+  "v3_growth_zone_illumination_flicker_z0.03_s66": {
+   "class": "accept_repaired",
+   "expected": "accept_clean",
+   "sequence": [
+    "enlarge_patch/1.5x"
+   ],
+   "kind": "illumination_flicker",
+   "seed": 66,
+   "size": "0.03",
+   "repairing_states": [
+    "enlarge_patch/1.5x",
+    "enlarge_patch/2x",
+    "register_frames + enlarge_patch/1.5x",
+    "register_frames + enlarge_patch/2x",
+    "smooth_midline/light + enlarge_patch/1.5x",
+    "crop_or_mask/crop_to_main_root + enlarge_patch/1.5x",
+    "crop_or_mask/crop_to_main_root + enlarge_patch/2x",
+    "crop_or_mask/mask_second_root + enlarge_patch/1.5x",
+    "crop_or_mask/mask_second_root + enlarge_patch/2x",
+    "enlarge_patch/1.5x + use_width_free_ratio",
+    "enlarge_patch/2x + use_width_free_ratio"
+   ],
+   "states": 35
+  },
+  "v3_growth_zone_drift_low_texture_mild_s67": {
+   "class": "accept_repaired",
+   "expected": "accept_repaired",
+   "sequence": [
+    "register_frames",
+    "enlarge_patch/2x"
+   ],
+   "kind": "drift_low_texture_mild",
+   "seed": 67,
+   "size": null,
+   "repairing_states": [
+    "register_frames + enlarge_patch/2x"
+   ],
+   "states": 35
+  },
+  "v3_growth_zone_second_root_occlusion_mild_s67": {
+   "class": "accept_clean",
+   "expected": "accept_repaired",
+   "sequence": [],
+   "kind": "second_root_occlusion_mild",
+   "seed": 67,
+   "size": null,
+   "repairing_states": [
+    "smooth_midline/light",
+    "crop_or_mask/crop_to_main_root",
+    "crop_or_mask/mask_second_root",
+    "enlarge_patch/1.5x",
+    "use_width_free_ratio",
+    "smooth_midline/light + crop_or_mask/crop_to_main_root",
+    "smooth_midline/light + crop_or_mask/mask_second_root",
+    "smooth_midline/light + enlarge_patch/1.5x",
+    "smooth_midline/light + use_width_free_ratio",
+    "crop_or_mask/crop_to_main_root + enlarge_patch/1.5x",
+    "crop_or_mask/crop_to_main_root + use_width_free_ratio",
+    "crop_or_mask/mask_second_root + enlarge_patch/1.5x",
+    "crop_or_mask/mask_second_root + use_width_free_ratio",
+    "enlarge_patch/1.5x + use_width_free_ratio",
+    "enlarge_patch/2x + use_width_free_ratio"
+   ],
+   "states": 35
+  },
+  "v3_growth_zone_drift_jitter_mild_s67": {
+   "class": "decline",
+   "expected": "accept_repaired",
+   "sequence": null,
+   "kind": "drift_jitter_mild",
+   "seed": 67,
+   "size": null,
+   "repairing_states": [],
+   "states": 35
+  },
+  "v3_growth_zone_low_texture_fast_mild_s67": {
+   "class": "accept_repaired",
+   "expected": "accept_repaired",
+   "sequence": [
+    "change_frame_stride/half",
+    "enlarge_patch/2x"
+   ],
+   "kind": "low_texture_fast_mild",
+   "seed": 67,
+   "size": null,
+   "repairing_states": [
+    "change_frame_stride/half + enlarge_patch/2x"
+   ],
+   "states": 43
+  },
+  "v3_growth_zone_focus_drift_z1.5_s67": {
+   "class": "accept_clean",
+   "expected": "accept_clean",
+   "sequence": [],
+   "kind": "focus_drift",
+   "seed": 67,
+   "size": "1.5",
+   "repairing_states": [
+    "smooth_midline/light",
+    "crop_or_mask/crop_to_main_root",
+    "crop_or_mask/mask_second_root",
+    "enlarge_patch/1.5x",
+    "enlarge_patch/2x",
+    "use_width_free_ratio",
+    "register_frames + enlarge_patch/1.5x",
+    "register_frames + enlarge_patch/2x",
+    "smooth_midline/light + crop_or_mask/crop_to_main_root",
+    "smooth_midline/light + crop_or_mask/mask_second_root",
+    "smooth_midline/light + enlarge_patch/1.5x",
+    "smooth_midline/light + enlarge_patch/2x",
+    "smooth_midline/light + use_width_free_ratio",
+    "crop_or_mask/crop_to_main_root + enlarge_patch/1.5x",
+    "crop_or_mask/crop_to_main_root + enlarge_patch/2x",
+    "crop_or_mask/crop_to_main_root + use_width_free_ratio",
+    "crop_or_mask/mask_second_root + enlarge_patch/1.5x",
+    "crop_or_mask/mask_second_root + enlarge_patch/2x",
+    "crop_or_mask/mask_second_root + use_width_free_ratio",
+    "enlarge_patch/1.5x + use_width_free_ratio",
+    "enlarge_patch/2x + use_width_free_ratio"
+   ],
+   "states": 35
+  },
+  "v3_growth_zone_illumination_flicker_z0.03_s67": {
+   "class": "accept_repaired",
+   "expected": "accept_clean",
+   "sequence": [
+    "enlarge_patch/1.5x"
+   ],
+   "kind": "illumination_flicker",
+   "seed": 67,
+   "size": "0.03",
+   "repairing_states": [
+    "enlarge_patch/1.5x",
+    "enlarge_patch/2x",
+    "use_width_free_ratio",
+    "register_frames + enlarge_patch/2x",
+    "smooth_midline/light + enlarge_patch/2x",
+    "crop_or_mask/crop_to_main_root + enlarge_patch/1.5x",
+    "crop_or_mask/crop_to_main_root + enlarge_patch/2x",
+    "crop_or_mask/crop_to_main_root + use_width_free_ratio",
+    "crop_or_mask/mask_second_root + enlarge_patch/1.5x",
+    "crop_or_mask/mask_second_root + enlarge_patch/2x",
+    "crop_or_mask/mask_second_root + use_width_free_ratio",
+    "enlarge_patch/1.5x + use_width_free_ratio",
+    "enlarge_patch/2x + use_width_free_ratio"
+   ],
+   "states": 35
+  }
+ },
+ "counts": {
+  "accept_clean": 7,
+  "accept_repaired": 19,
+  "decline": 22
+ },
+ "complete": true,
+ "stop": false
+}

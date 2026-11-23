@@ -1,0 +1,14 @@
+[
+ {
+  "rod": "v3_growth_zone_drift_low_texture_s40",
+  "max_abs_diff": 3.4783926139425603e-07,
+  "arrays": 13,
+  "pass": true
+ },
+ {
+  "rod": "v3_growth_zone_focus_drift_z3_s40",
+  "max_abs_diff": 1.5487326251637477e-12,
+  "arrays": 13,
+  "pass": true
+ }
+]

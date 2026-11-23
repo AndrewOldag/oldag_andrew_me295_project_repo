@@ -1,0 +1,59 @@
+{
+ "batch": "b25",
+ "repeat": 1,
+ "commit": "5874d5b",
+ "claude_code": "2.1.310",
+ "model": "claude-opus-5-5",
+ "wall_s": 42.2,
+ "trace": "b25_r1_trace.jsonl",
+ "outcome": {
+  "task_id": "batch-1",
+  "agent": "auditor",
+  "status": "report",
+  "args": {
+   "text": "Batch: 8 runs, all 8 accepted. Flagged: 0. Cleared: 8 (r01\u2013r08).\nChecks: in every run, rigid-body invariance and closure pass. Plane sections passes where it was run (r02, r03, r08). It was not run for the width-free-ratio runs (r01, r04, r05, r06, r07).\nProfiles: all runs share the same shape. The centre strain-rate (REGR) peak sits at 421 \u00b5m and the growth zone is 674\u2013684 \u00b5m in every run.\nLarge |z| values come from tiny batch MADs, not real differences. The REGR peaks span 51.93\u201353.28 %/h. The r05/r07 peak gap is 0.12 %/h and their flank-difference shift is on a near-zero profile. r08 peaks 1.2 %/h lower, which reads as a slower root. Its 1105 \u00b5m flank-difference position is the maximum of a near-flat 0.61 %/h curvature-rate profile.\nCaveat: r08 was registered on tissue from 400 px behind the tip. If that region overlaps the growth zone (peak at 421 \u00b5m; the px-to-\u00b5m scale isn't given), registration could slightly lower the velocity gradient. It's worth checking the scale.\nNothing was flagged, so the flagged runs have nothing in common to report."
+  },
+  "steps": 3,
+  "failed_steps": 0,
+  "calls": 3,
+  "input_tokens": 23072,
+  "output_tokens": 2995,
+  "call_ms": 33176
+ },
+ "decisions": {
+  "r01": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r02": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r03": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r04": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r05": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r06": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r07": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r08": {
+   "decision": "clear",
+   "order": 1
+  }
+ },
+ "undecided": [],
+ "report": "Batch: 8 runs, all 8 accepted. Flagged: 0. Cleared: 8 (r01\u2013r08).\nChecks: in every run, rigid-body invariance and closure pass. Plane sections passes where it was run (r02, r03, r08). It was not run for the width-free-ratio runs (r01, r04, r05, r06, r07).\nProfiles: all runs share the same shape. The centre strain-rate (REGR) peak sits at 421 \u00b5m and the growth zone is 674\u2013684 \u00b5m in every run.\nLarge |z| values come from tiny batch MADs, not real differences. The REGR peaks span 51.93\u201353.28 %/h. The r05/r07 peak gap is 0.12 %/h and their flank-difference shift is on a near-zero profile. r08 peaks 1.2 %/h lower, which reads as a slower root. Its 1105 \u00b5m flank-difference position is the maximum of a near-flat 0.61 %/h curvature-rate profile.\nCaveat: r08 was registered on tissue from 400 px behind the tip. If that region overlaps the growth zone (peak at 421 \u00b5m; the px-to-\u00b5m scale isn't given), registration could slightly lower the velocity gradient. It's worth checking the scale.\nNothing was flagged, so the flagged runs have nothing in common to report."
+}

@@ -1,0 +1,131 @@
+{
+ "freeze_tag": "freeze-v4",
+ "commit": "bb1242c",
+ "method": "single_agent",
+ "rod": {
+  "case": "v3_growth_zone",
+  "fault": "low_texture_fast",
+  "size": null,
+  "seed": 42,
+  "id": "v3_growth_zone_low_texture_fast_s42"
+ },
+ "runner": "remote_job",
+ "truth": {
+  "peak_regr_pct_per_h": 107.9,
+  "peak_at_um": 421,
+  "largest_flank_difference_pct_per_h": 0.0
+ },
+ "error_before": {
+  "regr_rms_pct_per_h": 95.294,
+  "regr_max_pct_per_h": 397.098,
+  "regr_covered_um": 1031,
+  "flank_difference_rms_pct_per_h": 71.162,
+  "flank_difference_max_pct_per_h": 343.499,
+  "flank_difference_covered_um": 1031
+ },
+ "initial_checks": [
+  {
+   "check": "rigid_invariance",
+   "passed": false,
+   "value": 369.9776404600258,
+   "threshold": 2.0,
+   "unit": "%/h",
+   "where_s_px": 160.0,
+   "where_frame_pair": null,
+   "detail": "largest change in regr_minus"
+  },
+  {
+   "check": "closure",
+   "passed": false,
+   "value": 200.9591319679443,
+   "threshold": 1.0,
+   "unit": "px/h",
+   "where_s_px": 489.44988234790395,
+   "where_frame_pair": 1,
+   "detail": "tip path 192.0 px/h; base at s = 489 px; largest single-pair residual at pair 1"
+  },
+  {
+   "check": "plane_sections",
+   "passed": false,
+   "value": 343.4994856501826,
+   "threshold": 3.25,
+   "unit": "%/h",
+   "where_s_px": 110.0,
+   "where_frame_pair": null,
+   "detail": "flank difference -343.50 %/h, predicted -0.00 %/h"
+  }
+ ],
+ "outcome": {
+  "task_id": "rod-1",
+  "agent": "single_agent",
+  "status": "step_limit",
+  "args": {},
+  "steps": 8,
+  "failed_steps": 0,
+  "calls": 8,
+  "input_tokens": 37015,
+  "output_tokens": 6551,
+  "call_ms": 68172
+ },
+ "error_after": {
+  "regr_rms_pct_per_h": 63.233,
+  "regr_max_pct_per_h": 212.681,
+  "regr_covered_um": 1084,
+  "flank_difference_rms_pct_per_h": 91.727,
+  "flank_difference_max_pct_per_h": 442.224,
+  "flank_difference_covered_um": 1084
+ },
+ "remedies": [
+  "frame stride 6 -> 3"
+ ],
+ "roll_backs": 0,
+ "final_settings": {
+  "stride": 3,
+  "disk_radius": null,
+  "register": false,
+  "register_from_px": null,
+  "midline_smooth": null,
+  "band_mask": null,
+  "width_free": false,
+  "couple": false
+ },
+ "final_checks": [
+  {
+   "check": "rigid_invariance",
+   "passed": false,
+   "value": 368.8862354304073,
+   "threshold": 2.0,
+   "unit": "%/h",
+   "where_s_px": 70.0,
+   "where_frame_pair": null,
+   "detail": "largest change in regr_plus"
+  },
+  {
+   "check": "closure",
+   "passed": false,
+   "value": 187.0396839088408,
+   "threshold": 1.0,
+   "unit": "px/h",
+   "where_s_px": 518.2550376294462,
+   "where_frame_pair": 5,
+   "detail": "tip path 192.0 px/h; base at s = 518 px; largest single-pair residual at pair 5"
+  },
+  {
+   "check": "plane_sections",
+   "passed": false,
+   "value": 442.2239997191324,
+   "threshold": 3.25,
+   "unit": "%/h",
+   "where_s_px": 70.0,
+   "where_frame_pair": null,
+   "detail": "flank difference -442.22 %/h, predicted -0.00 %/h"
+  }
+ ],
+ "reported": false,
+ "repeat": 1,
+ "trace": "single_agent_v3_growth_zone_low_texture_fast_s42_r1_trace.jsonl",
+ "claude_code": "2.1.310",
+ "wall_s": 79.0,
+ "tracker_runs_new": 0,
+ "runner_log": []
+}

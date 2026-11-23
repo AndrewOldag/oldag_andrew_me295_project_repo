@@ -1,0 +1,47 @@
+{
+ "z_cutoff": 3.0,
+ "decisions": {
+  "r01": {
+   "decision": "clear",
+   "reasons": []
+  },
+  "r02": {
+   "decision": "flag",
+   "reasons": [
+    "summary_outlier:flank_difference_at_um"
+   ]
+  },
+  "r03": {
+   "decision": "flag",
+   "reasons": [
+    "summary_outlier:growth_zone_length_um"
+   ]
+  },
+  "r04": {
+   "decision": "flag",
+   "reasons": [
+    "summary_outlier:flank_difference_at_um"
+   ]
+  },
+  "r05": {
+   "decision": "clear",
+   "reasons": []
+  },
+  "r06": {
+   "decision": "clear",
+   "reasons": []
+  },
+  "r07": {
+   "decision": "flag",
+   "reasons": [
+    "summary_outlier:growth_zone_length_um"
+   ]
+  },
+  "r08": {
+   "decision": "flag",
+   "reasons": [
+    "summary_outlier:centre_peak_regr_pct_per_h"
+   ]
+  }
+ }
+}

@@ -1,0 +1,43 @@
+{
+ "z_cutoff": 3.0,
+ "decisions": {
+  "r01": {
+   "decision": "clear",
+   "reasons": []
+  },
+  "r02": {
+   "decision": "flag",
+   "reasons": [
+    "summary_outlier:centre_peak_regr_pct_per_h"
+   ]
+  },
+  "r03": {
+   "decision": "clear",
+   "reasons": []
+  },
+  "r04": {
+   "decision": "clear",
+   "reasons": []
+  },
+  "r05": {
+   "decision": "clear",
+   "reasons": []
+  },
+  "r06": {
+   "decision": "clear",
+   "reasons": []
+  },
+  "r07": {
+   "decision": "flag",
+   "reasons": [
+    "summary_outlier:width_free_ratio_max"
+   ]
+  },
+  "r08": {
+   "decision": "flag",
+   "reasons": [
+    "summary_outlier:width_free_ratio_max"
+   ]
+  }
+ }
+}

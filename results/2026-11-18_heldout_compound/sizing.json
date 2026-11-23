@@ -1,0 +1,6 @@
+{
+ "sizes": {
+  "focus_drift": "3",
+  "illumination_flicker": "0.1"
+ }
+}

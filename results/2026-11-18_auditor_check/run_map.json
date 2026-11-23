@@ -1,0 +1,302 @@
+{
+ "b01": {
+  "r05": "diagnostician_v3_bend20_clean_s28_r1",
+  "r07": "remedy_tree_v3_bend20_clean_s27",
+  "r06": "script_v3_bend20_clean_s26",
+  "r02": "script_v3_bend20_clean_s27",
+  "r01": "script_v3_bend20_clean_s28",
+  "r08": "single_agent_v3_bend20_clean_s27_r0",
+  "r04": "single_agent_v3_bend20_clean_s28_r1",
+  "r03": "PLANT:doubled_frame:single_agent_v3_bend20_clean_s28_r2"
+ },
+ "b02": {
+  "r05": "diagnostician_v3_bend24_clean_s27_r1",
+  "r03": "remedy_tree_v3_bend24_clean_s28",
+  "r04": "script_v3_bend24_clean_s28",
+  "r02": "single_agent_v3_bend24_clean_s26_r0",
+  "r08": "single_agent_v3_bend24_clean_s26_r1",
+  "r06": "single_agent_v3_bend24_clean_s27_r2",
+  "r01": "single_agent_v3_bend24_clean_s28_r0",
+  "r07": "single_agent_v3_bend24_clean_s28_r1"
+ },
+ "b03": {
+  "r06": "diagnostician_v3_growth_zone_width_change_s26_r1",
+  "r05": "diagnostician_v3_growth_zone_width_change_s28_r1",
+  "r07": "remedy_tree_v3_growth_zone_width_change_s27",
+  "r04": "remedy_tree_v3_growth_zone_width_change_s28",
+  "r01": "single_agent_v3_growth_zone_width_change_s26_r1",
+  "r02": "single_agent_v3_growth_zone_width_change_s27_r0",
+  "r03": "single_agent_v3_growth_zone_width_change_s27_r1",
+  "r08": "single_agent_v3_growth_zone_width_change_s28_r0"
+ },
+ "b04": {
+  "r07": "PLANT:other_rod_track:diagnostician_v3_still_clean_s27_r0",
+  "r02": "diagnostician_v3_still_clean_s27_r1",
+  "r06": "diagnostician_v3_still_clean_s27_r2",
+  "r01": "diagnostician_v3_still_clean_s28_r0",
+  "r03": "remedy_tree_v3_still_clean_s26",
+  "r04": "script_v3_still_clean_s26",
+  "r08": "script_v3_still_clean_s28",
+  "r05": "single_agent_v3_still_clean_s27_r2"
+ },
+ "b05": {
+  "r05": "diagnostician_v3_growth_zone_clean_s26_r0",
+  "r01": "diagnostician_v3_growth_zone_clean_s26_r2",
+  "r07": "diagnostician_v3_growth_zone_clean_s27_r0",
+  "r06": "diagnostician_v3_growth_zone_clean_s27_r2",
+  "r08": "remedy_tree_v3_growth_zone_clean_s26",
+  "r02": "single_agent_v3_growth_zone_clean_s26_r1",
+  "r03": "PLANT:other_rod_track:single_agent_v3_growth_zone_clean_s26_r2",
+  "r04": "single_agent_v3_growth_zone_clean_s28_r1"
+ },
+ "b06": {
+  "r05": "PLANT:other_rod_track:diagnostician_v3_still_clean_s26_r0",
+  "r07": "diagnostician_v3_still_clean_s26_r1",
+  "r01": "diagnostician_v3_still_clean_s26_r2",
+  "r02": "diagnostician_v3_still_clean_s27_r0",
+  "r08": "diagnostician_v3_still_clean_s28_r2",
+  "r04": "script_v3_still_clean_s27",
+  "r03": "single_agent_v3_still_clean_s26_r0",
+  "r06": "single_agent_v3_still_clean_s28_r1"
+ },
+ "b07": {
+  "r08": "diagnostician_v3_bend24_clean_s26_r0",
+  "r04": "diagnostician_v3_bend24_clean_s26_r1",
+  "r05": "diagnostician_v3_bend24_clean_s26_r2",
+  "r02": "diagnostician_v3_bend24_clean_s28_r0",
+  "r01": "remedy_tree_v3_bend24_clean_s26",
+  "r07": "remedy_tree_v3_bend24_clean_s28",
+  "r03": "single_agent_v3_bend24_clean_s27_r1",
+  "r06": "single_agent_v3_bend24_clean_s28_r1"
+ },
+ "b08": {
+  "r02": "diagnostician_v3_bend20_clean_s27_r2",
+  "r03": "diagnostician_v3_bend20_clean_s28_r1",
+  "r04": "remedy_tree_v3_bend20_clean_s28",
+  "r05": "script_v3_bend20_clean_s26",
+  "r06": "single_agent_v3_bend20_clean_s27_r0",
+  "r08": "single_agent_v3_bend20_clean_s27_r2",
+  "r01": "single_agent_v3_bend20_clean_s28_r1",
+  "r07": "single_agent_v3_bend20_clean_s28_r2"
+ },
+ "b09": {
+  "r05": "PLANT:closure_relabelled:diagnostician_v3_growth_zone_bad_stage_correction_z3_s26_r1",
+  "r07": "diagnostician_v3_growth_zone_bad_stage_correction_z3_s27_r0",
+  "r06": "diagnostician_v3_growth_zone_bad_stage_correction_z3_s27_r1",
+  "r08": "diagnostician_v3_growth_zone_bad_stage_correction_z3_s27_r2",
+  "r04": "diagnostician_v3_growth_zone_bad_stage_correction_z3_s28_r0",
+  "r03": "diagnostician_v3_growth_zone_bad_stage_correction_z3_s28_r2",
+  "r01": "remedy_tree_v3_growth_zone_bad_stage_correction_z3_s27",
+  "r02": "remedy_tree_v3_growth_zone_bad_stage_correction_z3_s28"
+ },
+ "b10": {
+  "r05": "diagnostician_v3_growth_zone_clean_s26_r2",
+  "r04": "diagnostician_v3_growth_zone_clean_s27_r2",
+  "r02": "diagnostician_v3_growth_zone_clean_s28_r2",
+  "r03": "remedy_tree_v3_growth_zone_clean_s27",
+  "r07": "script_v3_growth_zone_clean_s26",
+  "r01": "script_v3_growth_zone_clean_s27",
+  "r08": "single_agent_v3_growth_zone_clean_s26_r1",
+  "r06": "single_agent_v3_growth_zone_clean_s28_r2"
+ },
+ "b11": {
+  "r04": "diagnostician_v3_bend16_clean_s26_r0",
+  "r03": "diagnostician_v3_bend16_clean_s27_r1",
+  "r07": "diagnostician_v3_bend16_clean_s27_r2",
+  "r05": "diagnostician_v3_bend16_clean_s28_r0",
+  "r06": "diagnostician_v3_bend16_clean_s28_r2",
+  "r01": "remedy_tree_v3_bend16_clean_s28",
+  "r02": "script_v3_bend16_clean_s26",
+  "r08": "PLANT:doubled_frame:single_agent_v3_bend16_clean_s26_r1"
+ },
+ "b12": {
+  "r04": "diagnostician_v3_bend30_clean_s27_r0",
+  "r03": "diagnostician_v3_bend30_clean_s27_r2",
+  "r01": "diagnostician_v3_bend30_clean_s28_r0",
+  "r05": "remedy_tree_v3_bend30_clean_s26",
+  "r06": "script_v3_bend30_clean_s27",
+  "r02": "single_agent_v3_bend30_clean_s27_r1",
+  "r08": "single_agent_v3_bend30_clean_s28_r0",
+  "r07": "single_agent_v3_bend30_clean_s28_r1"
+ },
+ "b13": {
+  "r08": "diagnostician_v3_bend16_clean_s26_r2",
+  "r07": "PLANT:wrong_unit:diagnostician_v3_bend16_clean_s28_r2",
+  "r05": "remedy_tree_v3_bend16_clean_s26",
+  "r01": "script_v3_bend16_clean_s27",
+  "r06": "script_v3_bend16_clean_s28",
+  "r03": "single_agent_v3_bend16_clean_s27_r0",
+  "r02": "single_agent_v3_bend16_clean_s27_r1",
+  "r04": "single_agent_v3_bend16_clean_s28_r0"
+ },
+ "b14": {
+  "r04": "diagnostician_v3_bend20_clean_s27_r0",
+  "r02": "diagnostician_v3_bend20_clean_s28_r1",
+  "r08": "remedy_tree_v3_bend20_clean_s26",
+  "r05": "remedy_tree_v3_bend20_clean_s28",
+  "r01": "script_v3_bend20_clean_s27",
+  "r06": "single_agent_v3_bend20_clean_s26_r1",
+  "r07": "single_agent_v3_bend20_clean_s27_r0",
+  "r03": "PLANT:other_rod_track:single_agent_v3_bend20_clean_s28_r1"
+ },
+ "b15": {
+  "r04": "diagnostician_v3_bend16_clean_s27_r0",
+  "r06": "diagnostician_v3_bend16_clean_s27_r1",
+  "r01": "diagnostician_v3_bend16_clean_s28_r0",
+  "r08": "diagnostician_v3_bend16_clean_s28_r1",
+  "r02": "script_v3_bend16_clean_s27",
+  "r05": "single_agent_v3_bend16_clean_s27_r0",
+  "r03": "single_agent_v3_bend16_clean_s27_r1",
+  "r07": "single_agent_v3_bend16_clean_s27_r2"
+ },
+ "b16": {
+  "r07": "diagnostician_v3_still_clean_s26_r0",
+  "r05": "diagnostician_v3_still_clean_s27_r1",
+  "r08": "diagnostician_v3_still_clean_s28_r1",
+  "r02": "script_v3_still_clean_s26",
+  "r04": "single_agent_v3_still_clean_s26_r2",
+  "r06": "single_agent_v3_still_clean_s27_r0",
+  "r03": "single_agent_v3_still_clean_s27_r1",
+  "r01": "single_agent_v3_still_clean_s28_r1"
+ },
+ "b17": {
+  "r05": "diagnostician_v3_growth_zone_width_change_s26_r1",
+  "r07": "diagnostician_v3_growth_zone_width_change_s27_r0",
+  "r02": "diagnostician_v3_growth_zone_width_change_s28_r0",
+  "r04": "diagnostician_v3_growth_zone_width_change_s28_r2",
+  "r03": "remedy_tree_v3_growth_zone_width_change_s27",
+  "r08": "remedy_tree_v3_growth_zone_width_change_s28",
+  "r01": "PLANT:wrong_unit:single_agent_v3_growth_zone_width_change_s26_r2",
+  "r06": "single_agent_v3_growth_zone_width_change_s28_r2"
+ },
+ "b18": {
+  "r02": "diagnostician_v3_growth_zone_clean_s26_r0",
+  "r06": "remedy_tree_v3_growth_zone_clean_s26",
+  "r03": "script_v3_growth_zone_clean_s27",
+  "r04": "single_agent_v3_growth_zone_clean_s26_r0",
+  "r07": "single_agent_v3_growth_zone_clean_s26_r1",
+  "r01": "single_agent_v3_growth_zone_clean_s27_r1",
+  "r08": "single_agent_v3_growth_zone_clean_s27_r2",
+  "r05": "single_agent_v3_growth_zone_clean_s28_r0"
+ },
+ "b19": {
+  "r07": "diagnostician_v3_growth_zone_rigid_drift_z0.5_s28_r1",
+  "r02": "diagnostician_v3_growth_zone_rigid_drift_z0.5_s28_r2",
+  "r08": "remedy_tree_v3_growth_zone_rigid_drift_z0.5_s27",
+  "r06": "single_agent_v3_growth_zone_rigid_drift_z0.5_s26_r0",
+  "r05": "single_agent_v3_growth_zone_rigid_drift_z0.5_s26_r1",
+  "r04": "single_agent_v3_growth_zone_rigid_drift_z0.5_s27_r2",
+  "r03": "single_agent_v3_growth_zone_rigid_drift_z0.5_s28_r0",
+  "r01": "single_agent_v3_growth_zone_rigid_drift_z0.5_s28_r2"
+ },
+ "b20": {
+  "r02": "diagnostician_v3_growth_zone_width_change_s26_r2",
+  "r08": "diagnostician_v3_growth_zone_width_change_s28_r0",
+  "r06": "remedy_tree_v3_growth_zone_width_change_s26",
+  "r05": "remedy_tree_v3_growth_zone_width_change_s28",
+  "r03": "single_agent_v3_growth_zone_width_change_s26_r0",
+  "r04": "single_agent_v3_growth_zone_width_change_s28_r0",
+  "r07": "single_agent_v3_growth_zone_width_change_s28_r1",
+  "r01": "single_agent_v3_growth_zone_width_change_s28_r2"
+ },
+ "b21": {
+  "r03": "diagnostician_v3_bend30_clean_s27_r1",
+  "r02": "diagnostician_v3_bend30_clean_s28_r0",
+  "r05": "diagnostician_v3_bend30_clean_s28_r1",
+  "r07": "remedy_tree_v3_bend30_clean_s26",
+  "r01": "script_v3_bend30_clean_s26",
+  "r06": "script_v3_bend30_clean_s28",
+  "r04": "single_agent_v3_bend30_clean_s27_r0",
+  "r08": "single_agent_v3_bend30_clean_s28_r1"
+ },
+ "b22": {
+  "r01": "diagnostician_v3_bend24_clean_s26_r2",
+  "r02": "diagnostician_v3_bend24_clean_s28_r2",
+  "r07": "script_v3_bend24_clean_s27",
+  "r05": "single_agent_v3_bend24_clean_s26_r1",
+  "r06": "single_agent_v3_bend24_clean_s26_r2",
+  "r03": "single_agent_v3_bend24_clean_s28_r0",
+  "r04": "single_agent_v3_bend24_clean_s28_r1",
+  "r08": "single_agent_v3_bend24_clean_s28_r2"
+ },
+ "b23": {
+  "r02": "diagnostician_v3_growth_zone_bad_stage_correction_z3_s26_r0",
+  "r01": "diagnostician_v3_growth_zone_bad_stage_correction_z3_s26_r1",
+  "r08": "diagnostician_v3_growth_zone_bad_stage_correction_z3_s26_r2",
+  "r05": "diagnostician_v3_growth_zone_bad_stage_correction_z3_s27_r0",
+  "r06": "diagnostician_v3_growth_zone_bad_stage_correction_z3_s28_r0",
+  "r03": "PLANT:closure_relabelled:diagnostician_v3_growth_zone_bad_stage_correction_z3_s28_r2",
+  "r07": "remedy_tree_v3_growth_zone_bad_stage_correction_z3_s26",
+  "r04": "remedy_tree_v3_growth_zone_bad_stage_correction_z3_s28"
+ },
+ "b24": {
+  "r02": "diagnostician_v3_growth_zone_clean_s26_r0",
+  "r08": "diagnostician_v3_growth_zone_clean_s26_r1",
+  "r04": "diagnostician_v3_growth_zone_clean_s27_r0",
+  "r01": "diagnostician_v3_growth_zone_clean_s28_r1",
+  "r07": "diagnostician_v3_growth_zone_clean_s28_r2",
+  "r03": "script_v3_growth_zone_clean_s26",
+  "r06": "single_agent_v3_growth_zone_clean_s26_r2",
+  "r05": "PLANT:wrong_unit:single_agent_v3_growth_zone_clean_s27_r2"
+ },
+ "b25": {
+  "r07": "diagnostician_v3_growth_zone_rigid_drift_z0.5_s26_r2",
+  "r02": "diagnostician_v3_growth_zone_rigid_drift_z0.5_s28_r0",
+  "r03": "diagnostician_v3_growth_zone_rigid_drift_z0.5_s28_r2",
+  "r08": "PLANT:doubled_frame:remedy_tree_v3_growth_zone_rigid_drift_z0.5_s27",
+  "r05": "single_agent_v3_growth_zone_rigid_drift_z0.5_s26_r0",
+  "r01": "single_agent_v3_growth_zone_rigid_drift_z0.5_s27_r0",
+  "r06": "single_agent_v3_growth_zone_rigid_drift_z0.5_s27_r2",
+  "r04": "single_agent_v3_growth_zone_rigid_drift_z0.5_s28_r1"
+ },
+ "b26": {
+  "r06": "diagnostician_v3_growth_zone_bad_stage_correction_z3_s26_r0",
+  "r02": "diagnostician_v3_growth_zone_bad_stage_correction_z3_s26_r2",
+  "r04": "diagnostician_v3_growth_zone_bad_stage_correction_z3_s27_r0",
+  "r07": "diagnostician_v3_growth_zone_bad_stage_correction_z3_s27_r1",
+  "r05": "diagnostician_v3_growth_zone_bad_stage_correction_z3_s27_r2",
+  "r08": "PLANT:closure_relabelled:diagnostician_v3_growth_zone_bad_stage_correction_z3_s28_r2",
+  "r01": "remedy_tree_v3_growth_zone_bad_stage_correction_z3_s26",
+  "r03": "remedy_tree_v3_growth_zone_bad_stage_correction_z3_s28"
+ },
+ "b27": {
+  "r04": "diagnostician_v3_growth_zone_rigid_drift_z0.5_s26_r1",
+  "r01": "diagnostician_v3_growth_zone_rigid_drift_z0.5_s27_r0",
+  "r06": "remedy_tree_v3_growth_zone_rigid_drift_z0.5_s26",
+  "r02": "remedy_tree_v3_growth_zone_rigid_drift_z0.5_s27",
+  "r05": "single_agent_v3_growth_zone_rigid_drift_z0.5_s27_r0",
+  "r07": "single_agent_v3_growth_zone_rigid_drift_z0.5_s27_r1",
+  "r08": "single_agent_v3_growth_zone_rigid_drift_z0.5_s28_r0",
+  "r03": "single_agent_v3_growth_zone_rigid_drift_z0.5_s28_r2"
+ },
+ "b28": {
+  "r01": "diagnostician_v3_growth_zone_bad_stage_correction_z3_s26_r2",
+  "r06": "diagnostician_v3_growth_zone_bad_stage_correction_z3_s27_r0",
+  "r04": "diagnostician_v3_growth_zone_bad_stage_correction_z3_s27_r1",
+  "r02": "diagnostician_v3_growth_zone_bad_stage_correction_z3_s27_r2",
+  "r03": "diagnostician_v3_growth_zone_bad_stage_correction_z3_s28_r0",
+  "r08": "diagnostician_v3_growth_zone_bad_stage_correction_z3_s28_r1",
+  "r07": "PLANT:closure_relabelled:remedy_tree_v3_growth_zone_bad_stage_correction_z3_s27",
+  "r05": "remedy_tree_v3_growth_zone_bad_stage_correction_z3_s28"
+ },
+ "b29": {
+  "r07": "diagnostician_v3_bend30_clean_s26_r0",
+  "r03": "diagnostician_v3_bend30_clean_s26_r1",
+  "r01": "diagnostician_v3_bend30_clean_s27_r0",
+  "r04": "remedy_tree_v3_bend30_clean_s26",
+  "r05": "script_v3_bend30_clean_s26",
+  "r02": "single_agent_v3_bend30_clean_s26_r1",
+  "r06": "single_agent_v3_bend30_clean_s27_r0",
+  "r08": "single_agent_v3_bend30_clean_s28_r0"
+ },
+ "b30": {
+  "r04": "diagnostician_v3_growth_zone_rigid_drift_z0.5_s26_r0",
+  "r05": "diagnostician_v3_growth_zone_rigid_drift_z0.5_s26_r1",
+  "r01": "diagnostician_v3_growth_zone_rigid_drift_z0.5_s26_r2",
+  "r06": "diagnostician_v3_growth_zone_rigid_drift_z0.5_s28_r0",
+  "r08": "diagnostician_v3_growth_zone_rigid_drift_z0.5_s28_r1",
+  "r03": "single_agent_v3_growth_zone_rigid_drift_z0.5_s26_r0",
+  "r02": "PLANT:wrong_unit:single_agent_v3_growth_zone_rigid_drift_z0.5_s26_r1",
+  "r07": "single_agent_v3_growth_zone_rigid_drift_z0.5_s28_r2"
+ }
+}

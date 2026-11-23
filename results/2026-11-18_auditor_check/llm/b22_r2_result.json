@@ -1,0 +1,59 @@
+{
+ "batch": "b22",
+ "repeat": 2,
+ "commit": "47e8eef",
+ "claude_code": "2.1.310",
+ "model": "claude-opus-5-5",
+ "wall_s": 22.1,
+ "trace": "b22_r2_trace.jsonl",
+ "outcome": {
+  "task_id": "batch-1",
+  "agent": "auditor",
+  "status": "report",
+  "args": {
+   "text": "Batch: 8 runs, all 8 accepted. Flagged: none. Cleared: r01\u2013r08.\n- Every final check passes on every run: rigid-body invariance, closure and plane sections. No run used the width-free ratio.\n- The summaries are very close across the batch. The centre REGR peak is at 421 \u00b5m on every run. Peak strain rates are 52.84\u201352.92 %/h. Growth zones are 674\u2013695 \u00b5m long.\n- The few large z-scores come from a very small batch MAD, not from real differences. r07's z of \u22123.37 is a peak 0.05 %/h below the median. The flank-difference peak in r01, r05 and r06 sits 11 \u00b5m off the median. r04 and r08 have growth zones about 2 % shorter.\n- r04 and r08 each kept one remedy, and their checks pass after it. No run rolled anything back.\n- Some runs give exactly the same checks and summaries: r02 and r03; r01, r05 and r06; r04 and r08. They may be the same movie processed more than once rather than separate roots, so the batch may cover fewer separate measurements than 8. The run IDs and time windows should be checked before the results are pooled.\n- No flags, so the flagged runs share nothing."
+  },
+  "steps": 2,
+  "failed_steps": 0,
+  "calls": 2,
+  "input_tokens": 14485,
+  "output_tokens": 1637,
+  "call_ms": 18784
+ },
+ "decisions": {
+  "r01": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r02": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r03": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r04": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r05": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r06": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r07": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r08": {
+   "decision": "clear",
+   "order": 1
+  }
+ },
+ "undecided": [],
+ "report": "Batch: 8 runs, all 8 accepted. Flagged: none. Cleared: r01\u2013r08.\n- Every final check passes on every run: rigid-body invariance, closure and plane sections. No run used the width-free ratio.\n- The summaries are very close across the batch. The centre REGR peak is at 421 \u00b5m on every run. Peak strain rates are 52.84\u201352.92 %/h. Growth zones are 674\u2013695 \u00b5m long.\n- The few large z-scores come from a very small batch MAD, not from real differences. r07's z of \u22123.37 is a peak 0.05 %/h below the median. The flank-difference peak in r01, r05 and r06 sits 11 \u00b5m off the median. r04 and r08 have growth zones about 2 % shorter.\n- r04 and r08 each kept one remedy, and their checks pass after it. No run rolled anything back.\n- Some runs give exactly the same checks and summaries: r02 and r03; r01, r05 and r06; r04 and r08. They may be the same movie processed more than once rather than separate roots, so the batch may cover fewer separate measurements than 8. The run IDs and time windows should be checked before the results are pooled.\n- No flags, so the flagged runs share nothing."
+}

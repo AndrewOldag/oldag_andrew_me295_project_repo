@@ -1,0 +1,125 @@
+{
+ "batch": "b21",
+ "repeat": 2,
+ "commit": "47e8eef",
+ "claude_code": "2.1.310",
+ "model": "claude-opus-5-5",
+ "wall_s": 83.8,
+ "trace": "b21_r2_trace.jsonl",
+ "outcome": {
+  "task_id": "batch-1",
+  "agent": "auditor",
+  "status": "report",
+  "args": {
+   "text": "Batch: 8 runs, all 8 accepted.\nFlagged (6), reason other (likely duplicates): r01/r07, r05/r06 and r02/r08. In each pair, the two runs match exactly on all three check values (rigid invariance, closure, plane sections). They also match on every strain-rate summary: REGR peak and its position, growth-zone length, and flank difference and its position. Their final settings and kept remedies match too. The only difference is r02/r08's step count (5 vs 7). Separate roots would not give the same velocity, strain-rate and curvature numbers, so each pair looks like one measurement reported twice. We can't tell which root it belongs to.\nCleared (2): r03 and r04. Both pass all checks, all summaries have |z| < 2, neither duplicates another run, and r04's one kept remedy (registration) is the normal path.\nWhat the flagged runs share: none fails a check or is a strain-rate outlier. The problem is duplicated reports, which points to a bookkeeping or run-assignment fault upstream, not to the kinematics. The source movies for these 6 runs should be checked before they are reported."
+  },
+  "steps": 11,
+  "failed_steps": 0,
+  "calls": 11,
+  "input_tokens": 106485,
+  "output_tokens": 4957,
+  "call_ms": 62562
+ },
+ "decisions": {
+  "r01": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "other",
+   "evidence": [
+    "rigid_invariance",
+    "closure",
+    "plane_sections",
+    "centre_peak_regr_pct_per_h",
+    "growth_zone_length_um",
+    "flank_difference_max_pct_per_h",
+    "final_settings",
+    "steps"
+   ]
+  },
+  "r07": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "other",
+   "evidence": [
+    "rigid_invariance",
+    "closure",
+    "plane_sections",
+    "centre_peak_regr_pct_per_h",
+    "growth_zone_length_um",
+    "flank_difference_max_pct_per_h",
+    "final_settings",
+    "steps"
+   ]
+  },
+  "r05": {
+   "decision": "flag",
+   "order": 2,
+   "reason": "other",
+   "evidence": [
+    "rigid_invariance",
+    "closure",
+    "plane_sections",
+    "centre_peak_regr_pct_per_h",
+    "growth_zone_length_um",
+    "flank_difference_max_pct_per_h",
+    "final_settings",
+    "steps"
+   ]
+  },
+  "r06": {
+   "decision": "flag",
+   "order": 2,
+   "reason": "other",
+   "evidence": [
+    "rigid_invariance",
+    "closure",
+    "plane_sections",
+    "centre_peak_regr_pct_per_h",
+    "growth_zone_length_um",
+    "flank_difference_max_pct_per_h",
+    "final_settings",
+    "steps"
+   ]
+  },
+  "r02": {
+   "decision": "flag",
+   "order": 3,
+   "reason": "other",
+   "evidence": [
+    "rigid_invariance",
+    "closure",
+    "plane_sections",
+    "centre_peak_regr_pct_per_h",
+    "growth_zone_length_um",
+    "flank_difference_max_pct_per_h",
+    "remedies_kept",
+    "final_settings"
+   ]
+  },
+  "r08": {
+   "decision": "flag",
+   "order": 3,
+   "reason": "other",
+   "evidence": [
+    "rigid_invariance",
+    "closure",
+    "plane_sections",
+    "centre_peak_regr_pct_per_h",
+    "growth_zone_length_um",
+    "flank_difference_max_pct_per_h",
+    "remedies_kept",
+    "final_settings"
+   ]
+  },
+  "r03": {
+   "decision": "clear",
+   "order": 4
+  },
+  "r04": {
+   "decision": "clear",
+   "order": 4
+  }
+ },
+ "undecided": [],
+ "report": "Batch: 8 runs, all 8 accepted.\nFlagged (6), reason other (likely duplicates): r01/r07, r05/r06 and r02/r08. In each pair, the two runs match exactly on all three check values (rigid invariance, closure, plane sections). They also match on every strain-rate summary: REGR peak and its position, growth-zone length, and flank difference and its position. Their final settings and kept remedies match too. The only difference is r02/r08's step count (5 vs 7). Separate roots would not give the same velocity, strain-rate and curvature numbers, so each pair looks like one measurement reported twice. We can't tell which root it belongs to.\nCleared (2): r03 and r04. Both pass all checks, all summaries have |z| < 2, neither duplicates another run, and r04's one kept remedy (registration) is the normal path.\nWhat the flagged runs share: none fails a check or is a strain-rate outlier. The problem is duplicated reports, which points to a bookkeeping or run-assignment fault upstream, not to the kinematics. The source movies for these 6 runs should be checked before they are reported."
+}

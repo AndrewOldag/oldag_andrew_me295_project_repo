@@ -1,0 +1,1678 @@
+{
+ "script": {
+  "repeats": [
+   0
+  ],
+  "per_repeat": [
+   {
+    "runs": 20,
+    "runs_per_class": {
+     "accept_clean": 4,
+     "accept_repaired": 10,
+     "decline": 6
+    },
+    "correct": 6,
+    "accuracy_per_class": {
+     "accept_clean": 1.0,
+     "accept_repaired": 0.2,
+     "decline": 0.0
+    },
+    "balanced_accuracy": 0.39999999999999997,
+    "overall_accuracy": 0.3,
+    "false_accepts": 12,
+    "false_accept_rate": 0.6,
+    "coverage": 1.0,
+    "abstention_precision": null,
+    "abstention_recall": 0.0,
+    "unnecessary_decline_rate": {
+     "accept_clean": 0.0,
+     "accept_repaired": 0.0
+    },
+    "not_reported_per_class": {
+     "accept_clean": 0,
+     "accept_repaired": 0,
+     "decline": 0
+    },
+    "categories": {
+     "good_report": 6,
+     "false_accept": 12,
+     "correct_decline": 0,
+     "unnecessary_decline": 0,
+     "not_reported": 0,
+     "accept_on_decline": 2
+    },
+    "remedies_kept_per_class": {
+     "accept_clean": 0,
+     "accept_repaired": 0,
+     "decline": 0
+    },
+    "runs_with_remedy_kept_per_class": {
+     "accept_clean": 0,
+     "accept_repaired": 0,
+     "decline": 0
+    },
+    "fault_named_correct": 0,
+    "fault_rods": 20
+   }
+  ],
+  "runs": {
+   "mean": 20.0,
+   "min": 20,
+   "max": 20
+  },
+  "runs_per_class": {
+   "accept_clean": {
+    "mean": 4.0,
+    "min": 4,
+    "max": 4
+   },
+   "accept_repaired": {
+    "mean": 10.0,
+    "min": 10,
+    "max": 10
+   },
+   "decline": {
+    "mean": 6.0,
+    "min": 6,
+    "max": 6
+   }
+  },
+  "correct": {
+   "mean": 6.0,
+   "min": 6,
+   "max": 6
+  },
+  "accuracy_per_class": {
+   "accept_clean": {
+    "mean": 1.0,
+    "min": 1.0,
+    "max": 1.0
+   },
+   "accept_repaired": {
+    "mean": 0.2,
+    "min": 0.2,
+    "max": 0.2
+   },
+   "decline": {
+    "mean": 0.0,
+    "min": 0.0,
+    "max": 0.0
+   }
+  },
+  "balanced_accuracy": {
+   "mean": 0.39999999999999997,
+   "min": 0.39999999999999997,
+   "max": 0.39999999999999997
+  },
+  "overall_accuracy": {
+   "mean": 0.3,
+   "min": 0.3,
+   "max": 0.3
+  },
+  "false_accepts": {
+   "mean": 12.0,
+   "min": 12,
+   "max": 12
+  },
+  "false_accept_rate": {
+   "mean": 0.6,
+   "min": 0.6,
+   "max": 0.6
+  },
+  "coverage": {
+   "mean": 1.0,
+   "min": 1.0,
+   "max": 1.0
+  },
+  "abstention_precision": null,
+  "abstention_recall": {
+   "mean": 0.0,
+   "min": 0.0,
+   "max": 0.0
+  },
+  "unnecessary_decline_rate": {
+   "accept_clean": {
+    "mean": 0.0,
+    "min": 0.0,
+    "max": 0.0
+   },
+   "accept_repaired": {
+    "mean": 0.0,
+    "min": 0.0,
+    "max": 0.0
+   }
+  },
+  "not_reported_per_class": {
+   "accept_clean": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   },
+   "accept_repaired": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   },
+   "decline": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   }
+  },
+  "categories": {
+   "good_report": {
+    "mean": 6.0,
+    "min": 6,
+    "max": 6
+   },
+   "false_accept": {
+    "mean": 12.0,
+    "min": 12,
+    "max": 12
+   },
+   "correct_decline": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   },
+   "unnecessary_decline": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   },
+   "not_reported": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   },
+   "accept_on_decline": {
+    "mean": 2.0,
+    "min": 2,
+    "max": 2
+   }
+  },
+  "remedies_kept_per_class": {
+   "accept_clean": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   },
+   "accept_repaired": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   },
+   "decline": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   }
+  },
+  "runs_with_remedy_kept_per_class": {
+   "accept_clean": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   },
+   "accept_repaired": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   },
+   "decline": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   }
+  },
+  "fault_named_correct": {
+   "mean": 0.0,
+   "min": 0,
+   "max": 0
+  },
+  "fault_rods": {
+   "mean": 20.0,
+   "min": 20,
+   "max": 20
+  }
+ },
+ "remedy_tree": {
+  "repeats": [
+   0
+  ],
+  "per_repeat": [
+   {
+    "runs": 20,
+    "runs_per_class": {
+     "accept_clean": 4,
+     "accept_repaired": 10,
+     "decline": 6
+    },
+    "correct": 15,
+    "accuracy_per_class": {
+     "accept_clean": 1.0,
+     "accept_repaired": 0.8,
+     "decline": 0.5
+    },
+    "balanced_accuracy": 0.7666666666666666,
+    "overall_accuracy": 0.75,
+    "false_accepts": 4,
+    "false_accept_rate": 0.23529411764705882,
+    "coverage": 0.85,
+    "abstention_precision": 1.0,
+    "abstention_recall": 0.5,
+    "unnecessary_decline_rate": {
+     "accept_clean": 0.0,
+     "accept_repaired": 0.0
+    },
+    "not_reported_per_class": {
+     "accept_clean": 0,
+     "accept_repaired": 0,
+     "decline": 0
+    },
+    "categories": {
+     "good_report": 12,
+     "false_accept": 4,
+     "correct_decline": 3,
+     "unnecessary_decline": 0,
+     "not_reported": 0,
+     "accept_on_decline": 1
+    },
+    "remedies_kept_per_class": {
+     "accept_clean": 0,
+     "accept_repaired": 12,
+     "decline": 10
+    },
+    "runs_with_remedy_kept_per_class": {
+     "accept_clean": 0,
+     "accept_repaired": 8,
+     "decline": 4
+    },
+    "fault_named_correct": 5,
+    "fault_rods": 20
+   }
+  ],
+  "runs": {
+   "mean": 20.0,
+   "min": 20,
+   "max": 20
+  },
+  "runs_per_class": {
+   "accept_clean": {
+    "mean": 4.0,
+    "min": 4,
+    "max": 4
+   },
+   "accept_repaired": {
+    "mean": 10.0,
+    "min": 10,
+    "max": 10
+   },
+   "decline": {
+    "mean": 6.0,
+    "min": 6,
+    "max": 6
+   }
+  },
+  "correct": {
+   "mean": 15.0,
+   "min": 15,
+   "max": 15
+  },
+  "accuracy_per_class": {
+   "accept_clean": {
+    "mean": 1.0,
+    "min": 1.0,
+    "max": 1.0
+   },
+   "accept_repaired": {
+    "mean": 0.8,
+    "min": 0.8,
+    "max": 0.8
+   },
+   "decline": {
+    "mean": 0.5,
+    "min": 0.5,
+    "max": 0.5
+   }
+  },
+  "balanced_accuracy": {
+   "mean": 0.7666666666666666,
+   "min": 0.7666666666666666,
+   "max": 0.7666666666666666
+  },
+  "overall_accuracy": {
+   "mean": 0.75,
+   "min": 0.75,
+   "max": 0.75
+  },
+  "false_accepts": {
+   "mean": 4.0,
+   "min": 4,
+   "max": 4
+  },
+  "false_accept_rate": {
+   "mean": 0.23529411764705882,
+   "min": 0.23529411764705882,
+   "max": 0.23529411764705882
+  },
+  "coverage": {
+   "mean": 0.85,
+   "min": 0.85,
+   "max": 0.85
+  },
+  "abstention_precision": {
+   "mean": 1.0,
+   "min": 1.0,
+   "max": 1.0
+  },
+  "abstention_recall": {
+   "mean": 0.5,
+   "min": 0.5,
+   "max": 0.5
+  },
+  "unnecessary_decline_rate": {
+   "accept_clean": {
+    "mean": 0.0,
+    "min": 0.0,
+    "max": 0.0
+   },
+   "accept_repaired": {
+    "mean": 0.0,
+    "min": 0.0,
+    "max": 0.0
+   }
+  },
+  "not_reported_per_class": {
+   "accept_clean": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   },
+   "accept_repaired": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   },
+   "decline": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   }
+  },
+  "categories": {
+   "good_report": {
+    "mean": 12.0,
+    "min": 12,
+    "max": 12
+   },
+   "false_accept": {
+    "mean": 4.0,
+    "min": 4,
+    "max": 4
+   },
+   "correct_decline": {
+    "mean": 3.0,
+    "min": 3,
+    "max": 3
+   },
+   "unnecessary_decline": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   },
+   "not_reported": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   },
+   "accept_on_decline": {
+    "mean": 1.0,
+    "min": 1,
+    "max": 1
+   }
+  },
+  "remedies_kept_per_class": {
+   "accept_clean": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   },
+   "accept_repaired": {
+    "mean": 12.0,
+    "min": 12,
+    "max": 12
+   },
+   "decline": {
+    "mean": 10.0,
+    "min": 10,
+    "max": 10
+   }
+  },
+  "runs_with_remedy_kept_per_class": {
+   "accept_clean": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   },
+   "accept_repaired": {
+    "mean": 8.0,
+    "min": 8,
+    "max": 8
+   },
+   "decline": {
+    "mean": 4.0,
+    "min": 4,
+    "max": 4
+   }
+  },
+  "fault_named_correct": {
+   "mean": 5.0,
+   "min": 5,
+   "max": 5
+  },
+  "fault_rods": {
+   "mean": 20.0,
+   "min": 20,
+   "max": 20
+  }
+ },
+ "diagnostician": {
+  "repeats": [
+   0,
+   1,
+   2
+  ],
+  "per_repeat": [
+   {
+    "runs": 20,
+    "runs_per_class": {
+     "accept_clean": 4,
+     "accept_repaired": 10,
+     "decline": 6
+    },
+    "correct": 10,
+    "accuracy_per_class": {
+     "accept_clean": 1.0,
+     "accept_repaired": 0.2,
+     "decline": 0.6666666666666666
+    },
+    "balanced_accuracy": 0.6222222222222222,
+    "overall_accuracy": 0.5,
+    "false_accepts": 4,
+    "false_accept_rate": 0.4,
+    "coverage": 0.5,
+    "abstention_precision": 0.4,
+    "abstention_recall": 0.6666666666666666,
+    "unnecessary_decline_rate": {
+     "accept_clean": 0.0,
+     "accept_repaired": 0.6
+    },
+    "not_reported_per_class": {
+     "accept_clean": 0,
+     "accept_repaired": 0,
+     "decline": 0
+    },
+    "categories": {
+     "good_report": 6,
+     "false_accept": 4,
+     "correct_decline": 4,
+     "unnecessary_decline": 6,
+     "not_reported": 0,
+     "accept_on_decline": 0
+    },
+    "remedies_kept_per_class": {
+     "accept_clean": 0,
+     "accept_repaired": 7,
+     "decline": 5
+    },
+    "runs_with_remedy_kept_per_class": {
+     "accept_clean": 0,
+     "accept_repaired": 7,
+     "decline": 4
+    },
+    "fault_named_correct": 11,
+    "fault_rods": 20
+   },
+   {
+    "runs": 20,
+    "runs_per_class": {
+     "accept_clean": 4,
+     "accept_repaired": 10,
+     "decline": 6
+    },
+    "correct": 9,
+    "accuracy_per_class": {
+     "accept_clean": 1.0,
+     "accept_repaired": 0.2,
+     "decline": 0.5
+    },
+    "balanced_accuracy": 0.5666666666666667,
+    "overall_accuracy": 0.45,
+    "false_accepts": 4,
+    "false_accept_rate": 0.4,
+    "coverage": 0.5,
+    "abstention_precision": 0.3333333333333333,
+    "abstention_recall": 0.5,
+    "unnecessary_decline_rate": {
+     "accept_clean": 0.0,
+     "accept_repaired": 0.6
+    },
+    "not_reported_per_class": {
+     "accept_clean": 0,
+     "accept_repaired": 0,
+     "decline": 1
+    },
+    "categories": {
+     "good_report": 6,
+     "false_accept": 4,
+     "correct_decline": 3,
+     "unnecessary_decline": 6,
+     "not_reported": 1,
+     "accept_on_decline": 0
+    },
+    "remedies_kept_per_class": {
+     "accept_clean": 2,
+     "accept_repaired": 5,
+     "decline": 6
+    },
+    "runs_with_remedy_kept_per_class": {
+     "accept_clean": 2,
+     "accept_repaired": 5,
+     "decline": 4
+    },
+    "fault_named_correct": 12,
+    "fault_rods": 20
+   },
+   {
+    "runs": 20,
+    "runs_per_class": {
+     "accept_clean": 4,
+     "accept_repaired": 10,
+     "decline": 6
+    },
+    "correct": 10,
+    "accuracy_per_class": {
+     "accept_clean": 1.0,
+     "accept_repaired": 0.2,
+     "decline": 0.6666666666666666
+    },
+    "balanced_accuracy": 0.6222222222222222,
+    "overall_accuracy": 0.5,
+    "false_accepts": 4,
+    "false_accept_rate": 0.4,
+    "coverage": 0.5,
+    "abstention_precision": 0.4,
+    "abstention_recall": 0.6666666666666666,
+    "unnecessary_decline_rate": {
+     "accept_clean": 0.0,
+     "accept_repaired": 0.6
+    },
+    "not_reported_per_class": {
+     "accept_clean": 0,
+     "accept_repaired": 0,
+     "decline": 0
+    },
+    "categories": {
+     "good_report": 6,
+     "false_accept": 4,
+     "correct_decline": 4,
+     "unnecessary_decline": 6,
+     "not_reported": 0,
+     "accept_on_decline": 0
+    },
+    "remedies_kept_per_class": {
+     "accept_clean": 1,
+     "accept_repaired": 6,
+     "decline": 7
+    },
+    "runs_with_remedy_kept_per_class": {
+     "accept_clean": 1,
+     "accept_repaired": 6,
+     "decline": 4
+    },
+    "fault_named_correct": 11,
+    "fault_rods": 20
+   }
+  ],
+  "runs": {
+   "mean": 20.0,
+   "min": 20,
+   "max": 20
+  },
+  "runs_per_class": {
+   "accept_clean": {
+    "mean": 4.0,
+    "min": 4,
+    "max": 4
+   },
+   "accept_repaired": {
+    "mean": 10.0,
+    "min": 10,
+    "max": 10
+   },
+   "decline": {
+    "mean": 6.0,
+    "min": 6,
+    "max": 6
+   }
+  },
+  "correct": {
+   "mean": 9.666666666666666,
+   "min": 9,
+   "max": 10
+  },
+  "accuracy_per_class": {
+   "accept_clean": {
+    "mean": 1.0,
+    "min": 1.0,
+    "max": 1.0
+   },
+   "accept_repaired": {
+    "mean": 0.20000000000000004,
+    "min": 0.2,
+    "max": 0.2
+   },
+   "decline": {
+    "mean": 0.611111111111111,
+    "min": 0.5,
+    "max": 0.6666666666666666
+   }
+  },
+  "balanced_accuracy": {
+   "mean": 0.6037037037037037,
+   "min": 0.5666666666666667,
+   "max": 0.6222222222222222
+  },
+  "overall_accuracy": {
+   "mean": 0.48333333333333334,
+   "min": 0.45,
+   "max": 0.5
+  },
+  "false_accepts": {
+   "mean": 4.0,
+   "min": 4,
+   "max": 4
+  },
+  "false_accept_rate": {
+   "mean": 0.4000000000000001,
+   "min": 0.4,
+   "max": 0.4
+  },
+  "coverage": {
+   "mean": 0.5,
+   "min": 0.5,
+   "max": 0.5
+  },
+  "abstention_precision": {
+   "mean": 0.37777777777777777,
+   "min": 0.3333333333333333,
+   "max": 0.4
+  },
+  "abstention_recall": {
+   "mean": 0.611111111111111,
+   "min": 0.5,
+   "max": 0.6666666666666666
+  },
+  "unnecessary_decline_rate": {
+   "accept_clean": {
+    "mean": 0.0,
+    "min": 0.0,
+    "max": 0.0
+   },
+   "accept_repaired": {
+    "mean": 0.6,
+    "min": 0.6,
+    "max": 0.6
+   }
+  },
+  "not_reported_per_class": {
+   "accept_clean": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   },
+   "accept_repaired": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   },
+   "decline": {
+    "mean": 0.3333333333333333,
+    "min": 0,
+    "max": 1
+   }
+  },
+  "categories": {
+   "good_report": {
+    "mean": 6.0,
+    "min": 6,
+    "max": 6
+   },
+   "false_accept": {
+    "mean": 4.0,
+    "min": 4,
+    "max": 4
+   },
+   "correct_decline": {
+    "mean": 3.6666666666666665,
+    "min": 3,
+    "max": 4
+   },
+   "unnecessary_decline": {
+    "mean": 6.0,
+    "min": 6,
+    "max": 6
+   },
+   "not_reported": {
+    "mean": 0.3333333333333333,
+    "min": 0,
+    "max": 1
+   },
+   "accept_on_decline": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   }
+  },
+  "remedies_kept_per_class": {
+   "accept_clean": {
+    "mean": 1.0,
+    "min": 0,
+    "max": 2
+   },
+   "accept_repaired": {
+    "mean": 6.0,
+    "min": 5,
+    "max": 7
+   },
+   "decline": {
+    "mean": 6.0,
+    "min": 5,
+    "max": 7
+   }
+  },
+  "runs_with_remedy_kept_per_class": {
+   "accept_clean": {
+    "mean": 1.0,
+    "min": 0,
+    "max": 2
+   },
+   "accept_repaired": {
+    "mean": 6.0,
+    "min": 5,
+    "max": 7
+   },
+   "decline": {
+    "mean": 4.0,
+    "min": 4,
+    "max": 4
+   }
+  },
+  "fault_named_correct": {
+   "mean": 11.333333333333334,
+   "min": 11,
+   "max": 12
+  },
+  "fault_rods": {
+   "mean": 20.0,
+   "min": 20,
+   "max": 20
+  },
+  "agreement": {
+   "repeats": 3,
+   "rods": 20,
+   "rods_left_out": 0,
+   "unanimous": 19,
+   "unanimity_rate": 0.95,
+   "unanimity_rate_per_class": {
+    "accept_clean": 1.0,
+    "accept_repaired": 1.0,
+    "decline": 0.8333333333333334
+   },
+   "fleiss_kappa": 0.9553239017125836,
+   "category_counts": {
+    "good_report": 18,
+    "false_accept": 12,
+    "correct_decline": 11,
+    "unnecessary_decline": 18,
+    "not_reported": 1,
+    "accept_on_decline": 0
+   }
+  }
+ },
+ "single_agent": {
+  "repeats": [
+   0,
+   1,
+   2
+  ],
+  "per_repeat": [
+   {
+    "runs": 20,
+    "runs_per_class": {
+     "accept_clean": 4,
+     "accept_repaired": 10,
+     "decline": 6
+    },
+    "correct": 6,
+    "accuracy_per_class": {
+     "accept_clean": 1.0,
+     "accept_repaired": 0.2,
+     "decline": 0.0
+    },
+    "balanced_accuracy": 0.39999999999999997,
+    "overall_accuracy": 0.3,
+    "false_accepts": 6,
+    "false_accept_rate": 0.5,
+    "coverage": 0.6,
+    "abstention_precision": null,
+    "abstention_recall": 0.0,
+    "unnecessary_decline_rate": {
+     "accept_clean": 0.0,
+     "accept_repaired": 0.0
+    },
+    "not_reported_per_class": {
+     "accept_clean": 0,
+     "accept_repaired": 3,
+     "decline": 5
+    },
+    "categories": {
+     "good_report": 6,
+     "false_accept": 6,
+     "correct_decline": 0,
+     "unnecessary_decline": 0,
+     "not_reported": 8,
+     "accept_on_decline": 0
+    },
+    "remedies_kept_per_class": {
+     "accept_clean": 3,
+     "accept_repaired": 12,
+     "decline": 9
+    },
+    "runs_with_remedy_kept_per_class": {
+     "accept_clean": 3,
+     "accept_repaired": 7,
+     "decline": 6
+    },
+    "fault_named_correct": 3,
+    "fault_rods": 20
+   },
+   {
+    "runs": 20,
+    "runs_per_class": {
+     "accept_clean": 4,
+     "accept_repaired": 10,
+     "decline": 6
+    },
+    "correct": 8,
+    "accuracy_per_class": {
+     "accept_clean": 1.0,
+     "accept_repaired": 0.4,
+     "decline": 0.0
+    },
+    "balanced_accuracy": 0.4666666666666666,
+    "overall_accuracy": 0.4,
+    "false_accepts": 6,
+    "false_accept_rate": 0.42857142857142855,
+    "coverage": 0.7,
+    "abstention_precision": null,
+    "abstention_recall": 0.0,
+    "unnecessary_decline_rate": {
+     "accept_clean": 0.0,
+     "accept_repaired": 0.0
+    },
+    "not_reported_per_class": {
+     "accept_clean": 0,
+     "accept_repaired": 2,
+     "decline": 4
+    },
+    "categories": {
+     "good_report": 8,
+     "false_accept": 6,
+     "correct_decline": 0,
+     "unnecessary_decline": 0,
+     "not_reported": 6,
+     "accept_on_decline": 0
+    },
+    "remedies_kept_per_class": {
+     "accept_clean": 2,
+     "accept_repaired": 11,
+     "decline": 10
+    },
+    "runs_with_remedy_kept_per_class": {
+     "accept_clean": 2,
+     "accept_repaired": 8,
+     "decline": 6
+    },
+    "fault_named_correct": 4,
+    "fault_rods": 20
+   },
+   {
+    "runs": 20,
+    "runs_per_class": {
+     "accept_clean": 4,
+     "accept_repaired": 10,
+     "decline": 6
+    },
+    "correct": 7,
+    "accuracy_per_class": {
+     "accept_clean": 1.0,
+     "accept_repaired": 0.3,
+     "decline": 0.0
+    },
+    "balanced_accuracy": 0.43333333333333335,
+    "overall_accuracy": 0.35,
+    "false_accepts": 7,
+    "false_accept_rate": 0.5,
+    "coverage": 0.7,
+    "abstention_precision": null,
+    "abstention_recall": 0.0,
+    "unnecessary_decline_rate": {
+     "accept_clean": 0.0,
+     "accept_repaired": 0.0
+    },
+    "not_reported_per_class": {
+     "accept_clean": 0,
+     "accept_repaired": 1,
+     "decline": 5
+    },
+    "categories": {
+     "good_report": 7,
+     "false_accept": 7,
+     "correct_decline": 0,
+     "unnecessary_decline": 0,
+     "not_reported": 6,
+     "accept_on_decline": 0
+    },
+    "remedies_kept_per_class": {
+     "accept_clean": 2,
+     "accept_repaired": 10,
+     "decline": 11
+    },
+    "runs_with_remedy_kept_per_class": {
+     "accept_clean": 2,
+     "accept_repaired": 7,
+     "decline": 6
+    },
+    "fault_named_correct": 4,
+    "fault_rods": 20
+   }
+  ],
+  "runs": {
+   "mean": 20.0,
+   "min": 20,
+   "max": 20
+  },
+  "runs_per_class": {
+   "accept_clean": {
+    "mean": 4.0,
+    "min": 4,
+    "max": 4
+   },
+   "accept_repaired": {
+    "mean": 10.0,
+    "min": 10,
+    "max": 10
+   },
+   "decline": {
+    "mean": 6.0,
+    "min": 6,
+    "max": 6
+   }
+  },
+  "correct": {
+   "mean": 7.0,
+   "min": 6,
+   "max": 8
+  },
+  "accuracy_per_class": {
+   "accept_clean": {
+    "mean": 1.0,
+    "min": 1.0,
+    "max": 1.0
+   },
+   "accept_repaired": {
+    "mean": 0.3,
+    "min": 0.2,
+    "max": 0.4
+   },
+   "decline": {
+    "mean": 0.0,
+    "min": 0.0,
+    "max": 0.0
+   }
+  },
+  "balanced_accuracy": {
+   "mean": 0.4333333333333333,
+   "min": 0.39999999999999997,
+   "max": 0.4666666666666666
+  },
+  "overall_accuracy": {
+   "mean": 0.35000000000000003,
+   "min": 0.3,
+   "max": 0.4
+  },
+  "false_accepts": {
+   "mean": 6.333333333333333,
+   "min": 6,
+   "max": 7
+  },
+  "false_accept_rate": {
+   "mean": 0.4761904761904762,
+   "min": 0.42857142857142855,
+   "max": 0.5
+  },
+  "coverage": {
+   "mean": 0.6666666666666666,
+   "min": 0.6,
+   "max": 0.7
+  },
+  "abstention_precision": null,
+  "abstention_recall": {
+   "mean": 0.0,
+   "min": 0.0,
+   "max": 0.0
+  },
+  "unnecessary_decline_rate": {
+   "accept_clean": {
+    "mean": 0.0,
+    "min": 0.0,
+    "max": 0.0
+   },
+   "accept_repaired": {
+    "mean": 0.0,
+    "min": 0.0,
+    "max": 0.0
+   }
+  },
+  "not_reported_per_class": {
+   "accept_clean": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   },
+   "accept_repaired": {
+    "mean": 2.0,
+    "min": 1,
+    "max": 3
+   },
+   "decline": {
+    "mean": 4.666666666666667,
+    "min": 4,
+    "max": 5
+   }
+  },
+  "categories": {
+   "good_report": {
+    "mean": 7.0,
+    "min": 6,
+    "max": 8
+   },
+   "false_accept": {
+    "mean": 6.333333333333333,
+    "min": 6,
+    "max": 7
+   },
+   "correct_decline": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   },
+   "unnecessary_decline": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   },
+   "not_reported": {
+    "mean": 6.666666666666667,
+    "min": 6,
+    "max": 8
+   },
+   "accept_on_decline": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   }
+  },
+  "remedies_kept_per_class": {
+   "accept_clean": {
+    "mean": 2.3333333333333335,
+    "min": 2,
+    "max": 3
+   },
+   "accept_repaired": {
+    "mean": 11.0,
+    "min": 10,
+    "max": 12
+   },
+   "decline": {
+    "mean": 10.0,
+    "min": 9,
+    "max": 11
+   }
+  },
+  "runs_with_remedy_kept_per_class": {
+   "accept_clean": {
+    "mean": 2.3333333333333335,
+    "min": 2,
+    "max": 3
+   },
+   "accept_repaired": {
+    "mean": 7.333333333333333,
+    "min": 7,
+    "max": 8
+   },
+   "decline": {
+    "mean": 6.0,
+    "min": 6,
+    "max": 6
+   }
+  },
+  "fault_named_correct": {
+   "mean": 3.6666666666666665,
+   "min": 3,
+   "max": 4
+  },
+  "fault_rods": {
+   "mean": 20.0,
+   "min": 20,
+   "max": 20
+  },
+  "agreement": {
+   "repeats": 3,
+   "rods": 20,
+   "rods_left_out": 0,
+   "unanimous": 14,
+   "unanimity_rate": 0.7,
+   "unanimity_rate_per_class": {
+    "accept_clean": 1.0,
+    "accept_repaired": 0.5,
+    "decline": 0.8333333333333334
+   },
+   "fleiss_kappa": 0.6997497914929109,
+   "category_counts": {
+    "good_report": 21,
+    "false_accept": 19,
+    "correct_decline": 0,
+    "unnecessary_decline": 0,
+    "not_reported": 20,
+    "accept_on_decline": 0
+   }
+  }
+ },
+ "all_decline": {
+  "repeats": [
+   0
+  ],
+  "per_repeat": [
+   {
+    "runs": 20,
+    "runs_per_class": {
+     "accept_clean": 4,
+     "accept_repaired": 10,
+     "decline": 6
+    },
+    "correct": 6,
+    "accuracy_per_class": {
+     "accept_clean": 0.0,
+     "accept_repaired": 0.0,
+     "decline": 1.0
+    },
+    "balanced_accuracy": 0.3333333333333333,
+    "overall_accuracy": 0.3,
+    "false_accepts": 0,
+    "false_accept_rate": null,
+    "coverage": 0.0,
+    "abstention_precision": 0.3,
+    "abstention_recall": 1.0,
+    "unnecessary_decline_rate": {
+     "accept_clean": 1.0,
+     "accept_repaired": 1.0
+    },
+    "not_reported_per_class": {
+     "accept_clean": 0,
+     "accept_repaired": 0,
+     "decline": 0
+    },
+    "categories": {
+     "good_report": 0,
+     "false_accept": 0,
+     "correct_decline": 6,
+     "unnecessary_decline": 14,
+     "not_reported": 0,
+     "accept_on_decline": 0
+    },
+    "remedies_kept_per_class": {
+     "accept_clean": 0,
+     "accept_repaired": 0,
+     "decline": 0
+    },
+    "runs_with_remedy_kept_per_class": {
+     "accept_clean": 0,
+     "accept_repaired": 0,
+     "decline": 0
+    },
+    "fault_named_correct": 0,
+    "fault_rods": 0
+   }
+  ],
+  "runs": {
+   "mean": 20.0,
+   "min": 20,
+   "max": 20
+  },
+  "runs_per_class": {
+   "accept_clean": {
+    "mean": 4.0,
+    "min": 4,
+    "max": 4
+   },
+   "accept_repaired": {
+    "mean": 10.0,
+    "min": 10,
+    "max": 10
+   },
+   "decline": {
+    "mean": 6.0,
+    "min": 6,
+    "max": 6
+   }
+  },
+  "correct": {
+   "mean": 6.0,
+   "min": 6,
+   "max": 6
+  },
+  "accuracy_per_class": {
+   "accept_clean": {
+    "mean": 0.0,
+    "min": 0.0,
+    "max": 0.0
+   },
+   "accept_repaired": {
+    "mean": 0.0,
+    "min": 0.0,
+    "max": 0.0
+   },
+   "decline": {
+    "mean": 1.0,
+    "min": 1.0,
+    "max": 1.0
+   }
+  },
+  "balanced_accuracy": {
+   "mean": 0.3333333333333333,
+   "min": 0.3333333333333333,
+   "max": 0.3333333333333333
+  },
+  "overall_accuracy": {
+   "mean": 0.3,
+   "min": 0.3,
+   "max": 0.3
+  },
+  "false_accepts": {
+   "mean": 0.0,
+   "min": 0,
+   "max": 0
+  },
+  "false_accept_rate": null,
+  "coverage": {
+   "mean": 0.0,
+   "min": 0.0,
+   "max": 0.0
+  },
+  "abstention_precision": {
+   "mean": 0.3,
+   "min": 0.3,
+   "max": 0.3
+  },
+  "abstention_recall": {
+   "mean": 1.0,
+   "min": 1.0,
+   "max": 1.0
+  },
+  "unnecessary_decline_rate": {
+   "accept_clean": {
+    "mean": 1.0,
+    "min": 1.0,
+    "max": 1.0
+   },
+   "accept_repaired": {
+    "mean": 1.0,
+    "min": 1.0,
+    "max": 1.0
+   }
+  },
+  "not_reported_per_class": {
+   "accept_clean": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   },
+   "accept_repaired": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   },
+   "decline": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   }
+  },
+  "categories": {
+   "good_report": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   },
+   "false_accept": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   },
+   "correct_decline": {
+    "mean": 6.0,
+    "min": 6,
+    "max": 6
+   },
+   "unnecessary_decline": {
+    "mean": 14.0,
+    "min": 14,
+    "max": 14
+   },
+   "not_reported": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   },
+   "accept_on_decline": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   }
+  },
+  "remedies_kept_per_class": {
+   "accept_clean": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   },
+   "accept_repaired": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   },
+   "decline": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   }
+  },
+  "runs_with_remedy_kept_per_class": {
+   "accept_clean": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   },
+   "accept_repaired": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   },
+   "decline": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   }
+  },
+  "fault_named_correct": {
+   "mean": 0.0,
+   "min": 0,
+   "max": 0
+  },
+  "fault_rods": {
+   "mean": 0.0,
+   "min": 0,
+   "max": 0
+  }
+ },
+ "all_accept": {
+  "repeats": [
+   0
+  ],
+  "per_repeat": [
+   {
+    "runs": 20,
+    "runs_per_class": {
+     "accept_clean": 4,
+     "accept_repaired": 10,
+     "decline": 6
+    },
+    "correct": 6,
+    "accuracy_per_class": {
+     "accept_clean": 1.0,
+     "accept_repaired": 0.2,
+     "decline": 0.0
+    },
+    "balanced_accuracy": 0.39999999999999997,
+    "overall_accuracy": 0.3,
+    "false_accepts": 12,
+    "false_accept_rate": 0.6,
+    "coverage": 1.0,
+    "abstention_precision": null,
+    "abstention_recall": 0.0,
+    "unnecessary_decline_rate": {
+     "accept_clean": 0.0,
+     "accept_repaired": 0.0
+    },
+    "not_reported_per_class": {
+     "accept_clean": 0,
+     "accept_repaired": 0,
+     "decline": 0
+    },
+    "categories": {
+     "good_report": 6,
+     "false_accept": 12,
+     "correct_decline": 0,
+     "unnecessary_decline": 0,
+     "not_reported": 0,
+     "accept_on_decline": 2
+    },
+    "remedies_kept_per_class": {
+     "accept_clean": 0,
+     "accept_repaired": 0,
+     "decline": 0
+    },
+    "runs_with_remedy_kept_per_class": {
+     "accept_clean": 0,
+     "accept_repaired": 0,
+     "decline": 0
+    },
+    "fault_named_correct": 0,
+    "fault_rods": 0
+   }
+  ],
+  "runs": {
+   "mean": 20.0,
+   "min": 20,
+   "max": 20
+  },
+  "runs_per_class": {
+   "accept_clean": {
+    "mean": 4.0,
+    "min": 4,
+    "max": 4
+   },
+   "accept_repaired": {
+    "mean": 10.0,
+    "min": 10,
+    "max": 10
+   },
+   "decline": {
+    "mean": 6.0,
+    "min": 6,
+    "max": 6
+   }
+  },
+  "correct": {
+   "mean": 6.0,
+   "min": 6,
+   "max": 6
+  },
+  "accuracy_per_class": {
+   "accept_clean": {
+    "mean": 1.0,
+    "min": 1.0,
+    "max": 1.0
+   },
+   "accept_repaired": {
+    "mean": 0.2,
+    "min": 0.2,
+    "max": 0.2
+   },
+   "decline": {
+    "mean": 0.0,
+    "min": 0.0,
+    "max": 0.0
+   }
+  },
+  "balanced_accuracy": {
+   "mean": 0.39999999999999997,
+   "min": 0.39999999999999997,
+   "max": 0.39999999999999997
+  },
+  "overall_accuracy": {
+   "mean": 0.3,
+   "min": 0.3,
+   "max": 0.3
+  },
+  "false_accepts": {
+   "mean": 12.0,
+   "min": 12,
+   "max": 12
+  },
+  "false_accept_rate": {
+   "mean": 0.6,
+   "min": 0.6,
+   "max": 0.6
+  },
+  "coverage": {
+   "mean": 1.0,
+   "min": 1.0,
+   "max": 1.0
+  },
+  "abstention_precision": null,
+  "abstention_recall": {
+   "mean": 0.0,
+   "min": 0.0,
+   "max": 0.0
+  },
+  "unnecessary_decline_rate": {
+   "accept_clean": {
+    "mean": 0.0,
+    "min": 0.0,
+    "max": 0.0
+   },
+   "accept_repaired": {
+    "mean": 0.0,
+    "min": 0.0,
+    "max": 0.0
+   }
+  },
+  "not_reported_per_class": {
+   "accept_clean": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   },
+   "accept_repaired": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   },
+   "decline": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   }
+  },
+  "categories": {
+   "good_report": {
+    "mean": 6.0,
+    "min": 6,
+    "max": 6
+   },
+   "false_accept": {
+    "mean": 12.0,
+    "min": 12,
+    "max": 12
+   },
+   "correct_decline": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   },
+   "unnecessary_decline": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   },
+   "not_reported": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   },
+   "accept_on_decline": {
+    "mean": 2.0,
+    "min": 2,
+    "max": 2
+   }
+  },
+  "remedies_kept_per_class": {
+   "accept_clean": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   },
+   "accept_repaired": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   },
+   "decline": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   }
+  },
+  "runs_with_remedy_kept_per_class": {
+   "accept_clean": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   },
+   "accept_repaired": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   },
+   "decline": {
+    "mean": 0.0,
+    "min": 0,
+    "max": 0
+   }
+  },
+  "fault_named_correct": {
+   "mean": 0.0,
+   "min": 0,
+   "max": 0
+  },
+  "fault_rods": {
+   "mean": 0.0,
+   "min": 0,
+   "max": 0
+  }
+ }
+}

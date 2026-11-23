@@ -1,0 +1,59 @@
+{
+ "batch": "b12",
+ "repeat": 1,
+ "commit": "39da216",
+ "claude_code": "2.1.310",
+ "model": "claude-opus-5-5",
+ "wall_s": 33.1,
+ "trace": "b12_r1_trace.jsonl",
+ "outcome": {
+  "task_id": "batch-1",
+  "agent": "auditor",
+  "status": "report",
+  "args": {
+   "text": "Batch: 8 runs, 8 accepted. Flagged: none. Cleared: r01, r02, r03, r04, r05, r06, r07, r08.\nAll three final checks (rigid-body invariance, closure, plane sections) passed on every run. No run used the width-free ratio and no run had a roll back.\nThe REGR peak is at 421 \u00b5m and the largest flank difference is at 410 \u00b5m in every run.\nThe large |z| values only reflect very small batch MADs. r08's REGR peak (52.92 %/h, z 3.37) is 0.24 % above the median. The 674 \u00b5m growth zones of r01, r07 and r08 (z -3.51) are about 4 % shorter than the 700 \u00b5m median. That is a small spread in the velocity profile, not a different shape.\nr01 and r07 each kept one remedy, and all checks pass on the result. r08 took 5 steps but kept no remedy and ended at stride 1, so its rates were not changed.\nNothing is flagged, so there is no shared fault.\nNote for follow-up: r02, r03, r04 and r06 have exactly the same check values and summaries, and so do r01 and r07. It may be worth confirming that these are separate roots or time windows and not duplicated inputs."
+  },
+  "steps": 3,
+  "failed_steps": 0,
+  "calls": 3,
+  "input_tokens": 22840,
+  "output_tokens": 1745,
+  "call_ms": 21343
+ },
+ "decisions": {
+  "r01": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r02": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r03": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r04": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r05": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r06": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r07": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r08": {
+   "decision": "clear",
+   "order": 1
+  }
+ },
+ "undecided": [],
+ "report": "Batch: 8 runs, 8 accepted. Flagged: none. Cleared: r01, r02, r03, r04, r05, r06, r07, r08.\nAll three final checks (rigid-body invariance, closure, plane sections) passed on every run. No run used the width-free ratio and no run had a roll back.\nThe REGR peak is at 421 \u00b5m and the largest flank difference is at 410 \u00b5m in every run.\nThe large |z| values only reflect very small batch MADs. r08's REGR peak (52.92 %/h, z 3.37) is 0.24 % above the median. The 674 \u00b5m growth zones of r01, r07 and r08 (z -3.51) are about 4 % shorter than the 700 \u00b5m median. That is a small spread in the velocity profile, not a different shape.\nr01 and r07 each kept one remedy, and all checks pass on the result. r08 took 5 steps but kept no remedy and ended at stride 1, so its rates were not changed.\nNothing is flagged, so there is no shared fault.\nNote for follow-up: r02, r03, r04 and r06 have exactly the same check values and summaries, and so do r01 and r07. It may be worth confirming that these are separate roots or time windows and not duplicated inputs."
+}
