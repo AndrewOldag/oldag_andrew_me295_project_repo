@@ -79,6 +79,16 @@ Course project for AM/ME/CE 295, Caltech, Fall 2026. Start with `CLAUDE.md` and 
 - Reads the cached final records of `results/2026-10-12b_scored_v1/` from `staging/` (the scored runs' caches). Definition: `docs/proposals/2026-10-13_auditor-v1.md`
 - `python scripts/synth/auditor_v1.py views` writes the 8 batch views; `rule` runs the rule auditor; `llm --set dev|heldout [--method M] [--repeat K]` runs the LLM auditor (needs a clean tracked tree); `eval` writes `results/2026-10-13_auditor_v1/scores.md`. Test: `tests/test_auditor.py`
 
+## Held-out compound and novel faults (task c029, VM only)
+- Tracker on this machine: export the tracker commit the freeze runs used into `staging/qb_tracker/` (git-ignored) and name the tracker env's interpreter in `private/local_tracker.yaml` (`python: ...`). `scripts/synth/local_qb.py` runs `make_rod.py` and `qb_track.py` with it. Check first: render and track one freeze v4 rod and compare with `python scripts/synth/local_equivalence.py <local npz> <v4 cache npz>` (largest difference at most 1e-6 px)
+- Faults: `measure/render_compound.py` (4 compound, 2 novel), tests `tests/test_render_compound.py`. Proposal `docs/proposals/2026-11-18_heldout-compound.md`
+- `python scripts/synth/heldout_compound.py sizing-sweep`, `sizing`, `label-sweep`, `labels` (commit `labels.json`), then `rules`, `agents --method diagnostician|single_agent --repeat K`, `eval`. Outputs `results/2026-11-18_heldout_compound/`. Restartable: cached runs and finished summaries are skipped. Waits for 3 GB free memory before each rod batch and each run
+- Since spec 2026-11-20 no tracker run on the VM: `heldout_compound.py render` renders the rods; `python scripts/synth/compound_queue.py submit --equivalence`, `fetch`, `equivalence` (2 rods, cluster vs VM, limit 1e-6 px), then `submit` and `fetch` (rerun until nothing is left) run the label states on the cluster CPU. Needs `private/compound_cluster.yaml` (cluster settings, ledger) and the cluster connection master. Synthetic-rod job kind: `scripts/rod_jobs.py`, tests `tests/test_rod_jobs.py`
+
+## Auditor check with planted errors (task c030, no tracker runs)
+- Needs the freeze v4 tracker cache in `staging/tracks_freeze_v4/`. Proposal `docs/proposals/2026-11-18_auditor-check.md`
+- `python scripts/synth/auditor_check.py plan` (once), `views`, `rule`, `llm --repeat K` for K = 0, 1, 2, `eval`. Outputs `results/2026-11-18_auditor_check/`
+
 ## Dispatcher (fake queue, no real jobs)
 - Proposal `docs/proposals/2026-10-23_dispatcher.md` (approved 2026-10-23); settings `config/dispatcher.yaml`; code `agents/dispatcher.py`, prompt `agents/prompts/dispatcher.md`
 - `python scripts/demo_dispatcher.py` runs the script baseline over every include-yes root on the fake queue (2 h windows, 4 lab-server workers, 20 injected crashes retried once) and prints the summary: windows by state, core-hours, retries, peak workers, wall hours. No LLM call

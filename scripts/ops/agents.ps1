@@ -12,14 +12,23 @@
 #   powershell -File scripts\ops\agents.ps1 -Status                # running or exited, last output time
 #   powershell -File scripts\ops\agents.ps1 -StopAll               # stop every Claude Code process
 #   -Fresh: new conversation instead of continuing; -GapSec: wait between starts (default 60)
+#   -Model: model for this start (overrides the per-session default; audit defaults to claude-fable-5-2)
+# Names must be known sessions (comma lists are split). A known session with no worktree gets one
+# (.claude\worktrees\<name> on wip/<name> from origin/main); the main checkout is never used.
 # Logs: %USERPROFILE%\claude_agents\<name>.out.jsonl, <name>.err.txt, <name>.pid
 param(
-    [string[]]$Names = @('dispatcher', 'real-calib', 'compound'),
+    [string[]]$Names = @('dispatcher', 'real-calib', 'compound', 'audit'),
     [switch]$Status,
     [switch]$StopAll,
     [switch]$Fresh,
-    [int]$GapSec = 60
+    [int]$GapSec = 60,
+    [string]$Model = ''
 )
+$known = @('dispatcher', 'real-calib', 'compound', 'audit')
+$defaultModel = @{ 'audit' = 'claude-fable-5-2' }
+$Names = @($Names | ForEach-Object { $_ -split ',' } | ForEach-Object { $_.Trim() } | Where-Object { $_ })
+$bad = @($Names | Where-Object { $known -notcontains $_ })
+if ($bad.Count -gt 0) { Write-Output "unknown session name(s): $($bad -join ', '); known: $($known -join ', ')"; exit 1 }
 $ErrorActionPreference = "Stop"
 $repo = Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path))
 $logs = Join-Path $env:USERPROFILE "claude_agents"
@@ -60,7 +69,14 @@ $first = $true
 foreach ($n in $Names) {
     if (Running $n) { Write-Output "$n is still running; not started again"; continue }
     $wt = Join-Path $repo ".claude\worktrees\$n"
-    if (-not (Test-Path $wt)) { $wt = $repo; Write-Output "$n has no worktree yet; starting in the main checkout (make the worktree first)" }
+    if (-not (Test-Path $wt)) {
+        git -C $repo fetch -q origin
+        git -C $repo show-ref --verify --quiet "refs/heads/wip/$n"
+        if ($LASTEXITCODE -eq 0) { git -C $repo worktree add -q $wt "wip/$n" }
+        else { git -C $repo worktree add -q -b "wip/$n" $wt origin/main }
+        if (-not (Test-Path $wt)) { Write-Output "${n}: could not create worktree $wt; not started"; continue }
+        Write-Output "${n}: created worktree $wt on wip/$n"
+    }
     if (-not $first) { Start-Sleep $GapSec }
     $first = $false
 
@@ -75,6 +91,8 @@ You are the course-lane session named $n, running headless as a hidden backgroun
     $promptFile = Join-Path $logs "$n.prompt.txt"
     Set-Content -Path $promptFile -Value $prompt -Encoding utf8
     $argv = @('-p', '--permission-mode', 'auto', '--output-format', 'stream-json', '--verbose')
+    $m = if ($Model) { $Model } elseif ($defaultModel.ContainsKey($n)) { $defaultModel[$n] } else { '' }
+    if ($m) { $argv += @('--model', $m) }
     if (-not $Fresh) { $argv = @('-c') + $argv }
     $out = Join-Path $logs "$n.out.jsonl"
     if (Test-Path $out) { Move-Item -Force $out (Join-Path $logs "$n.prev.out.jsonl") }

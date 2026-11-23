@@ -1,0 +1,59 @@
+{
+ "batch": "b13",
+ "repeat": 0,
+ "commit": "3b1415a",
+ "claude_code": "2.1.310",
+ "model": "claude-opus-5-5",
+ "wall_s": 31.8,
+ "trace": "b13_r0_trace.jsonl",
+ "outcome": {
+  "task_id": "batch-1",
+  "agent": "auditor",
+  "status": "report",
+  "args": {
+   "text": "Batch audit: 8 runs, all 8 accepted. 0 flagged, 8 cleared (r01\u2013r08). Nothing in common to report for flagged runs.\n\n- **Checks:** All three final checks passed on every run. Rigid-body invariance was 0.60\u20130.78 against a threshold of 2.0 %/h. Closure was 0.13\u20130.20 against 1.0 px/h. Plane sections was 1.21\u20131.39 against 3.25 %/h. No run used the width-free ratio.\n- **Large z-scores:** The batch spread is close to zero, so small differences give large z-scores.\n  - r01\u2013r03: growth zone is 695 \u00b5m against a median of 684 \u00b5m (z 2.13). That is 11 \u00b5m, about 1.6 %.\n  - r05 and r08: REGR peak is 53.06 against 53.02 %/h (z 2.7), and the flank difference peaks at 410 \u00b5m instead of 421 \u00b5m (z \u22123.19). These are 0.04 %/h and 11 \u00b5m.\n- **r07:** Its REGR peak (111.61 %/h) and largest flank difference (\u221213.49 %/h) are both about 2.1\u00d7 the batch. But the REGR peak is at the same distance from the tip (421 \u00b5m), the growth zone is the same length (684 \u00b5m), and the flank difference peaks at the same place. It used frame stride 1 with no remedies kept, and all checks passed. So it reads as a faster root with the same profile shape, not a fault.\n- **Note on r07:** Its check values match r04 and r06 exactly, even though its strain rates are 2.1\u00d7 theirs. Confirming r07's frame times would rule out a time-base error.\n\nKinematics only: velocity, strain rate and curvature."
+  },
+  "steps": 3,
+  "failed_steps": 0,
+  "calls": 3,
+  "input_tokens": 22761,
+  "output_tokens": 2529,
+  "call_ms": 27444
+ },
+ "decisions": {
+  "r01": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r02": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r03": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r04": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r05": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r06": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r07": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r08": {
+   "decision": "clear",
+   "order": 1
+  }
+ },
+ "undecided": [],
+ "report": "Batch audit: 8 runs, all 8 accepted. 0 flagged, 8 cleared (r01\u2013r08). Nothing in common to report for flagged runs.\n\n- **Checks:** All three final checks passed on every run. Rigid-body invariance was 0.60\u20130.78 against a threshold of 2.0 %/h. Closure was 0.13\u20130.20 against 1.0 px/h. Plane sections was 1.21\u20131.39 against 3.25 %/h. No run used the width-free ratio.\n- **Large z-scores:** The batch spread is close to zero, so small differences give large z-scores.\n  - r01\u2013r03: growth zone is 695 \u00b5m against a median of 684 \u00b5m (z 2.13). That is 11 \u00b5m, about 1.6 %.\n  - r05 and r08: REGR peak is 53.06 against 53.02 %/h (z 2.7), and the flank difference peaks at 410 \u00b5m instead of 421 \u00b5m (z \u22123.19). These are 0.04 %/h and 11 \u00b5m.\n- **r07:** Its REGR peak (111.61 %/h) and largest flank difference (\u221213.49 %/h) are both about 2.1\u00d7 the batch. But the REGR peak is at the same distance from the tip (421 \u00b5m), the growth zone is the same length (684 \u00b5m), and the flank difference peaks at the same place. It used frame stride 1 with no remedies kept, and all checks passed. So it reads as a faster root with the same profile shape, not a fault.\n- **Note on r07:** Its check values match r04 and r06 exactly, even though its strain rates are 2.1\u00d7 theirs. Confirming r07's frame times would rule out a time-base error.\n\nKinematics only: velocity, strain rate and curvature."
+}

@@ -1,13 +1,13 @@
 # compound
-Updated: 2026-11-21 10:50 (local)
+Updated: 2026-11-23 12:47 (local)
 Lane: course
-Branch: wip/rod-jobs
-Last inbox item done: 6
+Branch: wip/compound
+Last inbox item done: 12
 State: ready to merge
-Now: branch wip/rod-jobs (inbox item 6): the synthetic-rod job kind only, for real-calib R5. c029 continues on wip/compound
+Now: idle; check at 12:47 found no new inbox item and no compound process running. c029, c029b and c030 done; branch not yet merged into main
 Done since last update:
-- `scripts/rod_jobs.py`: rendered rods VM -> storage (tar, md5 per file, `<rid>.ok`) -> cluster (rsync, file count); one Slurm array task per rendered rod running all its tracker runs (1 core, 1 h, finished outputs skipped, partial outputs reported, never deleted); fetch to storage with md5 on both ends, to the VM only on md5 match; down link or master: `connection down`, no state change. Built on retrack_queue.py (Remote, array script, ledger)
-- `tests/test_rod_jobs.py`: 8 fake-cluster tests; with tests/test_retrack_queue.py 21 passed
-- In use for c029 on wip/compound: 2-rod cluster vs VM equivalence 3.5e-7 and 1.5e-12 px (limit 1e-6); 329 of 852 label runs fetched
+- Array 7925321 fetched 09:53; remedy tree 20 of 20 (d1d857e)
+- c029b metrics and `results/2026-11-18_heldout_compound/supplement/README.md` (8f40c6d): overall accuracy remedy tree 0.75, diagnostician 0.48, single agent 0.35, script 0.30, all-decline 0.30. 124 of 150 agent runs (4 set aside)
+- Task c029b done; log entry in docs/running_log_pending/compound.md (0abb68e)
 Needs Andrew:
-- none on this branch
+- None. The cluster connection master is no longer needed by compound

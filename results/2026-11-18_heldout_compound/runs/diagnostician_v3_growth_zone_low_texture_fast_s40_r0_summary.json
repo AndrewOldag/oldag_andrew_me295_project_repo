@@ -1,0 +1,138 @@
+{
+ "freeze_tag": "freeze-v4",
+ "commit": "bb1242c",
+ "method": "diagnostician",
+ "rod": {
+  "case": "v3_growth_zone",
+  "fault": "low_texture_fast",
+  "size": null,
+  "seed": 40,
+  "id": "v3_growth_zone_low_texture_fast_s40"
+ },
+ "runner": "remote_job",
+ "truth": {
+  "peak_regr_pct_per_h": 107.9,
+  "peak_at_um": 421,
+  "largest_flank_difference_pct_per_h": 0.0
+ },
+ "error_before": {
+  "regr_rms_pct_per_h": 63.612,
+  "regr_max_pct_per_h": 170.75,
+  "regr_covered_um": 1031,
+  "flank_difference_rms_pct_per_h": 80.294,
+  "flank_difference_max_pct_per_h": 306.453,
+  "flank_difference_covered_um": 1031
+ },
+ "initial_checks": [
+  {
+   "check": "rigid_invariance",
+   "passed": false,
+   "value": 332.88038284915217,
+   "threshold": 2.0,
+   "unit": "%/h",
+   "where_s_px": 165.0,
+   "where_frame_pair": null,
+   "detail": "largest change in regr_minus"
+  },
+  {
+   "check": "closure",
+   "passed": false,
+   "value": 192.68046076525962,
+   "threshold": 1.0,
+   "unit": "px/h",
+   "where_s_px": 493.395544126055,
+   "where_frame_pair": 3,
+   "detail": "tip path 192.0 px/h; base at s = 493 px; largest single-pair residual at pair 3"
+  },
+  {
+   "check": "plane_sections",
+   "passed": false,
+   "value": 306.4533535031695,
+   "threshold": 3.25,
+   "unit": "%/h",
+   "where_s_px": 130.0,
+   "where_frame_pair": null,
+   "detail": "flank difference 306.45 %/h, predicted -0.00 %/h"
+  }
+ ],
+ "outcome": {
+  "task_id": "rod-1",
+  "agent": "diagnostician",
+  "status": "decline",
+  "args": {
+   "fault": "low_texture",
+   "reason": "Texture contrast (~0.06) and focus (~0.035) are far below the clean reference (lowest 0.155 and 0.073). The mapped remedy, enlarge_patch, did not fix it: at 1.5x all three checks still failed, and 2x made plane sections worse and was rolled back. No setting is left, so the tracked velocity, strain rate and curvature can't be trusted."
+  },
+  "steps": 8,
+  "failed_steps": 0,
+  "calls": 8,
+  "input_tokens": 40608,
+  "output_tokens": 4400,
+  "call_ms": 45550
+ },
+ "error_after": {
+  "regr_rms_pct_per_h": 69.087,
+  "regr_max_pct_per_h": 268.476,
+  "regr_covered_um": 1021,
+  "flank_difference_rms_pct_per_h": 76.514,
+  "flank_difference_max_pct_per_h": 223.295,
+  "flank_difference_covered_um": 1021
+ },
+ "remedies": [
+  "frame stride 6 -> 3",
+  "rolled back: integrity: frame stride 6 -> 3",
+  "tracker disk radius 14 -> 21 px",
+  "tracker disk radius 21 -> 28 px",
+  "rolled back: tracker disk radius 21 -> 28 px"
+ ],
+ "roll_backs": 2,
+ "final_settings": {
+  "stride": 6,
+  "disk_radius": 21,
+  "register": false,
+  "register_from_px": null,
+  "midline_smooth": null,
+  "band_mask": null,
+  "width_free": false,
+  "couple": false
+ },
+ "final_checks": [
+  {
+   "check": "rigid_invariance",
+   "passed": false,
+   "value": 395.34606911449345,
+   "threshold": 2.0,
+   "unit": "%/h",
+   "where_s_px": 125.0,
+   "where_frame_pair": null,
+   "detail": "largest change in regr_plus"
+  },
+  {
+   "check": "closure",
+   "passed": false,
+   "value": 218.89893720673996,
+   "threshold": 1.0,
+   "unit": "px/h",
+   "where_s_px": 479.3045749052584,
+   "where_frame_pair": 5,
+   "detail": "tip path 192.0 px/h; base at s = 479 px; largest single-pair residual at pair 5"
+  },
+  {
+   "check": "plane_sections",
+   "passed": false,
+   "value": 223.29510717739385,
+   "threshold": 3.25,
+   "unit": "%/h",
+   "where_s_px": 10.0,
+   "where_frame_pair": null,
+   "detail": "flank difference 223.30 %/h, predicted 0.00 %/h"
+  }
+ ],
+ "reported": false,
+ "repeat": 0,
+ "trace": "diagnostician_v3_growth_zone_low_texture_fast_s40_r0_trace.jsonl",
+ "claude_code": "2.1.310",
+ "wall_s": 56.0,
+ "tracker_runs_new": 0,
+ "runner_log": []
+}

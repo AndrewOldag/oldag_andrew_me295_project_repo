@@ -1,0 +1,67 @@
+{
+ "batch": "b03",
+ "repeat": 0,
+ "commit": "3b1415a",
+ "claude_code": "2.1.310",
+ "model": "claude-opus-5-5",
+ "wall_s": 62.3,
+ "trace": "b03_r0_trace.jsonl",
+ "outcome": {
+  "task_id": "batch-1",
+  "agent": "auditor",
+  "status": "report",
+  "args": {
+   "text": "Batch: 8 runs, all 8 accepted. All were reported with the width-free ratio, so the plane-sections check was not run. Rigid-body invariance and closure passed in every run.\nFlagged (2), summary_outlier: r01 and r06. Their largest flank difference is at 284 \u00b5m, not 1074 \u00b5m as in the other runs. That means the curvature-rate profile has a different shape. Their growth zone is also slightly shorter (684 vs 695 \u00b5m), and their REGR peak is slightly lower (52.96 vs 53.1 %/h).\nCleared (6): r02, r03, r04, r05, r07, r08. Their REGR peak (about 53.1 %/h at 421 \u00b5m), growth-zone length and flank-difference profile all match the batch. In r04, r05 and r08 the width-free ratio has z 4.18 only because the batch MAD is small. Their ratio is 0.074 against a median of -0.019, and it peaks at the same 50 \u00b5m as the rest of the batch.\nWhat the flagged runs share: r01 and r06 have identical final measurements. Both took 6 steps with no roll backs and kept the same width-free remedy. They differ from the batch in where the flank difference peaks, not in REGR level.\nNote: the summaries repeat in identical groups (r01/r06, r02/r03/r07, r04/r05/r08). Check that these are separate roots or time windows and not the same movie entered more than once."
+  },
+  "steps": 5,
+  "failed_steps": 0,
+  "calls": 5,
+  "input_tokens": 40747,
+  "output_tokens": 5094,
+  "call_ms": 54485
+ },
+ "decisions": {
+  "r01": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "summary_outlier",
+   "evidence": [
+    "flank_difference_at_um"
+   ]
+  },
+  "r06": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "summary_outlier",
+   "evidence": [
+    "flank_difference_at_um"
+   ]
+  },
+  "r02": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r03": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r04": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r05": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r07": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r08": {
+   "decision": "clear",
+   "order": 2
+  }
+ },
+ "undecided": [],
+ "report": "Batch: 8 runs, all 8 accepted. All were reported with the width-free ratio, so the plane-sections check was not run. Rigid-body invariance and closure passed in every run.\nFlagged (2), summary_outlier: r01 and r06. Their largest flank difference is at 284 \u00b5m, not 1074 \u00b5m as in the other runs. That means the curvature-rate profile has a different shape. Their growth zone is also slightly shorter (684 vs 695 \u00b5m), and their REGR peak is slightly lower (52.96 vs 53.1 %/h).\nCleared (6): r02, r03, r04, r05, r07, r08. Their REGR peak (about 53.1 %/h at 421 \u00b5m), growth-zone length and flank-difference profile all match the batch. In r04, r05 and r08 the width-free ratio has z 4.18 only because the batch MAD is small. Their ratio is 0.074 against a median of -0.019, and it peaks at the same 50 \u00b5m as the rest of the batch.\nWhat the flagged runs share: r01 and r06 have identical final measurements. Both took 6 steps with no roll backs and kept the same width-free remedy. They differ from the batch in where the flank difference peaks, not in REGR level.\nNote: the summaries repeat in identical groups (r01/r06, r02/r03/r07, r04/r05/r08). Check that these are separate roots or time windows and not the same movie entered more than once."
+}

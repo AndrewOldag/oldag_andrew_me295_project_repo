@@ -1,0 +1,59 @@
+{
+ "batch": "b20",
+ "repeat": 0,
+ "commit": "3b1415a",
+ "claude_code": "2.1.310",
+ "model": "claude-opus-5-5",
+ "wall_s": 44.3,
+ "trace": "b20_r0_trace.jsonl",
+ "outcome": {
+  "task_id": "batch-1",
+  "agent": "auditor",
+  "status": "report",
+  "args": {
+   "text": "Batch of 8 runs (r01\u2013r08), all accepted. Flagged: none. Cleared: all 8.\nChecks: rigid-body invariance (0.74\u20130.80 vs 2.0 %/h) and closure (0.11 vs 1.0 px/h) passed in every run. Plane sections was not run because every run reported the width-free ratio. Its values of 3.79\u20133.86 %/h are above the 3.25 threshold, which is expected when root width changes.\nRemedies: each run kept 1 remedy (report the width-free ratio). r05 and r06 each have 1 roll-back, and the final checks pass.\nSummaries: the batch splits into two groups with the same values within each group. r01, r04, r05, r07 and r08: REGR peak 53.15 %/h at 421 \u00b5m, growth zone 695 \u00b5m, largest flank difference \u22123.86 %/h at 1074 \u00b5m. r02, r03 and r06: REGR peak 52.96 %/h at 421 \u00b5m, growth zone 684 \u00b5m, largest flank difference \u22123.79 %/h at 284 \u00b5m.\nThe centre strain-rate profiles of the two groups are nearly the same. The largest flank differences are almost equal in size but sit at different positions.\nFollow-up: in r02, r03 and r06 the largest width-free ratio is negative (\u22120.019 at 50 \u00b5m, against 0.074 for the other group). Check the curvature-rate profile of these 3 runs before comparing curvature results across the batch."
+  },
+  "steps": 3,
+  "failed_steps": 0,
+  "calls": 3,
+  "input_tokens": 23030,
+  "output_tokens": 3400,
+  "call_ms": 40352
+ },
+ "decisions": {
+  "r01": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r02": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r03": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r04": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r05": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r06": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r07": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r08": {
+   "decision": "clear",
+   "order": 1
+  }
+ },
+ "undecided": [],
+ "report": "Batch of 8 runs (r01\u2013r08), all accepted. Flagged: none. Cleared: all 8.\nChecks: rigid-body invariance (0.74\u20130.80 vs 2.0 %/h) and closure (0.11 vs 1.0 px/h) passed in every run. Plane sections was not run because every run reported the width-free ratio. Its values of 3.79\u20133.86 %/h are above the 3.25 threshold, which is expected when root width changes.\nRemedies: each run kept 1 remedy (report the width-free ratio). r05 and r06 each have 1 roll-back, and the final checks pass.\nSummaries: the batch splits into two groups with the same values within each group. r01, r04, r05, r07 and r08: REGR peak 53.15 %/h at 421 \u00b5m, growth zone 695 \u00b5m, largest flank difference \u22123.86 %/h at 1074 \u00b5m. r02, r03 and r06: REGR peak 52.96 %/h at 421 \u00b5m, growth zone 684 \u00b5m, largest flank difference \u22123.79 %/h at 284 \u00b5m.\nThe centre strain-rate profiles of the two groups are nearly the same. The largest flank differences are almost equal in size but sit at different positions.\nFollow-up: in r02, r03 and r06 the largest width-free ratio is negative (\u22120.019 at 50 \u00b5m, against 0.074 for the other group). Check the curvature-rate profile of these 3 runs before comparing curvature results across the batch."
+}

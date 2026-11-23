@@ -1,0 +1,66 @@
+{
+ "batch": "b05",
+ "repeat": 2,
+ "commit": "47e8eef",
+ "claude_code": "2.1.310",
+ "model": "claude-opus-5-5",
+ "wall_s": 69.9,
+ "trace": "b05_r2_trace.jsonl",
+ "outcome": {
+  "task_id": "batch-1",
+  "agent": "auditor",
+  "status": "report",
+  "args": {
+   "text": "Batch: 8 runs, all 8 accepted. 1 flagged, 7 cleared.\nFlagged: r03 (width_free_ratio_used). Its largest flank difference is -7.97 %/h at 432 \u00b5m, against a batch median of 0.495 %/h. The sign is reversed and it is about 16 times larger. Because it used the width-free ratio, plane sections was not run, so no final check tested this curvature-rate signal. Its centre strain-rate peak (REGR) is 53.02 %/h at 421 \u00b5m and its growth zone is 695 \u00b5m, both in line with the batch.\nCleared: r01, r05, r08 (no remedies; every summary close to the batch median; all checks pass). r02 (width-free ratio of -0.04; otherwise identical to r01). r06 and r07 (all checks pass, including plane sections, which supports their flank difference near the tip at 21 \u00b5m). r04 (width-free ratio; its large z values come from a very small batch MAD: growth zone 21 \u00b5m shorter, about 3%, and a flank difference of -0.81 %/h, about the batch's size with the opposite sign; rigid-body invariance and closure pass).\nWhat the flagged run has in common with the batch: it is the only run where the width-free ratio left a large curvature-rate signal, the flank difference, untested by any check. Its velocity and centre strain-rate profile match the other roots."
+  },
+  "steps": 6,
+  "failed_steps": 0,
+  "calls": 6,
+  "input_tokens": 49304,
+  "output_tokens": 4694,
+  "call_ms": 54372
+ },
+ "decisions": {
+  "r03": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "width_free_ratio_used",
+   "evidence": [
+    "flank_difference_max_pct_per_h",
+    "plane_sections",
+    "width_free_ratio_max",
+    "remedies_kept"
+   ]
+  },
+  "r01": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r02": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r05": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r08": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r04": {
+   "decision": "clear",
+   "order": 3
+  },
+  "r06": {
+   "decision": "clear",
+   "order": 3
+  },
+  "r07": {
+   "decision": "clear",
+   "order": 3
+  }
+ },
+ "undecided": [],
+ "report": "Batch: 8 runs, all 8 accepted. 1 flagged, 7 cleared.\nFlagged: r03 (width_free_ratio_used). Its largest flank difference is -7.97 %/h at 432 \u00b5m, against a batch median of 0.495 %/h. The sign is reversed and it is about 16 times larger. Because it used the width-free ratio, plane sections was not run, so no final check tested this curvature-rate signal. Its centre strain-rate peak (REGR) is 53.02 %/h at 421 \u00b5m and its growth zone is 695 \u00b5m, both in line with the batch.\nCleared: r01, r05, r08 (no remedies; every summary close to the batch median; all checks pass). r02 (width-free ratio of -0.04; otherwise identical to r01). r06 and r07 (all checks pass, including plane sections, which supports their flank difference near the tip at 21 \u00b5m). r04 (width-free ratio; its large z values come from a very small batch MAD: growth zone 21 \u00b5m shorter, about 3%, and a flank difference of -0.81 %/h, about the batch's size with the opposite sign; rigid-body invariance and closure pass).\nWhat the flagged run has in common with the batch: it is the only run where the width-free ratio left a large curvature-rate signal, the flank difference, untested by any check. Its velocity and centre strain-rate profile match the other roots."
+}

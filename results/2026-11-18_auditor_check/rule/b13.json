@@ -1,0 +1,44 @@
+{
+ "z_cutoff": 3.0,
+ "decisions": {
+  "r01": {
+   "decision": "clear",
+   "reasons": []
+  },
+  "r02": {
+   "decision": "clear",
+   "reasons": []
+  },
+  "r03": {
+   "decision": "clear",
+   "reasons": []
+  },
+  "r04": {
+   "decision": "clear",
+   "reasons": []
+  },
+  "r05": {
+   "decision": "flag",
+   "reasons": [
+    "summary_outlier:flank_difference_at_um"
+   ]
+  },
+  "r06": {
+   "decision": "clear",
+   "reasons": []
+  },
+  "r07": {
+   "decision": "flag",
+   "reasons": [
+    "summary_outlier:centre_peak_regr_pct_per_h",
+    "summary_outlier:flank_difference_max_pct_per_h"
+   ]
+  },
+  "r08": {
+   "decision": "flag",
+   "reasons": [
+    "summary_outlier:flank_difference_at_um"
+   ]
+  }
+ }
+}

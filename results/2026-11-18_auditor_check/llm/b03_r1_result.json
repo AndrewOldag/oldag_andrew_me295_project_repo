@@ -1,0 +1,67 @@
+{
+ "batch": "b03",
+ "repeat": 1,
+ "commit": "510d287",
+ "claude_code": "2.1.310",
+ "model": "claude-opus-5-5",
+ "wall_s": 150.8,
+ "trace": "b03_r1_trace.jsonl",
+ "outcome": {
+  "task_id": "batch-1",
+  "agent": "auditor",
+  "status": "report",
+  "args": {
+   "text": "Batch audit: 8 runs, all 8 accepted. 2 flagged, 6 cleared.\n\nFlagged as summary outlier (2 runs): r01 and r06. Their largest flank difference is at 284 \u00b5m from the tip, while every other run has it at 1074 \u00b5m. That means the curvature-rate profile has a different shape. Both runs pass rigid invariance and closure. Their growth zone (684 \u00b5m against 695 \u00b5m) and centre REGR peak (52.96 %/h against 53.1 %/h) differ only a little, even though their z-scores are large.\n\nCleared (6 runs): r02, r03, r04, r05, r07 and r08. They pass rigid invariance and closure, and their REGR peak (421 \u00b5m), growth zone (695 \u00b5m) and flank-difference position (1074 \u00b5m) match the batch. In r04, r05 and r08 the largest width-free ratio is 0.074 against a batch median of -0.019. The z-score of 4.18 comes from a very small MAD; the actual difference is small and close to zero, so I don't count it as a fault.\n\nWhat the flagged runs share: both report the width-free ratio, needed 6 steps, kept one remedy and had no roll-backs. All their summaries are identical, and they differ from the batch only in where the flank difference is largest.\n\nEvery run used the width-free ratio, so the plane-sections check was not run on any of them.\n\nThe summaries repeat in three identical groups: r01 and r06; r02, r03 and r07; r04, r05 and r08. Check whether these are really separate roots or time windows."
+  },
+  "steps": 5,
+  "failed_steps": 0,
+  "calls": 5,
+  "input_tokens": 40843,
+  "output_tokens": 4766,
+  "call_ms": 64468
+ },
+ "decisions": {
+  "r01": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "summary_outlier",
+   "evidence": [
+    "flank_difference_at_um"
+   ]
+  },
+  "r06": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "summary_outlier",
+   "evidence": [
+    "flank_difference_at_um"
+   ]
+  },
+  "r02": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r03": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r04": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r05": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r07": {
+   "decision": "clear",
+   "order": 2
+  },
+  "r08": {
+   "decision": "clear",
+   "order": 2
+  }
+ },
+ "undecided": [],
+ "report": "Batch audit: 8 runs, all 8 accepted. 2 flagged, 6 cleared.\n\nFlagged as summary outlier (2 runs): r01 and r06. Their largest flank difference is at 284 \u00b5m from the tip, while every other run has it at 1074 \u00b5m. That means the curvature-rate profile has a different shape. Both runs pass rigid invariance and closure. Their growth zone (684 \u00b5m against 695 \u00b5m) and centre REGR peak (52.96 %/h against 53.1 %/h) differ only a little, even though their z-scores are large.\n\nCleared (6 runs): r02, r03, r04, r05, r07 and r08. They pass rigid invariance and closure, and their REGR peak (421 \u00b5m), growth zone (695 \u00b5m) and flank-difference position (1074 \u00b5m) match the batch. In r04, r05 and r08 the largest width-free ratio is 0.074 against a batch median of -0.019. The z-score of 4.18 comes from a very small MAD; the actual difference is small and close to zero, so I don't count it as a fault.\n\nWhat the flagged runs share: both report the width-free ratio, needed 6 steps, kept one remedy and had no roll-backs. All their summaries are identical, and they differ from the batch only in where the flank difference is largest.\n\nEvery run used the width-free ratio, so the plane-sections check was not run on any of them.\n\nThe summaries repeat in three identical groups: r01 and r06; r02, r03 and r07; r04, r05 and r08. Check whether these are really separate roots or time windows."
+}

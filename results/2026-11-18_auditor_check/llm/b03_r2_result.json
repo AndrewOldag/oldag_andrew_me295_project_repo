@@ -1,0 +1,81 @@
+{
+ "batch": "b03",
+ "repeat": 2,
+ "commit": "47e8eef",
+ "claude_code": "2.1.310",
+ "model": "claude-opus-5-5",
+ "wall_s": 91.1,
+ "trace": "b03_r2_trace.jsonl",
+ "outcome": {
+  "task_id": "batch-1",
+  "agent": "auditor",
+  "status": "report",
+  "args": {
+   "text": "Batch of 8 runs, all 8 accepted, all reported with the width-free ratio (plane sections not run). 5 flagged, 3 cleared.\n- Flagged, summary_outlier: r01 and r06. The largest flank difference is at 284 \u00b5m, but at 1074 \u00b5m in every other run. The growth zone is also a little shorter (684 vs 695 \u00b5m). So the strain-rate profile has a different shape.\n- Flagged, width_free_ratio_used: r04, r05 and r08. The width-free ratio maximum is +0.074, against a batch median of -0.019 (z 4.18), so the sign is reversed. In r04 the maximum is 50 \u00b5m from the tip, against 800 \u00b5m in r02. That points to a tip artefact. The position was only checked in r04's record; r05 and r08 have the same summaries.\n- Cleared: r02, r03 and r07. Rigid invariance and closure pass, and every summary is within |z| 0.67 of the batch.\nIn common: every flagged run passed rigid invariance and closure. All five were flagged for an unusual curvature-rate or width-free profile (where the flank difference or ratio maximum sits along the root), not for a failed check. The centre REGR peak (about 53 %/h at 421 \u00b5m) matches across the whole batch."
+  },
+  "steps": 6,
+  "failed_steps": 0,
+  "calls": 6,
+  "input_tokens": 49926,
+  "output_tokens": 6815,
+  "call_ms": 73515
+ },
+ "decisions": {
+  "r01": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "summary_outlier",
+   "evidence": [
+    "flank_difference_at_um",
+    "growth_zone_length_um"
+   ]
+  },
+  "r06": {
+   "decision": "flag",
+   "order": 1,
+   "reason": "summary_outlier",
+   "evidence": [
+    "flank_difference_at_um",
+    "growth_zone_length_um"
+   ]
+  },
+  "r04": {
+   "decision": "flag",
+   "order": 2,
+   "reason": "width_free_ratio_used",
+   "evidence": [
+    "width_free_ratio_max"
+   ]
+  },
+  "r05": {
+   "decision": "flag",
+   "order": 2,
+   "reason": "width_free_ratio_used",
+   "evidence": [
+    "width_free_ratio_max"
+   ]
+  },
+  "r08": {
+   "decision": "flag",
+   "order": 2,
+   "reason": "width_free_ratio_used",
+   "evidence": [
+    "width_free_ratio_max"
+   ]
+  },
+  "r02": {
+   "decision": "clear",
+   "order": 3
+  },
+  "r03": {
+   "decision": "clear",
+   "order": 3
+  },
+  "r07": {
+   "decision": "clear",
+   "order": 3
+  }
+ },
+ "undecided": [],
+ "report": "Batch of 8 runs, all 8 accepted, all reported with the width-free ratio (plane sections not run). 5 flagged, 3 cleared.\n- Flagged, summary_outlier: r01 and r06. The largest flank difference is at 284 \u00b5m, but at 1074 \u00b5m in every other run. The growth zone is also a little shorter (684 vs 695 \u00b5m). So the strain-rate profile has a different shape.\n- Flagged, width_free_ratio_used: r04, r05 and r08. The width-free ratio maximum is +0.074, against a batch median of -0.019 (z 4.18), so the sign is reversed. In r04 the maximum is 50 \u00b5m from the tip, against 800 \u00b5m in r02. That points to a tip artefact. The position was only checked in r04's record; r05 and r08 have the same summaries.\n- Cleared: r02, r03 and r07. Rigid invariance and closure pass, and every summary is within |z| 0.67 of the batch.\nIn common: every flagged run passed rigid invariance and closure. All five were flagged for an unusual curvature-rate or width-free profile (where the flank difference or ratio maximum sits along the root), not for a failed check. The centre REGR peak (about 53 %/h at 421 \u00b5m) matches across the whole batch."
+}

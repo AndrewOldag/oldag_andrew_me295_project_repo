@@ -1,0 +1,132 @@
+{
+ "freeze_tag": "freeze-v4",
+ "commit": "6cee1e7",
+ "method": "diagnostician",
+ "rod": {
+  "case": "v3_growth_zone",
+  "fault": "illumination_flicker",
+  "size": "0.03",
+  "seed": 60,
+  "id": "v3_growth_zone_illumination_flicker_z0.03_s60"
+ },
+ "runner": "remote_job",
+ "truth": {
+  "peak_regr_pct_per_h": 54.0,
+  "peak_at_um": 421,
+  "largest_flank_difference_pct_per_h": 0.0
+ },
+ "error_before": {
+  "regr_rms_pct_per_h": 0.935,
+  "regr_max_pct_per_h": 2.952,
+  "regr_covered_um": 1137,
+  "flank_difference_rms_pct_per_h": 1.453,
+  "flank_difference_max_pct_per_h": 5.944,
+  "flank_difference_covered_um": 1137
+ },
+ "initial_checks": [
+  {
+   "check": "rigid_invariance",
+   "passed": false,
+   "value": 2.5589323313372265,
+   "threshold": 2.0,
+   "unit": "%/h",
+   "where_s_px": 55.0,
+   "where_frame_pair": null,
+   "detail": "largest change in regr_plus"
+  },
+  {
+   "check": "closure",
+   "passed": true,
+   "value": 0.049198133964000974,
+   "threshold": 1.0,
+   "unit": "px/h",
+   "where_s_px": 547.9674807688087,
+   "where_frame_pair": 17,
+   "detail": "tip path 96.0 px/h; base at s = 548 px; largest single-pair residual at pair 17"
+  },
+  {
+   "check": "plane_sections",
+   "passed": false,
+   "value": 5.944300425084664,
+   "threshold": 3.25,
+   "unit": "%/h",
+   "where_s_px": 55.0,
+   "where_frame_pair": null,
+   "detail": "flank difference -5.94 %/h, predicted 0.00 %/h"
+  }
+ ],
+ "outcome": {
+  "task_id": "rod-1",
+  "agent": "diagnostician",
+  "status": "decline",
+  "args": {
+   "fault": "unknown",
+   "reason": "Rigid-body invariance and plane sections both fail at s = 116 \u00b5m near the tip, which points to a tracker artefact. The evidence rules out each listed fault: displacement is 0.17 of the patch radius, frame quality is normal with one bright object, midline jitter is 0.08 px, and closure passes. Flank spacing changes only at s = 500\u2013600 \u00b5m, not where the checks fail. No listed remedy fits."
+  },
+  "steps": 6,
+  "failed_steps": 0,
+  "calls": 6,
+  "input_tokens": 27772,
+  "output_tokens": 3252,
+  "call_ms": 34307
+ },
+ "error_after": {
+  "regr_rms_pct_per_h": 0.935,
+  "regr_max_pct_per_h": 2.952,
+  "regr_covered_um": 1137,
+  "flank_difference_rms_pct_per_h": 1.453,
+  "flank_difference_max_pct_per_h": 5.944,
+  "flank_difference_covered_um": 1137
+ },
+ "remedies": [],
+ "roll_backs": 0,
+ "final_settings": {
+  "stride": 1,
+  "disk_radius": null,
+  "register": false,
+  "register_from_px": null,
+  "midline_smooth": null,
+  "band_mask": null,
+  "width_free": false,
+  "couple": false
+ },
+ "final_checks": [
+  {
+   "check": "rigid_invariance",
+   "passed": false,
+   "value": 2.5589323313372265,
+   "threshold": 2.0,
+   "unit": "%/h",
+   "where_s_px": 55.0,
+   "where_frame_pair": null,
+   "detail": "largest change in regr_plus"
+  },
+  {
+   "check": "closure",
+   "passed": true,
+   "value": 0.049198133964000974,
+   "threshold": 1.0,
+   "unit": "px/h",
+   "where_s_px": 547.9674807688087,
+   "where_frame_pair": 17,
+   "detail": "tip path 96.0 px/h; base at s = 548 px; largest single-pair residual at pair 17"
+  },
+  {
+   "check": "plane_sections",
+   "passed": false,
+   "value": 5.944300425084664,
+   "threshold": 3.25,
+   "unit": "%/h",
+   "where_s_px": 55.0,
+   "where_frame_pair": null,
+   "detail": "flank difference -5.94 %/h, predicted 0.00 %/h"
+  }
+ ],
+ "reported": false,
+ "repeat": 0,
+ "trace": "diagnostician_v3_growth_zone_illumination_flicker_z0.03_s60_r0_trace.jsonl",
+ "claude_code": "2.1.310",
+ "wall_s": 45.0,
+ "tracker_runs_new": 0,
+ "runner_log": []
+}

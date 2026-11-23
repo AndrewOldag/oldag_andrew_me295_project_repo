@@ -1,0 +1,59 @@
+{
+ "batch": "b08",
+ "repeat": 1,
+ "commit": "510d287",
+ "claude_code": "2.1.310",
+ "model": "claude-opus-5-5",
+ "wall_s": 137.0,
+ "trace": "b08_r1_trace.jsonl",
+ "outcome": {
+  "task_id": "batch-1",
+  "agent": "auditor",
+  "status": "report",
+  "args": {
+   "text": "Batch: 8 runs, 8 accepted. 0 flagged, 8 cleared (r01\u2013r08).\nAll three final checks (rigid-body invariance, closure, plane sections) passed on every run. No run used the width-free ratio.\nThe summaries sit close to the batch. Centre REGR peak is 53.02\u201353.09 %/h, at 421 \u00b5m from the tip on every run. Growth-zone length is 674\u2013695 \u00b5m.\nThe largest |z| values come from a very small batch MAD, and the differences behind them are small: r05 flank difference is -8.36 vs -8.075 %/h, and r02/r06/r08 flank difference position is 432 vs 415.5 \u00b5m.\nr01 kept one remedy: frames registered on non-growing tissue before tracking, with stride 1, so the time base is unchanged. Its checks pass, so this is the normal path.\nSince nothing was flagged, there is no common thread among flagged runs.\nOne thing to check: r03, r04 and r07 have the same check values and summaries, and so do r02, r06 and r08. Please confirm these are separate roots or time windows and not duplicate entries of the same movie, because duplicates would also make the batch MAD look smaller."
+  },
+  "steps": 3,
+  "failed_steps": 0,
+  "calls": 3,
+  "input_tokens": 22794,
+  "output_tokens": 1937,
+  "call_ms": 41942
+ },
+ "decisions": {
+  "r01": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r02": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r03": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r04": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r05": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r06": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r07": {
+   "decision": "clear",
+   "order": 1
+  },
+  "r08": {
+   "decision": "clear",
+   "order": 1
+  }
+ },
+ "undecided": [],
+ "report": "Batch: 8 runs, 8 accepted. 0 flagged, 8 cleared (r01\u2013r08).\nAll three final checks (rigid-body invariance, closure, plane sections) passed on every run. No run used the width-free ratio.\nThe summaries sit close to the batch. Centre REGR peak is 53.02\u201353.09 %/h, at 421 \u00b5m from the tip on every run. Growth-zone length is 674\u2013695 \u00b5m.\nThe largest |z| values come from a very small batch MAD, and the differences behind them are small: r05 flank difference is -8.36 vs -8.075 %/h, and r02/r06/r08 flank difference position is 432 vs 415.5 \u00b5m.\nr01 kept one remedy: frames registered on non-growing tissue before tracking, with stride 1, so the time base is unchanged. Its checks pass, so this is the normal path.\nSince nothing was flagged, there is no common thread among flagged runs.\nOne thing to check: r03, r04 and r07 have the same check values and summaries, and so do r02, r06 and r08. Please confirm these are separate roots or time windows and not duplicate entries of the same movie, because duplicates would also make the batch MAD look smaller."
+}

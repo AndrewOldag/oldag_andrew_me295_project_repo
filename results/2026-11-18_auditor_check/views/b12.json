@@ -1,0 +1,899 @@
+{
+ "batch": "b12",
+ "table": {
+  "columns": {
+   "checks": "check: [value, threshold, passed]; passed null = not run",
+   "summaries": "summary: [value, robust z in this batch]"
+  },
+  "batch_median_mad": {
+   "centre_peak_regr_pct_per_h": {
+    "median": 52.795,
+    "mad": 0.025
+   },
+   "centre_peak_at_um": {
+    "median": 421.0,
+    "mad": 0.0
+   },
+   "growth_zone_length_um": {
+    "median": 700.0,
+    "mad": 5.0
+   },
+   "flank_difference_max_pct_per_h": {
+    "median": -11.88,
+    "mad": 0.18
+   },
+   "flank_difference_at_um": {
+    "median": 410.0,
+    "mad": 0.0
+   },
+   "width_free_ratio_max": {
+    "median": null,
+    "mad": null
+   }
+  },
+  "runs": [
+   {
+    "run_id": "r01",
+    "status": "accept",
+    "checks": {
+     "rigid_invariance": [
+      0.569,
+      2.0,
+      true
+     ],
+     "closure": [
+      0.112,
+      1.0,
+      true
+     ],
+     "plane_sections": [
+      2.307,
+      3.25,
+      true
+     ]
+    },
+    "steps": 5,
+    "remedies_kept": 1,
+    "roll_backs": 0,
+    "width_free": false,
+    "summaries": {
+     "centre_peak_regr_pct_per_h": [
+      52.82,
+      0.67
+     ],
+     "centre_peak_at_um": [
+      421.0,
+      0.0
+     ],
+     "growth_zone_length_um": [
+      674.0,
+      -3.51
+     ],
+     "flank_difference_max_pct_per_h": [
+      -12.09,
+      -0.79
+     ],
+     "flank_difference_at_um": [
+      410.0,
+      0.0
+     ],
+     "width_free_ratio_max": [
+      null,
+      null
+     ]
+    }
+   },
+   {
+    "run_id": "r02",
+    "status": "accept",
+    "checks": {
+     "rigid_invariance": [
+      0.564,
+      2.0,
+      true
+     ],
+     "closure": [
+      0.215,
+      1.0,
+      true
+     ],
+     "plane_sections": [
+      1.251,
+      3.25,
+      true
+     ]
+    },
+    "steps": 6,
+    "remedies_kept": 0,
+    "roll_backs": 0,
+    "width_free": false,
+    "summaries": {
+     "centre_peak_regr_pct_per_h": [
+      52.77,
+      -0.67
+     ],
+     "centre_peak_at_um": [
+      421.0,
+      0.0
+     ],
+     "growth_zone_length_um": [
+      705.0,
+      0.67
+     ],
+     "flank_difference_max_pct_per_h": [
+      -11.7,
+      0.67
+     ],
+     "flank_difference_at_um": [
+      410.0,
+      0.0
+     ],
+     "width_free_ratio_max": [
+      null,
+      null
+     ]
+    }
+   },
+   {
+    "run_id": "r03",
+    "status": "accept",
+    "checks": {
+     "rigid_invariance": [
+      0.564,
+      2.0,
+      true
+     ],
+     "closure": [
+      0.215,
+      1.0,
+      true
+     ],
+     "plane_sections": [
+      1.251,
+      3.25,
+      true
+     ]
+    },
+    "steps": 1,
+    "remedies_kept": 0,
+    "roll_backs": 0,
+    "width_free": false,
+    "summaries": {
+     "centre_peak_regr_pct_per_h": [
+      52.77,
+      -0.67
+     ],
+     "centre_peak_at_um": [
+      421.0,
+      0.0
+     ],
+     "growth_zone_length_um": [
+      705.0,
+      0.67
+     ],
+     "flank_difference_max_pct_per_h": [
+      -11.7,
+      0.67
+     ],
+     "flank_difference_at_um": [
+      410.0,
+      0.0
+     ],
+     "width_free_ratio_max": [
+      null,
+      null
+     ]
+    }
+   },
+   {
+    "run_id": "r04",
+    "status": "accept",
+    "checks": {
+     "rigid_invariance": [
+      0.564,
+      2.0,
+      true
+     ],
+     "closure": [
+      0.215,
+      1.0,
+      true
+     ],
+     "plane_sections": [
+      1.251,
+      3.25,
+      true
+     ]
+    },
+    "steps": 1,
+    "remedies_kept": 0,
+    "roll_backs": 0,
+    "width_free": false,
+    "summaries": {
+     "centre_peak_regr_pct_per_h": [
+      52.77,
+      -0.67
+     ],
+     "centre_peak_at_um": [
+      421.0,
+      0.0
+     ],
+     "growth_zone_length_um": [
+      705.0,
+      0.67
+     ],
+     "flank_difference_max_pct_per_h": [
+      -11.7,
+      0.67
+     ],
+     "flank_difference_at_um": [
+      410.0,
+      0.0
+     ],
+     "width_free_ratio_max": [
+      null,
+      null
+     ]
+    }
+   },
+   {
+    "run_id": "r05",
+    "status": "accept",
+    "checks": {
+     "rigid_invariance": [
+      1.109,
+      2.0,
+      true
+     ],
+     "closure": [
+      0.218,
+      1.0,
+      true
+     ],
+     "plane_sections": [
+      1.906,
+      3.25,
+      true
+     ]
+    },
+    "steps": 1,
+    "remedies_kept": 0,
+    "roll_backs": 0,
+    "width_free": false,
+    "summaries": {
+     "centre_peak_regr_pct_per_h": [
+      52.84,
+      1.21
+     ],
+     "centre_peak_at_um": [
+      421.0,
+      0.0
+     ],
+     "growth_zone_length_um": [
+      695.0,
+      -0.67
+     ],
+     "flank_difference_max_pct_per_h": [
+      -12.38,
+      -1.87
+     ],
+     "flank_difference_at_um": [
+      410.0,
+      0.0
+     ],
+     "width_free_ratio_max": [
+      null,
+      null
+     ]
+    }
+   },
+   {
+    "run_id": "r06",
+    "status": "accept",
+    "checks": {
+     "rigid_invariance": [
+      0.564,
+      2.0,
+      true
+     ],
+     "closure": [
+      0.215,
+      1.0,
+      true
+     ],
+     "plane_sections": [
+      1.251,
+      3.25,
+      true
+     ]
+    },
+    "steps": 1,
+    "remedies_kept": 0,
+    "roll_backs": 0,
+    "width_free": false,
+    "summaries": {
+     "centre_peak_regr_pct_per_h": [
+      52.77,
+      -0.67
+     ],
+     "centre_peak_at_um": [
+      421.0,
+      0.0
+     ],
+     "growth_zone_length_um": [
+      705.0,
+      0.67
+     ],
+     "flank_difference_max_pct_per_h": [
+      -11.7,
+      0.67
+     ],
+     "flank_difference_at_um": [
+      410.0,
+      0.0
+     ],
+     "width_free_ratio_max": [
+      null,
+      null
+     ]
+    }
+   },
+   {
+    "run_id": "r07",
+    "status": "accept",
+    "checks": {
+     "rigid_invariance": [
+      0.569,
+      2.0,
+      true
+     ],
+     "closure": [
+      0.112,
+      1.0,
+      true
+     ],
+     "plane_sections": [
+      2.307,
+      3.25,
+      true
+     ]
+    },
+    "steps": 7,
+    "remedies_kept": 1,
+    "roll_backs": 0,
+    "width_free": false,
+    "summaries": {
+     "centre_peak_regr_pct_per_h": [
+      52.82,
+      0.67
+     ],
+     "centre_peak_at_um": [
+      421.0,
+      0.0
+     ],
+     "growth_zone_length_um": [
+      674.0,
+      -3.51
+     ],
+     "flank_difference_max_pct_per_h": [
+      -12.09,
+      -0.79
+     ],
+     "flank_difference_at_um": [
+      410.0,
+      0.0
+     ],
+     "width_free_ratio_max": [
+      null,
+      null
+     ]
+    }
+   },
+   {
+    "run_id": "r08",
+    "status": "accept",
+    "checks": {
+     "rigid_invariance": [
+      0.535,
+      2.0,
+      true
+     ],
+     "closure": [
+      0.149,
+      1.0,
+      true
+     ],
+     "plane_sections": [
+      2.227,
+      3.25,
+      true
+     ]
+    },
+    "steps": 5,
+    "remedies_kept": 0,
+    "roll_backs": 0,
+    "width_free": false,
+    "summaries": {
+     "centre_peak_regr_pct_per_h": [
+      52.92,
+      3.37
+     ],
+     "centre_peak_at_um": [
+      421.0,
+      0.0
+     ],
+     "growth_zone_length_um": [
+      674.0,
+      -3.51
+     ],
+     "flank_difference_max_pct_per_h": [
+      -12.06,
+      -0.67
+     ],
+     "flank_difference_at_um": [
+      410.0,
+      0.0
+     ],
+     "width_free_ratio_max": [
+      null,
+      null
+     ]
+    }
+   }
+  ]
+ },
+ "runs": [
+  {
+   "run_id": "r01",
+   "status": "accept",
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "value": 0.569,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "passed": true
+    },
+    {
+     "check": "closure",
+     "value": 0.112,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "passed": true
+    },
+    {
+     "check": "plane_sections",
+     "value": 2.307,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "passed": true
+    }
+   ],
+   "remedies_kept": [
+    "frames registered on the non-growing tissue (from 400 px from the tip) before tracking"
+   ],
+   "roll_backs": 0,
+   "steps": 5,
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": true,
+    "register_from_px": 400,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false
+   },
+   "summaries": {
+    "centre_peak_regr_pct_per_h": 52.82,
+    "centre_peak_at_um": 421.0,
+    "growth_zone_length_um": 674.0,
+    "flank_difference_max_pct_per_h": -12.09,
+    "flank_difference_at_um": 410.0,
+    "width_free_ratio_max": null,
+    "width_free_ratio_at_um": null
+   },
+   "z": {
+    "centre_peak_regr_pct_per_h": 0.67,
+    "centre_peak_at_um": 0.0,
+    "growth_zone_length_um": -3.51,
+    "flank_difference_max_pct_per_h": -0.79,
+    "flank_difference_at_um": 0.0,
+    "width_free_ratio_max": null
+   }
+  },
+  {
+   "run_id": "r02",
+   "status": "accept",
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "value": 0.564,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "passed": true
+    },
+    {
+     "check": "closure",
+     "value": 0.215,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "passed": true
+    },
+    {
+     "check": "plane_sections",
+     "value": 1.251,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "passed": true
+    }
+   ],
+   "remedies_kept": [],
+   "roll_backs": 0,
+   "steps": 6,
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false
+   },
+   "summaries": {
+    "centre_peak_regr_pct_per_h": 52.77,
+    "centre_peak_at_um": 421.0,
+    "growth_zone_length_um": 705.0,
+    "flank_difference_max_pct_per_h": -11.7,
+    "flank_difference_at_um": 410.0,
+    "width_free_ratio_max": null,
+    "width_free_ratio_at_um": null
+   },
+   "z": {
+    "centre_peak_regr_pct_per_h": -0.67,
+    "centre_peak_at_um": 0.0,
+    "growth_zone_length_um": 0.67,
+    "flank_difference_max_pct_per_h": 0.67,
+    "flank_difference_at_um": 0.0,
+    "width_free_ratio_max": null
+   }
+  },
+  {
+   "run_id": "r03",
+   "status": "accept",
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "value": 0.564,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "passed": true
+    },
+    {
+     "check": "closure",
+     "value": 0.215,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "passed": true
+    },
+    {
+     "check": "plane_sections",
+     "value": 1.251,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "passed": true
+    }
+   ],
+   "remedies_kept": [],
+   "roll_backs": 0,
+   "steps": 1,
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false
+   },
+   "summaries": {
+    "centre_peak_regr_pct_per_h": 52.77,
+    "centre_peak_at_um": 421.0,
+    "growth_zone_length_um": 705.0,
+    "flank_difference_max_pct_per_h": -11.7,
+    "flank_difference_at_um": 410.0,
+    "width_free_ratio_max": null,
+    "width_free_ratio_at_um": null
+   },
+   "z": {
+    "centre_peak_regr_pct_per_h": -0.67,
+    "centre_peak_at_um": 0.0,
+    "growth_zone_length_um": 0.67,
+    "flank_difference_max_pct_per_h": 0.67,
+    "flank_difference_at_um": 0.0,
+    "width_free_ratio_max": null
+   }
+  },
+  {
+   "run_id": "r04",
+   "status": "accept",
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "value": 0.564,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "passed": true
+    },
+    {
+     "check": "closure",
+     "value": 0.215,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "passed": true
+    },
+    {
+     "check": "plane_sections",
+     "value": 1.251,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "passed": true
+    }
+   ],
+   "remedies_kept": [],
+   "roll_backs": 0,
+   "steps": 1,
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false
+   },
+   "summaries": {
+    "centre_peak_regr_pct_per_h": 52.77,
+    "centre_peak_at_um": 421.0,
+    "growth_zone_length_um": 705.0,
+    "flank_difference_max_pct_per_h": -11.7,
+    "flank_difference_at_um": 410.0,
+    "width_free_ratio_max": null,
+    "width_free_ratio_at_um": null
+   },
+   "z": {
+    "centre_peak_regr_pct_per_h": -0.67,
+    "centre_peak_at_um": 0.0,
+    "growth_zone_length_um": 0.67,
+    "flank_difference_max_pct_per_h": 0.67,
+    "flank_difference_at_um": 0.0,
+    "width_free_ratio_max": null
+   }
+  },
+  {
+   "run_id": "r05",
+   "status": "accept",
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "value": 1.109,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "passed": true
+    },
+    {
+     "check": "closure",
+     "value": 0.218,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "passed": true
+    },
+    {
+     "check": "plane_sections",
+     "value": 1.906,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "passed": true
+    }
+   ],
+   "remedies_kept": [],
+   "roll_backs": 0,
+   "steps": 1,
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false
+   },
+   "summaries": {
+    "centre_peak_regr_pct_per_h": 52.84,
+    "centre_peak_at_um": 421.0,
+    "growth_zone_length_um": 695.0,
+    "flank_difference_max_pct_per_h": -12.38,
+    "flank_difference_at_um": 410.0,
+    "width_free_ratio_max": null,
+    "width_free_ratio_at_um": null
+   },
+   "z": {
+    "centre_peak_regr_pct_per_h": 1.21,
+    "centre_peak_at_um": 0.0,
+    "growth_zone_length_um": -0.67,
+    "flank_difference_max_pct_per_h": -1.87,
+    "flank_difference_at_um": 0.0,
+    "width_free_ratio_max": null
+   }
+  },
+  {
+   "run_id": "r06",
+   "status": "accept",
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "value": 0.564,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "passed": true
+    },
+    {
+     "check": "closure",
+     "value": 0.215,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "passed": true
+    },
+    {
+     "check": "plane_sections",
+     "value": 1.251,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "passed": true
+    }
+   ],
+   "remedies_kept": [],
+   "roll_backs": 0,
+   "steps": 1,
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false
+   },
+   "summaries": {
+    "centre_peak_regr_pct_per_h": 52.77,
+    "centre_peak_at_um": 421.0,
+    "growth_zone_length_um": 705.0,
+    "flank_difference_max_pct_per_h": -11.7,
+    "flank_difference_at_um": 410.0,
+    "width_free_ratio_max": null,
+    "width_free_ratio_at_um": null
+   },
+   "z": {
+    "centre_peak_regr_pct_per_h": -0.67,
+    "centre_peak_at_um": 0.0,
+    "growth_zone_length_um": 0.67,
+    "flank_difference_max_pct_per_h": 0.67,
+    "flank_difference_at_um": 0.0,
+    "width_free_ratio_max": null
+   }
+  },
+  {
+   "run_id": "r07",
+   "status": "accept",
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "value": 0.569,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "passed": true
+    },
+    {
+     "check": "closure",
+     "value": 0.112,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "passed": true
+    },
+    {
+     "check": "plane_sections",
+     "value": 2.307,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "passed": true
+    }
+   ],
+   "remedies_kept": [
+    "frames registered on the non-growing tissue (from 400 px from the tip) before tracking"
+   ],
+   "roll_backs": 0,
+   "steps": 7,
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": true,
+    "register_from_px": 400,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false
+   },
+   "summaries": {
+    "centre_peak_regr_pct_per_h": 52.82,
+    "centre_peak_at_um": 421.0,
+    "growth_zone_length_um": 674.0,
+    "flank_difference_max_pct_per_h": -12.09,
+    "flank_difference_at_um": 410.0,
+    "width_free_ratio_max": null,
+    "width_free_ratio_at_um": null
+   },
+   "z": {
+    "centre_peak_regr_pct_per_h": 0.67,
+    "centre_peak_at_um": 0.0,
+    "growth_zone_length_um": -3.51,
+    "flank_difference_max_pct_per_h": -0.79,
+    "flank_difference_at_um": 0.0,
+    "width_free_ratio_max": null
+   }
+  },
+  {
+   "run_id": "r08",
+   "status": "accept",
+   "final_checks": [
+    {
+     "check": "rigid_invariance",
+     "value": 0.535,
+     "threshold": 2.0,
+     "unit": "%/h",
+     "passed": true
+    },
+    {
+     "check": "closure",
+     "value": 0.149,
+     "threshold": 1.0,
+     "unit": "px/h",
+     "passed": true
+    },
+    {
+     "check": "plane_sections",
+     "value": 2.227,
+     "threshold": 3.25,
+     "unit": "%/h",
+     "passed": true
+    }
+   ],
+   "remedies_kept": [],
+   "roll_backs": 0,
+   "steps": 5,
+   "final_settings": {
+    "stride": 1,
+    "disk_radius": null,
+    "register": false,
+    "register_from_px": null,
+    "midline_smooth": null,
+    "band_mask": null,
+    "width_free": false
+   },
+   "summaries": {
+    "centre_peak_regr_pct_per_h": 52.92,
+    "centre_peak_at_um": 421.0,
+    "growth_zone_length_um": 674.0,
+    "flank_difference_max_pct_per_h": -12.06,
+    "flank_difference_at_um": 410.0,
+    "width_free_ratio_max": null,
+    "width_free_ratio_at_um": null
+   },
+   "z": {
+    "centre_peak_regr_pct_per_h": 3.37,
+    "centre_peak_at_um": 0.0,
+    "growth_zone_length_um": -3.51,
+    "flank_difference_max_pct_per_h": -0.67,
+    "flank_difference_at_um": 0.0,
+    "width_free_ratio_max": null
+   }
+  }
+ ]
+}
