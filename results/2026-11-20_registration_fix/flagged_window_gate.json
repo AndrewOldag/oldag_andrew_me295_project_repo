@@ -1,0 +1,89 @@
+{
+ "window": "0711_c5__w6-8",
+ "gate": "option A (Andrew, 2026-11-21)",
+ "k": {
+  "inversions": 1.5,
+  "gap_ratio": 1.5,
+  "lateral": 3.0
+ },
+ "tracks": {
+  "register_frames v1": {
+   "tag": "st1_reg2p1075",
+   "passed": false,
+   "checks": [
+    {
+     "check": "integrity_rel_inversions",
+     "passed": false,
+     "value": 199.75,
+     "detail": "remedied over base"
+    },
+    {
+     "check": "integrity_rel_gap_ratio",
+     "passed": false,
+     "value": 3.646452208451156,
+     "detail": "remedied over base"
+    },
+    {
+     "check": "integrity_rel_lateral",
+     "passed": false,
+     "value": 14.868563333993595,
+     "detail": "remedied over base"
+    },
+    {
+     "check": "registration_plausible",
+     "passed": null,
+     "value": NaN,
+     "detail": "registered without a plausibility bound (register_frames v1)"
+    }
+   ],
+   "absolute": {
+    "integrity_inversions": 798.0,
+    "integrity_gap_ratio": 6.430992827826915,
+    "integrity_lateral": 15.260049619232403,
+    "registration_plausible": NaN
+   }
+  },
+  "register_v2": {
+   "tag": "st1_regv2p1075b91",
+   "passed": false,
+   "checks": [
+    {
+     "check": "integrity_rel_inversions",
+     "passed": false,
+     "value": 414.25,
+     "detail": "remedied over base"
+    },
+    {
+     "check": "integrity_rel_gap_ratio",
+     "passed": false,
+     "value": 6.852269807446537,
+     "detail": "remedied over base"
+    },
+    {
+     "check": "integrity_rel_lateral",
+     "passed": false,
+     "value": 79.49826869649594,
+     "detail": "remedied over base"
+    },
+    {
+     "check": "registration_plausible",
+     "passed": false,
+     "value": 0.0,
+     "detail": "final rotation 6.024 deg, shift 63.13 px, bound {'max_shift_px': 91.0, 'max_rot_deg': 2.0}"
+    }
+   ],
+   "absolute": {
+    "integrity_inversions": 1656.0,
+    "integrity_gap_ratio": 12.084869200778906,
+    "integrity_lateral": 81.59144213873117,
+    "registration_plausible": 0.0
+   }
+  }
+ },
+ "base_absolute": {
+  "integrity_inversions": 3.0,
+  "integrity_gap_ratio": 1.7636300876019169,
+  "integrity_lateral": 1.0263297990831275,
+  "registration_plausible": NaN
+ }
+}
