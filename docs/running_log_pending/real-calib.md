@@ -75,3 +75,4 @@
 - Demo: `python scripts/zone_checks.py thresholds` -> same thresholds; writes `results/2026-11-23_zone_checks/synthetic.md`
 - Remaining: merge; a real threshold only with a real reference set and Andrew's approval
 - Bottlenecks: none
+- Done (inbox 31): on-record shift confirmed as the fault set (amendment 6810f3a withdrawn); README limit added: fault model is an arc-length offset of the profile, not a zone misplaced by another tracker error. Main merged (b22e799; conflict markers removed in the next commit). No run, no cluster job

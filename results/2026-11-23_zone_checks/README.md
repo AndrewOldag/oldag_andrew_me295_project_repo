@@ -44,6 +44,7 @@ Spec `docs/specs/2026-11-23_growth-zone-checks.md`. Proposal `docs/proposals/202
 - A real threshold would need a real reference set (as for closure, c018) and Andrew's approval; not done here
 
 ## Limits
+- The fault model is an arc-length offset of the profile (profile at the wrong s relative to the tracked tissue). It does not cover a zone misplaced by a tracker error of another kind
 - The shifted rods displace the reported profile only; a displacement of the whole frame (midline tip and profile together) is not visible to either check
 - The particle-path residual uses the midline tip in the first and last frame only, so midline-tip noise in those two frames enters every point
 - Real growth that changes within a 2 h window adds residual that the steady synthetic rods do not have
