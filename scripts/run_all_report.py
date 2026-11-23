@@ -8,6 +8,7 @@ are masked.
 """
 import csv
 import json
+import re
 from collections import Counter, OrderedDict, defaultdict
 from pathlib import Path
 
@@ -70,6 +71,12 @@ def table(title, counts_by, keys, cols):
     return md + [""]
 
 
+def _last_line(err):
+    """Last line of a cluster error, folders dropped (no host path in a tracked file)."""
+    line = next((l for l in reversed(str(err).splitlines()) if l.strip()), "")
+    return re.sub(r"/[^\s'\"]*/", "", line).strip()[:120]
+
+
 def main(run_dir, tree_dir, out, rows):
     import run_all as RA
     out.mkdir(parents=True, exist_ok=True)
@@ -77,7 +84,7 @@ def main(run_dir, tree_dir, out, rows):
     recs = read_json_dir(run_dir / "windows")
     tree = read_json_dir(C026_TREE / "windows")
     tree_new = read_json_dir(tree_dir / "windows")
-    tree.update({k: v for k, v in tree_new.items() if v["outcome"]["status"] != "paused" or k not in tree})
+    tree.update(tree_new)              # c027 tree records replace c026 ones (register v1, no gate; spec 2026-11-20)
     audits = {p.parent.name: json.loads(p.read_text()) for p in sorted((run_dir / "audit").glob("*/audit.json"))}
 
     methods = OrderedDict()
@@ -167,7 +174,7 @@ def main(run_dir, tree_dir, out, rows):
           ("rolled-back remedy that made closure worse (tree)",
            [w for w in order if w in tree and any(_worse(s) for s in tree[w].get("remedies", []))]),
           ("auditor flag", [f"{root}: {rid}" for root, rid, _ in flags]),
-          ("retrack task failed on the cluster", [f"{r['job']} ({r['error'][:60]})" for r in queue if r["state"] == "failed"])]
+          ("retrack task failed on the cluster", [f"{r['job']} ({_last_line(r['error'])})" for r in queue if r["state"] == "failed"])]
     links = [e for l in read_jsonl(QUEUE / "queue_log.jsonl") for e in l.get("link", []) if "connected" not in e[1]]
     links += [{"status": l["status"]} for l in read_jsonl(QUEUE / "queue_log.jsonl") if l["status"] == "connection down"]
     fm.append(("link or master down (queue)", [json.dumps(e) for e in links]))

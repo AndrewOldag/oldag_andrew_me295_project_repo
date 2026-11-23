@@ -188,3 +188,37 @@ def test_roots_limit_the_dispatcher():
     some = RA.window_list({"0708_c4"})
     assert some and {w.root_id for w in some} == {"0708_c4"}
     assert len(RA.window_list()) > len(some)
+
+
+def test_tree_reruns_every_diagnostician_window(tmp_path, monkeypatch):
+    """The tree runs on every window the diagnostician decided, c026-reached ones included (register v1, no gate)."""
+    from dataclasses import dataclass
+
+    import agents.executors as E
+
+    @dataclass
+    class Outcome:
+        status: str
+    run = tmp_path / "run" / "windows"
+    run.mkdir(parents=True)
+    for wid, by in (("0711_c5__w6-8", "diagnostician"), ("0708_c4__w4-6", "rule")):
+        (run / f"{wid}.json").write_text(json.dumps({"window": wid, "status": "final", "decided_by": by}))
+
+    class FakeSlice:
+        def __init__(self, runner, w, label=""):
+            self.runs, self.checks = [(SimpleNamespace(tag=lambda: "st1"), None, {})], {}
+    monkeypatch.setattr(E, "Slice", FakeSlice)
+    monkeypatch.setattr(RA, "wait_memory", lambda: None)
+    monkeypatch.setattr(RA, "remedy_steps", lambda sl: [])
+    monkeypatch.setattr(RA, "closure", lambda c: None)
+    out = tmp_path / "tree"
+    RA.run_tree_all(None, tmp_path / "run", out, log=lambda m: None,
+                    tree=lambda sl, step_limit, trace_path: Outcome("decline"))
+    assert sorted(p.stem for p in (out / "windows").glob("*.json")) == ["0711_c5__w6-8"]
+    assert json.loads((out / "windows" / "0711_c5__w6-8.json").read_text())["outcome"]["status"] == "decline"
+
+
+def test_report_error_line_has_no_folder():
+    import run_all_report as R
+    err = 'Traceback\n  File "/a/b/c.py", line 1\nFileNotFoundError: No such file: \'/x/y/StagePositionData.yaml\'\n'
+    assert R._last_line(err) == "FileNotFoundError: No such file: 'StagePositionData.yaml'"

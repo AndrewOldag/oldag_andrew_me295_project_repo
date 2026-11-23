@@ -16,7 +16,7 @@ run     Fixed-script dispatcher (agents/dispatcher.py run_script_batch) over the
         settings go to OUT/paused.jsonl for `retrack_queue.py jobs --paused`, and the window reruns from step 0 on
         the next start. No step waits on the cluster.
 tree    The remedy tree (agents/baselines.py run_tree, step limit 8) on every window whose first check fails,
-        through the same cache; the c026 tree records stand for the windows it reached.
+        through the same cache. The c026 tree's windows are rerun (register v1, no integrity gate there).
 audit   Auditor runs for roots whose windows are all final; --final-now also takes roots with paused windows,
         over their final windows (the cut-off pass).
 report  scripts/run_all_report.py.
@@ -46,7 +46,6 @@ from measure.real_runner import RealRunner, RealWindow, vm_free_gb  # noqa: E402
 CONFIG = ROOT / "private" / "real_runner_c027.yaml"
 BATCHES = {1: ROOT / "results" / "2026-10-25_full_batch_1" / "windows.csv",
            2: ROOT / "results" / "2026-10-25_full_batch_2" / "windows.csv"}
-C026_TREE = ROOT / "staging" / "c026" / "tree" / "windows"
 LLM_CAP, STEP_LIMIT, AUDIT_RESERVE, VM_MIN_GB = 900, 8, 5, 3.0
 LIMIT_TEXT = "hit your session limit"
 # Inbox items 49 and 53: register_frames v1 tracks can pass closure with points out of order. They count as not
@@ -441,18 +440,18 @@ def _run_auditor(summaries, records, launcher, d):
 
 # ---- tree baseline
 def run_tree_all(runner, run_dir, out, stop_at=None, clock=datetime.datetime.now, log=print, tree=None):
-    """The remedy tree on every window whose first check fails in the integrated run (run records), skipping the
-    windows the c026 tree reached. Paused windows as in the run."""
+    """The remedy tree on every window whose first check fails in the integrated run (run records), the windows the
+    c026 tree reached included: their c026 records used register v1 and no integrity gate, so they are rescored here
+    (spec 2026-11-20; c026 records kept). Paused windows as in the run."""
     from agents.baselines import run_tree
     from agents.executors import Slice
     tree = tree or run_tree
     out = Path(out)
     (out / "windows").mkdir(parents=True, exist_ok=True)
-    reached = {p.stem for p in C026_TREE.glob("*.json")}
     todo = []
     for p in sorted(Path(run_dir, "windows").glob("*.json")):
         r = json.loads(p.read_text())
-        if r["status"] == "final" and r["decided_by"] == "diagnostician" and r["window"] not in reached:
+        if r["status"] == "final" and r["decided_by"] == "diagnostician":
             todo.append(r)
     for r in todo:
         wid = r["window"]
