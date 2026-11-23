@@ -1,0 +1,288 @@
+{
+ "labels": {
+  "v3_growth_zone_drift_low_texture_s40": {
+   "class": "decline",
+   "expected": "decline",
+   "sequence": null,
+   "kind": "drift_low_texture",
+   "seed": 40,
+   "size": null,
+   "repairing_states": [],
+   "states": 35
+  },
+  "v3_growth_zone_drift_low_texture_s41": {
+   "class": "decline",
+   "expected": "decline",
+   "sequence": null,
+   "kind": "drift_low_texture",
+   "seed": 41,
+   "size": null,
+   "repairing_states": [],
+   "states": 35
+  },
+  "v3_growth_zone_drift_low_texture_s42": {
+   "class": "decline",
+   "expected": "decline",
+   "sequence": null,
+   "kind": "drift_low_texture",
+   "seed": 42,
+   "size": null,
+   "repairing_states": [],
+   "states": 35
+  },
+  "v3_growth_zone_drift_low_texture_s43": {
+   "class": "decline",
+   "expected": "decline",
+   "sequence": null,
+   "kind": "drift_low_texture",
+   "seed": 43,
+   "size": null,
+   "repairing_states": [],
+   "states": 35
+  },
+  "v3_growth_zone_second_root_occlusion_s40": {
+   "class": "decline",
+   "expected": "decline",
+   "sequence": null,
+   "kind": "second_root_occlusion",
+   "seed": 40,
+   "size": null,
+   "repairing_states": [],
+   "states": 35
+  },
+  "v3_growth_zone_second_root_occlusion_s41": {
+   "class": "decline",
+   "expected": "decline",
+   "sequence": null,
+   "kind": "second_root_occlusion",
+   "seed": 41,
+   "size": null,
+   "repairing_states": [],
+   "states": 35
+  },
+  "v3_growth_zone_second_root_occlusion_s42": {
+   "class": "decline",
+   "expected": "decline",
+   "sequence": null,
+   "kind": "second_root_occlusion",
+   "seed": 42,
+   "size": null,
+   "repairing_states": [],
+   "states": 35
+  },
+  "v3_growth_zone_second_root_occlusion_s43": {
+   "class": "decline",
+   "expected": "decline",
+   "sequence": null,
+   "kind": "second_root_occlusion",
+   "seed": 43,
+   "size": null,
+   "repairing_states": [],
+   "states": 35
+  },
+  "v3_growth_zone_drift_jitter_s40": {
+   "class": "decline",
+   "expected": "decline",
+   "sequence": null,
+   "kind": "drift_jitter",
+   "seed": 40,
+   "size": null,
+   "repairing_states": [],
+   "states": 35
+  },
+  "v3_growth_zone_drift_jitter_s41": {
+   "class": "decline",
+   "expected": "decline",
+   "sequence": null,
+   "kind": "drift_jitter",
+   "seed": 41,
+   "size": null,
+   "repairing_states": [],
+   "states": 35
+  },
+  "v3_growth_zone_drift_jitter_s42": {
+   "class": "decline",
+   "expected": "decline",
+   "sequence": null,
+   "kind": "drift_jitter",
+   "seed": 42,
+   "size": null,
+   "repairing_states": [],
+   "states": 35
+  },
+  "v3_growth_zone_drift_jitter_s43": {
+   "class": "decline",
+   "expected": "decline",
+   "sequence": null,
+   "kind": "drift_jitter",
+   "seed": 43,
+   "size": null,
+   "repairing_states": [],
+   "states": 35
+  },
+  "v3_growth_zone_low_texture_fast_s40": {
+   "class": "decline",
+   "expected": "decline",
+   "sequence": null,
+   "kind": "low_texture_fast",
+   "seed": 40,
+   "size": null,
+   "repairing_states": [],
+   "states": 43
+  },
+  "v3_growth_zone_low_texture_fast_s41": {
+   "class": "decline",
+   "expected": "decline",
+   "sequence": null,
+   "kind": "low_texture_fast",
+   "seed": 41,
+   "size": null,
+   "repairing_states": [],
+   "states": 43
+  },
+  "v3_growth_zone_low_texture_fast_s42": {
+   "class": "decline",
+   "expected": "decline",
+   "sequence": null,
+   "kind": "low_texture_fast",
+   "seed": 42,
+   "size": null,
+   "repairing_states": [],
+   "states": 43
+  },
+  "v3_growth_zone_low_texture_fast_s43": {
+   "class": "decline",
+   "expected": "decline",
+   "sequence": null,
+   "kind": "low_texture_fast",
+   "seed": 43,
+   "size": null,
+   "repairing_states": [],
+   "states": 43
+  },
+  "v3_growth_zone_focus_drift_z3_s40": {
+   "class": "accept_repaired",
+   "expected": "decline",
+   "sequence": [
+    "enlarge_patch/1.5x"
+   ],
+   "kind": "focus_drift",
+   "seed": 40,
+   "size": "3",
+   "repairing_states": [
+    "enlarge_patch/1.5x",
+    "enlarge_patch/2x",
+    "register_frames + enlarge_patch/1.5x",
+    "register_frames + enlarge_patch/2x",
+    "smooth_midline/light + enlarge_patch/1.5x",
+    "smooth_midline/light + enlarge_patch/2x",
+    "crop_or_mask/crop_to_main_root + enlarge_patch/1.5x",
+    "crop_or_mask/crop_to_main_root + enlarge_patch/2x",
+    "crop_or_mask/mask_second_root + enlarge_patch/1.5x",
+    "crop_or_mask/mask_second_root + enlarge_patch/2x",
+    "enlarge_patch/1.5x + use_width_free_ratio",
+    "enlarge_patch/2x + use_width_free_ratio"
+   ],
+   "states": 35
+  },
+  "v3_growth_zone_focus_drift_z3_s41": {
+   "class": "accept_repaired",
+   "expected": "decline",
+   "sequence": [
+    "enlarge_patch/1.5x",
+    "use_width_free_ratio"
+   ],
+   "kind": "focus_drift",
+   "seed": 41,
+   "size": "3",
+   "repairing_states": [
+    "enlarge_patch/1.5x + use_width_free_ratio",
+    "enlarge_patch/2x + use_width_free_ratio"
+   ],
+   "states": 35
+  },
+  "v3_growth_zone_focus_drift_z3_s42": {
+   "class": "accept_repaired",
+   "expected": "decline",
+   "sequence": [
+    "enlarge_patch/1.5x",
+    "use_width_free_ratio"
+   ],
+   "kind": "focus_drift",
+   "seed": 42,
+   "size": "3",
+   "repairing_states": [
+    "enlarge_patch/1.5x + use_width_free_ratio",
+    "enlarge_patch/2x + use_width_free_ratio"
+   ],
+   "states": 35
+  },
+  "v3_growth_zone_focus_drift_z3_s43": {
+   "class": "accept_repaired",
+   "expected": "decline",
+   "sequence": [
+    "use_width_free_ratio"
+   ],
+   "kind": "focus_drift",
+   "seed": 43,
+   "size": "3",
+   "repairing_states": [
+    "use_width_free_ratio",
+    "register_frames + use_width_free_ratio",
+    "smooth_midline/light + use_width_free_ratio",
+    "crop_or_mask/crop_to_main_root + use_width_free_ratio",
+    "crop_or_mask/mask_second_root + use_width_free_ratio",
+    "enlarge_patch/1.5x + use_width_free_ratio",
+    "enlarge_patch/2x + use_width_free_ratio"
+   ],
+   "states": 35
+  },
+  "v3_growth_zone_illumination_flicker_z0.1_s40": {
+   "class": "decline",
+   "expected": "accept_clean",
+   "sequence": null,
+   "kind": "illumination_flicker",
+   "seed": 40,
+   "size": "0.1",
+   "repairing_states": [],
+   "states": 35
+  },
+  "v3_growth_zone_illumination_flicker_z0.1_s41": {
+   "class": "decline",
+   "expected": "accept_clean",
+   "sequence": null,
+   "kind": "illumination_flicker",
+   "seed": 41,
+   "size": "0.1",
+   "repairing_states": [],
+   "states": 35
+  },
+  "v3_growth_zone_illumination_flicker_z0.1_s42": {
+   "class": "decline",
+   "expected": "accept_clean",
+   "sequence": null,
+   "kind": "illumination_flicker",
+   "seed": 42,
+   "size": "0.1",
+   "repairing_states": [],
+   "states": 35
+  },
+  "v3_growth_zone_illumination_flicker_z0.1_s43": {
+   "class": "decline",
+   "expected": "accept_clean",
+   "sequence": null,
+   "kind": "illumination_flicker",
+   "seed": 43,
+   "size": "0.1",
+   "repairing_states": [],
+   "states": 35
+  }
+ },
+ "counts": {
+  "accept_clean": 0,
+  "accept_repaired": 4,
+  "decline": 20
+ },
+ "complete": true,
+ "stop": false
+}
