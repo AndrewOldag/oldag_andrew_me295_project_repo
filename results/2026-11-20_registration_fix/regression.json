@@ -1,0 +1,207 @@
+{
+ "k": {
+  "inversions": 1.5,
+  "gap_ratio": 1.5,
+  "lateral": 3.0
+ },
+ "rods": [
+  {
+   "rod": "v3_growth_zone_rigid_drift_z0.5_s26",
+   "v1_tag": "st1_reg2p400",
+   "v2_tag": "st1_regv2p400b17",
+   "v1": {
+    "closure": 0.3135582818499649,
+    "all_pass": true,
+    "good": true,
+    "outcome": "accept_repaired correct",
+    "gate": true,
+    "integrity_rel_inversions": 1.0,
+    "integrity_rel_gap_ratio": 0.9988045805465654,
+    "integrity_rel_lateral": 1.9500133567181088,
+    "registration_plausible": NaN,
+    "final_rotation_deg": 0.39,
+    "final_band_motion_px": null,
+    "plausible": null
+   },
+   "v2": {
+    "closure": 0.20295540453848315,
+    "all_pass": false,
+    "good": true,
+    "outcome": "not accepted",
+    "gate": true,
+    "integrity_rel_inversions": 1.0,
+    "integrity_rel_gap_ratio": 1.001091060155373,
+    "integrity_rel_lateral": 2.24894341573205,
+    "registration_plausible": 1.0,
+    "final_rotation_deg": 0.382,
+    "final_band_motion_px": 8.16,
+    "plausible": true
+   }
+  },
+  {
+   "rod": "v3_growth_zone_rigid_drift_z0.5_s27",
+   "v1_tag": "st1_reg2p400",
+   "v2_tag": "st1_regv2p400b17",
+   "v1": {
+    "closure": 0.23603945531667625,
+    "all_pass": true,
+    "good": true,
+    "outcome": "accept_repaired correct",
+    "gate": true,
+    "integrity_rel_inversions": 1.0,
+    "integrity_rel_gap_ratio": 0.9954416949518604,
+    "integrity_rel_lateral": 1.826748039176381,
+    "registration_plausible": NaN,
+    "final_rotation_deg": 0.456,
+    "final_band_motion_px": null,
+    "plausible": null
+   },
+   "v2": {
+    "closure": 0.21569600349773035,
+    "all_pass": true,
+    "good": true,
+    "outcome": "accept_repaired correct",
+    "gate": true,
+    "integrity_rel_inversions": 1.0,
+    "integrity_rel_gap_ratio": 0.9924988001015954,
+    "integrity_rel_lateral": 2.2191454074757373,
+    "registration_plausible": 1.0,
+    "final_rotation_deg": 0.413,
+    "final_band_motion_px": 8.15,
+    "plausible": true
+   }
+  },
+  {
+   "rod": "v3_growth_zone_rigid_drift_z0.5_s28",
+   "v1_tag": "st1_reg2p400",
+   "v2_tag": "st1_regv2p400b17",
+   "v1": {
+    "closure": 0.4526808798984154,
+    "all_pass": true,
+    "good": true,
+    "outcome": "accept_repaired correct",
+    "gate": true,
+    "integrity_rel_inversions": 1.0,
+    "integrity_rel_gap_ratio": 0.9996893744836773,
+    "integrity_rel_lateral": 1.680977117516155,
+    "registration_plausible": NaN,
+    "final_rotation_deg": 0.431,
+    "final_band_motion_px": null,
+    "plausible": null
+   },
+   "v2": {
+    "closure": 0.13269092051101605,
+    "all_pass": true,
+    "good": true,
+    "outcome": "accept_repaired correct",
+    "gate": true,
+    "integrity_rel_inversions": 1.0,
+    "integrity_rel_gap_ratio": 0.9981407606193068,
+    "integrity_rel_lateral": 1.9462712893076064,
+    "registration_plausible": 1.0,
+    "final_rotation_deg": 0.358,
+    "final_band_motion_px": 8.14,
+    "plausible": true
+   }
+  },
+  {
+   "rod": "v3_growth_zone_bad_stage_correction_z3_s26",
+   "v1_tag": "st1_reg2p400",
+   "v2_tag": "st1_regv2p400b6",
+   "v1": {
+    "closure": 0.12297113491508539,
+    "all_pass": true,
+    "good": true,
+    "outcome": "accept_repaired correct",
+    "gate": true,
+    "integrity_rel_inversions": 1.0,
+    "integrity_rel_gap_ratio": 0.9997792026814166,
+    "integrity_rel_lateral": 1.2409715807926955,
+    "registration_plausible": NaN,
+    "final_rotation_deg": 0.008,
+    "final_band_motion_px": null,
+    "plausible": null
+   },
+   "v2": {
+    "closure": 0.0715237723671297,
+    "all_pass": false,
+    "good": true,
+    "outcome": "not accepted",
+    "gate": true,
+    "integrity_rel_inversions": 1.0,
+    "integrity_rel_gap_ratio": 1.0002821455362685,
+    "integrity_rel_lateral": 1.1267366061135837,
+    "registration_plausible": 1.0,
+    "final_rotation_deg": 0.008,
+    "final_band_motion_px": 2.81,
+    "plausible": true
+   }
+  },
+  {
+   "rod": "v3_growth_zone_bad_stage_correction_z3_s27",
+   "v1_tag": "st1_reg2p400",
+   "v2_tag": "st1_regv2p400b6",
+   "v1": {
+    "closure": 0.0560624285300589,
+    "all_pass": true,
+    "good": true,
+    "outcome": "accept_repaired correct",
+    "gate": true,
+    "integrity_rel_inversions": 1.0,
+    "integrity_rel_gap_ratio": 0.9978047698299976,
+    "integrity_rel_lateral": 1.4538956759522803,
+    "registration_plausible": NaN,
+    "final_rotation_deg": 0.016,
+    "final_band_motion_px": null,
+    "plausible": null
+   },
+   "v2": {
+    "closure": 0.044227654440303,
+    "all_pass": true,
+    "good": true,
+    "outcome": "accept_repaired correct",
+    "gate": true,
+    "integrity_rel_inversions": 1.0,
+    "integrity_rel_gap_ratio": 0.9964567884094713,
+    "integrity_rel_lateral": 1.2281777336870234,
+    "registration_plausible": 1.0,
+    "final_rotation_deg": 0.009,
+    "final_band_motion_px": 2.84,
+    "plausible": true
+   }
+  },
+  {
+   "rod": "v3_growth_zone_bad_stage_correction_z3_s28",
+   "v1_tag": "st1_reg2p400",
+   "v2_tag": "st1_regv2p400b6",
+   "v1": {
+    "closure": 0.1772348626862398,
+    "all_pass": true,
+    "good": true,
+    "outcome": "accept_repaired correct",
+    "gate": true,
+    "integrity_rel_inversions": 1.0,
+    "integrity_rel_gap_ratio": 0.9992060904359903,
+    "integrity_rel_lateral": 1.4249499480525896,
+    "registration_plausible": NaN,
+    "final_rotation_deg": -0.009,
+    "final_band_motion_px": null,
+    "plausible": null
+   },
+   "v2": {
+    "closure": 0.1052520015166713,
+    "all_pass": false,
+    "good": true,
+    "outcome": "not accepted",
+    "gate": true,
+    "integrity_rel_inversions": 1.0,
+    "integrity_rel_gap_ratio": 0.9982301868954292,
+    "integrity_rel_lateral": 1.171922404050023,
+    "registration_plausible": 1.0,
+    "final_rotation_deg": 0.002,
+    "final_band_motion_px": 2.83,
+    "plausible": true
+   }
+  }
+ ]
+}

@@ -247,7 +247,17 @@ def integrity_ratios(remedied, base):
     with np.errstate(divide="ignore", invalid="ignore"):
         return {"inversions": float((r["integrity_inversions"] + 1) / (b["integrity_inversions"] + 1)),
                 "gap_ratio": float(np.divide(r["integrity_gap_ratio"], b["integrity_gap_ratio"])),
-                "lateral": float(np.divide(r["integrity_lateral"], b["integrity_lateral"]))}
+                "lateral": float(np.divide(r["integrity_lateral"], _lateral_base(b["integrity_lateral"])))}
+
+
+def _lateral_base(base):
+    """A base lateral scatter of exactly 0 (field-level synthetic rods, no tracker noise) is replaced by the
+    absolute clean-rod threshold `lateral_px` (R4 rule), so the ratio stays finite. Tracker tracks never have
+    exactly 0, so no real or tracked synthetic decision changes (Andrew, 2026-11-22)."""
+    if base == 0:
+        with open(INTEGRITY_FILE) as fh:
+            return float(yaml.safe_load(fh)["lateral_px"])
+    return base
 
 
 def relative_integrity(rec_remedied, rec_base, k=None):

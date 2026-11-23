@@ -1,12 +1,19 @@
 # register_frames fix and track-integrity check (spec 2026-11-20 R, task c031)
 
-2026-11-20. Proposal `docs/proposals/2026-11-20_registration-fix.md` (committed before any run). No tracker run, no cluster job, no LLM run so far.
+2026-11-20 to 2026-11-22. Proposal `docs/proposals/2026-11-20_registration-fix.md` (committed before any run). Cluster CPU jobs: R1 (1 job), R5 (1 array, 12 tasks). No tracker run on this machine, no LLM run.
 
 ## Flagged window
 - 0711_c5__w6-8 (batch 2, control), c027: closure 22.83 px/h -> `register_frames` v1 (`st1_reg2p1075`) -> 14.03 px/h, accepted by the diagnostician; record voided by dispatcher (inbox 49)
 - v1 report saved with the track: final rotation 9.23 deg, shift 100.6 px, smallest pair ECC 0.967. No per-pair values were saved
 
-## R1 diagnosis (part done)
+## R1 diagnosis
+- One cluster CPU job (7841039, 2026-11-22) of `scripts/remote/register_diag.py` on the window's 80 frames, band from 1075 px; output `register_diag_0711_c5__w6-8.json` (md5 equal on cluster, storage and here). The staged root copy was then deleted on the cluster (5.3 GB, logged in DELETED.log)
+- Chained (v1): its chain equals `register_frames` exactly; final rotation 9.23 deg = the sum of the 79 pair rotations (mean 0.117 deg, mean absolute 0.23 deg, largest 1.00 deg). Every pair fit converged (ECC min 0.967, median 0.977); pair band motion median 0.52 px, largest 1.53 px. No single bad pair: a small per-pair bias of one sign adds up
+- Path of the chained rotation: 2.4 deg by frame 10, 5.1 by 20, 6.3 by 50, 9.2 by 70 (9.23 at 79). Band-centre motion of the last map 21.7 px (under the v2 bound of 46 px); rotation 9.23 deg (over the 2 deg bound)
+- Direct to frame 0 (v2): erratic on frames 1-20 (-1.5 to 6.0 deg, ECC 0.88-0.97), then ECC fails on frames 21-80 (59 of 79 fits); the map stays at the frame-20 fit (6.02 deg, band motion 3.9 px). Report `plausible: false` (6.02 deg over 2 deg): v2 would roll this remedy back
+- Answer: chaining gives the 9.23 deg. The direct fit does not find one rigid motion of the basal band over the window either; the band does not stay rigidly like itself relative to frame 0 for more than about 20 frames
+- v2 counts a failed fit only as a missing ECC value (`per_frame.ecc` null); it is not part of the plausibility bound. Here the rotation bound trips anyway. Reported, not changed
+- Before the job, integrity of the window's tracks on this machine
 - Integrity of the window's tracks on this machine (`flagged_window_integrity.json`):
 
 | Track | Inversions | Gap ratio | Lateral, px |
@@ -15,7 +22,6 @@
 | `register_frames` v1 `st1_reg2p1075` | 798 | 6.43 | 15.26 |
 
 - The registered track lost point order in most frames; closure did not see it
-- Per-pair and direct fits: `scripts/remote/register_diag.py`, written and tested (its chain equals `register_frames`), not run. Needs one cluster CPU job (see Open)
 - Synthetic evidence for the chaining cause (`tests/test_register_v2.py`, 24 frames, rotation 0.05 deg per frame plus shift, noise): direct fit error 0.03 deg, 0.04 px; chained v1 error 1.2 deg. Per-pair errors add up along the chain
 
 ## R2 register_v2
@@ -57,10 +63,29 @@
 - Flagged window, v1: inversions ratio 199.8, gap ratio 3.65, lateral 14.9: fails. Its v2 track is not back yet (dispatcher's register_v2 retracks)
 - Over the 44 pairs: median ratio inversions 4.8, gap ratio 1.45, lateral 2.4
 
+## R5 synthetic regression (2026-11-22)
+- Rods: the 6 freeze v4 rods labelled accept_repaired with `register_frames` (rigid_drift z0.5, bad_stage_correction z3; seeds 26-28), each with its moved copy. Re-rendered on this machine; truth equal to the freeze v4 truth within 1e-12 (the re-render differs by about 1e-18)
+- `register_v2` settings from `apply_remedy` on the cached unremedied run: band from 400 px; bound 17 px (rigid drift), 6 px (bad stage correction)
+- 12 tracker runs on the cluster CPU, one array through `scripts/rod_jobs.py` (`scripts/synth/register_v2_regression.py`): 12 fetched, 0 failed, md5 checked; worst case $0.144
+- Outcome by the freeze v4 rule; v1 tracks are the cached freeze v4 ones (`regression.md`, `regression.json`):
+
+| Rod | v1 | v2 | v2 closure, px/h | v2 rigid invariance, %/h | v1 rigid invariance, %/h |
+| :-- | :-- | :-- | --: | --: | --: |
+| rigid_drift s26 | accept_repaired correct | not accepted | 0.20 | 2.75 (fail) | 1.69 |
+| rigid_drift s27 | accept_repaired correct | accept_repaired correct | 0.22 | 1.53 | 0.80 |
+| rigid_drift s28 | accept_repaired correct | accept_repaired correct | 0.13 | 1.98 | 1.08 |
+| bad_stage s26 | accept_repaired correct | not accepted | 0.07 | 3.88 (fail) | 1.67 |
+| bad_stage s27 | accept_repaired correct | accept_repaired correct | 0.04 | 1.71 | 0.80 |
+| bad_stage s28 | accept_repaired correct | not accepted | 0.11 | 2.72 (fail) | 1.12 |
+
+- v1 repairs 6 of 6; v2 repairs 3 of 6. v2 closure is lower than v1 on all 6; v2 rigid invariance (rod against its moved copy) is higher on all 6 and over the synthetic gate (2.0 %/h) on 3. All 12 measurements (v1 and v2) are good against truth; the 3 v2 rods are declined by the check, not by error
+- All 6 v2 registrations plausible (rotation 0.002-0.41 deg, band motion 2.8-8.2 px, under the bounds); the option A gate passes all 12
+- v2 fits a rotation of 0.36-0.41 deg on the rigid-drift rods. Not explained yet
+- On real windows rigid invariance is reported, not gating (real profile), so this check does not decline real windows
+- Known limit (Andrew, 2026-11-22: register_v2 kept as the registration remedy, fixed list unchanged): on the synthetic register rods v2 repairs 3 of 6 against 6 of 6 for v1, because rigid invariance against the moved copy is higher after v2. Listed as a failure mode for Lab report 4
+
 ## Open
-- R1 per-pair run: one sbatch of `register_diag.py` through the relay (planning, inbox 24)
-- Flagged window v2 through the gate, once its register_v2 track is fetched
-- R5: compound's synthetic-rod job kind on main
+- Flagged window v2 track through the option A gate, once dispatcher's register_v2 retrack of it is fetched (in its c027 cycle on 2026-11-22)
 
 ## Commands
 - `python -m pytest tests/test_integrity.py tests/test_executors.py` (agents env); `tests/test_register_v2.py` in the tracker env with the tracker on PYTHONPATH
