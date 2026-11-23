@@ -7,7 +7,7 @@ state: working
 branch: wip/audit
 host: VM (read-only, no cluster jobs)
 created: 2026-11-23 13:10
-last_update: 2026-11-23 13:34
+last_update: 2026-11-23 13:44
 blocker: none
 done_marker: results/2026-11-23_audit/README.md
 ---
@@ -17,7 +17,7 @@ Spec `docs/specs/2026-11-23_audit.md`.
 ## Parts
 - [x] 1 rules over history
 - [x] 2 equations
-- [ ] 3 freezes and held-out sets
+- [x] 3 freezes and held-out sets
 - [ ] 4 results recompute
 - [ ] 5 decisions
 - [ ] 6 lab reports and README
