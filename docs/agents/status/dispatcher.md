@@ -1,14 +1,19 @@
 # dispatcher
-Updated: 2026-11-14 14:00 (local)
+Updated: 2026-11-22 16:34 (local)
 Lane: course
 Branch: wip/dispatcher
-Last inbox item done: 45
-State: ready to merge
-Now: task c026 done with what ran: remedy tree on 38 of 84 batch-2 failing windows; diagnostician not run (Andrew, 2026-11-14). Results `results/2026-11-12_batch2_agents/`
+Last inbox item done: 55 (item 46, task c027, still working)
+State: working
+Now: c027 cycle running detached (register_v2 and remaining retracks, status line after every group); the run restarts by itself when the wave is done
 Done since last update:
-- Tree stopped at 38 when the cluster master went down about 23:10 on 2026-11-13: accepted after repair 9, declined 28, error 1; fixed script declines all 84
-- README, tables.md, windows.csv (outcome and check values only), example_traces.md (plane-sections values masked); decisions; log in docs/running_log_pending/dispatcher.md
-- Fixes this task: Link.run read to EOF (ca66ae6), Link.run 30 min channel timeout, clear_root .npz only, audit-only multi-window roots, tree real-profile gates (37d108b)
-- Suite: 400 passed, 2 skipped
+- Auto 11-22 16:34 (from logs): run 1189 records, accept by rule 1034, decline by diagnostician 23, decline by rule 58, paused 74; LLM calls 491; run ended: done; windows this start 74; LLM calls 491. Queue 430 tasks: done 3, failed 12, fetched 415; cycle last: 2026-11-22 16:34 fetch: fetched 1, failed 0, not finished 0; groups cleared g019
+- Item 55: main merged (option A gate, rod-jobs). `integrity_gate(relative_integrity(remedied, base, load_relative_k()))` wired into `Slice.apply_remedy`, which the diagnostician and the remedy tree both use; a failure rolls back as `rolled back: integrity: <change>`; test added. Suite 445 passed, 3 skipped
+- Gate applies to tracker tracks only: on a field-level synthetic rod (in-process runner) the base lateral scatter is exactly 0, the ratio is infinite and every midline remedy fails (`test_info_p1_p5` failed that way). Real-calib may want to handle a zero base in `relative_integrity`
+- Remedy hold lifted. A failing window now waits, before any LLM call, until every one of its single-remedy tracks is cached (register_v2 is not yet), so no calls are spent twice
+- Cycle started 14:34: 0727_cc7 leftover in c019 cleared after its md5 check (9 output files, 4.7 GB, c019/DELETED.log); g016 fetched (24 tracks, md5 checked); g017 submitted, the first register_v2 group (4 tasks, array 7841537), 2 fetched
+- Fixed: `stage_root`'s cap check refused 0714_c4 (the cluster copy is larger than the storage `du`); packing now uses 1.1 x and a refusal submits the roots already staged; test (queue tests 16 passed)
+- Run: 1,189 records: 1,034 accepted by rule, 58 declined by rule, 23 declined by the diagnostician with no remedy tried, 74 paused (the 12 held records among them). 55 roots audited; LLM calls 491 of 900
+- Detached `after_wave.sh` reruns run_all.py when the cycle logs `wave done`: paused windows from step 0 with the diagnostician and the gate, then the auditor runs of the roots that become complete (the 8 held roots among them)
+- Cluster folder 28.5 GB of 30 GB at 14:28 (before g016's clear). Ledger spent $7.630
 Needs Andrew:
-- A staged root copy may remain on the cluster from the stop (master down); check and clear after an md5 check, or let the next c026 run clear it
+- Keep the cluster master up until the cycle logs `wave done` (about 100 register_v2 and 120 other retracks left, in groups of 3-4 roots)

@@ -32,7 +32,7 @@ import json
 import re
 import shlex
 import sys
-from collections import OrderedDict
+from collections import Counter, OrderedDict
 from dataclasses import asdict
 from pathlib import Path
 
@@ -51,8 +51,11 @@ BATCH1 = ROOT / "results" / "2026-10-25_full_batch_1" / "windows.csv"
 CAP_MB = 30 * 1024
 LIMITS = {"prep": "00:15:00", "long": "00:45:00", "short": "00:15:00"}   # spec A1: register_frames 45 min
 ARRAY_THROTTLE = 16
-# Inbox item 49 (2026-11-20): no register_frames retrack is submitted until `register_v2` is on main
+# Inbox items 49 and 53: register_frames v1 tracks are never submitted (register_v2 replaces them)
 REGISTER_HOLD = True
+STUCK_S = 2 * 3600        # inbox item 52: a task live this long after its group's submit is cancelled and failed
+MAX_FAILS = 1             # inbox item 52: a failed task is requeued once
+STAGE_MARGIN = 1.1        # cluster size of a staged root over its storage `du`, upper bound used for packing
 JOB_FIELDS = ["job", "window", "root", "from_h", "to_h", "which", "kind", "settings"]
 QUEUE_FIELDS = JOB_FIELDS + ["group", "array", "task", "state", "error", "md5", "fetched"]
 FINAL = ("fetched", "failed", "done")
@@ -83,6 +86,11 @@ def write_csv(path, rows, fields):
         w.writeheader()
         w.writerows({k: r.get(k, "") for k in fields} for r in rows)
     tmp.replace(path)
+
+
+def is_register_v1(row):
+    d = json.loads(row["settings"]) if row.get("settings") else {}
+    return bool(d.get("register")) and d.get("register_version", 1) != 2
 
 
 def settings_of(row):
@@ -225,6 +233,9 @@ class Remote:
                 res[int(m.group(1))] = (p[1].split()[0], p[2])
         return res
 
+    def cancel(self, array, task):
+        self.relay.run(f"scancel {q(array)}_{int(task)}", check=False)
+
     def err_tail(self, name, array, task):
         return self.relay.run(f"tail -3 {q(self.work)}/logs/{q(name)}_{array}_{task}.err 2>/dev/null",
                               check=False).decode(errors="replace").strip()[-300:]
@@ -320,11 +331,15 @@ def submit(runner, remote, job_rows_, state=STATE, cap_mb=CAP_MB, log=print):
         return "connection down"
     queue = read_csv(state / "queue.csv")
     queued = {r["job"] for r in queue if r["state"] != "failed"}
-    held = [r for r in job_rows_ if REGISTER_HOLD and r["kind"] == "long"]
+    held = [r for r in job_rows_ if REGISTER_HOLD and is_register_v1(r)]
     if held:
-        log(f"{len(held)} register_frames jobs held (inbox item 49; register_v2 pending)")
+        log(f"{len(held)} register_frames v1 jobs held (inbox items 49, 53)")
+    fails = Counter(r["job"] for r in queue if r["state"] == "failed")
+    gave_up = {j for j, n in fails.items() if n > MAX_FAILS}
+    if gave_up:
+        log(f"{len(gave_up)} jobs failed {MAX_FAILS + 1} times; not requeued")
     todo = [r for r in job_rows_ if r["job"] not in queued and not runner.cache_path_from_name(r["job"]).exists()
-            and not (REGISTER_HOLD and r["kind"] == "long")]
+            and not (REGISTER_HOLD and is_register_v1(r)) and r["job"] not in gave_up]
     if not todo:
         log("nothing to submit")
         return "nothing to submit"
@@ -335,7 +350,9 @@ def submit(runner, remote, job_rows_, state=STATE, cap_mb=CAP_MB, log=print):
     try:
         room = max(0, cap_mb - remote.folder_mb())
         staged = set(remote.staged())               # already on the cluster: no new space (a resubmit after a failure)
-        sizes = [(root, 0 if root in staged else remote.root_mb(runner.windows[rows[0]["window"]]["imgdir"]))
+        # storage `du` is under the size on the cluster file system (0714_c4, 2026-11-22): pack with a 10 % margin
+        sizes = [(root, 0 if root in staged else
+                  int(STAGE_MARGIN * remote.root_mb(runner.windows[rows[0]["window"]]["imgdir"])))
                  for root, rows in by_root.items()]
         groups = pack_groups(sizes, room)
         if not groups:
@@ -344,9 +361,18 @@ def submit(runner, remote, job_rows_, state=STATE, cap_mb=CAP_MB, log=print):
             return "no room"
         work, tag = runner.ccfg["work_dir"], runner.tag
         gid = f"g{1 + max([int(r['group'][1:]) for r in queue] or [0]):03d}"
-        rows = [r for root in groups[0] for r in by_root[root]]
+        done_roots = []
         for root in groups[0]:
-            remote.stage(root, runner.windows[by_root[root][0]["window"]]["imgdir"])
+            try:
+                remote.stage(root, runner.windows[by_root[root][0]["window"]]["imgdir"])
+            except Exception as e:                   # noqa: BLE001 - the cap check of stage_root: stage no more
+                if "cluster folder cap" not in str(e) or not done_roots:
+                    raise
+                log(f"{root}: {str(e)[-80:]}; group submitted with {len(done_roots)} roots")
+                break
+            done_roots.append(root)
+        groups[0] = done_roots
+        rows = [r for root in groups[0] for r in by_root[root]]
         for wid in sorted({r["window"] for r in rows}):
             remote.push_midline(runner.midline_path(_window(wid)), f"{work}/midline/{wid}{tag}_netmid.npz")
         prep = [{**{k: r[k] for k in ("window", "root", "from_h", "to_h")}, "job": f"prep_{r['window']}",
@@ -405,7 +431,7 @@ def _window(wid):
     return RealWindow(root, float(a), float(b))
 
 
-def fetch(runner, remote, state=STATE, log=print):
+def fetch(runner, remote, state=STATE, log=print, clock=datetime.datetime.now):
     """Returns a one-line status. See the module docstring."""
     queue = read_csv(state / "queue.csv")
     if not queue:
@@ -418,6 +444,10 @@ def fetch(runner, remote, state=STATE, log=print):
         return "connection down"
     work = runner.ccfg["work_dir"]
     counts = {"fetched": 0, "failed": 0, "running": 0}
+    t_group = {}
+    for line in (state / "groups.jsonl").read_text().splitlines() if (state / "groups.jsonl").exists() else []:
+        g = json.loads(line)
+        t_group.setdefault(g["group"], datetime.datetime.fromisoformat(g["time"]))
     try:
         for aid in sorted({r["array"] for r in queue if r["state"] not in FINAL}):
             states = remote.sacct(aid)
@@ -426,6 +456,12 @@ def fetch(runner, remote, state=STATE, log=print):
                     continue
                 st, _ = states.get(int(r["task"]), ("PENDING", ""))
                 if st in ("PENDING", "RUNNING", "REQUEUED", "CONFIGURING", "SUSPENDED", "COMPLETING"):
+                    t0 = t_group.get(r["group"])
+                    if t0 is not None and (clock() - t0).total_seconds() > STUCK_S:
+                        remote.cancel(aid, r["task"])
+                        r["state"], r["error"] = "failed", f"stuck over 2 h ({st}); cancelled"
+                        counts["failed"] += 1
+                        continue
                     r["state"] = st.lower()
                     counts["running"] += 1
                     continue

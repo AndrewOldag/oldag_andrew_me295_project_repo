@@ -169,3 +169,27 @@ def test_width_free_ratio_is_not_rolled_back():
     s = Slice(FieldRunner(), Rod("width_change"))
     r = s.apply_remedy({"fault": "width_change", "remedy": "use_width_free_ratio", "setting": None}, {})
     assert not r.get("rolled_back") and r["check_values"]["plane_sections"]["after"] is None
+
+
+def test_integrity_gate_rolls_back_a_scrambled_remedied_track():
+    """Dispatcher item 55: a remedied track whose points are out of order against the base track is rolled back."""
+    inner = FieldRunner()
+
+    class Scrambled:
+        form = "remote_job"                        # a tracker runner: the gate applies
+
+        def initial_settings(self, rod):
+            return inner.initial_settings(rod)
+
+        def measure(self, rod, settings):
+            m = inner.measure(rod, settings)
+            if settings == inner.initial_settings(rod):
+                return m
+            return replace(m, record=replace(m.record, centre=m.record.centre[:, ::-1]))   # tip and base swapped
+
+    s = Slice(Scrambled(), Rod("growth_zone"))
+    out = s.apply_remedy({"remedy": "smooth_midline", "setting": "light"}, {})
+    assert out["rolled_back"] and out["integrity"]["integrity_rel_inversions"]["passed"] is False
+    assert s.runs[-1][3].startswith("rolled back: integrity:") and s.runs[-1][0] == s.runs[0][0]
+    clean = Slice(FieldRunner(), Rod("growth_zone"))    # field-level rod: no tracker track, the gate does not apply
+    assert "integrity" not in clean.apply_remedy({"remedy": "smooth_midline", "setting": "light"}, {})

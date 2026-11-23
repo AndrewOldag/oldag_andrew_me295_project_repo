@@ -56,6 +56,8 @@ class FakeRemote:
         return self._root
 
     def stage(self, root, imgdir):
+        if root in getattr(self, "cap_refuses", ()):
+            raise JobFailed(f"{root}: staging 4650 MB would pass the 30720 MB cluster folder cap")
         self.calls.append(("stage", root))
 
     def staged(self):
@@ -84,6 +86,9 @@ class FakeRemote:
 
     def err_tail(self, name, array, task):
         return "Traceback: boom"
+
+    def cancel(self, array, task):
+        self.calls.append(("scancel", array, str(task)))
 
     def pull(self, cluster_path, storage_dir):
         name = cluster_path.rsplit("/", 1)[1]
@@ -161,7 +166,7 @@ def test_down_link_exit_0_no_state_change(setup, capsys):
 
 def test_submit_groups_by_room_and_arrays(setup):
     runner, state = setup
-    rem = FakeRemote(folder_mb=20000, root_mb=5000)                # room for 2 roots under 30 GB
+    rem = FakeRemote(folder_mb=19000, root_mb=5000)                # room for 2 roots under 30 GB (5500 MB packed)
     rows = rows_for(runner, ["r1__w0-2", "r2__w0-2", "r3__w10-12"])
     assert RQ.submit(runner, rem, rows, state=state) == "submitted g001"
     q = RQ.read_csv(state / "queue.csv")
@@ -311,3 +316,42 @@ def test_register_hold_submits_no_register_job(setup, monkeypatch):
     q = RQ.read_csv(state / "queue.csv")
     assert {r["kind"] for r in q} == {"short"}
     assert not [p for p in rem.cluster_files if "_long/" in p]
+
+
+def test_register_v2_submitted_while_v1_held(setup, monkeypatch):
+    runner, state = setup
+    monkeypatch.setattr(RQ, "REGISTER_HOLD", True)
+    v2 = TrackSettings(register=True, register_from_px=900, register_version=2, register_max_shift_px=50)
+    rows = rows_for(runner, ["r1__w0-2"]) + RQ.job_rows(runner, RQ._window("r1__w0-2"), v2)
+    RQ.submit(runner, FakeRemote(), rows, state=state)
+    jobs = {r["job"] for r in RQ.read_csv(state / "queue.csv") if r["kind"] == "long"}
+    assert jobs == {rows[-1]["job"]} and "regv2p900b50" in rows[-1]["job"]
+
+
+def test_stuck_task_cancelled_and_requeued_once(setup):
+    import datetime
+    runner, state = setup
+    rem = FakeRemote()
+    rows = rows_for(runner, ["r1__w0-2"], settings=(TrackSettings(stride=2),))
+    RQ.submit(runner, rem, rows, state=state)
+    a = RQ.read_csv(state / "queue.csv")[0]["array"]
+    rem.states[(a, 0)] = "RUNNING"
+    late = lambda: datetime.datetime.now() + datetime.timedelta(hours=3)        # noqa: E731
+    RQ.fetch(runner, rem, state=state, clock=late)
+    q = RQ.read_csv(state / "queue.csv")
+    assert q[0]["state"] == "failed" and q[0]["error"].startswith("stuck over 2 h")
+    assert ("scancel", a, "0") in rem.calls and rem.deleted == [f"{WORK}/data/r1.imgdir"]
+    assert RQ.submit(runner, rem, rows, state=state) == "submitted g002"          # requeued once
+    a2 = RQ.read_csv(state / "queue.csv")[-1]["array"]
+    rem.states[(a2, 0)] = "FAILED"
+    RQ.fetch(runner, rem, state=state)
+    assert RQ.submit(runner, rem, rows, state=state) == "nothing to submit"       # failed twice: not again
+
+
+def test_stage_cap_refusal_submits_the_staged_roots(setup):
+    runner, state = setup
+    rem = FakeRemote(folder_mb=0, root_mb=5000)
+    rem.cap_refuses = {"r2"}                                        # cluster copy larger than storage du
+    rows = rows_for(runner, ["r1__w0-2", "r2__w0-2", "r3__w0-2"])
+    assert RQ.submit(runner, rem, rows, state=state) == "submitted g001"
+    assert {r["root"] for r in RQ.read_csv(state / "queue.csv")} == {"r1"}

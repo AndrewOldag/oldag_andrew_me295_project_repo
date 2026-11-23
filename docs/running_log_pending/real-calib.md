@@ -33,3 +33,22 @@
 - Demo: `python scripts/integrity_thresholds.py relative --cache <freeze v4 cache>` -> k 1.5, 1.5, 3.0
 - Remaining: R1 sbatch when the master is open; flagged window v2 through the gate; R5 with compound's rod job kind
 - Bottlenecks: Andrew (cluster master); compound (rod job kind on main)
+
+## 2026-11-22 (build account, session real-calib, inbox item 26)
+- Done: merged origin/main (f12675c); own cluster work, code and stage folders for c031 (config git-ignored)
+- Done: R5 `scripts/synth/register_v2_regression.py`: 6 freeze v4 register rods and moved copies re-rendered (truth equal within 1e-12), 12 tracker runs in one cluster array (7840638) through `scripts/rod_jobs.py`, 12 fetched, 0 failed, worst case $0.144
+- Result: v1 repairs 6 of 6, register_v2 3 of 6; v2 closure lower on all 6 (0.04-0.22 px/h), v2 rigid invariance higher on all 6 and over 2.0 %/h on 3 (2.72, 2.75, 3.88); all 12 good against truth; all v2 plausible; option A gate passes all 12
+- Done: R1 job submitted (7841039, root 0711_c5 staged in the c031 stage folder, 10.7 GB); running at 14:45
+- Demo: `python scripts/synth/register_v2_regression.py report` -> the table in `results/2026-11-20_registration_fix/regression.md`
+- Remaining: fetch R1; clear the staged root after the output is md5-checked on storage; flagged window v2 through the gate; decisions; ready to merge
+- Bottlenecks: Andrew (R5 result: v2 vs v1 on rigid invariance); dispatcher (flagged window v2 track)
+
+## 2026-11-22 (build account, session real-calib, inbox item 27)
+- Done: merged origin/main (49bc3c1); R1 job 7841039 COMPLETED, output fetched (md5 equal on cluster, storage, VM)
+- Result R1: v1's 9.23 deg is the sum of 79 pair rotations (mean 0.117 deg, largest 1.0 deg, pair ECC min 0.967); direct-to-frame-0 fit erratic on frames 1-20 (up to 6.0 deg), ECC fails on 59 of 79 frames, plausible false
+- Done: staged root 0711_c5 deleted on the cluster (5.3 GB) after the md5 check, logged in DELETED.log
+- Done: R5 README states the known limit (Andrew keeps register_v2); decisions
+- Tests: 35 passed (integrity, executors, check_after_fix, record tests)
+- Demo: `results/2026-11-20_registration_fix/README.md` sections R1 and R5
+- Remaining: flagged window register_v2 track through the option A gate when dispatcher has fetched it; then ready to merge
+- Bottlenecks: dispatcher (register_v2 retracks in its c027 cycle)
