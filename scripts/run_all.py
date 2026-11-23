@@ -21,7 +21,8 @@ audit   Auditor runs for roots whose windows are all final; --final-now also tak
         over their final windows (the cut-off pass).
 report  scripts/run_all_report.py.
 
-Caps: 900 LLM calls for the diagnostician and the auditor together. A diagnostician window starts only if the calls
+Caps: 900 LLM calls for the diagnostician and the auditor together (`--llm-cap`; c027 restarted with 1,300 at 782
+calls, inbox item 59). A diagnostician window starts only if the calls
 so far plus its step limit (8) plus 5 per root still to audit stay within the cap. Free VM memory at least 3 GB
 before each window. A trace with the seat's session-limit message is set aside, not recorded, and the run stops.
 """
@@ -491,6 +492,7 @@ def main(argv=None):
     ap.add_argument("--tree")
     ap.add_argument("--stop-at")
     ap.add_argument("--final-now", action="store_true")
+    ap.add_argument("--llm-cap", type=int, default=LLM_CAP)
     a = ap.parse_args(argv)
     sys.stdout.reconfigure(errors="backslashreplace")
     rows = batch_rows()
@@ -511,7 +513,7 @@ def main(argv=None):
         print(run_tree_all(runner, a.run, a.out, stop_at))
         return 0
     from agents.launcher import Launcher
-    run = Run(runner, a.out, rows, launcher=Launcher(), stop_at=stop_at)
+    run = Run(runner, a.out, rows, launcher=Launcher(), cap=a.llm_cap, stop_at=stop_at)
     window_list_into(run)                     # every window of each root, so a root is audited only when complete
     if a.step == "audit":
         print(f"auditor runs: {run.audit(final_now=a.final_now)}; {run.stopping or ''}")

@@ -128,6 +128,7 @@ python scripts/run_all.py report --run staging/c027/run --tree staging/c027/tree
 ```
 - Needs: Setup steps 1-4 and `private/real_runner_c027.yaml`. `run` and `tree` read cached tracks only and need no cluster connection; a window whose track is not cached is paused and its settings go to `paused.jsonl` for `retrack_queue.py jobs --paused`. Rerun `run` after a `fetch` of the queue: finished windows are skipped
 - Proposal and caps: `docs/proposals/2026-11-18_integrated-run.md`. Tests: `python -m pytest tests/test_run_all.py`
+- LLM call cap: `--llm-cap N`, default 900. c027 was restarted with `--llm-cap 1300` on 2026-11-23 (inbox item 59, planning under Andrew's overnight authority): the run stopped at 782 calls with 33 windows paused and roots not yet audited; 1,300 covers 33 windows x step limit 8 plus the auditor reserve of 5 per remaining root on top of 782. Prompts, gate, thresholds, methods and windows unchanged
 
 ## Task board
 - One file per task in `tasks/` (format in `tasks/README.md`). Research-lane tasks use the same format in a folder outside every git repo

@@ -162,3 +162,22 @@ def test_register_hold_counts_registered_tracks_as_missing(tmp_path, monkeypatch
         r.measure(w, s)
     monkeypatch.setattr(RA, "REGISTER_HOLD", False)
     assert r.missing(w, s) == []
+
+
+@pytest.mark.parametrize("argv, cap", [([], 900), (["--llm-cap", "1300"], 1300)])
+def test_llm_cap_option(monkeypatch, argv, cap):
+    seen = {}
+
+    class FakeRun:
+        def __init__(self, *a, **k):
+            seen.update(k)
+            self.windows_of, self.stopping = {}, None
+
+        def audit(self, final_now=False):
+            return 0
+    monkeypatch.setattr(RA, "Run", FakeRun)
+    monkeypatch.setattr(RA, "batch_rows", lambda: {})
+    monkeypatch.setattr(RA, "make_runner", lambda config, rows: None)
+    monkeypatch.setattr(RA, "window_list", lambda: [])
+    monkeypatch.setitem(sys.modules, "agents.launcher", SimpleNamespace(Launcher=lambda: None))
+    assert RA.main(["audit", "--out", "x"] + argv) == 0 and seen["cap"] == cap
