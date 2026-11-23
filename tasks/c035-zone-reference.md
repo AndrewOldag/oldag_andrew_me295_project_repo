@@ -17,7 +17,7 @@ Spec `docs/specs/2026-11-23_zone-check-real-reference.md`.
 ## Parts
 - [done] Proposal `docs/proposals/2026-11-23_zone-reference.md` (seed, strata, threshold rule), before the draw
 - [done] Step 1: residual split (`pp_common_*`, `pp_shape_*`), tests 12 passed; synthetic: shape flags 15 of 15 at every shift (synthetic.md)
-- [todo] Step 2: sample of 24 accepted c027 windows
+- [done] Step 2: sample of 24 accepted c027 windows (sample.csv)
 - [todo] Step 3: overlays and index in `staging/c035_overlays/` (not pushed)
 - [todo] Step 4: Andrew's labels
 - [todo] Step 5: thresholds, Andrew approves

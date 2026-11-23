@@ -1,0 +1,25 @@
+window,root,condition,order,pool
+0721_c6__w0-2,0721_c6,control,1,368
+0708_c9__w8-10,0708_c9,control,2,368
+0714_c9__w20-22,0714_c9,control,3,368
+0714_c11__w2-4,0714_c11,control,4,368
+0721_c7__w6-8,0721_c7,control,5,368
+0727_cc3__w6-8,0727_cc3,control then control,1,42
+0727_cc5__w6-8,0727_cc5,control then control,2,42
+0727_cc1__w2-4,0727_cc1,control then control,3,42
+0727_cc4__w22-23.63,0727_cc4,control then control,4,42
+0714_m4__w20-22,0714_m4,mannitol,1,291
+0714_m8__w6-8,0714_m8,mannitol,2,291
+0708_m9__w18-20,0708_m9,mannitol,3,291
+0714_m9__w20-22,0714_m9,mannitol,4,291
+0714_m1__w18-20,0714_m1,mannitol,5,291
+0727_mc6__w2-4,0727_mc6,mannitol then control,1,272
+0721_m6__w8-10,0721_m6,mannitol then control,2,272
+0721_m12__w6-8,0721_m12,mannitol then control,3,272
+0721_m3__w10-12,0721_m3,mannitol then control,4,272
+0727_mc4__w18-20,0727_mc4,mannitol then control,5,272
+0727_mm4__w14-16,0727_mm4,mannitol then mannitol,1,61
+0727_mm2__w22-23.64,0727_mm2,mannitol then mannitol,2,61
+0727_mm7__w12-14,0727_mm7,mannitol then mannitol,3,61
+0727_mm6__w6-8,0727_mm6,mannitol then mannitol,4,61
+0727_mm3__w10-12,0727_mm3,mannitol then mannitol,5,61
