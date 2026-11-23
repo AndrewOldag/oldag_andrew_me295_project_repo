@@ -1,11 +1,12 @@
 # dispatcher
-Updated: 2026-11-23 01:00 (local)
+Updated: 2026-11-23 01:50 (local)
 Lane: course
 Branch: wip/dispatcher
 Last inbox item done: 58 (item 46, task c027, still working)
 State: working
-Now: c027 cycle running detached (status line after every group); after_wave.sh reruns the paused windows when the wave is done
+Now: wave done (cycle exited 01:00); after_wave.sh (pid 8208) runs the rerun of the paused windows and auditors: run_all.py (pid 676, since 01:03), log last written 01:45
 Done since last update:
+- Item 58 (01:45 start check): cycle.sh exited after `wave done` (01:00), as designed; after_wave.sh and one run_all.py are running. Last log lines: 0721_c1__w4-6 final decline, auditor 0721_c1 report; LLM calls 766 of 900. Nothing restarted; this session exits
 - Item 58 (00:45 start check): cycle.sh (pid 7820, since 14:34) and after_wave.sh (pid 8208, since 14:39) are running, one of each; cycle log last line 00:44 (g031: fetched 1, not finished 5). Nothing restarted; this session exits
 - Item 58 (23:46 start check): cycle.sh (pid 7820, since 14:34) and after_wave.sh (pid 8208, since 14:39) are running, one of each; cycle log last line 23:45 (g030: fetched 10, not finished 19; 63 jobs wait). Nothing restarted; this session exits
 - Item 58 (22:45 start check): cycle.sh (pid 7820, since 14:34) and after_wave.sh (pid 8208, since 14:39) are running, one of each; cycle log last line 22:44 (g028: 2 tasks not finished). Nothing restarted; this session exits
@@ -16,4 +17,4 @@ Done since last update:
 - Cycle log: 17:09 g020 cleared (12 register_v2 tasks fetched, md5 checked)
 - Run unchanged since the hold was lifted: 1,189 records, 74 paused waiting for their remedy tracks; LLM calls 491 of 900
 Needs Andrew:
-- Keep the cluster master up until the cycle logs `wave done` (about 6 h)
+- The wave is done (01:00); the cycle no longer needs the cluster master. The rerun is at 766 of 900 LLM calls; if it reaches the cap before the paused windows and auditors finish, it stops and this status says so
