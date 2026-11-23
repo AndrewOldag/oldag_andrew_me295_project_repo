@@ -1,14 +1,16 @@
 # compound
-Updated: 2026-11-23 04:55 (local)
+Updated: 2026-11-23 06:56 (local)
 Lane: course
 Branch: wip/compound
-Last inbox item done: 11
+Last inbox item done: 12
 State: working
-Now: item 10 step 4: c029b LLM methods running (detached runner from 03:47, now diagnostician repeat 2; 83 of 120 LLM runs written); arrays 7908864 and 7908996 queued for paused states
+Now: item 10 step 4: c029b LLM methods running (detached runner restarted 06:53, diagnostician repeat 2, then single agent repeat 2); about 24 LLM runs left of 120
 Done since last update:
-- Array 7902231 fetched, 6 of 6, 0 failed; rules rerun: remedy tree 2 paused runs redone from step 0; 1 paused again on a further state (low_texture_fast s60 st1_r21)
-- Arrays submitted after ledger check: 7908864 (2 runs, drift_low_texture s61 register_v2 state), 7908996 (2 runs, low_texture_fast s60 st1_r21); spend $8.25 of $15 before these, worst case $0.048
-- Rule-method runs committed: script 20 of 20, remedy tree 19 of 20 (8b4e232)
+- Runner had stopped at 04:57 on the account usage limit (2 runs set aside in runs/usage_limit/); restarted 06:53
+- Item 12: c029b missing-state runs set aside in runs/missing_state/ with pending.jsonl, redone from step 0 once the state is cached; set-aside runs count toward the cap (ba032f6, test added; 22 passed). 2 set aside (diagnostician drift_low_texture_mild s61 r0, r2); r0 redone (decline low_texture), r2 in this pass
+- Item 12: c029 README names the 3 runs, metrics with and without them; no conclusion changes (679a3e9)
+- Arrays 7908864 and 7908996 fetched: 4 of 4, 0 failed
+- Remedy tree low_texture_fast_mild s60 paused again on a third state (st1_r28); array 7919315 submitted (2 runs, worst case $0.024; spend before it about $8.30 of $15)
+- run_rules: a paused rule run leaves no partial trace (the tracked trace blocked the runner's clean-tree check)
 Needs Andrew:
-- Keep the cluster connection master open until arrays 7908864 and 7908996 are fetched
-- Decision: LLM runs whose remedy needs a state not cached do not pause; the agent gets a "Missing" tool error and finishes the run. c029b: 2 runs so far (diagnostician drift_low_texture s61 r0, r2). c029: 3 runs (diagnostician drift_jitter s40 r1; single agent low_texture_fast s42 r1, s43 r0), committed and reported as they are. Proposal: c029b set these runs aside in runs/missing_state/ (kept, not scored) and redo them from step 0 once the state is fetched; c029 stays unchanged, with one line naming the 3 runs in its README. Until you answer, both are kept and scored as written, and the count is reported beside the metrics
+- Keep the cluster connection master open until array 7919315 is fetched
