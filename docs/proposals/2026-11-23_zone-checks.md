@@ -10,12 +10,13 @@ real-calib, 2026-11-23. Committed before any run. Nothing below changes after th
 ## Check 1: plateau (`checker/zone_checks.py`, `plateau`)
 - Basal part, fixed rule: covered grid points with `s >= 2/3 s_end` (the basal third of the covered span)
 - `plateau_regr`: largest `|mean regr_mid|` over the basal part, %/h
-- `plateau_speed`: `|mean v_mid over the basal part - v_tip| / v_tip`. `v_tip` = net displacement of the midline tip in world coordinates (midline plus stage log) over the window, divided by the window duration, px/h
-- `v_tip` under 10 px/h: `plateau_speed` not computable (fixed non-growing rods); `plateau_regr` still computed
+- `plateau_speed`: `|mean v_mid over the basal part - v_tip| / v_tip`. `v_tip` = growth speed: change over the window of the arc length along the midline from the midline tip to the projection of the most basal centre point tracked in every frame, divided by the window duration, px/h
+- `v_tip` under 10 px/h, or no centre point tracked in every frame: `plateau_speed` not computable (fixed non-growing rods); `plateau_regr` still computed
+- Amended 2026-11-23, before any freeze v4 or real record was checked: the first draft took `v_tip` from the world path of the midline tip. That path includes the turn of the tip by bending: on the field-level rod `v3_bend24` (`measure/rod.py`, correct profile) it gave `plateau_speed` 0.37. Growth speed along the midline gives 0.0006 there
 - Flag: either value over its threshold
 
 ## Check 2: material-point prediction (`checker/zone_checks.py`, `particle_path`)
-- Tip-frame position of centre point `j` in frame `i`: `S_ij = s_c[i, j] + |midline[i, 0] - centre[i, 0]|` (arc length along the tracked chain plus the straight distance from the midline tip to the first chain point)
+- Tip-frame position of centre point `j` in frame `i`: `S_ij = s_c[i, j] + o_i` (arc length along the tracked chain plus `o_i`, the arc length along the frame's midline from its tip to the projection of the first chain point; amended with `v_tip` above, was the straight distance)
 - Seeds: centre points finite in frame 0 and in the last frame
 - Prediction: integrate `dS/dt = v(S)` from `S_0j` over the window, RK4 with 4 substeps per frame interval; `v` = the window-mean `v_mid` profile, linear between finite grid points, held at its last finite value past `s_end`, 0 below `s = 0`
 - Residual `e_j = S_pred,j - S_Tj`, px. Values: `pp_rms_px`, `pp_max_px` (max `|e_j|`); `pp_rms_rel` = `pp_rms_px` / RMS of the tracked tip-frame displacements `S_Tj - S_0j`; `pp_max_rel` = `pp_max_px` / the largest `|S_Tj - S_0j|`

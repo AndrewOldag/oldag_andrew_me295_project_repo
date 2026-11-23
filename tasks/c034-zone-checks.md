@@ -7,7 +7,7 @@ state: working
 branch: wip/zone-checks
 host: VM
 created: 2026-11-23 13:25
-last_update: 2026-11-23 13:35
+last_update: 2026-11-23 13:55
 blocker: none
 done_marker: results/2026-11-23_zone_checks/README.md
 ---
@@ -16,7 +16,7 @@ Spec `docs/specs/2026-11-23_growth-zone-checks.md`.
 
 ## Parts
 - [done] Proposal `docs/proposals/2026-11-23_zone-checks.md`, committed before any run
-- [todo] `checker/zone_checks.py`, tests
+- [done] `checker/zone_checks.py`, tests (10 passed)
 - [todo] Synthetic: clean and shifted freeze v4 rods; thresholds committed
 - [todo] Real: every c027 window, report-only
 - [todo] README, decisions, log; ready to merge
