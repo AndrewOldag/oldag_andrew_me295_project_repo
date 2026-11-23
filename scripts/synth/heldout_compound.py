@@ -23,7 +23,7 @@ import sys
 import time
 import traceback
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from dataclasses import replace
+from dataclasses import asdict, replace
 from itertools import combinations
 from pathlib import Path
 
@@ -44,6 +44,7 @@ FREEZE_TAG = "freeze-v4"                      # prompts and agents of freeze v4 
 OUT = ROOT / "results" / "2026-11-18_heldout_compound"
 CACHE = ROOT / "staging" / "tracks_c029"
 RODS = ROOT / "staging" / "rods_c029"
+PAUSED = ROOT / "staging" / "c029_queue" / "paused.jsonl"    # states a method run needed and the labels did not run
 GZ = "v3_growth_zone"
 SCORING_SEEDS = (40, 41, 42, 43)              # not used before (proposal, section 2)
 SIZING_SEEDS = (50, 51)
@@ -227,10 +228,14 @@ class LocalRunner(v3.V3Runner):
     def measure(self, rod, settings):
         st = replace(settings, width_free=False)
         if not v3.cached(rod, st) or v3.truth(rod) is None:
-            if not self.remote:
-                raise v3.Missing(rod, st)
-            rid, rid_m = self.render(rod), self.render(rod, moved=True)
-            self.track(rid, st), self.track(rid_m, st)
+            if tracker_failed(rod, st):        # the tracker failed on this setting in every cluster submit
+                raise NotAvailable("the tracker failed on these settings")
+            # since spec 2026-11-20 no VM tracking: the run pauses; the state goes to the cluster queue
+            # (compound_queue.py jobs --paused) and the run is redone from step 0 once it is cached
+            PAUSED.parent.mkdir(parents=True, exist_ok=True)
+            with PAUSED.open("a") as f:
+                f.write(json.dumps({"rod": rod.id(), "settings": asdict(st), "time": time.strftime("%F %T")}) + "\n")
+            raise v3.Missing(rod, st)
         return Measurement(from_tracker_npz(v3.out_file(rod, st)), from_tracker_npz(v3.out_file(rod, st, True)),
                            settings, v3.truth(rod))
 
@@ -414,6 +419,35 @@ def set_aside_limit_runs():
     return n
 
 
+def run_rules():
+    """v3.run_rules from the cache; a rod-method that needs a state not cached pauses (PAUSED) and runs again on
+    the next call, from step 0."""
+    out = OUT / "runs"
+    out.mkdir(parents=True, exist_ok=True)
+    done = paused = same = 0
+    for rod in scored_rods():
+        for m, fn in v3.RULES.items():
+            summ, trace = out / f"{v3.stem(m, rod)}_summary.json", out / f"{v3.stem(m, rod)}_trace.jsonl"
+            if summ.exists():
+                continue
+            trace.unlink(missing_ok=True)                    # local file of an unfinished rule run
+            try:
+                sl = v3.Slice(LocalRunner(), rod)
+                o = fn(sl, trace)
+                o2 = fn(v3.Slice(LocalRunner(), rod), None)    # second run from the cache: deterministic?
+            except v3.Missing as e:
+                paused += 1
+                print(f"{v3.stem(m, rod)}: paused, needs {e}", flush=True)
+                continue
+            v3.write_summary(summ, rod, sl, o, m, {"runner": "cluster tracks, VM checker"})
+            ident = (o2.status, o2.steps, o2.args) == (o.status, o.steps, o.args)
+            same += ident
+            done += 1
+            with (out / "deterministic.jsonl").open("a") as f:
+                f.write(json.dumps({"run": v3.stem(m, rod), "identical": ident}) + "\n")
+    print(f"rule-method runs written {done}, paused {paused}; second runs identical {same} of {done}")
+
+
 def labels_committed():
     f = OUT / "labels.json"
     return f.exists() and not v3.git("status", "--porcelain", "--", str(f)) and \
@@ -467,8 +501,7 @@ def main():
         if v3.git("status", "--porcelain", "--untracked-files=no"):
             sys.exit("tracked files are modified; commit first (each run records the commit)")
         if a.cmd == "rules":
-            v3.V3Runner = lambda remote=False: LocalRunner(remote=True)     # stacked tree states tracked on demand
-            v3.run_rules()
+            run_rules()
             return
         if a.method is None or a.repeat is None:
             ap.error("--method and --repeat are required")

@@ -44,9 +44,26 @@ def config_path():
     sys.exit("private/compound_cluster.yaml missing")
 
 
-def job_rows(equivalence=False):
+def paused_rows():
+    """Rows for the states paused method runs need (heldout_compound.PAUSED), rod and moved copy, not cached."""
+    rows, seen = [], set()
+    for line in (hc.PAUSED.read_text().splitlines() if hc.PAUSED.exists() else []):
+        d = json.loads(line)
+        st = TrackSettings(**d["settings"])
+        for rid in (d["rod"], d["rod"] + "_moved"):
+            name = f"{rid}__{st.tag()}.npz"
+            if name in seen or Path(f"{hc.CACHE / name}.ok").exists():
+                continue
+            seen.add(name)
+            rows.append({"job": name, "rid": rid, "settings": json.dumps(asdict(st), sort_keys=True), "sub": "tracks"})
+    return rows
+
+
+def job_rows(equivalence=False, paused=False):
     """[{job, rid, settings, sub}]: one row per tracker run not cached."""
     hc.point_v3_here()
+    if paused:
+        return paused_rows()
     rows = []
     if equivalence:
         st = TrackSettings(stride=1)
@@ -93,6 +110,7 @@ def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("step", choices=["jobs", "submit", "fetch", "equivalence"])
     ap.add_argument("--equivalence", action="store_true")
+    ap.add_argument("--paused", action="store_true", help="the states paused method runs need")
     a = ap.parse_args(argv)
     STATE.mkdir(parents=True, exist_ok=True)
     if a.step == "equivalence":
@@ -101,7 +119,7 @@ def main(argv=None):
         print(json.dumps(res))
         return 0
     if a.step == "jobs":
-        rows = job_rows(a.equivalence)
+        rows = job_rows(a.equivalence, a.paused)
         print(f"{len(rows)} tracker runs, {len({r['rid'] for r in rows})} array tasks; "
               f"worst case ${rod_jobs.worst_case_usd(rows)}")
         return 0
@@ -115,7 +133,7 @@ def main(argv=None):
         if not a.equivalence and not all(r.get("pass") for r in json.loads((STATE / "equivalence.json").read_text())):
             sys.exit("equivalence failed: stop, Needs Andrew")
         mover = rod_jobs.RodMover(runner, sdir, hc.RODS)
-        print(rod_jobs.submit(runner, remote, mover, job_rows(a.equivalence), STATE, prefix=PREFIX))
+        print(rod_jobs.submit(runner, remote, mover, job_rows(a.equivalence, a.paused), STATE, prefix=PREFIX))
     else:
         print(rod_jobs.fetch(runner, remote, STATE, sdir, local_dir, prefix=PREFIX))
     return 0
