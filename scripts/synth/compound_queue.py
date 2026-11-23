@@ -5,12 +5,15 @@
   python scripts/synth/compound_queue.py submit [--equivalence]
   python scripts/synth/compound_queue.py fetch
   python scripts/synth/compound_queue.py equivalence               # cluster vs VM tracks of the 2 check rods
+  python scripts/synth/compound_queue.py --set c029b jobs|submit|fetch   # supplement c029b (heldout_supplement.py)
 
 Jobs: every label state of heldout_compound.label_states not cached, on the rod and its moved copy. register_frames
 states use `register_v2` (measure/remedies.apply_remedy; inbox compound items 5-6). `--equivalence`: the
 unremedied run of 2 rods already tracked on the VM, into `tracks_eq`; `equivalence` compares them (limit 1e-6 px,
 as 2026-10-23). Settings: private/compound_cluster.yaml (own cluster work and code folders; the c027 ledger, cap
 and spend stop). Rods: staging/rods_c029 (heldout_compound.py render).
+`--set c029b`: the 48 supplement candidates (staging/rods_c029b, tracks_c029b, queue staging/c029b_queue, job
+prefix c029b); the cluster vs VM equivalence of c029 holds for it (same cluster folders, code and tracker).
 """
 import argparse
 import json
@@ -32,6 +35,16 @@ STATE = ROOT / "staging" / "c029_queue"
 EQ_RODS = ("v3_growth_zone_drift_low_texture_s40", "v3_growth_zone_focus_drift_z3_s40")
 EQ_DIR = STATE / "equivalence"
 PREFIX = "c029"
+EQ_FILE = STATE / "equivalence.json"
+
+
+def use_set(name):
+    """Point this queue at a test set: c029 (default) or the supplement c029b."""
+    global STATE, PREFIX
+    if name == "c029b":
+        import heldout_supplement
+        heldout_supplement.use()
+        STATE, PREFIX = ROOT / "staging" / "c029b_queue", "c029b"
 
 
 def config_path():
@@ -111,7 +124,11 @@ def main(argv=None):
     ap.add_argument("step", choices=["jobs", "submit", "fetch", "equivalence"])
     ap.add_argument("--equivalence", action="store_true")
     ap.add_argument("--paused", action="store_true", help="the states paused method runs need")
+    ap.add_argument("--set", choices=["c029", "c029b"], default="c029")
     a = ap.parse_args(argv)
+    use_set(a.set)
+    if a.set != "c029" and (a.equivalence or a.step == "equivalence"):
+        sys.exit("equivalence is checked on c029 only")
     STATE.mkdir(parents=True, exist_ok=True)
     if a.step == "equivalence":
         res = equivalence()
@@ -128,9 +145,9 @@ def main(argv=None):
     remote = rq.Remote(runner)
     sdir = yaml.safe_load(cfg.read_text())["c029_storage_dir"]
     if a.step == "submit":
-        if not a.equivalence and not (STATE / "equivalence.json").exists():
+        if not a.equivalence and not EQ_FILE.exists():
             sys.exit("equivalence first: submit --equivalence, fetch, equivalence")
-        if not a.equivalence and not all(r.get("pass") for r in json.loads((STATE / "equivalence.json").read_text())):
+        if not a.equivalence and not all(r.get("pass") for r in json.loads(EQ_FILE.read_text())):
             sys.exit("equivalence failed: stop, Needs Andrew")
         mover = rod_jobs.RodMover(runner, sdir, hc.RODS)
         print(rod_jobs.submit(runner, remote, mover, job_rows(a.equivalence, a.paused), STATE, prefix=PREFIX))

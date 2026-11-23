@@ -34,7 +34,7 @@ Same six kinds as c029, milder. Renderer `measure/render_compound.py`; the compo
 ## 5. Selection (fixed before any label exists)
 - Walk the 48 candidates in candidate order. Keep the first 10 labelled accept_repaired, the first 4 labelled accept_clean and the first 6 labelled decline: 20 rods
 - If a class has fewer rods than its quota, keep all of that class and state the shortfall. No other rods replace them
-- A candidate whose label cannot be computed (tracker error on a needed state) is skipped and listed
+- A state the tracker fails on in every cluster submit counts as a failing state, as in c029 (`heldout_compound.labels_report`). Correction 2026-11-22, before any render: an earlier line said such a candidate is skipped
 - Written to `supplement/selected.json` with the label counts of all 48; committed with `labels.json` before any method run. The method driver refuses to run until both are committed
 
 ## 6. Where the runs happen
