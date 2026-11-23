@@ -1,0 +1,136 @@
+{
+ "freeze_tag": "freeze-v4",
+ "commit": "043f8eb",
+ "method": "diagnostician",
+ "rod": {
+  "case": "v3_growth_zone",
+  "fault": "focus_drift",
+  "size": "3",
+  "seed": 43,
+  "id": "v3_growth_zone_focus_drift_z3_s43"
+ },
+ "runner": "remote_job",
+ "truth": {
+  "peak_regr_pct_per_h": 54.0,
+  "peak_at_um": 421,
+  "largest_flank_difference_pct_per_h": 0.0
+ },
+ "error_before": {
+  "regr_rms_pct_per_h": 1.272,
+  "regr_max_pct_per_h": 3.937,
+  "regr_covered_um": 1137,
+  "flank_difference_rms_pct_per_h": 2.267,
+  "flank_difference_max_pct_per_h": 8.552,
+  "flank_difference_covered_um": 1137
+ },
+ "initial_checks": [
+  {
+   "check": "rigid_invariance",
+   "passed": true,
+   "value": 1.317907094635191,
+   "threshold": 2.0,
+   "unit": "%/h",
+   "where_s_px": 275.0,
+   "where_frame_pair": null,
+   "detail": "largest change in regr_mid"
+  },
+  {
+   "check": "closure",
+   "passed": true,
+   "value": 0.45553040715446264,
+   "threshold": 1.0,
+   "unit": "px/h",
+   "where_s_px": 547.9871337809121,
+   "where_frame_pair": 35,
+   "detail": "tip path 96.0 px/h; base at s = 548 px; largest single-pair residual at pair 35"
+  },
+  {
+   "check": "plane_sections",
+   "passed": false,
+   "value": 8.551821497181695,
+   "threshold": 3.25,
+   "unit": "%/h",
+   "where_s_px": 90.0,
+   "where_frame_pair": null,
+   "detail": "flank difference -8.55 %/h, predicted 0.00 %/h"
+  }
+ ],
+ "outcome": {
+  "task_id": "rod-1",
+  "agent": "diagnostician",
+  "status": "decline",
+  "args": {
+   "fault": "low_texture",
+   "reason": "Texture and focus drop far below the clean reference over the window. A 1.5x patch lowered plane sections only to 4.94 %/h (limit 3.25), and 2x was rolled back with no further setting, so the remedy has failed."
+  },
+  "steps": 6,
+  "failed_steps": 0,
+  "calls": 6,
+  "input_tokens": 28773,
+  "output_tokens": 2581,
+  "call_ms": 28670
+ },
+ "error_after": {
+  "regr_rms_pct_per_h": 0.908,
+  "regr_max_pct_per_h": 2.687,
+  "regr_covered_um": 1137,
+  "flank_difference_rms_pct_per_h": 1.527,
+  "flank_difference_max_pct_per_h": 4.936,
+  "flank_difference_covered_um": 1137
+ },
+ "remedies": [
+  "tracker disk radius 14 -> 21 px",
+  "tracker disk radius 21 -> 28 px",
+  "rolled back: tracker disk radius 21 -> 28 px"
+ ],
+ "roll_backs": 1,
+ "final_settings": {
+  "stride": 1,
+  "disk_radius": 21,
+  "register": false,
+  "register_from_px": null,
+  "midline_smooth": null,
+  "band_mask": null,
+  "width_free": false,
+  "couple": false
+ },
+ "final_checks": [
+  {
+   "check": "rigid_invariance",
+   "passed": true,
+   "value": 0.7482987220044739,
+   "threshold": 2.0,
+   "unit": "%/h",
+   "where_s_px": 275.0,
+   "where_frame_pair": null,
+   "detail": "largest change in regr_mid"
+  },
+  {
+   "check": "closure",
+   "passed": true,
+   "value": 0.3841698865831789,
+   "threshold": 1.0,
+   "unit": "px/h",
+   "where_s_px": 547.9287467723123,
+   "where_frame_pair": 35,
+   "detail": "tip path 96.0 px/h; base at s = 548 px; largest single-pair residual at pair 35"
+  },
+  {
+   "check": "plane_sections",
+   "passed": false,
+   "value": 4.935829905123734,
+   "threshold": 3.25,
+   "unit": "%/h",
+   "where_s_px": 90.0,
+   "where_frame_pair": null,
+   "detail": "flank difference -4.94 %/h, predicted 0.00 %/h"
+  }
+ ],
+ "reported": false,
+ "repeat": 2,
+ "trace": "diagnostician_v3_growth_zone_focus_drift_z3_s43_r2_trace.jsonl",
+ "claude_code": "2.1.310",
+ "wall_s": 39.3,
+ "tracker_runs_new": 0,
+ "runner_log": []
+}
