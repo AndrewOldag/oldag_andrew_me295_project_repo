@@ -1,16 +1,14 @@
 # real-calib
-Updated: 2026-11-23 04:46 (local)
+Updated: 2026-11-23 15:40 (local)
 Lane: course
-Branch: wip/supervisor
-Last inbox item done: 29
+Branch: wip/zone-checks
+Last inbox item done: 31
 State: ready to merge
-Now: c032 built and tested, waiting for coordinator merge of wip/supervisor; no inbox item after 29 (checked 2026-11-23 04:46); not installed (switch-over waits for a planning item after Thu 26 Nov 12:00)
+Now: c034 done; wip/zone-checks ready to merge
 Done since last update:
-- Item 28 replaced by item 29
-- Item 29 (c032): scripts/ops/supervisor.ps1, register_detached.ps1, install_supervisor.ps1 (not run); tests/test_supervisor.py 12 passed; test_ops, test_board 18 passed; README, decisions, log, task to review
-- Two limits beyond the spec (decisions): the same session is not restarted within 60 min of its last supervisor start (a session that exits with an inbox item still open would else restart every tick); status read from the newest `Updated:` over all origin branches
-- For planning: sessions that exit while an item is open should still keep `Last inbox item done` below the inbox (supervisor then retries hourly), or write the item number with a note as dispatcher does (then only the 2 h stale rule applies, and only for State working)
-- Seen on the VM: a pid file `real-calib,compound.pid` in the agents folder: `agents.ps1 -Names a,b` under `-File` takes "a,b" as one name. supervisor.ps1 splits on commas; agents.ps1 not changed
-- Dispatcher and compound: when the supervisor is installed, register long detached processes with `scripts/ops/register_detached.ps1` (README)
+- Inbox 31: fault set stays the on-record shift of the profile along s. README limit added: the fault model is an arc-length offset of the profile; it does not cover a zone misplaced by a tracker error of another kind
+- Merged origin/main (b22e799); decisions conflict kept both entries (markers removed in the following commit)
+- No run, no cluster job, no rendering
 Needs Andrew:
 - none
+- wip/supervisor (c032) still ready to merge, unchanged

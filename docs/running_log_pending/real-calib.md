@@ -64,3 +64,15 @@
 - Demo: `powershell -File scripts/ops/supervisor.ps1 -Once` -> one heartbeat line on `ops/heartbeat`, e.g. `2026-11-22 22:00 free=8.0GB dispatcher=exited real-calib=exited,pending:inbox compound=exited start=real-calib dead=none`
 - Remaining: switch-over after the c027 cut-off (Thu 26 Nov 12:00) on a planning inbox item
 - Bottlenecks: none
+
+## 2026-11-23 (build account, session real-calib, inbox item 30)
+- Done: proposal `docs/proposals/2026-11-23_zone-checks.md` before any run (e385ae2); amended before any v4 or real record: plateau tip speed along the midline (f5cc997)
+- Done: `checker/zone_checks.py` (plateau, particle path), `tests/test_zone_checks.py` 10 passed; `scripts/zone_checks.py`
+- Done: synthetic, freeze v4 seeds 26-28: thresholds from 18 clean base tracks committed before the real run (3cf728b): plateau_regr 8.5 %/h, plateau_speed 0.018, pp_rms_rel 0.0044, pp_max_rel 0.0063
+- Done: particle path flags 15 of 15 at every shift (-60 to +60 px); plateau 0 of 15 at every shift; false alarms 0 of 18 clean, 0 of 9 repaired
+- Done: real, 1,189 c027 windows from the cache (1,186 computed, 3 paused without a track): either check flags 1,034 of 1,034 accepted base tracks; pp_rms_rel median 0.030 (7x the threshold). Largest residuals are a common offset: change of the first chain point's distance from the midline tip (corr -1.00); over 15 px on 143 of 1,127. No outcome changed
+- Tests: 487 passed, 3 skipped without test_board.py, 198 s; test_board.py 8 passed, 2 failed on main's c033-audit.md host field (comma inside parentheses), not this branch
+- Demo: `python scripts/zone_checks.py thresholds` -> same thresholds; writes `results/2026-11-23_zone_checks/synthetic.md`
+- Remaining: merge; a real threshold only with a real reference set and Andrew's approval
+- Bottlenecks: none
+- Done (inbox 31): on-record shift confirmed as the fault set (amendment 6810f3a withdrawn); README limit added: fault model is an arc-length offset of the profile, not a zone misplaced by another tracker error. Main merged (b22e799; conflict markers removed in the next commit). No run, no cluster job
