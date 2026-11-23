@@ -436,6 +436,7 @@ def run_rules():
                 o = fn(sl, trace)
                 o2 = fn(v3.Slice(LocalRunner(), rod), None)    # second run from the cache: deterministic?
             except v3.Missing as e:
+                trace.unlink(missing_ok=True)                # a paused run leaves no file; it runs again from step 0
                 paused += 1
                 print(f"{v3.stem(m, rod)}: paused, needs {e}", flush=True)
                 continue
