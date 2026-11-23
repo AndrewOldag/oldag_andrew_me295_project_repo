@@ -52,3 +52,9 @@
 - Demo: `results/2026-11-20_registration_fix/README.md` sections R1 and R5
 - Remaining: flagged window register_v2 track through the option A gate when dispatcher has fetched it; then ready to merge
 - Bottlenecks: dispatcher (register_v2 retracks in its c027 cycle)
+
+## 2026-11-22 (build account, session real-calib, inbox item 27, end)
+- Done: flagged window 0711_c5__w6-8 register_v2 track (dispatcher c027, job 7859132 task 4, md5 ac89fc29 at fetch and here) through the option A gate: inversions ratio 414.3, gap ratio 6.85, lateral 79.5, plausible no (6.02 deg over 2 deg): fail. v1: 199.8, 3.65, 14.9: fail. `results/2026-11-20_registration_fix/flagged_window_gate.json`
+- Demo: `python scripts/integrity_thresholds.py pairs --pairs <csv> --out <json>` -> per-pair ratios and gate; README section "Integrity gate, option A"
+- Remaining: none for c031; ready to merge
+- Bottlenecks: none

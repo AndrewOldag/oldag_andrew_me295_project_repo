@@ -9,17 +9,18 @@
 ## R1 diagnosis
 - One cluster CPU job (7841039, 2026-11-22) of `scripts/remote/register_diag.py` on the window's 80 frames, band from 1075 px; output `register_diag_0711_c5__w6-8.json` (md5 equal on cluster, storage and here). The staged root copy was then deleted on the cluster (5.3 GB, logged in DELETED.log)
 - Chained (v1): its chain equals `register_frames` exactly; final rotation 9.23 deg = the sum of the 79 pair rotations (mean 0.117 deg, mean absolute 0.23 deg, largest 1.00 deg). Every pair fit converged (ECC min 0.967, median 0.977); pair band motion median 0.52 px, largest 1.53 px. No single bad pair: a small per-pair bias of one sign adds up
-- Path of the chained rotation: 2.4 deg by frame 10, 5.1 by 20, 6.3 by 50, 9.2 by 70 (9.23 at 79). Band-centre motion of the last map 21.7 px (under the v2 bound of 46 px); rotation 9.23 deg (over the 2 deg bound)
+- Path of the chained rotation: 2.4 deg by frame 10, 5.1 by 20, 6.3 by 50, 9.2 by 70 (9.23 at 79). Band-centre motion of the last map 21.7 px (under the v2 bound: 91 px from the remedy, `regv2p1075b91`); rotation 9.23 deg (over the 2 deg bound)
+- Correction (2026-11-22): the diagnosis job was run with a shift bound of 46 px (the drift the closure miss implies) instead of the remedy's 91 px (2 x that drift). Its `plausible: false` comes from the rotation bound, which does not depend on it; the outcome is the same with 91 px
 - Direct to frame 0 (v2): erratic on frames 1-20 (-1.5 to 6.0 deg, ECC 0.88-0.97), then ECC fails on frames 21-80 (59 of 79 fits); the map stays at the frame-20 fit (6.02 deg, band motion 3.9 px). Report `plausible: false` (6.02 deg over 2 deg): v2 would roll this remedy back
 - Answer: chaining gives the 9.23 deg. The direct fit does not find one rigid motion of the basal band over the window either; the band does not stay rigidly like itself relative to frame 0 for more than about 20 frames
 - v2 counts a failed fit only as a missing ECC value (`per_frame.ecc` null); it is not part of the plausibility bound. Here the rotation bound trips anyway. Reported, not changed
-- Before the job, integrity of the window's tracks on this machine
 - Integrity of the window's tracks on this machine (`flagged_window_integrity.json`):
 
 | Track | Inversions | Gap ratio | Lateral, px |
 | :-- | --: | --: | --: |
 | base `st1` | 3 | 1.76 | 1.03 |
 | `register_frames` v1 `st1_reg2p1075` | 798 | 6.43 | 15.26 |
+| `register_v2` `st1_regv2p1075b91` | 1656 | 12.08 | 81.59 |
 
 - The registered track lost point order in most frames; closure did not see it
 - Synthetic evidence for the chaining cause (`tests/test_register_v2.py`, 24 frames, rotation 0.05 deg per frame plus shift, noise): direct fit error 0.03 deg, 0.04 px; chained v1 error 1.2 deg. Per-pair errors add up along the chain
@@ -60,7 +61,14 @@
 | batch 1 | 7 | 1 | 6 | 2 | 3 |
 | batch 2 | 37 | 16 | 20 | 18 | 19 |
 
-- Flagged window, v1: inversions ratio 199.8, gap ratio 3.65, lateral 14.9: fails. Its v2 track is not back yet (dispatcher's register_v2 retracks)
+- Flagged window under the gate (`flagged_window_gate.json`; v2 track from dispatcher's c027 cycle, cluster job 7859132 task 4, md5 checked at fetch and here):
+
+| Track | Inversions ratio | Gap ratio | Lateral ratio | Registration plausible | Gate |
+| :-- | --: | --: | --: | :-- | :-- |
+| v1 `st1_reg2p1075` | 199.8 | 3.65 | 14.9 | not bounded (v1) | fail |
+| v2 `st1_regv2p1075b91` | 414.3 | 6.85 | 79.5 | no (6.02 deg, bound 2 deg) | fail |
+
+- v2 fails every ratio and the plausibility bound; both remedies are rolled back. Its 6.02 deg final rotation matches the R1 direct fit (6.02 deg). The window cannot be repaired by registration
 - Over the 44 pairs: median ratio inversions 4.8, gap ratio 1.45, lateral 2.4
 
 ## R5 synthetic regression (2026-11-22)
@@ -83,9 +91,6 @@
 - v2 fits a rotation of 0.36-0.41 deg on the rigid-drift rods. Not explained yet
 - On real windows rigid invariance is reported, not gating (real profile), so this check does not decline real windows
 - Known limit (Andrew, 2026-11-22: register_v2 kept as the registration remedy, fixed list unchanged): on the synthetic register rods v2 repairs 3 of 6 against 6 of 6 for v1, because rigid invariance against the moved copy is higher after v2. Listed as a failure mode for Lab report 4
-
-## Open
-- Flagged window v2 track through the option A gate, once dispatcher's register_v2 retrack of it is fetched (in its c027 cycle on 2026-11-22)
 
 ## Commands
 - `python -m pytest tests/test_integrity.py tests/test_executors.py` (agents env); `tests/test_register_v2.py` in the tracker env with the tracker on PYTHONPATH
