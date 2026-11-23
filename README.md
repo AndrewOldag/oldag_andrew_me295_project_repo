@@ -142,6 +142,15 @@ python scripts/run_all.py report --run staging/c027/run --tree staging/c027/tree
 - Proposal and caps: `docs/proposals/2026-11-18_integrated-run.md`. Tests: `python -m pytest tests/test_run_all.py`
 - LLM call cap: `--llm-cap N`, default 900. c027 was restarted with `--llm-cap 1300` on 2026-11-23 (inbox item 59, planning under Andrew's overnight authority): the run stopped at 782 calls with 33 windows paused and roots not yet audited; 1,300 covers 33 windows x step limit 8 plus the auditor reserve of 5 per remaining root on top of 782. Prompts, gate, thresholds, methods and windows unchanged
 
+## Growth-zone placement checks, report-only (task c034)
+```
+python scripts/zone_checks.py synthetic --cache <freeze v4 track cache>    # 18 clean, 90 shifted, 9 repaired records
+python scripts/zone_checks.py thresholds                                  # config/zone_thresholds.yaml, synthetic.md
+python scripts/zone_checks.py real --cache <c027 track cache>             # real_counts.md; values to staging/zone_checks/
+```
+- Plateau and particle-path (Silk) checks in `checker/zone_checks.py`, not part of `run_checks`; they gate nothing. Cached tracks only, no tracker run. A rerun of `real` skips windows already in the values file
+- Proposal `docs/proposals/2026-11-23_zone-checks.md`; results `results/2026-11-23_zone_checks/`. Tests: `python -m pytest tests/test_zone_checks.py`
+
 ## Task board
 - One file per task in `tasks/` (format in `tasks/README.md`). Research-lane tasks use the same format in a folder outside every git repo
 - Optional: copy `config/board.example.conf` to `private/board.conf` and set the research folder and the page path

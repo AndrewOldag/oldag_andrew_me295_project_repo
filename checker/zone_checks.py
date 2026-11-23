@@ -124,7 +124,7 @@ def particle_path(rec, thresholds=None, fields=None):
     over the RMS and the largest of the tracked tip-frame displacements.
     """
     s, v, _, ok = _profile(fields if fields is not None else rec.fields)
-    keys = ("pp_rms_px", "pp_max_px", "pp_rms_rel", "pp_max_rel")
+    keys = ("pp_rms_px", "pp_max_px", "pp_rms_rel", "pp_max_rel", "pp_mean_px", "tip_offset_change_px")
     if ok.sum() < 2:
         return ZoneResult("particle_path", None, dict.fromkeys(keys), dict(thresholds or {}), "no covered span")
     S = tip_frame_positions(rec)
@@ -144,9 +144,14 @@ def particle_path(rec, thresholds=None, fields=None):
     rms, mx = float(np.sqrt(np.mean(e ** 2))), float(np.max(np.abs(e)))
     dmax = float(np.max(np.abs(d)))
     rel = dmax >= MIN_DISPLACEMENT_PX
+    # Diagnostics, not gating: the signed mean residual, and the change over the window of the first chain
+    # point's distance from the midline tip (S[:, 0]), a part common to every point's tracked position
+    o = S[[0, -1], 0]
+    diag = {"pp_mean_px": float(np.mean(e)),
+            "tip_offset_change_px": float(o[1] - o[0]) if np.isfinite(o).all() else None}
     values = {"pp_rms_px": rms, "pp_max_px": mx,
               "pp_rms_rel": rms / float(np.sqrt(np.mean(d ** 2))) if rel else None,
-              "pp_max_rel": mx / dmax if rel else None}
+              "pp_max_rel": mx / dmax if rel else None, **diag}
     return ZoneResult("particle_path", _decide(values, thresholds, ("pp_rms_rel", "pp_max_rel")), values,
                       dict(thresholds or {}),
                       f"{int(seed.sum())} points" + ("" if rel else "; largest displacement under 2 px: "

@@ -113,13 +113,21 @@ def thresholds(a):
 
 
 def real_tracks(r):
-    """(kind, track file stem) to check for one windows.csv row."""
-    base = f"{r['window']}_ft2__st1__L1000.npz"
-    out = [("base", base)]
+    """(kind, settings) to check for one windows.csv row."""
+    out = [("base", "st1")]
     st = r["final_settings"]
     if r["integrated"].startswith("accepted") and st and st != "st1":
-        out.append(("accepted", f"{r['window']}_ft2__{st}__L1000.npz"))
+        out.append(("accepted", st))
     return out
+
+
+def track_file(cache, window, settings):
+    """The window's track; windows with a rigidly moved copy use the whole-pixel reference track as main."""
+    for part in ("_ft2", "_ft2_wp_ref"):
+        p = cache / f"{window}{part}__{settings}__L1000.npz"
+        if p.exists():
+            return p
+    return None
 
 
 def real(a):
@@ -134,12 +142,12 @@ def real(a):
     windows = list(csv.DictReader(open(WINDOWS)))
     with open(vals_path, "a") as fh:
         for r in windows:
-            for kind, name in real_tracks(r):
-                if (r["window"], kind) in done:
+            for kind, st in real_tracks(r):
+                if (r["window"], kind) in done and "error" not in done[(r["window"], kind)]:
                     continue
-                p = cache / name
-                d = {"window": r["window"], "kind": kind, "track": name}
-                if not p.exists():
+                p = track_file(cache, r["window"], st)
+                d = {"window": r["window"], "kind": kind, "track": p.name if p else st}
+                if p is None:
                     d["error"] = "track not cached"
                 else:
                     try:
@@ -196,6 +204,18 @@ def real_report(windows, done, th):
               "| Value | Computed | Percentiles |", "| :-- | --: | :-- |"]
     for k in ("plateau_speed", "pp_rms_px", "pp_max_px", "pp_rms_rel", "pp_max_rel"):
         lines.append(f"| {k} | {len(pct(k))} | {q(pct(k))} |")
+    for k in ("pp_mean_px", "tip_offset_change_px"):
+        lines.append(f"| abs {k} | {len(pct(k))} | {q([abs(x) for x in pct(k)])} |")
+    both = [d for d in ok if d.get("pp_rms_px") and d.get("tip_offset_change_px") is not None]
+    share = np.array([d["pp_mean_px"] ** 2 / d["pp_rms_px"] ** 2 for d in both])
+    rms = np.array([d["pp_rms_px"] for d in both])
+    top = rms > np.percentile(rms, 75)
+    corr = np.corrcoef([d["pp_mean_px"] for d in both], [d["tip_offset_change_px"] for d in both])[0, 1]
+    lines += ["", "Common part: share of the squared mean residual in the squared RMS residual, median "
+              f"{np.median(share):.2f} over {len(both)} base tracks, {np.median(share[top]):.2f} over the quarter with "
+              f"the largest `pp_rms_px`. Correlation of the mean residual with `tip_offset_change_px`: {corr:.2f}. "
+              f"Base tracks with `|tip_offset_change_px|` over 15 px (one patch spacing): "
+              f"{sum(abs(d['tip_offset_change_px']) > 15 for d in both)} of {len(both)}"]
     lines += ["", "## Example windows (base track; first 3 by id per group)", "",
               "| Outcome | particle_path | plateau | Windows |", "| :-- | :-- | :-- | :-- |"]
     word = {True: "flag", False: "pass", None: "n/a"}
