@@ -108,16 +108,17 @@ class _Q:
         return dict(self.jobs)
 
 
-def dispatch(collector):
-    """Fixed-script dispatcher over the include-yes roots; returns its summary."""
-    engine = D.Engine(_Q(), D.load_config(), rows=D.manifest_rows(),
+def dispatch(collector, roots=None):
+    """Fixed-script dispatcher over the include-yes roots (only `roots` if given; B5 demo); returns its summary."""
+    rows = [r for r in D.manifest_rows() if roots is None or r["id"] in roots]
+    engine = D.Engine(_Q(), D.load_config(), rows=rows,
                       budget={"core_hours": 0.0, "usd": 0.0, "approved": False}, collector=collector)
     return D.run_script_batch(engine, poll_minutes=15, round_limit=400)
 
 
-def window_list():
+def window_list(roots=None):
     seen = []
-    dispatch(lambda t: (seen.append(RealWindow(t.root_id, t.from_h, t.to_h)), {"listed": True})[1])
+    dispatch(lambda t: (seen.append(RealWindow(t.root_id, t.from_h, t.to_h)), {"listed": True})[1], roots)
     return seen
 
 
@@ -493,9 +494,13 @@ def main(argv=None):
     ap.add_argument("--stop-at")
     ap.add_argument("--final-now", action="store_true")
     ap.add_argument("--llm-cap", type=int, default=LLM_CAP)
+    ap.add_argument("--roots", help="comma-separated root ids: run, fetch and audit only these (B5 demo)")
     a = ap.parse_args(argv)
     sys.stdout.reconfigure(errors="backslashreplace")
+    roots = set(a.roots.split(",")) if a.roots else None
     rows = batch_rows()
+    if roots is not None:
+        rows = {w: r for w, r in rows.items() if _window(w).root_id in roots}
     stop_at = datetime.datetime.fromisoformat(a.stop_at) if a.stop_at else None
     if a.step == "windows":
         ws = window_list()
@@ -514,7 +519,7 @@ def main(argv=None):
         return 0
     from agents.launcher import Launcher
     run = Run(runner, a.out, rows, launcher=Launcher(), cap=a.llm_cap, stop_at=stop_at)
-    window_list_into(run)                     # every window of each root, so a root is audited only when complete
+    window_list_into(run, roots)              # every window of each root, so a root is audited only when complete
     if a.step == "audit":
         print(f"auditor runs: {run.audit(final_now=a.final_now)}; {run.stopping or ''}")
         return 0
@@ -525,7 +530,7 @@ def main(argv=None):
             run.audit()
         return res
     t0 = time.time()
-    disp = dispatch(collect)
+    disp = dispatch(collect, roots)
     status = run.stopping or "done"
     with open(Path(a.out) / "run_log.jsonl", "a") as f:
         f.write(json.dumps({"time": now(), "status": status, "windows_this_start": run.done_count,
@@ -535,8 +540,8 @@ def main(argv=None):
     return 0
 
 
-def window_list_into(run):
-    for w in window_list():
+def window_list_into(run, roots=None):
+    for w in window_list(roots):
         run.windows_of.setdefault(w.root_id, []).append(w.id())
 
 

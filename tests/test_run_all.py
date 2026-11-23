@@ -178,6 +178,13 @@ def test_llm_cap_option(monkeypatch, argv, cap):
     monkeypatch.setattr(RA, "Run", FakeRun)
     monkeypatch.setattr(RA, "batch_rows", lambda: {})
     monkeypatch.setattr(RA, "make_runner", lambda config, rows: None)
-    monkeypatch.setattr(RA, "window_list", lambda: [])
+    monkeypatch.setattr(RA, "window_list", lambda roots=None: [])
     monkeypatch.setitem(sys.modules, "agents.launcher", SimpleNamespace(Launcher=lambda: None))
     assert RA.main(["audit", "--out", "x"] + argv) == 0 and seen["cap"] == cap
+
+
+def test_roots_limit_the_dispatcher():
+    """--roots (B5 demo): the dispatcher lists only the windows of the given roots; without it every root."""
+    some = RA.window_list({"0708_c4"})
+    assert some and {w.root_id for w in some} == {"0708_c4"}
+    assert len(RA.window_list()) > len(some)
