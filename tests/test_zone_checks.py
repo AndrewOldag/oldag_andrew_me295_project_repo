@@ -62,3 +62,24 @@ def test_tracked_fixture_runs():
     rec = from_tracker_npz(DATA / "growth_zone_clean_s0.npz")
     v = vals(rec)
     assert all(v[k] is not None and np.isfinite(v[k]) for k in v)
+
+
+def test_split_recombines():
+    rec = make_record(CASES["v3_growth_zone"])
+    v = vals(rec, shifted_fields(rec, 30))
+    assert np.isclose(v["pp_rms_px"] ** 2, v["pp_common_px"] ** 2 + v["pp_shape_rms_px"] ** 2)
+    assert np.isclose(v["pp_rms_rel"] ** 2, v["pp_common_rel"] ** 2 + v["pp_shape_rel"] ** 2)
+    assert v["pp_shape_rel"] > 100 * vals(rec)["pp_shape_rel"]    # a shifted profile leaves a shape part
+
+
+def test_tip_moved_along_axis_is_common_mode():
+    """Last-frame midline slid 10 px along its axis (a misplaced midline tip): every point's tip-frame
+    position changes by the same amount, so the residual is common mode and the shape part stays."""
+    import dataclasses
+    rec = make_record(CASES["v3_growth_zone"])
+    m = rec.midline.copy()
+    t = m[-1, 0] - m[-1, 1]
+    m[-1] = m[-1] + 10.0 * t / np.linalg.norm(t)
+    v0, v = vals(rec), vals(dataclasses.replace(rec, midline=m))
+    assert abs(abs(v["pp_common_px"]) - 10.0) < 0.5
+    assert v["pp_shape_rms_px"] < v0["pp_shape_rms_px"] + 0.1

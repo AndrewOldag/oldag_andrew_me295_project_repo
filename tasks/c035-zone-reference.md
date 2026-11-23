@@ -7,7 +7,7 @@ state: working
 branch: wip/zone-reference
 host: VM
 created: 2026-11-23 14:35
-last_update: 2026-11-23 14:40
+last_update: 2026-11-23 14:55
 blocker: none
 done_marker: results/2026-11-23_zone_reference/README.md
 ---
@@ -16,7 +16,7 @@ Spec `docs/specs/2026-11-23_zone-check-real-reference.md`.
 
 ## Parts
 - [done] Proposal `docs/proposals/2026-11-23_zone-reference.md` (seed, strata, threshold rule), before the draw
-- [todo] Step 1: residual split; synthetic re-run (shape part detection per shift)
+- [done] Step 1: residual split (`pp_common_*`, `pp_shape_*`), tests 12 passed; synthetic: shape flags 15 of 15 at every shift (synthetic.md)
 - [todo] Step 2: sample of 24 accepted c027 windows
 - [todo] Step 3: overlays and index in `staging/c035_overlays/` (not pushed)
 - [todo] Step 4: Andrew's labels
