@@ -77,9 +77,11 @@ def _last_line(err):
     return re.sub(r"/[^\s'\"]*/", "", line).strip()[:120]
 
 
-def main(run_dir, tree_dir, out, rows):
+def main(run_dir, tree_dir, out, rows, demo=None):
     import run_all as RA
     out.mkdir(parents=True, exist_ok=True)
+    if demo:
+        print("demo: same outcome %d of %d windows" % write_demo(out, run_dir, demo[0], demo[1]))
     order = [w.id() for w in RA.window_list()]
     recs = read_json_dir(run_dir / "windows")
     tree = read_json_dir(C026_TREE / "windows")
@@ -206,6 +208,54 @@ def main(run_dir, tree_dir, out, rows):
     write_examples(out, run_dir, recs, order, flags)
     print(f"wrote {out}")
     return 0
+
+
+DEMO_STAGES = [("stage the root's images to the cluster", "driver", r"staging \d+ MB", "driver", r": job \d+"),
+               ("cluster job: midline net, QC, track, checker; collect, md5 (includes queue wait)", "driver", r": job \d+",
+                "driver", r"collected"),
+               ("fetch base tracks to the VM", "after", r"fetch start", "after", r"fetch end"),
+               ("agents and auditor", "after", r"run start", "after", r"run end")]
+
+
+def _stamps(log):
+    p = Path(log)
+    lines = p.read_text(encoding="utf-8", errors="replace").splitlines() if p.exists() else []
+    return [(l[:19], l[20:]) for l in lines if re.match(r"[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2} ", l)]
+
+
+def _at(stamps, pat):
+    import datetime
+    t = next((t for t, m in stamps if re.search(pat, m)), None)
+    return datetime.datetime.fromisoformat(t) if t else None
+
+
+def write_demo(out, run_dir, demo_dir, root):
+    """B5: fresh one-root demo against the cached run, window by window; wall time per stage from the demo logs."""
+    a, b = read_json_dir(run_dir / "windows"), read_json_dir(demo_dir / "run" / "windows")
+    ws = sorted((w for w in set(a) | set(b) if w.startswith(root + "__")), key=lambda w: int(w.split("__w")[1].split("-")[0]))
+    md = [f"# c027 B5: fresh one-root demo ({root})", "", "| window | cached run | demo | closure before (px/h) cached / demo | match |",
+          "| :-- | :-- | :-- | :-- | :-- |"]
+    same = 0
+    for w in ws:
+        ca, cb = cls(a.get(w)), cls(b.get(w))
+        va = _v(next((c for c in (a.get(w) or {}).get("initial_checks", []) if c["check"] == "closure"), None))
+        vb = _v(next((c for c in (b.get(w) or {}).get("initial_checks", []) if c["check"] == "closure"), None))
+        same += ca == cb
+        md.append(f"| {w} | {ca} | {cb} | {va} / {vb} | {'yes' if ca == cb else 'no'} |")
+    md += ["", f"Same outcome: {same} of {len(ws)} windows.", ""]
+    fa, fb = [json.loads(p.read_text()) if p.exists() else {} for p in
+              (run_dir / "audit" / root / "audit.json", demo_dir / "run" / "audit" / root / "audit.json")]
+    flags = [sorted((r, d.get("reason")) for r, d in (x.get("decisions") or {}).items() if d.get("decision") == "flag")
+             for x in (fa, fb)]
+    md += [f"Auditor flags: cached {flags[0] or 'none'}; demo {flags[1] or 'none'}; "
+           f"{'same' if flags[0] == flags[1] else 'different'}. LLM calls: cached {fa.get('calls', '-')}, demo {fb.get('calls', '-')}.",
+           "", "| stage | wall time (min) |", "| :-- | --: |"]
+    logs = {"driver": _stamps(demo_dir / "driver.log"), "after": _stamps(demo_dir / "after.log")}
+    for name, l0, p0, l1, p1 in DEMO_STAGES:
+        t0, t1 = _at(logs[l0], p0), _at(logs[l1], p1)
+        md.append(f"| {name} | {(t1 - t0).total_seconds() / 60:.1f} |" if t0 and t1 else f"| {name} | - |")
+    (out / "demo.md").write_text("\n".join(md) + "\n", encoding="utf-8")
+    return same, len(ws)
 
 
 def _v(c):

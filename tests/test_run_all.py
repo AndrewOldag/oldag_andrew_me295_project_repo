@@ -222,3 +222,29 @@ def test_report_error_line_has_no_folder():
     import run_all_report as R
     err = 'Traceback\n  File "/a/b/c.py", line 1\nFileNotFoundError: No such file: \'/x/y/StagePositionData.yaml\'\n'
     assert R._last_line(err) == "FileNotFoundError: No such file: 'StagePositionData.yaml'"
+
+
+def test_report_demo_compares_windows_and_times(tmp_path):
+    import run_all_report as R
+
+    def rec(w, status, by, closure):
+        return {"window": w, "status": "final", "decided_by": by, "outcome": {"status": status}, "remedies": [],
+                "initial_checks": [{"check": "closure", "value": closure}]}
+    run, demo = tmp_path / "run", tmp_path / "demo"
+    for d, recs in ((run, [rec("r1__w0-2", "decline", "diagnostician", 90.0), rec("r1__w2-4", "accept", "rule", 3.0)]),
+                    (demo / "run", [rec("r1__w0-2", "step_limit", "diagnostician", 90.0), rec("r1__w2-4", "accept", "rule", 3.0)])):
+        (d / "windows").mkdir(parents=True)
+        (d / "audit" / "r1").mkdir(parents=True)
+        (d / "audit" / "r1" / "audit.json").write_text(json.dumps(
+            {"calls": 4, "decisions": {"r01": {"decision": "flag", "reason": "summary_outlier"}}}))
+        for r in recs:
+            (d / "windows" / f"{r['window']}.json").write_text(json.dumps(r))
+    (demo / "driver.log").write_text("2026-11-23 06:47:17 r1: staging 5 MB (folder 1 MB)\n"
+                                     "2026-11-23 06:49:17 r1: job 1 (spent ...)\n2026-11-23 07:19:17 r1: collected (2 tracks)\n")
+    (demo / "after.log").write_text("2026-11-23 07:19:19 fetch start\nwindow x\n2026-11-23 07:19:25 fetch end\n"
+                                    "2026-11-23 07:19:28 run start: x\n2026-11-23 07:22:58 run end\n")
+    assert R.write_demo(tmp_path, run, demo, "r1") == (1, 2)
+    md = (tmp_path / "demo.md").read_text()
+    assert "| r1__w0-2 | declined by agent | step_limit | 90.00 / 90.00 | no |" in md
+    assert "same. LLM calls: cached 4, demo 4" in md
+    assert "| stage the root's images to the cluster | 2.0 |" in md and "| agents and auditor | 3.5 |" in md

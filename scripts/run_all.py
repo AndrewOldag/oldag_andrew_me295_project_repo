@@ -494,6 +494,7 @@ def main(argv=None):
     ap.add_argument("--final-now", action="store_true")
     ap.add_argument("--llm-cap", type=int, default=LLM_CAP)
     ap.add_argument("--roots", help="comma-separated root ids: run, fetch and audit only these (B5 demo)")
+    ap.add_argument("--demo", help="report: demo folder (driver.log, after.log, run/) to compare with --run for --roots")
     a = ap.parse_args(argv)
     sys.stdout.reconfigure(errors="backslashreplace")
     roots = set(a.roots.split(",")) if a.roots else None
@@ -508,7 +509,8 @@ def main(argv=None):
         return 0
     if a.step == "report":
         import run_all_report
-        return run_all_report.main(Path(a.run), Path(a.tree), Path(a.out), rows)
+        demo = (Path(a.demo), a.roots) if a.demo else None
+        return run_all_report.main(Path(a.run), Path(a.tree), Path(a.out), batch_rows(), demo)
     runner = make_runner(a.config, rows)
     if a.step == "fetch":
         fetch(runner, rows)
