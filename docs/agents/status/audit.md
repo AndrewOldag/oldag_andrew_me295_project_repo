@@ -1,10 +1,10 @@
 # audit
-Updated: 2026-11-23 14:47 (local)
+Updated: 2026-11-23 15:47 (local)
 Lane: course
 Branch: wip/audit
 Last inbox item done: 1
 State: ready to merge
-Now: idle; check at 2026-11-23 14:47 found no new inbox item; waiting on Andrew's review of findings
+Now: idle; check at 2026-11-23 15:47 found no new inbox item; waiting on Andrew's review of findings
 Done since last update:
 - c033 done: `results/2026-11-23_audit/README.md`, `findings.csv`: 62 findings, 5 blocker, 12 major, 45 minor
 - section 7 reproducibility: 0 blocker, 2 major, 9 minor
