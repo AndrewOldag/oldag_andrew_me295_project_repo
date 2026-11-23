@@ -154,7 +154,7 @@ def main(run_dir, tree_dir, out, rows, demo=None):
            f"- Auditor: {len([a for a in audits.values() if a.get('status') != 'not_called'])} runs, {a_calls} calls; "
            f"{len([a for a in audits.values() if a.get('status') == 'not_called'])} roots with no accepted window "
            "(no call)", f"- All traces under the run folder, paused and set-aside included: {all_calls} calls "
-           "(cap 900)", f"- Auditor flags: {len(flags)}", ""]
+           "(cap 900, raised to 1,300 at 782 calls)", f"- Auditor flags: {len(flags)}", ""]
     queue = list(csv.DictReader(open(QUEUE / "queue.csv"))) if (QUEUE / "queue.csv").exists() else []
     qs = Counter(r["state"] for r in queue)
     md += ["### Cluster", "", f"- Retrack tasks recorded: {len(queue)} ({', '.join(f'{k} {v}' for k, v in sorted(qs.items()))}); "

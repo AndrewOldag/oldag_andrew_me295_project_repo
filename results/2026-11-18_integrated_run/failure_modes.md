@@ -11,7 +11,7 @@
 | paused at the cut-off (track not cached) | 4 | 0708_m9__w10-12 |
 | rolled-back remedy that made closure worse (diagnostician) | 33 | 0708_c10__w0-2 |
 | rolled-back remedy that made closure worse (tree) | 76 | 0708_c10__w0-2 |
-| auditor flag | 240 | 0708_c10: r02 |
+| auditor flag | 245 | 0708_c10: r02 |
 | retrack task failed on the cluster | 28 | 0708_c4__w0-2_ft2__st2__L1000.npz (FileNotFoundError: [Errno 2] No such file or directory: '0708_c4__w0-2_ft2__st2__L1000.npz') |
 | link or master down (queue) | 1 | {"status": "connection down"} |
 

@@ -19,6 +19,7 @@ python scripts/run_all.py windows
 python scripts/run_all.py fetch
 python scripts/run_all.py run --out staging/c027/run --llm-cap 1300
 python scripts/run_all.py tree --run staging/c027/run --out staging/c027/tree
+python scripts/run_all.py audit --out staging/c027/run --final-now --llm-cap 1300
 python scripts/run_all.py report --run staging/c027/run --tree staging/c027/tree --out results/2026-11-18_integrated_run --demo staging/c027/demo --roots 0708_c4
 ```
 - Retracks: `python scripts/retrack_queue.py submit` / `fetch` (README, task c027). Records, traces and tracks in `staging/c027/` (git-ignored). A rerun skips finished windows
@@ -33,7 +34,8 @@ python scripts/run_all.py report --run staging/c027/run --tree staging/c027/tree
 - "Accepted after repair" means the checker passes after a kept remedy. Real windows have no ground truth: it does not say the repaired measurement is right
 - Diagnostician vs tree, 90 windows with both final: same outcome 74, same final kept settings 69. The 16 disagreements, with closure before and after each remedy, are in `tables.md`. In 10 the tree accepts after light midline smoothing or a disk-radius change where the diagnostician declined; in 6 the diagnostician hit its step limit and the tree declined
 - Remedies tried: diagnostician 73 (kept 4, rolled back 69); tree 352 (kept 27, rolled back 325)
-- LLM use: 1,007 calls in the main run (diagnostician 358 on recorded windows, auditor 439 over 99 roots; the rest in paused and set-aside traces). Auditor flags: 240
+- LLM use: 1,015 calls in the main run (diagnostician 358 on recorded windows, auditor 447 over 101 roots; the rest in paused and set-aside traces). Auditor flags: 245
+- Final-now audit (dispatcher inbox item 60, 2026-11-23 13:10, instead of at the Thu 26 Nov cut-off: no paused window could still change, so waiting gained nothing): 0708_m9 over its 11 final windows of 12 (8 accepted) and 0721_m5 over 11 of 12 (10 accepted), 4 calls each. 0727_cc7 has no auditor run: both its windows stay paused
 - Cluster: 616 retrack tasks in 47 arrays (fetched 576, failed 28, done 12). Spend $8.248 of $15 before the demo GPU job; demo job worst case $0.252
 
 ## Fresh one-root demo (B5, `demo.md`)
@@ -54,6 +56,6 @@ python scripts/run_all.py report --run staging/c027/run --tree staging/c027/tree
 ## Known limits
 - Real-movie profile: closure is the only gate. Rigid invariance needs a moved copy, which most windows lack
 - The tree's remedy list starts with registration, which often raises closure before roll back; the start of the registration band comes from the failing window's own profile
-- 3 roots have paused windows and no auditor run yet (0708_m9, 0721_m5, 0727_cc7). At the cut-off (Thu 26 Nov 12:00) `run_all.py audit --final-now` audits them over their final windows
+- 0708_m9 and 0721_m5 were audited over their final windows only (`--final-now`); 0727_cc7 (2 windows, both paused) has no auditor run
 - LLM cap raised mid-run (above). Session-limit stops were set aside and rerun, not recorded
 - The demo reused cached remedy tracks for its 2 failing windows, so only the base path is fresh end to end
