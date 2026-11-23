@@ -7,7 +7,7 @@ state: working
 branch: wip/dispatcher
 host: VM (LLM runs), cluster (retrack arrays on CPU; one GPU midline job), lab server (storage and relay)
 created: 2026-11-18 14:20
-last_update: 2026-11-22 15:00
+last_update: 2026-11-22 17:20
 blocker: none (master needed until wave 1 is done)
 done_marker: results/2026-11-18_integrated_run/README.md
 ---
