@@ -15,3 +15,12 @@
 - Demo: `python scripts/synth/compound_queue.py jobs` prints the c029 runs not cached (825, incl. about 300 register_v2 states)
 - Remaining: fetch the 523 queued runs; submit the register_v2 states; labels committed; rules, diagnostician and single agent (3 repeats); c029 README by Thu 26 Nov 20:00
 - Bottlenecks: cluster connection master (Andrew)
+
+## 2026-11-22 (build account, session compound)
+- Done: c029 label runs on the cluster complete: 1,307 fetched over 3 arrays (7418923, 7845308, 7852409), 5 runs failed in every submit (tracker errors), cluster CPU; storage link reset and master down on 21 Nov, resumed 22 Nov
+- Done: c029 labels before any method run (a9445d2): 24 rods, accept_repaired 4 (focus_drift), decline 20; all-decline 20 of 24
+- Done: merged main (option A integrity gate in Slice.apply_remedy, register_v2); suite 460 passed, 3 skipped
+- Done: c029 rule methods: 47 of 48 runs, 1 paused (3-step state submitted, array 7853647); deterministic 47 of 47. LLM methods started 17:15 (144 runs planned, cap 450)
+- Demo: `python scripts/synth/heldout_compound.py labels` prints the label table
+- Remaining: fetch paused states and rerun paused runs; LLM methods to the end; `eval` (scores), README `results/2026-11-18_heldout_compound/`, decisions
+- Bottlenecks: none
