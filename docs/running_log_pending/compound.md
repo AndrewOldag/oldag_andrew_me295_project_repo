@@ -24,3 +24,13 @@
 - Demo: `python scripts/synth/heldout_compound.py labels` prints the label table
 - Remaining: fetch paused states and rerun paused runs; LLM methods to the end; `eval` (scores), README `results/2026-11-18_heldout_compound/`, decisions
 - Bottlenecks: none
+
+## 2026-11-22 (build account, session compound, evening)
+- Done: c029 LLM methods complete: diagnostician and single agent, 3 repeats, 144 runs (7596bfc and later); 9 runs ended by the account session limit set aside; runner restarted twice (session limit 18:34, dirty tree 20:14)
+- Done: c029 remedy tree 48 of 48 (paused drift_jitter s41 redone after its 3-step state was fetched); rule second runs identical 48 of 48
+- Done: c029 eval and README `results/2026-11-18_heldout_compound/README.md`: balanced accuracy tree 0.70, diagnostician 0.47, single agent 0.06, script 0.00, all-decline 0.50; 153 of 450 agent runs; 1,031 `claude -p` calls
+- Done: flicker note (inbox 10 step 1): not a generator bug; tracker matches raw intensity
+- Done: c029b proposal (bd3c2ce), MILD renderer entries with tests (18 passed), `heldout_supplement.py`, `compound_queue.py --set c029b` (19 tests passed); 96 renders on the VM; unremedied array 7872119 submitted (96 runs, worst case $1.15)
+- Demo: `python scripts/synth/heldout_compound.py eval` writes `table_metrics.md` for c029
+- Remaining: c029b remedied array, labels and selection committed; c029b methods (cap 150); supplement README by Thu 26 Nov 20:00
+- Bottlenecks: cluster connection master (Andrew) for the c029b label arrays
