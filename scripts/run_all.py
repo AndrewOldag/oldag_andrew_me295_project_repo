@@ -16,12 +16,13 @@ run     Fixed-script dispatcher (agents/dispatcher.py run_script_batch) over the
         settings go to OUT/paused.jsonl for `retrack_queue.py jobs --paused`, and the window reruns from step 0 on
         the next start. No step waits on the cluster.
 tree    The remedy tree (agents/baselines.py run_tree, step limit 8) on every window whose first check fails,
-        through the same cache; the c026 tree records stand for the windows it reached.
+        through the same cache. The c026 tree's windows are rerun (register v1, no integrity gate there).
 audit   Auditor runs for roots whose windows are all final; --final-now also takes roots with paused windows,
         over their final windows (the cut-off pass).
 report  scripts/run_all_report.py.
 
-Caps: 900 LLM calls for the diagnostician and the auditor together. A diagnostician window starts only if the calls
+Caps: 900 LLM calls for the diagnostician and the auditor together (`--llm-cap`; c027 restarted with 1,300 at 782
+calls, inbox item 59). A diagnostician window starts only if the calls
 so far plus its step limit (8) plus 5 per root still to audit stay within the cap. Free VM memory at least 3 GB
 before each window. A trace with the seat's session-limit message is set aside, not recorded, and the run stops.
 """
@@ -45,7 +46,6 @@ from measure.real_runner import RealRunner, RealWindow, vm_free_gb  # noqa: E402
 CONFIG = ROOT / "private" / "real_runner_c027.yaml"
 BATCHES = {1: ROOT / "results" / "2026-10-25_full_batch_1" / "windows.csv",
            2: ROOT / "results" / "2026-10-25_full_batch_2" / "windows.csv"}
-C026_TREE = ROOT / "staging" / "c026" / "tree" / "windows"
 LLM_CAP, STEP_LIMIT, AUDIT_RESERVE, VM_MIN_GB = 900, 8, 5, 3.0
 LIMIT_TEXT = "hit your session limit"
 # Inbox items 49 and 53: register_frames v1 tracks can pass closure with points out of order. They count as not
@@ -107,16 +107,17 @@ class _Q:
         return dict(self.jobs)
 
 
-def dispatch(collector):
-    """Fixed-script dispatcher over the include-yes roots; returns its summary."""
-    engine = D.Engine(_Q(), D.load_config(), rows=D.manifest_rows(),
+def dispatch(collector, roots=None):
+    """Fixed-script dispatcher over the include-yes roots (only `roots` if given; B5 demo); returns its summary."""
+    rows = [r for r in D.manifest_rows() if roots is None or r["id"] in roots]
+    engine = D.Engine(_Q(), D.load_config(), rows=rows,
                       budget={"core_hours": 0.0, "usd": 0.0, "approved": False}, collector=collector)
     return D.run_script_batch(engine, poll_minutes=15, round_limit=400)
 
 
-def window_list():
+def window_list(roots=None):
     seen = []
-    dispatch(lambda t: (seen.append(RealWindow(t.root_id, t.from_h, t.to_h)), {"listed": True})[1])
+    dispatch(lambda t: (seen.append(RealWindow(t.root_id, t.from_h, t.to_h)), {"listed": True})[1], roots)
     return seen
 
 
@@ -439,18 +440,18 @@ def _run_auditor(summaries, records, launcher, d):
 
 # ---- tree baseline
 def run_tree_all(runner, run_dir, out, stop_at=None, clock=datetime.datetime.now, log=print, tree=None):
-    """The remedy tree on every window whose first check fails in the integrated run (run records), skipping the
-    windows the c026 tree reached. Paused windows as in the run."""
+    """The remedy tree on every window whose first check fails in the integrated run (run records), the windows the
+    c026 tree reached included: their c026 records used register v1 and no integrity gate, so they are rescored here
+    (spec 2026-11-20; c026 records kept). Paused windows as in the run."""
     from agents.baselines import run_tree
     from agents.executors import Slice
     tree = tree or run_tree
     out = Path(out)
     (out / "windows").mkdir(parents=True, exist_ok=True)
-    reached = {p.stem for p in C026_TREE.glob("*.json")}
     todo = []
     for p in sorted(Path(run_dir, "windows").glob("*.json")):
         r = json.loads(p.read_text())
-        if r["status"] == "final" and r["decided_by"] == "diagnostician" and r["window"] not in reached:
+        if r["status"] == "final" and r["decided_by"] == "diagnostician":
             todo.append(r)
     for r in todo:
         wid = r["window"]
@@ -491,9 +492,15 @@ def main(argv=None):
     ap.add_argument("--tree")
     ap.add_argument("--stop-at")
     ap.add_argument("--final-now", action="store_true")
+    ap.add_argument("--llm-cap", type=int, default=LLM_CAP)
+    ap.add_argument("--roots", help="comma-separated root ids: run, fetch and audit only these (B5 demo)")
+    ap.add_argument("--demo", help="report: demo folder (driver.log, after.log, run/) to compare with --run for --roots")
     a = ap.parse_args(argv)
     sys.stdout.reconfigure(errors="backslashreplace")
+    roots = set(a.roots.split(",")) if a.roots else None
     rows = batch_rows()
+    if roots is not None:
+        rows = {w: r for w, r in rows.items() if _window(w).root_id in roots}
     stop_at = datetime.datetime.fromisoformat(a.stop_at) if a.stop_at else None
     if a.step == "windows":
         ws = window_list()
@@ -502,7 +509,8 @@ def main(argv=None):
         return 0
     if a.step == "report":
         import run_all_report
-        return run_all_report.main(Path(a.run), Path(a.tree), Path(a.out), rows)
+        demo = (Path(a.demo), a.roots) if a.demo else None
+        return run_all_report.main(Path(a.run), Path(a.tree), Path(a.out), batch_rows(), demo)
     runner = make_runner(a.config, rows)
     if a.step == "fetch":
         fetch(runner, rows)
@@ -511,8 +519,8 @@ def main(argv=None):
         print(run_tree_all(runner, a.run, a.out, stop_at))
         return 0
     from agents.launcher import Launcher
-    run = Run(runner, a.out, rows, launcher=Launcher(), stop_at=stop_at)
-    window_list_into(run)                     # every window of each root, so a root is audited only when complete
+    run = Run(runner, a.out, rows, launcher=Launcher(), cap=a.llm_cap, stop_at=stop_at)
+    window_list_into(run, roots)              # every window of each root, so a root is audited only when complete
     if a.step == "audit":
         print(f"auditor runs: {run.audit(final_now=a.final_now)}; {run.stopping or ''}")
         return 0
@@ -523,7 +531,7 @@ def main(argv=None):
             run.audit()
         return res
     t0 = time.time()
-    disp = dispatch(collect)
+    disp = dispatch(collect, roots)
     status = run.stopping or "done"
     with open(Path(a.out) / "run_log.jsonl", "a") as f:
         f.write(json.dumps({"time": now(), "status": status, "windows_this_start": run.done_count,
@@ -533,8 +541,8 @@ def main(argv=None):
     return 0
 
 
-def window_list_into(run):
-    for w in window_list():
+def window_list_into(run, roots=None):
+    for w in window_list(roots):
         run.windows_of.setdefault(w.root_id, []).append(w.id())
 
 

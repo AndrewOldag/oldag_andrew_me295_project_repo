@@ -187,10 +187,9 @@ class Slice:
         out = {"rechecked": True, "change": change, **_summary(after),
                "check_values": _before_after(before, after)}
         # option A integrity gate (Andrew, 2026-11-21; dispatcher item 55): the remedied track against the window's own
-        # base track. A failure rolls the remedy back whatever the checks say. Tracker tracks only: a field-level rod
-        # (in-process runner) has no tracked points and a base lateral scatter of exactly 0, so the ratio is undefined
-        gate = (relative_integrity(self.current.record, self.runs[0][1].record, load_relative_k())
-                if getattr(self.runner, "form", None) != "in_process" else [])
+        # base track. A failure rolls the remedy back whatever the checks say. A base lateral scatter of exactly 0
+        # (field-level rods) has a floor in checker/checks.py `_lateral_base` (item 56)
+        gate = relative_integrity(self.current.record, self.runs[0][1].record, load_relative_k())
         if not integrity_gate(gate):
             self.runs.append((settings, before_m, before, f"rolled back: integrity: {change}"))
             out.update({k: v for k, v in _summary(before).items() if k != "check_values"}, rolled_back=True,

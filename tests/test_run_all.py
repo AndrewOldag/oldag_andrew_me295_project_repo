@@ -162,3 +162,89 @@ def test_register_hold_counts_registered_tracks_as_missing(tmp_path, monkeypatch
         r.measure(w, s)
     monkeypatch.setattr(RA, "REGISTER_HOLD", False)
     assert r.missing(w, s) == []
+
+
+@pytest.mark.parametrize("argv, cap", [([], 900), (["--llm-cap", "1300"], 1300)])
+def test_llm_cap_option(monkeypatch, argv, cap):
+    seen = {}
+
+    class FakeRun:
+        def __init__(self, *a, **k):
+            seen.update(k)
+            self.windows_of, self.stopping = {}, None
+
+        def audit(self, final_now=False):
+            return 0
+    monkeypatch.setattr(RA, "Run", FakeRun)
+    monkeypatch.setattr(RA, "batch_rows", lambda: {})
+    monkeypatch.setattr(RA, "make_runner", lambda config, rows: None)
+    monkeypatch.setattr(RA, "window_list", lambda roots=None: [])
+    monkeypatch.setitem(sys.modules, "agents.launcher", SimpleNamespace(Launcher=lambda: None))
+    assert RA.main(["audit", "--out", "x"] + argv) == 0 and seen["cap"] == cap
+
+
+def test_roots_limit_the_dispatcher():
+    """--roots (B5 demo): the dispatcher lists only the windows of the given roots; without it every root."""
+    some = RA.window_list({"0708_c4"})
+    assert some and {w.root_id for w in some} == {"0708_c4"}
+    assert len(RA.window_list()) > len(some)
+
+
+def test_tree_reruns_every_diagnostician_window(tmp_path, monkeypatch):
+    """The tree runs on every window the diagnostician decided, c026-reached ones included (register v1, no gate)."""
+    from dataclasses import dataclass
+
+    import agents.executors as E
+
+    @dataclass
+    class Outcome:
+        status: str
+    run = tmp_path / "run" / "windows"
+    run.mkdir(parents=True)
+    for wid, by in (("0711_c5__w6-8", "diagnostician"), ("0708_c4__w4-6", "rule")):
+        (run / f"{wid}.json").write_text(json.dumps({"window": wid, "status": "final", "decided_by": by}))
+
+    class FakeSlice:
+        def __init__(self, runner, w, label=""):
+            self.runs, self.checks = [(SimpleNamespace(tag=lambda: "st1"), None, {})], {}
+    monkeypatch.setattr(E, "Slice", FakeSlice)
+    monkeypatch.setattr(RA, "wait_memory", lambda: None)
+    monkeypatch.setattr(RA, "remedy_steps", lambda sl: [])
+    monkeypatch.setattr(RA, "closure", lambda c: None)
+    out = tmp_path / "tree"
+    RA.run_tree_all(None, tmp_path / "run", out, log=lambda m: None,
+                    tree=lambda sl, step_limit, trace_path: Outcome("decline"))
+    assert sorted(p.stem for p in (out / "windows").glob("*.json")) == ["0711_c5__w6-8"]
+    assert json.loads((out / "windows" / "0711_c5__w6-8.json").read_text())["outcome"]["status"] == "decline"
+
+
+def test_report_error_line_has_no_folder():
+    import run_all_report as R
+    err = 'Traceback\n  File "/a/b/c.py", line 1\nFileNotFoundError: No such file: \'/x/y/StagePositionData.yaml\'\n'
+    assert R._last_line(err) == "FileNotFoundError: No such file: 'StagePositionData.yaml'"
+
+
+def test_report_demo_compares_windows_and_times(tmp_path):
+    import run_all_report as R
+
+    def rec(w, status, by, closure):
+        return {"window": w, "status": "final", "decided_by": by, "outcome": {"status": status}, "remedies": [],
+                "initial_checks": [{"check": "closure", "value": closure}]}
+    run, demo = tmp_path / "run", tmp_path / "demo"
+    for d, recs in ((run, [rec("r1__w0-2", "decline", "diagnostician", 90.0), rec("r1__w2-4", "accept", "rule", 3.0)]),
+                    (demo / "run", [rec("r1__w0-2", "step_limit", "diagnostician", 90.0), rec("r1__w2-4", "accept", "rule", 3.0)])):
+        (d / "windows").mkdir(parents=True)
+        (d / "audit" / "r1").mkdir(parents=True)
+        (d / "audit" / "r1" / "audit.json").write_text(json.dumps(
+            {"calls": 4, "decisions": {"r01": {"decision": "flag", "reason": "summary_outlier"}}}))
+        for r in recs:
+            (d / "windows" / f"{r['window']}.json").write_text(json.dumps(r))
+    (demo / "driver.log").write_text("2026-11-23 06:47:17 r1: staging 5 MB (folder 1 MB)\n"
+                                     "2026-11-23 06:49:17 r1: job 1 (spent ...)\n2026-11-23 07:19:17 r1: collected (2 tracks)\n")
+    (demo / "after.log").write_text("2026-11-23 07:19:19 fetch start\nwindow x\n2026-11-23 07:19:25 fetch end\n"
+                                    "2026-11-23 07:19:28 run start: x\n2026-11-23 07:22:58 run end\n")
+    assert R.write_demo(tmp_path, run, demo, "r1") == (1, 2)
+    md = (tmp_path / "demo.md").read_text()
+    assert "| r1__w0-2 | declined by agent | step_limit | 90.00 / 90.00 | no |" in md
+    assert "same. LLM calls: cached 4, demo 4" in md
+    assert "| stage the root's images to the cluster | 2.0 |" in md and "| agents and auditor | 3.5 |" in md

@@ -19,3 +19,23 @@
 - Demo: `python staging/c027/tools/counts.py` is local; `python scripts/run_all.py windows` prints the window count
 - Remaining: master up -> cycle (cc7 clear, register_v2 and remaining retracks); integrity gate on main -> rerun paused windows with the diagnostician; tree baseline; fresh demo; report by Thu 26 Nov 20:00
 - Bottlenecks: cluster master (Andrew); integrity gate option A (real-calib)
+
+## 2026-11-23 (build account, dispatcher session, task c027)
+- Done: tree rounds (B4) ended 05:48 after 8 rounds; the 2 jobs of 0708_m1__w10-12 failed twice and were not requeued
+- Done: `run_all.py --roots` for the B5 demo, with a test (57044f4)
+- Done: B5 demo of 0708_c4 started 06:47: root staged (5,347 MB) to a new cluster folder; GPU job 7918920 (worst case $0.252; ledger $8.50 of $15)
+- Done: tree reruns the 38 c026-reached windows with register_v2 and the integrity gate (3c43f44); first pass 7 accept, 27 decline, 3 paused
+- Done: report drops host folders from cluster error lines; draft tables, windows.csv, failure modes, example traces in `results/2026-11-18_integrated_run/`
+- Demo: `python scripts/run_all.py report --run staging/c027/run --tree staging/c027/tree --out results/2026-11-18_integrated_run` writes tables.md: integrated 1034 accepted, 2 accepted after repair, 85 declined by agent; tree 12 accepted after repair, 78 declined
+- Remaining: demo collect, agents and auditor on 0708_c4, compare with the c027 run; tree rescore rounds; results README (B9) by Thu 26 Nov 20:00
+- Bottlenecks: none
+
+## 2026-11-23 (build account, dispatcher, session 08:00)
+- Done: B5 demo of 0708_c4 finished: GPU job collected 07:17 (12 tracks, md5 checked); agents and auditor 07:19-07:23, 22 LLM calls
+- Done: demo vs cached run: same outcome 12 of 12 windows, closure equal, same auditor flag (r07 summary outlier); wall time staging 2.6 min, cluster job 27.8 min, fetch 0.1 min, agents 3.5 min
+- Done: `run_all.py report --demo` writes demo.md, with a test (2354ee4); suite 451 passed, 3 skipped, 2 failed (test_board, old c032 file on this branch; fixed on main)
+- Done: tree rescore rounds ended 07:20: 3 windows stay paused (0708_m1, 0714_c9, 0727_cc6, all 10-12 h; retracks failed twice)
+- Done: results README for c027 (B7-B9)
+- Demo: `python scripts/run_all.py report --run staging/c027/run --tree staging/c027/tree --out results/2026-11-18_integrated_run --demo staging/c027/demo --roots 0708_c4` prints `demo: same outcome 12 of 12 windows`
+- Remaining: at Thu 26 Nov 12:00 `run_all.py audit --final-now` for 0708_m9, 0721_m5, 0727_cc7, rerun report, status ready to merge
+- Bottlenecks: none; waiting for the cut-off
