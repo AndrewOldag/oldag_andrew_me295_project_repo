@@ -1,10 +1,10 @@
 # real-calib
-Updated: 2026-11-23 01:46 (local)
+Updated: 2026-11-23 02:46 (local)
 Lane: course
 Branch: wip/supervisor
 Last inbox item done: 29
 State: ready to merge
-Now: c032 built and tested, waiting for coordinator merge of wip/supervisor; no inbox item after 29 (checked 2026-11-23 01:46); not installed (switch-over waits for a planning item after Thu 26 Nov 12:00)
+Now: c032 built and tested, waiting for coordinator merge of wip/supervisor; no inbox item after 29 (checked 2026-11-23 02:46); not installed (switch-over waits for a planning item after Thu 26 Nov 12:00)
 Done since last update:
 - Item 28 replaced by item 29
 - Item 29 (c032): scripts/ops/supervisor.ps1, register_detached.ps1, install_supervisor.ps1 (not run); tests/test_supervisor.py 12 passed; test_ops, test_board 18 passed; README, decisions, log, task to review
