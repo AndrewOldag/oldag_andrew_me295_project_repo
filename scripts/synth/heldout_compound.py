@@ -308,6 +308,20 @@ def sizing_report():
 
 # ------------------------------------------------------------------ labels
 
+def tracker_failed(rod, st):
+    """True when the state's tracker run (rod or moved copy) failed on the cluster in two submits
+    (staging/c029_queue/queue.csv): a state without a measurement, neither passing nor good."""
+    import csv
+    f = ROOT / "staging" / "c029_queue" / "queue.csv"
+    if not f.exists():
+        return False
+    tag = replace(st, width_free=False).tag()
+    jobs = {f"{rod.id(m)}__{tag}.npz" for m in (False, True)}
+    with open(f, newline="") as fh:
+        fails = [r["job"] for r in csv.DictReader(fh) if r["job"] in jobs and r["state"] == "failed"]
+    return any(fails.count(j) >= 2 for j in jobs)
+
+
 def labels_report():
     """Per rod: accept_clean if the unremedied run passes all checks and is good; accept_repaired if a state of
     one or two steps passes and is good (the first such state in schema order is named); decline otherwise.
@@ -327,6 +341,11 @@ def labels_report():
         ev = []
         for seq, st in sts:
             e = v3.evaluate(rod, st, after_remedy=bool(seq)) if st is not None and cached(rod, st) else None
+            if e is None and st is not None and tracker_failed(rod, st):
+                ev.append((seq, {"all_pass": False, "good": False, "tracker_error": True}))
+                per.append(f"| {rod.id()} | {' + '.join(seq) or 'none'} | tracker error on the cluster (twice) "
+                           "| | | | | no | no |")
+                continue
             if e is None:
                 missing += 1
                 continue
