@@ -75,9 +75,9 @@ Windows: 1189. Records: 1189. Real windows have no ground truth; 'accepted after
 ### LLM use
 
 - Diagnostician (recorded windows): 358 calls, 1587279 input tokens, 232626 output tokens, 0.68 h of call time
-- Auditor: 99 runs, 439 calls; 0 roots with no accepted window (no call)
-- All traces under the run folder, paused and set-aside included: 1007 calls (cap 900)
-- Auditor flags: 240
+- Auditor: 101 runs, 447 calls; 0 roots with no accepted window (no call)
+- All traces under the run folder, paused and set-aside included: 1015 calls (cap 900, raised to 1,300 at 782 calls)
+- Auditor flags: 245
 
 ### Cluster
 

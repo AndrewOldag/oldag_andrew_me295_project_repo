@@ -16,6 +16,6 @@ From: planning account. Date: 2026-11-23. Approved by Andrew 2026-11-23 (answer 
 
 ## Limits
 - No zone positions, REGR, growth-zone or flank values in the public repo: pass/fail, residuals and counts only; anything else `[masked]`
-- Shifted rods: rendered on the VM, tracked on the cluster CPU through `rod_jobs.py` (no tracking on the VM; ledger check before submit, $15 stop). No other cluster jobs
+- Shifted rods: the zone shifted along $s$ on the freeze v4 records (profile placed at the wrong $s$ relative to the tracked tissue); no rendering, no tracking, no cluster jobs (amendment of 13:22 withdrawn 2026-11-23 14:05: a rendered and correctly tracked shifted rod is a correct measurement, not a fault)
 - No change to prompts, thresholds, remedies, the real profile or any scored result
 - Branch `wip/zone-checks` from `origin/main`; proposal committed before any run; results in `results/2026-11-23_zone_checks/`; ready to merge by Fri 27 Nov 12:00

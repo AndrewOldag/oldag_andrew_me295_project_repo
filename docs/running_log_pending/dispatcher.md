@@ -39,3 +39,12 @@
 - Demo: `python scripts/run_all.py report --run staging/c027/run --tree staging/c027/tree --out results/2026-11-18_integrated_run --demo staging/c027/demo --roots 0708_c4` prints `demo: same outcome 12 of 12 windows`
 - Remaining: at Thu 26 Nov 12:00 `run_all.py audit --final-now` for 0708_m9, 0721_m5, 0727_cc7, rerun report, status ready to merge
 - Bottlenecks: none; waiting for the cut-off
+
+## 2026-11-23 (build account, dispatcher, session 13:10)
+- Done: inbox 60: `run_all.py audit --out staging/c027/run --final-now --llm-cap 1300` (detached, 13:10-13:12): 0708_m9 and 0721_m5 audited over 11 of 12 windows each, 4 LLM calls each; 0727_cc7 not audited (both windows paused, no final window)
+- Done: report rerun: auditor 101 runs, 447 calls; all traces 1,015 calls of 1,300; auditor flags 245 (was 240); report line names the cap raise
+- Done: results README: audit command, final-now line, known limits updated
+- Done: suite 485 passed, 3 skipped, 2 failed (test_board: `tasks/c033-audit.md` host field from main does not parse)
+- Demo: `python scripts/run_all.py report --run staging/c027/run --tree staging/c027/tree --out results/2026-11-18_integrated_run --demo staging/c027/demo --roots 0708_c4` writes tables.md with `Auditor: 101 runs, 447 calls`
+- Remaining: planning merges wip/dispatcher; idle after that
+- Bottlenecks: none

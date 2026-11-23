@@ -5,7 +5,7 @@ lane: course
 owner: audit
 state: queued
 branch: wip/audit
-host: VM (read-only, no cluster jobs)
+host: VM (read-only; no cluster jobs)
 created: 2026-11-23 13:10
 last_update: 2026-11-23 13:10
 blocker: none
