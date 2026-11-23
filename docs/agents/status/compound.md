@@ -1,14 +1,14 @@
 # compound
-Updated: 2026-11-22 20:17 (local)
+Updated: 2026-11-22 21:28 (local)
 Lane: course
 Branch: wip/compound
 Last inbox item done: 9
-State: working
-Now: item 10 step 3: rendering the 48 c029b candidates on the VM, then cluster label arrays (detached, c029b_labels.ps1). c029 LLM methods still running (single agent repeat 1, then repeat 2)
+State: waiting on cluster (c029b label array)
+Now: item 10 step 3: c029b remedied label array 7874239 (96 tasks, 2,608 runs) on the cluster; a detached loop fetches every 10 min, resubmits failed runs once, then writes labels and selected.json. On restart: commit labels and selection, then start the c029b methods
 Done since last update:
-- Item 10 (1): flicker 0.1 declines because the tracker matches raw intensity (no gain term); the generator applies the fault as defined. Not a generator bug; nothing re-rendered. Note `results/2026-11-18_heldout_compound/flicker.md`
-- Item 10 (2): proposal `docs/proposals/2026-11-22_heldout-supplement.md` committed before any render (bd3c2ce); seeds 60-67; selection rule fixed
-- c029b code: MILD entries in render_compound (c029 entries unchanged, tests 18 passed), heldout_supplement.py driver, compound_queue --set c029b (tests 19 passed with retrack_queue)
-- New task file tasks/c029b-heldout-supplement.md
+- c029 done: 144 LLM runs and 48 rule runs; README, metrics, decisions, log (results/2026-11-18_heldout_compound/README.md). Balanced accuracy: tree 0.70, diagnostician 0.47, single agent 0.06, script 0.00, all-decline 0.50. 153 of 450 agent runs; 1,031 claude -p calls
+- c029 remedy tree: paused drift_jitter s41 redone after its 3-step state was fetched; 48 of 48
+- c029b: 96 renders (48 candidates and moved copies); unremedied array 7872119 fetched 96 of 96, none failed
+- Ledger: total $7.93 of $15 after the c029b arrays' worst case
 Needs Andrew:
-- none
+- Keep the cluster connection master open until the c029b array is fetched (about 2,600 runs)
