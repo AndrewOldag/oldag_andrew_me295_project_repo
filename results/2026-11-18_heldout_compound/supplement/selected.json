@@ -1,0 +1,40 @@
+{
+ "selected": [
+  "v3_growth_zone_drift_low_texture_mild_s60",
+  "v3_growth_zone_second_root_occlusion_mild_s60",
+  "v3_growth_zone_drift_jitter_mild_s60",
+  "v3_growth_zone_low_texture_fast_mild_s60",
+  "v3_growth_zone_focus_drift_z1.5_s60",
+  "v3_growth_zone_illumination_flicker_z0.03_s60",
+  "v3_growth_zone_drift_low_texture_mild_s61",
+  "v3_growth_zone_second_root_occlusion_mild_s61",
+  "v3_growth_zone_drift_jitter_mild_s61",
+  "v3_growth_zone_focus_drift_z1.5_s61",
+  "v3_growth_zone_illumination_flicker_z0.03_s61",
+  "v3_growth_zone_second_root_occlusion_mild_s62",
+  "v3_growth_zone_focus_drift_z1.5_s62",
+  "v3_growth_zone_illumination_flicker_z0.03_s62",
+  "v3_growth_zone_focus_drift_z1.5_s63",
+  "v3_growth_zone_illumination_flicker_z0.03_s63",
+  "v3_growth_zone_drift_low_texture_mild_s64",
+  "v3_growth_zone_second_root_occlusion_mild_s64",
+  "v3_growth_zone_drift_jitter_mild_s64",
+  "v3_growth_zone_focus_drift_z1.5_s64"
+ ],
+ "quota": {
+  "accept_repaired": 10,
+  "accept_clean": 4,
+  "decline": 6
+ },
+ "shortfall": {},
+ "counts_all_48": {
+  "accept_clean": 7,
+  "accept_repaired": 19,
+  "decline": 22
+ },
+ "counts_selected": {
+  "accept_repaired": 10,
+  "accept_clean": 4,
+  "decline": 6
+ }
+}
