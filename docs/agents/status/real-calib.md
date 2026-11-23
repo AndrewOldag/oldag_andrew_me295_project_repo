@@ -1,11 +1,16 @@
 # real-calib
-Updated: 2026-11-22 22:47 (local)
+Updated: 2026-11-22 23:04 (local)
 Lane: course
 Branch: wip/supervisor
-Last inbox item done: 28
-State: working
-Now: item 29, task c032: VM supervisor (scripts/ops/supervisor.ps1), build and test only
+Last inbox item done: 29
+State: ready to merge
+Now: c032 built and tested; not installed (switch-over waits for a planning inbox item after Thu 26 Nov 12:00)
 Done since last update:
-- Item 28 replaced by item 29; branch wip/supervisor from origin/main (9c55431)
+- Item 28 replaced by item 29
+- Item 29 (c032): scripts/ops/supervisor.ps1, register_detached.ps1, install_supervisor.ps1 (not run); tests/test_supervisor.py 12 passed; test_ops, test_board 18 passed; README, decisions, log, task to review
+- Two limits beyond the spec (decisions): the same session is not restarted within 60 min of its last supervisor start (a session that exits with an inbox item still open would else restart every tick); status read from the newest `Updated:` over all origin branches
+- For planning: sessions that exit while an item is open should still keep `Last inbox item done` below the inbox (supervisor then retries hourly), or write the item number with a note as dispatcher does (then only the 2 h stale rule applies, and only for State working)
+- Seen on the VM: a pid file `real-calib,compound.pid` in the agents folder: `agents.ps1 -Names a,b` under `-File` takes "a,b" as one name. supervisor.ps1 splits on commas; agents.ps1 not changed
+- Dispatcher and compound: when the supervisor is installed, register long detached processes with `scripts/ops/register_detached.ps1` (README)
 Needs Andrew:
 - none
