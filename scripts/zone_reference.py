@@ -4,14 +4,22 @@ docs/proposals/2026-11-23_zone-reference.md).
 synthetic   c034 freeze v4 set (18 clean, 90 shifted, 9 repaired) with the residual split into common mode and shape.
             Synthetic shape threshold by the R4 rule on the clean tracks (this test only). Writes synthetic.csv, synthetic.md
 sample      24 accepted c027 windows by the proposal's rule (seed 20261123). Writes sample.csv
+overlays    Per sampled window: first, middle and last frame read from storage (read-only, one window at a time, raw
+            frames deleted after use) with midline, midline tip, tracked chain (first point marked) and predicted
+            particle positions. PNGs, index.html and a blank labels.csv in staging/c035_overlays/ (git-ignored). The
+            index shows no residual value or flag. A rerun skips windows with a PNG
 
   python scripts/zone_reference.py synthetic --cache <freeze v4 track cache>
   python scripts/zone_reference.py sample --cache <c027 track cache>
+  python scripts/zone_reference.py overlays --cache <c027 track cache> --host <storage ssh alias> --data <movie root>
 """
 import argparse
 import collections
 import csv
+import html
 import json
+import re
+import shlex
 import sys
 from pathlib import Path
 
@@ -20,12 +28,16 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "scripts"))
-from checker.zone_checks import particle_path, shifted_fields  # noqa: E402
+from checker.zone_checks import (SUBSTEPS, _profile, _velocity, particle_path, shifted_fields,  # noqa: E402
+                                 tip_frame_positions)
 from integrity_thresholds import LABELS, round_up_2sf, track_set  # noqa: E402
 from measure.record import from_tracker_npz  # noqa: E402
 from zone_checks import SHIFTS, WINDOWS, track_file  # noqa: E402
 
 OUT = ROOT / "results" / "2026-11-23_zone_reference"
+OVERLAYS = ROOT / "staging" / "c035_overlays"
+ZOOM_PX = 120                                    # half width of the tip-region panels
+MOVED_VELOCITY = np.array([0.5, 0.3]) / 90.0     # px/s, (row, col): scripts/remote/real_moved.py VELOCITY
 MANIFEST = ROOT / "manifest" / "root_manifest.csv"
 SEED = 20261123
 STRATA = {"control": 5, "control then control": 4, "mannitol": 5, "mannitol then control": 5,
@@ -141,13 +153,148 @@ def sample(a):
     print(json.dumps({c: len(pool[c]) for c in sorted(STRATA)} | {"sampled": len(rows)}))
 
 
+def predicted_positions(rec):
+    """(T, M) predicted tip-frame position of each seed (finite in the first and last frame) in every frame, by the
+    particle_path integration of checker/zone_checks.py; NaN for points that are not seeds."""
+    s, v, _, ok = _profile(rec.fields)
+    S = tip_frame_positions(rec)
+    seed = np.isfinite(S[0]) & np.isfinite(S[-1])
+    vel = _velocity(s, v, ok)
+    out = np.full(S.shape, np.nan)
+    x = S[0, seed].copy()
+    out[0, seed] = x
+    for i, dt in enumerate(np.diff(np.asarray(rec.frame_times_s, float))):
+        h = dt / SUBSTEPS
+        for _ in range(SUBSTEPS):
+            k1 = vel(x); k2 = vel(x + 0.5 * h * k1); k3 = vel(x + 0.5 * h * k2); k4 = vel(x + h * k3)
+            x = x + h * (k1 + 2 * k2 + 2 * k3 + k4) / 6.0
+        out[i + 1, seed] = x
+    return out
+
+
+def on_midline(line, S):
+    """Points at arc length S from the tip along `line` (K, 2); NaN past its ends."""
+    line = line[np.isfinite(line[:, 0])]
+    sl = np.concatenate([[0.0], np.cumsum(np.linalg.norm(np.diff(line, axis=0), axis=1))])
+    S = np.where((S >= 0) & (S <= sl[-1]), S, np.nan)
+    return np.stack([np.interp(S, sl, line[:, 0]), np.interp(S, sl, line[:, 1])], axis=-1)
+
+
+def window_frames(elapsed_s, h0, h1):
+    """Movie frame indices of a window, as scripts/remote/real_midline.py selects them."""
+    t_h = np.asarray(elapsed_s) / 3600.0
+    return np.nonzero((t_h >= h0) & (t_h <= h1))[0]
+
+
+def _elapsed_s(text):
+    m = re.search(r"theElapsedTimes:\s*\[(.*?)\]", text, re.DOTALL)
+    vals = [float(v) for v in m.group(1).split(",") if v.strip()]
+    return np.array(vals[1:]) / 1000.0              # the first value is a count header
+
+
+def overlays(a):
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    from measure.remote_link import Link
+
+    cache = Path(a.cache)
+    man = {r["id"]: r for r in csv.DictReader(open(MANIFEST))}
+    rows = list(csv.DictReader(open(OUT / "sample.csv")))
+    raw = OVERLAYS / "_raw"
+    raw.mkdir(parents=True, exist_ok=True)
+    link = Link(a.host)
+    notes = {}
+    try:
+        for r in rows:
+            w = r["window"]
+            png = OVERLAYS / f"{w}.png"
+            if png.exists():
+                continue
+            m = man[r["root"]]
+            imgdir = f"{a.data.rstrip('/')}/{m['experiment']}/{m['montage_imgdir']}"
+            tf = track_file(cache, w, "st1")
+            rec = from_tracker_npz(tf, root_id=w)
+            el = _elapsed_s(link.run(f"cat {shlex.quote(imgdir + '/ElapsedTimes.yaml')}").decode())
+            fr = window_frames(el, *_hours(w))
+            T = len(rec.frame_times_s)
+            if len(fr) != T or np.max(np.abs(el[fr] - el[fr[0]] - (rec.frame_times_s - rec.frame_times_s[0]))) > 1.0:
+                notes[w] = f"frame times do not match the track ({len(fr)} frames, track {T})"
+                print(w, notes[w])
+                continue
+            pred = predicted_positions(rec)
+            # a whole-pixel reference track is on the copy cropped by D at the top left (real_moved.py whole_pixel)
+            tw = rec.frame_times_s - rec.frame_times_s[0]
+            crop = np.rint(np.outer(tw, MOVED_VELOCITY)).astype(int).max(axis=0) if "_wp_ref" in tf.name else 0
+            fig, grid = plt.subplots(2, 3, figsize=(18, 11), gridspec_kw={"height_ratios": [1, 1.4]})
+            for k, i in enumerate((0, T // 2, T - 1)):
+                f = raw / f"{w}_{int(fr[i])}.npy"
+                f.write_bytes(link.run(f"cat {shlex.quote(f'{imgdir}/ImageData_Ch0_TP{int(fr[i]):07d}.npy')}"))
+                img = np.load(f)
+                f.unlink()                           # raw frame deleted after use
+                img = img[0] if img.ndim == 3 else img
+                off = rec.stage_px[i] - crop         # image = world - stage_px (+ crop on a reference copy)
+                mid = rec.midline[i] - off
+                ch = rec.centre[i] - off
+                pp = on_midline(mid, pred[i])
+                pts = np.concatenate([mid[np.isfinite(mid[:, 0])], ch[np.isfinite(ch[:, 0])]])
+                r0, c0 = np.maximum(pts.min(0) - 80, 0).astype(int)
+                r1, c1 = np.minimum(pts.max(0) + 80, img.shape).astype(int)
+                lo, hi = np.percentile(img[r0:r1, c0:c1], (1, 99.5))
+                tip = mid[0]
+                zoom = (max(tip[0] - ZOOM_PX, 0), min(tip[0] + ZOOM_PX, img.shape[0]),
+                        max(tip[1] - ZOOM_PX, 0), min(tip[1] + ZOOM_PX, img.shape[1]))
+                for ax, (a0, a1, b0, b1), ms in ((grid[0, k], (r0, r1, c0, c1), 1.0),
+                                                 (grid[1, k], zoom, 2.0)):
+                    ax.imshow(img, cmap="gray", vmin=lo, vmax=hi)
+                    ax.plot(mid[:, 1], mid[:, 0], "-", color="cyan", lw=0.8 * ms, label="midline")
+                    ax.plot(tip[1], tip[0], "*", color="red", ms=10 * ms, label="midline tip")
+                    ax.plot(ch[:, 1], ch[:, 0], "o", color="yellow", ms=2.5 * ms, label="tracked chain")
+                    j = np.flatnonzero(np.isfinite(ch[:, 0]))
+                    if len(j):
+                        ax.plot(ch[j[0], 1], ch[j[0], 0], "s", mfc="none", mec="magenta", ms=8 * ms, mew=2,
+                                label="first chain point")
+                    ax.plot(pp[:, 1], pp[:, 0], "x", color="lime", ms=4 * ms, mew=1, label="predicted")
+                    ax.set_xlim(b0, b1); ax.set_ylim(a1, a0)
+                    ax.set_xticks([]); ax.set_yticks([])
+                grid[0, k].set_title(f"frame {i} of {T - 1} ({rec.frame_times_s[i] / 3600:.2f} h)")
+                grid[1, k].set_title(f"tip region, {2 * ZOOM_PX} px")
+            grid[0, 0].legend(loc="lower left", fontsize=8, framealpha=0.7)
+            fig.suptitle(w)
+            fig.tight_layout()
+            fig.savefig(png, dpi=110)
+            plt.close(fig)
+            print(w, "done", flush=True)
+    finally:
+        link.close()
+    labels = OVERLAYS / "labels.csv"
+    if not labels.exists():
+        labels.write_text("window,label\n" + "".join(f"{r['window']},\n" for r in rows))
+    items = []
+    for r in rows:
+        w = html.escape(r["window"])
+        body = (f'<img src="{w}.png" style="width:100%">' if (OVERLAYS / f"{r['window']}.png").exists()
+                else f"<p>not made: {html.escape(notes.get(r['window'], 'see run output'))}</p>")
+        items.append(f'<h2 id="{w}">{w} ({html.escape(r["condition"])})</h2>\n{body}')
+    (OVERLAYS / "index.html").write_text(
+        "<!doctype html><meta charset='utf-8'><title>c035 overlays</title><body style='font-family:sans-serif'>"
+        "<h1>c035 reference windows: label each clean or not clean in labels.csv</h1>"
+        "<p>Not clean: midline tip or first chain point visibly wrong, or the profile visibly misplaced (predicted "
+        "points, green x, visibly off the tracked chain, yellow). Frames: first, middle and last of the window. "
+        "Red star: midline tip. Magenta square: first chain point.</p>\n" + "\n".join(items) + "</body>")
+    print(json.dumps({"windows": len(rows), "made": sum((OVERLAYS / f"{r['window']}.png").exists() for r in rows),
+                      "not made": notes}))
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
     s = sub.add_parser("synthetic"); s.add_argument("--cache", required=True)
     s = sub.add_parser("sample"); s.add_argument("--cache", required=True)
+    s = sub.add_parser("overlays"); s.add_argument("--cache", required=True)
+    s.add_argument("--host", required=True); s.add_argument("--data", required=True)
     a = ap.parse_args()
-    {"synthetic": synthetic, "sample": sample}[a.cmd](a)
+    {"synthetic": synthetic, "sample": sample, "overlays": overlays}[a.cmd](a)
 
 
 if __name__ == "__main__":
