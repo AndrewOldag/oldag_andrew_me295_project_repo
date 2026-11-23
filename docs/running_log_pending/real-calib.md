@@ -76,3 +76,13 @@
 - Remaining: merge; a real threshold only with a real reference set and Andrew's approval
 - Bottlenecks: none
 - Done (inbox 31): on-record shift confirmed as the fault set (amendment 6810f3a withdrawn); README limit added: fault model is an arc-length offset of the profile, not a zone misplaced by another tracker error. Main merged (b22e799; conflict markers removed in the next commit). No run, no cluster job
+
+## 2026-11-23 (build account, session real-calib, inbox item 32, c035)
+- Done: proposal `docs/proposals/2026-11-23_zone-reference.md` before the draw (bcf0733): seed 20261123, strata 5/4/5/5/5 by condition, one window per root, threshold rule on clean windows, step 1 stop rule
+- Done: residual split in `checker/zone_checks.py` (`pp_common_*`, `pp_shape_*`); synthetic re-run (b3e4e90): shape flags 15 of 15 at every shift -60 to +60 px, 0 of 18 clean, 0 of 9 repaired (synthetic shape threshold 0.0019; shifted 0.045-0.18). c034 values reproduced 117 of 117
+- Done: 24 accepted c027 windows drawn (`results/2026-11-23_zone_reference/sample.csv`)
+- Done: 24 overlays in staging (not pushed), 3 frames per window plus tip-region zoom; frames read from storage read-only and deleted after use (ee01809)
+- Tests: 502 passed, 3 skipped (full suite, 202 s)
+- Demo: `python scripts/zone_reference.py synthetic --cache <freeze v4 track cache>` -> writes `results/2026-11-23_zone_reference/synthetic.md`, stop rule met
+- Remaining: Andrew's labels; thresholds (Andrew approves); apply to all c027 windows; README, decisions; ready to merge by Fri 27 Nov 12:00
+- Bottlenecks: labels, on Andrew
