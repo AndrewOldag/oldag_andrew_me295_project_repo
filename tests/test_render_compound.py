@@ -27,10 +27,21 @@ def same(a, b):
 
 def test_lists():
     from agents.actions import FAULTS
-    assert set(C.COMPOUND_FAULTS) == set(C.COMPOUND) | set(C.NOVEL)
+    assert set(C.COMPOUND_FAULTS) == set(C.COMPOUND) | set(C.MILD) | set(C.NOVEL)
     assert not set(C.COMPOUND_FAULTS) & (set(base.DEV_FAULTS) | set(H.HELDOUT_FAULTS) | set(FAULTS))
-    for f, comp in C.COMPOUND.items():
+    for f, comp in (C.COMPOUND | C.MILD).items():
         assert len(comp) == 2 and set(comp) <= set(base.DEV_FAULTS) | set(H.HELDOUT_FAULTS)
+
+
+def test_mild_is_c029_kinds_with_milder_sizes_and_c029_unchanged():
+    assert C.COMPOUND == {
+        "drift_low_texture": {"rigid_drift": "0.5", "low_texture": "0.03"},
+        "second_root_occlusion": {"second_root": "30", "partial_occlusion": "20"},
+        "drift_jitter": {"rigid_drift": "0.5", "midline_jitter": "3"},
+        "low_texture_fast": {"low_texture": "0.03", "displacement_exceeds_patch": "2x6"}}
+    assert {f.removesuffix("_mild") for f in C.MILD} == set(C.COMPOUND)
+    for f, comp in C.MILD.items():
+        assert set(comp) == set(C.COMPOUND[f.removesuffix("_mild")])
 
 
 def test_clean_equals_render():
@@ -39,11 +50,12 @@ def test_clean_equals_render():
     assert same(C.render(spec, movie), base.render(s0, m0))
 
 
-@pytest.mark.parametrize("fault", ["drift_low_texture", "drift_jitter", "low_texture_fast"])
+@pytest.mark.parametrize("fault", ["drift_low_texture", "drift_jitter", "low_texture_fast",
+                                   "drift_low_texture_mild", "drift_jitter_mild", "low_texture_fast_mild"])
 def test_dev_pairs_equal_render_with_both_settings(fault):
     spec, movie = short(*C.image_case("v3_growth_zone", fault, 40))
     kw, speed = {}, 1.0
-    for f, z in C.COMPOUND[fault].items():
+    for f, z in C.components(fault).items():
         m, _, sp = base.fault_settings(f, z)
         kw.update(m)
         speed *= sp
@@ -61,10 +73,11 @@ def test_heldout_component_alone_equals_render_heldout(comp, size, monkeypatch):
     assert same(C.render(spec, movie), H.render(s0, m0))
 
 
-def test_second_root_occlusion_differs_from_each_component():
-    spec, movie = short(*C.image_case("v3_growth_zone", "second_root_occlusion", 40), height=768)
+@pytest.mark.parametrize("fault", ["second_root_occlusion", "second_root_occlusion_mild"])
+def test_second_root_occlusion_differs_from_each_component(fault):
+    spec, movie = short(*C.image_case("v3_growth_zone", fault, 40), height=768)
     both = C.render(spec, movie)
-    for comp, size in C.COMPOUND["second_root_occlusion"].items():
+    for comp, size in C.components(fault).items():
         s0, m0 = short(*H.image_case("v3_growth_zone", comp, 40, size=size), height=768)
         assert not same(both, H.render(s0, m0))
 

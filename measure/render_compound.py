@@ -9,6 +9,12 @@ Compound faults: two faults at their freeze v4 sizes in one movie
 - second_root_occlusion: second_root 30 + partial_occlusion 20 (the drop is drawn over both roots)
 - drift_jitter: rigid_drift 0.5 + midline_jitter 3
 - low_texture_fast: low_texture 0.03 + displacement_exceeds_patch 2x6
+Milder compound faults of the supplement c029b (proposal docs/proposals/2026-11-22_heldout-supplement.md), as
+separate entries so the c029 entries do not change:
+- drift_low_texture_mild: rigid_drift 0.5 + low_texture 0.2
+- second_root_occlusion_mild: second_root 10 + partial_occlusion 5
+- drift_jitter_mild: rigid_drift 0.5 + midline_jitter 0.5
+- low_texture_fast_mild: low_texture 0.2 + displacement_exceeds_patch 1x4
 Novel single faults, not in the remedy tree or the agents' fault list (size from the sizing rule):
 - focus_drift: Gaussian blur rising linearly from 0 at frame 0 to `size` px at the last rendered frame
 - illumination_flicker: each frame's image (background and root) times a gain 1 + size * N(0, 1), own
@@ -33,8 +39,14 @@ COMPOUND = {
     "drift_jitter": {"rigid_drift": "0.5", "midline_jitter": "3"},
     "low_texture_fast": {"low_texture": "0.03", "displacement_exceeds_patch": "2x6"},
 }
+MILD = {
+    "drift_low_texture_mild": {"rigid_drift": "0.5", "low_texture": "0.2"},
+    "second_root_occlusion_mild": {"second_root": "10", "partial_occlusion": "5"},
+    "drift_jitter_mild": {"rigid_drift": "0.5", "midline_jitter": "0.5"},
+    "low_texture_fast_mild": {"low_texture": "0.2", "displacement_exceeds_patch": "1x4"},
+}
 NOVEL = ("focus_drift", "illumination_flicker")
-COMPOUND_FAULTS = tuple(COMPOUND) + NOVEL
+COMPOUND_FAULTS = tuple(COMPOUND) + tuple(MILD) + NOVEL
 FLICKER_SEED = 104729          # own stream: the texture and camera noise stay those of render.render
 FLICKER_CLIP = (0.5, 1.5)
 
@@ -49,8 +61,8 @@ class CompoundMovie(base.Movie):
 
 def components(fault, size=None):
     """{component fault: size string} of one compound or novel fault."""
-    if fault in COMPOUND:
-        return dict(COMPOUND[fault])
+    if fault in COMPOUND or fault in MILD:
+        return dict(COMPOUND.get(fault) or MILD[fault])
     if fault in NOVEL:
         if size is None:
             raise ValueError(f"{fault} needs a size")
