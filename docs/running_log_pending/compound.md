@@ -44,3 +44,11 @@
 - Demo: `python scripts/synth/heldout_supplement.py eval` writes `supplement/table_metrics.md` once all runs exist
 - Remaining: finish c029b LLM runs (about 24 left); fetch 7919315, rerun remedy tree; eval; supplement README by Thu 26 Nov 20:00
 - Bottlenecks: cluster connection master (Andrew) for array 7919315
+
+## 2026-11-23 (build account, session compound, morning)
+- Done: c029b LLM runs complete: diagnostician 60 of 60, single agent 60 of 60, 0 harness errors; runner ended 07:11 (715ec33)
+- Done: array 7919315 fetched (2 of 2); remedy tree low_texture_fast_mild s60 paused on a fourth state (st1_r21_mask); array 7925321 submitted 07:49 (2 runs, worst case $0.024)
+- Done: detached loop `staging/c029b_tail.ps1` (git-ignored) fetches, reruns `rules`, submits a further paused state if needed (max 3)
+- Demo: `python scripts/synth/heldout_supplement.py eval` writes `supplement/table_metrics.md` (19 of 20 remedy-tree runs so far; not committed)
+- Remaining: fetch 7925321, last remedy-tree run, eval, supplement README by Thu 26 Nov 20:00
+- Bottlenecks: cluster queue for array 7925321; connection master (Andrew)

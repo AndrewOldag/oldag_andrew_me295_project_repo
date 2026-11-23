@@ -7,7 +7,7 @@ state: working
 branch: wip/compound
 host: VM (renders and LLM runs), cluster (tracker runs)
 created: 2026-11-22 20:20
-last_update: 2026-11-23 07:51
+last_update: 2026-11-23 08:11
 blocker: none
 done_marker: results/2026-11-18_heldout_compound/supplement/README.md
 ---
