@@ -398,8 +398,8 @@ def point_v3_here():
 def llm_runs():
     runs = OUT / "runs"
     n = sum(1 for m in v3.LLM for _ in runs.glob(f"{m}_*_summary.json")) if runs.exists() else 0
-    lim = runs / "usage_limit"
-    return n + (len(list(lim.glob("*_summary.json"))) if lim.exists() else 0)
+    aside = [runs / "usage_limit", runs / "missing_state"]      # set-aside runs count toward the cap
+    return n + sum(len(list(d.glob("*_summary.json"))) for d in aside if d.exists())
 
 
 def set_aside_limit_runs():

@@ -12,7 +12,9 @@ docs/proposals/2026-11-22_heldout-supplement.md). The c029 driver (heldout_compo
 Renders in staging/rods_c029b, tracks in staging/tracks_c029b (git-ignored). No tracker run on the VM.
 """
 import json
+import re
 import sys
+import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -68,6 +70,48 @@ def use():
     hc.scored_rods = scored_rods
 
 
+MISSING = OUT / "runs" / "missing_state"   # inbox item 12: kept, not scored, redone from step 0 once cached
+
+
+def missing_in(trace):
+    """(rod id, settings tag) of the first "Missing" tool error in an agent trace, else None."""
+    m = re.search(r"Missing: (\S+) (\S+?)\"", trace.read_text(encoding="utf-8")) if trace.exists() else None
+    return (m.group(1), m.group(2).rstrip("\\")) if m else None
+
+
+def state_cached(rid, tag):
+    return all(Path(f"{hc.CACHE / f'{r}__{tag}.npz'}.ok").exists() for r in (rid, f"{rid}_moved"))
+
+
+def set_aside_missing_state_runs():
+    """LLM runs whose remedy needed a state not cached (the agent got a Missing tool error) move to
+    runs/missing_state/ with a line in pending.jsonl (inbox item 12)."""
+    n, runs = 0, OUT / "runs"
+    for f in runs.glob("*_summary.json"):
+        s = json.loads(f.read_text())
+        if s["method"] not in hc.v3.LLM or not (miss := missing_in(runs / s["trace"])):
+            continue
+        MISSING.mkdir(parents=True, exist_ok=True)
+        for g in (f, runs / s["trace"]):
+            dest = MISSING / g.name
+            if dest.exists():
+                dest = MISSING / f"{g.stem}_{time.strftime('%H%M%S')}{g.suffix}"
+            g.rename(dest)
+        with (MISSING / "pending.jsonl").open("a") as h:
+            h.write(json.dumps({"run": f.name[:-len("_summary.json")], "rod": miss[0], "tag": miss[1],
+                                "time": time.strftime("%F %T")}) + "\n")
+        n += 1
+    return n
+
+
+def waiting_on_state(method, repeat):
+    """Rod ids whose set-aside run of this method and repeat still waits for its state."""
+    f = MISSING / "pending.jsonl"
+    rows = [json.loads(x) for x in f.read_text().splitlines()] if f.exists() else []
+    return {r["rod"] for r in rows if r["run"].startswith(method + "_") and r["run"].endswith(f"_r{repeat}")
+            and not state_cached(r["rod"], r["tag"])}
+
+
 def committed(f):
     return f.exists() and not hc.v3.git("status", "--porcelain", "--", str(f)) and bool(hc.v3.git("ls-files", "--", str(f)))
 
@@ -100,6 +144,20 @@ def main():
         sys.exit("selected.json not committed: no method runs before (proposal, section 5)")
     if cmd == "render" and selected() is not None:
         sys.exit("selection made; renders are of the 48 candidates only")
+    if cmd == "agents":
+        n = set_aside_missing_state_runs()
+        a = sys.argv
+        m, k = a[a.index("--method") + 1], int(a[a.index("--repeat") + 1])
+        wait = waiting_on_state(m, k)
+        if wait:
+            print(f"{m} repeat {k}: {len(wait)} rods wait for a state not cached, skipped: {sorted(wait)}", flush=True)
+            hc.scored_rods = lambda: [r for r in scored_rods() if r.id() not in wait]
+        try:
+            hc.main()
+        finally:
+            n += set_aside_missing_state_runs()
+            print(f"missing-state runs set aside this call: {n}", flush=True)
+        return
     hc.main()
 
 

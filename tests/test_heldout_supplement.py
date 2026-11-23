@@ -35,3 +35,31 @@ def test_select_keeps_a_short_class_whole_and_states_the_shortfall():
     labels[ids[5]]["class"] = labels[ids[9]]["class"] = "accept_repaired"
     keep, short = S.select(labels)
     assert len(keep) == 8 and short == {"accept_repaired": 8, "accept_clean": 4}
+
+
+def test_missing_state_runs_set_aside_and_wait_until_cached(tmp_path, monkeypatch):
+    runs, cache = tmp_path / "runs", tmp_path / "cache"
+    runs.mkdir(), cache.mkdir()
+    monkeypatch.setattr(S, "OUT", tmp_path)
+    monkeypatch.setattr(S, "MISSING", runs / "missing_state")
+    monkeypatch.setattr(S.hc, "CACHE", cache)
+    rid, tag = "v3_growth_zone_drift_low_texture_mild_s61", "st1_r21_regv2p400b17"
+    tool = {"tool": "apply_remedy", "result": f"Missing: {rid} {tag}"}
+    for name, trace in [("diagnostician_x_r0", tool), ("diagnostician_y_r0", {"result": "ok"}),
+                        ("script_z", tool)]:
+        (runs / f"{name}_trace.jsonl").write_text(S.json.dumps(trace) + "\n")
+        method = name.rsplit("_", 2)[0] if name.startswith("diag") else "script"
+        (runs / f"{name}_summary.json").write_text(S.json.dumps({"method": method, "trace": f"{name}_trace.jsonl"}))
+    assert S.missing_in(runs / "diagnostician_x_r0_trace.jsonl") == (rid, tag)
+    assert S.set_aside_missing_state_runs() == 1
+    assert sorted(p.name for p in (runs / "missing_state").iterdir()) == \
+        ["diagnostician_x_r0_summary.json", "diagnostician_x_r0_trace.jsonl", "pending.jsonl"]
+    assert (runs / "script_z_summary.json").exists()                  # rule methods are not set aside
+    pending = S.json.loads((runs / "missing_state" / "pending.jsonl").read_text())
+    pending["run"] = f"diagnostician_{rid}_r0"
+    (runs / "missing_state" / "pending.jsonl").write_text(S.json.dumps(pending) + "\n")
+    assert S.waiting_on_state("diagnostician", 0) == {rid}
+    assert S.waiting_on_state("diagnostician", 1) == set() and S.waiting_on_state("single_agent", 0) == set()
+    for r in (rid, f"{rid}_moved"):
+        (cache / f"{r}__{tag}.npz.ok").write_text("")
+    assert S.waiting_on_state("diagnostician", 0) == set()
