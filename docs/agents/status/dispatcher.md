@@ -1,11 +1,12 @@
 # dispatcher
-Updated: 2026-11-22 23:42 (local)
+Updated: 2026-11-22 23:47 (local)
 Lane: course
 Branch: wip/dispatcher
 Last inbox item done: 58 (item 46, task c027, still working)
 State: working
 Now: c027 cycle running detached (status line after every group); after_wave.sh reruns the paused windows when the wave is done
 Done since last update:
+- Item 58 (23:46 start check): cycle.sh (pid 7820, since 14:34) and after_wave.sh (pid 8208, since 14:39) are running, one of each; cycle log last line 23:45 (g030: fetched 10, not finished 19; 63 jobs wait). Nothing restarted; this session exits
 - Item 58 (22:45 start check): cycle.sh (pid 7820, since 14:34) and after_wave.sh (pid 8208, since 14:39) are running, one of each; cycle log last line 22:44 (g028: 2 tasks not finished). Nothing restarted; this session exits
 - Auto 11-22 23:42 (from logs): run 1189 records, accept by rule 1034, decline by diagnostician 23, decline by rule 58, paused 74; LLM calls 491; run ended: done; windows this start 74; LLM calls 491. Queue 540 tasks: done 9, failed 24, fetched 478, submitted 29; cycle last:  ; for real-calib: 0711_c5__w6-8 register_v2 track and base are in the c027 cache
 - Items 56-57: main merged at a group boundary (zero-base lateral fix); the cycle kept running. The gate now applies on every remedy step including field-level rods (tracker-only exception removed); suite 447 passed, 3 skipped, test_info_p1_p5 passes. after_wave.sh reads run_all.py and the gate from disk when it starts, so the rerun uses the merged code
