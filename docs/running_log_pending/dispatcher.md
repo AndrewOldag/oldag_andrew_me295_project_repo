@@ -62,3 +62,8 @@
 
 ## 2026-11-23 (build account, dispatcher, session 22:15)
 - Done: inbox 62 part 1: `scripts/mask_bio.py` reviewed exemption list (file, exact phrase, decision date); flank-difference range in `docs/proposals/2026-10-23_real-midline-smoothing.md` unmasked as a check value; 2 tests (exemption matches exactly one place; covers only its phrase in its file); suite 508 passed, 3 skipped
+- Done: inbox 62 part 2 / 63: new archive folder created on the lab server (mkdir only; location in private/); 4 tars and MD5SUMS copied over one ssh connection; `md5sum -c` on the server: 4 of 4 OK; no delete or rename
+  - real_subset_035e8fc.tar 8f8d1f269da5d3ab90f0f3c3be6a6087; real_subset_2ea98bd.tar 1c7c1671577ca40d2b8302f8fa801e3a; real_subset_97f2eb0.tar fdcffd795d2be52b0bdc174ca6f6f0c5; real_subset_runs_vm.tar cfc5c6b7c87bc01697283e383949a8ac
+- Demo: `python scripts/board.py` shows c036 in review (ready to merge)
+- Remaining: planning merges wip/audit-fixes; history rewrite (planning/Andrew)
+- Bottlenecks: none
