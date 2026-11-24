@@ -25,6 +25,18 @@ real-calib, 2026-11-23. Committed before the sample is drawn and before any valu
 - Frames are read from storage one window at a time, read-only; raw frames are deleted from the VM after the overlays are written. Overlays and `index.html` in `staging/c035_overlays/` (git-ignored, not pushed). The index shows no residual value or flag, so labels are blind to the check
 - `labels.csv`: `window,label` with `label` in `clean`, `not clean`. Andrew writes it; the session waits
 
+## Extension to 150 windows (inbox 33, Andrew, 2026-11-23 20:52)
+Committed before the extra windows are drawn and before any threshold is computed. The first 24 windows, their overlays and Andrew's labels stay as they are.
+- Pool: the same pool as step 2 (accepted, include yes, usable hours, base track with `pp_shape_rel` and `pp_common_rel` computable), less the first 24 windows
+- Size: 126 more windows, 150 in total
+- Strata: the `condition` column, in proportion to the accepted pool (1,034 windows: control 368, control then control 42, mannitol 291, mannitol then control 272, mannitol then mannitol 61). Allocation by largest remainder of `126 x pool / 1,034`; ties go to the condition first in sorted order. Result: control 45, control then control 5, mannitol 36, mannitol then control 33, mannitol then mannitol 7
+- Per root: at most 2 windows in total, counting the first 24
+- Draw: `numpy.random.default_rng(20261124)`, one generator for the whole extension. Conditions in sorted order; in each, the pool sorted by window id is permuted with `rng.permutation`; windows are taken in that order, skipping any of the first 24 and any window whose root already has 2 windows in the sample, until the stratum is full
+- A stratum that runs out under the per-root cap stays short; the shortfall is reported in status and README. No window moves between strata
+- Code `scripts/zone_reference.py extend`; appends rows 25-150 to `sample.csv` (column `draw`: 1 for the first 24, 2 for the extension). The draw does not look at any residual value beyond computability
+- Overlays as in step 3, one window at a time, raw frames deleted after use; appended to `index.html` and to `labels.csv` (blank label) in sample order after the first 24, without changing an existing label
+- Threshold rule (step 5) unchanged, computed once on all 150 labels. If fewer than 30 are `clean`, status says so before anything is computed
+
 ## Threshold rule (step 5)
 - Set: the windows Andrew labels `clean`
 - `pp_shape_rel` threshold: 99.5th percentile over the set (numpy linear interpolation) x 1.5, rounded up to 2 significant figures. Same rule for `pp_common_rel` (anchoring-drift flag)
