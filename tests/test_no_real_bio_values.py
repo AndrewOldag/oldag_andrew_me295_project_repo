@@ -15,8 +15,8 @@ def test_tracked_real_files_have_no_biology_values():
     hits = {}
     for f in mask_bio.tracked_files():
         text = mask_bio.read_text(f)
-        if text and mask_bio.find_values(text):
-            hits[f] = sorted(set(mask_bio.find_values(text)))
+        if text and mask_bio.find_values(text, f):
+            hits[f] = sorted(set(mask_bio.find_values(text, f)))
     assert not hits, f"biology values in {len(hits)} files (run scripts/mask_bio.py --apply): {list(hits)[:10]}"
 
 
@@ -42,3 +42,21 @@ def test_report_mask_covers_strain_rate_profile():
     m = mask({"strain_rate_pct_per_h": [1.0, 2.0], "negative_strain_rate_min_pct_per_h": -17.9, "closure": 1.2})
     assert m["strain_rate_pct_per_h"] == "[masked]" and m["negative_strain_rate_min_pct_per_h"] == "[masked]"
     assert m["closure"] == 1.2
+
+
+@pytest.mark.skipif(shutil.which("git") is None, reason="needs git")
+def test_each_exemption_matches_exactly_one_place():
+    for path, phrase, decision in mask_bio.EXEMPT:
+        assert decision
+        places = [f for f in mask_bio.tracked_files() if phrase in (mask_bio.read_text(f) or "")]
+        assert places == [path], f"{phrase!r} in {places}"
+        assert mask_bio.read_text(path).count(phrase) == 1
+
+
+def test_exemption_covers_only_its_phrase_in_its_file():
+    path, phrase, _ = mask_bio.EXEMPT[0]
+    text = f"{phrase}; growth zone 2-6 px/h"
+    assert mask_bio.mask_text(text, path) == f"{phrase}; growth zone [masked] px/h"
+    assert mask_bio.find_values(text, path) == ["growth zone"]
+    assert mask_bio.find_values(phrase, "results/other_real/README.md")
+    assert "[masked]" in mask_bio.mask_text(phrase)

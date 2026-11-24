@@ -59,3 +59,6 @@
 - Demo: `python scripts/mask_bio.py` prints `0 files with values`; results in `results/2026-11-23_audit_fixes/README.md`
 - Remaining: planning merges wip/audit-fixes; Andrew rules on the masked proposal line
 - Bottlenecks: none
+
+## 2026-11-23 (build account, dispatcher, session 22:15)
+- Done: inbox 62 part 1: `scripts/mask_bio.py` reviewed exemption list (file, exact phrase, decision date); flank-difference range in `docs/proposals/2026-10-23_real-midline-smoothing.md` unmasked as a check value; 2 tests (exemption matches exactly one place; covers only its phrase in its file); suite 508 passed, 3 skipped
