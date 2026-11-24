@@ -9,7 +9,8 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 from checker.zone_checks import particle_path, tip_frame_positions  # noqa: E402
 from measure.rod import make_record, v3_cases  # noqa: E402
-from zone_reference import _hours, on_midline, predicted_positions, window_frames  # noqa: E402
+from zone_reference import (_draw, _hours, allocate, append_labels, on_midline, predicted_positions,  # noqa: E402
+                            window_frames)
 
 CASES = {c.name: c for c in v3_cases()}
 
@@ -33,3 +34,28 @@ def test_window_frames_and_hours():
     assert _hours("0727_cc4__w22-23.63") == (22.0, 23.63)
     el = np.arange(0, 3 * 3600 + 1, 90.0)
     assert len(window_frames(el, 0, 2)) == 81 and window_frames(el, 2, 4)[0] == 80
+
+
+def test_allocate_extension_quota():
+    sizes = {"control": 368, "control then control": 42, "mannitol": 291, "mannitol then control": 272,
+             "mannitol then mannitol": 61}
+    assert allocate(126, sizes) == {"control": 45, "control then control": 5, "mannitol": 36,
+                                    "mannitol then control": 33, "mannitol then mannitol": 7}
+    assert allocate(3, {"a": 1, "b": 1, "c": 1, "d": 1}) == {"a": 1, "b": 1, "c": 1, "d": 0}
+
+
+def test_draw_caps_windows_per_root_and_skips_taken():
+    pool = {"x": [{"window": f"r{i % 3}__w{i}", "root": f"r{i % 3}"} for i in range(12)]}
+    taken = {"r0__w0": {"window": "r0__w0", "root": "r0"}}
+    rows = _draw(pool, {"x": 10}, np.random.default_rng(1), taken, 2)
+    roots = [r["root"] for r in rows]
+    assert len(rows) == 5 and roots.count("r0") == 1 and roots.count("r1") == 2 and roots.count("r2") == 2
+    assert "r0__w0" not in {r["window"] for r in rows} and [r["order"] for r in rows] == [1, 2, 3, 4, 5]
+
+
+def test_append_labels_keeps_existing(tmp_path):
+    p = tmp_path / "labels.csv"
+    append_labels(p, ["a", "b"])
+    p.write_text(p.read_text().replace("a,\n", "a,clean\n"))
+    append_labels(p, ["a", "b", "c", "d"])
+    assert p.read_text() == "window,label\na,clean\nb,\nc,\nd,\n"

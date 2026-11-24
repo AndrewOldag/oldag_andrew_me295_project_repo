@@ -4,13 +4,15 @@ docs/proposals/2026-11-23_zone-reference.md).
 synthetic   c034 freeze v4 set (18 clean, 90 shifted, 9 repaired) with the residual split into common mode and shape.
             Synthetic shape threshold by the R4 rule on the clean tracks (this test only). Writes synthetic.csv, synthetic.md
 sample      24 accepted c027 windows by the proposal's rule (seed 20261123). Writes sample.csv
+extend      126 more (inbox 33: seed 20261124, proportional strata, at most 2 per root). Appends to sample.csv
 overlays    Per sampled window: first, middle and last frame read from storage (read-only, one window at a time, raw
             frames deleted after use) with midline, midline tip, tracked chain (first point marked) and predicted
-            particle positions. PNGs, index.html and a blank labels.csv in staging/c035_overlays/ (git-ignored). The
+            particle positions. PNGs, index.html and labels.csv (blank rows appended for new windows, existing labels kept) in staging/c035_overlays/ (git-ignored). The
             index shows no residual value or flag. A rerun skips windows with a PNG
 
   python scripts/zone_reference.py synthetic --cache <freeze v4 track cache>
   python scripts/zone_reference.py sample --cache <c027 track cache>
+  python scripts/zone_reference.py extend --cache <c027 track cache>
   python scripts/zone_reference.py overlays --cache <c027 track cache> --host <storage ssh alias> --data <movie root>
 """
 import argparse
@@ -40,8 +42,11 @@ ZOOM_PX = 120                                    # half width of the tip-region 
 MOVED_VELOCITY = np.array([0.5, 0.3]) / 90.0     # px/s, (row, col): scripts/remote/real_moved.py VELOCITY
 MANIFEST = ROOT / "manifest" / "root_manifest.csv"
 SEED = 20261123
+SEED_EXTRA = 20261124                            # inbox 33 extension
+EXTRA = 126
 STRATA = {"control": 5, "control then control": 4, "mannitol": 5, "mannitol then control": 5,
           "mannitol then mannitol": 5}
+SAMPLE_COLS = ["window", "root", "condition", "order", "pool", "draw"]
 KEYS = ("pp_rms_px", "pp_common_px", "pp_shape_rms_px", "pp_rms_rel", "pp_common_rel", "pp_shape_rel")
 
 
@@ -115,8 +120,8 @@ def _hours(window):
     return float(a), float(b)
 
 
-def sample(a):
-    cache = Path(a.cache)
+def _pool(cache):
+    """Proposal step 2 pool by condition: accepted, include yes, usable hours, base track with both relative values."""
     man = {r["id"]: r for r in csv.DictReader(open(MANIFEST))}
     pool = collections.defaultdict(list)
     for r in csv.DictReader(open(WINDOWS)):
@@ -133,24 +138,70 @@ def sample(a):
         if v["pp_shape_rel"] is None or v["pp_common_rel"] is None:
             continue
         pool[r["condition"]].append(r)
-    rng = np.random.default_rng(SEED)
+    return pool
+
+
+def _draw(pool, quota, rng, taken, per_root):
+    """Conditions in sorted order; each pool sorted by window id, permuted, taken in that order, skipping windows in
+    `taken` and roots that already hold `per_root` windows, until the stratum's quota is met (or the pool runs out)."""
+    count = collections.Counter(r["root"] for r in taken.values())
     rows = []
-    for cond in sorted(STRATA):
+    for cond in sorted(quota):
         cands = sorted(pool[cond], key=lambda r: r["window"])
-        roots, n = set(), 0
+        n = 0
         for i in rng.permutation(len(cands)):
+            if n == quota[cond]:
+                break
             r = cands[i]
-            if r["root"] in roots:
+            if r["window"] in taken or count[r["root"]] >= per_root:
                 continue
-            roots.add(r["root"])
+            count[r["root"]] += 1
             n += 1
             rows.append({"window": r["window"], "root": r["root"], "condition": cond, "order": n,
                          "pool": len(cands)})
-            if n == STRATA[cond]:
-                break
+    return rows
+
+
+def allocate(total, sizes):
+    """Largest-remainder allocation of `total` in proportion to `sizes`; ties to the key first in sorted order."""
+    keys = sorted(sizes)
+    n = sum(sizes.values())
+    exact = {k: total * sizes[k] / n for k in keys}
+    out = {k: int(np.floor(exact[k])) for k in keys}
+    for k in sorted(keys, key=lambda k: (-(exact[k] - out[k]), keys.index(k)))[:total - sum(out.values())]:
+        out[k] += 1
+    return out
+
+
+def sample(a):
+    pool = _pool(Path(a.cache))
+    rows = _draw(pool, STRATA, np.random.default_rng(SEED), {}, 1)
+    for r in rows:
+        r["draw"] = 1
     OUT.mkdir(parents=True, exist_ok=True)
-    _write_csv(OUT / "sample.csv", rows, ["window", "root", "condition", "order", "pool"])
+    _write_csv(OUT / "sample.csv", rows, SAMPLE_COLS)
     print(json.dumps({c: len(pool[c]) for c in sorted(STRATA)} | {"sampled": len(rows)}))
+
+
+def extend(a):
+    """Inbox 33: 126 more windows (seed 20261124), proportional strata, at most 2 per root counting the first 24.
+    Appends to sample.csv; a rerun once the extension is drawn does nothing."""
+    first = list(csv.DictReader(open(OUT / "sample.csv")))
+    if any(r.get("draw") == "2" for r in first):
+        print(json.dumps({"sampled": len(first), "note": "extension already drawn"}))
+        return
+    assert len(first) == sum(STRATA.values()), len(first)
+    pool = _pool(Path(a.cache))
+    quota = allocate(EXTRA, {c: len(pool[c]) for c in STRATA})
+    rows = _draw(pool, quota, np.random.default_rng(SEED_EXTRA), {r["window"]: r for r in first}, 2)
+    for r in first:
+        r["draw"] = 1
+    for r in rows:
+        r["draw"] = 2
+    _write_csv(OUT / "sample.csv", first + rows, SAMPLE_COLS)
+    got = collections.Counter(r["condition"] for r in rows)
+    print(json.dumps({"pool": {c: len(pool[c]) for c in sorted(STRATA)}, "quota": quota,
+                      "drawn": {c: got[c] for c in sorted(STRATA)}, "sampled": len(first) + len(rows)}))
 
 
 def predicted_positions(rec):
@@ -190,6 +241,16 @@ def _elapsed_s(text):
     m = re.search(r"theElapsedTimes:\s*\[(.*?)\]", text, re.DOTALL)
     vals = [float(v) for v in m.group(1).split(",") if v.strip()]
     return np.array(vals[1:]) / 1000.0              # the first value is a count header
+
+
+def append_labels(path, windows):
+    """Blank rows for windows not yet in labels.csv, in sample order after the existing rows; labels kept."""
+    if not path.exists():
+        path.write_text("window,label\n")
+    with open(path, newline="") as fh:
+        have = {r["window"] for r in csv.DictReader(fh)}
+    with open(path, "a", newline="") as fh:
+        fh.write("".join(f"{w},\n" for w in windows if w not in have))
 
 
 def overlays(a):
@@ -267,9 +328,7 @@ def overlays(a):
             print(w, "done", flush=True)
     finally:
         link.close()
-    labels = OVERLAYS / "labels.csv"
-    if not labels.exists():
-        labels.write_text("window,label\n" + "".join(f"{r['window']},\n" for r in rows))
+    append_labels(OVERLAYS / "labels.csv", [r["window"] for r in rows])
     items = []
     for r in rows:
         w = html.escape(r["window"])
@@ -291,10 +350,11 @@ def main():
     sub = ap.add_subparsers(dest="cmd", required=True)
     s = sub.add_parser("synthetic"); s.add_argument("--cache", required=True)
     s = sub.add_parser("sample"); s.add_argument("--cache", required=True)
+    s = sub.add_parser("extend"); s.add_argument("--cache", required=True)
     s = sub.add_parser("overlays"); s.add_argument("--cache", required=True)
     s.add_argument("--host", required=True); s.add_argument("--data", required=True)
     a = ap.parse_args()
-    {"synthetic": synthetic, "sample": sample, "overlays": overlays}[a.cmd](a)
+    {"synthetic": synthetic, "sample": sample, "extend": extend, "overlays": overlays}[a.cmd](a)
 
 
 if __name__ == "__main__":
