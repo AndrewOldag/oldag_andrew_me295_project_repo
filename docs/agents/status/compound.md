@@ -1,11 +1,14 @@
 # compound
-Updated: 2026-11-23 16:48 (local)
+Updated: 2026-11-23 16:50 (local)
 Lane: course
-Branch: wip/compound (c029, c029b, c030; ready to merge); wip/report-corrections (c037, working)
-Last inbox item done: 12
-State: working
-Now: item 13 (c037): correction blocks in Lab reports 2 and 3 for the c033 audit findings, on `wip/report-corrections` from origin/main. No runs
+Branch: wip/compound (c029, c029b, c030; ready to merge); wip/report-corrections (c037; ready to merge)
+Last inbox item done: 13
+State: ready to merge
+Now: idle. Item 13 (c037) done; both branches ready to merge
 Done since last update:
-- Read inbox item 13 and the c033 findings; branch `wip/report-corrections` created
+- LR2 (11-01) and LR3 correction blocks dated 2026-11-23, original text unchanged (2f33bd6)
+- `docs/reports/corrections_for_lab_report_4.md`: one table of every correction, S5-1 disclosure line (c72e231)
+- Task c037 in review; log entry in `docs/running_log_pending/compound_c037.md` on wip/report-corrections (named apart from compound.md on wip/compound to avoid a merge conflict) (1d4b05b)
 Needs Andrew:
-- None
+- S6-8: keep or drop the base-net midline figure in LR2 (block states it is not a course claim)
+- Not changed by c037 (outside the reports): decisions.md:159 "about 10x" (S2-3; median is 76x), README S6-11 and S6-12, top note on the 2026-10-30 LR2 draft (S6-1)
