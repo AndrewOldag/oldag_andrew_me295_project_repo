@@ -9,6 +9,7 @@ $repo = (Get-Location).Path
 if (-not (Test-Path (Join-Path $repo '.git'))) { throw 'Run this from the repo root.' }
 $oldMain = '73668b3a2527604a0d8395faeebb7fa6c5cfebdb'   # main before the rewrite
 
+$env:GIT_ASK_YESNO = 'false'   # never stop on 'Unlink ... failed. Should I try again? (y/n)'
 function Git { & git @args; if ($LASTEXITCODE -ne 0) { throw "git $args failed ($LASTEXITCODE)" } }
 
 # 1. Nothing may be running, and no tracked file may have unpushed edits
@@ -53,13 +54,14 @@ foreach ($b in (& git for-each-ref --format='%(refname:short)' refs/heads)) {
     else { Git branch -D $b; Write-Output "branch $b removed (no rewritten copy on origin; its old commits must not be pushed)" }
 }
 
-# 5. Drop the old commits from this clone
+# 5. Drop every reference to the old commits. No gc: on this VM git cannot unlink object files
+#    (Invalid argument), so old objects stay as unreachable loose files. A push sends only reachable
+#    commits, so they can never reach GitHub again. Auto gc is turned off for this clone.
+Git config gc.auto 0
 Git reflog expire --expire=now --all
-Git gc --prune=now --quiet
 $ErrorActionPreference = 'Continue'
-& git cat-file -e "$oldMain^{commit}" 2>$null
-$still = ($LASTEXITCODE -eq 0)
+$refs = & git for-each-ref --contains $oldMain 2>$null
 $ErrorActionPreference = 'Stop'
-if ($still) { throw 'Old main is still present in this clone. Tell the planning account.' }
-Write-Output 'Done: old history gone from this clone. Re-enable the hourly task:'
+if ($refs) { Write-Output $refs; throw 'A ref still contains old main. Tell the planning account.' }
+Write-Output 'Done: no branch or tag here reaches the old history. Re-enable the hourly task:'
 Write-Output '  schtasks /Change /TN "ME295 agents ping" /ENABLE'
