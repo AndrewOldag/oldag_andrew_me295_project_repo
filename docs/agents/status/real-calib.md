@@ -1,10 +1,10 @@
 # real-calib
-Updated: 2026-11-23 23:35 (local)
+Updated: 2026-11-23 23:46 (local)
 Lane: course
 Branch: wip/zone-reference
 Last inbox item done: 34
 State: ready to merge
-Now: c035 done; results `results/2026-11-23_zone_reference/README.md`
+Now: c035 done; waiting for merge of wip/zone-reference and the next inbox item
 Done since last update:
 - Thresholds to `config/zone_reference_thresholds.yaml` (0.14, 0.5), decision dated 2026-11-23
 - Step 6, 1,189 c027 windows report-only (`real_counts.md`): accepted base 8 of 1,034 flagged (shape 3, common 5); declined by agent 11 of 85; 3 tracks not cached; no outcome changes
