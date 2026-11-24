@@ -1,10 +1,10 @@
 # real-calib
-Updated: 2026-11-23 18:46 (local)
+Updated: 2026-11-23 19:46 (local)
 Lane: course
 Branch: wip/zone-reference
 Last inbox item done: 31
 State: waiting on Andrew
-Now: inbox 32 (c035) step 4: overlays ready; still waiting for Andrew's labels (checked 18:46, labels.csv empty; no new inbox item)
+Now: inbox 32 (c035) step 4: overlays ready; still waiting for Andrew's labels (checked 19:46, labels.csv empty; no new inbox item)
 Done since last update:
 - Proposal (bcf0733): seed 20261123, strata 5/4/5/5/5 by condition, one window per root, threshold rule, step 1 stop rule
 - Step 1 (b3e4e90): residual split into common mode and shape in `checker/zone_checks.py`. Synthetic re-run: shape flags 15 of 15 at every shift (-60 to +60 px), 0 of 18 clean, 0 of 9 repaired (synthetic shape threshold 0.0019; shifted 0.045-0.18). Stop rule met
