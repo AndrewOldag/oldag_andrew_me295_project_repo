@@ -1,10 +1,10 @@
 # dispatcher
-Updated: 2026-11-23 19:46 (local)
+Updated: 2026-11-23 20:45 (local)
 Lane: course
 Branch: wip/audit-fixes
 Last inbox item done: 61
 State: ready to merge
-Now: check github 2026-11-23 19:45: no inbox item after 61, no new spec; waiting for planning to merge wip/audit-fixes, then idle
+Now: check github 11-23 20:45: no inbox item after 61, no new spec; waiting for planning to merge wip/audit-fixes, then idle
 Done since last update:
 - S2-1 impact: 2,819 cached remedied tracks (c027 706, c029 651, c029b 1311, freeze v4 151) gated old vs new; 2 change (c027 0721_c3__w2-4 tree steps enlarge_patch 1.5x/2x, fail -> pass); window outcome unchanged (closure 151 px/h still fails, no-improvement rule rolls back)
 - Results README, decisions, log pending entry; suite 506 passed, 3 skipped
