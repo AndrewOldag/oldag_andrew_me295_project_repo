@@ -116,18 +116,24 @@ def _velocity(s, v, ok):
     return f
 
 
-def particle_path(rec, thresholds=None, fields=None):
+def particle_path(rec, thresholds=None, fields=None, slide_px=0.0):
     """Tracked points moved by the window-mean velocity profile against where they were tracked.
 
     Integrates dS/dt = v(S) (Silk particle path) from frame 0 to the last frame for every centre
     point tracked in both. pp_rms_px, pp_max_px: residuals, px; pp_rms_rel, pp_max_rel: the same
-    over the RMS and the largest of the tracked tip-frame displacements.
+    over the RMS and the largest of the tracked tip-frame displacements. slide_px (fault injection
+    only, c035 detection curve): every tracked point slides along s by slide_px x (t - t0)/(t_end - t0),
+    an anchoring drift growing over the window; the profile is unchanged.
     """
     s, v, _, ok = _profile(fields if fields is not None else rec.fields)
-    keys = ("pp_rms_px", "pp_max_px", "pp_rms_rel", "pp_max_rel", "pp_mean_px", "tip_offset_change_px")
+    keys = ("pp_rms_px", "pp_max_px", "pp_rms_rel", "pp_max_rel", "pp_mean_px", "tip_offset_change_px",
+            "pp_common_px", "pp_shape_rms_px", "pp_shape_max_px", "pp_common_rel", "pp_shape_rel")
     if ok.sum() < 2:
         return ZoneResult("particle_path", None, dict.fromkeys(keys), dict(thresholds or {}), "no covered span")
     S = tip_frame_positions(rec)
+    if slide_px:
+        t = np.asarray(rec.frame_times_s, float)
+        S = S + (slide_px * (t - t[0]) / (t[-1] - t[0]))[:, None]
     seed = np.isfinite(S[0]) & np.isfinite(S[-1])
     if not seed.any():
         return ZoneResult("particle_path", None, dict.fromkeys(keys), dict(thresholds or {}),
@@ -149,9 +155,16 @@ def particle_path(rec, thresholds=None, fields=None):
     o = S[[0, -1], 0]
     diag = {"pp_mean_px": float(np.mean(e)),
             "tip_offset_change_px": float(o[1] - o[0]) if np.isfinite(o).all() else None}
+    # Split (c035, docs/proposals/2026-11-23_zone-reference.md): common mode = mean residual, shape = the rest
+    common = float(np.mean(e))
+    shape = e - common
+    shape_rms = float(np.sqrt(np.mean(shape ** 2)))
+    drms = float(np.sqrt(np.mean(d ** 2)))
+    split = {"pp_common_px": common, "pp_shape_rms_px": shape_rms, "pp_shape_max_px": float(np.max(np.abs(shape))),
+             "pp_common_rel": abs(common) / drms if rel else None, "pp_shape_rel": shape_rms / drms if rel else None}
     values = {"pp_rms_px": rms, "pp_max_px": mx,
-              "pp_rms_rel": rms / float(np.sqrt(np.mean(d ** 2))) if rel else None,
-              "pp_max_rel": mx / dmax if rel else None, **diag}
+              "pp_rms_rel": rms / drms if rel else None,
+              "pp_max_rel": mx / dmax if rel else None, **diag, **split}
     return ZoneResult("particle_path", _decide(values, thresholds, ("pp_rms_rel", "pp_max_rel")), values,
                       dict(thresholds or {}),
                       f"{int(seed.sum())} points" + ("" if rel else "; largest displacement under 2 px: "

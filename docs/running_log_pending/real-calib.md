@@ -76,3 +76,42 @@
 - Remaining: merge; a real threshold only with a real reference set and Andrew's approval
 - Bottlenecks: none
 - Done (inbox 31): on-record shift confirmed as the fault set (amendment 6810f3a withdrawn); README limit added: fault model is an arc-length offset of the profile, not a zone misplaced by another tracker error. Main merged (b22e799; conflict markers removed in the next commit). No run, no cluster job
+
+## 2026-11-23 (build account, session real-calib, inbox item 32, c035)
+- Done: proposal `docs/proposals/2026-11-23_zone-reference.md` before the draw (bcf0733): seed 20261123, strata 5/4/5/5/5 by condition, one window per root, threshold rule on clean windows, step 1 stop rule
+- Done: residual split in `checker/zone_checks.py` (`pp_common_*`, `pp_shape_*`); synthetic re-run (b3e4e90): shape flags 15 of 15 at every shift -60 to +60 px, 0 of 18 clean, 0 of 9 repaired (synthetic shape threshold 0.0019; shifted 0.045-0.18). c034 values reproduced 117 of 117
+- Done: 24 accepted c027 windows drawn (`results/2026-11-23_zone_reference/sample.csv`)
+- Done: 24 overlays in staging (not pushed), 3 frames per window plus tip-region zoom; frames read from storage read-only and deleted after use (ee01809)
+- Tests: 502 passed, 3 skipped (full suite, 202 s)
+- Demo: `python scripts/zone_reference.py synthetic --cache <freeze v4 track cache>` -> writes `results/2026-11-23_zone_reference/synthetic.md`, stop rule met
+- Remaining: Andrew's labels; thresholds (Andrew approves); apply to all c027 windows; README, decisions; ready to merge by Fri 27 Nov 12:00
+- Bottlenecks: labels, on Andrew
+
+## 2026-11-23 (build account, session real-calib, inbox item 33, c035)
+- Done: extension rule committed in the proposal before the draw (c452959): 126 more, seed 20261124, largest-remainder strata 45/5/36/33/7, at most 2 windows per root
+- Done: `scripts/zone_reference.py extend`, `append_labels`; tests `tests/test_zone_reference.py` 6 passed
+- Done: refactored draw reproduces the first 24 windows exactly; extension drawn, 150 windows (b7d30ac)
+- Running: overlays for windows 25-150, detached job, one window at a time, raw frames deleted after use
+- Remaining: Andrew labels 25-150; thresholds on all 150 (fewer than 30 clean: say so first); apply; README
+- Bottlenecks: none until the overlays are done
+- Done: overlays for windows 25-150 (detached job): 150 of 150 made, none failed, raw frames deleted; index and labels.csv hold 150 rows, first 24 labels kept (21 clean, 3 not clean)
+- Demo: `python scripts/ops/label_server.py <worktree>/staging/c035_overlays` serves the 150 overlays for labelling at http://127.0.0.1:8765
+- Bottlenecks: Andrew labels windows 25-150; thresholds wait for that
+
+## 2026-11-23 (build account, session real-calib, c035 step 5)
+- Done: Andrew's labels read: 150 windows, 130 clean, 20 not clean
+- Done: `scripts/zone_reference.py thresholds`; `tests/test_zone_reference.py` 7 passed, with `tests/test_zone_checks.py` 19 passed (83752a4)
+- Done: thresholds by the proposal rule: `pp_shape_rel` 0.14, `pp_common_rel` 0.5; reference set: shape 0 of 130 clean and 1 of 20 not clean over; common 1 of 130 clean and 0 of 20 not clean over
+- Done: synthetic at shape 0.14 (information): +-60 px 15 of 15, +-30 and +-15 px 0 of 15, clean 0 of 15, repaired 0 of 9
+- Demo: `python scripts/zone_reference.py thresholds --cache <c027 track cache>` -> prints the two thresholds; writes `results/2026-11-23_zone_reference/thresholds.md`, `reference.csv`
+- Remaining: Andrew approves; config file; step 6 apply to 1,189 c027 windows; README, decisions; ready to merge by Fri 27 Nov 12:00
+- Bottlenecks: threshold approval, on Andrew
+
+## 2026-11-23 (build account, session real-calib, c035 steps 6-7, inbox 34)
+- Done: thresholds approved by Andrew written to `config/zone_reference_thresholds.yaml`; `scripts/zone_reference.py apply`, `curve`; `particle_path(slide_px=...)` injection; tests `tests/test_zone_reference.py` 9 passed, `tests/test_zone_checks.py` 12 passed (1a023ff)
+- Done: curve sizes committed in README before the run (1a023ff); run 47 s
+- Done: step 6 on 1,189 c027 windows (1,191 tracks, 3 not cached), 42 s: accepted base 8 of 1,034 flagged (shape 3, common 5); declined by agent 11 of 85
+- Done: detection curve, 130 clean windows: false alarms shape 0, common 1; shape caught 2 of 130 at 15-30 px, 10 at 60 px, 101 at 90 px; common caught 90 of 130 at 4 patch spacings toward the tip, 11 away; no size caught in 90 % of windows in both directions
+- Demo: `python scripts/zone_reference.py curve --cache <c027 track cache>` -> writes `results/2026-11-23_zone_reference/curve.md`
+- Remaining: merge; gating of the zone checks is future work
+- Bottlenecks: none
