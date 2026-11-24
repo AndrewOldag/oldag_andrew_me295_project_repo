@@ -1,14 +1,13 @@
 # real-calib
-Updated: 2026-11-23 20:58 (local)
+Updated: 2026-11-23 21:50 (local)
 Lane: course
 Branch: wip/zone-reference
-Last inbox item done: 32
-State: working
-Now: inbox 33 (c035): overlays for windows 25-150 running as a detached job (about 25 s per window, about 50 min); started 20:55. Rerun of the same command resumes from the PNGs made
+Last inbox item done: 33
+State: waiting on Andrew
+Now: c035: all 150 overlays exist; waiting for labels of windows 25-150
 Done since last update:
-- Extension rule in `docs/proposals/2026-11-23_zone-reference.md` before the draw (c452959): seed 20261124, largest remainder 45/5/36/33/7, at most 2 windows per root counting the first 24
-- `scripts/zone_reference.py extend`; labels.csv rows appended in sample order, existing labels kept; tests 6 passed (eb1b340)
-- Refactored draw reproduces the first 24 exactly; extension drawn: 150 windows, all strata full, no root over 2 (b7d30ac)
-- Andrew's 24 labels kept as written; no threshold computed
+- Overlays for windows 25-150 made by the detached job: 150 of 150, none failed; raw frames deleted after each window (`_raw` empty)
+- Index `staging/c035_overlays/index.html` and `staging/c035_overlays/labels.csv` (in the real-calib worktree, not pushed): 150 rows in sample order; first 24 labels kept as written (21 clean, 3 not clean), rows 25-150 blank
+- No threshold computed
 Needs Andrew:
-- none yet. When all 150 overlays exist: label windows 25-150 (status will say)
+- Label windows 25-150: `python scripts/ops/label_server.py .claude/worktrees/real-calib/staging/c035_overlays` (from the main checkout), then open http://127.0.0.1:8765. Then start me again

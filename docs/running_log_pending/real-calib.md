@@ -94,3 +94,6 @@
 - Running: overlays for windows 25-150, detached job, one window at a time, raw frames deleted after use
 - Remaining: Andrew labels 25-150; thresholds on all 150 (fewer than 30 clean: say so first); apply; README
 - Bottlenecks: none until the overlays are done
+- Done: overlays for windows 25-150 (detached job): 150 of 150 made, none failed, raw frames deleted; index and labels.csv hold 150 rows, first 24 labels kept (21 clean, 3 not clean)
+- Demo: `python scripts/ops/label_server.py <worktree>/staging/c035_overlays` serves the 150 overlays for labelling at http://127.0.0.1:8765
+- Bottlenecks: Andrew labels windows 25-150; thresholds wait for that
