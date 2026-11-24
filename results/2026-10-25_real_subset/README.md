@@ -12,9 +12,10 @@ Spec `docs/specs/2026-10-24b_real-movie-push.md` section C; dispatcher inbox ite
 
 ## Run
 ```
-python scripts/real_slice.py --windows <48 windows ROOT:A-B> --config private/real_runner_c019.yaml --out results/2026-10-25_real_subset
-python scripts/real_subset_report.py --run results/2026-10-25_real_subset
+python scripts/real_slice.py --windows <48 windows ROOT:A-B> --config private/real_runner_c019.yaml --out staging/c019/real_subset_runs/run1
+python scripts/real_subset_report.py --run staging/c019/real_subset_runs/run1 --out results/2026-10-25_real_subset
 ```
+- Commands corrected 2026-11-23 (c033 audit S7-2, S7-3): the run writes its traces and `summary.json` to a git-ignored staging folder, and the report reads them there and writes `windows.csv` and `tables.md` here. The report no longer writes REGR or growth-zone columns. The staging copy (`staging/c019/real_subset_runs/run1`, `run2`, `run3`) was restored from 035e8fc; with it both commands reproduce the committed `windows.csv`, `tables.md` and `agreement.json` (checked 2026-11-23)
 - Wall time 1059 s (tracks cached by `scripts/real_track.py`; remedy runs tracked during the run). Dispatcher: 2 rounds, 48 windows collected, 0 retries
 - Files here: `windows.csv` (one row per window), `tables.md`, `agreement.md`, `agreement.json`. Traces and `summary.json` (run 1 and `run2/`, `run3/`) are kept off the public tree because the auditor's text quotes REGR values (Andrew, 2026-10-26); they stay in git history (2ea98bd, 97f2eb0, 035e8fc) and the dispatcher keeps a copy in its staging folder
 
@@ -57,8 +58,8 @@ Per window (all 48): `tables.md` and `windows.csv`. Columns: outcome, auditor de
 - Kinematics only; no claim about stress, stiffness or a constitutive law. This run is about agent behaviour; the condition comparison is the auditor's report, not a biology result
 
 ## Repeated runs (inbox item 36 (2), item 38)
-- Runs 2 and 3: the same 48 windows, `--cached-only` (no tracker rerun), `--out run2`, `run3`; each started with at least 3 GB free VM memory (item 38). Wall 282 s and 249 s
-- Agreement over the 3 runs (`agreement.md`, `agreement.json`; `python scripts/real_subset_agreement.py results/2026-10-25_real_subset results/2026-10-25_real_subset/run2 results/2026-10-25_real_subset/run3`):
+- Runs 2 and 3: the same 48 windows, `--cached-only` (no tracker rerun), `--out staging/c019/real_subset_runs/run2`, `run3`; each started with at least 3 GB free VM memory (item 38). Wall 282 s and 249 s
+- Agreement over the 3 runs (`agreement.md`, `agreement.json`; `python scripts/real_subset_agreement.py --out results/2026-10-25_real_subset staging/c019/real_subset_runs/run1 staging/c019/real_subset_runs/run2 staging/c019/real_subset_runs/run3`):
 
 | Decision | Windows | Unanimous | Unanimity rate | Fleiss kappa |
 | :-- | :-- | :-- | :-- | :-- |

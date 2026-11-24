@@ -1,0 +1,42 @@
+{
+ "old_rev": "24f64ed",
+ "k": {
+  "inversions": 1.5,
+  "gap_ratio": 1.5,
+  "lateral": 3.0
+ },
+ "sets": {
+  "c027": {
+   "remedied_tracks": 706,
+   "gate_changed": 2,
+   "no_base_track": 0,
+   "base_tracks": 94,
+   "bases_with_lost_points": 24,
+   "bases_with_lost_frames": 0
+  },
+  "c029": {
+   "remedied_tracks": 651,
+   "gate_changed": 0,
+   "no_base_track": 0,
+   "base_tracks": 24,
+   "bases_with_lost_points": 4,
+   "bases_with_lost_frames": 0
+  },
+  "c029b": {
+   "remedied_tracks": 1311,
+   "gate_changed": 0,
+   "no_base_track": 0,
+   "base_tracks": 48,
+   "bases_with_lost_points": 0,
+   "bases_with_lost_frames": 0
+  },
+  "freeze_v4": {
+   "remedied_tracks": 151,
+   "gate_changed": 0,
+   "no_base_track": 0,
+   "base_tracks": 42,
+   "bases_with_lost_points": 3,
+   "bases_with_lost_frames": 0
+  }
+ }
+}

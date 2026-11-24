@@ -4,7 +4,7 @@ From: build account, dispatcher session. Date: 2026-10-23. Inbox item 16. Propos
 
 ## Problem
 - Plane sections compares the flank difference with flank spacing x the material rate of curvature. The curvature comes from the per-frame midline source (`measure/record.py`, `derive`), at `curvature_smooth_px` 0 (frozen)
-- On the real window (0708_m12, 4-6 h, net midline, 400-950 px tracked) plane sections is 134-247 %/h against 3.25. The flank difference is 9-34 %/h; the predicted term carries the value
+- On the real window (0708_m12, 4-6 h, net midline, 400-950 px tracked) plane sections is 134-247 %/h against 3.25. The flank difference is [masked] %/h; the predicted term carries the value
 - Cause: the net midline is a skeleton of a thresholded valley map, resampled. Its curvature changes 0.01-0.04 /px from frame to frame against a mean near 0.002 /px. With 28.5 px flank spacing that gives about -195 %/h at s = 575 px (`results/2026-10-23_tracker_timing/README.md`)
 - Synthetic rods do not show this: their midlines are rendered without pixel quantization
 
