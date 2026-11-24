@@ -7,7 +7,7 @@ state: review
 branch: wip/audit-fixes
 host: VM
 created: 2026-11-23 16:20
-last_update: 2026-11-23 17:15
+last_update: 2026-11-23 23:35
 blocker: none
 done_marker: results/2026-11-23_audit_fixes/README.md
 ---
@@ -20,3 +20,5 @@ Inbox item, planning 2026-11-23 16:20; findings in results/2026-11-23_audit/.
 - [x] S3-1: frame_quality reference recompute, report-only impact
 - [x] S6-3, S7-1, S7-2: READMEs and commands
 - [x] results/2026-11-23_audit_fixes/README.md
+- [x] Inbox 62 part 1: mask_bio reviewed exemption, flank-difference range unmasked, tests (ad577fe)
+- [x] Inbox 62 part 2 / 63: archive copy to the lab server, md5 4 of 4 OK on the server

@@ -1,14 +1,17 @@
 # dispatcher
-Updated: 2026-11-23 21:45 (local)
+Updated: 2026-11-23 23:45 (local)
 Lane: course
 Branch: wip/audit-fixes
-Last inbox item done: 61
+Last inbox item done: 63
 State: ready to merge
-Now: check github 11-23 21:45: no inbox item after 61, no new spec; waiting for planning to merge wip/audit-fixes, then idle
+Now: check github, no new items after 63; wip/audit-fixes ready to merge, waiting on merge
 Done since last update:
-- S2-1 impact: 2,819 cached remedied tracks (c027 706, c029 651, c029b 1311, freeze v4 151) gated old vs new; 2 change (c027 0721_c3__w2-4 tree steps enlarge_patch 1.5x/2x, fail -> pass); window outcome unchanged (closure 151 px/h still fails, no-improvement rule rolls back)
-- Results README, decisions, log pending entry; suite 506 passed, 3 skipped
-- Earlier today: S1 (1b6074c), S2 code (97846cf), S3 (20e5af3), S6/S7 (ccd1d56)
+- check github 23:45: no new inbox items
+- Inbox 63 (and 62 part 2): archive folder created on the lab server (mkdir only; recorded in private/paths.md); 4 tars and MD5SUMS copied over one ssh connection; `md5sum -c` on the server: 4 of 4 OK; no delete, no rename
+  - real_subset_035e8fc.tar (git archive of results/2026-10-25_real_subset/ at 035e8fc) 8f8d1f269da5d3ab90f0f3c3be6a6087
+  - real_subset_2ea98bd.tar (same at 2ea98bd) 1c7c1671577ca40d2b8302f8fa801e3a
+  - real_subset_97f2eb0.tar (same at 97f2eb0) fdcffd795d2be52b0bdc174ca6f6f0c5
+  - real_subset_runs_vm.tar (VM staging/c019/real_subset_runs/) cfc5c6b7c87bc01697283e383949a8ac
+- Inbox 62 part 1 earlier (ad577fe)
 Needs Andrew:
-- docs/proposals/2026-10-23_real-midline-smoothing.md:7 flank-difference range masked; audit asks Andrew to rule: check value (unmask) or biology (keep masked)
-- Before the history rewrite: the real-subset traces and summaries (035e8fc) exist only in git history and the VM copy staging/c019/real_subset_runs/; keep a private copy if wanted
+- none

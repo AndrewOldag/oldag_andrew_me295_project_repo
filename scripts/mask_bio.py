@@ -7,6 +7,7 @@ and stay out of the public repo (Andrew, 2026-10-25). This masks them in place a
     python scripts/mask_bio.py --apply    # mask in place
 
 Scope: tracked files in real-movie result folders (`REAL_DIR`) and `EXTRA_FILES`. Synthetic results are not touched.
+Exemptions: `EXEMPT` lists file, exact phrase and decision; nothing else in those files is exempt.
 `tests/test_no_real_bio_values.py` fails if a value comes back.
 """
 import argparse
@@ -22,6 +23,11 @@ REAL_DIR = re.compile(r"^results/[^/]*(real|full_batch|batch2|integrated|registr
 EXTRA_FILES = {"docs/proposals/2026-10-23_real-midline-smoothing.md"}
 # numerical differences between two runs of the same track, not values
 SKIP_FILES = {"results/2026-10-25_full_batch_1/cluster_equivalence.json"}
+# reviewed exemptions: (file, exact phrase, decision). Each phrase must occur exactly once in its file
+EXEMPT = [
+    ("docs/proposals/2026-10-23_real-midline-smoothing.md", "The flank difference is 9-34 %/h",
+     "check value, may be shown (Andrew, 2026-11-23)"),
+]
 
 BIO_KEY = r"[A-Za-z_]*(?:regr|growth_zone|gz_len|flank|strain_rate|peak_at|velocity_um)[A-Za-z_]*"
 NUM = r"-?\d[\d.eE+-]*"
@@ -48,8 +54,23 @@ def _text_hit(m):
     return not re.search(r"\bs\s*=?\s*$", head)
 
 
-def mask_text(text):
-    """Text with every biology value masked."""
+def _exempt_phrases(path):
+    return [phrase for f, phrase, _ in EXEMPT if f == path]
+
+
+def _hide(text, path):
+    """Text with this file's exempt phrases swapped for placeholders, and the placeholders."""
+    held = {}
+    for i, phrase in enumerate(_exempt_phrases(path)):
+        key = f"\x00EXEMPT{i}\x00"
+        held[key] = phrase
+        text = text.replace(phrase, key)
+    return text, held
+
+
+def mask_text(text, path=None):
+    """Text with every biology value masked, except this file's exempt phrases."""
+    text, held = _hide(text, path)
     def key_sub(m):
         q = m.group("q")
         return f"{q}{m.group('key')}{q}{m.group('sep')}{q}[masked]{q}" if _key_hit(m) else m.group(0)
@@ -57,11 +78,14 @@ def mask_text(text):
     prev = None
     while prev != text:  # again, for a position right after a masked value
         prev, text = text, TEXT_RE.sub(lambda m: m.group("head") + "[masked]" if _text_hit(m) else m.group(0), text)
+    for key, phrase in held.items():
+        text = text.replace(key, phrase)
     return text
 
 
-def find_values(text):
-    """Biology keys and phrases that still carry a number (names only, never values)."""
+def find_values(text, path=None):
+    """Biology keys and phrases that still carry a number (names only, never values), exempt phrases left out."""
+    text, _ = _hide(text, path)
     out = [m.group("key") for m in KEY_RE.finditer(text) if _key_hit(m)]
     out += [m.group("head").strip() for m in TEXT_RE.finditer(text) if _text_hit(m)]
     return out
@@ -95,14 +119,14 @@ def main(argv=None):
         text = read_text(f)
         if text is None:
             continue
-        found = find_values(text)
+        found = find_values(text, f)
         if not found:
             continue
         n += 1
         print(f, len(found), ", ".join(sorted(set(found)))[:200])
         if args.apply:
             with open(REPO / f, "w", encoding="utf-8", newline="") as fh:
-                fh.write(mask_text(text))
+                fh.write(mask_text(text, f))
     print(f"{n} files {'masked' if args.apply else 'with values'}")
     return 0
 
