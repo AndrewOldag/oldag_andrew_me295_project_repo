@@ -25,9 +25,14 @@ foreach ($w in $wts) {
     if ($dirty) { Write-Output "Tracked changes in $($w.path):"; Write-Output $dirty; throw 'Commit and push (or discard) those first.' }
 }
 
-# 2. Fetch the rewritten history
-Git fetch origin --prune --force
-Git fetch origin --tags --force
+# 2. Recreate the three freeze tags on the rewritten commits (same message and date), then fetch
+Git tag -l | ForEach-Object { & git tag -d $_ | Out-Null }
+Git fetch origin --prune --force --no-tags
+$env:GIT_COMMITTER_DATE = '1791868618 -0700'; Git -c user.name='Andrew Oldag' -c user.email='andrewnoldag@gmail.com' tag -a freeze-v2 d7220663e547bdc37fe38113e12c043342684932 -m 'Freeze v2, approved by Andrew 2026-10-12 (docs/proposals/2026-10-12_freeze-v2.md)'
+$env:GIT_COMMITTER_DATE = '1792805637 -0700'; Git -c user.name='Andrew Oldag' -c user.email='andrewnoldag@gmail.com' tag -a freeze-v3 e34bd075a4171b607d6d56d5ad09edd64ab262ec -m 'Freeze v3: docs/proposals/2026-10-23_freeze-v3.md; labels results/2026-10-23_freeze_v3/labels.json; Claude Code 2.1.310'
+$env:GIT_COMMITTER_DATE = '1792976670 +0000'; Git -c user.name='Andrew Oldag' -c user.email='andrewnoldag@gmail.com' tag -a freeze-v4 bb891bba937cf7e8a719f68d4a9f31d94ce0c82c -m 'Freeze v4: docs/proposals/2026-10-25_freeze-v4-candidate.md; labels results/2026-10-25_freeze_v4/labels.json; candidate v4; Claude Code 2.1.310'
+Remove-Item Env:GIT_COMMITTER_DATE
+Git push --force origin 'refs/tags/*:refs/tags/*'
 
 # 3. Reset every checkout to its rewritten branch (untracked and ignored files stay)
 foreach ($w in $wts) {
