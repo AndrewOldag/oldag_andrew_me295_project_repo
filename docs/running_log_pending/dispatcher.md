@@ -48,3 +48,14 @@
 - Demo: `python scripts/run_all.py report --run staging/c027/run --tree staging/c027/tree --out results/2026-11-18_integrated_run --demo staging/c027/demo --roots 0708_c4` writes tables.md with `Auditor: 101 runs, 447 calls`
 - Remaining: planning merges wip/dispatcher; idle after that
 - Bottlenecks: none
+
+## 2026-11-23 (build account, dispatcher, session 16:40)
+- Done: inbox 61, task c036 on `wip/audit-fixes` (from origin/main 8da5056)
+- Done: S1-3, S1-4: `scripts/mask_bio.py --apply` masked real-root biology values in 61 tracked files; report masker covers `strain_rate`; `tests/test_no_real_bio_values.py` (1b6074c)
+- Done: S2-1: integrity gate fails frames with < 3 centre points (`integrity_lost_frames`), measures order and gaps across lost points, fails NaN values; 5 tests (97846cf). Impact over 2,819 cached remedied tracks (c027, c029, c029b, freeze v4): 2 change, both c027 0721_c3__w2-4 tree steps, fail -> pass; outcome unchanged (closure 151 px/h still fails)
+- Done: S3-1: real frame_quality reference from 23 in-rule windows (texture median 0.0641, focus median 0.0285); 2 of 102 scored frame values lie between old and new median (20e5af3)
+- Done: S6-3, S7-1, S7-2: 2 READMEs, full run_batch commands, real-subset commands read `staging/c019/real_subset_runs/` and write with `--out`; rerun reproduces committed files (ccd1d56)
+- Done: suite 506 passed, 3 skipped
+- Demo: `python scripts/mask_bio.py` prints `0 files with values`; results in `results/2026-11-23_audit_fixes/README.md`
+- Remaining: planning merges wip/audit-fixes; Andrew rules on the masked proposal line
+- Bottlenecks: none
