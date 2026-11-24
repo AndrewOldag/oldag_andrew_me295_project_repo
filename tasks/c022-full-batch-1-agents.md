@@ -3,11 +3,11 @@ id: c022
 title: agent run over real-calib first batch (126 windows, 11 roots)
 lane: course
 owner: dispatcher
-state: review
+state: done
 branch: wip/dispatcher
 host: VM (LLM runs), cluster (remedy retracks on CPU), lab server (light)
 created: 2026-10-25 19:05
-last_update: 2026-10-25 21:45
+last_update: 2026-11-24 09:30
 blocker: none
 done_marker: results/2026-10-25_full_batch_1_agents/README.md
 ---

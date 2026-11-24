@@ -3,11 +3,11 @@ id: c023
 title: closure not-computable rule, real-slice README command, dispatcher vs fixed-script on the fake queue
 lane: course
 owner: dispatcher
-state: review
+state: done
 branch: wip/dispatcher
 host: VM
 created: 2026-11-02 14:10
-last_update: 2026-11-03 22:07
+last_update: 2026-11-24 09:30
 blocker: none
 done_marker: results/2026-11-02_dispatcher_eval/README.md
 ---

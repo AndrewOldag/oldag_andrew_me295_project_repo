@@ -3,11 +3,11 @@ id: c037
 title: correction blocks in Lab reports 2 and 3 for the c033 audit findings
 lane: course
 owner: compound
-state: review
+state: done
 branch: wip/report-corrections
 host: VM
 created: 2026-11-23 16:20
-last_update: 2026-11-23 16:50
+last_update: 2026-11-24 09:30
 blocker: none
 done_marker: docs/reports/corrections_for_lab_report_4.md
 ---

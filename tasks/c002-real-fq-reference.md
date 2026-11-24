@@ -3,11 +3,11 @@ id: c002
 title: Recompute the real-movie frame_quality reference with the real-tracking midline source
 lane: course
 owner: Andrew
-state: blocked
+state: done
 branch: none
 created: 2026-10-16 17:45
-last_update: 2026-10-16 17:45
-blocker: real-tracking midline source does not exist yet
+last_update: 2026-11-24 09:30
+blocker: none; superseded: real midlines come from the midline net (decisions 2026-10-24)
 done_marker: config/frame_quality_reference.yaml real section no longer marked provisional
 host: lab server
 ---

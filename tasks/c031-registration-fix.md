@@ -3,11 +3,11 @@ id: c031
 title: register_frames fix (direct to reference, plausibility bound), track-integrity check, synthetic regression
 lane: course
 owner: real-calib
-state: review
+state: done
 branch: wip/real-calib
 host: VM (code and checker), cluster (all tracker runs)
 created: 2026-11-20 14:50
-last_update: 2026-11-22 19:57
+last_update: 2026-11-24 09:30
 blocker: none
 done_marker: results/2026-11-20_registration_fix/README.md
 ---

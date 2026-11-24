@@ -3,11 +3,11 @@ id: c033
 title: independent audit of the course project before Lab report 4
 lane: course
 owner: audit
-state: review
+state: done
 branch: wip/audit
 host: VM (read-only; no cluster jobs)
 created: 2026-11-23 13:10
-last_update: 2026-11-23 14:22
+last_update: 2026-11-24 09:30
 blocker: none
 done_marker: results/2026-11-23_audit/README.md
 ---

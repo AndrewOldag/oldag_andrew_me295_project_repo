@@ -3,11 +3,11 @@ id: c034
 title: growth-zone placement checks (plateau, material-point prediction), report-only
 lane: course
 owner: real-calib
-state: review
+state: done
 branch: wip/zone-checks
 host: VM
 created: 2026-11-23 13:25
-last_update: 2026-11-23 15:40
+last_update: 2026-11-24 09:30
 blocker: none
 done_marker: results/2026-11-23_zone_checks/README.md
 ---

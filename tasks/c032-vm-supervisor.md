@@ -3,11 +3,11 @@ id: c032
 title: VM supervisor (no LLM): start sessions with pending work, detached registry, heartbeat
 lane: course
 owner: real-calib
-state: review
+state: done
 branch: wip/supervisor
 host: VM
 created: 2026-11-22 22:30
-last_update: 2026-11-22 23:04
+last_update: 2026-11-24 09:30
 blocker: none
 done_marker: tests/test_supervisor.py passes
 ---

@@ -3,10 +3,10 @@ id: c008
 title: Spec audit: specs, rules, literature network; independent check
 lane: course
 owner: spec-audit
-state: review
+state: done
 branch: wip/spec-audit
 created: 2026-10-23 00:30
-last_update: 2026-10-23 01:13
+last_update: 2026-11-24 09:30
 blocker: none
 done_marker: docs/reviews/2026-10-23_spec-audit/SUMMARY.md and CHECK.md
 host: VM
