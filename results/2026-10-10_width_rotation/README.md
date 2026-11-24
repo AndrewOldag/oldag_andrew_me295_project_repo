@@ -11,7 +11,10 @@ Spec: `docs/specs/2026-10-10_bent-rods-width-change-rotation.md`, parts A and B.
 ## Runs
 - 30 tracker runs, 0 failed, 0 frozen points: width_change at curvature 1/400 and 1/267 px (flank spacing +40 %/h), rigid_rotation at 0.1, 0.03 and 0.01 deg/frame; 3 seeds each, each tracked twice (as rendered and rigidly moved)
 - Width-change movies 640 x 640 px (the curved rod leaves a 320 px frame); tracked length 400 px; render 21 s, track 7-8 s per run. Rotation movies 640 x 320 px as before
-- Commands: `scripts/synth/run_batch.py --case growth_zone --fault width_change --width-kappa-inv K` and `--case rigid_rotation --rotation-deg R`, then `scripts/synth/eval_rods.py --tracks <dir> --out results/2026-10-10_width_rotation`
+- Commands (corrected 2026-11-23, c033 audit S7-1), with the tracker env's Python on the tracker machine (README, image-level rods):
+  - `python scripts/synth/run_batch.py --work DIR --case growth_zone --fault width_change --width-kappa-inv K --seeds 0 1 2 --moved-too`, K = 400 and 267
+  - `python scripts/synth/run_batch.py --work DIR --case rigid_rotation --rotation-deg R --seeds 0 1 2 --moved-too`, R = 0.1, 0.03 and 0.01
+  - Then, in the agents env: `python scripts/synth/eval_rods.py --tracks DIR/tracks --out results/2026-10-10_width_rotation`
 
 ## A. Width change
 | Curvature (1/px) | True residual (%/h) | plane_sections per seed (%/h) | Peak at s (px) | Above 3.25 |
