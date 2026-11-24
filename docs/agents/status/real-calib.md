@@ -1,12 +1,14 @@
 # real-calib
-Updated: 2026-11-23 21:10 (local)
+Updated: 2026-11-23 20:58 (local)
 Lane: course
 Branch: wip/zone-reference
 Last inbox item done: 32
 State: working
-Now: inbox 33 (c035): extension rule committed in the proposal; next the draw of 126 more windows, then overlays
+Now: inbox 33 (c035): overlays for windows 25-150 running as a detached job (about 25 s per window, about 50 min); started 20:55. Rerun of the same command resumes from the PNGs made
 Done since last update:
-- Andrew's labels for the first 24 seen in staging (not used yet; no threshold computed)
-- Extension rule in `docs/proposals/2026-11-23_zone-reference.md` before the draw: seed 20261124, 126 more by largest remainder (control 45, control then control 5, mannitol 36, mannitol then control 33, mannitol then mannitol 7), at most 2 windows per root counting the first 24
+- Extension rule in `docs/proposals/2026-11-23_zone-reference.md` before the draw (c452959): seed 20261124, largest remainder 45/5/36/33/7, at most 2 windows per root counting the first 24
+- `scripts/zone_reference.py extend`; labels.csv rows appended in sample order, existing labels kept; tests 6 passed (9cb2a3e)
+- Refactored draw reproduces the first 24 exactly; extension drawn: 150 windows, all strata full, no root over 2 (b7d30ac)
+- Andrew's 24 labels kept as written; no threshold computed
 Needs Andrew:
-- none
+- none yet. When all 150 overlays exist: label windows 25-150 (status will say)

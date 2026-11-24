@@ -86,3 +86,11 @@
 - Demo: `python scripts/zone_reference.py synthetic --cache <freeze v4 track cache>` -> writes `results/2026-11-23_zone_reference/synthetic.md`, stop rule met
 - Remaining: Andrew's labels; thresholds (Andrew approves); apply to all c027 windows; README, decisions; ready to merge by Fri 27 Nov 12:00
 - Bottlenecks: labels, on Andrew
+
+## 2026-11-23 (build account, session real-calib, inbox item 33, c035)
+- Done: extension rule committed in the proposal before the draw (c452959): 126 more, seed 20261124, largest-remainder strata 45/5/36/33/7, at most 2 windows per root
+- Done: `scripts/zone_reference.py extend`, `append_labels`; tests `tests/test_zone_reference.py` 6 passed
+- Done: refactored draw reproduces the first 24 windows exactly; extension drawn, 150 windows (b7d30ac)
+- Running: overlays for windows 25-150, detached job, one window at a time, raw frames deleted after use
+- Remaining: Andrew labels 25-150; thresholds on all 150 (fewer than 30 clean: say so first); apply; README
+- Bottlenecks: none until the overlays are done
