@@ -1,13 +1,11 @@
 # compound
-Updated: 2026-11-23 15:46 (local)
+Updated: 2026-11-23 16:48 (local)
 Lane: course
-Branch: wip/compound
+Branch: wip/compound (c029, c029b, c030; ready to merge); wip/report-corrections (c037, working)
 Last inbox item done: 12
-State: ready to merge
-Now: idle; check at 15:46 found no new inbox item (last is 12) and no compound process running. c029, c029b and c030 done; branch not yet merged into main
+State: working
+Now: item 13 (c037): correction blocks in Lab reports 2 and 3 for the c033 audit findings, on `wip/report-corrections` from origin/main. No runs
 Done since last update:
-- Array 7925321 fetched 09:53; remedy tree 20 of 20 (d1d857e)
-- c029b metrics and `results/2026-11-18_heldout_compound/supplement/README.md` (8f40c6d): overall accuracy remedy tree 0.75, diagnostician 0.48, single agent 0.35, script 0.30, all-decline 0.30. 124 of 150 agent runs (4 set aside)
-- Task c029b done; log entry in docs/running_log_pending/compound.md (0abb68e)
+- Read inbox item 13 and the c033 findings; branch `wip/report-corrections` created
 Needs Andrew:
-- None. The cluster connection master is no longer needed by compound
+- None
