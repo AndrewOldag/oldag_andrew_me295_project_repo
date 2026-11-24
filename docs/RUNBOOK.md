@@ -1,0 +1,169 @@
+# Runbook: every driver and command
+
+Detailed commands for each part of the system and each scored run, in the order they were built. The top-level `README.md` has the overview, install steps and the reproduction table.
+
+## Measurement record, synthetic rods and checker
+- Record format: `docs/context/measurement_record.md`. Code: `measure/record.py`
+- Field-level rods (six cases, truth known): `measure/rod.py`. Checker: `checker/` (no LLM; definitions in `docs/decisions.md`). Both run in the agents env and are covered by `python -m pytest -q tests`
+- Image-level rods need the tracker (Quantum Borland v1, private) in its own env (`envs/qb.yml`), on the machine where tracking runs. With that env's Python, from a copy of `measure/` and `scripts/`:
+  - `python scripts/synth/run_batch.py --work DIR --case growth_zone --seeds 0 1 2 --moved-too [--fault low_texture]` renders each rod (`scripts/synth/make_rod.py`; options `--width-kappa-inv K` for the width_change curvature and `--rotation-deg R` for the rigid_rotation rate), tracks it (`scripts/remote/qb_track.py`) and writes `DIR/tracks/<id>.npz` with the truth beside it. About 13 s per rod
+- Back in the agents env: `python scripts/synth/eval_rods.py --tracks DIR/tracks --out results/<date>_<name>` writes the field-level table, the image-level check values at the approved thresholds, per-seed values, truth errors, and a profile plot
+- Checker thresholds: `config/checker_thresholds.yaml` (approved 2026-10-10)
+
+## Sweeps on the shared tracker machine
+- The tracker machine is shared. `scripts/synth/sweep.py` enforces the limits (`docs/decisions.md`, 2026-10-11): load check before start (1 min load at most half the cores; three 15 min retries) and before each run (pause above three quarters), at most 4 workers and one eighth of the cores, one thread per worker, `nice 19` and idle I/O, one sweep at a time (lock file), 2 h projected wall time and 10 GB of work space. Single runs through `RemoteRunner` are also load-checked and run at lowest priority
+- Code goes to one directory per branch on the tracker machine: `<code_dir>/<branch with / replaced by _>` (`code_dir` from `private/runner.yaml`). Run from a checked-out branch; a detached HEAD is refused. The sweep lock and work directory stay shared, one sweep per machine
+- From the agents env, with `private/runner.yaml` filled in: `python scripts/synth/fix_sweep.py start --part check`, then `status --part check`, `stop`, `fetch --part check`. `status` prints the preflight line (cores, load, memory, disk, work space, own processes) and the end line (load before and after, peak workers, wall time)
+- On the tracker machine directly: `python scripts/synth/sweep.py run --plan P --work DIR`, `sweep.py status --work DIR`, `sweep.py stop --work DIR`
+- Spec 2026-10-11 sweeps: `python scripts/synth/fix_sweep.py start --part P` (parts listed in the script; `--dry-run` prints the run count), `fetch --part P` copies outputs to `staging/tracks_2026-10-11/`, then `python scripts/synth/eval_fix.py --out results/2026-10-11_remedy_fixes` writes the tables
+- The system runs uncoupled (Andrew, 2026-10-11): `couple` is a recorded run setting, false everywhere. The coupled tables are data in `results/2026-10-11_remedy_fixes/item6_clean_basis.md` and `results/2026-10-11b_padding_tolerance_coupling/b4_coupling_weight.md`. Scoring tolerance: `config/scoring_tolerance.yaml` (scoring only)
+- Diagnostician on one rod: `python scripts/demo_slice.py --fault rigid_drift --size 0.5 --out results/<dir>`; `--replay` re-applies the remedies of an existing trace without calling the agent
+- Held-out faults (branch `heldout/faults` until the freeze): `measure/render_heldout.py`; `make_rod.py --fault second_root|fast_rotation|bad_stage_correction|flank_swap|partial_occlusion --size Z`. Checker-only sweep: `python scripts/synth/heldout_sweep.py start` (`--dry-run` prints the run count), `status`, `fetch`, then `eval --out results/<dir>`. Proposal: `docs/proposals/2026-10-12_heldout-faults.md`
+
+## Diagnostician on a synthetic rod (one slice)
+- `request_info` answers come from the measurement record and the check results (`measure/info.py`). `apply_remedy` changes the run settings (`measure/remedies.py`; table in `docs/decisions.md`), re-runs the measurement and re-checks it (`agents/executors.py`)
+- Runner (`measure/runner.py`), one interface with two forms: `FieldRunner` in process for field-level rods; `RemoteRunner` renders and tracks on the machine that has the tracker. For the remote form copy `config/runner.example.yaml` to `private/runner.yaml` and fill it in (host alias, work and code directories there, tracker env Python)
+- `python scripts/demo_slice.py --fault displacement_exceeds_patch` renders one rod with that fault, tracks and checks it, runs the diagnostician, and prints the truth, the error before and after, and the outcome. Trace and summary in `results/<date>_demo_slice/`. `--no-agent` stops after the first check; `--runner field` runs a field-level rod in process
+
+## Single-agent baseline
+- Same model, prompt (one sentence changed), actions, lists and step limit as the diagnostician, with no checker output in anything it sees: no check fields in the task, `check_report` answers not available, remedy results show the change only, no roll back. `agents/executors.py` (`BlindSlice`), `agents/prompts/single_agent.md`, `single_agent` in `config/models.yaml`. Definition: `docs/proposals/2026-10-12_single-agent-baseline.md`. Test: `tests/test_single_agent.py`
+
+## Non-LLM baselines (no agent call)
+- Fixed-parameter script and rule-based remedy tree: `agents/baselines.py`. The tree is fixed in `docs/proposals/2026-10-12_remedy-tree.md`. Both use the diagnostician's `Slice` (same remedies, re-runs and roll back) and write the orchestrator's outcome record
+- Development faults at their frozen sizes, seeds 0-2, in rounds: `python scripts/synth/baselines.py next` starts the tracker runs still needed as one sweep (refuses while another sweep holds the lock, and past 200 runs), `status`, `fetch` (to `staging/tracks_baselines/`); repeat until `next` needs nothing. Then `python scripts/synth/baselines.py write --out results/<dir>` writes a trace and a summary per task
+- Scoring: `python scripts/synth/eval_baselines.py --runs results/<dir> [--agent-runs DIR] --out results/<dir>` writes `table.md` and `scores.json` (`measure/score.py`, freeze labels)
+
+## Scored runs (four methods)
+- `python scripts/synth/scored_v1.py next --set dev|heldout` starts the tracker runs the script and remedy tree still need as one sweep; `status`, `fetch`; repeat until `next` needs nothing. Then `rules --set S`, `agents --set S --method diagnostician|single_agent` (needs a clean tracked tree; each run records the freeze tag and commit; runs with a summary are skipped), and `eval`, which writes `results/2026-10-12b_scored_v1/table_dev.md`, `table_heldout.md` and `scores.json`
+- Held-out labels: `python scripts/synth/heldout_labels.py start`, `status`, `fetch`, `eval --out results/2026-10-12b_heldout_labels`
+
+## Freeze v3 scored runs (51 rods, five methods, repeats)
+- Definition: `docs/proposals/2026-10-23_freeze-v3.md`. Driver `scripts/synth/scored_v3.py`; outputs in `results/2026-10-23_freeze_v3/`; tracker cache `staging/tracks_freeze_v3/`
+- Each phase: `python scripts/synth/scored_v3.py plan --phase P` (`--dry-run` prints the run count) starts one sweep of the tracker runs still needed; `status`; `fetch` after it ends; then the phase's report. Repeat `plan` until it needs nothing (registration and `enlarge_patch` states need the unremedied run first)
+  1. `--phase basis`, then `basis`: clean v3 rods, seeds 10-14, against the approved thresholds and flank tolerance (`basis.md`)
+  2. `--phase sizing`, then `sizing`: held-out sizes at v3 geometry, seeds 10-12 (`sizing.md`, `sizing.json`)
+  3. `--phase labels`, then `labels`: labels of the 51 scored rods, seeds 20-22 (`labels.md`, `labels.json`)
+  4. Tag `freeze-v3`. `--phase methods`, then `rules` (script and remedy tree), then `agents --method diagnostician|single_agent --repeat 0|1|2` (clean tracked tree needed)
+  5. `eval`: metrics from `measure/metrics.py` (`table_metrics.md`, `metrics.json`, `scores.json`)
+- Stops: a clean basis value over a threshold or the flank tolerance, a held-out size that changes, more than half of the labelled set in decline, or more than 600 tracker runs. Each stop is for Andrew
+- On the tracker machine nothing is renamed or overwritten: outputs and rods are complete when their `.ok` marker exists; code goes to a folder per commit (`docs/decisions.md`, 2026-10-23)
+
+## Freeze v3.1 sizing (ended at its stop rule; v3 stays the scored set)
+- Spec `docs/specs/2026-10-24_freeze-v3.1.md`. Driver `scripts/synth/scored_v31.py` (the v3 driver with a new cache `staging/tracks_freeze_v31/` and output folder `results/2026-10-24_freeze_v3.1/`; states in a local copy of the v3 cache `staging/tracks_freeze_v3/` are reused)
+- `plan --phase sizing` starts one sweep of the states still needed; `status`; `fetch`; `sizing` writes `sizing.md`. `second-root` writes `second_root.md` from the v3 runs. Test: `tests/test_freeze_v31.py`
+- The tracker host comes from `private/runner.yaml`; optional `rods_dir` and `max_gb` (template `config/runner.example.yaml`)
+
+## Freeze v4 candidate (switch `candidate`, off by default)
+- Proposal `docs/proposals/2026-10-25_diagnostician-repair-misses.md` (C1, C2, C3 option a; approved by Andrew 2026-10-25). Switch `candidate` in `config/models.yaml`: `null` (off; v3 and v3.1 unchanged) or `v4`. A driver turns it on for its own process with `agents.candidate.use("v4")`
+- On: prompt files `agents/prompts/diagnostician_v4.md` and `single_agent_v4.md` (fault-to-remedy map, C1); per-pair closure-residual spread in `stage_log_summary` (C2, `measure/info.py`, `stage_log_spread`); in labels, a check that cannot be computed after a remedy counts as failing (C3 a, `measure/score.py`, `checks_pass`)
+- Check against freeze v3 (needs the local v3 cache `staging/tracks_freeze_v3/`): `python scripts/synth/v4_replay_check.py` writes `results/2026-10-25_freeze_v4/switch_check.md` (labels, rule methods, every v3 LLM trace re-executed, switch off and on). Tests: `tests/test_v4_candidate.py`
+- Driver `scripts/synth/scored_v4.py`: the v3 driver with the switch on, the v3 set on seeds 26-28, cache `staging/tracks_freeze_v4/`, outputs `results/2026-10-25_freeze_v4/`. `plan --phase labels` (`--dry-run` prints the run count; label cap 228 tracker runs), `status`, `fetch`, `labels`; `dev-check` and `dev-report` (diagnostician on v3 seed 20, from the v3 cache, after the labels are committed); then as v3: tag `freeze-v4`, `plan --phase methods`, `rules`, `agents --method M --repeat K`, `eval`; `decompose` writes `decompose_v3_v4.md` (v3 runs rescored under C3 a, and v3 against v4 on rows whose label is unchanged; needs both caches). Stops: 420 tracker runs, 420 LLM runs, free VM memory under 3.85 GB
+
+## Auditor v1 (scored runs v1, no tracker runs)
+- Reads the cached final records of `results/2026-10-12b_scored_v1/` from `staging/` (the scored runs' caches). Definition: `docs/proposals/2026-10-13_auditor-v1.md`
+- `python scripts/synth/auditor_v1.py views` writes the 8 batch views; `rule` runs the rule auditor; `llm --set dev|heldout [--method M] [--repeat K]` runs the LLM auditor (needs a clean tracked tree); `eval` writes `results/2026-10-13_auditor_v1/scores.md`. Test: `tests/test_auditor.py`
+
+## Held-out compound and novel faults (task c029, VM only)
+- Tracker on this machine: export the tracker commit the freeze runs used into `staging/qb_tracker/` (git-ignored) and name the tracker env's interpreter in `private/local_tracker.yaml` (`python: ...`). `scripts/synth/local_qb.py` runs `make_rod.py` and `qb_track.py` with it. Check first: render and track one freeze v4 rod and compare with `python scripts/synth/local_equivalence.py <local npz> <v4 cache npz>` (largest difference at most 1e-6 px)
+- Faults: `measure/render_compound.py` (4 compound, 2 novel), tests `tests/test_render_compound.py`. Proposal `docs/proposals/2026-11-18_heldout-compound.md`
+- `python scripts/synth/heldout_compound.py sizing-sweep`, `sizing`, `label-sweep`, `labels` (commit `labels.json`), then `rules`, `agents --method diagnostician|single_agent --repeat K`, `eval`. Outputs `results/2026-11-18_heldout_compound/`. Restartable: cached runs and finished summaries are skipped. Waits for 3 GB free memory before each rod batch and each run
+- Since spec 2026-11-20 no tracker run on the VM: `heldout_compound.py render` renders the rods; `python scripts/synth/compound_queue.py submit --equivalence`, `fetch`, `equivalence` (2 rods, cluster vs VM, limit 1e-6 px), then `submit` and `fetch` (rerun until nothing is left) run the label states on the cluster CPU. Needs `private/compound_cluster.yaml` (cluster settings, ledger) and the cluster connection master. Synthetic-rod job kind: `scripts/rod_jobs.py`, tests `tests/test_rod_jobs.py`
+
+## Auditor check with planted errors (task c030, no tracker runs)
+- Needs the freeze v4 tracker cache in `staging/tracks_freeze_v4/`. Proposal `docs/proposals/2026-11-18_auditor-check.md`
+- `python scripts/synth/auditor_check.py plan` (once), `views`, `rule`, `llm --repeat K` for K = 0, 1, 2, `eval`. Outputs `results/2026-11-18_auditor_check/`
+
+## Dispatcher (fake queue, no real jobs)
+- Proposal `docs/proposals/2026-10-23_dispatcher.md` (approved 2026-10-23); settings `config/dispatcher.yaml`; code `agents/dispatcher.py`, prompt `agents/prompts/dispatcher.md`
+- `python scripts/demo_dispatcher.py` runs the script baseline over every include-yes root on the fake queue (2 h windows, 4 lab-server workers, 20 injected crashes retried once) and prints the summary: windows by state, core-hours, retries, peak workers, wall hours. No LLM call
+- The engine, not the agent, enforces the limits: include-yes rows and usable windows only; lab-server worker limit and load rule; cluster submits only inside an approved budget in `config/compute_budget.yaml` (absent = 0). Test: `tests/test_dispatcher.py`
+- Dispatcher agent vs fixed script on the fake queue (task c023, proposal `docs/proposals/2026-11-02_dispatcher-eval.md`): `python scripts/dispatcher_eval.py run` runs scenarios S0-S4 x seeds 0-4 for both methods (`--methods script` needs no LLM call, 37 s; agent batches take about 10-20 min each and stop on the Claude session limit; restarts skip finished batches); `python scripts/dispatcher_eval.py report` writes `results/2026-11-02_dispatcher_eval/` tables. Test: `tests/test_dispatcher_eval.py`
+- Real-movie tracking of one window: `scripts/remote/qb_track.py --from-h H0 --to-h H1 --movie real` with a midline from `scripts/remote/real_midline.py` (provisional); timing driver `scripts/remote/time_window.sh`. Results `results/2026-10-23_tracker_timing/`
+- Smallest real slice, end to end (dispatcher -> tracker -> checker -> diagnostician -> auditor): `python scripts/real_slice.py` (defaults: root 0708_m12, 4-6 h; `--dispatcher script` for the baseline; `--no-agent` for dispatcher script, tracker and checker only; `--audit-only` re-runs only the auditor on a recorded batch). Needs `private/real_runner.yaml` (template `config/real_runner.example.yaml`; `--config` for another file). A window without a `midline` entry gets its net midline built on the compute host first (segmentation midline, the tracker's `batch_midlines.py` in tile mode with the fine-tuned net2, `scripts/remote/net_to_midline.py`). Writes traces and `summary.json` to `results/<date>_real_slice/`. Real-movie profile: closure gates; rigid invariance and plane sections are reported, not gating (`docs/decisions.md`, 2026-10-24). Test: `tests/test_real_slice.py`
+- Three-root real slice (control, drought, recovery): `python scripts/real_slice.py --windows 0708_m12:4-6 0711_c2:4-6 0721_m10:4-6 --config private/real_runner.yaml private/real_runner_lab.yaml --out results/2026-10-24_real_slice_3roots_c2`. With several configs each window runs on the host of the first config that lists it (here 0708_m12 and 0721_m10 on the workstation, 0711_c2 on the lab server; control 0711_c2 replaced 0711_c1, decisions 2026-10-24). Each run carries its root's condition; the auditor's task asks it to compare the conditions. Midline net `net2_midline_ft2.pt` (`docs/decisions.md`, 2026-10-24), set by `midline_weights` and `midline_tag: ft2` in the runner config; the tag goes into every output name. The runner waits before each host step while free VM memory is below 1.5 GB
+- 16-root real subset, 48 windows (task c019): (1) `python scripts/real_track.py --config private/real_runner_c019.yaml` tracks every window in the config at 1000 px with its moved copy on the lab server (skips windows whose net midline is not on the host; restarts skip cached windows); (2) `python scripts/real_slice.py --windows <ROOT:A-B ...> --config private/real_runner_c019.yaml --out results/2026-10-25_real_subset` runs the agents (closure gate from `config/checker_thresholds_real.yaml`; waits before each window while free VM memory is below 2 GB, `--min-free-gb`); repeats add `--cached-only --out .../runN` (no tracker rerun); (3) `python scripts/real_subset_report.py --run results/2026-10-25_real_subset` writes `tables.md` and `windows.csv`; `python scripts/real_subset_agreement.py RUN1 RUN2 RUN3` writes `agreement.md`. Results and window list: `results/2026-10-25_real_subset/README.md`. Tests: `tests/test_real_slice.py`, `tests/test_check_profiles.py`
+- Full batch 2, 91 roots, 1063 windows (spec 2026-11-04): `python scripts/full_batch_2_driver.py` with `private/full_batch_2.yaml` (template `config/full_batch_2.example.yaml`). One persistent connection to the storage host; cluster commands only through its connection master (checked before each step; down: stop). Per root: stage, one GPU job (`scripts/remote/full_batch_2_root_job.sh`: midlines, 1000 px tracks, w10-12 moved copy, checker), copy back with md5 on both ends, then delete the staged frames. Restarts skip finished roots (markers). Then `python scripts/full_batch.py summary --batch 2`. Results and audit: `results/2026-10-25_full_batch_2/`. Tests: `tests/test_full_batch_2_driver.py`, `tests/test_remote_link.py`
+- Agent run over real-calib's first batch, 126 windows (task c022): `python scripts/real_slice.py --windows <ROOT:A-B ...> --config private/real_runner_c022.yaml --moved-span 10-12 --min-free-gb 3 --out staging/c022/run4` (cached tracks; moved copy for the 10-12 h window of each root only); then `python scripts/full_batch_agents_report.py --run staging/c022/run4 --out results/2026-10-25_full_batch_1_agents` writes the public `windows.csv` and `tables.md` (outcome counts; no check, REGR or growth-zone values; the run folder stays out of git). Results: `results/2026-10-25_full_batch_1_agents/README.md`. Tests: `tests/test_full_batch_report.py`, `tests/test_dispatcher.py`, `tests/test_real_slice.py`
+
+## RAG over the papers (task c024)
+- Proposal `docs/proposals/2026-11-02_rag.md`. Corpus: the files with `included = yes` in `docs/context/literature/rag_corpus.csv` (no OUP or Wiley paper). PDFs are not in the repo: unzip the corpus zip into `staging/rag_corpus/` (git-ignored); `build` checks every sha256 against the csv and stops on a mismatch or an extra file
+- Agents env with `pypdf` and `fastembed` (in `environment.yml`). The first `build` downloads the embedding model (`BAAI/bge-small-en-v1.5`, about 65 MB) into `staging/rag/models/`
+- `python scripts/rag.py build` (page text, chunks, chunk embeddings in `staging/rag/`; 309 s on the 2-core VM, 2026-11-02), `gold` (checks `rag/gold.yaml`: every gold quote on its page), `retrieval` (BM25 and embedding ranks, no LLM), `run --repeat 1|2|3` (one `claude -p` call per question; stops under 3 GB free VM memory or at 150 calls; restarts skip answered questions), `report` (writes `results/2026-11-02_rag/`: scored metrics, and post-hoc metrics from the saved answers with the second reader's alt pages and the Mullen1998 artefact map, `rag/posthoc.py`; no LLM call). `retrieval` and `run` refuse until `rag/gold.yaml` is committed. Answer texts stay in `staging/rag/runs/`
+- Code `rag/` (prompt `rag/prompts/answerer.md`); test `tests/test_rag.py`
+## Run the real slice
+One root (0708_m12, 4-6 h), end to end: dispatcher agent -> tracker -> checker -> diagnostician -> auditor.
+```
+python scripts/real_slice.py --out results/<date>_real_slice
+```
+- Needs: Setup steps 1-4 (agents env, Claude Code at the pinned version, signed in); `private/real_runner.yaml`, copied from `config/real_runner.example.yaml` and filled in. The file names a compute host reachable by `ssh -o BatchMode=yes` (key login), and on that host: the tracker environment (`envs/qb.yml`), a checkout of the tracker (Quantum Borland v1, a separate private repository), the root's montage `.imgdir`, and the midline net weights. `private/` is git-ignored; the movies are not in this repo
+- Writes `summary.json` and the agent traces to the `--out` folder. Real-movie profile: closure gates (19 px/h, `config/checker_thresholds_real.yaml`); a window whose closure cannot be computed is declined (`docs/decisions.md`, 2026-11-02); rigid invariance and plane sections are reported, not gating
+- Expected wall time: about 1-2 min when the window's net midline and track are already on the host (71 s on 2026-10-23); a few minutes more when they are not, since the net midline is built and the window tracked on the host first (about 100 s of tracking per 2 h window on one core). Three roots with tracking: 597 s (`results/2026-10-24_real_slice_3roots_c2/`)
+- More windows: `--windows ROOT:A-B ...`; more hosts: `--config FILE ...` (each window runs on the first config that lists it). Other real-slice runs are listed under Dispatcher above
+
+## Retracks on the cluster, submit and forget (task c027)
+```
+python scripts/retrack_queue.py seed                                         # earlier cached tracks -> c027 cache
+python scripts/retrack_queue.py jobs --wave 1 --out staging/c027/wave1.csv  # job list; prints count and worst case
+python scripts/retrack_queue.py submit --jobs staging/c027/wave1.csv
+python scripts/retrack_queue.py fetch
+```
+- Needs: `private/real_runner_c027.yaml` (storage host, cluster folders, ledger command, windows); the cluster connection master open on the storage host for `submit` and `fetch` only
+- `submit` stages whole root imgdirs in groups under 30 GB, writes Slurm arrays (1 core; 45 min for register_frames, 15 min otherwise), checks the spend ledger per array and records array ids in `staging/c027/queue.csv`. `fetch` pulls finished tracks to storage and the VM cache with md5 checks, marks failed tasks and clears a group's staged roots once all its tasks are final (`DELETED.log`). Both can be rerun at any time; a down link or master prints `connection down` and exits 0
+- Registration hold (dispatcher inbox item 49): `submit` sends no register_frames job until `register_v2` is on main (`REGISTER_HOLD`)
+- Tests: `python -m pytest tests/test_retrack_queue.py` (fake relay; no host contacted)
+
+## Integrated run over every include-yes root (task c027)
+```
+python scripts/run_all.py windows                                  # 1,189 windows in dispatcher order
+python scripts/run_all.py fetch                                    # base tracks storage -> VM cache, md5 checked
+python scripts/run_all.py run --out staging/c027/run               # dispatcher -> checker -> diagnostician -> auditor
+python scripts/run_all.py tree --run staging/c027/run --out staging/c027/tree
+python scripts/run_all.py report --run staging/c027/run --tree staging/c027/tree --out results/2026-11-18_integrated_run
+python scripts/run_all.py report --run staging/c027/run --tree staging/c027/tree --out results/2026-11-18_integrated_run --demo staging/c027/demo --roots 0708_c4
+```
+- `--demo DIR --roots ROOT` also writes `demo.md` (B5): the fresh one-root run in `DIR/run` against the cached run, window by window, auditor flags, and wall time per stage from `DIR/driver.log` and `DIR/after.log`
+- Needs: Setup steps 1-4 and `private/real_runner_c027.yaml`. `run` and `tree` read cached tracks only and need no cluster connection; a window whose track is not cached is paused and its settings go to `paused.jsonl` for `retrack_queue.py jobs --paused`. Rerun `run` after a `fetch` of the queue: finished windows are skipped
+- Proposal and caps: `docs/proposals/2026-11-18_integrated-run.md`. Tests: `python -m pytest tests/test_run_all.py`
+- LLM call cap: `--llm-cap N`, default 900. c027 was restarted with `--llm-cap 1300` on 2026-11-23 (inbox item 59, planning under Andrew's overnight authority): the run stopped at 782 calls with 33 windows paused and roots not yet audited; 1,300 covers 33 windows x step limit 8 plus the auditor reserve of 5 per remaining root on top of 782. Prompts, gate, thresholds, methods and windows unchanged
+
+## Growth-zone placement checks, report-only (task c034)
+```
+python scripts/zone_checks.py synthetic --cache <freeze v4 track cache>    # 18 clean, 90 shifted, 9 repaired records
+python scripts/zone_checks.py thresholds                                  # config/zone_thresholds.yaml, synthetic.md
+python scripts/zone_checks.py real --cache <c027 track cache>             # real_counts.md; values to staging/zone_checks/
+```
+- Plateau and particle-path (Silk) checks in `checker/zone_checks.py`, not part of `run_checks`; they gate nothing. Cached tracks only, no tracker run. A rerun of `real` skips windows already in the values file
+- Proposal `docs/proposals/2026-11-23_zone-checks.md`; results `results/2026-11-23_zone_checks/`. Tests: `python -m pytest tests/test_zone_checks.py`
+
+## Task board
+- One file per task in `tasks/` (format in `tasks/README.md`). Research-lane tasks use the same format in a folder outside every git repo
+- Optional: copy `config/board.example.conf` to `private/board.conf` and set the research folder and the page path
+- `python scripts/board.py` prints one table of all tasks; a `working` task with `last_update` older than 30 min shows as stale. `--html` also writes the local page (never inside a git repo). Test: `tests/test_board.py`
+
+## VM heartbeat and backup by hand (Windows VM)
+- Copy `config/backup.example.conf` to `private/backup.conf` and fill it in (server alias and backup folder, sources, scheduler paths)
+- `powershell -File scripts/ops/install_schedule.ps1` copies `heartbeat.sh` and `hidden.vbs` to `OPS_DIR` and registers the scheduled task `me295-heartbeat`, every 5 min: it appends date and uptime to the health log; a gap over 10 min adds a `GAP` line, the first gap also writes `FIRST_GAP` beside the log. `-S4U` (elevated shell) runs it when nobody is logged on; `-Remove` unregisters it
+- Coordinator tick (elevated shell): `powershell -File scripts/ops/install_coordinator_tick.ps1` copies `coordinator_tick.ps1` and `hidden.vbs` to `OPS_DIR` and registers `me295-coordinator-tick`, every 10 min, S4U. A tick skips (no Claude call) if no remote ref changed and the last full pass is under 60 min old; else it runs one headless coordinator pass (`claude -p`), stopped at 20 min. Log: `OPS_DIR/coordinator_tick/tick.log`. Check: `Get-ScheduledTask me295-coordinator-tick | Get-ScheduledTaskInfo`. By hand: `powershell -File scripts/ops/coordinator_tick.ps1 [-Force]`. `-Remove` unregisters it
+- Supervisor (built, not installed; switch-over on a planning inbox item): `scripts/ops/supervisor.ps1`, one hidden process, no LLM. Every 10 min it fetches, and for dispatcher, real-calib and compound checks running (pid file from `agents.ps1`, process `claude` alive) and pending (inbox last item on `origin/main` above `Last inbox item done` in the newest status over all branches, or `State: working` with `Updated` 2 h old). It starts at most one session per tick with `agents.ps1 -Names <name> -Fresh` (60 s between starts, the same session not again within 60 min, nothing under 3 GB free). Each tick appends one line to `docs/agents/status/supervisor.md` on branch `ops/heartbeat` (last 48 lines; git plumbing, no checkout touched). A second copy exits on its lock. It never deletes, stops a process, or reaches the cluster or lab server. Detached processes: `powershell -File scripts/ops/register_detached.ps1 -Name <n> -ProcessId <pid> -Command <c> -Log <f>` (`-Unregister` when done); dead entries are reported in the heartbeat, never restarted. Install: `powershell -File scripts/ops/install_supervisor.ps1` (logon task `me295-supervisor`, removes the hourly `ME295 agents ping`); `-Uninstall` reverses both. One tick by hand: `powershell -File scripts/ops/supervisor.ps1 -Once`. Test: `tests/test_supervisor.py`
+- There is no scheduled backup. `bash scripts/ops/backup_vm.sh --conf private/backup.conf [--tag T] run` makes one backup by hand: bundles, tarballs, `SHA256SUMS`, `RESTORE.md` in a dated folder on the server, checked there with `sha256sum -c`. It never overwrites a folder and never deletes anything on the server. Test: `tests/test_ops.py`
+
+## Tools
+- Root manifest review app: `python scripts/manifest/review_server.py`, then open http://localhost:8295
+
+Run instructions for the full system will be added as it is built.
+
+## Real reference set for the zone check (task c035, report-only)
+```
+python scripts/zone_reference.py synthetic --cache <freeze v4 track cache>   # residual split: common mode and shape
+python scripts/zone_reference.py sample --cache <c027 track cache>          # 24 accepted windows, seed fixed in the proposal
+python scripts/zone_reference.py extend --cache <c027 track cache>          # 126 more (seed 20261124), at most 2 per root
+python scripts/zone_reference.py overlays --cache <c027 track cache> --host <storage ssh alias> --data <movie root>
+python scripts/ops/label_server.py staging/c035_overlays                    # click-to-label page (Y clean, N not clean)
+python scripts/zone_reference.py thresholds --cache <c027 track cache>      # 99.5th percentile of clean x 1.5
+python scripts/zone_reference.py apply --cache <c027 track cache>           # report-only on 1,189 windows
+python scripts/zone_reference.py curve --cache <c027 track cache>           # injected shifts and slides on clean windows
+```
+- Proposal `docs/proposals/2026-11-23_zone-reference.md`; approved thresholds `config/zone_reference_thresholds.yaml`; results `results/2026-11-23_zone_reference/`. Tests: `python -m pytest tests/test_zone_reference.py`
+
+## After the history rewrite (2026-11-24)
+- `scripts/ops/after_rewrite.ps1` points a Windows clone and its worktrees at the rewritten history without touching ignored files (decisions, 2026-11-24)

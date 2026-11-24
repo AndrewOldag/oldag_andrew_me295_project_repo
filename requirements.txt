@@ -1,0 +1,12 @@
+# Agents environment as a pip requirements file (the conda file environment.yml is the reference).
+# Python 3.12. Create: python -m venv .venv && .venv/bin/pip install -r requirements.txt
+# The LLM agents run through Claude Code; its version and the model ID are pinned in config/models.yaml.
+numpy>=2.0
+scipy>=1.13
+pyyaml>=6.0
+matplotlib>=3.9
+pytest>=8.0
+mcp==2.3.0         # only for scripts/cli_probe (MCP test record)
+pypdf==6.21.4      # rag: PDF text per page
+fastembed==0.9.1   # rag: local CPU embeddings (ONNX, no torch)
+paramiko==5.1.0    # one persistent ssh connection to the storage host

@@ -9,7 +9,7 @@ Spec `docs/specs/2026-10-23b_freeze-v3.md`. Proposal `docs/proposals/2026-10-23_
 - `table_metrics.md`: metrics per method, agreement, categories, per row, cost, per run
 - `metrics.json`, `scores.json`: the same, machine-readable
 - `runs/`: trace and summary per run, `<method>_<rod id>[_r<repeat>]`; `deterministic.jsonl` (rule methods run twice)
-- Commands: README section "Freeze v3 scored runs"
+- Commands: `docs/RUNBOOK.md` section "Freeze v3 scored runs"
 
 ## Set
 - 51 rods on scoring seeds 20-22, v3 geometry (tip 96 px/h, growth zone at 200 px, tracked length 500 px, stage follows the tip every frame)

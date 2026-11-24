@@ -10,7 +10,7 @@ Inbox diag-analysis items 3-5 (Andrew, 2026-10-25). Proposal `docs/proposals/202
 - `metrics.json`, `scores.json`: the same, machine-readable
 - `runs/`: trace and summary per run, `<method>_<rod id>[_r<repeat>]`; `deterministic.jsonl` (rule methods run twice)
 - `runs/usage_limit/`: 95 LLM runs ended by the account usage limit, kept for the record and run again
-- Commands: README section "Freeze v4 candidate"
+- Commands: `docs/RUNBOOK.md` section "Freeze v4 candidate"
 
 ## Set
 - 51 rods on unseen seeds 26-28, v3 geometry; every v3 class at its v3 size
