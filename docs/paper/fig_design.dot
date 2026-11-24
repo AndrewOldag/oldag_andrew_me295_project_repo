@@ -1,0 +1,31 @@
+digraph G {
+  rankdir=TB; nodesep=0.25; ranksep=0.22;
+  node [fontname="Helvetica", fontsize=11, shape=box, style="rounded,filled", fillcolor="#ffffff", color="#555555"];
+  edge [fontname="Helvetica", fontsize=8.5, color="#555555", arrowsize=0.7];
+
+  subgraph cluster_data { label="Data"; fontname="Helvetica-Bold"; fontsize=11; color="#bbbbbb"; style=rounded;
+    movies [label="Real movies\n101 roots + stage log", shape=cylinder, fillcolor="#f2f2f2"];
+    synth  [label="Synthetic rods\nknown field + injected fault", shape=cylinder, fillcolor="#f2f2f2"];
+  }
+  human [label="Human sign-off (Andrew)\nbudget · thresholds and labels · deletes ·\ndropping a root · usable windows", fillcolor="#fff3c4", color="#b08900"];
+
+  disp  [label="Dispatcher: fixed script\n(LLM version evaluated: no gain)", fillcolor="#e6f4e6", color="#3d8b3d"];
+  orch  [label="Orchestrator (plain Python)\ntyped JSON actions; budget, step limits", fillcolor="#eeeeee"];
+  track [label="Tracker + midline net (tools)\ncluster jobs, submit and forget", fillcolor="#e6f4e6", color="#3d8b3d"];
+  check [label="Checker (no LLM)\nclosure · rigid invariance · plane sections", fillcolor="#e6f4e6", color="#3d8b3d", penwidth=2];
+  diag  [label="Diagnostician (LLM agent)\nask info → name fault →\nremedy from fixed list, or decline", fillcolor="#dbe8ff", color="#2f5fb3", penwidth=2];
+  rem   [label="Remedies (tools)\nretrack; roll back if checks worsen", fillcolor="#e6f4e6", color="#3d8b3d"];
+  gate  [label="Integrity gate (no LLM)\nremedied track vs its own base:\norder, gaps, lateral scatter", fillcolor="#e6f4e6", color="#3d8b3d", penwidth=2];
+  out   [label="accept · accept after repair · decline\n(with fault and reason)", fillcolor="#f2f2f2"];
+  aud   [label="Auditor (LLM agent) + rule auditor\nper root; planted-error check", fillcolor="#dbe8ff", color="#2f5fb3"];
+  zone  [label="Growth-zone checks (no LLM)\nparticle path; report-only", fillcolor="#e6f4e6", color="#3d8b3d", style="rounded,filled,dashed"];
+  score [label="Scoring (synthetic, no LLM)\noutcome vs label from truth", shape=note];
+
+  movies -> disp; disp -> orch [label="windows"]; orch -> track [label="jobs"]; synth -> track;
+  track -> check [label="record"];
+  check -> out [label="all pass"]; check -> diag [label="any fail"];
+  diag -> orch [label="typed actions"]; orch -> rem; rem -> gate; gate -> check [label="re-check"];
+  diag -> out [label="final"];
+  out -> aud; out -> zone [style=dashed]; out -> score [style=dashed];
+  aud -> human [style=dashed, label="flags"]; human -> orch [style=dashed, label="approves"];
+}
