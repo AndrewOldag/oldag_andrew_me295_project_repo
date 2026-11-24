@@ -181,38 +181,47 @@ def _project(points, line):
 def track_integrity(rec, thresholds=None):
     """Point order, neighbour gaps and lateral scatter of the centre chain against the midline, per frame.
 
-    inversions: neighbour pairs (both tracked) whose arc length along the frame's midline does not increase from
-    tip to base, summed over frames. gap_ratio: largest centre-neighbour distance over the median, largest over
-    frames. lateral_px: RMS distance of centre points from the frame's midline. registration_plausible: the
-    register_v2 report of a registered track (1 plausible, 0 not); unknown for v1 and unregistered tracks.
-    Reported on every track; a gate only for tracks made by a remedy (integrity_gate).
+    inversions: neighbour pairs of tracked points (a lost point in between is skipped) whose arc length along the
+    frame's midline does not increase from tip to base, summed over frames. gap_ratio: largest distance between
+    tracked neighbours (across lost points) over the median, largest over frames. lateral_px: RMS distance of centre
+    points from the frame's midline. lost_frames: frames with fewer than 3 tracked centre points or no midline; they
+    cannot be measured and fail (c033 audit S2-1). registration_plausible: the register_v2 report of a registered
+    track (1 plausible, 0 not); unknown for v1 and unregistered tracks.
+    Reported on every track; a gate only for tracks made by a remedy (integrity_gate). A value that cannot be
+    computed (no measurable frame) is NaN and fails the gate.
     """
     th = thresholds or {}
-    inv, ratio, lat, worst = 0, 0.0, [], (0, 0)
+    inv, ratio, lat, worst, lost, measured = 0, 0.0, [], (0, 0), 0, 0
     for t in range(rec.n_frames):
         c = rec.centre[t]
         ok = np.isfinite(c[:, 0])
         line = rec.midline[t]
         if ok.sum() < 3 or np.isfinite(line[:, 0]).sum() < 2:
+            lost += 1
             continue
+        measured += 1
         s, dist = _project(c[ok], line)
-        pair_ok = ok[:-1] & ok[1:]
-        s_full = np.full(len(c), np.nan)
-        s_full[ok] = s
-        n_inv = int(np.sum(pair_ok & ~(np.diff(s_full) > 0)))
+        n_inv = int(np.sum(~(np.diff(s) > 0)))
         inv += n_inv
         if n_inv > worst[1]:
             worst = (t, n_inv)
-        g = np.linalg.norm(np.diff(c, axis=0), axis=1)[pair_ok]
-        if len(g) and np.median(g) > 0:
+        g = np.linalg.norm(np.diff(c[ok], axis=0), axis=1)
+        if np.median(g) > 0:
             ratio = max(ratio, float(np.max(g) / np.median(g)))
+        else:
+            ratio = float("inf")
         lat.append(dist)
+    if not measured:
+        inv, ratio = float("nan"), float("nan")
     lateral = float(np.sqrt(np.mean(np.concatenate(lat) ** 2))) if lat else float("nan")
     out = [CheckResult("integrity_inversions", _decide(float(inv), th.get("inversions")), float(inv),
-                       th.get("inversions"), "pairs", where_frame_pair=worst[0] if inv else None,
-                       detail=f"most in frame {worst[0]} ({worst[1]})" if inv else "point order kept in every frame"),
+                       th.get("inversions"), "pairs", where_frame_pair=worst[0] if worst[1] else None,
+                       detail=("no measurable frame" if not measured else f"most in frame {worst[0]} ({worst[1]})"
+                               if inv else "point order kept in every measured frame")),
            CheckResult("integrity_gap_ratio", _decide(ratio, th.get("gap_ratio")), ratio, th.get("gap_ratio"), "ratio"),
-           CheckResult("integrity_lateral", _decide(lateral, th.get("lateral_px")), lateral, th.get("lateral_px"), "px")]
+           CheckResult("integrity_lateral", _decide(lateral, th.get("lateral_px")), lateral, th.get("lateral_px"), "px"),
+           CheckResult("integrity_lost_frames", lost == 0, float(lost), 0, "frames",
+                       detail=f"{lost} of {rec.n_frames} frames with fewer than 3 tracked centre points or no midline")]
     reg = ((rec.settings or {}).get("preprocess") or {}).get("register")
     if reg is None:
         out.append(CheckResult("registration_plausible", None, float("nan"), None, "", detail="not registered"))
@@ -227,8 +236,10 @@ def track_integrity(rec, thresholds=None):
 
 
 def integrity_gate(results):
-    """False when any integrity value fails or the registration is not plausible; True otherwise."""
-    return not any(r.passed is False for r in results)
+    """False when any integrity value fails or cannot be computed (NaN), or the registration is not plausible;
+    True otherwise."""
+    return not any(r.passed is False or (r.check.startswith("integrity") and not np.isfinite(r.value))
+                   for r in results)
 
 
 RELATIVE_FILE = Path(__file__).resolve().parents[1] / "config" / "integrity_relative_k.yaml"
@@ -270,4 +281,4 @@ def relative_integrity(rec_remedied, rec_base, k=None):
     out = [CheckResult(f"integrity_rel_{name}",
                        False if np.isposinf(v) and k.get(name) is not None else _decide(v, k.get(name)),
                        v, k.get(name), "ratio", detail="remedied over base") for name, v in ratios.items()]
-    return out + [x for x in rem if x.check == "registration_plausible"]
+    return out + [x for x in rem if x.check in ("integrity_lost_frames", "registration_plausible")]
