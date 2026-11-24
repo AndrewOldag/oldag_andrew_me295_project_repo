@@ -9,15 +9,17 @@ texture_contrast: {median: 0.193, lowest: 0.155}
 focus: {median: 0.090, lowest: 0.073}
 
 # Real movies (spec 2026-10-13 Task B4; inbox fq-real item 5, planning decision 2026-10-13, option a). PROVISIONAL.
-# Values: median and lowest over the frames of the real 1 h windows Andrew labelled clean by eye: 24 windows,
-# 3 frames each (start, middle, end of the hour): 72 values. Windows inside usable windows of include-yes roots only.
+# Values: median and lowest over the frames of the real 1 h windows Andrew labelled clean by eye: 23 windows,
+# 3 frames each (start, middle, end of the hour): 69 values. Windows inside usable windows of include-yes roots only.
+# Recomputed 2026-11-23 (c033 audit S3-1, task c036): the 24th window (0727_cc7, 8.5-9.5 h) is outside the usable
+# window since 2026-10-23 (usable_to_h 9.5 -> 4.05) and is left out. Was 24 windows: 0.0648 / 0.0439, 0.0286 / 0.0213.
 # Band: 45 px around a medial ridge of a dark-root segmentation, not the midline source of real tracking.
 # Recompute with that midline source once it exists.
 # Limits: marks low texture and blur. Does not mark uneven lighting or debris: the one window labelled
 # not_clean (lighting, debris) is above the clean median on both measures. One not_clean window cannot test separation.
 # Used by measure/info.py for records whose settings have movie: real.
 real:
-  basis: "PROVISIONAL: 24 real 1 h windows labelled clean, 3 frames each; marks low texture and blur, not uneven lighting or debris"
+  basis: "PROVISIONAL: 23 real 1 h windows labelled clean, 3 frames each; marks low texture and blur, not uneven lighting or debris"
   provisional: true
-  texture_contrast: {median: 0.0648, lowest: 0.0439}
-  focus: {median: 0.0286, lowest: 0.0213}
+  texture_contrast: {median: 0.0641, lowest: 0.0439}
+  focus: {median: 0.0285, lowest: 0.0213}

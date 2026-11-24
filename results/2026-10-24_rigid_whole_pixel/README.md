@@ -19,7 +19,7 @@
 | plus flank | 0.29 | 0.18 | 0.09 | 0.36 | 0.82 | 1.03 | 1.54 | 0.78 | 0.93 | 2.16 |
 | minus flank | 0.35 | 0.79 | 0.18 | 0.26 | 1.01 | 0.70 | 1.66 | 2.76 | 7.29 | 4.72 |
 
-- Without resampling and rotation, the first 250 px from the tip agree within 1.0 %/h on all three profiles (the growth zone peak is near s = 300 px, 44 %/h). The difference grows toward the basal end of the tracked chain: 2.0-2.2 %/h at 250-350 px and 5.8 %/h at 350-400 px on the centre profile
+- Without resampling and rotation, the first 250 px from the tip agree within 1.0 %/h on all three profiles (the growth zone peak is near s = 300 px, [masked] %/h). The difference grows toward the basal end of the tracked chain: 2.0-2.2 %/h at 250-350 px and 5.8 %/h at 350-400 px on the centre profile
 - No frozen points in either copy; chain length 398 px in both at frame 0
 - Step 2 removed only the part past 398 px; the 350-400 px band stays
 

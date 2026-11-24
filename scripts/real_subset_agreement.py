@@ -1,11 +1,11 @@
 """Agreement of repeated agent runs on the 16-root real subset (dispatcher inbox item 36 (2)), as in freeze v3:
 per window, do all runs give the same outcome; unanimity rate and Fleiss' kappa (measure/metrics.py).
 
-  python scripts/real_subset_agreement.py results/2026-10-25_real_subset results/2026-10-25_real_subset/run2 ...
+  python scripts/real_subset_agreement.py [--out DIR] RUN1 RUN2 RUN3
 
 Outcome per window: accept (as measured), accept_repaired (a remedy kept), decline. The auditor's decision per
-accepted window (clear or flag) is compared the same way. Writes agreement.json and agreement.md into the first
-run folder and prints the tables.
+accepted window (clear or flag) is compared the same way. Each run folder holds its summary.json (kept off the
+public tree). Writes agreement.json and agreement.md into --out (default: the first run folder) and prints the tables.
 """
 import json
 import sys
@@ -48,6 +48,9 @@ def agree(per_run, key, cats):
 
 def main():
     runs = sys.argv[1:]
+    out = Path(runs[0])
+    if runs[:1] == ["--out"]:
+        out, runs = Path(runs[1]), runs[2:]
     per_run = [outcomes(r) for r in runs]
     res = {"runs": runs, "outcome": agree(per_run, "outcome", OUTCOMES), "auditor": agree(per_run, "auditor", AUDIT),
            "counts": [dict(Counter(v["outcome"] for v in r.values())) for r in per_run]}
@@ -70,8 +73,8 @@ def main():
         md += [f"- {w}: {v}" for w, v in res["fault"]["split"].items()] or ["- none"]
     md += ["", "Windows without a unanimous auditor decision:"]
     md += [f"- {w}: {v}" for w, v in res["auditor"]["split"].items()] or ["- none"]
-    (Path(runs[0]) / "agreement.json").write_text(json.dumps(res, indent=1))
-    (Path(runs[0]) / "agreement.md").write_text("\n".join(md) + "\n")
+    (out / "agreement.json").write_text(json.dumps(res, indent=1))
+    (out / "agreement.md").write_text("\n".join(md) + "\n")
     print("\n".join(md))
 
 

@@ -107,3 +107,58 @@ def test_zero_base_lateral_uses_clean_floor():
     r = integrity_ratios(res(0.1), res(0.0))["lateral"]
     assert np.isfinite(r) and abs(r - 0.1 / 0.081) < 1e-9
     assert integrity_ratios(res(0.3), res(0.1))["lateral"] == 0.3 / 0.1
+
+
+# c033 audit S2-1: lost points and frames that cannot be measured fail, not pass
+
+def test_frame_with_fewer_than_3_points_fails():
+    from checker import relative_integrity
+    rec = clean()
+    c = rec.centre.copy()
+    c[10, 2:] = np.nan
+    v = values(replace(rec, centre=c))
+    assert v["integrity_lost_frames"].value == 1 and v["integrity_lost_frames"].passed is False
+    assert not integrity_gate(list(v.values()))
+    res = relative_integrity(replace(rec, centre=c), rec, K)
+    assert not integrity_gate(res)
+
+
+def test_gap_across_lost_points_is_measured():
+    from checker import relative_integrity
+    rec = clean()
+    c = rec.centre.copy()
+    c[:, 10:15] = np.nan
+    v = values(replace(rec, centre=c))
+    assert v["integrity_gap_ratio"].value > 5 and v["integrity_gap_ratio"].passed is False
+    res = {r.check: r for r in relative_integrity(replace(rec, centre=c), rec, K)}
+    assert res["integrity_rel_gap_ratio"].passed is False and not integrity_gate(list(res.values()))
+
+
+def test_inversion_across_lost_point_is_counted():
+    rec = clean()
+    c = rec.centre.copy()
+    c[10, 6] = np.nan
+    c[10, [5, 7]] = c[10, [7, 5]]
+    assert values(replace(rec, centre=c))["integrity_inversions"].value >= 1
+
+
+def test_empty_track_fails():
+    """Audit test D: 2 of the centre points tracked in every frame; nothing can be measured."""
+    from checker import relative_integrity
+    rec = clean()
+    c = np.full_like(rec.centre, np.nan)
+    c[:, :2] = rec.centre[:, :2]
+    v = values(replace(rec, centre=c))
+    assert np.isnan(v["integrity_inversions"].value) and np.isnan(v["integrity_gap_ratio"].value)
+    assert np.isnan(v["integrity_lateral"].value) and v["integrity_lost_frames"].value == rec.n_frames
+    assert not integrity_gate(list(v.values()))
+    assert not integrity_gate(relative_integrity(replace(rec, centre=c), rec, K))
+
+
+def test_nan_lateral_fails_the_gate():
+    from checker.checks import CheckResult
+    res = [CheckResult("integrity_rel_inversions", True, 1.0, 1.5, "ratio"),
+           CheckResult("integrity_rel_gap_ratio", True, 1.0, 1.5, "ratio"),
+           CheckResult("integrity_rel_lateral", None, float("nan"), 3.0, "ratio")]
+    assert not integrity_gate(res)
+    assert integrity_gate(res[:2])

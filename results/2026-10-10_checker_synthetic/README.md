@@ -11,7 +11,10 @@ Spec: `docs/specs/2026-10-09_checker-and-synthetic-rods.md`, items 3 and 4. Thre
 ## Runs
 - 70 tracker runs, all completed: 4 clean cases x 5 seeds and 5 development faults x 3 seeds, each run twice (as rendered, and with a rigid motion of 0.1 deg/frame and (0.5, 0.3) px/frame added and not logged)
 - Movie: 640 x 320 px, 41 frames at 90 s, rod radius 30 px, tip speed 60 px/h, peak REGR 43 %/h. Tracker: two-side, `track_centre=True`, disk radius 15 px, spacing 15 px, uncoupled. 6-7 s per tracker run; render 5-7 s (27-39 s for the 241-frame stride movie)
-- Commands: `scripts/synth/run_batch.py` on the tracker machine, `scripts/synth/eval_rods.py --tracks <dir> --out results/2026-10-10_checker_synthetic` here
+- Commands (corrected 2026-11-23, c033 audit S7-1), with the tracker env's Python on the tracker machine (README, image-level rods):
+  - Clean: `python scripts/synth/run_batch.py --work DIR --case C --seeds 0 1 2 3 4 --moved-too`, C = growth_zone, bending, rigid_translation, rigid_rotation
+  - Faults: `python scripts/synth/run_batch.py --work DIR --case growth_zone --fault F --seeds 0 1 2 --moved-too`, F = rigid_drift, displacement_exceeds_patch, midline_jitter, low_texture, width_change
+  - Then, in the agents env: `python scripts/synth/eval_rods.py --tracks DIR/tracks --out results/2026-10-10_checker_synthetic`
 
 ## Results
 - Field level: all 18 check outcomes as expected. Clean values at most 0.002 %/h or 0.0000 px/h; width_change gives a 1.50 %/h plane-sections residual

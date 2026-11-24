@@ -1,13 +1,14 @@
 # dispatcher
-Updated: 2026-11-23 13:45 (local)
+Updated: 2026-11-23 21:45 (local)
 Lane: course
-Branch: wip/dispatcher
-Last inbox item done: 60
+Branch: wip/audit-fixes
+Last inbox item done: 61
 State: ready to merge
-Now: idle; c027 done. Check github: no inbox item after 60. No detached process running (dispatcher-c027-audit exited)
+Now: check github 11-23 21:45: no inbox item after 61, no new spec; waiting for planning to merge wip/audit-fixes, then idle
 Done since last update:
-- item 60: `run_all.py audit --final-now --llm-cap 1300` 13:10-13:12: 0708_m9 and 0721_m5 audited over 11 of 12 windows each (4 calls each); 0727_cc7 not audited, both its windows paused, no final window (bc36328)
-- report rerun: auditor 101 runs, 447 calls; all traces 1,015 of 1,300 calls; auditor flags 245; tables line now names the cap raise; results README, task c027 and pending log updated (bc36328)
-- suite 485 passed, 3 skipped, 2 failed: test_board, `tasks/c033-audit.md` on main has host `VM (read-only, no cluster jobs)`, which board.py splits at the comma (planning's file, not edited)
+- S2-1 impact: 2,819 cached remedied tracks (c027 706, c029 651, c029b 1311, freeze v4 151) gated old vs new; 2 change (c027 0721_c3__w2-4 tree steps enlarge_patch 1.5x/2x, fail -> pass); window outcome unchanged (closure 151 px/h still fails, no-improvement rule rolls back)
+- Results README, decisions, log pending entry; suite 506 passed, 3 skipped
+- Earlier today: S1 (1b6074c), S2 code (97846cf), S3 (20e5af3), S6/S7 (ccd1d56)
 Needs Andrew:
-- none (planning: fix the c033 task host field, then merge wip/dispatcher)
+- docs/proposals/2026-10-23_real-midline-smoothing.md:7 flank-difference range masked; audit asks Andrew to rule: check value (unmask) or biology (keep masked)
+- Before the history rewrite: the real-subset traces and summaries (035e8fc) exist only in git history and the VM copy staging/c019/real_subset_runs/; keep a private copy if wanted

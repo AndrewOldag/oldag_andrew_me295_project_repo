@@ -13,7 +13,7 @@ from pathlib import Path
 
 from audit.view import opaque_ids
 
-MASK_KEYS = re.compile(r"regr|growth|zone|flank|plane|peak|velocity|width|curvature|kappa|profile", re.I)
+MASK_KEYS = re.compile(r"regr|growth|zone|flank|plane|peak|velocity|width|curvature|kappa|profile|strain_rate", re.I)
 MASK_TEXT = re.compile(r"((?:REGR|growth[- ]zone|growth|flank|peak|zone length)[^.;\d]{0,40}?)(-?\d[\d.,]*\s*(?:%/h|um|µm|px)?)",
                        re.I)
 

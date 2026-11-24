@@ -34,8 +34,8 @@ def test_real_reference_for_real_records():
     ref = info.frame_quality(rec("growth_zone_clean_s1", "real"))["reference"]
     assert set(ref) == {"basis", "texture_contrast", "focus"}
     assert ref["basis"].startswith("PROVISIONAL")
-    assert ref["texture_contrast"] == {"median": 0.0648, "lowest": 0.0439}
-    assert ref["focus"] == {"median": 0.0286, "lowest": 0.0213}
+    assert ref["texture_contrast"] == {"median": 0.0641, "lowest": 0.0439}
+    assert ref["focus"] == {"median": 0.0285, "lowest": 0.0213}
 
 
 def test_real_section_marked_provisional():

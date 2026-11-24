@@ -1,0 +1,69 @@
+{
+ "old": {
+  "texture_contrast": 0.0648,
+  "focus": 0.0286
+ },
+ "new": {
+  "texture_contrast": 0.0641,
+  "focus": 0.0285
+ },
+ "sets": {
+  "c019_unscored": {
+   "answers": 2,
+   "windows": 1,
+   "frames": 6,
+   "frames_in_band": 0,
+   "windows_in_band": {}
+  },
+  "c022": {
+   "answers": 1,
+   "windows": 1,
+   "frames": 3,
+   "frames_in_band": 1,
+   "windows_in_band": {
+    "0714_c5~6-8__w6": [
+     "frame 0 texture_contrast"
+    ]
+   }
+  },
+  "c026": {
+   "answers": 0,
+   "windows": 0,
+   "frames": 0,
+   "frames_in_band": 0,
+   "windows_in_band": {}
+  },
+  "c027": {
+   "answers": 24,
+   "windows": 24,
+   "frames": 72,
+   "frames_in_band": 1,
+   "windows_in_band": {
+    "0727_cc3__w22-23.63": [
+     "frame 29 focus"
+    ]
+   }
+  },
+  "c027_demo": {
+   "answers": 2,
+   "windows": 2,
+   "frames": 6,
+   "frames_in_band": 0,
+   "windows_in_band": {}
+  },
+  "c027_unscored": {
+   "answers": 12,
+   "windows": 12,
+   "frames": 36,
+   "frames_in_band": 0,
+   "windows_in_band": {}
+  },
+  "c027_paused": {
+   "answers": 5,
+   "windows": 5,
+   "frames": 15,
+   "frames_in_band": 0,
+   "windows_in_band": {}
+  }
+ }
+}

@@ -1,0 +1,3 @@
+set,window,track,gate_old,gate_new,changed,lost_frames,lost_points,rel_inversions,rel_gap_ratio,rel_lateral,error
+c027,0721_c3__w2-4_ft2,0721_c3__w2-4_ft2__st1_r26__L1000.npz,False,True,True,0,760,1.1351,0.9992,0.9985,
+c027,0721_c3__w2-4_ft2,0721_c3__w2-4_ft2__st1_r34__L1000.npz,False,True,True,0,734,1.4865,1.0012,0.9974,
