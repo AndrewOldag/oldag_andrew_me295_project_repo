@@ -3,6 +3,7 @@ import sys
 from pathlib import Path
 
 import numpy as np
+import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
@@ -10,7 +11,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from checker.zone_checks import particle_path, tip_frame_positions  # noqa: E402
 from measure.rod import make_record, v3_cases  # noqa: E402
 from zone_reference import (_draw, _hours, allocate, append_labels, on_midline, predicted_positions,  # noqa: E402
-                            window_frames)
+                            read_labels, reference_thresholds, window_frames)
 
 CASES = {c.name: c for c in v3_cases()}
 
@@ -59,3 +60,17 @@ def test_append_labels_keeps_existing(tmp_path):
     p.write_text(p.read_text().replace("a,\n", "a,clean\n"))
     append_labels(p, ["a", "b", "c", "d"])
     assert p.read_text() == "window,label\na,clean\nb,\nc,\nd,\n"
+
+
+def test_reference_thresholds_rule_and_labels(tmp_path):
+    rows = [{"label": "clean", "pp_shape_rel": x, "pp_common_rel": 2 * x} for x in np.linspace(0.01, 0.02, 20)]
+    rows.append({"label": "not clean", "pp_shape_rel": 9.0, "pp_common_rel": 9.0})
+    th = reference_thresholds(rows)
+    assert th == {"pp_shape_rel": 0.03, "pp_common_rel": 0.06}
+    assert reference_thresholds(rows[:11] + rows[-1:]) is None
+    p = tmp_path / "labels.csv"
+    p.write_text("window,label\na,clean\nb,not clean\n")
+    assert read_labels(p, ["a", "b"]) == {"a": "clean", "b": "not clean"}
+    p.write_text("window,label\na,clean\nb,\n")
+    with pytest.raises(AssertionError):
+        read_labels(p, ["a", "b"])

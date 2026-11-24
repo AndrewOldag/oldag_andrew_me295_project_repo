@@ -9,11 +9,15 @@ overlays    Per sampled window: first, middle and last frame read from storage (
             frames deleted after use) with midline, midline tip, tracked chain (first point marked) and predicted
             particle positions. PNGs, index.html and labels.csv (blank rows appended for new windows, existing labels kept) in staging/c035_overlays/ (git-ignored). The
             index shows no residual value or flag. A rerun skips windows with a PNG
+thresholds  Proposal step 5 on Andrew's labels: 99.5th percentile x 1.5 (2 significant figures, rounded up) of
+            `pp_shape_rel` and `pp_common_rel` over the clean windows. Writes reference.csv and thresholds.md; the
+            values wait for Andrew's approval and are not written to config
 
   python scripts/zone_reference.py synthetic --cache <freeze v4 track cache>
   python scripts/zone_reference.py sample --cache <c027 track cache>
   python scripts/zone_reference.py extend --cache <c027 track cache>
   python scripts/zone_reference.py overlays --cache <c027 track cache> --host <storage ssh alias> --data <movie root>
+  python scripts/zone_reference.py thresholds --cache <c027 track cache>
 """
 import argparse
 import collections
@@ -345,6 +349,65 @@ def overlays(a):
                       "not made": notes}))
 
 
+def read_labels(path, windows):
+    """labels.csv as {window: label}; every sampled window labelled `clean` or `not clean`, no other window."""
+    lab = {r["window"]: r["label"].strip() for r in csv.DictReader(open(path))}
+    assert set(lab) == set(windows), "labels.csv windows differ from sample.csv"
+    bad = sorted(w for w, v in lab.items() if v not in ("clean", "not clean"))
+    assert not bad, f"unlabelled or unknown label: {bad[:5]}"
+    return lab
+
+
+def reference_thresholds(rows):
+    """Step 5 rule on the clean rows. Fewer than 12 clean: None (proposal: no threshold, ask Andrew)."""
+    clean = [r for r in rows if r["label"] == "clean"]
+    if len(clean) < 12:
+        return None
+    return {k: r4([r[k] for r in clean]) for k in ("pp_shape_rel", "pp_common_rel")}
+
+
+def thresholds(a):
+    sample_rows = list(csv.DictReader(open(OUT / "sample.csv")))
+    lab = read_labels(OVERLAYS / "labels.csv", [r["window"] for r in sample_rows])
+    n_clean = sum(v == "clean" for v in lab.values())
+    if n_clean < 30:
+        print(json.dumps({"clean": n_clean, "note": "fewer than 30 clean: say so in status before computing"}))
+        return
+    rows = []
+    for r in sample_rows:
+        v = pp_values(from_tracker_npz(track_file(Path(a.cache), r["window"], "st1"), root_id=r["window"]))
+        rows.append(r | {"label": lab[r["window"]]} | v)
+    th = reference_thresholds(rows)
+    for r in rows:
+        r["over_shape"] = "yes" if r["pp_shape_rel"] > th["pp_shape_rel"] else "no"
+        r["over_common"] = "yes" if r["pp_common_rel"] > th["pp_common_rel"] else "no"
+    _write_csv(OUT / "reference.csv", rows, ["window", "condition", "draw", "label", "pp_common_rel", "pp_shape_rel",
+                                             "over_common", "over_shape"])
+    lines = ["# Reference thresholds (proposal step 5), waiting for Andrew's approval", "",
+             f"Labels: {len(rows)} windows, {n_clean} clean, {len(rows) - n_clean} not clean (Andrew).",
+             "Rule: 99.5th percentile over the clean windows (numpy linear) x 1.5, rounded up to 2 significant figures.",
+             "", "| Value | 99.5th pct (clean) | Threshold | clean over | not clean over | clean range | not clean range |",
+             "| :-- | --: | --: | --: | --: | :-- | :-- |"]
+    for k, flag in (("pp_shape_rel", "over_shape"), ("pp_common_rel", "over_common")):
+        c = [r[k] for r in rows if r["label"] == "clean"]
+        n = [r[k] for r in rows if r["label"] != "clean"]
+        lines.append(f"| `{k}` | {np.percentile(c, 99.5):.4g} | {th[k]:g} | "
+                     f"{sum(r[flag] == 'yes' for r in rows if r['label'] == 'clean')} of {len(c)} | "
+                     f"{sum(r[flag] == 'yes' for r in rows if r['label'] != 'clean')} of {len(n)} | "
+                     f"{min(c):.3g}-{max(c):.3g} | {min(n):.3g}-{max(n):.3g} |")
+    lines += ["", "Not clean windows over either threshold: " + (", ".join(
+        r["window"] for r in rows if r["label"] != "clean" and "yes" in (r["over_shape"], r["over_common"])) or "none"),
+        "", "For information, synthetic set (synthetic.csv) at the shape threshold, flagged of computable:"]
+    syn = [r for r in csv.DictReader(open(OUT / "synthetic.csv")) if r["pp_shape_rel"]]
+    for cls, d in [("accept_clean", 0), *[("shifted", d) for d in SHIFTS], ("accept_repaired", 0)]:
+        sub = [r for r in syn if r["class"] == cls and int(r["shift_px"]) == d]
+        lines.append(f"- {cls} {d:+d} px: {sum(float(r['pp_shape_rel']) > th['pp_shape_rel'] for r in sub)} "
+                     f"of {len(sub)}")
+    lines += ["", "Not written to config until Andrew approves (then `config/zone_reference_thresholds.yaml`).", ""]
+    (OUT / "thresholds.md").write_text("\n".join(lines))
+    print(json.dumps({"windows": len(rows), "clean": n_clean, "thresholds": th}))
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -353,8 +416,10 @@ def main():
     s = sub.add_parser("extend"); s.add_argument("--cache", required=True)
     s = sub.add_parser("overlays"); s.add_argument("--cache", required=True)
     s.add_argument("--host", required=True); s.add_argument("--data", required=True)
+    s = sub.add_parser("thresholds"); s.add_argument("--cache", required=True)
     a = ap.parse_args()
-    {"synthetic": synthetic, "sample": sample, "extend": extend, "overlays": overlays}[a.cmd](a)
+    {"synthetic": synthetic, "sample": sample, "extend": extend, "overlays": overlays,
+     "thresholds": thresholds}[a.cmd](a)
 
 
 if __name__ == "__main__":

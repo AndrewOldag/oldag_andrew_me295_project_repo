@@ -1,0 +1,151 @@
+window,condition,draw,label,pp_common_rel,pp_shape_rel,over_common,over_shape
+0721_c6__w0-2,control,1,clean,0.0492982,0.0577832,no,no
+0708_c9__w8-10,control,1,clean,0.0863832,0.0169676,no,no
+0714_c9__w20-22,control,1,clean,0.0641297,0.0138866,no,no
+0714_c11__w2-4,control,1,not clean,0.0211622,0.0130269,no,no
+0721_c7__w6-8,control,1,clean,0.00112452,0.0225732,no,no
+0727_cc3__w6-8,control then control,1,clean,0.0126184,0.0158864,no,no
+0727_cc5__w6-8,control then control,1,clean,0.00173854,0.0104443,no,no
+0727_cc1__w2-4,control then control,1,clean,0.0154088,0.0169195,no,no
+0727_cc4__w22-23.63,control then control,1,clean,0.000324092,0.0178446,no,no
+0714_m4__w20-22,mannitol,1,clean,0.000288775,0.0295147,no,no
+0714_m8__w6-8,mannitol,1,clean,0.0411773,0.0336107,no,no
+0708_m9__w18-20,mannitol,1,not clean,0.0189347,0.071693,no,no
+0714_m9__w20-22,mannitol,1,clean,0.0859496,0.0449645,no,no
+0714_m1__w18-20,mannitol,1,clean,0.0022834,0.0298702,no,no
+0727_mc6__w2-4,mannitol then control,1,not clean,0.0719314,0.0176399,no,no
+0721_m6__w8-10,mannitol then control,1,clean,0.0309569,0.0131405,no,no
+0721_m12__w6-8,mannitol then control,1,clean,0.0462017,0.0123044,no,no
+0721_m3__w10-12,mannitol then control,1,clean,0.0425281,0.0103369,no,no
+0727_mc4__w18-20,mannitol then control,1,clean,0.000677873,0.012343,no,no
+0727_mm4__w14-16,mannitol then mannitol,1,clean,0.0317488,0.0210524,no,no
+0727_mm2__w22-23.64,mannitol then mannitol,1,clean,0.000472215,0.01878,no,no
+0727_mm7__w12-14,mannitol then mannitol,1,clean,0.00267874,0.0192627,no,no
+0727_mm6__w6-8,mannitol then mannitol,1,clean,0.0686196,0.114814,no,no
+0727_mm3__w10-12,mannitol then mannitol,1,clean,0.042958,0.0205653,no,no
+0711_c2__w6-8,control,2,clean,0.00106679,0.0129161,no,no
+0721_c5__w20-22,control,2,clean,0.000693977,0.0130952,no,no
+0708_c8__w4-6,control,2,clean,0.0384711,0.0229084,no,no
+0714_c10__w12-14,control,2,clean,0.00117331,0.0131309,no,no
+0714_c13__w8-10,control,2,clean,0.00143843,0.0114859,no,no
+0708_c11__w6-8,control,2,clean,0.00268061,0.010038,no,no
+0721_c1__w6-8,control,2,clean,0.0522493,0.0137229,no,no
+0721_c1__w16-18,control,2,clean,0.0184397,0.0156617,no,no
+0721_c8__w8-10,control,2,clean,0.0600941,0.0137042,no,no
+0721_c7__w2-4,control,2,clean,0.134418,0.0230583,no,no
+0711_c3__w12-14,control,2,clean,0.0888955,0.0117101,no,no
+0721_c9__w0-2,control,2,clean,0.00236398,0.0145319,no,no
+0711_c2__w22-24,control,2,clean,0.000969103,0.0160692,no,no
+0714_c11__w14-16,control,2,clean,0.0660116,0.0183022,no,no
+0711_c5__w0-2,control,2,clean,0.00169338,0.0174467,no,no
+0711_c7__w16-18,control,2,clean,0.000116765,0.0131085,no,no
+0711_c6__w8-10,control,2,clean,0.0422134,0.0125426,no,no
+0708_c2__w12-14,control,2,clean,0.0394741,0.0177,no,no
+0714_c14__w20-22,control,2,clean,0.00132547,0.0195536,no,no
+0714_c12__w2-4,control,2,clean,0.0387949,0.0135387,no,no
+0708_c4__w20-22,control,2,clean,0.0188743,0.0140725,no,no
+0714_c14__w10-12,control,2,clean,0.00916216,0.0141345,no,no
+0714_c13__w6-8,control,2,clean,0.00193489,0.00913135,no,no
+0721_c9__w12-14,control,2,not clean,0.0863449,0.0391846,no,no
+0714_c10__w10-12,control,2,clean,0.0244842,0.0151197,no,no
+0708_c10__w14-16,control,2,clean,0.0295437,0.0167394,no,no
+0721_c8__w12-14,control,2,clean,0.000642668,0.00998028,no,no
+0714_c12__w20-22,control,2,clean,0.00122187,0.0185849,no,no
+0711_c10__w12-14,control,2,clean,0.00107857,0.011753,no,no
+0721_c5__w12-14,control,2,clean,0.0502504,0.0113842,no,no
+0714_c9__w6-8,control,2,clean,0.0289937,0.0130566,no,no
+0708_c11__w14-16,control,2,clean,0.0180585,0.0719257,no,no
+0708_c2__w10-12,control,2,clean,0.0180752,0.0173438,no,no
+0708_c9__w0-2,control,2,clean,0.0474988,0.0266182,no,no
+0711_c10__w8-10,control,2,clean,0.00512828,0.0129178,no,no
+0708_c5__w4-6,control,2,clean,0.0365568,0.0186701,no,no
+0711_c4__w10-12,control,2,clean,0.0342134,0.0134911,no,no
+0711_c8__w6-8,control,2,clean,0.0361472,0.0121534,no,no
+0708_c5__w20-22,control,2,clean,0.0255581,0.0186594,no,no
+0711_c5__w18-20,control,2,clean,0.0599492,0.0131365,no,no
+0708_c10__w6-8,control,2,clean,0.036542,0.0225451,no,no
+0708_c8__w12-14,control,2,clean,0.069579,0.0183483,no,no
+0708_c4__w4-6,control,2,clean,0.0250242,0.0314242,no,no
+0711_c1__w10-12,control,2,clean,0.00929151,0.0136566,no,no
+0711_c6__w12-14,control,2,clean,0.0234034,0.00917449,no,no
+0727_cc4__w20-22,control then control,2,clean,0.0738487,0.0158273,no,no
+0727_cc6__w16-18,control then control,2,clean,0.00348058,0.0265796,no,no
+0727_cc5__w10-12,control then control,2,clean,0.0362577,0.0098535,no,no
+0727_cc6__w2-4,control then control,2,clean,0.00548998,0.0152991,no,no
+0727_cc2__w4-6,control then control,2,clean,0.00100705,0.0117403,no,no
+0714_m14__w2-4,mannitol,2,clean,0.0685168,0.0260262,no,no
+0714_m13__w14-16,mannitol,2,clean,0.00138934,0.0166752,no,no
+0714_m1__w12-14,mannitol,2,clean,0.0149894,0.0264713,no,no
+0711_m7__w8-10,mannitol,2,clean,0.00143483,0.0117362,no,no
+0708_m3__w4-6,mannitol,2,clean,0.00329027,0.0371869,no,no
+0708_m2__w20-22,mannitol,2,clean,0.0361214,0.0258845,no,no
+0711_m7__w6-8,mannitol,2,clean,0.0730943,0.0163743,no,no
+0708_m12__w4-6,mannitol,2,clean,0.020185,0.0183162,no,no
+0714_m13__w2-4,mannitol,2,clean,0.00679977,0.0251188,no,no
+0708_m7__w10-12,mannitol,2,not clean,0.130511,0.0194039,no,no
+0708_m3__w6-8,mannitol,2,clean,0.0781551,0.0244249,no,no
+0711_m3__w10-12,mannitol,2,not clean,0.000388659,0.022065,no,no
+0708_m6__w22-24,mannitol,2,clean,0.0133727,0.0499018,no,no
+0714_m5__w6-8,mannitol,2,clean,0.0124372,0.0185445,no,no
+0714_m9__w18-20,mannitol,2,clean,0.00340439,0.0531477,no,no
+0711_m10__w12-14,mannitol,2,clean,0.00266007,0.0190757,no,no
+0711_m10__w4-6,mannitol,2,clean,0.00143216,0.0296986,no,no
+0708_m2__w14-16,mannitol,2,clean,0.0399011,0.0270822,no,no
+0711_m2__w14-16,mannitol,2,clean,0.164437,0.0166037,no,no
+0711_m4__w10-12,mannitol,2,clean,0.00178422,0.0182241,no,no
+0708_m10__w12-14,mannitol,2,clean,0.00136125,0.0126262,no,no
+0708_m6__w4-6,mannitol,2,clean,0.0398237,0.0250006,no,no
+0714_m10__w4-6,mannitol,2,clean,0.0667321,0.0272226,no,no
+0708_m8__w10-12,mannitol,2,clean,0.0321046,0.0149963,no,no
+0714_m5__w16-18,mannitol,2,clean,0.00113664,0.0191433,no,no
+0714_m7__w16-18,mannitol,2,clean,0.00125573,0.026222,no,no
+0714_m2__w20-22,mannitol,2,clean,0.00234804,0.0339799,no,no
+0708_m9__w22-24,mannitol,2,not clean,0.299116,0.211994,no,yes
+0708_m7__w16-18,mannitol,2,not clean,0.0363921,0.0319034,no,no
+0711_m1__w12-14,mannitol,2,clean,0.145573,0.0142863,no,no
+0708_m12__w8-10,mannitol,2,clean,0.0284165,0.0124007,no,no
+0714_m4__w0-2,mannitol,2,not clean,0.00370439,0.0366297,no,no
+0708_m1__w2-4,mannitol,2,clean,0.00282467,0.0386188,no,no
+0714_m10__w0-2,mannitol,2,clean,0.133843,0.038657,no,no
+0708_m11__w12-14,mannitol,2,not clean,0.000412083,0.0148608,no,no
+0711_m9__w16-18,mannitol,2,not clean,0.194667,0.00991879,no,no
+0721_m11__w12-14,mannitol then control,2,clean,2.25952e-06,0.0130361,no,no
+0727_mc5__w12-14,mannitol then control,2,clean,0.000781347,0.0160079,no,no
+0727_mc2__w8-10,mannitol then control,2,clean,0.0805848,0.0104758,no,no
+0727_mc3__w18-20,mannitol then control,2,clean,0.00189066,0.0102643,no,no
+0721_m9__w14-16,mannitol then control,2,clean,0.00222836,0.0108576,no,no
+0727_mc11__w14-16,mannitol then control,2,clean,0.0137633,0.00974396,no,no
+0721_m7__w8-10,mannitol then control,2,clean,4.5867e-05,0.00801039,no,no
+0721_m7__w2-4,mannitol then control,2,clean,0.0103642,0.0662609,no,no
+0721_m2__w12-14,mannitol then control,2,clean,8.18911e-05,0.0119798,no,no
+0727_mc5__w2-4,mannitol then control,2,clean,0.0125774,0.0388607,no,no
+0727_mc9__w10-12,mannitol then control,2,clean,0.000288079,0.0107645,no,no
+0721_m9__w16-18,mannitol then control,2,clean,0.00149549,0.00900571,no,no
+0727_mc10__w10-12,mannitol then control,2,clean,0.00396435,0.0432382,no,no
+0721_m5__w14-16,mannitol then control,2,clean,0.000445573,0.0116209,no,no
+0727_mc10__w0-2,mannitol then control,2,not clean,0.236931,0.0142338,no,no
+0721_m5__w22-23.99,mannitol then control,2,clean,0.000411185,0.0105433,no,no
+0727_mc4__w20-22,mannitol then control,2,clean,0.00175345,0.0153639,no,no
+0721_m1__w20-22,mannitol then control,2,clean,0.0345942,0.010767,no,no
+0727_mc7__w10-12,mannitol then control,2,clean,0.0141252,0.0113704,no,no
+0721_m8__w10-12,mannitol then control,2,clean,0.00131485,0.0129876,no,no
+0727_mc3__w4-6,mannitol then control,2,not clean,0.0827805,0.0116371,no,no
+0721_m11__w14-16,mannitol then control,2,clean,0.0347367,0.0112452,no,no
+0721_m12__w14-16,mannitol then control,2,not clean,0.0313641,0.0131536,no,no
+0721_m10__w0-2,mannitol then control,2,not clean,0.0052246,0.0200677,no,no
+0727_mc13__w14-16,mannitol then control,2,clean,0.000442515,0.013149,no,no
+0727_mc7__w8-10,mannitol then control,2,not clean,0.0856283,0.00889626,no,no
+0721_m2__w18-20,mannitol then control,2,not clean,0.00303429,0.00989153,no,no
+0727_mc1__w2-4,mannitol then control,2,clean,0.00743207,0.0379389,no,no
+0721_m8__w12-14,mannitol then control,2,clean,8.87875e-06,0.0110985,no,no
+0721_m4__w10-12,mannitol then control,2,clean,0.00146527,0.0114641,no,no
+0727_mc2__w12-14,mannitol then control,2,clean,0.00302277,0.0123324,no,no
+0727_mc11__w16-18,mannitol then control,2,not clean,0.117453,0.00946119,no,no
+0721_m1__w22-23.99,mannitol then control,2,clean,0.0487118,0.0107133,no,no
+0727_mm6__w10-12,mannitol then mannitol,2,clean,0.628186,0.0292931,yes,no
+0727_mm2__w18-20,mannitol then mannitol,2,clean,0.111372,0.0183963,no,no
+0727_mm1__w6-8,mannitol then mannitol,2,clean,0.0571516,0.0132471,no,no
+0727_mm3__w2-4,mannitol then mannitol,2,not clean,0.000326002,0.0201707,no,no
+0727_mm1__w14-16,mannitol then mannitol,2,clean,0.000314914,0.0154024,no,no
+0727_mm4__w10-12,mannitol then mannitol,2,clean,0.094278,0.0156047,no,no
+0727_mm7__w22-23.64,mannitol then mannitol,2,not clean,1.4822e-05,0.0119526,no,no
