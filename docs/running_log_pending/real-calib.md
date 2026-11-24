@@ -97,3 +97,12 @@
 - Done: overlays for windows 25-150 (detached job): 150 of 150 made, none failed, raw frames deleted; index and labels.csv hold 150 rows, first 24 labels kept (21 clean, 3 not clean)
 - Demo: `python scripts/ops/label_server.py <worktree>/staging/c035_overlays` serves the 150 overlays for labelling at http://127.0.0.1:8765
 - Bottlenecks: Andrew labels windows 25-150; thresholds wait for that
+
+## 2026-11-23 (build account, session real-calib, c035 step 5)
+- Done: Andrew's labels read: 150 windows, 130 clean, 20 not clean
+- Done: `scripts/zone_reference.py thresholds`; `tests/test_zone_reference.py` 7 passed, with `tests/test_zone_checks.py` 19 passed (83752a4)
+- Done: thresholds by the proposal rule: `pp_shape_rel` 0.14, `pp_common_rel` 0.5; reference set: shape 0 of 130 clean and 1 of 20 not clean over; common 1 of 130 clean and 0 of 20 not clean over
+- Done: synthetic at shape 0.14 (information): +-60 px 15 of 15, +-30 and +-15 px 0 of 15, clean 0 of 15, repaired 0 of 9
+- Demo: `python scripts/zone_reference.py thresholds --cache <c027 track cache>` -> prints the two thresholds; writes `results/2026-11-23_zone_reference/thresholds.md`, `reference.csv`
+- Remaining: Andrew approves; config file; step 6 apply to 1,189 c027 windows; README, decisions; ready to merge by Fri 27 Nov 12:00
+- Bottlenecks: threshold approval, on Andrew

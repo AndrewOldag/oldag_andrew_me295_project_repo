@@ -7,8 +7,8 @@ state: waiting on Andrew
 branch: wip/zone-reference
 host: VM
 created: 2026-11-23 14:35
-last_update: 2026-11-23 21:50
-blocker: Andrew labels windows 25-150
+last_update: 2026-11-23 23:59
+blocker: Andrew approves the two thresholds
 done_marker: results/2026-11-23_zone_reference/README.md
 ---
 
@@ -23,7 +23,7 @@ Spec `docs/specs/2026-11-23_zone-check-real-reference.md`.
 - [done] Inbox 33: extension rule (126 more, seed 20261124) in the proposal, before the draw
 - [done] Inbox 33: 126 more drawn (b7d30ac): 45/5/36/33/7 by condition, max 2 per root, 150 in sample.csv
 - [done] Inbox 33: overlays for windows 25-150, detached job: 150 of 150 made, raw frames deleted; index and labels.csv have 150 rows, first 24 labels kept
-- [todo] Step 4b: Andrew labels windows 25-150
-- [todo] Step 5: thresholds, Andrew approves
+- [done] Step 4b: Andrew labelled all 150 (130 clean, 20 not clean)
+- [working] Step 5: thresholds computed (83752a4): pp_shape_rel 0.14, pp_common_rel 0.5; waiting for Andrew's approval
 - [todo] Step 6: apply to all c027 windows, report-only
 - [todo] Step 7: README, decisions, log; ready to merge
