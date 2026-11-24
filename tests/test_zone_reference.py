@@ -74,3 +74,20 @@ def test_reference_thresholds_rule_and_labels(tmp_path):
     p.write_text("window,label\na,clean\nb,\n")
     with pytest.raises(AssertionError):
         read_labels(p, ["a", "b"])
+
+
+def test_slide_moves_common_mode_only():
+    rec = make_record(CASES["v3_growth_zone"])
+    v0 = particle_path(rec).values
+    v1 = particle_path(rec, slide_px=30.0).values
+    assert np.isclose(v1["pp_common_px"], v0["pp_common_px"] - 30.0)
+    assert np.isclose(v1["pp_shape_rms_px"], v0["pp_shape_rms_px"])
+
+
+def test_ref_flags_and_smallest_caught():
+    from zone_reference import ref_flags, smallest_caught
+    th = {"pp_shape_rel": 0.14, "pp_common_rel": 0.5}
+    assert ref_flags({"pp_shape_rel": 0.2, "pp_common_rel": None}, th) == {"shape": True, "common": None}
+    res = {-30: [True] * 9 + [False], 30: [True] * 10, -15: [True] * 10, 15: [True] * 8 + [False] * 2}
+    assert smallest_caught(res, (-30, -15, 15, 30)) == 30
+    assert smallest_caught({-15: [False], 15: [True]}, (-15, 15)) is None

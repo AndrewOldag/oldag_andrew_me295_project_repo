@@ -1,0 +1,5 @@
+# Particle-path zone check, real reference thresholds (task c035; rule of docs/proposals/2026-11-23_zone-reference.md:
+# 99.5th percentile over Andrew's 130 clean reference windows x 1.5, rounded up to 2 significant figures).
+# Approved by Andrew 2026-11-23 23:20. Report-only: they gate nothing.
+pp_shape_rel: 0.14
+pp_common_rel: 0.5

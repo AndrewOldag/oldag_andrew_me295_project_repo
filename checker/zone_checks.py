@@ -116,12 +116,14 @@ def _velocity(s, v, ok):
     return f
 
 
-def particle_path(rec, thresholds=None, fields=None):
+def particle_path(rec, thresholds=None, fields=None, slide_px=0.0):
     """Tracked points moved by the window-mean velocity profile against where they were tracked.
 
     Integrates dS/dt = v(S) (Silk particle path) from frame 0 to the last frame for every centre
     point tracked in both. pp_rms_px, pp_max_px: residuals, px; pp_rms_rel, pp_max_rel: the same
-    over the RMS and the largest of the tracked tip-frame displacements.
+    over the RMS and the largest of the tracked tip-frame displacements. slide_px (fault injection
+    only, c035 detection curve): every tracked point slides along s by slide_px x (t - t0)/(t_end - t0),
+    an anchoring drift growing over the window; the profile is unchanged.
     """
     s, v, _, ok = _profile(fields if fields is not None else rec.fields)
     keys = ("pp_rms_px", "pp_max_px", "pp_rms_rel", "pp_max_rel", "pp_mean_px", "tip_offset_change_px",
@@ -129,6 +131,9 @@ def particle_path(rec, thresholds=None, fields=None):
     if ok.sum() < 2:
         return ZoneResult("particle_path", None, dict.fromkeys(keys), dict(thresholds or {}), "no covered span")
     S = tip_frame_positions(rec)
+    if slide_px:
+        t = np.asarray(rec.frame_times_s, float)
+        S = S + (slide_px * (t - t[0]) / (t[-1] - t[0]))[:, None]
     seed = np.isfinite(S[0]) & np.isfinite(S[-1])
     if not seed.any():
         return ZoneResult("particle_path", None, dict.fromkeys(keys), dict(thresholds or {}),

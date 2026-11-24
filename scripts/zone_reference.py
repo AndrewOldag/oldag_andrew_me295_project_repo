@@ -12,12 +12,20 @@ overlays    Per sampled window: first, middle and last frame read from storage (
 thresholds  Proposal step 5 on Andrew's labels: 99.5th percentile x 1.5 (2 significant figures, rounded up) of
             `pp_shape_rel` and `pp_common_rel` over the clean windows. Writes reference.csv and thresholds.md; the
             values wait for Andrew's approval and are not written to config
+apply       Step 6, report-only (inbox 34): the approved thresholds (config/zone_reference_thresholds.yaml) on every
+            c027 window, base track and the accepted track where a remedy was kept. Per-window values to --values
+            (git-ignored; a rerun skips windows already there). Writes real_counts.md (counts and example ids)
+curve       Inbox 34 detection curve on the clean reference windows: the profile shifted along s by +-15, 30, 60, 90
+            px (shape check); the whole chain slid by +-0.5, 1, 2, 4 patch spacings over the window (common check).
+            Writes curve.md (counts only); the thresholds do not change
 
   python scripts/zone_reference.py synthetic --cache <freeze v4 track cache>
   python scripts/zone_reference.py sample --cache <c027 track cache>
   python scripts/zone_reference.py extend --cache <c027 track cache>
   python scripts/zone_reference.py overlays --cache <c027 track cache> --host <storage ssh alias> --data <movie root>
   python scripts/zone_reference.py thresholds --cache <c027 track cache>
+  python scripts/zone_reference.py apply --cache <c027 track cache> [--values staging/zone_reference/apply.jsonl]
+  python scripts/zone_reference.py curve --cache <c027 track cache>
 """
 import argparse
 import collections
@@ -30,6 +38,7 @@ import sys
 from pathlib import Path
 
 import numpy as np
+import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
@@ -38,7 +47,7 @@ from checker.zone_checks import (SUBSTEPS, _profile, _velocity, particle_path, s
                                  tip_frame_positions)
 from integrity_thresholds import LABELS, round_up_2sf, track_set  # noqa: E402
 from measure.record import from_tracker_npz  # noqa: E402
-from zone_checks import SHIFTS, WINDOWS, track_file  # noqa: E402
+from zone_checks import SHIFTS, WINDOWS, real_tracks, track_file  # noqa: E402
 
 OUT = ROOT / "results" / "2026-11-23_zone_reference"
 OVERLAYS = ROOT / "staging" / "c035_overlays"
@@ -51,6 +60,10 @@ EXTRA = 126
 STRATA = {"control": 5, "control then control": 4, "mannitol": 5, "mannitol then control": 5,
           "mannitol then mannitol": 5}
 SAMPLE_COLS = ["window", "root", "condition", "order", "pool", "draw"]
+TH_FILE = ROOT / "config" / "zone_reference_thresholds.yaml"
+PATCH_PX = 15.0                                         # patch spacing of the tracked chain
+CURVE_SHIFTS = (-90, -60, -30, -15, 15, 30, 60, 90)     # px, profile along s (shape check)
+CURVE_SLIDES = (-4, -2, -1, -0.5, 0.5, 1, 2, 4)         # patch spacings, whole chain (common check)
 KEYS = ("pp_rms_px", "pp_common_px", "pp_shape_rms_px", "pp_rms_rel", "pp_common_rel", "pp_shape_rel")
 
 
@@ -408,6 +421,149 @@ def thresholds(a):
     print(json.dumps({"windows": len(rows), "clean": n_clean, "thresholds": th}))
 
 
+def ref_flags(v, th):
+    """{shape, common}: True/False against the approved thresholds, None where not computable."""
+    return {"shape": None if v.get("pp_shape_rel") is None else v["pp_shape_rel"] > th["pp_shape_rel"],
+            "common": None if v.get("pp_common_rel") is None else v["pp_common_rel"] > th["pp_common_rel"]}
+
+
+def apply(a):
+    th = yaml.safe_load(TH_FILE.read_text())
+    cache = Path(a.cache)
+    vals_path = Path(a.values)
+    vals_path.parent.mkdir(parents=True, exist_ok=True)
+    done = {}
+    if vals_path.exists():
+        for ln in vals_path.read_text().splitlines():
+            d = json.loads(ln)
+            done[(d["window"], d["kind"])] = d
+    windows = list(csv.DictReader(open(WINDOWS)))
+    with open(vals_path, "a") as fh:
+        for r in windows:
+            for kind, st in real_tracks(r):
+                if (r["window"], kind) in done and "error" not in done[(r["window"], kind)]:
+                    continue
+                p = track_file(cache, r["window"], st)
+                d = {"window": r["window"], "kind": kind, "track": p.name if p else st}
+                if p is None:
+                    d["error"] = "track not cached"
+                else:
+                    try:
+                        v = pp_values(from_tracker_npz(p, root_id=r["window"]))
+                        d |= {k: v[k] for k in KEYS}
+                    except Exception as e:           # noqa: BLE001 - counted as not computed
+                        d["error"] = f"{type(e).__name__}: {e}"
+                fh.write(json.dumps(d) + "\n")
+                fh.flush()
+                done[(r["window"], kind)] = d
+    OUT.mkdir(parents=True, exist_ok=True)
+    (OUT / "real_counts.md").write_text(apply_report(windows, done, th))
+    print(json.dumps({"tracks": len(done), "errors": sum("error" in d for d in done.values())}))
+
+
+def apply_report(windows, done, th):
+    by_class, by_cond = collections.defaultdict(collections.Counter), collections.defaultdict(collections.Counter)
+    examples = collections.defaultdict(list)
+    word = {True: "flag", False: "pass", None: "n/a"}
+    for r in windows:
+        for kind, _ in real_tracks(r):
+            d = done[(r["window"], kind)]
+            f = None if "error" in d else ref_flags(d, th)
+            for agg, k in ((by_class, (r["integrated"], kind)), (by_cond, (r["condition"] or "(none)", kind))):
+                agg[k]["windows"] += 1
+                if f is None:
+                    agg[k]["not computed"] += 1
+                    continue
+                for c in ("shape", "common"):
+                    agg[k][f"{c} " + ("n/a" if f[c] is None else "flagged" if f[c] else "pass")] += 1
+                agg[k]["either flagged"] += bool(f["shape"] or f["common"])
+            if f is not None and kind == "base":
+                examples[(r["integrated"], word[f["shape"]], word[f["common"]])].append(r["window"])
+    cols = ["windows", "not computed", "shape flagged", "shape n/a", "common flagged", "common n/a", "either flagged"]
+
+    def table(title, agg, head):
+        out = [f"## {title}", "", f"| {head} | Track | " + " | ".join(cols) + " |",
+               "| :-- | :-- | " + " | ".join("--:" for _ in cols) + " |"]
+        for (k, kind), c in sorted(agg.items()):
+            out.append(f"| {k} | {kind} | " + " | ".join(str(c[x]) for x in cols) + " |")
+        return out + [""]
+    base = [d for d in done.values() if d["kind"] == "base" and "error" not in d]
+    q = lambda v: " / ".join(f"{np.percentile(v, p):.3g}" for p in (50, 90, 99)) if v else "-"
+    lines = ["# Particle-path zone check with the real reference thresholds, c027 windows (report-only)", "",
+             "Thresholds `config/zone_reference_thresholds.yaml` (Andrew, 2026-11-23): "
+             + ", ".join(f"`{k}` {v:g}" for k, v in th.items()) + ". shape: `pp_shape_rel` over its threshold "
+             "(profile misplaced along s). common: `pp_common_rel` over its threshold (anchoring drift). "
+             "They gate nothing; no c027 outcome changes. n/a: largest tracked displacement under 2 px "
+             "(relative values not computable)", ""]
+    lines += table("By outcome class", by_class, "Outcome")
+    lines += table("By condition", by_cond, "Condition")
+    lines += ["## Relative residuals, base tracks (median / 90th / 99th percentile)", "",
+              "| Value | Computed | Percentiles |", "| :-- | --: | :-- |"]
+    for k in ("pp_shape_rel", "pp_common_rel"):
+        v = [d[k] for d in base if d.get(k) is not None]
+        lines.append(f"| {k} | {len(v)} | {q(v)} |")
+    lines += ["", "## Example windows (base track; first 3 by id per group)", "",
+              "| Outcome | shape | common | Windows |", "| :-- | :-- | :-- | :-- |"]
+    for (cls, sh, cm), ws in sorted(examples.items()):
+        lines.append(f"| {cls} | {sh} | {cm} | {', '.join(sorted(ws)[:3])} ({len(ws)}) |")
+    return "\n".join(lines) + "\n"
+
+
+def curve_rows(rec, th):
+    """Detection-curve records of one window: (check, size, flags); size 0 is the window as tracked."""
+    out = [("none", 0, ref_flags(pp_values(rec), th))]
+    for d in CURVE_SHIFTS:
+        out.append(("shape", d, ref_flags(pp_values(rec, shifted_fields(rec, d)), th)))
+    for n in CURVE_SLIDES:
+        out.append(("common", n, ref_flags(particle_path(rec, slide_px=n * PATCH_PX).values, th)))
+    return out
+
+
+def smallest_caught(res, sizes):
+    """Smallest |size| caught in at least 90 % of computable windows in both directions; None if none."""
+    def ok(s):
+        f = res[s]
+        n = sum(x is not None for x in f)
+        return n > 0 and sum(x is True for x in f) >= 0.9 * n
+    good = [abs(s) for s in sizes if ok(s) and ok(-s)]
+    return min(good) if good else None
+
+
+def curve(a):
+    th = yaml.safe_load(TH_FILE.read_text())
+    ref = [r for r in csv.DictReader(open(OUT / "reference.csv")) if r["label"] == "clean"]
+    res = {"shape": collections.defaultdict(list), "common": collections.defaultdict(list)}
+    false = collections.defaultdict(list)
+    for r in ref:
+        rec = from_tracker_npz(track_file(Path(a.cache), r["window"], "st1"), root_id=r["window"])
+        for check, size, f in curve_rows(rec, th):
+            if check == "none":
+                for c in ("shape", "common"):
+                    false[c].append(f[c])
+            else:
+                res[check][size].append(f[check])
+    frac = lambda v: (sum(x is True for x in v), sum(x is not None for x in v))
+    lines = ["# Detection curve on the clean reference windows (inbox 34; report-only, thresholds unchanged)", "",
+             f"Windows: {len(ref)} labelled clean by Andrew. Thresholds `config/zone_reference_thresholds.yaml`: "
+             + ", ".join(f"`{k}` {v:g}" for k, v in th.items()) + ". Counts read `caught of computable`", "",
+             "| Check | Injection | Size | Caught | Fraction |", "| :-- | :-- | --: | --: | --: |"]
+    for c in ("shape", "common"):
+        f, n = frac(false[c])
+        lines.append(f"| {c} | none (false alarms) | 0 | {f} of {n} | {f / n:.2f} |")
+    smallest = {}
+    for check, sizes, inj, unit in (("shape", CURVE_SHIFTS, "profile shifted along s", "px"),
+                                    ("common", CURVE_SLIDES, "whole chain slid along s", "patch spacings")):
+        for size in sizes:
+            f, n = frac(res[check][size])
+            lines.append(f"| {check} | {inj} | {size:+g} {unit} | {f} of {n} | {f / n:.2f} |")
+        s = smallest_caught(res[check], sizes)
+        smallest[check] = f"{s:g} {unit}" if s is not None else f"none up to {max(sizes):g} {unit}"
+    lines += ["", "Smallest size caught in at least 90 % of computable windows, in both directions: "
+              f"shape {smallest['shape']}; common {smallest['common']} (1 patch spacing = {PATCH_PX:g} px)", ""]
+    (OUT / "curve.md").write_text("\n".join(lines))
+    print(json.dumps({"windows": len(ref), "smallest": smallest}))
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -417,9 +573,12 @@ def main():
     s = sub.add_parser("overlays"); s.add_argument("--cache", required=True)
     s.add_argument("--host", required=True); s.add_argument("--data", required=True)
     s = sub.add_parser("thresholds"); s.add_argument("--cache", required=True)
+    s = sub.add_parser("apply"); s.add_argument("--cache", required=True)
+    s.add_argument("--values", default=str(ROOT / "staging" / "zone_reference" / "apply.jsonl"))
+    s = sub.add_parser("curve"); s.add_argument("--cache", required=True)
     a = ap.parse_args()
     {"synthetic": synthetic, "sample": sample, "extend": extend, "overlays": overlays,
-     "thresholds": thresholds}[a.cmd](a)
+     "thresholds": thresholds, "apply": apply, "curve": curve}[a.cmd](a)
 
 
 if __name__ == "__main__":
