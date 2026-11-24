@@ -3,12 +3,12 @@ id: c035
 title: real reference set and threshold for the particle-path zone check (report-only)
 lane: course
 owner: real-calib
-state: waiting on Andrew
+state: review
 branch: wip/zone-reference
 host: VM
 created: 2026-11-23 14:35
-last_update: 2026-11-23 23:59
-blocker: Andrew approves the two thresholds
+last_update: 2026-11-23 23:35
+blocker: none
 done_marker: results/2026-11-23_zone_reference/README.md
 ---
 
@@ -24,6 +24,7 @@ Spec `docs/specs/2026-11-23_zone-check-real-reference.md`.
 - [done] Inbox 33: 126 more drawn (b7d30ac): 45/5/36/33/7 by condition, max 2 per root, 150 in sample.csv
 - [done] Inbox 33: overlays for windows 25-150, detached job: 150 of 150 made, raw frames deleted; index and labels.csv have 150 rows, first 24 labels kept
 - [done] Step 4b: Andrew labelled all 150 (130 clean, 20 not clean)
-- [working] Step 5: thresholds computed (83752a4): pp_shape_rel 0.14, pp_common_rel 0.5; waiting for Andrew's approval
-- [todo] Step 6: apply to all c027 windows, report-only
-- [todo] Step 7: README, decisions, log; ready to merge
+- [done] Step 5: thresholds computed (83752a4), approved by Andrew 23:20; `config/zone_reference_thresholds.yaml`
+- [done] Step 6: applied to 1,189 c027 windows, report-only (`real_counts.md`); accepted 8 of 1,034 flagged
+- [done] Inbox 34: detection curve on 130 clean windows (`curve.md`), sizes committed before the run (1a023ff)
+- [done] Step 7: README, decisions, log; ready to merge

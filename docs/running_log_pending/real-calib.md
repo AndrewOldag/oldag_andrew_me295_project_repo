@@ -106,3 +106,12 @@
 - Demo: `python scripts/zone_reference.py thresholds --cache <c027 track cache>` -> prints the two thresholds; writes `results/2026-11-23_zone_reference/thresholds.md`, `reference.csv`
 - Remaining: Andrew approves; config file; step 6 apply to 1,189 c027 windows; README, decisions; ready to merge by Fri 27 Nov 12:00
 - Bottlenecks: threshold approval, on Andrew
+
+## 2026-11-23 (build account, session real-calib, c035 steps 6-7, inbox 34)
+- Done: thresholds approved by Andrew written to `config/zone_reference_thresholds.yaml`; `scripts/zone_reference.py apply`, `curve`; `particle_path(slide_px=...)` injection; tests `tests/test_zone_reference.py` 9 passed, `tests/test_zone_checks.py` 12 passed (1a023ff)
+- Done: curve sizes committed in README before the run (1a023ff); run 47 s
+- Done: step 6 on 1,189 c027 windows (1,191 tracks, 3 not cached), 42 s: accepted base 8 of 1,034 flagged (shape 3, common 5); declined by agent 11 of 85
+- Done: detection curve, 130 clean windows: false alarms shape 0, common 1; shape caught 2 of 130 at 15-30 px, 10 at 60 px, 101 at 90 px; common caught 90 of 130 at 4 patch spacings toward the tip, 11 away; no size caught in 90 % of windows in both directions
+- Demo: `python scripts/zone_reference.py curve --cache <c027 track cache>` -> writes `results/2026-11-23_zone_reference/curve.md`
+- Remaining: merge; gating of the zone checks is future work
+- Bottlenecks: none
